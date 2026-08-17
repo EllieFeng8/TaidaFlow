@@ -6,8 +6,10 @@
 
 #include "autogen/environment.h"
 #include "Core/TaidaFlowProxy.h"
+#include "infrastructure/proxy_mirror/wasmmirrorproxy.h"
 
-
+#include <cstdlib>
+#include <utility>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +18,36 @@ int main(int argc, char *argv[])
 
     TaidaFlowProxy *Td = new TaidaFlowProxy();
     qmlRegisterSingletonInstance<TaidaFlowProxy>("Core", 1, 0, "Td", Td);
+
+    WasmMirrorConfig mirrorConfig;
+    mirrorConfig.host = QStringLiteral("127.0.0.1");
+    mirrorConfig.port = 8125;
+    mirrorConfig.path = QStringLiteral("/mirror");
+    mirrorConfig.allowedOrigins = {
+        QStringLiteral("http://127.0.0.1:8123"),
+        QStringLiteral("http://localhost:8123")
+    };
+
+    WasmMirrorProxyOptions mirrorOptions;
+    mirrorOptions.required = true;
+
+    if (!mirrorConfig.addProxy(QStringLiteral("TaidaFlow"),
+                               *Td,
+                               std::move(mirrorOptions))) {
+        qCritical().noquote() << mirrorConfig.validationError();
+        return EXIT_FAILURE;
+    }
+
+    QString mirrorError;
+    auto mirror = WasmMirrorProxy::create(mirrorConfig, &mirrorError);
+    if (!mirror) {
+        qCritical().noquote() << mirrorError;
+        return EXIT_FAILURE;
+    }
+
+    qInfo().noquote()
+        << "WASM Mirror endpoint:"
+        << mirror->webSocketUrl().toString();
 
     QQmlApplicationEngine engine;
     const QUrl url(mainQmlFile);

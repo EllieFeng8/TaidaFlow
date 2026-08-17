@@ -1,0 +1,16 @@
+build*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Testing/
+*.user
+*.autosave
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.exp
+*.qm
+.idea/

@@ -1,0 +1,86 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "debug-visual-studio",
+      "displayName": "Debug-Visual Studio",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/cmake-build-debug-visual-studio",
+      "toolchainFile": "C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_MAKE_PROGRAM": "C:/Qt/Tools/Ninja/ninja.exe",
+        "BUILD_TESTING": "ON"
+      },
+      "environment": {
+        "VSLANG": "1033"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "Visual Studio"
+        }
+      }
+    },
+    {
+      "name": "wasm-debug",
+      "displayName": "WASM Configure Only (Do Not Build)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-wasm",
+      "toolchainFile": "C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_MAKE_PROGRAM": "C:/Qt/Tools/Ninja/ninja.exe",
+        "BUILD_TESTING": "OFF",
+        "QT_CHAINLOAD_TOOLCHAIN_FILE": "C:/tools/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+        "EMSCRIPTEN_ROOT_PATH": "C:/tools/emsdk/upstream/emscripten",
+        "QT_HOST_PATH": "C:/Qt/6.8.3/msvc2022_64",
+        "QT_HOST_PATH_CMAKE_DIR": "C:/Qt/6.8.3/msvc2022_64/lib/cmake",
+        "CMAKE_CROSSCOMPILING_EMULATOR": "C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe"
+      },
+      "environment": {
+        "EMSDK": "C:/tools/emsdk",
+        "EM_CONFIG": "C:/tools/emsdk/.emscripten",
+        "EMSCRIPTEN": "C:/tools/emsdk/upstream/emscripten",
+        "EMSDK_PYTHON": "C:/tools/emsdk/python/3.9.2-nuget_64bit/python.exe",
+        "EMSDK_NODE": "C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe",
+        "PATH": "C:/tools/emsdk/python/3.9.2-nuget_64bit;C:/tools/emsdk/node/16.20.0_64bit/bin;C:/tools/emsdk/upstream/emscripten;C:/tools/emsdk/upstream/bin;C:/Qt/6.8.3/msvc2022_64/bin;C:/Qt/Tools/Ninja;C:/Qt/Tools/CMake_64/bin;C:/Windows/System32;C:/Windows;C:/Windows/System32/Wbem;C:/Windows/System32/WindowsPowerShell/v1.0"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "Visual Studio"
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "desktop-app",
+      "displayName": "Build Desktop App",
+      "configurePreset": "debug-visual-studio",
+      "targets": ["MyApplication"]
+    },
+    {
+      "name": "wasm-client",
+      "displayName": "Debug-WASM (Build - Select This)",
+      "configurePreset": "wasm-debug",
+      "inheritConfigureEnvironment": true,
+      "targets": ["MyApplication"]
+    }
+  ]
+}
+

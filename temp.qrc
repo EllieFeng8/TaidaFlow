@@ -1,0 +1,24 @@
+<RCC>
+    <qresource>
+        <file>qtquickcontrols2.conf</file>
+        <file>TaidaFlow.qmlproject</file>
+        <file>TaidaFlow/Constants.qml</file>
+        <file>TaidaFlow/EventListModel.qml</file>
+        <file>TaidaFlow/EventListSimulator.qml</file>
+        <file>TaidaFlow/qmldir</file>
+        <file>TaidaFlowContent/AlarmPage.qml</file>
+        <file>TaidaFlowContent/App.qml</file>
+        <file>TaidaFlowContent/assets/center.png</file>
+        <file>TaidaFlowContent/assets/Group 121.png</file>
+        <file>TaidaFlowContent/assets/Group 164.png</file>
+        <file>TaidaFlowContent/assets/motor.png</file>
+        <file>TaidaFlowContent/assets/motor2.png</file>
+        <file>TaidaFlowContent/assets/schedule.png</file>
+        <file>TaidaFlowContent/components/InterfaceBox.qml</file>
+        <file>TaidaFlowContent/components/MotorIcon.qml</file>
+        <file>TaidaFlowContent/components/ValueTag.qml</file>
+        <file>TaidaFlowContent/HistoryPage.qml</file>
+        <file>TaidaFlowContent/Main.qml</file>
+        <file>TaidaFlowContent/TopNav.qml</file>
+    </qresource>
+</RCC>

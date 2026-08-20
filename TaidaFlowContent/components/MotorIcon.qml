@@ -1,12 +1,22 @@
 import QtQuick
 import QtQuick.Controls
-import Core 1.0
 Item {
     id: motorIcon
 
     property string motorName: "M1"
     property string value: "20"
     property string unit: "PV %"
+    signal valueEdited(real newValue)
+
+    function commitValue() {
+        var newValue = Number(editField.text)
+        if (isNaN(newValue))
+            return
+
+        motorIcon.valueEdited(newValue)
+        Qt.inputMethod.hide()
+        valueDialog.close()
+    }
 
     width: 78
     height: 110
@@ -185,14 +195,10 @@ Item {
                     Qt.inputMethod.show()
                 }
                 Keys.onReturnPressed: {
-                    motorIcon.value = editField.text
-                    Qt.inputMethod.hide()
-                    valueDialog.close()
+                    motorIcon.commitValue()
                 }
                 Keys.onEnterPressed: {
-                    motorIcon.value = editField.text
-                    Qt.inputMethod.hide()
-                    valueDialog.close()
+                    motorIcon.commitValue()
                 }
             }
 
@@ -231,15 +237,7 @@ Item {
                     }
 
                     onClicked: {
-                        if(motorName == "M1"){
-                            Td.m1ValueSv = editField.text
-                        }
-                        value = editField.text
-
-                        // 如果要傳給 C++
-                        // proxy.setMotorValue(motorName, Number(editField.text))
-
-                        valueDialog.close()
+                        motorIcon.commitValue()
                     }
                 }
 

@@ -1,5 +1,5 @@
 qt_add_qml_module(Core STATIC
-        URI TaidaFlowCoreInternal
+        URI Core       # ↔ QML 端 import AmpSnap.Core 1.0
         VERSION 1.0
         SOURCES
         TaidaFlowProxy.h

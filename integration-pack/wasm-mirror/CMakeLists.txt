@@ -4,11 +4,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     project(WasmMirrorIntegrationPack VERSION 1.0.0 LANGUAGES CXX)
 endif()
 
-# Avoid inheriting consumer projects' CMAKE_INCLUDE_CURRENT_DIR setting.
-# On Windows, the package VERSION file can otherwise shadow the C++ <version>
-# standard library header because filesystem lookups are case-insensitive.
-set(CMAKE_INCLUDE_CURRENT_DIR OFF)
-
 find_package(Qt6 6.8 REQUIRED COMPONENTS
     Core
     Network

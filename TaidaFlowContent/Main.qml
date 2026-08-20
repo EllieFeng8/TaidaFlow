@@ -4,7 +4,6 @@ import "components" as Components
 import Core 1.0
 Item {
     id: mainPage
-    property bool motorRunning: true
 
     anchors.top: topNavBar.bottom
     anchors.left: parent.left
@@ -16,89 +15,14 @@ Item {
     visible: root.currentPage === 0
     transformOrigin: Item.TopLeft
 
-    // =====================================
-    // 溫度測試
-    // =====================================
-    property real testTemperature: 20
-    property bool testTempIncreasing: true
-
+    // Proxy updates the simulated/read-only PV values. This timer only
+    // repaints the canvas so pipe colors follow the latest Proxy values.
     Timer {
         id: systemTestTimer
-
         interval: 300
         repeat: true
         running: true
-
-        onTriggered: {
-
-        // =====================================
-        // 溫度上升
-        // =====================================
-        if (mainPage.testTempIncreasing) {
-
-            mainPage.testTemperature += 1
-
-            if (mainPage.testTemperature >= 50) {
-                mainPage.testTemperature = 50
-                mainPage.testTempIncreasing = false
-            }
-
-        }
-
-        // =====================================
-        // 溫度下降
-        // =====================================
-        else {
-
-            mainPage.testTemperature -= 1
-
-            if (mainPage.testTemperature <= 20) {
-                mainPage.testTemperature = 20
-                mainPage.testTempIncreasing = true
-            }
-        }
-
-
-        // =====================================
-        // TT-01 / TT-02
-        // =====================================
-        tt01.value =
-                mainPage.testTemperature.toFixed(1)
-
-        tt02.value =
-                (mainPage.testTemperature + 3).toFixed(1)
-
-
-        // =====================================
-        // TT-03 / TT-04
-        // =====================================
-        tt03.value =
-                (mainPage.testTemperature - 2).toFixed(1)
-
-        tt04.value =
-                (mainPage.testTemperature + 5).toFixed(1)
-
-
-        // =====================================
-        // FM 測試
-        // =====================================
-
-        // 20~23°C 時模擬停止
-        if (mainPage.testTemperature <= 23) {
-            flowMeter.value = 0
-        }
-
-        // >23°C 模擬開始流動
-        else {
-            flowMeter.value = 20
-        }
-
-
-        // =====================================
-        // Canvas 更新
-        // =====================================
-        pipes.requestPaint()
-        }
+        onTriggered: pipes.requestPaint()
     }
 
     // =========================================================
@@ -416,25 +340,32 @@ Item {
         x: 30
         y: 374
         motorName: "M1"
-        value:Td.m1ValueSv
+        value: String(Td.m1ValueSv)
+        onValueEdited: function(newValue) { Td.m1ValueSv = newValue }
     }
 
     Components.MotorIcon {
         x: 195
         y: 259
         motorName: "M2"
+        value: String(Td.m2ValueSv)
+        onValueEdited: function(newValue) { Td.m2ValueSv = newValue }
     }
 
     Components.MotorIcon {
         x: 350
         y: 369
         motorName: "M3"
+        value: String(Td.m3ValueSv)
+        onValueEdited: function(newValue) { Td.m3ValueSv = newValue }
     }
 
     Components.MotorIcon {
         x: 85
         y: 474
         motorName: "M4"
+        value: String(Td.m4ValueSv)
+        onValueEdited: function(newValue) { Td.m4ValueSv = newValue }
     }
 
     // =========================================================
@@ -488,15 +419,15 @@ Item {
                 color: "transparent"
 
                 border.width: 7
-                border.color: motorRunning
+                border.color: Td.motorRunningSv
                               ? "#2866FF00"
                               : "#18666666"
 
-                opacity: motorRunning ? 0.8 : 0.3
+                opacity: Td.motorRunningSv ? 0.8 : 0.3
 
                 // 呼吸縮放
                 SequentialAnimation on scale {
-                    running: motorRunning
+                    running: Td.motorRunningSv
                     loops: Animation.Infinite
 
                     NumberAnimation {
@@ -516,7 +447,7 @@ Item {
 
                 // 呼吸透明度
                 SequentialAnimation on opacity {
-                    running: motorRunning
+                    running: Td.motorRunningSv
                     loops: Animation.Infinite
 
                     NumberAnimation {
@@ -542,7 +473,7 @@ Item {
                 radius: 15
                 anchors.centerIn: parent
 
-                color: motorRunning
+                color: Td.motorRunningSv
                        ? "#3366FF00"
                        : "#33666666"
 
@@ -554,7 +485,7 @@ Item {
 
                     anchors.centerIn: parent
 
-                    color: motorRunning
+                    color: Td.motorRunningSv
                            ? "#66FF00"
                            : "#666666"
                 }
@@ -582,7 +513,7 @@ Item {
         x: 578
         y: 436
         title: "PT-01"
-        value:"25.5"
+        value: Td.pt01ValuePv.toFixed(1)
         unit: "Pa"
     }
 
@@ -606,26 +537,26 @@ Item {
         Components.ValueTag {
             id: tt01
             title: "TT-01"
-            value: "30"
+            value: Td.tt01ValuePv.toFixed(1)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt02
             title: "TT-02"
-            value: "2.5"
+            value: Td.tt02ValuePv.toFixed(1)
             unit: "°C"
         }
 
         Components.ValueTag {
             title: "PT-04"
-            value: "2.5"
+            value: Td.pt04ValuePv.toFixed(1)
             unit: "Pa"
         }
 
         Components.ValueTag {
             title: "PT-05"
-            value: "2.5"
+            value: Td.pt05ValuePv.toFixed(1)
             unit: "Pa"
         }
     }
@@ -644,14 +575,14 @@ Item {
         Components.ValueTag {
             id: tt03
             title: "TT-03"
-            value: "55"
+            value: Td.tt03ValuePv.toFixed(1)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt04
             title: "TT-04"
-            value: "25"
+            value: Td.tt04ValuePv.toFixed(1)
             unit: "°C"
         }
     }
@@ -662,12 +593,14 @@ Item {
     Components.ValueTag {
 
         title: "PT-07"
+        value: Td.pt07ValuePv.toFixed(1)
         unit: "Pa"
     }
 
     Components.ValueTag {
 
         title: "PT-06"
+        value: Td.pt06ValuePv.toFixed(1)
         unit: "Pa"
     }
     }
@@ -735,7 +668,17 @@ Item {
         width: 73
         height: 74
 
-        property string value: "20"
+        readonly property string value: String(Td.pump2HzSv)
+
+        function commitValue() {
+            var newValue = Number(motor2EditField.text)
+            if (isNaN(newValue))
+                return
+
+            Td.pump2HzSv = newValue
+            Qt.inputMethod.hide()
+            motor2ValueDialog.close()
+        }
 
         Image {
             id: motor2
@@ -894,15 +837,10 @@ Item {
                         Qt.inputMethod.show()
                     }
                     Keys.onReturnPressed: {
-                        motor2Item.value = motor2EditField.text
-                        Qt.inputMethod.hide()
-                        motor2ValueDialog.close()
+                        motor2Item.commitValue()
                     }
                     Keys.onEnterPressed: {
-                        motor2Item.value = motor2EditField.text
-
-                        Qt.inputMethod.hide()
-                        motor2ValueDialog.close()
+                        motor2Item.commitValue()
                     }
                 }
 
@@ -940,13 +878,7 @@ Item {
                         }
 
                         onClicked: {
-                            motor2Item.value = motor2EditField.text
-
-                            // 如果之後要傳給 C++
-                            // proxy.setMotor2Hz(Number(motor2EditField.text))
-
-                            Qt.inputMethod.hide()
-                            motor2ValueDialog.close()
+                            motor2Item.commitValue()
                         }
                     }
 
@@ -998,7 +930,7 @@ Item {
         x: 732
         y: 523
         title: "PT-02"
-        value:"25.5"
+        value: Td.pt02ValuePv.toFixed(1)
         unit: "Pa"
     }
 
@@ -1006,6 +938,7 @@ Item {
         x: 897
         y: 523
         title: "PT-03"
+        value: Td.pt03ValuePv.toFixed(1)
         unit: "Pa"
     }
 
@@ -1042,7 +975,7 @@ Item {
         width: 60
         height: 97
         id: flowMeter
-        property real value: 3
+        readonly property real value: Td.flowMeterValuePv
 
 
         Rectangle {
@@ -1140,7 +1073,7 @@ Item {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: motorRunning
+                text: Td.motorRunningSv
                       ? "是否關閉泵浦？"
                       : "是否開啟泵浦？"
 
@@ -1188,7 +1121,7 @@ Item {
                     }
 
                     contentItem: Text {
-                        text: motorRunning ? "關閉" : "開啟"
+                        text: Td.motorRunningSv ? "關閉" : "開啟"
 
                         color: "white"
                         font.pixelSize: confirmButton.hovered ? 19 : 18
@@ -1203,9 +1136,7 @@ Item {
                     }
 
                     onClicked: {
-                        motorRunning = !motorRunning
-
-                        // proxy.setMotor1(motorRunning)
+                        Td.motorRunningSv = !Td.motorRunningSv
 
                         motorDialog.close()
                     }

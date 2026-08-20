@@ -16,15 +16,8 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
     FORCE
 )
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickTimeline ShaderTools Network Concurrent WebSockets)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickTimeline ShaderTools)
 qt_standard_project_setup()
-
-set(WASM_MIRROR_PACK_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/integration-pack/wasm-mirror")
-add_subdirectory(
-    "${WASM_MIRROR_PACK_DIR}"
-    "${CMAKE_BINARY_DIR}/wasm-mirror-pack"
-)
 
 add_subdirectory(Core)
 
@@ -37,20 +30,7 @@ qt_add_resources(${CMAKE_PROJECT_NAME} "configuration"
 
 include(qds)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Core Coreplugin)
-if(TARGET Core_resources_1)
-    add_dependencies(${CMAKE_PROJECT_NAME} Core_resources_1)
-endif()
-
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE WasmMirror::Core)
-
-include("${WASM_MIRROR_PACK_DIR}/cmake/WasmMirrorProxyRegister.cmake")
-wasm_mirror_register_proxy(
-    TARGET ${CMAKE_PROJECT_NAME}
-    CLASS TaidaFlowProxy
-    HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Core/TaidaFlowProxy.h"
-)
-wasm_mirror_finalize_proxy_registration(TARGET ${CMAKE_PROJECT_NAME})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Coreplugin)
 
 if (BUILD_QDS_COMPONENTS)
     include(qmlcomponents OPTIONAL)

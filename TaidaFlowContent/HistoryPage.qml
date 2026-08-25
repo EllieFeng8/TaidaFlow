@@ -58,23 +58,18 @@ Item {
         return date
     }
 
-    function seedHistoryData() {
+    function reloadHistoryData() {
         historySourceModel.clear()
-
-        var devices = ["循環泵浦 A", "循環泵浦 B", "主水槽", "過濾器", "測試設備", "加熱器"]
-        var sensors = ["TT-01", "PT-02", "LS-01", "FM-01", "TT-03", "PT-06"]
-        var now = new Date()
-
-        for (var i = 0; i < 36; ++i) {
-            var recordDate = new Date(now.getTime() - i * 2 * 60 * 60 * 1000)
-            var leakOn = i === 7 || i === 19
+        var records = Td.historyRecords
+        for (var i = 0; i < records.length; ++i) {
+            var row = records[i]
             historySourceModel.append({
-                "timestampMs": recordDate.getTime(),
-                "recordTime": formatDateTime(recordDate),
-                "equipment": devices[i % devices.length],
-                "sensorName": sensors[i % sensors.length],
-                "switchState": (i % 5 === 0 || leakOn) ? "OFF" : "ON",
-                "leakState": leakOn ? "ON" : "OFF"
+                "timestampMs": Number(row.timestampMs),
+                "recordTime": String(row.recordTime),
+                "equipment": String(row.equipment),
+                "sensorName": String(row.sensorName),
+                "switchState": String(row.switchState),
+                "leakState": String(row.leakState)
             })
         }
     }
@@ -192,12 +187,20 @@ Item {
     }
 
     Component.onCompleted: {
-        seedHistoryData()
+        reloadHistoryData()
         var now = new Date()
         var oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
         startTimeField.text = formatDateTime(oneDayAgo)
         endTimeField.text = formatDateTime(now)
         applyFilter()
+    }
+
+    Connections {
+        target: Td
+        function onHistoryRecordsChanged() {
+            reloadHistoryData()
+            applyFilter()
+        }
     }
 
     Timer {

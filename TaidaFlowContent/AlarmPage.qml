@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Core 1.0
 
 // =========================================================
 // 異常警告頁面
@@ -58,39 +59,25 @@ Item {
         return date
     }
 
-    function seedAlarmData() {
+    function reloadAlarmData() {
         alarmListModel.clear()
         activeAlarmCount = 0
-
-        var devices = ["循環泵浦 A", "主水槽", "過濾器", "測試設備", "加熱器", "循環泵浦 B"]
-        var sensors = ["M1", "LS-01", "PT-03", "TT-04", "TT-03", "FM-01"]
-        var messages = [
-            "馬達回授訊號異常",
-            "偵測到漏水訊號",
-            "壓力超過安全範圍",
-            "出口溫度過高",
-            "加熱溫度偏高",
-            "流量低於設定值"
-        ]
-        var activeRows = [0, 3, 8]
-        var now = new Date()
-
-        for (var i = 0; i < 14; ++i) {
-            var isActive = activeRows.indexOf(i) !== -1
-            var alarmDate = new Date(now.getTime() - i * 37 * 60 * 1000)
-
+        var records = Td.alarmRecords
+        for (var i = 0; i < records.length; ++i) {
+            var row = records[i]
             alarmListModel.append({
                 "serialNumber": i + 1,
-                "timestampMs": alarmDate.getTime(),
-                "alarmTime": formatDateTime(alarmDate),
-                "equipment": devices[i % devices.length],
-                "sensorName": sensors[i % sensors.length],
-                "alarmMessage": messages[i % messages.length],
-                "severity": i % 4 === 0 ? "嚴重" : "警告",
-                "alarmStatus": isActive ? "未處理" : "已解除"
+                "timestampMs": Number(row.timestampMs),
+                "alarmTime": String(row.alarmTime),
+                "equipment": String(row.equipment),
+                "sensorName": String(row.sensorName),
+                "alarmMessage": String(row.alarmMessage),
+                "severity": String(row.severity),
+                "alarmStatus": String(row.alarmStatus)
             })
         }
 
+        var now = new Date()
         var oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
         startTimeField.text = formatDateTime(oneDayAgo)
         endTimeField.text = formatDateTime(now)
@@ -184,7 +171,14 @@ Item {
         refreshPagedModel()
     }
 
-    Component.onCompleted: seedAlarmData()
+    Component.onCompleted: reloadAlarmData()
+
+    Connections {
+        target: Td
+        function onAlarmRecordsChanged() {
+            reloadAlarmData()
+        }
+    }
 
     Column {
         anchors.fill: parent

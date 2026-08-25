@@ -1,6 +1,4 @@
-1.0.0
-
-Wire protocol: 3
-Inner ProxyMirror protocol: 2
-Source commit: d52bd18a56527a6b2ba36b06c1668519df8e656d
-
+// Pack version: 1.0.0
+// Wire protocol: 3
+// Inner ProxyMirror protocol: 2
+// Source commit: d52bd18a56527a6b2ba36b06c1668519df8e656d

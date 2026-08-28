@@ -17,7 +17,7 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
 )
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS
-    Core Gui Widgets Qml Quick QuickTimeline ShaderTools
+    Core Gui Widgets Qml Quick QuickTimeline ShaderTools SerialBus Sql
     Network WebSockets
 )
 qt_standard_project_setup()
@@ -31,8 +31,7 @@ add_subdirectory(
 
 add_subdirectory(Core)
 
-qt_add_executable(${CMAKE_PROJECT_NAME}
-        Core/TaidaFlowProxy.h)
+qt_add_executable(${CMAKE_PROJECT_NAME})
 qt_add_resources(${CMAKE_PROJECT_NAME} "configuration"
     PREFIX "/"
     FILES
@@ -47,13 +46,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         WasmMirror::Core
 )
 
-include("${WASM_MIRROR_PACK_DIR}/cmake/WasmMirrorProxyRegister.cmake")
-wasm_mirror_register_proxy(
-    TARGET ${CMAKE_PROJECT_NAME}
-    CLASS TaidaFlowProxy
-    HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Core/TaidaFlowProxy.h"
-)
-wasm_mirror_finalize_proxy_registration(TARGET ${CMAKE_PROJECT_NAME})
 
 if (BUILD_QDS_COMPONENTS)
     include(qmlcomponents OPTIONAL)

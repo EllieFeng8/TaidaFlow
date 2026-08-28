@@ -9,7 +9,7 @@
 #include "autogen/environment.h"
 #include "Core/TaidaFlowProxy.h"
 #include "infrastructure/proxy_mirror/wasmmirrorproxy.h"
-
+#include "core.h"
 
 
 int main(int argc, char *argv[])
@@ -17,8 +17,11 @@ int main(int argc, char *argv[])
     set_qt_environment();
     QApplication app(argc, argv);
 
-    TaidaFlowProxy *Td = new TaidaFlowProxy();
+    Core& core = Core::instance();
+    core.init();
+    TaidaFlowProxy* Td = core.m_proxy;
     qmlRegisterSingletonInstance<TaidaFlowProxy>("Core", 1, 0, "Td", Td);
+
 
     WasmMirrorConfig mirrorConfig;
     mirrorConfig.host = QStringLiteral("127.0.0.1");

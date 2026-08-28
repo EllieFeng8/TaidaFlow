@@ -3,8 +3,11 @@ qt_add_qml_module(Core STATIC
         VERSION 1.0
         SOURCES
         TaidaFlowProxy.h
-
-
+        core.h
+        core.cpp
+        manager.h
+        manager.cpp
+        Modbus_Client.h
 )
 
 target_include_directories(Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -21,6 +24,7 @@ target_link_libraries(Core
         Qt${QT_VERSION_MAJOR}::ShaderTools
         Qt${QT_VERSION_MAJOR}::Network
         Qt${QT_VERSION_MAJOR}::Concurrent
-#        Qt${QT_VERSION_MAJOR}::SerialBus
+        Qt${QT_VERSION_MAJOR}::SerialBus
+        Qt${QT_VERSION_MAJOR}::Sql
 #        Qt${QT_VERSION_MAJOR}::OpcUa
 )

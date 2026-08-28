@@ -290,12 +290,12 @@ private:
     double m_m2ValueSv = 0.0;
     double m_m3ValueSv = 0.0;
     double m_m4ValueSv = 0.0;
-    double m_m1ValuePv = 10.1;
-    double m_m2ValuePv = 10.1;
-    double m_m3ValuePv = 10.1;
-    double m_m4ValuePv = 10.1;
+    double m_m1ValuePv = 0.0;
+    double m_m2ValuePv = 0.0;
+    double m_m3ValuePv = 0.0;
+    double m_m4ValuePv = 0.0;
     double m_pump2HzSv = 0.0;
-    double m_pump2HzPv = 10.1;
+    double m_pump2HzPv = 0.0;
     bool m_motorRunningSv = false;
 
     double m_tt01ValuePv = 0.0;

@@ -30,7 +30,12 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double m2ValueSv READ m2ValueSv WRITE setM2ValueSv NOTIFY m2ValueSvChanged)
     Q_PROPERTY(double m3ValueSv READ m3ValueSv WRITE setM3ValueSv NOTIFY m3ValueSvChanged)
     Q_PROPERTY(double m4ValueSv READ m4ValueSv WRITE setM4ValueSv NOTIFY m4ValueSvChanged)
+    Q_PROPERTY(double m1ValuePv READ m1ValuePv WRITE setM1ValuePv NOTIFY m1ValuePvChanged)
+    Q_PROPERTY(double m2ValuePv READ m2ValuePv WRITE setM2ValuePv NOTIFY m2ValuePvChanged)
+    Q_PROPERTY(double m3ValuePv READ m3ValuePv WRITE setM3ValuePv NOTIFY m3ValuePvChanged)
+    Q_PROPERTY(double m4ValuePv READ m4ValuePv WRITE setM4ValuePv NOTIFY m4ValuePvChanged)
     Q_PROPERTY(double pump2HzSv READ pump2HzSv WRITE setPump2HzSv NOTIFY pump2HzSvChanged)
+    Q_PROPERTY(double pump2HzPv READ pump2HzPv WRITE setPump2HzPv NOTIFY pump2HzPvChanged)
     Q_PROPERTY(bool motorRunningSv READ motorRunningSv WRITE setMotorRunningSv NOTIFY motorRunningSvChanged)
 
     // Read-only process values (PV): QML can observe but cannot write.
@@ -66,7 +71,12 @@ public:
     double m2ValueSv() const { return m_m2ValueSv; }
     double m3ValueSv() const { return m_m3ValueSv; }
     double m4ValueSv() const { return m_m4ValueSv; }
+    double m1ValuePv() const { return m_m1ValuePv; }
+    double m2ValuePv() const { return m_m2ValuePv; }
+    double m3ValuePv() const { return m_m3ValuePv; }
+    double m4ValuePv() const { return m_m4ValuePv; }
     double pump2HzSv() const { return m_pump2HzSv; }
+    double pump2HzPv() const { return m_pump2HzPv; }
     bool motorRunningSv() const { return m_motorRunningSv; }
 
     double tt01ValuePv() const { return m_tt01ValuePv; }
@@ -88,7 +98,12 @@ public:
     void setM2ValueSv(double value) { setWritableValue(m_m2ValueSv, value, &TaidaFlowProxy::m2ValueSvChanged); }
     void setM3ValueSv(double value) { setWritableValue(m_m3ValueSv, value, &TaidaFlowProxy::m3ValueSvChanged); }
     void setM4ValueSv(double value) { setWritableValue(m_m4ValueSv, value, &TaidaFlowProxy::m4ValueSvChanged); }
+    void setM1ValuePv(double value) { setWritableValue(m_m1ValuePv, value, &TaidaFlowProxy::m1ValuePvChanged); }
+    void setM2ValuePv(double value) { setWritableValue(m_m2ValuePv, value, &TaidaFlowProxy::m2ValuePvChanged); }
+    void setM3ValuePv(double value) { setWritableValue(m_m3ValuePv, value, &TaidaFlowProxy::m3ValuePvChanged); }
+    void setM4ValuePv(double value) { setWritableValue(m_m4ValuePv, value, &TaidaFlowProxy::m4ValuePvChanged); }
     void setPump2HzSv(double value) { setWritableValue(m_pump2HzSv, value, &TaidaFlowProxy::pump2HzSvChanged); }
+    void setPump2HzPv(double value) { setWritableValue(m_pump2HzPv, value, &TaidaFlowProxy::pump2HzPvChanged); }
     void setTt01ValuePv(double value) { setProcessValue(m_tt01ValuePv, value, &TaidaFlowProxy::tt01ValuePvChanged); }
     void setTt02ValuePv(double value) { setProcessValue(m_tt02ValuePv, value, &TaidaFlowProxy::tt02ValuePvChanged); }
     void setTt03ValuePv(double value) { setProcessValue(m_tt03ValuePv, value, &TaidaFlowProxy::tt03ValuePvChanged); }
@@ -152,7 +167,12 @@ signals:
     void m2ValueSvChanged(double value);
     void m3ValueSvChanged(double value);
     void m4ValueSvChanged(double value);
+    void m1ValuePvChanged(double value);
+    void m2ValuePvChanged(double value);
+    void m3ValuePvChanged(double value);
+    void m4ValuePvChanged(double value);
     void pump2HzSvChanged(double value);
+    void pump2HzPvChanged(double value);
     void motorRunningSvChanged(bool value);
 
     void tt01ValuePvChanged(double value);
@@ -270,7 +290,12 @@ private:
     double m_m2ValueSv = 0.0;
     double m_m3ValueSv = 0.0;
     double m_m4ValueSv = 0.0;
+    double m_m1ValuePv = 10.1;
+    double m_m2ValuePv = 10.1;
+    double m_m3ValuePv = 10.1;
+    double m_m4ValuePv = 10.1;
     double m_pump2HzSv = 0.0;
+    double m_pump2HzPv = 10.1;
     bool m_motorRunningSv = false;
 
     double m_tt01ValuePv = 0.0;

@@ -5,6 +5,7 @@ Item {
 
     property string motorName: "M1"
     property string value: "20"
+    property string valuePv: "0"
     property string unit: "PV %"
     signal valueEdited(real newValue)
 
@@ -55,7 +56,7 @@ Item {
     }
 
     Rectangle {
-        width: 56
+        width: 69
         height: 32
         y: 74
         anchors.horizontalCenter: parent.horizontalCenter
@@ -109,14 +110,24 @@ Item {
             }
         }
 
-        Text {
+        Row {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 1
             anchors.horizontalCenter: parent.horizontalCenter
-            text: unit
-            color: "white"
-            font.pixelSize: 14
-            font.family: "Consolas"
+
+            Text {
+                text: "PV:"
+                color: "white"
+                font.pixelSize: 14
+                font.family: "Consolas"
+            }
+
+            Text {
+                text: valuePv+"%"
+                color: "#FFD166"
+                font.pixelSize: 14
+                font.family: "Consolas"
+            }
         }
     }
     // =====================================================

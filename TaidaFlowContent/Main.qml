@@ -341,6 +341,7 @@ Item {
         y: 374
         motorName: "M1"
         value: String(Td.m1ValueSv)
+        valuePv: String(Td.m1ValuePv)
         onValueEdited: function(newValue) { Td.m1ValueSv = newValue }
     }
 
@@ -349,6 +350,7 @@ Item {
         y: 259
         motorName: "M2"
         value: String(Td.m2ValueSv)
+        valuePv: String(Td.m2ValuePv)
         onValueEdited: function(newValue) { Td.m2ValueSv = newValue }
     }
 
@@ -357,6 +359,7 @@ Item {
         y: 369
         motorName: "M3"
         value: String(Td.m3ValueSv)
+        valuePv: String(Td.m3ValuePv)
         onValueEdited: function(newValue) { Td.m3ValueSv = newValue }
     }
 
@@ -365,6 +368,7 @@ Item {
         y: 474
         motorName: "M4"
         value: String(Td.m4ValueSv)
+        valuePv: String(Td.m4ValuePv)
         onValueEdited: function(newValue) { Td.m4ValueSv = newValue }
     }
 
@@ -690,7 +694,7 @@ Item {
         Rectangle {
             id: motorValueBox
 
-            width: 55
+            width: 69
             height: 32
             x: 9
             y: 79
@@ -734,20 +738,24 @@ Item {
                 font.pixelSize: 15
                 font.family: "Consolas"
             }
-
-            Text {
+            Row {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 1
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: "PV HZ"
+                Text {
+                    text: "PV:"
+                    color: "white"
+                    font.pixelSize: 14
+                    font.family: "Consolas"
+                }
 
-                color: motorMouseArea.containsMouse
-                       ? "#D9F5FF"
-                       : "white"
-
-                font.pixelSize: 14
-                font.family: "Consolas"
+                Text {
+                    text: Td.pump2HzPv+"%"
+                    color: "#FFD166"
+                    font.pixelSize: 14
+                    font.family: "Consolas"
+                }
             }
 
             MouseArea {

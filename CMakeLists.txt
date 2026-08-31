@@ -18,7 +18,7 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS
     Core Gui Widgets Qml Quick QuickTimeline ShaderTools SerialBus Sql
-    Network WebSockets
+    Network WebSockets HttpServer
 )
 qt_standard_project_setup()
 

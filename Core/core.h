@@ -1,11 +1,10 @@
 #pragma once
-#include<qsettings.h>
-#include <qobject>
-#include <Qvector>
-#include <QTimer>
+#include <QObject>
 #include "manager.h"
 #include "TaidaFlowProxy.h"
-#include <QRandomGenerator>
+
+class ModbusServer;
+class SqlManager;
 
 class Core : public QObject
 {
@@ -16,22 +15,16 @@ public:
     TaidaFlowProxy* m_proxy = nullptr;
     void init();
 
-public slots:
-    //proxy
-    
-    //manager
-    
-    //void on201data(QVector <quint16>);
-    //void on202data(QVector <quint16>);
-    //void on203data(QVector <quint16>);
-    //void on204data(QVector <quint16>);
-    //void on205data(QVector <quint16>);
-
 private:
 
     explicit Core(QObject* parent = nullptr) {}
     ~Core();
+    void saveHmiInputSettings();
+    void loadHmiInputSettings();
 
     Manager* m_manager = nullptr;
+    ModbusServer* m_modbusServer = nullptr;
+    SqlManager* m_sqlManager = nullptr;
+    bool m_loadingHmiInputSettings = false;
 
 };

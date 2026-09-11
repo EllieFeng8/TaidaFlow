@@ -37,6 +37,10 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double pump2HzSv READ pump2HzSv WRITE setPump2HzSv NOTIFY pump2HzSvChanged)
     Q_PROPERTY(double pump2HzPv READ pump2HzPv WRITE setPump2HzPv NOTIFY pump2HzPvChanged)
     Q_PROPERTY(bool motorRunningSv READ motorRunningSv WRITE setMotorRunningSv NOTIFY motorRunningSvChanged)
+    // Inverter commands. Reset is momentary in the UI; emergency stop retains
+    // its state until the operator releases it.
+    Q_PROPERTY(bool inverterResetSv READ inverterResetSv WRITE setInverterResetSv NOTIFY inverterResetSvChanged)
+    Q_PROPERTY(bool emergencyStopSv READ emergencyStopSv WRITE setEmergencyStopSv NOTIFY emergencyStopSvChanged)
 
     // Read-only process values (PV): QML can observe but cannot write.
     Q_PROPERTY(double tt01ValuePv READ tt01ValuePv WRITE setTt01ValuePv NOTIFY tt01ValuePvChanged)
@@ -78,6 +82,8 @@ public:
     double pump2HzSv() const { return m_pump2HzSv; }
     double pump2HzPv() const { return m_pump2HzPv; }
     bool motorRunningSv() const { return m_motorRunningSv; }
+    bool inverterResetSv() const { return m_inverterResetSv; }
+    bool emergencyStopSv() const { return m_emergencyStopSv; }
 
     double tt01ValuePv() const { return m_tt01ValuePv; }
     double tt02ValuePv() const { return m_tt02ValuePv; }
@@ -104,6 +110,8 @@ public:
     void setM4ValuePv(double value) { setWritableValue(m_m4ValuePv, value, &TaidaFlowProxy::m4ValuePvChanged); }
     void setPump2HzSv(double value) { setWritableValue(m_pump2HzSv, value, &TaidaFlowProxy::pump2HzSvChanged); }
     void setPump2HzPv(double value) { setWritableValue(m_pump2HzPv, value, &TaidaFlowProxy::pump2HzPvChanged); }
+    void setInverterResetSv(bool value) { setBooleanValue(m_inverterResetSv, value, &TaidaFlowProxy::inverterResetSvChanged); }
+    void setEmergencyStopSv(bool value) { setBooleanValue(m_emergencyStopSv, value, &TaidaFlowProxy::emergencyStopSvChanged); }
     void setTt01ValuePv(double value) { setProcessValue(m_tt01ValuePv, value, &TaidaFlowProxy::tt01ValuePvChanged); }
     void setTt02ValuePv(double value) { setProcessValue(m_tt02ValuePv, value, &TaidaFlowProxy::tt02ValuePvChanged); }
     void setTt03ValuePv(double value) { setProcessValue(m_tt03ValuePv, value, &TaidaFlowProxy::tt03ValuePvChanged); }
@@ -174,6 +182,8 @@ signals:
     void pump2HzSvChanged(double value);
     void pump2HzPvChanged(double value);
     void motorRunningSvChanged(bool value);
+    void inverterResetSvChanged(bool value);
+    void emergencyStopSvChanged(bool value);
 
     void tt01ValuePvChanged(double value);
     void tt02ValuePvChanged(double value);
@@ -205,6 +215,17 @@ private:
     void setProcessValue(double &target, double value, ValueSignal signal)
     {
         if (qFuzzyCompare(target + 1.0, value + 1.0)) {
+            return;
+        }
+        target = value;
+        emit (this->*signal)(value);
+    }
+
+    using BooleanSignal = void (TaidaFlowProxy::*)(bool);
+
+    void setBooleanValue(bool &target, bool value, BooleanSignal signal)
+    {
+        if (target == value) {
             return;
         }
         target = value;
@@ -297,6 +318,8 @@ private:
     double m_pump2HzSv = 0.0;
     double m_pump2HzPv = 0.0;
     bool m_motorRunningSv = false;
+    bool m_inverterResetSv = false;
+    bool m_emergencyStopSv = false;
 
     double m_tt01ValuePv = 0.0;
     double m_tt02ValuePv = 0.0;

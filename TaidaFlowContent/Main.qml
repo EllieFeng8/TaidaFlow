@@ -26,6 +26,109 @@ Item {
     }
 
     // =========================================================
+    // 變頻器控制
+    // =========================================================
+    Rectangle {
+        id: inverterControlPanel
+        x: 22
+        y: 92
+        width: 176
+        height: 146
+        radius: 8
+        color: "#D9152238"
+        border.color: "#4D8EDCFF"
+        border.width: 1
+
+        Column {
+            anchors.fill: parent
+            anchors.margins: 14
+            spacing: 10
+
+            Text {
+                text: "變頻器控制"
+                color: "#8EDCFF"
+                font.bold: true
+                font.pixelSize: 16
+            }
+
+            Button {
+                id: inverterResetButton
+                width: 148
+                height: 42
+                text: "變頻器復歸"
+                // enabled: !Td.emergencyStopSv
+
+                onClicked: {
+                    Td.inverterResetSv = true
+                    inverterResetPulse.start()
+                }
+
+                background: Rectangle {
+                    radius: 6
+                    color: inverterResetButton.down ? "#0877B5" : "#0087DC"
+                    border.color: inverterResetButton.hovered ? "#8EDCFF" : "transparent"
+                    border.width: inverterResetButton.hovered ? 1 : 0
+                    opacity: inverterResetButton.enabled ? 1.0 : 0.45
+                }
+
+                contentItem: Text {
+                    text: inverterResetButton.text
+                    color: "white"
+                    font.bold: true
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+            Row {
+                spacing: 8
+
+                Text {
+                    text: "緊急停止"
+                    color: Td.emergencyStopSv ? "#FF5A5F" : root.textColor
+                    font.bold: true
+                    font.pixelSize: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Switch {
+                    id: emergencyStopSwitch
+                    checked: Td.emergencyStopSv
+                    onToggled: Td.emergencyStopSv = checked
+
+                    indicator: Rectangle {
+                        implicitWidth: 54
+                        implicitHeight: 28
+                        radius: height / 2
+                        color: emergencyStopSwitch.checked ? "#D9363E" : "#4B5563"
+                        border.color: emergencyStopSwitch.checked ? "#FFB4B8" : "#7B8794"
+                        border.width: 1
+
+                        Rectangle {
+                            width: 22
+                            height: 22
+                            radius: 11
+                            x: emergencyStopSwitch.checked ? parent.width - width - 3 : 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "white"
+
+                            Behavior on x { NumberAnimation { duration: 120 } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: inverterResetPulse
+        interval: 250
+        repeat: false
+        onTriggered: Td.inverterResetSv = false
+    }
+
+    // =========================================================
     // 管線
     // =========================================================
     Canvas {

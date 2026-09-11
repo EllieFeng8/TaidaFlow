@@ -29,6 +29,8 @@ public slots:
     void setM4Sv(double value);
     void setPump2HzSv(double value);
     void setMotorRunningSv(bool running);
+    void setInverterResetSv(bool active);
+    void setEmergencyStopSv(bool active);
     void writeServerData(QModbusDataUnit::RegisterType table,
                          int offset,
                          const QList<quint16> &values);

@@ -57,6 +57,8 @@ QString commandPointName(ModbusMapping::CommandPoint point)
     case ModbusMapping::CommandPoint::Pump2Hz: return QStringLiteral("Pump2Hz");
     case ModbusMapping::CommandPoint::MotorRunning: return QStringLiteral("MakeupPumpStart");
     case ModbusMapping::CommandPoint::VfdRun: return QStringLiteral("VfdRun");
+    case ModbusMapping::CommandPoint::InverterReset: return QStringLiteral("InverterReset");
+    case ModbusMapping::CommandPoint::EmergencyStop: return QStringLiteral("EmergencyStop");
     }
 
     return QStringLiteral("Unknown");
@@ -316,6 +318,41 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                .arg(state ? 1 : 0);
         }
     }
+}
+
+void Manager::setInverterResetSv(bool active)
+{
+    writeCommand(ModbusMapping::CommandPoint::InverterReset, active ? 1.0 : 0.0);
+}
+
+void Manager::setEmergencyStopSv(bool active)
+{
+    // The emergency-stop circuit is active-low: UI ON asserts the stop by
+    // writing DO2 = 0; UI OFF releases it by writing DO2 = 1.
+    writeCommand(ModbusMapping::CommandPoint::EmergencyStop, active ? 0.0 : 1.0);
+
+    if (!active)
+        return;
+
+    qWarning().noquote()
+            << QStringLiteral("[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.");
+    m_startVfdAfterFrequencyWrite = false;
+
+    // Setters update the visible HMI value and synchronously issue the
+    // corresponding physical stop command.  If the HMI already shows an off
+    // value, explicitly write the device command so a stale field output is
+    // still made safe.
+    if (m_proxy && m_proxy->pump2HzSv() != 0.0) {
+        m_proxy->setPump2HzSv(0.0);
+    } else {
+        writeCommand(ModbusMapping::CommandPoint::VfdRun, 0.0);
+        writeCommand(ModbusMapping::CommandPoint::Pump2Hz, 0.0);
+    }
+
+    if (m_proxy && m_proxy->motorRunningSv())
+        m_proxy->setMotorRunningSv(false);
+    else
+        writeCommand(ModbusMapping::CommandPoint::MotorRunning, 0.0);
 }
 
 void Manager::saveServerInputData()

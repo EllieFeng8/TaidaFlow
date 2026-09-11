@@ -61,6 +61,10 @@ void Core::init()
     connect(m_proxy, &TaidaFlowProxy::pump2HzSvChanged, m_manager, &Manager::setPump2HzSv);
     connect(m_proxy, &TaidaFlowProxy::motorRunningSvChanged,
             m_manager, &Manager::setMotorRunningSv);
+    connect(m_proxy, &TaidaFlowProxy::inverterResetSvChanged,
+            m_manager, &Manager::setInverterResetSv);
+    connect(m_proxy, &TaidaFlowProxy::emergencyStopSvChanged,
+            m_manager, &Manager::setEmergencyStopSv);
 
     connect(m_proxy, &TaidaFlowProxy::m1ValueSvChanged, this,
             [this](double) { saveHmiInputSettings(); });

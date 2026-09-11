@@ -14,28 +14,44 @@ public:
     {
     }
 
+    void setApplicationWriteInProgress(bool inProgress)
+    {
+        m_applicationWriteInProgress = inProgress;
+    }
+
 protected:
     bool writeData(const QModbusDataUnit &unit) override
     {
+        // setData() also calls writeData().  Internal mirrors (AI/DI/readback)
+        // must be allowed to update otherwise read-only server tables, while
+        // writes arriving from an external Modbus client remain restricted.
+        if (m_applicationWriteInProgress)
+            return QModbusTcpServer::writeData(unit);
+
         const int startAddress = unit.startAddress();
         const bool isDigitalOutput = unit.registerType() == QModbusDataUnit::Coils
                 && ModbusServerBridgeMapping::isContainedRange(
                         startAddress, unit.valueCount(),
                         ModbusServerBridgeMapping::ServerDoStart,
                         ModbusServerBridgeMapping::ServerDoCount);
-        const bool isAnalogOutput = unit.registerType() == QModbusDataUnit::HoldingRegisters
+        const bool isValveAnalogOutput = unit.registerType() == QModbusDataUnit::HoldingRegisters
                 && ModbusServerBridgeMapping::isContainedRange(
                         startAddress, unit.valueCount(),
                         ModbusServerBridgeMapping::ServerAoStart,
                         ModbusServerBridgeMapping::ServerAoCount);
+        const bool isPumpSpeedAnalogOutput = unit.registerType() == QModbusDataUnit::HoldingRegisters
+                && ModbusServerBridgeMapping::isContainedRange(
+                        startAddress, unit.valueCount(),
+                        ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegister,
+                        ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegisterCount);
 
-        if (!isDigitalOutput && !isAnalogOutput) {
+        if (!isDigitalOutput && !isValveAnalogOutput && !isPumpSpeedAnalogOutput) {
             setError(QStringLiteral("This Modbus Server address is read-only or unmapped."),
                      QModbusDevice::WriteError);
             return false;
         }
 
-        if (isAnalogOutput) {
+        if (isValveAnalogOutput || isPumpSpeedAnalogOutput) {
             for (quint16 value : unit.values()) {
                 if (value > ModbusServerBridgeMapping::Adam6224AoMaximumRawValue) {
                     setError(QStringLiteral("AO value must be in the raw range 0..4095."),
@@ -55,6 +71,9 @@ protected:
         normalizedUnit.setValues(normalizedValues);
         return QModbusTcpServer::writeData(normalizedUnit);
     }
+
+private:
+    bool m_applicationWriteInProgress = false;
 };
 
 ModbusServer::ModbusServer(QObject *parent)
@@ -201,7 +220,9 @@ bool ModbusServer::setValue(QModbusDataUnit::RegisterType table,
     }
 
     m_applyingLocalValue = true;
+    m_server->setApplicationWriteInProgress(true);
     const bool didSetValue = m_server->setData(table, offset, value);
+    m_server->setApplicationWriteInProgress(false);
     m_applyingLocalValue = false;
     if (!didSetValue) {
         const QString message = m_server->errorString();

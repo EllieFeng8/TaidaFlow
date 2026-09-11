@@ -22,7 +22,7 @@ enum class ProcessPoint {
 };
 
 enum class CommandPoint {
-    M1, M2, M3, M4, Pump2Hz, MotorRunning
+    M1, M2, M3, M4, Pump2Hz, MotorRunning, VfdRun
 };
 
 enum class ValueFormat {
@@ -116,9 +116,12 @@ inline QList<ReadBinding> defaultReadBindings()
         {ProcessPoint::Pt07, ModbusClient::Device::Adam6217_203,
          QModbusDataUnit::HoldingRegisters, 0, 8, 2,
          ValueFormat::Unsigned16, kPressureScale, 0.0},
-        // Flow-meter electrical range is not yet known; do not display mA as
-        // a flow rate until the transmitter's engineering range is supplied.
-        {ProcessPoint::FlowMeter},
+        // The transmitter's engineering range has not been provided, so keep
+        // this value as its original 16-bit register value rather than
+        // inventing a flow-rate conversion.
+        {ProcessPoint::FlowMeter, ModbusClient::Device::Adam6217_203,
+         QModbusDataUnit::HoldingRegisters, 0, 8, 3,
+         ValueFormat::Unsigned16, 1.0, 0.0},
         {ProcessPoint::Mv1Position, ModbusClient::Device::Adam6217_203,
          QModbusDataUnit::HoldingRegisters, 0, 8, 4,
          ValueFormat::Unsigned16, kValvePositionScale, 0.0},
@@ -138,7 +141,7 @@ inline QList<WriteBinding> defaultWriteBindings()
 {
     // ADAM-6224 AO0..AO3 is MV1..MV4. A 12-bit raw AO value of 0..4095
     // maps to the configured 0..10 V output, which is 0..100% valve opening.
-    // ADAM-6256 DO0 starts the circulation pump.
+    constexpr double kPumpFrequencyScale = 60.0 / 4095.0;
     constexpr double kValveOpeningScale = 100.0 / 4095.0;
     return {
         {CommandPoint::M1, ModbusClient::Device::Adam6224_204,
@@ -149,9 +152,14 @@ inline QList<WriteBinding> defaultWriteBindings()
          QModbusDataUnit::HoldingRegisters, 2, kValveOpeningScale, 0.0, 0.0, 100.0},
         {CommandPoint::M4, ModbusClient::Device::Adam6224_204,
          QModbusDataUnit::HoldingRegisters, 3, kValveOpeningScale, 0.0, 0.0, 100.0},
-        {CommandPoint::Pump2Hz},
+        // ADAM-6022 AO0 is manual holding register 40011 (protocol offset
+        // 10). Its 0..10 V output represents the VFD 0..60 Hz setting.
+        {CommandPoint::Pump2Hz, ModbusClient::Device::Adam6022_205,
+         QModbusDataUnit::HoldingRegisters, 10, kPumpFrequencyScale, 0.0, 0.0, 60.0},
         {CommandPoint::MotorRunning, ModbusClient::Device::Adam6256_201,
-         QModbusDataUnit::Coils, 16},
+         QModbusDataUnit::Coils, 19}, // DO3 / manual coil 00020: makeup pump.
+        {CommandPoint::VfdRun, ModbusClient::Device::Adam6256_201,
+         QModbusDataUnit::Coils, 16}, // DO0 / manual coil 00017: VFD enable.
     };
 }
 

@@ -55,7 +55,8 @@ QString commandPointName(ModbusMapping::CommandPoint point)
     case ModbusMapping::CommandPoint::M3: return QStringLiteral("MV3");
     case ModbusMapping::CommandPoint::M4: return QStringLiteral("MV4");
     case ModbusMapping::CommandPoint::Pump2Hz: return QStringLiteral("Pump2Hz");
-    case ModbusMapping::CommandPoint::MotorRunning: return QStringLiteral("CirculationPumpStart");
+    case ModbusMapping::CommandPoint::MotorRunning: return QStringLiteral("MakeupPumpStart");
+    case ModbusMapping::CommandPoint::VfdRun: return QStringLiteral("VfdRun");
     }
 
     return QStringLiteral("Unknown");
@@ -107,7 +108,7 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, QObject *parent)
     });
 
     connect(&m_modbus, &ModbusClient::writeSucceeded, this,
-            [](ModbusClient::Device device,
+            [this](ModbusClient::Device device,
                QModbusDataUnit::RegisterType registerType,
                int startAddress,
                quint16 valueCount) {
@@ -117,6 +118,15 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, QObject *parent)
                            .arg(static_cast<int>(registerType))
                            .arg(startAddress)
                            .arg(valueCount);
+
+        if (m_startVfdAfterFrequencyWrite
+                && device == ModbusClient::Device::Adam6022_205
+                && registerType == QModbusDataUnit::HoldingRegisters
+                && startAddress == ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister
+                && valueCount == 1) {
+            m_startVfdAfterFrequencyWrite = false;
+            writeCommand(ModbusMapping::CommandPoint::VfdRun, 1.0);
+        }
     });
 
     connect(&m_modbus, &ModbusClient::deviceConnectionChanged, this,
@@ -171,12 +181,27 @@ void Manager::setM4Sv(double value)
 
 void Manager::setPump2HzSv(double value)
 {
-    writeCommand(ModbusMapping::CommandPoint::Pump2Hz, value);
+    if (value <= 0.0) {
+        m_startVfdAfterFrequencyWrite = false;
+        writeCommand(ModbusMapping::CommandPoint::VfdRun, 0.0);
+        writeCommand(ModbusMapping::CommandPoint::Pump2Hz, value);
+        return;
+    }
+
+    // The 0..10 V frequency output must be accepted by ADAM-6022 before DO0
+    // (manual coil 00017) enables the VFD.
+    m_startVfdAfterFrequencyWrite = true;
+    if (!writeCommand(ModbusMapping::CommandPoint::Pump2Hz, value))
+        m_startVfdAfterFrequencyWrite = false;
 }
 
 void Manager::setMotorRunningSv(bool running)
 {
-    writeCommand(ModbusMapping::CommandPoint::MotorRunning, running ? 1.0 : 0.0);
+    if (!writeCommand(ModbusMapping::CommandPoint::MotorRunning, running ? 1.0 : 0.0)
+            && running && m_proxy && m_proxy->motorRunningSv()) {
+        // Keep HMI state consistent with the safety-rejected physical command.
+        m_proxy->setMotorRunningSv(false);
+    }
 }
 
 void Manager::pollConfiguredPoints()
@@ -195,6 +220,10 @@ void Manager::pollConfiguredPoints()
                   QModbusDataUnit::DiscreteInputs,
                   ModbusServerBridgeMapping::Adam6224DiStart,
                   ModbusServerBridgeMapping::ServerDiCount);
+    m_modbus.read(ModbusClient::Device::Adam6256_201,
+                  QModbusDataUnit::Coils,
+                  ModbusServerBridgeMapping::Adam6256DoStart,
+                  9);
 }
 
 void Manager::mirrorClientData(ModbusClient::Device device,
@@ -254,6 +283,36 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                .arg(serverOffset)
                                .arg(ModbusClient::displayName(device))
                                .arg(diOffset)
+                               .arg(state ? 1 : 0);
+
+            if (diOffset == 0) {
+                const bool mustTrip = !state && (!m_di0StateKnown || m_di0OutputPermit);
+                m_di0OutputPermit = state;
+                m_di0StateKnown = true;
+                if (mustTrip)
+                    tripDi0Interlock();
+            }
+        }
+        return;
+    }
+
+    if (device == ModbusClient::Device::Adam6256_201
+            && registerType == QModbusDataUnit::Coils) {
+        for (qsizetype index = 0; index < values.size(); ++index) {
+            const int doOffset = startAddress + static_cast<int>(index)
+                    - ModbusServerBridgeMapping::Adam6256DoStart;
+            if (doOffset < 0 || doOffset > 8)
+                continue;
+
+            const bool state = values.at(index) != 0;
+            if (doOffset < ModbusServerBridgeMapping::ServerDoCount)
+                emit serverCoilUpdated(static_cast<quint16>(doOffset), state);
+            qInfo().noquote()
+                    << QStringLiteral("[Modbus][Read] device=%1 point=DO%2 offset=%3 raw=%4 value=%5")
+                               .arg(ModbusClient::displayName(device))
+                               .arg(doOffset)
+                               .arg(startAddress + static_cast<int>(index))
+                               .arg(values.at(index))
                                .arg(state ? 1 : 0);
         }
     }
@@ -318,14 +377,51 @@ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
                     offset, values.size(),
                     ModbusServerBridgeMapping::ServerDoStart,
                     ModbusServerBridgeMapping::ServerDoCount)) {
+        QList<quint16> permittedValues = values;
+        for (qsizetype index = 0; index < permittedValues.size(); ++index) {
+            const int doOffset = offset + static_cast<int>(index);
+            if ((doOffset == 0 || doOffset == 3)
+                    && permittedValues.at(index) != 0
+                    && !m_di0OutputPermit) {
+                qWarning().noquote()
+                        << QStringLiteral("[Safety Interlock] DI0 is false/unknown; rejecting ADAM-6256 DO%1 command.")
+                                   .arg(doOffset);
+                permittedValues[index] = 0;
+                emit serverCoilUpdated(static_cast<quint16>(doOffset), false);
+            }
+        }
+
         qInfo().noquote()
                 << QStringLiteral("[ModbusServer->Client] ADAM-6256 DO%1..DO%2 values=%3")
                            .arg(offset)
                            .arg(offset + values.size() - 1)
-                           .arg(modbusValuesText(values));
+                           .arg(modbusValuesText(permittedValues));
         m_modbus.write(ModbusClient::Device::Adam6256_201,
                        QModbusDataUnit::Coils,
                        ModbusServerBridgeMapping::Adam6256DoStart + offset,
+                       permittedValues);
+        return;
+    }
+
+    if (table == QModbusDataUnit::HoldingRegisters
+            && ModbusServerBridgeMapping::isContainedRange(
+                    offset, values.size(),
+                    ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegister,
+                    ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegisterCount)) {
+        const quint16 rawValue = values.constFirst();
+        if (rawValue > ModbusServerBridgeMapping::Adam6224AoMaximumRawValue) {
+            qWarning().noquote()
+                    << QStringLiteral("[ModbusServer->Client] Pump AO value %1 is outside raw range 0..4095.")
+                               .arg(rawValue);
+            return;
+        }
+
+        qInfo().noquote()
+                << QStringLiteral("[ModbusServer->Client] ADAM-6022 AO0 values=%1")
+                           .arg(modbusValuesText(values));
+        m_modbus.write(ModbusClient::Device::Adam6022_205,
+                       QModbusDataUnit::HoldingRegisters,
+                       ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister,
                        values);
         return;
     }
@@ -394,31 +490,52 @@ void Manager::mirrorHmiCommandToServer(const ModbusMapping::WriteBinding &bindin
                 << QStringLiteral("[HMI->ModbusServer] coil=%1 value=%2")
                            .arg(serverOffset)
                            .arg(rawValue);
+        return;
+    }
+
+    if (binding.device == ModbusClient::Device::Adam6022_205
+            && binding.registerType == QModbusDataUnit::HoldingRegisters
+            && binding.startAddress == ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister) {
+        emit serverHoldingRegisterUpdated(
+                ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegister, rawValue);
+        qInfo().noquote()
+                << QStringLiteral("[HMI->ModbusServer] holdingRegister=%1 raw=%2")
+                           .arg(ModbusServerBridgeMapping::ServerPumpSpeedHoldingRegister)
+                           .arg(rawValue);
     }
 }
 
-void Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
+bool Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
 {
+    if ((point == ModbusMapping::CommandPoint::VfdRun
+            || point == ModbusMapping::CommandPoint::MotorRunning)
+            && value != 0.0 && !m_di0OutputPermit) {
+        qWarning().noquote()
+                << QStringLiteral("[Safety Interlock] DI0 is false/unknown; %1 was not energized.")
+                           .arg(commandPointName(point));
+        return false;
+    }
+
     for (const ModbusMapping::WriteBinding &binding : m_writeBindings) {
         if (binding.point != point)
             continue;
 
         if (!binding.isConfigured()) {
             qInfo() << "Modbus write skipped: address mapping is not configured.";
-            return;
+            return false;
         }
 
         if (value < binding.minimumValue || value > binding.maximumValue) {
             qWarning() << "Modbus write skipped: value is outside the configured range."
                        << value << binding.minimumValue << binding.maximumValue;
-            return;
+            return false;
         }
 
         const double rawValue = (value - binding.offset) / binding.scale;
         const qint64 roundedValue = std::llround(rawValue);
         if (roundedValue < 0 || roundedValue > std::numeric_limits<quint16>::max()) {
             qWarning() << "Modbus write skipped: encoded value is outside uint16 range.";
-            return;
+            return false;
         }
 
         qInfo().noquote()
@@ -430,10 +547,28 @@ void Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
                            .arg(roundedValue);
         const quint16 encodedValue = static_cast<quint16>(roundedValue);
         mirrorHmiCommandToServer(binding, encodedValue);
-        m_modbus.write(binding.device,
-                       binding.registerType,
-                       binding.startAddress,
-                       {encodedValue});
-        return;
+        return m_modbus.write(binding.device,
+                              binding.registerType,
+                              binding.startAddress,
+                              {encodedValue});
     }
+
+    qWarning().noquote()
+            << QStringLiteral("Modbus write skipped: no mapping exists for %1.")
+                       .arg(commandPointName(point));
+    return false;
+}
+
+void Manager::tripDi0Interlock()
+{
+    qWarning().noquote()
+            << QStringLiteral("[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.");
+
+    m_startVfdAfterFrequencyWrite = false;
+    writeCommand(ModbusMapping::CommandPoint::VfdRun, 0.0);
+
+    if (m_proxy && m_proxy->motorRunningSv())
+        m_proxy->setMotorRunningSv(false);
+    else
+        writeCommand(ModbusMapping::CommandPoint::MotorRunning, 0.0);
 }

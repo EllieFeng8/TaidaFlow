@@ -159,28 +159,28 @@ void ModbusClient::read(Device device,
         connect(reply, &QModbusReply::finished, this, handleReply);
 }
 
-void ModbusClient::write(Device device,
+bool ModbusClient::write(Device device,
                          QModbusDataUnit::RegisterType registerType,
                          int startAddress,
                          const QList<quint16> &values)
 {
     DeviceSession *session = sessionFor(device);
     if (!session)
-        return;
+        return false;
     if ((registerType != QModbusDataUnit::Coils
          && registerType != QModbusDataUnit::HoldingRegisters)
         || startAddress < 0 || values.isEmpty()) {
         emit deviceError(device, QStringLiteral("Invalid Modbus write request."));
-        return;
+        return false;
     }
     if (!ensureConnected(session))
-        return;
+        return false;
 
     const QModbusDataUnit request(registerType, startAddress, values);
     QModbusReply *reply = session->client->sendWriteRequest(request, session->config.unitId);
     if (!reply) {
         emit deviceError(device, session->client->errorString());
-        return;
+        return false;
     }
 
     const quint16 valueCount = static_cast<quint16>(values.size());
@@ -197,6 +197,8 @@ void ModbusClient::write(Device device,
         handleReply();
     else
         connect(reply, &QModbusReply::finished, this, handleReply);
+
+    return true;
 }
 
 QString ModbusClient::displayName(Device device)

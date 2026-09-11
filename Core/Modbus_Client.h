@@ -49,7 +49,8 @@ public:
               QModbusDataUnit::RegisterType registerType,
               int startAddress,
               quint16 valueCount);
-    void write(Device device,
+    // Returns true only when Qt accepted the request for transmission.
+    bool write(Device device,
                QModbusDataUnit::RegisterType registerType,
                int startAddress,
                const QList<quint16> &values);

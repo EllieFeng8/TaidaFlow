@@ -21,6 +21,9 @@ constexpr int ServerInputRegisterCount = 20;
 
 constexpr int ServerAoStart = 0;
 constexpr int ServerAoCount = 4;
+constexpr int ServerPumpSpeedHoldingRegister = 4;
+constexpr int ServerPumpSpeedHoldingRegisterCount = 1;
+constexpr int Adam6022Ao0HoldingRegister = 10; // ADAM-6022 manual 40011.
 constexpr quint16 Adam6224AoMaximumRawValue = 4095;
 
 inline bool isContainedRange(int start, qsizetype count, int rangeStart, int rangeCount)

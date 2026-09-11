@@ -48,7 +48,8 @@ private:
     void mirrorHmiCommandToServer(const ModbusMapping::WriteBinding &binding,
                                   quint16 rawValue);
     void updateProcessPoint(ModbusMapping::ProcessPoint point, double value);
-    void writeCommand(ModbusMapping::CommandPoint point, double value);
+    bool writeCommand(ModbusMapping::CommandPoint point, double value);
+    void tripDi0Interlock();
 
     TaidaFlowProxy *m_proxy = nullptr;
     SqlManager *m_sql = nullptr;
@@ -58,4 +59,9 @@ private:
     QList<ModbusMapping::WriteBinding> m_writeBindings;
     QVector<quint16> m_serverInputRegisters;
     quint8 m_completedAiGroups = 0;
+    bool m_startVfdAfterFrequencyWrite = false;
+    // The machine starts in the conservative state.  A true DI0 sample is
+    // required before either DO0 (00017) or DO3 (00020) can be energized.
+    bool m_di0OutputPermit = false;
+    bool m_di0StateKnown = false;
 };

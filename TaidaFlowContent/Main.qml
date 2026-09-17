@@ -757,8 +757,20 @@ Item {
 
         Image {
             id: wayValve
-            scale:1.2
+            scale: wayValveMouse.containsMouse ? 1.3 : 1.2
             source: "assets/Group 164.png"
+
+            Behavior on scale {
+                NumberAnimation { duration: 120 }
+            }
+
+            MouseArea {
+                id: wayValveMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: wayValveDialog.open()
+            }
         }
 
 
@@ -1155,6 +1167,98 @@ Item {
         font.family: "Consolas"
         horizontalAlignment: Text.AlignHCenter
     }
+    Dialog {
+        id: wayValveDialog
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: 400
+        padding: 28
+        modal: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        // Keep the confirmed command stable if the proxy changes while open.
+        property bool requestedOpen: false
+        onAboutToShow: requestedOpen = !Td.wayValveOpenSv
+
+        background: Rectangle {
+            color: "#152238"
+            radius: 12
+            border.color: "#0087DC"
+            border.width: 2
+        }
+
+        contentItem: Column {
+            spacing: 24
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: wayValveDialog.requestedOpen
+                      ? "是否開啟二通閥？" : "是否關閉二通閥？"
+                color: "white"
+                font.pixelSize: 24
+                font.bold: true
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 24
+
+                Button {
+                    id: wayValveConfirmButton
+                    width: 140
+                    height: 50
+                    hoverEnabled: true
+                    text: wayValveDialog.requestedOpen ? "開啟" : "關閉"
+
+                    background: Rectangle {
+                        radius: 6
+                        color: wayValveConfirmButton.down ? "#0877B5"
+                               : wayValveConfirmButton.hovered ? "#19B8FF" : "#0087DC"
+                        border.color: wayValveConfirmButton.hovered ? "#8EDCFF" : "transparent"
+                        Behavior on color { ColorAnimation { duration: 120 } }
+                    }
+                    contentItem: Text {
+                        text: wayValveConfirmButton.text
+                        color: "white"
+                        font.pixelSize: 18
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: {
+                        Td.wayValveOpenSv = wayValveDialog.requestedOpen
+                        wayValveDialog.accept()
+                    }
+                }
+
+                Button {
+                    id: wayValveCancelButton
+                    width: 140
+                    height: 50
+                    hoverEnabled: true
+                    text: "取消"
+
+                    background: Rectangle {
+                        radius: 6
+                        color: wayValveCancelButton.down ? "#374151"
+                               : wayValveCancelButton.hovered ? "#657184" : "#4B5563"
+                        border.color: wayValveCancelButton.hovered ? "#AFC5D8" : "transparent"
+                        Behavior on color { ColorAnimation { duration: 120 } }
+                    }
+                    contentItem: Text {
+                        text: wayValveCancelButton.text
+                        color: "white"
+                        font.pixelSize: 18
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: wayValveDialog.reject()
+                }
+            }
+        }
+    }
+
     Dialog {
         id: motorDialog
 

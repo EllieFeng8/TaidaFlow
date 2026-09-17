@@ -739,17 +739,17 @@ Item {
     // 2-way Valve
     // =========================================================
     Item {
-        x: 660
+        x: 690
         y: 359
         width: 58
         height: 60
 
         Text {
-            x: -53
-            y: 2
+            x: 0
+            y: -42
             width: 50
             text: "2-way\nValve"
-            rotation: -90
+            // rotation: -90
             color: "white"
             font.pixelSize: 14
             horizontalAlignment: Text.AlignHCenter
@@ -773,6 +773,71 @@ Item {
             }
         }
 
+        Item {
+            width: 40
+            height: 40
+            anchors.horizontalCenter: parent.horizontalCenter
+            x:-10
+            y: 55
+
+            Rectangle {
+                id: wayValveBreathingRing
+                width: 30
+                height: 30
+                radius: 15
+                anchors.centerIn: parent
+                color: "transparent"
+                border.width: 7
+                border.color: Td.wayValveOpenSv ? "#2866FF00" : "#18666666"
+                scale: Td.wayValveOpenSv ? pulseScale : 1.0
+                opacity: Td.wayValveOpenSv ? pulseOpacity : 0.3
+
+                property real pulseScale: 1.0
+                property real pulseOpacity: 0.85
+
+                SequentialAnimation on pulseScale {
+                    running: Td.wayValveOpenSv
+                    loops: Animation.Infinite
+                    NumberAnimation {
+                        from: 1.0; to: 1.55; duration: 900
+                        easing.type: Easing.InOutSine
+                    }
+                    NumberAnimation {
+                        from: 1.55; to: 1.0; duration: 900
+                        easing.type: Easing.InOutSine
+                    }
+                }
+
+                SequentialAnimation on pulseOpacity {
+                    running: Td.wayValveOpenSv
+                    loops: Animation.Infinite
+                    NumberAnimation {
+                        from: 0.85; to: 0.45; duration: 900
+                        easing.type: Easing.InOutSine
+                    }
+                    NumberAnimation {
+                        from: 0.45; to: 0.85; duration: 900
+                        easing.type: Easing.InOutSine
+                    }
+                }
+            }
+
+            Rectangle {
+                width: 30
+                height: 30
+                radius: 15
+                anchors.centerIn: parent
+                color: Td.wayValveOpenSv ? "#3366FF00" : "#33666666"
+
+                Rectangle {
+                    width: 14
+                    height: 14
+                    radius: 7
+                    anchors.centerIn: parent
+                    color: Td.wayValveOpenSv ? "#66FF00" : "#666666"
+                }
+            }
+        }
 
     }
 

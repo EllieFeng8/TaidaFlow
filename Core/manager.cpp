@@ -56,6 +56,7 @@ QString commandPointName(ModbusMapping::CommandPoint point)
     case ModbusMapping::CommandPoint::M4: return QStringLiteral("MV4");
     case ModbusMapping::CommandPoint::Pump2Hz: return QStringLiteral("Pump2Hz");
     case ModbusMapping::CommandPoint::MotorRunning: return QStringLiteral("MakeupPumpStart");
+    case ModbusMapping::CommandPoint::WayValveOpen: return QStringLiteral("CirculationBypassValveOpen");
     case ModbusMapping::CommandPoint::VfdRun: return QStringLiteral("VfdRun");
     case ModbusMapping::CommandPoint::InverterReset: return QStringLiteral("InverterReset");
     case ModbusMapping::CommandPoint::EmergencyStop: return QStringLiteral("EmergencyStop");
@@ -318,6 +319,11 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                .arg(state ? 1 : 0);
         }
     }
+}
+
+void Manager::setWayValveOpenSv(bool open)
+{
+    writeCommand(ModbusMapping::CommandPoint::WayValveOpen, open ? 1.0 : 0.0);
 }
 
 void Manager::setInverterResetSv(bool active)

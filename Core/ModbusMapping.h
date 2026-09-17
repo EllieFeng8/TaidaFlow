@@ -22,7 +22,7 @@ enum class ProcessPoint {
 };
 
 enum class CommandPoint {
-    M1, M2, M3, M4, Pump2Hz, MotorRunning, VfdRun, InverterReset, EmergencyStop
+    M1, M2, M3, M4, Pump2Hz, MotorRunning, WayValveOpen, VfdRun, InverterReset, EmergencyStop
 };
 
 enum class ValueFormat {
@@ -158,6 +158,8 @@ inline QList<WriteBinding> defaultWriteBindings()
          QModbusDataUnit::HoldingRegisters, 10, kPumpFrequencyScale, 0.0, 0.0, 60.0},
         {CommandPoint::MotorRunning, ModbusClient::Device::Adam6256_201,
          QModbusDataUnit::Coils, 19}, // DO3 / manual coil 00020: makeup pump.
+        {CommandPoint::WayValveOpen, ModbusClient::Device::Adam6256_201,
+         QModbusDataUnit::Coils, 20}, // DO4 / manual coil 00021: circulation bypass valve.
         {CommandPoint::VfdRun, ModbusClient::Device::Adam6256_201,
          QModbusDataUnit::Coils, 16}, // DO0 / manual coil 00017: VFD enable.
         {CommandPoint::InverterReset, ModbusClient::Device::Adam6256_201,

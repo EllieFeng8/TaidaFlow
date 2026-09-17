@@ -61,6 +61,8 @@ void Core::init()
     connect(m_proxy, &TaidaFlowProxy::pump2HzSvChanged, m_manager, &Manager::setPump2HzSv);
     connect(m_proxy, &TaidaFlowProxy::motorRunningSvChanged,
             m_manager, &Manager::setMotorRunningSv);
+    connect(m_proxy, &TaidaFlowProxy::wayValveOpenSvChanged,
+            m_manager, &Manager::setWayValveOpenSv);
     connect(m_proxy, &TaidaFlowProxy::inverterResetSvChanged,
             m_manager, &Manager::setInverterResetSv);
     connect(m_proxy, &TaidaFlowProxy::emergencyStopSvChanged,
@@ -77,6 +79,8 @@ void Core::init()
     connect(m_proxy, &TaidaFlowProxy::pump2HzSvChanged, this,
             [this](double) { saveHmiInputSettings(); });
     connect(m_proxy, &TaidaFlowProxy::motorRunningSvChanged, this,
+            [this](bool) { saveHmiInputSettings(); });
+    connect(m_proxy, &TaidaFlowProxy::wayValveOpenSvChanged, this,
             [this](bool) { saveHmiInputSettings(); });
 
     connect(m_modbusServer, &ModbusServer::writeRequested,
@@ -105,6 +109,7 @@ void Core::saveHmiInputSettings()
     settings.setValue(QStringLiteral("m4ValueSv"), m_proxy->m4ValueSv());
     settings.setValue(QStringLiteral("pump2HzSv"), m_proxy->pump2HzSv());
     settings.setValue(QStringLiteral("motorRunningSv"), m_proxy->motorRunningSv());
+    settings.setValue(QStringLiteral("wayValveOpenSv"), m_proxy->wayValveOpenSv());
     settings.endGroup();
     settings.sync();
 
@@ -126,6 +131,7 @@ void Core::loadHmiInputSettings()
     m_proxy->setM4ValueSv(settings.value(QStringLiteral("m4ValueSv"), 0.0).toDouble());
     m_proxy->setPump2HzSv(settings.value(QStringLiteral("pump2HzSv"), 0.0).toDouble());
     m_proxy->setMotorRunningSv(settings.value(QStringLiteral("motorRunningSv"), false).toBool());
+    m_proxy->setWayValveOpenSv(settings.value(QStringLiteral("wayValveOpenSv"), false).toBool());
     settings.endGroup();
     m_loadingHmiInputSettings = false;
 

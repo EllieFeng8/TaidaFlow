@@ -3,6 +3,7 @@
 #include "ModbusMapping.h"
 
 #include <QObject>
+#include <QSet>
 #include <QTimer>
 #include <QVector>
 
@@ -21,6 +22,9 @@ public:
 
     void start();
     void stop();
+    bool saveAlarm(const QString &sensor,
+                   const QString &message,
+                   const QString &status);
 
 public slots:
     void setM1Sv(double value);
@@ -37,6 +41,7 @@ public slots:
                          const QList<quint16> &values);
 
 signals:
+    void alarmSaved();
     void serverCoilUpdated(quint16 offset, bool value);
     void serverInputRegisterUpdated(quint16 offset, quint16 value);
     void serverHoldingRegisterUpdated(quint16 offset, quint16 value);
@@ -50,6 +55,7 @@ private:
     void saveServerInputData();
     void mirrorHmiCommandToServer(const ModbusMapping::WriteBinding &binding,
                                   quint16 rawValue);
+    void checkHighInputAlarm(quint16 serverOffset, quint16 rawValue);
     void updateProcessPoint(ModbusMapping::ProcessPoint point, double value);
     bool writeCommand(ModbusMapping::CommandPoint point, double value);
     void tripDi0Interlock();
@@ -63,6 +69,7 @@ private:
     QVector<quint16> m_serverInputRegisters;
     quint8 m_completedAiGroups = 0;
     bool m_startVfdAfterFrequencyWrite = false;
+    QSet<quint16> m_activeHighInputAlarms;
     // The machine starts in the conservative state.  A true DI0 sample is
     // required before either DO0 (00017) or DO3 (00020) can be energized.
     bool m_di0OutputPermit = false;

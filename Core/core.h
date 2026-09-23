@@ -21,6 +21,7 @@ private:
     ~Core();
     void saveHmiInputSettings();
     void loadHmiInputSettings();
+    void loadAlarmRecords();
 
     Manager* m_manager = nullptr;
     ModbusServer* m_modbusServer = nullptr;

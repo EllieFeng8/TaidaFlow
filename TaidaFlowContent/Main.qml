@@ -526,7 +526,7 @@ Item {
                 color: "transparent"
 
                 border.width: 7
-                border.color: Td.motorRunningSv
+                border.color: Td.motorRunningPv
                               ? "#2866FF00"
                               : "#18666666"
 
@@ -534,7 +534,7 @@ Item {
 
                 // 呼吸縮放
                 SequentialAnimation on scale {
-                    running: Td.motorRunningSv
+                    running: Td.motorRunningPv
                     loops: Animation.Infinite
 
                     NumberAnimation {
@@ -554,7 +554,7 @@ Item {
 
                 // 呼吸透明度
                 SequentialAnimation on opacity {
-                    running: Td.motorRunningSv
+                    running: Td.motorRunningPv
                     loops: Animation.Infinite
 
                     NumberAnimation {
@@ -580,7 +580,7 @@ Item {
                 radius: 15
                 anchors.centerIn: parent
 
-                color: Td.motorRunningSv
+                color: Td.motorRunningPv
                        ? "#3366FF00"
                        : "#33666666"
 
@@ -592,7 +592,7 @@ Item {
 
                     anchors.centerIn: parent
 
-                    color: Td.motorRunningSv
+                    color: Td.motorRunningPv
                            ? "#66FF00"
                            : "#666666"
                 }
@@ -788,15 +788,15 @@ Item {
                 anchors.centerIn: parent
                 color: "transparent"
                 border.width: 7
-                border.color: Td.wayValveOpenSv ? "#2866FF00" : "#18666666"
-                scale: Td.wayValveOpenSv ? pulseScale : 1.0
-                opacity: Td.wayValveOpenSv ? pulseOpacity : 0.3
+                border.color: Td.wayValveOpenPv ? "#2866FF00" : "#18666666"
+                scale: Td.wayValveOpenPv ? pulseScale : 1.0
+                opacity: Td.wayValveOpenPv ? pulseOpacity : 0.3
 
                 property real pulseScale: 1.0
                 property real pulseOpacity: 0.85
 
                 SequentialAnimation on pulseScale {
-                    running: Td.wayValveOpenSv
+                    running: Td.wayValveOpenPv
                     loops: Animation.Infinite
                     NumberAnimation {
                         from: 1.0; to: 1.55; duration: 900
@@ -809,7 +809,7 @@ Item {
                 }
 
                 SequentialAnimation on pulseOpacity {
-                    running: Td.wayValveOpenSv
+                    running: Td.wayValveOpenPv
                     loops: Animation.Infinite
                     NumberAnimation {
                         from: 0.85; to: 0.45; duration: 900
@@ -827,14 +827,14 @@ Item {
                 height: 30
                 radius: 15
                 anchors.centerIn: parent
-                color: Td.wayValveOpenSv ? "#3366FF00" : "#33666666"
+                color: Td.wayValveOpenPv ? "#3366FF00" : "#33666666"
 
                 Rectangle {
                     width: 14
                     height: 14
                     radius: 7
                     anchors.centerIn: parent
-                    color: Td.wayValveOpenSv ? "#66FF00" : "#666666"
+                    color: Td.wayValveOpenPv ? "#66FF00" : "#666666"
                 }
             }
         }

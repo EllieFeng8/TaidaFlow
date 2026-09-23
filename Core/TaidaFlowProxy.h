@@ -37,7 +37,9 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double pump2HzSv READ pump2HzSv WRITE setPump2HzSv NOTIFY pump2HzSvChanged)
     Q_PROPERTY(double pump2HzPv READ pump2HzPv WRITE setPump2HzPv NOTIFY pump2HzPvChanged)
     Q_PROPERTY(bool motorRunningSv READ motorRunningSv WRITE setMotorRunningSv NOTIFY motorRunningSvChanged)
+    Q_PROPERTY(bool motorRunningPv READ motorRunningPv WRITE setMotorRunningPv NOTIFY motorRunningPvChanged)
     Q_PROPERTY(bool wayValveOpenSv READ wayValveOpenSv WRITE setWayValveOpenSv NOTIFY wayValveOpenSvChanged)
+    Q_PROPERTY(bool wayValveOpenPv READ wayValveOpenPv WRITE setWayValveOpenPv NOTIFY wayValveOpenPvChanged)
     // Inverter commands. Reset is momentary in the UI; emergency stop retains
     // its state until the operator releases it.
     Q_PROPERTY(bool inverterResetSv READ inverterResetSv WRITE setInverterResetSv NOTIFY inverterResetSvChanged)
@@ -83,7 +85,9 @@ public:
     double pump2HzSv() const { return m_pump2HzSv; }
     double pump2HzPv() const { return m_pump2HzPv; }
     bool motorRunningSv() const { return m_motorRunningSv; }
+    bool motorRunningPv() const { return m_motorRunningPv; }
     bool wayValveOpenSv() const { return m_wayValveOpenSv; }
+    bool wayValveOpenPv() const { return m_wayValveOpenPv; }
     bool inverterResetSv() const { return m_inverterResetSv; }
     bool emergencyStopSv() const { return m_emergencyStopSv; }
 
@@ -114,6 +118,7 @@ public:
     void setPump2HzPv(double value) { setWritableValue(m_pump2HzPv, value, &TaidaFlowProxy::pump2HzPvChanged); }
     void setInverterResetSv(bool value) { setBooleanValue(m_inverterResetSv, value, &TaidaFlowProxy::inverterResetSvChanged); }
     void setWayValveOpenSv(bool value) { setBooleanValue(m_wayValveOpenSv, value, &TaidaFlowProxy::wayValveOpenSvChanged); }
+    void setWayValveOpenPv(bool value) { setBooleanValue(m_wayValveOpenPv, value, &TaidaFlowProxy::wayValveOpenPvChanged); }
     void setEmergencyStopSv(bool value) { setBooleanValue(m_emergencyStopSv, value, &TaidaFlowProxy::emergencyStopSvChanged); }
     void setTt01ValuePv(double value) { setProcessValue(m_tt01ValuePv, value, &TaidaFlowProxy::tt01ValuePvChanged); }
     void setTt02ValuePv(double value) { setProcessValue(m_tt02ValuePv, value, &TaidaFlowProxy::tt02ValuePvChanged); }
@@ -139,11 +144,13 @@ public:
     }
     void setMotorRunningSv(bool value)
     {
-        if (m_motorRunningSv == value) {
-            return;
-        }
         m_motorRunningSv = value;
         emit motorRunningSvChanged(value);
+    }
+    void setMotorRunningPv(bool value)
+    {
+        m_motorRunningPv = value;
+        emit motorRunningPvChanged(value);
     }
 
     Q_INVOKABLE QString saveHistoryCsv(const QString &csvContent)
@@ -185,7 +192,9 @@ signals:
     void pump2HzSvChanged(double value);
     void pump2HzPvChanged(double value);
     void motorRunningSvChanged(bool value);
+    void motorRunningPvChanged(bool value);
     void wayValveOpenSvChanged(bool value);
+    void wayValveOpenPvChanged(bool value);
     void inverterResetSvChanged(bool value);
     void emergencyStopSvChanged(bool value);
 
@@ -322,7 +331,9 @@ private:
     double m_pump2HzSv = 0.0;
     double m_pump2HzPv = 0.0;
     bool m_motorRunningSv = false;
+    bool m_motorRunningPv = false;
     bool m_wayValveOpenSv = false;
+    bool m_wayValveOpenPv = false;
     bool m_inverterResetSv = false;
     bool m_emergencyStopSv = false;
 

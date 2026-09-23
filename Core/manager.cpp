@@ -6,6 +6,8 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QStringList>
 
 #include <cmath>
@@ -13,6 +15,25 @@
 
 namespace {
 constexpr int kPollIntervalMs = 1000;
+constexpr quint16 kInputHighAlarmThreshold = 58982; // 65535 * 90 %, strict greater-than.
+
+QString highInputAlarmSensorName(quint16 serverOffset)
+{
+    switch (serverOffset) {
+    case 0: return QStringLiteral("TT-01");
+    case 1: return QStringLiteral("TT-02");
+    case 2: return QStringLiteral("TT-03");
+    case 3: return QStringLiteral("TT-04");
+    case 4: return QStringLiteral("PT-01");
+    case 5: return QStringLiteral("PT-02");
+    case 6: return QStringLiteral("PT-03");
+    case 7: return QStringLiteral("PT-04");
+    case 8: return QStringLiteral("PT-05");
+    case 9: return QStringLiteral("PT-06");
+    case 10: return QStringLiteral("PT-07");
+    default: return {};
+    }
+}
 
 QString modbusValuesText(const QList<quint16> &values)
 {
@@ -162,6 +183,36 @@ void Manager::stop()
     m_modbus.disconnectAll();
 }
 
+bool Manager::saveAlarm(const QString &sensor,
+                        const QString &message,
+                        const QString &status)
+{
+    if (!m_sql) {
+        qWarning() << "[SQL] Insert alarm skipped: SqlManager is unavailable.";
+        return false;
+    }
+
+    const QJsonObject alarm{
+        {QStringLiteral("sensor"), sensor},
+        {QStringLiteral("alarmMessage"), message},
+        {QStringLiteral("status"), status},
+    };
+    const QString reason = QString::fromUtf8(
+            QJsonDocument(alarm).toJson(QJsonDocument::Compact));
+
+    QString errorMessage;
+    if (!m_sql->insertAlarm(reason, &errorMessage)) {
+        qWarning().noquote() << "[SQL] Insert alarm failed:" << errorMessage;
+        return false;
+    }
+
+    qInfo().noquote()
+            << QStringLiteral("[SQL] Alarm inserted: sensor=%1 message=%2 status=%3")
+                       .arg(sensor, message, status);
+    emit alarmSaved();
+    return true;
+}
+
 void Manager::setM1Sv(double value)
 {
     writeCommand(ModbusMapping::CommandPoint::M1, value);
@@ -248,6 +299,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             const quint16 serverOffset = static_cast<quint16>(serverStart + aiOffset);
             m_serverInputRegisters[serverOffset] = values.at(index);
             emit serverInputRegisterUpdated(serverOffset, values.at(index));
+            checkHighInputAlarm(serverOffset, values.at(index));
             qInfo().noquote()
                     << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4")
                                .arg(serverOffset)
@@ -310,6 +362,15 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             const bool state = values.at(index) != 0;
             if (doOffset < ModbusServerBridgeMapping::ServerDoCount)
                 emit serverCoilUpdated(static_cast<quint16>(doOffset), state);
+
+            // PV is the physical feedback read from ADAM-6256, not the HMI
+            // command (SV).  DO3 is the makeup-pump command (00020); DO4 is
+            // the circulation bypass / two-way valve command (00021).
+            if (m_proxy && doOffset == 3)
+                m_proxy->setMotorRunningPv(state);
+            else if (m_proxy && doOffset == 4)
+                m_proxy->setWayValveOpenPv(state);
+
             qInfo().noquote()
                     << QStringLiteral("[Modbus][Read] device=%1 point=DO%2 offset=%3 raw=%4 value=%5")
                                .arg(ModbusClient::displayName(device))
@@ -319,6 +380,26 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                .arg(state ? 1 : 0);
         }
     }
+}
+
+void Manager::checkHighInputAlarm(quint16 serverOffset, quint16 rawValue)
+{
+    const QString sensor = highInputAlarmSensorName(serverOffset);
+    if (sensor.isEmpty())
+        return;
+
+    if (rawValue < kInputHighAlarmThreshold) {
+        m_activeHighInputAlarms.remove(serverOffset);
+        return;
+    }
+
+    if (m_activeHighInputAlarms.contains(serverOffset))
+        return;
+
+    const QString message = QStringLiteral("輸入值超過量程 90%（raw=%1）")
+            .arg(rawValue);
+    if (saveAlarm(sensor, message, QStringLiteral("數值異常")))
+        m_activeHighInputAlarms.insert(serverOffset);
 }
 
 void Manager::setWayValveOpenSv(bool open)

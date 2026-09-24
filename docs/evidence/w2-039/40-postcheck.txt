@@ -1,0 +1,8 @@
+﻿postcheck 2026-09-24 18:49:47
+processes TaidaFlowApp/Adam60xxSimulator: 0
+python processes: 0
+listeners 502/8123/8125: 0
+connections 502/8123/8125 (non-TIME_WAIT): 0
+TaidaFlowSettings.ini identical to w2-039-before.bak: True
+runtime sensor DB .w2-039-before.bak left: False
+HEAD: b2c553c

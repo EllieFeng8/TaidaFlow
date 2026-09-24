@@ -1,0 +1,53 @@
+﻿saves: 255 (18:41:01 .. 18:45:15)
+History requests: 9
+  18:40:59.981  [History] request #1 (start-up) page 1 posted to SqlManager thread in 17 us.
+  18:43:46.631  [History] request #2 (page shown) page 1 posted to SqlManager thread in 18 us.
+  18:43:55.185  [History] request #3 (page changed) page 2 posted to SqlManager thread in 16 us.
+  18:44:03.704  [History] request #4 (page changed) page 3 posted to SqlManager thread in 18 us.
+  18:44:12.278  [History] request #5 (page changed) page 4 posted to SqlManager thread in 15 us.
+  18:44:12.300  [History] request #6 (page changed) page 5 posted to SqlManager thread in 14 us.
+  18:44:12.323  [History] request #7 (page changed) page 6 posted to SqlManager thread in 7 us.
+  18:44:20.834  [History] request #8 (page changed) page 5 posted to SqlManager thread in 20 us.
+  18:44:35.870  [History] request #9 (page shown) page 5 posted to SqlManager thread in 17 us.
+saves between consecutive History requests (none of them caused a load):
+         start -> request #1  : 0 saves
+    request #1 -> request #2  : 166 saves
+    request #2 -> request #3  : 9 saves
+    request #3 -> request #4  : 8 saves
+    request #4 -> request #5  : 9 saves
+    request #5 -> request #6  : 0 saves
+    request #6 -> request #7  : 0 saves
+    request #7 -> request #8  : 8 saves
+    request #8 -> request #9  : 15 saves
+    request #9 -> end         : 40 saves
+all [History] lines:
+  18:40:59.981  [History] request #1 (start-up) page 1 posted to SqlManager thread in 17 us.
+  18:41:00.314  [History] #1 applied: page 1/205685, 10 record(s), total 2056844 row(s); SqlManager thread count 45.29 ms + page 1.35 ms; request-to-apply 333.29 ms.
+  18:43:46.631  [History] request #2 (page shown) page 1 posted to SqlManager thread in 18 us.
+  18:43:46.683  [History] #2 applied: page 1/205701, 10 record(s), total 2057010 row(s); SqlManager thread count 50.34 ms + page 1.27 ms; request-to-apply 51.74 ms.
+  18:43:55.185  [History] request #3 (page changed) page 2 posted to SqlManager thread in 16 us.
+  18:43:55.232  [History] #3 applied: page 2/205702, 10 record(s), total 2057019 row(s); SqlManager thread count 45.05 ms + page 1.23 ms; request-to-apply 46.49 ms.
+  18:44:03.704  [History] request #4 (page changed) page 3 posted to SqlManager thread in 18 us.
+  18:44:03.749  [History] #4 applied: page 3/205703, 10 record(s), total 2057027 row(s); SqlManager thread count 43.58 ms + page 1.10 ms; request-to-apply 44.87 ms.
+  18:44:12.278  [History] request #5 (page changed) page 4 posted to SqlManager thread in 15 us.
+  18:44:12.300  [History] request #6 (page changed) page 5 posted to SqlManager thread in 14 us.
+  18:44:12.323  [History] result #5 (page 4) dropped: stale, newest request is #6.
+  18:44:12.323  [History] request #7 (page changed) page 6 posted to SqlManager thread in 7 us.
+  18:44:12.367  [History] result #6 (page 5) dropped: stale, newest request is #7.
+  18:44:12.413  [History] #7 applied: page 6/205704, 10 record(s), total 2057036 row(s); SqlManager thread count 43.90 ms + page 1.02 ms; request-to-apply 89.27 ms.
+  18:44:20.834  [History] request #8 (page changed) page 5 posted to SqlManager thread in 20 us.
+  18:44:20.879  [History] #8 applied: page 5/205705, 10 record(s), total 2057044 row(s); SqlManager thread count 43.46 ms + page 1.07 ms; request-to-apply 44.69 ms.
+  18:44:35.870  [History] request #9 (page shown) page 5 posted to SqlManager thread in 17 us.
+  18:44:35.948  [History] #9 applied: page 5/205706, 10 record(s), total 2057059 row(s); SqlManager thread count 49.64 ms + page 1.17 ms; request-to-apply 77.23 ms.
+
+main-thread ping (10509 pings, 18:43:05 .. 18:44:55):
+  request #1: no ping in window (outside the ping run)
+  request #2: 7 pings during load window 18:43:46.631..18:43:46.733, max 23.90 ms at 18:43:46.692
+  request #3: 10 pings during load window 18:43:55.185..18:43:55.282, max 1.23 ms at 18:43:55.207
+  request #4: 9 pings during load window 18:44:03.704..18:44:03.799, max 0.61 ms at 18:44:03.754
+  request #5: 9 pings during load window 18:44:12.278..18:44:12.373, max 0.91 ms at 18:44:12.283
+  request #6: 11 pings during load window 18:44:12.300..18:44:12.417, max 0.94 ms at 18:44:12.409
+  request #7: 14 pings during load window 18:44:12.323..18:44:12.463, max 0.94 ms at 18:44:12.409
+  request #8: 10 pings during load window 18:44:20.834..18:44:20.929, max 0.58 ms at 18:44:20.908
+  request #9: 9 pings during load window 18:44:35.870..18:44:35.998, max 23.92 ms at 18:44:35.958
+  outside load windows: p50 0.08 ms, p99 2.43 ms, max 36.54 ms

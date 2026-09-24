@@ -1,0 +1,9 @@
+﻿precheck 2026-09-24 18:37:23
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8125: 0
+connections 502/8123/8125: 0
+python processes: 0
+precheck runB 2026-09-24 18:40:45
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8125: 0
+connections 502/8123/8125: 5

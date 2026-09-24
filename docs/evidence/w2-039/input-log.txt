@@ -1,0 +1,12 @@
+﻿[18:38:37.003] w2-039 click (1165,81) -> clicked window(1165,81) screen(2114,540) : run A: History tab (page shown)
+[18:39:00.291] w2-039 click (1089,1061) -> clicked window(1089,1061) screen(2038,1520) : run A: next page (1 -> 2)
+[18:39:06.802] w2-039 click (851,1061) -> clicked window(851,1061) screen(1800,1520) : run A: previous page (2 -> 1)
+[18:39:13.324] w2-039 click (775,81) -> clicked window(775,81) screen(1724,540) : run A: Main tab (history hidden)
+[18:39:19.845] w2-039 click (1165,81) -> clicked window(1165,81) screen(2114,540) : run A: History tab again (page shown)
+[18:43:46.399] w2-039 click (1165,81) -> clicked window(1165,81) screen(2114,540) : run B: History tab (page shown)
+[18:43:54.955] w2-039 click (1089,1061) -> clicked window(1089,1061) screen(2038,1520) : run B: next page (1 -> 2)
+[18:44:03.476] w2-039 click (1089,1061) -> clicked window(1089,1061) screen(2038,1520) : run B: next page (2 -> 3)
+[18:44:12.117] w2-039 fast clicks x3 at window(1089,1061) gap 15 ms, click times 18:44:12.267, 18:44:12.292, 18:44:12.314 : run B: 3 fast next clicks (3 -> 6 expected)
+[18:44:20.606] w2-039 click (851,1061) -> clicked window(851,1061) screen(1800,1520) : run B: previous page
+[18:44:29.121] w2-039 click (775,81) -> clicked window(775,81) screen(1724,540) : run B: Main tab
+[18:44:35.643] w2-039 click (1165,81) -> clicked window(1165,81) screen(2114,540) : run B: History tab again (page shown)

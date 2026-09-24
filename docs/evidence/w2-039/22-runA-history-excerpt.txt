@@ -1,0 +1,122 @@
+﻿29: 18:37:52.991 [t31236] [History] request #1 (start-up) page 1 posted to SqlManager thread in 24 us.
+43: 18:37:53.277 [t31236] [SQL] Loaded sensor-history page 1/292: 10 record(s).
+44: 18:37:53.277 [t31236] [History] #1 applied: page 1/292, 10 record(s), total 2917 row(s); SqlManager thread count 0.67 ms + page 0.85 ms; request-to-apply 285.82 ms.
+111: 18:37:54.071 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+173: 18:37:55.018 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+230: 18:37:56.018 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+286: 18:37:57.014 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+339: 18:37:58.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+395: 18:37:59.009 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+454: 18:38:00.007 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+511: 18:38:01.007 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+568: 18:38:01.992 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+621: 18:38:03.002 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+680: 18:38:04.003 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+736: 18:38:05.001 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+792: 18:38:06.014 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+848: 18:38:07.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+904: 18:38:08.027 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+960: 18:38:08.995 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1016: 18:38:09.997 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1072: 18:38:11.001 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1127: 18:38:11.993 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1182: 18:38:12.992 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1237: 18:38:13.994 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1292: 18:38:14.994 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1347: 18:38:15.990 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1398: 18:38:17.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1455: 18:38:18.009 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1509: 18:38:19.020 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1562: 18:38:20.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1614: 18:38:21.027 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1667: 18:38:21.999 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1720: 18:38:23.001 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1773: 18:38:24.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1825: 18:38:25.004 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1878: 18:38:26.004 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1930: 18:38:27.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+1980: 18:38:27.998 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2035: 18:38:28.999 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2085: 18:38:30.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2140: 18:38:31.010 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2192: 18:38:32.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2244: 18:38:33.022 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2296: 18:38:34.039 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2348: 18:38:35.008 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2400: 18:38:36.011 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2452: 18:38:37.002 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2470: 18:38:37.232 [t31236] [History] request #2 (page shown) page 1 posted to SqlManager thread in 18 us.
+2473: 18:38:37.234 [t31236] [SQL] Loaded sensor-history page 1/297: 10 record(s).
+2474: 18:38:37.234 [t31236] [History] #2 applied: page 1/297, 10 record(s), total 2961 row(s); SqlManager thread count 0.69 ms + page 0.77 ms; request-to-apply 1.53 ms.
+2509: 18:38:38.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2558: 18:38:39.007 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2613: 18:38:40.004 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2665: 18:38:41.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2717: 18:38:41.995 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2769: 18:38:43.001 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2821: 18:38:44.012 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2873: 18:38:45.020 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2925: 18:38:46.035 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2977: 18:38:47.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3029: 18:38:48.009 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3081: 18:38:49.011 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3133: 18:38:50.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3185: 18:38:51.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3237: 18:38:52.002 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3289: 18:38:53.008 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3338: 18:38:54.008 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3393: 18:38:55.008 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3445: 18:38:56.010 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3497: 18:38:57.008 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3549: 18:38:58.004 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3601: 18:38:59.034 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3650: 18:39:00.010 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3671: 18:39:00.521 [t31236] [History] request #3 (page changed) page 2 posted to SqlManager thread in 17 us.
+3674: 18:39:00.522 [t31236] [SQL] Loaded sensor-history page 2/299: 10 record(s).
+3675: 18:39:00.522 [t31236] [History] #3 applied: page 2/299, 10 record(s), total 2984 row(s); SqlManager thread count 0.68 ms + page 0.81 ms; request-to-apply 1.58 ms.
+3707: 18:39:01.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3762: 18:39:01.997 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3814: 18:39:03.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3866: 18:39:04.001 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3918: 18:39:05.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+3967: 18:39:06.012 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4022: 18:39:07.009 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4040: 18:39:07.032 [t31236] [History] request #4 (page changed) page 1 posted to SqlManager thread in 14 us.
+4043: 18:39:07.034 [t31236] [SQL] Loaded sensor-history page 1/300: 10 record(s).
+4044: 18:39:07.034 [t31236] [History] #4 applied: page 1/300, 10 record(s), total 2991 row(s); SqlManager thread count 0.63 ms + page 0.76 ms; request-to-apply 2.00 ms.
+4079: 18:39:08.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4131: 18:39:09.024 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4183: 18:39:10.012 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4235: 18:39:11.027 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4287: 18:39:12.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4339: 18:39:13.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4388: 18:39:14.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4440: 18:39:15.002 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4495: 18:39:16.000 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4544: 18:39:17.011 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4599: 18:39:17.999 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4648: 18:39:18.997 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4703: 18:39:19.998 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4721: 18:39:20.071 [t31236] [History] request #5 (page shown) page 1 posted to SqlManager thread in 17 us.
+4724: 18:39:20.073 [t31236] [SQL] Loaded sensor-history page 1/301: 10 record(s).
+4725: 18:39:20.073 [t31236] [History] #5 applied: page 1/301, 10 record(s), total 3004 row(s); SqlManager thread count 0.70 ms + page 0.73 ms; request-to-apply 1.84 ms.
+4760: 18:39:20.999 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4812: 18:39:22.009 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4864: 18:39:23.026 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4916: 18:39:24.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+4965: 18:39:25.004 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5020: 18:39:26.002 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5069: 18:39:26.998 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5124: 18:39:27.997 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5173: 18:39:28.993 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5225: 18:39:29.995 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5277: 18:39:30.994 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5332: 18:39:31.995 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5384: 18:39:32.998 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5436: 18:39:34.013 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5488: 18:39:35.037 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5540: 18:39:36.011 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5592: 18:39:37.011 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5644: 18:39:38.005 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5696: 18:39:39.006 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+5745: 18:39:40.010 [t31236] [SQL] Saved Server Input Registers 0..19 to sensor_data.

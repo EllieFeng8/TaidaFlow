@@ -1,0 +1,492 @@
+﻿diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index e7d082d..281d98c 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -16,6 +16,7 @@
+ #include <QFileInfo>
+ #include <QFile>
+ #include <QTextStream>
++#include <QElapsedTimer>
+ #include <limits>
+ 
+ SqlManager* SqlManager::s_instance = nullptr;
+@@ -268,6 +269,7 @@ SqlManager::SqlManager(QObject* parent)
+     , m_thread(nullptr)
+     , m_threadStarted(false)
+ {
++    qRegisterMetaType<SensorHistoryPageResult>("SensorHistoryPageResult");
+ }
+ 
+ SqlManager::~SqlManager()
+@@ -839,6 +841,148 @@ bool SqlManager::countSensorRange(qint64 from, qint64 to, qint64* total, QString
+     });
+ }
+ 
++bool SqlManager::querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
++                                           QJsonArray* out, QString* errMsg)
++{
++    return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
++        if (!out)
++        {
++            if (errMsg) *errMsg = "output array is null";
++            return false;
++        }
++        *out = QJsonArray();
++        if (to < from)
++        {
++            if (errMsg) *errMsg = "to < from";
++            return false;
++        }
++        if (page <= 0 || pageSize <= 0)
++        {
++            if (errMsg) *errMsg = "page and pageSize must be positive";
++            return false;
++        }
++
++        const QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
++        const QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
++        if (startDate.year() != endDate.year() || startDate.month() != endDate.month())
++        {
++            if (errMsg) *errMsg = "from and to must be in the same month";
++            return false;
++        }
++
++        const QString key = monthKey(startDate);
++        if (!QFileInfo::exists(dataFileForKey(key)))
++        {
++            return true;
++        }
++
++        QSqlDatabase db = openDataDb(key);
++        if (!db.isValid() || !db.isOpen())
++        {
++            if (errMsg) *errMsg = "db open failed";
++            return false;
++        }
++        if (!ensureDataSchema(db))
++        {
++            if (errMsg) *errMsg = "ensure schema failed";
++            return false;
++        }
++
++        QStringList columns;
++        columns << "timestamp";
++        for (int i = 0; i < kSensorCount; ++i)
++        {
++            columns << QString("s%1").arg(i + 1);
++        }
++
++        // Walks idx_sensor_data_ts backwards from the newest row; rowid breaks
++        // ties between equal timestamps so that pages never overlap.
++        QSqlQuery query(db);
++        query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to "
++                              "ORDER BY timestamp DESC, rowid DESC LIMIT :limit OFFSET :offset")
++                          .arg(columns.join(", ")));
++        query.bindValue(":from", from);
++        query.bindValue(":to", to);
++        query.bindValue(":limit", pageSize);
++        query.bindValue(":offset", static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize));
++        if (!query.exec())
++        {
++            if (errMsg) *errMsg = query.lastError().text();
++            return false;
++        }
++
++        while (query.next())
++        {
++            QJsonObject obj;
++            obj.insert("ts", query.value(0).toLongLong());
++            for (int i = 0; i < kSensorCount; ++i)
++            {
++                obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
++            }
++            out->append(obj);
++        }
++        return true;
++    });
++}
++
++void SqlManager::requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
++                                          int page, int pageSize)
++{
++    // Remember the newest id first, so that an older request still waiting in
++    // the queue is skipped instead of executed.
++    quint64 latest = m_latestHistoryRequestId.load();
++    while (latest < requestId
++           && !m_latestHistoryRequestId.compare_exchange_weak(latest, requestId))
++    {
++    }
++
++    // Queued, never blocking: the work runs later on the SqlManager thread and
++    // the result goes back through the sensorHistoryPageReady signal.  'this'
++    // is the context object, so nothing runs once SqlManager is destroyed.
++    QMetaObject::invokeMethod(this, [this, requestId, from, to, page, pageSize]() {
++        SensorHistoryPageResult result;
++        result.requestId = requestId;
++        result.page = page;
++        result.pageSize = pageSize;
++
++        if (requestId < m_latestHistoryRequestId.load())
++        {
++            result.superseded = true;
++            emit sensorHistoryPageReady(result);
++            return;
++        }
++
++        QElapsedTimer timer;
++        timer.start();
++        QString err;
++        result.countOk = countSensorRange(from, to, &result.totalRows, &err);   // runs inline on this thread
++        result.countMs = timer.nsecsElapsed() / 1.0e6;
++        if (!result.countOk)
++        {
++            result.errorMessage = err;
++            emit sensorHistoryPageReady(result);
++            return;
++        }
++
++        timer.restart();
++        const qint64 offset = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
++        if (result.totalRows > 0 && page > 0 && offset < result.totalRows)
++        {
++            result.ok = querySensorRangeDescPaged(from, to, page, pageSize, &result.samples, &err);
++            if (!result.ok)
++                result.errorMessage = err;
++        }
++        else
++        {
++            result.ok = page > 0;      // empty month or page past the end: no page query
++            if (!result.ok)
++                result.errorMessage = "page must be positive";
++        }
++        result.pageMs = timer.nsecsElapsed() / 1.0e6;
++        emit sensorHistoryPageReady(result);
++    }, Qt::QueuedConnection);
++}
++
+ bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)
+ {
+     return runOnThread([this, from, to, total, errMsg]() {
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index 252367a..5bff957 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -13,6 +13,25 @@
+ #include <type_traits>
+ #include <QString>
+ #include <QtGlobal>
++#include <atomic>
++
++// w2-039: result of one History-page load (one COUNT + one newest-first page),
++// produced on the SqlManager thread and delivered queued to the requester.
++struct SensorHistoryPageResult
++{
++    quint64 requestId = 0;
++    int page = 0;              // 1-based, page 1 = newest rows
++    int pageSize = 0;
++    qint64 totalRows = 0;      // rows of sensor_data in [from, to]
++    QJsonArray samples;        // newest first; same object layout as queryRangeJsonPaged
++    bool ok = false;
++    bool countOk = false;
++    bool superseded = false;   // skipped: a newer request was already queued
++    QString errorMessage;
++    double countMs = 0.0;      // measured on the SqlManager thread
++    double pageMs = 0.0;
++};
++Q_DECLARE_METATYPE(SensorHistoryPageResult)
+ 
+ class SqlManager : public QObject
+ {
+@@ -62,6 +81,25 @@ public:
+                            QString* errMsg = nullptr);
+     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
+ 
++    // w2-039 History page (newest first).  [from, to] must lie in one calendar
++    // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
++    // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other
++    // public functions when called from another thread.
++    bool querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
++                                   QJsonArray* out, QString* errMsg = nullptr);
++
++    // w2-039 asynchronous History load: returns immediately (never blocks the
++    // caller).  On the SqlManager thread it runs one COUNT for [from, to] and
++    // one querySensorRangeDescPaged(), then emits sensorHistoryPageReady().
++    // Connect to it with a queued connection.  A request whose id is lower
++    // than the newest requested id when it starts is not executed and is
++    // reported with superseded = true.
++    void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
++                                  int page, int pageSize);
++
++signals:
++    void sensorHistoryPageReady(const SensorHistoryPageResult& result);
++
+ private:
+     explicit SqlManager(QObject* parent = nullptr);
+     void startWorkerThread();
+@@ -76,6 +114,7 @@ private:
+     QString m_dataSchemaPath;
+     QThread* m_thread;
+     bool m_threadStarted;
++    std::atomic<quint64> m_latestHistoryRequestId{0};
+ 
+     QString monthKey(const QDate& date) const;
+     QString dataFileForKey(const QString& key) const;
+diff --git a/Core/core.cpp b/Core/core.cpp
+index a62c230..ce2f94a 100644
+--- a/Core/core.cpp
++++ b/Core/core.cpp
+@@ -83,6 +83,12 @@ Core& Core::instance()
+ 
+ Core::~Core()
+ {
++    // w2-039: stop History results first.  A load may still be running on the
++    // SqlManager thread; after this disconnect its result is not delivered to
++    // Core, and a result already queued for Core is removed with Core by
++    // ~QObject.  The SqlManager side only captures its own 'this' and values.
++    if (m_sqlManager)
++        disconnect(m_sqlManager, nullptr, this, nullptr);
+     if (m_modbusServer) {
+         m_modbusServer->stop();
+         delete m_modbusServer;
+@@ -118,10 +124,18 @@ void Core::init()
+ 
+     m_manager = new Manager(m_proxy, m_sqlManager, this);
+     connect(m_manager, &Manager::alarmSaved, this, &Core::loadAlarmRecords);
+-    connect(m_manager, &Manager::serverInputDataSaved,
+-            this, &Core::loadHistoryRecords);
++    // w2-039 (Mango): the History page is loaded only when it is shown
++    // (historyRefreshRequested, emitted by HistoryPage.qml, relayed from WASM)
++    // and when the page number changes, plus once at start-up.  It is no
++    // longer reloaded on every saved sample (Manager::serverInputDataSaved is
++    // still emitted, nothing here listens to it).  Loads run asynchronously on
++    // the SqlManager thread; results come back queued.
++    connect(m_sqlManager, &SqlManager::sensorHistoryPageReady,
++            this, &Core::applyHistoryPage, Qt::QueuedConnection);
++    connect(m_proxy, &TaidaFlowProxy::historyRefreshRequested, this,
++            [this]() { loadHistoryRecords("page shown"); });
+     connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this,
+-            [this](int) { loadHistoryRecords(); });
++            [this](int) { loadHistoryRecords("page changed"); });
+     if (!m_manager->saveAlarm(QStringLiteral("100"),
+                               QStringLiteral("設備啟動"),
+                               QStringLiteral("正常"))) {
+@@ -158,7 +172,8 @@ void Core::init()
+ 
+     m_manager->start();
+     m_modbusServer->start();
+-    loadHistoryRecords();
++    setHistoryTitleOnce();
++    loadHistoryRecords("start-up");
+     loadAlarmRecords();
+ }
+ 
+@@ -189,8 +204,10 @@ void Core::reportIgnoredHmiInputSettings()
+     }
+ }
+ 
+-void Core::loadHistoryRecords()
++void Core::setHistoryTitleOnce()
+ {
++    // w2-039: the column titles never change, so they are set once at start-up
++    // instead of on every load.
+     if (!m_proxy)
+         return;
+ 
+@@ -205,77 +222,97 @@ void Core::loadHistoryRecords()
+         QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
+         QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)")
+     });
++}
++
++namespace {
++constexpr int kHistoryPageSize = 10;
++}
++
++void Core::loadHistoryRecords(const char *reason)
++{
++    if (!m_proxy)
++        return;
+ 
+-    QVariantList records;
+     if (!m_sqlManager) {
+         qWarning() << "[SQL] Sensor history skipped: SqlManager is unavailable.";
+-        m_proxy->setHistoryRecords(records);
++        m_proxy->setHistoryRecords(QVariantList{});
+         return;
+     }
+ 
+-    constexpr int kHistoryPageSize = 10;
+     const QDate today = QDate::currentDate();
+     const QDate monthStart(today.year(), today.month(), 1);
+     const qint64 from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
+     const qint64 to = QDateTime(monthStart.addMonths(1), QTime(0, 0))
+                            .addSecs(-1)
+                            .toSecsSinceEpoch();
++    const int page = m_proxy->historyCurrentPage();
++
++    // w2-039: asynchronous.  One COUNT plus one newest-first page run on the
++    // SqlManager thread; applyHistoryPage() receives the result queued.  Only
++    // the result of the newest request is applied.
++    const quint64 requestId = ++m_historyRequestId;
++    m_historyRequestClock.start();
++    m_sqlManager->requestSensorHistoryPage(requestId, from, to, page, kHistoryPageSize);
++    qInfo().noquote()
++            << QStringLiteral("[History] request #%1 (%2) page %3 posted to SqlManager thread in %4 us.")
++                       .arg(requestId)
++                       .arg(QString::fromLatin1(reason))
++                       .arg(page)
++                       .arg(m_historyRequestClock.nsecsElapsed() / 1000);
++}
+ 
+-    qint64 totalRows = 0;
+-    QString errorMessage;
+-    if (!m_sqlManager->countSensorRange(from, to, &totalRows, &errorMessage)) {
+-        qWarning().noquote() << "[SQL] Failed to count sensor-history rows:" << errorMessage;
++void Core::applyHistoryPage(const SensorHistoryPageResult &result)
++{
++    if (!m_proxy)
++        return;
++
++    if (result.requestId != m_historyRequestId) {
++        qInfo().noquote()
++                << QStringLiteral("[History] result #%1 (page %2) dropped: stale, newest request is #%3%4.")
++                           .arg(result.requestId)
++                           .arg(result.page)
++                           .arg(m_historyRequestId)
++                           .arg(result.superseded ? QStringLiteral(" (not executed by SqlManager)")
++                                                  : QString());
++        return;
++    }
++    const double roundTripMs = m_historyRequestClock.nsecsElapsed() / 1.0e6;
++
++    if (!result.countOk) {
++        qWarning().noquote() << "[SQL] Failed to count sensor-history rows:" << result.errorMessage;
+         m_proxy->setHistoryTotalPages(1);
+-        m_proxy->setHistoryRecords(records);
++        m_proxy->setHistoryRecords(QVariantList{});
+         return;
+     }
+ 
++    const qint64 totalRows = result.totalRows;
+     const int totalPages = totalRows > 0
+             ? static_cast<int>((totalRows + kHistoryPageSize - 1) / kHistoryPageSize)
+             : 1;
+     m_proxy->setHistoryTotalPages(totalPages);
+ 
+-    const int currentPage = m_proxy->historyCurrentPage();
+-    if (currentPage > totalPages) {
++    if (result.page > totalPages) {
++        // Emits historyCurrentPageChanged, which requests the last page.
++        qInfo().noquote()
++                << QStringLiteral("[History] #%1 page %2 is past the last page %3; moving to page %3.")
++                           .arg(result.requestId)
++                           .arg(result.page)
++                           .arg(totalPages);
+         m_proxy->setHistoryCurrentPage(totalPages);
+         return;
+     }
+-    if (totalRows == 0) {
+-        m_proxy->setHistoryRecords(records);
++    if (!result.ok) {
++        qWarning().noquote() << "[SQL] Failed to load sensor-history page:" << result.errorMessage;
++        m_proxy->setHistoryRecords(QVariantList{});
+         return;
+     }
+ 
+-    // SqlManager reads chronological pages.  This calculates the matching
+-    // chronological interval for a newest-first UI page.
+-    const qint64 endRow = totalRows
+-            - static_cast<qint64>(currentPage - 1) * kHistoryPageSize;
+-    const qint64 startRow = qMax<qint64>(0, endRow - kHistoryPageSize);
+-    const int firstSqlPage = static_cast<int>(startRow / kHistoryPageSize) + 1;
+-    const int lastSqlPage = static_cast<int>((endRow - 1) / kHistoryPageSize) + 1;
+-
+-    QJsonArray samples;
+-    for (int sqlPage = firstSqlPage; sqlPage <= lastSqlPage; ++sqlPage) {
+-        QJsonArray pageSamples;
+-        if (!m_sqlManager->queryRangeJsonPaged(from, to, sqlPage,
+-                                                kHistoryPageSize, &pageSamples,
+-                                                &errorMessage)) {
+-            qWarning().noquote() << "[SQL] Failed to load sensor-history page:"
+-                                 << errorMessage;
+-            m_proxy->setHistoryRecords(QVariantList{});
+-            return;
+-        }
+-
+-        const qint64 pageStartRow = static_cast<qint64>(sqlPage - 1) * kHistoryPageSize;
+-        const qint64 copyStart = qMax(startRow, pageStartRow);
+-        const qint64 copyEnd = qMin(endRow, pageStartRow
+-                                    + static_cast<qint64>(pageSamples.size()));
+-        for (qint64 row = copyStart; row < copyEnd; ++row)
+-            samples.append(pageSamples.at(static_cast<qsizetype>(row - pageStartRow)));
+-    }
+-
++    // SqlManager returns the page newest first (ORDER BY timestamp DESC), the
++    // order the History page shows; no chronological re-paging is needed.
+     constexpr double adcFullScale = 65535.0;
+-    records.reserve(samples.size());
+-    for (const QJsonValue &sampleValue : samples) {
++    QVariantList records;
++    records.reserve(result.samples.size());
++    for (const QJsonValue &sampleValue : result.samples) {
+         const QJsonObject sample = sampleValue.toObject();
+         const qint64 timestamp = static_cast<qint64>(
+                 sample.value(QStringLiteral("ts")).toDouble());
+@@ -310,9 +347,20 @@ void Core::loadHistoryRecords()
+ 
+     qInfo().noquote()
+             << QStringLiteral("[SQL] Loaded sensor-history page %1/%2: %3 record(s).")
+-                       .arg(currentPage)
++                       .arg(result.page)
+                        .arg(totalPages)
+                        .arg(records.size());
++    qInfo().noquote()
++            << QStringLiteral("[History] #%1 applied: page %2/%3, %4 record(s), total %5 row(s); "
++                              "SqlManager thread count %6 ms + page %7 ms; request-to-apply %8 ms.")
++                       .arg(result.requestId)
++                       .arg(result.page)
++                       .arg(totalPages)
++                       .arg(records.size())
++                       .arg(totalRows)
++                       .arg(result.countMs, 0, 'f', 2)
++                       .arg(result.pageMs, 0, 'f', 2)
++                       .arg(roundTripMs, 0, 'f', 2);
+     m_proxy->setHistoryRecords(records);
+ }
+ 
+diff --git a/Core/core.h b/Core/core.h
+index 39432ca..dab5e54 100644
+--- a/Core/core.h
++++ b/Core/core.h
+@@ -1,10 +1,12 @@
+ #pragma once
++#include <QElapsedTimer>
+ #include <QObject>
+ #include "manager.h"
+ #include "TaidaFlowProxy.h"
+ 
+ class ModbusServer;
+ class SqlManager;
++struct SensorHistoryPageResult;
+ 
+ class Core : public QObject
+ {
+@@ -20,11 +22,17 @@ private:
+     explicit Core(QObject* parent = nullptr) {}
+     ~Core();
+     void reportIgnoredHmiInputSettings();
+-    void loadHistoryRecords();
++    void setHistoryTitleOnce();
++    void loadHistoryRecords(const char *reason);
++    void applyHistoryPage(const SensorHistoryPageResult &result);
+     void loadAlarmRecords();
+ 
+     Manager* m_manager = nullptr;
+     ModbusServer* m_modbusServer = nullptr;
+     SqlManager* m_sqlManager = nullptr;
++    // w2-039: id of the newest History request; results with another id are
++    // stale and dropped.
++    quint64 m_historyRequestId = 0;
++    QElapsedTimer m_historyRequestClock;   // started when the newest request is posted
+ 
+ };

@@ -16,6 +16,7 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
+#include <QElapsedTimer>
 #include <limits>
 
 SqlManager* SqlManager::s_instance = nullptr;
@@ -268,6 +269,7 @@ SqlManager::SqlManager(QObject* parent)
     , m_thread(nullptr)
     , m_threadStarted(false)
 {
+    qRegisterMetaType<SensorHistoryPageResult>("SensorHistoryPageResult");
 }
 
 SqlManager::~SqlManager()
@@ -837,6 +839,148 @@ bool SqlManager::countSensorRange(qint64 from, qint64 to, qint64* total, QString
 
         return true;
     });
+}
+
+bool SqlManager::querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
+                                           QJsonArray* out, QString* errMsg)
+{
+    return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
+        if (!out)
+        {
+            if (errMsg) *errMsg = "output array is null";
+            return false;
+        }
+        *out = QJsonArray();
+        if (to < from)
+        {
+            if (errMsg) *errMsg = "to < from";
+            return false;
+        }
+        if (page <= 0 || pageSize <= 0)
+        {
+            if (errMsg) *errMsg = "page and pageSize must be positive";
+            return false;
+        }
+
+        const QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
+        const QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
+        if (startDate.year() != endDate.year() || startDate.month() != endDate.month())
+        {
+            if (errMsg) *errMsg = "from and to must be in the same month";
+            return false;
+        }
+
+        const QString key = monthKey(startDate);
+        if (!QFileInfo::exists(dataFileForKey(key)))
+        {
+            return true;
+        }
+
+        QSqlDatabase db = openDataDb(key);
+        if (!db.isValid() || !db.isOpen())
+        {
+            if (errMsg) *errMsg = "db open failed";
+            return false;
+        }
+        if (!ensureDataSchema(db))
+        {
+            if (errMsg) *errMsg = "ensure schema failed";
+            return false;
+        }
+
+        QStringList columns;
+        columns << "timestamp";
+        for (int i = 0; i < kSensorCount; ++i)
+        {
+            columns << QString("s%1").arg(i + 1);
+        }
+
+        // Walks idx_sensor_data_ts backwards from the newest row; rowid breaks
+        // ties between equal timestamps so that pages never overlap.
+        QSqlQuery query(db);
+        query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to "
+                              "ORDER BY timestamp DESC, rowid DESC LIMIT :limit OFFSET :offset")
+                          .arg(columns.join(", ")));
+        query.bindValue(":from", from);
+        query.bindValue(":to", to);
+        query.bindValue(":limit", pageSize);
+        query.bindValue(":offset", static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize));
+        if (!query.exec())
+        {
+            if (errMsg) *errMsg = query.lastError().text();
+            return false;
+        }
+
+        while (query.next())
+        {
+            QJsonObject obj;
+            obj.insert("ts", query.value(0).toLongLong());
+            for (int i = 0; i < kSensorCount; ++i)
+            {
+                obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
+            }
+            out->append(obj);
+        }
+        return true;
+    });
+}
+
+void SqlManager::requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
+                                          int page, int pageSize)
+{
+    // Remember the newest id first, so that an older request still waiting in
+    // the queue is skipped instead of executed.
+    quint64 latest = m_latestHistoryRequestId.load();
+    while (latest < requestId
+           && !m_latestHistoryRequestId.compare_exchange_weak(latest, requestId))
+    {
+    }
+
+    // Queued, never blocking: the work runs later on the SqlManager thread and
+    // the result goes back through the sensorHistoryPageReady signal.  'this'
+    // is the context object, so nothing runs once SqlManager is destroyed.
+    QMetaObject::invokeMethod(this, [this, requestId, from, to, page, pageSize]() {
+        SensorHistoryPageResult result;
+        result.requestId = requestId;
+        result.page = page;
+        result.pageSize = pageSize;
+
+        if (requestId < m_latestHistoryRequestId.load())
+        {
+            result.superseded = true;
+            emit sensorHistoryPageReady(result);
+            return;
+        }
+
+        QElapsedTimer timer;
+        timer.start();
+        QString err;
+        result.countOk = countSensorRange(from, to, &result.totalRows, &err);   // runs inline on this thread
+        result.countMs = timer.nsecsElapsed() / 1.0e6;
+        if (!result.countOk)
+        {
+            result.errorMessage = err;
+            emit sensorHistoryPageReady(result);
+            return;
+        }
+
+        timer.restart();
+        const qint64 offset = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
+        if (result.totalRows > 0 && page > 0 && offset < result.totalRows)
+        {
+            result.ok = querySensorRangeDescPaged(from, to, page, pageSize, &result.samples, &err);
+            if (!result.ok)
+                result.errorMessage = err;
+        }
+        else
+        {
+            result.ok = page > 0;      // empty month or page past the end: no page query
+            if (!result.ok)
+                result.errorMessage = "page must be positive";
+        }
+        result.pageMs = timer.nsecsElapsed() / 1.0e6;
+        emit sensorHistoryPageReady(result);
+    }, Qt::QueuedConnection);
 }
 
 bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)

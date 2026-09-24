@@ -1,0 +1,195 @@
+﻿cmd.exe : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:384
++ ... ctest.log"; & cmd /c D:\repo\codex\qmlTester\taidaflow\docs\evidence\ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- Configuring done (0.2s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest
+[1/4] Automatic MOC and UIC for target tst_w2039_history
+[2/3] Building CXX object CMakeFiles\tst_w2039_history.dir\tst_w2039_history.cpp.obj
+[3/3] Linking CXX executable tst_w2039_history.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2039_history
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-039-qtest\tst_w2039_history.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest
+1: Test timeout computed to be: 600
+1: ********* Start testing of TstW2039History *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TstW2039History::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/settings_schema.sql"
+1: QWARN  : TstW2039History::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::initTestCase()
+1: QWARN  : TstW2039History::descPageContents(page 1) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 1) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 1) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageContents(page 1)
+1: QWARN  : TstW2039History::descPageContents(page 2) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 2) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 2) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageContents(page 2)
+1: QWARN  : TstW2039History::descPageContents(page 1000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 1000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 1000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageContents(page 1000)
+1: QWARN  : TstW2039History::descPageContents(page 10000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 10000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(page 10000) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageContents(page 10000)
+1: QWARN  : TstW2039History::descPageContents(last page 259200) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(last page 259200) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::descPageContents(last page 259200) Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageContents(last page 259200)
+1: QWARN  : TstW2039History::descPageValidation() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::descPageValidation()
+1: QINFO  : TstW2039History::loadTimes() load (Release, best of 5)                        page         ms
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::loadTimes() OLD countSensorRange + ASC paged (2 COUNT)          1      172.4
+1: QINFO  : TstW2039History::loadTimes() NEW 1 COUNT + DESC page (SqlManager thread)         1       55.8  (count 54.9 + page 0.86)
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::loadTimes() OLD countSensorRange + ASC paged (2 COUNT)       1000      173.2
+1: QINFO  : TstW2039History::loadTimes() NEW 1 COUNT + DESC page (SqlManager thread)      1000       56.3  (count 55.3 + page 1.03)
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::loadTimes() OLD countSensorRange + ASC paged (2 COUNT)      10000      172.9
+1: QINFO  : TstW2039History::loadTimes() NEW 1 COUNT + DESC page (SqlManager thread)     10000       56.6  (count 54.2 + page 2.45)
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::loadTimes() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::loadTimes() OLD countSensorRange + ASC paged (2 COUNT)     259200      107.4
+1: QINFO  : TstW2039History::loadTimes() NEW 1 COUNT + DESC page (SqlManager thread)    259200      117.4  (count 54.7 + page 62.65)
+1: PASS   : TstW2039History::loadTimes()
+1: QINFO  : TstW2039History::alternativeFetchSensorDataSlice() fetchSensorData slice (alternative)              page  rows read         ms
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::alternativeFetchSensorDataSlice() fetchSensorData(limit = page*10) + slice            1         10        0.4
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::alternativeFetchSensorDataSlice() fetchSensorData(limit = page*10) + slice         1000      10000       34.9
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::alternativeFetchSensorDataSlice() fetchSensorData(limit = page*10) + slice        10000     100000      362.5
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::alternativeFetchSensorDataSlice() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::alternativeFetchSensorDataSlice() fetchSensorData(limit = page*10) + slice        25920     259200     1013.3
+1: PASS   : TstW2039History::alternativeFetchSensorDataSlice()
+1: QINFO  : TstW2039History::mainThreadStall() main-thread max tick gap with no load (timer jitter reference): 11.5 ms
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::mainThreadStall() main-thread max tick gap: OLD blocking load 183.3 ms | NEW async load 11.5 ms (request posted in 51 us; SqlManager thread count 56.5 ms + page 0.93 ms)
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::mainThreadStall() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/settings_schema.sql"
+1: QINFO  : TstW2039History::mainThreadStall() residual: a blocking SqlManager call issued right after the request waited 59.8 ms (load count 58.5 + page 0.91 ms)
+1: PASS   : TstW2039History::mainThreadStall()
+1: QWARN  : TstW2039History::staleRequestsDropped() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::staleRequestsDropped() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::staleRequestsDropped() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::staleRequestsDropped() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QINFO  : TstW2039History::staleRequestsDropped() 5 rapid requests: applied 1 (newest, page 500), dropped 4, of which not executed by SqlManager (superseded) 3
+1: PASS   : TstW2039History::staleRequestsDropped()
+1: QWARN  : TstW2039History::receiverDestroyedWhileLoading() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: QWARN  : TstW2039History::receiverDestroyedWhileLoading() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-039-qtest/data_schema.sql"
+1: PASS   : TstW2039History::receiverDestroyedWhileLoading()
+1: PASS   : TstW2039History::cleanupTestCase()
+1: Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 13511ms
+1: ********* Finished testing of TstW2039History *********
+1/1 Test #1: tst_w2039_history ................   Passed   13.95 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  13.96 sec
+run-qtest.bat exit=0

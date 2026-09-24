@@ -1,0 +1,25 @@
+﻿saves: 107 (18:37:54 .. 18:39:40)
+History requests: 5
+  18:37:52.991  [History] request #1 (start-up) page 1 posted to SqlManager thread in 24 us.
+  18:38:37.232  [History] request #2 (page shown) page 1 posted to SqlManager thread in 18 us.
+  18:39:00.521  [History] request #3 (page changed) page 2 posted to SqlManager thread in 17 us.
+  18:39:07.032  [History] request #4 (page changed) page 1 posted to SqlManager thread in 14 us.
+  18:39:20.071  [History] request #5 (page shown) page 1 posted to SqlManager thread in 17 us.
+saves between consecutive History requests (none of them caused a load):
+         start -> request #1  : 0 saves
+    request #1 -> request #2  : 44 saves
+    request #2 -> request #3  : 23 saves
+    request #3 -> request #4  : 7 saves
+    request #4 -> request #5  : 13 saves
+    request #5 -> end         : 20 saves
+all [History] lines:
+  18:37:52.991  [History] request #1 (start-up) page 1 posted to SqlManager thread in 24 us.
+  18:37:53.277  [History] #1 applied: page 1/292, 10 record(s), total 2917 row(s); SqlManager thread count 0.67 ms + page 0.85 ms; request-to-apply 285.82 ms.
+  18:38:37.232  [History] request #2 (page shown) page 1 posted to SqlManager thread in 18 us.
+  18:38:37.234  [History] #2 applied: page 1/297, 10 record(s), total 2961 row(s); SqlManager thread count 0.69 ms + page 0.77 ms; request-to-apply 1.53 ms.
+  18:39:00.521  [History] request #3 (page changed) page 2 posted to SqlManager thread in 17 us.
+  18:39:00.522  [History] #3 applied: page 2/299, 10 record(s), total 2984 row(s); SqlManager thread count 0.68 ms + page 0.81 ms; request-to-apply 1.58 ms.
+  18:39:07.032  [History] request #4 (page changed) page 1 posted to SqlManager thread in 14 us.
+  18:39:07.034  [History] #4 applied: page 1/300, 10 record(s), total 2991 row(s); SqlManager thread count 0.63 ms + page 0.76 ms; request-to-apply 2.00 ms.
+  18:39:20.071  [History] request #5 (page shown) page 1 posted to SqlManager thread in 17 us.
+  18:39:20.073  [History] #5 applied: page 1/301, 10 record(s), total 3004 row(s); SqlManager thread count 0.70 ms + page 0.73 ms; request-to-apply 1.84 ms.

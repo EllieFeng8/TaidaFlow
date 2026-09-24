@@ -13,6 +13,25 @@
 #include <type_traits>
 #include <QString>
 #include <QtGlobal>
+#include <atomic>
+
+// w2-039: result of one History-page load (one COUNT + one newest-first page),
+// produced on the SqlManager thread and delivered queued to the requester.
+struct SensorHistoryPageResult
+{
+    quint64 requestId = 0;
+    int page = 0;              // 1-based, page 1 = newest rows
+    int pageSize = 0;
+    qint64 totalRows = 0;      // rows of sensor_data in [from, to]
+    QJsonArray samples;        // newest first; same object layout as queryRangeJsonPaged
+    bool ok = false;
+    bool countOk = false;
+    bool superseded = false;   // skipped: a newer request was already queued
+    QString errorMessage;
+    double countMs = 0.0;      // measured on the SqlManager thread
+    double pageMs = 0.0;
+};
+Q_DECLARE_METATYPE(SensorHistoryPageResult)
 
 class SqlManager : public QObject
 {
@@ -62,6 +81,25 @@ public:
                            QString* errMsg = nullptr);
     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
 
+    // w2-039 History page (newest first).  [from, to] must lie in one calendar
+    // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
+    // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other
+    // public functions when called from another thread.
+    bool querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
+                                   QJsonArray* out, QString* errMsg = nullptr);
+
+    // w2-039 asynchronous History load: returns immediately (never blocks the
+    // caller).  On the SqlManager thread it runs one COUNT for [from, to] and
+    // one querySensorRangeDescPaged(), then emits sensorHistoryPageReady().
+    // Connect to it with a queued connection.  A request whose id is lower
+    // than the newest requested id when it starts is not executed and is
+    // reported with superseded = true.
+    void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
+                                  int page, int pageSize);
+
+signals:
+    void sensorHistoryPageReady(const SensorHistoryPageResult& result);
+
 private:
     explicit SqlManager(QObject* parent = nullptr);
     void startWorkerThread();
@@ -76,6 +114,7 @@ private:
     QString m_dataSchemaPath;
     QThread* m_thread;
     bool m_threadStarted;
+    std::atomic<quint64> m_latestHistoryRequestId{0};
 
     QString monthKey(const QDate& date) const;
     QString dataFileForKey(const QString& key) const;

@@ -1,0 +1,26 @@
+﻿db=D:\repo\codex\qmlTester\taidaflow\build\w2-039-bench\data\sensor_202609.sqlite rows=2592000 size=571 MB
+
+COUNT(1) month range: best 57.3 ms (first 57.4 ms)
+
+variant                               page   page ms  load ms (best)  newest ts of page
+OLD 2xCOUNT + ASC OFFSET total-10        1      65.0           179.7  1790783999
+NEW COUNT + DESC plain (used)            1       0.1            57.4  1790783999
+NEW COUNT + DESC keyed                   1       0.1            57.4  1790783999
+NEW COUNT + DESC plain (used)         1000       0.2            57.6  1790774009
+NEW COUNT + DESC keyed                1000       0.2            57.5  1790774009
+NEW COUNT + DESC plain (used)        10000       1.7            59.0  1790684009
+NEW COUNT + DESC keyed               10000       1.2            58.6  1790684009
+NEW COUNT + DESC plain (used)       129600      31.9            89.3  1789488009
+NEW COUNT + DESC keyed              129600      26.3            83.6  1789488009
+NEW COUNT + DESC plain (used)       259200      65.8           123.1  1788192009
+NEW COUNT + DESC keyed              259200      52.3           109.6  1788192009
+
+page1 == reversed(old ASC last 10): True
+query plan plain (used):
+    (8, 0, 162, 'SEARCH sensor_data USING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)')
+query plan keyed:
+    (3, 0, 91, 'SEARCH sensor_data USING INTEGER PRIMARY KEY (rowid=?)')
+    (7, 0, 0, 'LIST SUBQUERY 1')
+    (15, 7, 147, 'SEARCH sensor_data USING COVERING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)')
+    (29, 7, 0, 'CREATE BLOOM FILTER')
+    (123, 0, 0, 'USE TEMP B-TREE FOR ORDER BY')

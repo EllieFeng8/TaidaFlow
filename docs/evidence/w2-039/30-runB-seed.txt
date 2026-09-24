@@ -1,0 +1,4 @@
+﻿before seed: sensor_202609.sqlite rows=3024 min=2026-09-24 13:28:07 max=2026-09-24 18:39:40 size=0 MB
+seeded 2053820 rows (2026-09-01 00:00:00 .. 2026-09-24 18:30:19)
+after seed: sensor_202609.sqlite rows=2056844 min=2026-09-01 00:00:00 max=2026-09-24 18:39:40 size=453 MB
+restored: sensor_202609.sqlite rows=3024 min=2026-09-24 13:28:07 max=2026-09-24 18:39:40 size=0 MB

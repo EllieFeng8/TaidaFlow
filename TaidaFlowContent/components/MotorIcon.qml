@@ -145,8 +145,15 @@ Item {
         id: valueDialog
         enabled: motorIcon.enabled
 
-        width: Overlay.overlay.width * 0.3
-        height: Overlay.overlay.height * 0.3
+        // Web scaling (App.qml): popups are drawn in the window overlay, which the
+        // scale on TopNav (root) does not reach; on the web the dialog uses the
+        // 1920x1080 design size and root's scale itself. Desktop: unchanged.
+        // TopLeft origin: the popup positioner centres width*scale x height*scale (it
+        // multiplies by the popup's scale when it opens), so the scaled box stays centred.
+        width: (Qt.platform.os === "wasm" ? root.width : Overlay.overlay.width) * 0.3
+        height: (Qt.platform.os === "wasm" ? root.height : Overlay.overlay.height) * 0.3
+        scale: root.scale
+        transformOrigin: Qt.platform.os === "wasm" ? Popup.TopLeft : Popup.Center
 
         anchors.centerIn: Overlay.overlay
 

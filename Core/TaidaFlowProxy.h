@@ -76,13 +76,19 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double historyRangeFromMs READ historyRangeFromMs WRITE setHistoryRangeFromMs NOTIFY historyRangeFromMsChanged)
     Q_PROPERTY(double historyRangeToMs READ historyRangeToMs WRITE setHistoryRangeToMs NOTIFY historyRangeToMsChanged)
     // Mirrored (Core -> all clients): export jobs keyed by clientSessionId; each value is a map
-    // {state, progress, queuePosition, rowsWritten, totalRows, fileName, url, savedPath, message}
-    // (spec §3.2). Written only by the Core; each client's QML reads only its own key.
+    // {state, progress, queuePosition, rowsWritten, totalRows, fileName, url, downloadPort,
+    // savedPath, message} (spec §3.2; url is the path "/exports/<file>" and downloadPort the
+    // Core's download port, spec §3.5 revised). Written only by the Core; each client's QML
+    // reads only its own key.
     Q_PROPERTY(QVariantMap historyExportStatus READ historyExportStatus WRITE setHistoryExportStatus NOTIFY historyExportStatusChanged)
     // Local only (STORED false, never mirrored): this client's id, "desktop" on the desktop,
     // "web-xxxx" per browser tab (set by main.cpp before the mirror is created, spec §1).
     // QML sends it with export requests and uses it as the key into historyExportStatus.
     Q_PROPERTY(QString clientSessionId READ clientSessionId NOTIFY clientSessionIdChanged STORED false)
+    // Local only (STORED false, never mirrored): host name of the page URL (location.hostname),
+    // set by the WASM main.cpp before the mirror is created; "" on the desktop. HistoryPage.qml
+    // builds the download link "http://" + pageHost + ":" + downloadPort + url (spec §3.5).
+    Q_PROPERTY(QString pageHost READ pageHost NOTIFY pageHostChanged STORED false)
 
     // Local transport overlay (wasm-mirror pack 1.0.1, package-integration §6.2/§9).
     // STORED false keeps both properties out of the Mirror contract, so the WASM
@@ -142,6 +148,7 @@ public:
     double historyRangeToMs() const { return m_historyRangeToMs; }
     QVariantMap historyExportStatus() const { return m_historyExportStatus; }
     QString clientSessionId() const { return m_clientSessionId; }
+    QString pageHost() const { return m_pageHost; }
     bool transportReady() const { return m_transportReady; }
     QString transportMessage() const { return m_transportMessage; }
 
@@ -250,6 +257,14 @@ public:
         m_clientSessionId = sessionId;
         emit clientSessionIdChanged();
     }
+    // Called only by the WASM composition root (main.cpp) before the mirror is created.
+    void setPageHost(const QString &host)
+    {
+        if (m_pageHost == host)
+            return;
+        m_pageHost = host;
+        emit pageHostChanged();
+    }
     void setMotorRunningSv(bool value)
     {
         m_motorRunningSv = value;
@@ -259,58 +274,6 @@ public:
     {
         m_motorRunningPv = value;
         emit motorRunningPvChanged(value);
-    }
-
-    // DEPRECATED, no QML caller since w2-040: the history page's only download entry is now
-    // historyExportRequested (Core-side raw export, spec §3). Kept unchanged only so that the
-    // core branch (which documents it in README/docs) can delete it together with its docs in
-    // w2-041; it is a Q_INVOKABLE, not a signal/property, so it is not part of the Mirror contract.
-    // Not relayed by the Mirror: runs locally on whichever side the button is pressed.
-    // Return value (formerly read by HistoryPage.qml downloadCsv()):
-    //   ""                  -> cancelled, no message
-    //   "ERROR:<reason>"    -> write failed (desktop only)
-    //   "DOWNLOAD:<name>"   -> WebAssembly: browser download started (asynchronous)
-    //   any other string    -> desktop: absolute path of the saved file
-    Q_INVOKABLE QString saveHistoryCsv(const QString &csvContent)
-    {
-#if defined(Q_OS_WASM)
-        // In the browser a QFile would only land in the in-memory Emscripten file
-        // system, so hand the bytes to the browser instead: saveFileContent() triggers
-        // the native save/download and returns immediately (Qt 6.8 QFileDialog docs).
-        // Same bytes as the desktop branch: UTF-8 BOM + the CSV text from QML.
-        const QString fileNameHint = QStringLiteral("TaidaFlow_History_")
-                + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
-                + QStringLiteral(".csv");
-        QByteArray content = QByteArrayLiteral("\xEF\xBB\xBF");
-        content += csvContent.toUtf8();
-        QFileDialog::saveFileContent(content, fileNameHint);
-        return QStringLiteral("DOWNLOAD:") + fileNameHint;
-#else
-        const QString suggestedName = QDir::homePath()
-                + QStringLiteral("/TaidaFlow_History_")
-                + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
-                + QStringLiteral(".csv");
-        const QString fileName = QFileDialog::getSaveFileName(
-                nullptr,
-                tr("下載歷史資料"),
-                suggestedName,
-                tr("CSV 檔案 (*.csv)"));
-
-        if (fileName.isEmpty()) {
-            return QString();
-        }
-
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            return QStringLiteral("ERROR:") + file.errorString();
-        }
-
-        // UTF-8 BOM keeps Traditional Chinese readable when opened in Excel.
-        file.write("\xEF\xBB\xBF");
-        file.write(csvContent.toUtf8());
-        file.close();
-        return fileName;
-#endif
     }
 signals:
     void m1ValueSvChanged(double value);
@@ -352,6 +315,7 @@ signals:
     void historyRangeToMsChanged(double toMs);
     void historyExportStatusChanged(const QVariantMap &status);
     void clientSessionIdChanged();
+    void pageHostChanged();
     void transportReadyChanged();
     void transportMessageChanged();
 
@@ -541,6 +505,8 @@ private:
     QVariantMap m_historyExportStatus;
     // Desktop default (spec §1); only the WASM composition root replaces it with "web-xxxx".
     QString m_clientSessionId = QStringLiteral("desktop");
+    // Only the WASM composition root sets it (location.hostname); desktop stays empty.
+    QString m_pageHost;
     // Desktop has no remote transport to wait for, so the overlay default is
     // "ready"; see main.cpp for the WASM-only initial false state.
     bool m_transportReady = true;

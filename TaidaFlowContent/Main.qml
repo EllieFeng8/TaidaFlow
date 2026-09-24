@@ -993,8 +993,15 @@ Item {
             id: motor2ValueDialog
             enabled: mainPage.controlsEnabled
 
-            width: Overlay.overlay.width * 0.3
-            height: Overlay.overlay.height * 0.3
+            // Web scaling (App.qml): popups are drawn in the window overlay, which the
+            // scale on TopNav (root) does not reach; on the web the dialog uses the
+            // 1920x1080 design size and root's scale itself. Desktop: unchanged.
+            // TopLeft origin: the popup positioner centres width*scale x height*scale (it
+            // multiplies by the popup's scale when it opens), so the scaled box stays centred.
+            width: (Qt.platform.os === "wasm" ? root.width : Overlay.overlay.width) * 0.3
+            height: (Qt.platform.os === "wasm" ? root.height : Overlay.overlay.height) * 0.3
+            scale: root.scale
+            transformOrigin: Qt.platform.os === "wasm" ? Popup.TopLeft : Popup.Center
 
             anchors.centerIn: Overlay.overlay
 
@@ -1276,6 +1283,9 @@ Item {
         parent: Overlay.overlay
         anchors.centerIn: parent
         width: 400
+        // Web scaling (App.qml): same scale as TopNav (root); desktop: 1, unchanged.
+        scale: root.scale
+        transformOrigin: Qt.platform.os === "wasm" ? Popup.TopLeft : Popup.Center
         padding: 28
         modal: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -1367,8 +1377,11 @@ Item {
         id: motorDialog
         enabled: mainPage.controlsEnabled
 
-        width: Overlay.overlay.width * 0.3
-        height: Overlay.overlay.height * 0.3
+        // Web scaling (App.qml): design size + root's scale on the web; desktop unchanged.
+        width: (Qt.platform.os === "wasm" ? root.width : Overlay.overlay.width) * 0.3
+        height: (Qt.platform.os === "wasm" ? root.height : Overlay.overlay.height) * 0.3
+        scale: root.scale
+        transformOrigin: Qt.platform.os === "wasm" ? Popup.TopLeft : Popup.Center
 
         anchors.centerIn: Overlay.overlay
 

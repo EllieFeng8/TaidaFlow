@@ -12,7 +12,42 @@
 #include "Core/TaidaFlowProxy.h"
 #include "infrastructure/proxy_mirror/wasmmirrorproxy.h"
 
+#if defined(Q_OS_WASM)
+#include <emscripten/val.h>
+#include <string>
+#else
+#include <QHostAddress>
+#include "lanrelay.h"
+#endif
 
+namespace {
+
+// Public Mirror port: the port the web pages connect to (desktop: served by LanRelay).
+constexpr quint16 MirrorPublicPort = 8125;
+#if !defined(Q_OS_WASM)
+// Internal Mirror port on the desktop, loopback only (pack 1.0.0 permits loopback binds only);
+// LanRelay forwards MirrorPublicPort to it. Not meant to be reached from outside.
+constexpr quint16 MirrorInternalPort = 18125;
+#endif
+
+#if defined(Q_OS_WASM)
+// Host name of the page URL (window.location.hostname), e.g. "192.168.1.20" when the page
+// was opened as http://192.168.1.20:8123/. Empty when it cannot be read. The Mirror
+// WebSocket and the download links (spec §3.5, pageHost) go to this same host, so a page
+// opened from another computer talks to the desktop that served it.
+QString browserPageHostName()
+{
+    const emscripten::val location = emscripten::val::global("location");
+    if (location.isUndefined() || location.isNull())
+        return {};
+    const emscripten::val hostName = location["hostname"];
+    if (!hostName.isString())
+        return {};
+    return QString::fromStdString(hostName.as<std::string>()).trimmed();
+}
+#endif
+
+} // namespace
 
 int main(int argc, char *argv[])
 {
@@ -36,18 +71,38 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<TaidaFlowProxy>("TaidaFlowBackend", 1, 0, "Td", Td);
 
     WasmMirrorConfig mirrorConfig;
+#if defined(Q_OS_WASM)
+    // LAN access: connect back to the host the page was loaded from (location.hostname),
+    // public port 8125. Fallback 127.0.0.1 (the previous fixed host) if it cannot be read.
+    QString mirrorHost = browserPageHostName();
+    if (mirrorHost.isEmpty()) {
+        mirrorHost = QStringLiteral("127.0.0.1");
+        qWarning().noquote()
+            << "location.hostname is not available; Mirror host falls back to" << mirrorHost;
+    }
+    mirrorConfig.host = mirrorHost;
+    mirrorConfig.port = MirrorPublicPort;
+#else
+    // Desktop: the Mirror itself stays on loopback (internal port); LanRelay below exposes
+    // it on 0.0.0.0:8125. Temporary until wasm-mirror pack 1.0.2 (see App/lanrelay.h).
     mirrorConfig.host = QStringLiteral("127.0.0.1");
-    mirrorConfig.port = 8125;
+    mirrorConfig.port = MirrorInternalPort;
+#endif
     mirrorConfig.path = QStringLiteral("/mirror");
-    mirrorConfig.allowedOrigins = {
-        QStringLiteral("http://127.0.0.1:8123"),
-        QStringLiteral("http://localhost:8123")
-    };
+    // Empty list = accept every Origin (pack docs wasm-mirror-integration.md §7.5). Intranet
+    // system: pages are opened from other computers under their own host names, and Mango
+    // decided not to do origin/access control.
+    mirrorConfig.allowedOrigins = {};
 
     WasmMirrorProxyOptions mirrorOptions;
     mirrorOptions.required = true;
 
 #if defined(Q_OS_WASM)
+    // Download links (spec §3.5 revised): the Core only sends the path + downloadPort, the
+    // page completes it with its own host name. Same source (and fallback) as the Mirror
+    // host above. pageHost is STORED false (never mirrored); desktop keeps "".
+    Td->setPageHost(mirrorHost);
+
     // Client session id (history export spec §1): every browser tab gets its own
     // short id before the mirror exists, so export requests and export status are
     // keyed per tab. clientSessionId is STORED false (never mirrored); the desktop
@@ -86,6 +141,19 @@ int main(int argc, char *argv[])
     qInfo().noquote()
         << "WASM Mirror endpoint:"
         << mirror->webSocketUrl().toString();
+
+#if !defined(Q_OS_WASM)
+    // LAN access (temporary, see App/lanrelay.h): 0.0.0.0:8125 -> 127.0.0.1:18125.
+    // Declared after the mirror, so it is destroyed first. A failure (e.g. port 8125 in
+    // use) is only logged and the desktop app keeps running; only web pages need the relay.
+    LanRelay lanRelay(QHostAddress(QHostAddress::AnyIPv4), MirrorPublicPort,
+                      QHostAddress(QHostAddress::LocalHost), MirrorInternalPort);
+    QString lanRelayError;
+    if (lanRelay.start(&lanRelayError))
+        qInfo().noquote() << "LAN relay listening:" << lanRelay.description();
+    else
+        qWarning().noquote() << lanRelayError;
+#endif
     // Transport diagnostics (desktop: server listening; WASM: snapshot ready /
     // offline). On WebAssembly these lines appear in the browser console.
     QObject::connect(mirror.get(), &WasmMirrorProxy::readyChanged, &app,

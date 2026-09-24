@@ -43,7 +43,7 @@ Item {
         : exportState === "running" ? Math.max(0, Math.min(100, Number(myExport.progress) || 0)) / 100
         : 0
     // Web download link of a finished export (spec §3.5); desktop entries use savedPath.
-    readonly property string exportUrl: exportState === "done" && myExport.url ? String(myExport.url) : ""
+    readonly property string exportUrl: exportState === "done" ? exportDownloadUrl(myExport) : ""
     // Set when this page sends an export request; only an export we asked for
     // may open a browser download (never a stale entry from the snapshot).
     property bool exportRequestedHere: false
@@ -196,6 +196,22 @@ Item {
         Td.historyExportCancelRequested(Td.clientSessionId)
     }
 
+    // Full download link of an export entry (spec §3.5, revised 2026-09-24). The Core does
+    // not know which host name the page used, so it sends url = "/exports/<file>" plus
+    // downloadPort; the page completes it with its own host (Td.pageHost, location.hostname
+    // set by the WASM main.cpp): "http://" + pageHost + ":" + downloadPort + url.
+    // Default port 8124 when downloadPort is missing. An absolute "http..." url is used as is.
+    function exportDownloadUrl(entry) {
+        var url = entry && entry.url ? String(entry.url) : ""
+        if (url.length === 0)
+            return ""
+        if (url.charAt(0) === "/") {
+            var port = Number(entry.downloadPort) > 0 ? Number(entry.downloadPort) : 8124
+            return "http://" + Td.pageHost + ":" + port + url
+        }
+        return url
+    }
+
     function exportStatusText() {
         if (!myExport)
             return ""
@@ -231,7 +247,7 @@ Item {
             return
         var state = String(entry.state || "")
         if (state === "done") {
-            var url = String(entry.url || "")
+            var url = exportDownloadUrl(entry)
             exportRequestedHere = false
             if (url.length > 0 && url !== lastOpenedExportUrl) {
                 lastOpenedExportUrl = url

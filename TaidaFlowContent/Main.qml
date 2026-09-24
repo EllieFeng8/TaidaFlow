@@ -967,7 +967,7 @@ Item {
                 }
 
                 Text {
-                    text: Td.pump2HzPv+"%"
+                    text: Td.pump2HzPv.toFixed(1) + "Hz"
                     color: "#FFD166"
                     font.pixelSize: 14
                     font.family: "Consolas"

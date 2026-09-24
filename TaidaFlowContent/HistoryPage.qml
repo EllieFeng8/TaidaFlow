@@ -23,12 +23,47 @@ Item {
     property color dangerColor: "#FF5964"
     property string filterMessage: ""
     property string exportMessage: ""
+
+    // Range convention shared with the Core (Core/TaidaFlowProxy.h): epoch ms,
+    // both ends inclusive; 0 .. 8640000000000000 (largest JS Date value, finite
+    // so the mirror accepts it) = unbounded, i.e. "顯示全部" (all months).
+    readonly property double unboundedFromMs: 0
+    readonly property double unboundedToMs: 8640000000000000
+
+    // This client's export job (spec §3.2): the entry of historyExportStatus
+    // keyed by our own clientSessionId, or null when there is none.
+    readonly property var myExport: {
+        var all = Td.historyExportStatus
+        var entry = all ? all[Td.clientSessionId] : undefined
+        return entry ? entry : null
+    }
+    readonly property string exportState: myExport && myExport.state ? String(myExport.state) : ""
+    readonly property bool exportActive: exportState === "queued" || exportState === "running"
+    readonly property real exportProgressFraction: exportState === "done" ? 1
+        : exportState === "running" ? Math.max(0, Math.min(100, Number(myExport.progress) || 0)) / 100
+        : 0
+    // Web download link of a finished export (spec §3.5); desktop entries use savedPath.
+    readonly property string exportUrl: exportState === "done" && myExport.url ? String(myExport.url) : ""
+    // Set when this page sends an export request; only an export we asked for
+    // may open a browser download (never a stale entry from the snapshot).
+    property bool exportRequestedHere: false
+    property string lastOpenedExportUrl: ""
+    // Terminal states (done/cancelled/error) stay in the Core's map; the close
+    // button hides the one currently shown until the entry changes.
+    property string dismissedExportKey: ""
+    readonly property string exportKey: myExport
+                                        ? exportState + "|" + String(myExport.fileName || "")
+                                          + "|" + String(myExport.message || "")
+                                        : ""
+    readonly property bool exportPanelShown: myExport !== null
+                                             && (exportActive || exportKey !== dismissedExportKey)
     readonly property int currentPage: Td.historyCurrentPage
     readonly property int totalPages: Td.historyTotalPages
 
     readonly property var columnTitles: Td.historyTitle
+    // The Core already pages the requested range (spec §2): this is the current
+    // page (10 rows) exactly as pushed, no local filtering.
     property var historySourceModel: []
-    property var filteredHistoryModel: []
     readonly property int tableWidth: 64 + 210 + 160 + Math.max(0, columnTitles.length - 2) * 146
 
     function columnWidth(index) { return index === 0 ? 210 : index === 1 ? 160 : 146 }
@@ -69,9 +104,40 @@ Item {
             rows.push({ timestampMs: Number(records[i].timestampMs), values: records[i].values })
         rows.sort(function(a, b) { return b.timestampMs - a.timestampMs })
         historySourceModel = rows
+        historyList.positionViewAtBeginning()
     }
 
+    // Show the range the Core is currently paging (historyRangeFromMs/ToMs) in
+    // the date fields. Unbounded ("顯示全部") leaves the fields empty.
+    function isUnboundedRange(fromMs, toMs) {
+        return fromMs <= unboundedFromMs && toMs >= unboundedToMs
+    }
+
+    // Reads Td directly (not the derived bindings) because it runs from
+    // Connections handlers, where derived properties may not be updated yet.
+    function syncRangeFields() {
+        if (isUnboundedRange(Td.historyRangeFromMs, Td.historyRangeToMs)) {
+            startDateField.text = ""
+            endDateField.text = ""
+            return
+        }
+        startDateField.text = formatDate(new Date(Td.historyRangeFromMs))
+        endDateField.text = formatDate(new Date(Td.historyRangeToMs))
+    }
+
+    function rangeText() {
+        if (isUnboundedRange(Td.historyRangeFromMs, Td.historyRangeToMs))
+            return "全部"
+        return formatDate(new Date(Td.historyRangeFromMs)) + " – "
+                + formatDate(new Date(Td.historyRangeToMs))
+    }
+
+    // "篩選": ask the Core for the range (spec §2). Local calendar days:
+    // start day 00:00:00.000 .. end day 23:59:59.999 (next day's midnight - 1 ms).
     function applyFilter() {
+        if (!Td.transportReady)
+            return
+
         var startDate = parseDate(startDateField.text)
         var endDate = parseDate(endDateField.text)
 
@@ -85,13 +151,8 @@ Item {
         }
 
         filterMessage = ""
-        // Include the entire end date, using the next local calendar day's midnight.
         var endExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
-        filteredHistoryModel = historySourceModel.filter(function(row) {
-            return row.timestampMs >= startDate.getTime()
-                    && row.timestampMs < endExclusive.getTime()
-        })
-        historyList.positionViewAtBeginning()
+        Td.historyRangeRequested(startDate.getTime(), endExclusive.getTime() - 1)
     }
 
     function goToPage(page) {
@@ -101,61 +162,91 @@ Item {
         Td.historyCurrentPage = page
     }
 
+    // "顯示全部": unbounded range, all months (spec §2).
     function showAllRecords() {
-        if (historySourceModel.length === 0)
+        if (!Td.transportReady)
             return
 
-        startDateField.text = formatDate(new Date(historySourceModel[historySourceModel.length - 1].timestampMs))
-        endDateField.text = formatDate(new Date(historySourceModel[0].timestampMs))
-        applyFilter()
+        filterMessage = ""
+        Td.historyRangeRequested(unboundedFromMs, unboundedToMs)
     }
 
-    function csvCell(value) {
-        return "\"" + String(value).replace(/\"/g, "\"\"") + "\""
+    function formatCount(value) {
+        var text = String(Math.max(0, Math.round(Number(value) || 0)))
+        return text.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
 
+    // "下載 CSV": the Core exports the raw data of the current query range
+    // (spec §3.1); progress comes back through historyExportStatus.
     function downloadCsv() {
-        if (filteredHistoryModel.length === 0) {
-            exportMessage = "目前沒有可下載的資料"
-            exportMessageTimer.restart()
+        if (!Td.transportReady || exportActive)
             return
+
+        exportRequestedHere = true
+        dismissedExportKey = ""
+        Td.historyExportRequested(Td.clientSessionId, Td.historyRangeFromMs, Td.historyRangeToMs)
+        exportMessage = "已送出匯出要求（區間：" + rangeText() + "）"
+        exportMessageTimer.restart()
+    }
+
+    function cancelExport() {
+        if (!Td.transportReady || !exportActive)
+            return
+
+        Td.historyExportCancelRequested(Td.clientSessionId)
+    }
+
+    function exportStatusText() {
+        if (!myExport)
+            return ""
+        switch (exportState) {
+        case "queued":
+            // queuePosition: 1 = next to run (0 only while running, spec §3.2).
+            return "排隊中 · 第 " + Number(myExport.queuePosition || 0) + " 位"
+        case "running":
+            return "匯出中 " + Math.round(Number(myExport.progress || 0)) + "% · "
+                    + formatCount(myExport.rowsWritten) + " / "
+                    + formatCount(myExport.totalRows) + " 筆"
+        case "done":
+            if (myExport.savedPath)
+                return "匯出完成 · " + formatCount(myExport.rowsWritten) + " 筆 · 已儲存：" + myExport.savedPath
+            return "匯出完成 · " + formatCount(myExport.rowsWritten) + " 筆 · " + String(myExport.fileName || "")
+        case "cancelled":
+            return "匯出已取消"
+        case "error":
+            return "匯出失敗：" + String(myExport.message || "未知錯誤")
+        default:
+            return String(myExport.message || exportState)
         }
+    }
 
-        var headings = [csvCell("序號")]
-        for (var c = 0; c < columnTitles.length; ++c)
-            headings.push(csvCell(columnTitles[c]))
-        var lines = [headings.join(",")]
-        for (var i = 0; i < filteredHistoryModel.length; ++i) {
-            var cells = [csvCell(i + 1)]
-            for (var j = 0; j < columnTitles.length; ++j)
-                cells.push(csvCell(cellText(filteredHistoryModel[i].values[j])))
-            lines.push(cells.join(","))
+    // Web: an export we requested finished with a download link -> hand it to
+    // the browser (spec §3.5). Desktop entries carry savedPath instead of url.
+    // Reads Td directly: runs from a Connections handler, where the derived
+    // myExport/exportState bindings may not be re-evaluated yet.
+    function handleExportStatus() {
+        var all = Td.historyExportStatus
+        var entry = all ? all[Td.clientSessionId] : undefined
+        if (!entry || !exportRequestedHere)
+            return
+        var state = String(entry.state || "")
+        if (state === "done") {
+            var url = String(entry.url || "")
+            exportRequestedHere = false
+            if (url.length > 0 && url !== lastOpenedExportUrl) {
+                lastOpenedExportUrl = url
+                Qt.openUrlExternally(url)
+                exportMessage = "已開始下載 " + String(entry.fileName || "")
+                exportMessageTimer.restart()
+            }
+        } else if (state === "cancelled" || state === "error") {
+            exportRequestedHere = false
         }
-
-        var savedPath = Td.saveHistoryCsv(lines.join("\r\n"))
-        if (savedPath.indexOf("ERROR:") === 0)
-            exportMessage = "下載失敗：" + savedPath.substring(6)
-        else if (savedPath.indexOf("DOWNLOAD:") === 0)
-            // WebAssembly: the browser download was started asynchronously; the
-            // file name is only a hint, the browser decides where the file goes.
-            exportMessage = "已開始下載 " + filteredHistoryModel.length + " 筆資料（"
-                    + savedPath.substring(9) + "）"
-        else if (savedPath.length > 0)
-            exportMessage = "已下載 " + filteredHistoryModel.length + " 筆資料"
-        else
-            exportMessage = ""
-
-        if (exportMessage.length > 0)
-            exportMessageTimer.restart()
     }
 
     Component.onCompleted: {
         reloadHistoryData()
-        var now = new Date()
-        var oneDayAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
-        startDateField.text = formatDate(oneDayAgo)
-        endDateField.text = formatDate(now)
-        applyFilter()
+        syncRangeFields()
     }
 
     // TopNav.qml keeps this page instantiated and switches pages by binding
@@ -170,7 +261,15 @@ Item {
         target: Td
         function onHistoryRecordsChanged() {
             reloadHistoryData()
-            applyFilter()
+        }
+        function onHistoryRangeFromMsChanged() {
+            syncRangeFields()
+        }
+        function onHistoryRangeToMsChanged() {
+            syncRangeFields()
+        }
+        function onHistoryExportStatusChanged() {
+            handleExportStatus()
         }
     }
 
@@ -191,9 +290,13 @@ Item {
         Row {
             width: parent.width
             height: 54
+            spacing: 16
 
             Column {
-                width: parent.width - downloadButton.width
+                // Positioners skip invisible children, so the export panel only
+                // takes space (and a spacing gap) while it is shown.
+                width: parent.width - downloadButton.width - parent.spacing
+                       - (exportPanel.visible ? exportPanel.width + parent.spacing : 0)
                 spacing: 4
 
                 Text {
@@ -204,9 +307,148 @@ Item {
                 }
 
                 Text {
+                    width: parent.width
                     text: "感測器與設備紀錄 · " + columnTitles.length + " 個欄位 · 左右捲動查看完整資料"
                     color: mutedTextColor
                     font.pixelSize: 14
+                    elide: Text.ElideRight
+                }
+            }
+
+            // Export job of this client (historyExportStatus[clientSessionId],
+            // spec §3.2): status line, progress bar and cancel / close actions.
+            Rectangle {
+                id: exportPanel
+                width: Math.min(480, Math.max(300, parent.width * 0.32))
+                height: 54
+                visible: historyPage.exportPanelShown
+                radius: 7
+                color: "#111D32"
+                border.color: historyPage.exportState === "error" ? dangerColor : dividerColor
+                border.width: 1
+
+                Text {
+                    id: exportStatusLabel
+                    anchors.left: parent.left
+                    anchors.leftMargin: 14
+                    anchors.right: exportActions.left
+                    anchors.rightMargin: 10
+                    anchors.top: parent.top
+                    anchors.topMargin: 9
+                    text: historyPage.exportStatusText()
+                    color: historyPage.exportState === "error" ? dangerColor
+                         : historyPage.exportState === "done" ? successColor
+                         : root.textColor
+                    font.pixelSize: 13
+                    elide: Text.ElideMiddle
+                }
+
+                Rectangle {
+                    id: exportProgressTrack
+                    anchors.left: parent.left
+                    anchors.leftMargin: 14
+                    anchors.right: exportActions.left
+                    anchors.rightMargin: 10
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 11
+                    height: 6
+                    radius: 3
+                    color: "#0B1527"
+
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        radius: 3
+                        width: parent.width * historyPage.exportProgressFraction
+                        color: historyPage.exportState === "done" ? successColor : root.mainBlue
+                    }
+                }
+
+                Row {
+                    id: exportActions
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 6
+
+                    // Web fallback: browsers may block a download opened outside a
+                    // click, so a finished web export also offers the link as a button.
+                    Button {
+                        id: openExportButton
+                        width: 84
+                        height: 32
+                        visible: historyPage.exportUrl.length > 0
+                        hoverEnabled: true
+
+                        background: Rectangle {
+                            radius: 5
+                            color: openExportButton.hovered ? "#16A34A" : successColor
+                        }
+
+                        contentItem: Text {
+                            text: "下載檔案"
+                            color: "white"
+                            font.pixelSize: 13
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        onClicked: Qt.openUrlExternally(historyPage.exportUrl)
+                    }
+
+                    Button {
+                        id: cancelExportButton
+                        width: 64
+                        height: 32
+                        visible: historyPage.exportActive
+                        // Cancel is a request relayed to the Core, so it needs the transport.
+                        enabled: Td.transportReady
+                        hoverEnabled: true
+
+                        background: Rectangle {
+                            radius: 5
+                            color: !cancelExportButton.enabled ? "#16243A"
+                                 : cancelExportButton.hovered ? "#223D5A" : "transparent"
+                            border.color: cancelExportButton.enabled ? dangerColor : "transparent"
+                            border.width: 1
+                        }
+
+                        contentItem: Text {
+                            text: "取消"
+                            color: cancelExportButton.enabled ? dangerColor : "#536A80"
+                            font.pixelSize: 13
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        onClicked: historyPage.cancelExport()
+                    }
+
+                    Button {
+                        id: closeExportButton
+                        width: 32
+                        height: 32
+                        visible: !historyPage.exportActive
+                        hoverEnabled: true
+
+                        background: Rectangle {
+                            radius: 5
+                            color: closeExportButton.hovered ? "#223D5A" : "transparent"
+                        }
+
+                        contentItem: Text {
+                            text: "✕"
+                            color: mutedTextColor
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        onClicked: historyPage.dismissedExportKey = historyPage.exportKey
+                    }
                 }
             }
 
@@ -214,18 +456,22 @@ Item {
                 id: downloadButton
                 width: 166
                 height: 48
+                // Export is a request to the Core: needs the transport, and only one
+                // export per client at a time (spec §3.3).
+                enabled: Td.transportReady && !historyPage.exportActive
                 hoverEnabled: true
 
                 background: Rectangle {
                     radius: 7
-                    color: downloadButton.hovered ? "#16A34A" : successColor
-                    border.color: downloadButton.hovered ? "#86EFAC" : "transparent"
+                    color: !downloadButton.enabled ? "#16243A"
+                         : downloadButton.hovered ? "#16A34A" : successColor
+                    border.color: downloadButton.enabled && downloadButton.hovered ? "#86EFAC" : "transparent"
                     border.width: 1
                 }
 
                 contentItem: Text {
                     text: "↓  下載 CSV"
-                    color: "white"
+                    color: downloadButton.enabled ? "white" : "#536A80"
                     font.pixelSize: 16
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
@@ -251,7 +497,7 @@ Item {
                 anchors.leftMargin: 24
                 anchors.right: parent.right
                 anchors.rightMargin: 24
-                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料"
+                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料；篩選可跨月，「顯示全部」為不限區間"
                 color: historyPage.mutedTextColor
                 font.pixelSize: 12
                 elide: Text.ElideRight
@@ -339,16 +585,19 @@ Item {
                     height: 46
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: 14
+                    // The range query is a request to the Core: disabled while offline.
+                    enabled: Td.transportReady
                     hoverEnabled: true
 
                     background: Rectangle {
                         radius: 6
-                        color: filterButton.hovered ? root.lightBlue : root.mainBlue
+                        color: !filterButton.enabled ? "#16243A"
+                             : filterButton.hovered ? root.lightBlue : root.mainBlue
                     }
 
                     contentItem: Text {
                         text: "篩選"
-                        color: "white"
+                        color: filterButton.enabled ? "white" : "#536A80"
                         font.pixelSize: 16
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -364,18 +613,20 @@ Item {
                     height: 46
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: 14
+                    enabled: Td.transportReady
                     hoverEnabled: true
 
                     background: Rectangle {
                         radius: 6
-                        color: allButton.hovered ? "#223D5A" : "transparent"
-                        border.color: dividerColor
+                        color: !allButton.enabled ? "#16243A"
+                             : allButton.hovered ? "#223D5A" : "transparent"
+                        border.color: allButton.enabled ? dividerColor : "transparent"
                         border.width: 1
                     }
 
                     contentItem: Text {
                         text: "顯示全部"
-                        color: root.textColor
+                        color: allButton.enabled ? root.textColor : "#536A80"
                         font.pixelSize: 15
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -392,7 +643,7 @@ Item {
                 anchors.bottomMargin: 8
                 text: filterMessage.length > 0
                       ? filterMessage
-                      : "共 " + filteredHistoryModel.length + " 筆"
+                      : "區間：" + historyPage.rangeText() + " · 本頁 " + historySourceModel.length + " 筆"
                 color: filterMessage.length > 0 ? dangerColor : mutedTextColor
                 font.pixelSize: 14
             }
@@ -464,7 +715,7 @@ Item {
                     y: tableHeader.height
                     width: horizontalTable.contentWidth
                     height: horizontalTable.height - tableHeader.height
-                    model: historyPage.filteredHistoryModel
+                    model: historyPage.historySourceModel
                     clip: true
                     boundsBehavior: Flickable.StopAtBounds
                     ScrollBar.vertical: ScrollBar {
@@ -517,7 +768,7 @@ Item {
 
             Text {
                 anchors.centerIn: horizontalTable
-                visible: filteredHistoryModel.length === 0 && filterMessage.length === 0
+                visible: historySourceModel.length === 0 && filterMessage.length === 0
                 text: "此日期區間沒有歷史資料"
                 color: mutedTextColor
                 font.pixelSize: 18

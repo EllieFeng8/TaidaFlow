@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QRandomGenerator>
 #include <cstdlib>
 #include <memory>
 #include <utility>
@@ -47,6 +48,15 @@ int main(int argc, char *argv[])
     mirrorOptions.required = true;
 
 #if defined(Q_OS_WASM)
+    // Client session id (history export spec §1): every browser tab gets its own
+    // short id before the mirror exists, so export requests and export status are
+    // keyed per tab. clientSessionId is STORED false (never mirrored); the desktop
+    // keeps the Proxy default "desktop". Kept outside the Proxy composition block on
+    // purpose: that block is replaced by core's composition when main is merged.
+    Td->setClientSessionId(
+        QStringLiteral("web-%1").arg(QRandomGenerator::global()->bounded(0x10000),
+                                     4, 16, QLatin1Char('0')));
+
     // Transport overlay (package-integration §9): the Proxy member defaults to
     // true so the desktop UI never waits for a remote transport. Only the WASM
     // composition root switches it to false before QML loads, then the handler

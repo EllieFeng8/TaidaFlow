@@ -68,6 +68,22 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(int historyTotalPages READ historyTotalPages WRITE setHistoryTotalPages NOTIFY historyTotalPagesChanged)
     Q_PROPERTY(QVariantList alarmRecords READ alarmRecords WRITE setAlarmRecords NOTIFY alarmRecordsChanged)
 
+    // History range query + raw export (docs/taidaflow_history_export_spec.md §2/§3).
+    // Mirrored (Core -> all clients): the range the Core is currently paging, in local-epoch
+    // ms, both ends inclusive; HistoryPage.qml only displays it (requests go through
+    // historyRangeRequested). fromMs = 0 and toMs = 8640000000000000 (the largest JS Date
+    // value) means "all months" (unbounded range, "顯示全部").
+    Q_PROPERTY(double historyRangeFromMs READ historyRangeFromMs WRITE setHistoryRangeFromMs NOTIFY historyRangeFromMsChanged)
+    Q_PROPERTY(double historyRangeToMs READ historyRangeToMs WRITE setHistoryRangeToMs NOTIFY historyRangeToMsChanged)
+    // Mirrored (Core -> all clients): export jobs keyed by clientSessionId; each value is a map
+    // {state, progress, queuePosition, rowsWritten, totalRows, fileName, url, savedPath, message}
+    // (spec §3.2). Written only by the Core; each client's QML reads only its own key.
+    Q_PROPERTY(QVariantMap historyExportStatus READ historyExportStatus WRITE setHistoryExportStatus NOTIFY historyExportStatusChanged)
+    // Local only (STORED false, never mirrored): this client's id, "desktop" on the desktop,
+    // "web-xxxx" per browser tab (set by main.cpp before the mirror is created, spec §1).
+    // QML sends it with export requests and uses it as the key into historyExportStatus.
+    Q_PROPERTY(QString clientSessionId READ clientSessionId NOTIFY clientSessionIdChanged STORED false)
+
     // Local transport overlay (wasm-mirror pack 1.0.1, package-integration §6.2/§9).
     // STORED false keeps both properties out of the Mirror contract, so the WASM
     // offline state is never written back into the authoritative desktop Proxy.
@@ -122,6 +138,10 @@ public:
     int historyCurrentPage() const { return m_historyCurrentPage; }
     int historyTotalPages() const { return m_historyTotalPages; }
     QVariantList alarmRecords() const { return m_alarmRecords; }
+    double historyRangeFromMs() const { return m_historyRangeFromMs; }
+    double historyRangeToMs() const { return m_historyRangeToMs; }
+    QVariantMap historyExportStatus() const { return m_historyExportStatus; }
+    QString clientSessionId() const { return m_clientSessionId; }
     bool transportReady() const { return m_transportReady; }
     QString transportMessage() const { return m_transportMessage; }
 
@@ -199,6 +219,37 @@ public:
         m_alarmRecords = records;
         emit alarmRecordsChanged(records);
     }
+    // Range bounds are epoch milliseconds: compare exactly (qFuzzyCompare would treat
+    // values ~1.7e12 that differ by a few ms as equal).
+    void setHistoryRangeFromMs(double fromMs)
+    {
+        if (m_historyRangeFromMs == fromMs)
+            return;
+        m_historyRangeFromMs = fromMs;
+        emit historyRangeFromMsChanged(fromMs);
+    }
+    void setHistoryRangeToMs(double toMs)
+    {
+        if (m_historyRangeToMs == toMs)
+            return;
+        m_historyRangeToMs = toMs;
+        emit historyRangeToMsChanged(toMs);
+    }
+    void setHistoryExportStatus(const QVariantMap &status)
+    {
+        if (m_historyExportStatus == status)
+            return;
+        m_historyExportStatus = status;
+        emit historyExportStatusChanged(status);
+    }
+    // Called only by the composition root (main.cpp) before the mirror is created.
+    void setClientSessionId(const QString &sessionId)
+    {
+        if (m_clientSessionId == sessionId)
+            return;
+        m_clientSessionId = sessionId;
+        emit clientSessionIdChanged();
+    }
     void setMotorRunningSv(bool value)
     {
         m_motorRunningSv = value;
@@ -210,8 +261,12 @@ public:
         emit motorRunningPvChanged(value);
     }
 
+    // DEPRECATED, no QML caller since w2-040: the history page's only download entry is now
+    // historyExportRequested (Core-side raw export, spec §3). Kept unchanged only so that the
+    // core branch (which documents it in README/docs) can delete it together with its docs in
+    // w2-041; it is a Q_INVOKABLE, not a signal/property, so it is not part of the Mirror contract.
     // Not relayed by the Mirror: runs locally on whichever side the button is pressed.
-    // Return value (read by HistoryPage.qml downloadCsv()):
+    // Return value (formerly read by HistoryPage.qml downloadCsv()):
     //   ""                  -> cancelled, no message
     //   "ERROR:<reason>"    -> write failed (desktop only)
     //   "DOWNLOAD:<name>"   -> WebAssembly: browser download started (asynchronous)
@@ -293,11 +348,26 @@ signals:
     void historyCurrentPageChanged(int page);
     void historyTotalPagesChanged(int pages);
     void alarmRecordsChanged(const QVariantList &records);
+    void historyRangeFromMsChanged(double fromMs);
+    void historyRangeToMsChanged(double toMs);
+    void historyExportStatusChanged(const QVariantMap &status);
+    void clientSessionIdChanged();
     void transportReadyChanged();
     void transportMessageChanged();
 
     // Request (not a property NOTIFY): emitted by HistoryPage.qml when the history page becomes visible; Desktop: Core listens and loads the history data; WASM: forwarded to the Desktop via the mirror request relay.
     void historyRefreshRequested();
+
+    // Request (UI -> Core, WASM relayed to the Desktop): HistoryPage.qml "篩選"/"顯示全部" asks the
+    // Core to page this range (epoch ms, both ends inclusive; 0 / 8640000000000000 = all months).
+    // The Core restarts at page 1 and writes back historyRangeFromMs/ToMs (spec §2).
+    void historyRangeRequested(double fromMs, double toMs);
+    // Request (UI -> Core, WASM relayed): "下載 CSV" asks the Core to export the raw data of the
+    // current range for this client (sessionId = clientSessionId); progress comes back through
+    // historyExportStatus[sessionId] (spec §3.1).
+    void historyExportRequested(QString sessionId, double fromMs, double toMs);
+    // Request (UI -> Core, WASM relayed): cancel this client's queued or running export (spec §3.1).
+    void historyExportCancelRequested(QString sessionId);
 
 private:
     using ValueSignal = void (TaidaFlowProxy::*)(double);
@@ -365,6 +435,10 @@ private:
             QStringLiteral("加熱溫度偏高"), QStringLiteral("流量低於設定值")};
 
         const QDateTime now = QDateTime::currentDateTime();
+        // Default history range = current month: first day 00:00 .. next month's first day - 1 ms.
+        const QDateTime monthStart(QDate(now.date().year(), now.date().month(), 1), QTime(0, 0));
+        m_historyRangeFromMs = static_cast<double>(monthStart.toMSecsSinceEpoch());
+        m_historyRangeToMs = static_cast<double>(monthStart.addMonths(1).toMSecsSinceEpoch() - 1);
         const QDateTime historyNow = now.addMSecs(-now.time().msec()).addSecs(-now.time().second());
         for (int i = 0; i < 36; ++i) {
             const QDateTime recordTime = historyNow.addSecs(-i * 2 * 60 * 60);
@@ -460,6 +534,13 @@ private:
     int m_historyCurrentPage = 1;
     int m_historyTotalPages = 1;
     QVariantList m_alarmRecords;
+    // Default range = current month (spec §2); initializeListData() fills it in. The
+    // authoritative Core overwrites both, and WASM clients receive the Core's values.
+    double m_historyRangeFromMs = 0.0;
+    double m_historyRangeToMs = 0.0;
+    QVariantMap m_historyExportStatus;
+    // Desktop default (spec §1); only the WASM composition root replaces it with "web-xxxx".
+    QString m_clientSessionId = QStringLiteral("desktop");
     // Desktop has no remote transport to wait for, so the overlay default is
     // "ready"; see main.cpp for the WASM-only initial false state.
     bool m_transportReady = true;

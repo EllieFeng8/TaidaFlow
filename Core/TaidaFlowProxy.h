@@ -169,6 +169,8 @@ public:
 
     void setHistoryTitle(const QVariantList &title)
     {
+        if (m_historyTitle == title)
+            return;
         m_historyTitle = title;
         emit historyTitleChanged(title);
     }
@@ -293,6 +295,9 @@ signals:
     void alarmRecordsChanged(const QVariantList &records);
     void transportReadyChanged();
     void transportMessageChanged();
+
+    // Request (not a property NOTIFY): emitted by HistoryPage.qml when the history page becomes visible; Desktop: Core listens and loads the history data; WASM: forwarded to the Desktop via the mirror request relay.
+    void historyRefreshRequested();
 
 private:
     using ValueSignal = void (TaidaFlowProxy::*)(double);

@@ -158,6 +158,14 @@ Item {
         applyFilter()
     }
 
+    // TopNav.qml keeps this page instantiated and switches pages by binding
+    // `visible` to root.currentPage, so the page becoming visible is the
+    // moment the history page is shown. Ask the authoritative side to load.
+    onVisibleChanged: {
+        if (visible)
+            Td.historyRefreshRequested()
+    }
+
     Connections {
         target: Td
         function onHistoryRecordsChanged() {

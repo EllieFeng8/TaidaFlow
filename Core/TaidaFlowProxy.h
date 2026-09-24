@@ -62,6 +62,8 @@ class TaidaFlowProxy : public QObject
     // List data is owned by the authoritative side. QML only reads a local copy.
     Q_PROPERTY(QVariantList historyTitle READ historyTitle WRITE setHistoryTitle NOTIFY historyTitleChanged)
     Q_PROPERTY(QVariantList historyRecords READ historyRecords WRITE setHistoryRecords NOTIFY historyRecordsChanged)
+    Q_PROPERTY(int historyCurrentPage READ historyCurrentPage WRITE setHistoryCurrentPage NOTIFY historyCurrentPageChanged)
+    Q_PROPERTY(int historyTotalPages READ historyTotalPages WRITE setHistoryTotalPages NOTIFY historyTotalPagesChanged)
     Q_PROPERTY(QVariantList alarmRecords READ alarmRecords WRITE setAlarmRecords NOTIFY alarmRecordsChanged)
 
 public:
@@ -106,6 +108,8 @@ public:
     double flowMeterValuePv() const { return m_flowMeterValuePv; }
     QVariantList historyTitle() const { return m_historyTitle; }
     QVariantList historyRecords() const { return m_historyRecords; }
+    int historyCurrentPage() const { return m_historyCurrentPage; }
+    int historyTotalPages() const { return m_historyTotalPages; }
     QVariantList alarmRecords() const { return m_alarmRecords; }
 
     void setM1ValueSv(double value) { setWritableValue(m_m1ValueSv, value, &TaidaFlowProxy::m1ValueSvChanged); }
@@ -144,6 +148,21 @@ public:
     {
         m_historyRecords = records;
         emit historyRecordsChanged(records);
+    }
+    // Page metadata comes from the authoritative side, independently of row count.
+    void setHistoryCurrentPage(int page)
+    {
+        if (page < 1 || m_historyCurrentPage == page)
+            return;
+        m_historyCurrentPage = page;
+        emit historyCurrentPageChanged(page);
+    }
+    void setHistoryTotalPages(int pages)
+    {
+        if (pages < 1 || m_historyTotalPages == pages)
+            return;
+        m_historyTotalPages = pages;
+        emit historyTotalPagesChanged(pages);
     }
     void setAlarmRecords(const QVariantList &records)
     {
@@ -220,6 +239,8 @@ signals:
     void flowMeterValuePvChanged(double value);
     void historyTitleChanged(const QVariantList &title);
     void historyRecordsChanged(const QVariantList &records);
+    void historyCurrentPageChanged(int page);
+    void historyTotalPagesChanged(int pages);
     void alarmRecordsChanged(const QVariantList &records);
 
 private:
@@ -379,6 +400,8 @@ private:
     double m_flowMeterValuePv = 0.0;
     QVariantList m_historyTitle;
     QVariantList m_historyRecords;
+    int m_historyCurrentPage = 1;
+    int m_historyTotalPages = 1;
     QVariantList m_alarmRecords;
 
     double m_testTemperature = 0.0;

@@ -21,14 +21,12 @@ Item {
     property color dangerColor: "#FF5964"
     property string filterMessage: ""
     property string exportMessage: ""
-    property int currentPage: 1
-    property int pageSize: 9
-    readonly property int totalPages: Math.max(1, Math.ceil(filteredHistoryModel.length / pageSize))
+    readonly property int currentPage: Td.historyCurrentPage
+    readonly property int totalPages: Td.historyTotalPages
 
     readonly property var columnTitles: Td.historyTitle
     property var historySourceModel: []
     property var filteredHistoryModel: []
-    property var pagedHistoryModel: []
     readonly property int tableWidth: 64 + 210 + 160 + Math.max(0, columnTitles.length - 2) * 146
 
     function columnWidth(index) { return index === 0 ? 210 : index === 1 ? 160 : 146 }
@@ -41,26 +39,22 @@ Item {
         return value < 10 ? "0" + value : String(value)
     }
 
-    function formatDateTime(date) {
+    function formatDate(date) {
         return date.getFullYear() + "/"
                 + twoDigits(date.getMonth() + 1) + "/"
-                + twoDigits(date.getDate()) + " "
-                + twoDigits(date.getHours()) + ":"
-                + twoDigits(date.getMinutes())
+                + twoDigits(date.getDate())
     }
 
-    function parseDateTime(value) {
-        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})\s+(\d{2}):(\d{2})$/)
+    function parseDate(value) {
+        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})$/)
         if (!match)
             return null
 
         var date = new Date(Number(match[1]), Number(match[2]) - 1,
-                            Number(match[3]), Number(match[4]), Number(match[5]), 0, 0)
+                            Number(match[3]), 0, 0, 0, 0)
         if (date.getFullYear() !== Number(match[1])
                 || date.getMonth() !== Number(match[2]) - 1
-                || date.getDate() !== Number(match[3])
-                || date.getHours() !== Number(match[4])
-                || date.getMinutes() !== Number(match[5]))
+                || date.getDate() !== Number(match[3]))
             return null
 
         return date
@@ -76,31 +70,25 @@ Item {
     }
 
     function applyFilter() {
-        var startDate = parseDateTime(startTimeField.text)
-        var endDate = parseDateTime(endTimeField.text)
+        var startDate = parseDate(startDateField.text)
+        var endDate = parseDate(endDateField.text)
 
         if (!startDate || !endDate) {
-            filterMessage = "請輸入正確時間（YYYY/MM/DD HH:MM）"
+            filterMessage = "請輸入正確日期（YYYY/MM/DD）"
             return
         }
         if (startDate.getTime() > endDate.getTime()) {
-            filterMessage = "起始時間不可晚於結束時間"
+            filterMessage = "起始日期不可晚於結束日期"
             return
         }
 
         filterMessage = ""
+        // Include the entire end date, using the next local calendar day's midnight.
+        var endExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
         filteredHistoryModel = historySourceModel.filter(function(row) {
             return row.timestampMs >= startDate.getTime()
-                    && row.timestampMs < endDate.getTime() + 60000
+                    && row.timestampMs < endExclusive.getTime()
         })
-        currentPage = 1
-        refreshPagedModel()
-    }
-
-    function refreshPagedModel() {
-        currentPage = Math.max(1, Math.min(currentPage, totalPages))
-        var startIndex = (currentPage - 1) * pageSize
-        pagedHistoryModel = filteredHistoryModel.slice(startIndex, startIndex + pageSize)
         historyList.positionViewAtBeginning()
     }
 
@@ -108,16 +96,15 @@ Item {
         if (page < 1 || page > totalPages || page === currentPage)
             return
 
-        currentPage = page
-        refreshPagedModel()
+        Td.historyCurrentPage = page
     }
 
     function showAllRecords() {
         if (historySourceModel.length === 0)
             return
 
-        startTimeField.text = formatDateTime(new Date(historySourceModel[historySourceModel.length - 1].timestampMs))
-        endTimeField.text = formatDateTime(new Date(historySourceModel[0].timestampMs))
+        startDateField.text = formatDate(new Date(historySourceModel[historySourceModel.length - 1].timestampMs))
+        endDateField.text = formatDate(new Date(historySourceModel[0].timestampMs))
         applyFilter()
     }
 
@@ -158,9 +145,9 @@ Item {
     Component.onCompleted: {
         reloadHistoryData()
         var now = new Date()
-        var oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-        startTimeField.text = formatDateTime(oneDayAgo)
-        endTimeField.text = formatDateTime(now)
+        var oneDayAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+        startDateField.text = formatDate(oneDayAgo)
+        endDateField.text = formatDate(now)
         applyFilter()
     }
 
@@ -242,6 +229,19 @@ Item {
             border.color: dividerColor
             border.width: 1
 
+            Text {
+                anchors.top: parent.top
+                anchors.topMargin: 8
+                anchors.left: parent.left
+                anchors.leftMargin: 24
+                anchors.right: parent.right
+                anchors.rightMargin: 24
+                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料"
+                color: historyPage.mutedTextColor
+                font.pixelSize: 12
+                elide: Text.ElideRight
+            }
+
             Row {
                 anchors.left: parent.left
                 anchors.leftMargin: 24
@@ -252,26 +252,26 @@ Item {
                     spacing: 8
 
                     Text {
-                        text: "起始時間"
+                        text: "起始日期"
                         color: mutedTextColor
                         font.pixelSize: 13
                     }
 
                     TextField {
-                        id: startTimeField
+                        id: startDateField
                         width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
                         height: 46
                         color: "white"
                         font.pixelSize: 16
                         font.family: "Consolas"
                         selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
+                        placeholderText: "YYYY/MM/DD"
                         placeholderTextColor: "#5F7890"
 
                         background: Rectangle {
                             radius: 6
                             color: "#0B1527"
-                            border.color: startTimeField.activeFocus ? root.mainBlue : dividerColor
+                            border.color: startDateField.activeFocus ? root.mainBlue : dividerColor
                             border.width: 1
                         }
 
@@ -291,26 +291,26 @@ Item {
                     spacing: 8
 
                     Text {
-                        text: "結束時間"
+                        text: "結束日期"
                         color: mutedTextColor
                         font.pixelSize: 13
                     }
 
                     TextField {
-                        id: endTimeField
+                        id: endDateField
                         width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
                         height: 46
                         color: "white"
                         font.pixelSize: 16
                         font.family: "Consolas"
                         selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
+                        placeholderText: "YYYY/MM/DD"
                         placeholderTextColor: "#5F7890"
 
                         background: Rectangle {
                             radius: 6
                             color: "#0B1527"
-                            border.color: endTimeField.activeFocus ? root.mainBlue : dividerColor
+                            border.color: endDateField.activeFocus ? root.mainBlue : dividerColor
                             border.width: 1
                         }
 
@@ -449,7 +449,7 @@ Item {
                     y: tableHeader.height
                     width: horizontalTable.contentWidth
                     height: horizontalTable.height - tableHeader.height
-                    model: historyPage.pagedHistoryModel
+                    model: historyPage.filteredHistoryModel
                     clip: true
                     boundsBehavior: Flickable.StopAtBounds
                     ScrollBar.vertical: ScrollBar {
@@ -466,7 +466,7 @@ Item {
                         Row {
                             Text {
                                 width: 64; height: 54
-                                text: (historyPage.currentPage - 1) * historyPage.pageSize + recordRow.index + 1
+                                text: recordRow.index + 1
                                 color: historyPage.mutedTextColor
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
@@ -503,7 +503,7 @@ Item {
             Text {
                 anchors.centerIn: horizontalTable
                 visible: filteredHistoryModel.length === 0 && filterMessage.length === 0
-                text: "此時間區間沒有歷史資料"
+                text: "此日期區間沒有歷史資料"
                 color: mutedTextColor
                 font.pixelSize: 18
             }

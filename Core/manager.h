@@ -3,6 +3,9 @@
 #include "ModbusMapping.h"
 #include "Ms300FaultReader.h"
 
+#include <QDateTime>
+#include <QHash>
+#include <QJsonObject>
 #include <QObject>
 #include <QSet>
 #include <QTimer>
@@ -49,6 +52,19 @@ signals:
     void serverHoldingRegisterUpdated(quint16 offset, quint16 value);
 
 private:
+    // One alarm_history row written by this run.  Row ids are per monthly
+    // data file, so the insert time is kept to find the file again.
+    struct AlarmRow {
+        qint64 id = -1;
+        QDateTime occurrence;
+        QJsonObject reason;     // JSON stored in alarm_history.reason
+    };
+
+    bool insertAlarmRow(const QString &sensor,
+                        const QString &message,
+                        const QString &status,
+                        AlarmRow *row);
+    bool markAlarmRowResolved(const AlarmRow &row, const QString &detail);
     void pollConfiguredPoints();
     void mirrorClientData(ModbusClient::Device device,
                           QModbusDataUnit::RegisterType registerType,
@@ -88,7 +104,10 @@ private:
     quint8 m_completedAiGroups = 0;
     bool m_startVfdAfterFrequencyWrite = false;
     QSet<quint16> m_activeHighInputAlarms;
-    QSet<quint16> m_activeDigitalInputAlarms;
+    // w2-037: DI offset -> the row written when that DI alarm was raised in
+    // this run.  When the DI returns to normal that same row is marked
+    // resolved; the entry is removed only after the update succeeded.
+    QHash<quint16, AlarmRow> m_activeDigitalInputAlarms;
     // The machine starts in the conservative state.  A true DI0 sample is
     // required before either DO0 (00017) or DO3 (00020) can be energized.
     bool m_di0OutputPermit = false;

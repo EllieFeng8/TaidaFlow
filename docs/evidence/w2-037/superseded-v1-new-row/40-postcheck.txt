@@ -1,0 +1,9 @@
+﻿[2026-09-24 17:43:37] w2-037 postcheck
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8125: 0
+connections on 8123/8125 (any state): 0
+TaidaFlowSettings.ini identical to .w2-037-before.bak before restore: True
+git status --short:
+ M Core/manager.cpp
+?? docs/evidence/w2-037/
+git log -1: 3ada4b0 fix(core): 頻率回授、漏液、補水泵 OL 連鎖、警報字詞對齊 UI、啟動改讀設備狀態

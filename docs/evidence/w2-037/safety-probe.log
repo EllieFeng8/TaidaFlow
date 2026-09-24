@@ -1,0 +1,44 @@
+﻿=== safety probe 2026-09-24T17:38:52.673+08:00 reason="before launch: w2-037 run A (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED profile=simulator
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.205:502 pid=83768 (Adam60xxSimulator)
+  port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.204:502 pid=83768 (Adam60xxSimulator)
+  port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.203:502 pid=83768 (Adam60xxSimulator)
+  port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.202:502 pid=83768 (Adam60xxSimulator)
+  port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.201:502 pid=83768 (Adam60xxSimulator)
+  port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  simulator endpoints listening: 5/5
+  verdict: SAFE
+=== safety probe 2026-09-24T17:50:00.706+08:00 reason="before launch: w2-037 run B (final: update row in place) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED profile=simulator
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.205:502 pid=19968 (Adam60xxSimulator)
+  port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.204:502 pid=19968 (Adam60xxSimulator)
+  port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.203:502 pid=19968 (Adam60xxSimulator)
+  port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.202:502 pid=19968 (Adam60xxSimulator)
+  port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.201:502 pid=19968 (Adam60xxSimulator)
+  port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  simulator endpoints listening: 5/5
+  verdict: SAFE

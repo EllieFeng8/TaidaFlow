@@ -900,9 +900,10 @@ bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QStrin
     });
 }
 
-bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg)
+bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg,
+                             qint64* insertedId)
 {
-    return runOnThread([this, occurrence, reason, errMsg]() {
+    return runOnThread([this, occurrence, reason, errMsg, insertedId]() {
         QString key = monthKey(occurrence.date());
         QSqlDatabase db = openDataDb(key);
         if (!db.isValid() || !db.isOpen())
@@ -927,6 +928,11 @@ bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason,
             if (errMsg) *errMsg = query.lastError().text();
             return false;
         }
+        if (insertedId)
+        {
+            const QVariant id = query.lastInsertId();
+            *insertedId = id.isValid() ? id.toLongLong() : -1;
+        }
         return true;
     });
 }
@@ -934,6 +940,36 @@ bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason,
 bool SqlManager::insertAlarm(const QString& reason, QString* errMsg)
 {
     return insertAlarm(QDateTime::currentDateTime(), reason, errMsg);
+}
+
+bool SqlManager::updateAlarmReason(const QDateTime& occurrence, qint64 id, const QString& reason,
+                                   QString* errMsg)
+{
+    return runOnThread([this, occurrence, id, reason, errMsg]() {
+        const QString key = monthKey(occurrence.date());
+        QSqlDatabase db = openDataDb(key);
+        if (!db.isValid() || !db.isOpen())
+        {
+            if (errMsg) *errMsg = "db open failed";
+            return false;
+        }
+
+        QSqlQuery query(db);
+        query.prepare("UPDATE alarm_history SET reason = :reason WHERE id = :id");
+        query.bindValue(":reason", reason);
+        query.bindValue(":id", id);
+        if (!query.exec())
+        {
+            if (errMsg) *errMsg = query.lastError().text();
+            return false;
+        }
+        if (query.numRowsAffected() != 1)
+        {
+            if (errMsg) *errMsg = QStringLiteral("no alarm_history row id=%1 in %2").arg(id).arg(key);
+            return false;
+        }
+        return true;
+    });
 }
 
 bool SqlManager::getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)

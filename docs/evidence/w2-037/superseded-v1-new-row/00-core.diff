@@ -1,0 +1,36 @@
+﻿diff --git a/Core/manager.cpp b/Core/manager.cpp
+index acc5dd3..2930750 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -797,15 +797,29 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
+ 
+     // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
+     const bool alarmActive = diOffset == 0 ? !state : state;
++    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+     if (!alarmActive) {
+-        m_activeDigitalInputAlarms.remove(diOffset);
++        // Only an alarm that was raised during this run gets a clear record;
++        // a DI that has always been normal writes nothing.
++        if (!m_activeDigitalInputAlarms.contains(diOffset))
++            return;
++
++        // The clear is a new event row.  The original 異常 row (shown as
++        // 未處理) is left as it is.  Core status 正常 is shown as 已解除
++        // through alarmUiFieldsForStatus() in core.cpp.  The DI stays in the
++        // active set until the row is stored, so a failed insert is retried
++        // on the next poll.
++        const QString clearMessage = QStringLiteral("%1 解除（%2=%3）")
++                .arg(alarmMessage, sensor)
++                .arg(state ? 1 : 0);
++        if (saveAlarm(sensor, clearMessage, QStringLiteral("正常")))
++            m_activeDigitalInputAlarms.remove(diOffset);
+         return;
+     }
+ 
+     if (m_activeDigitalInputAlarms.contains(diOffset))
+         return;
+ 
+-    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+     const QString message = QStringLiteral("%1（%2=%3）")
+             .arg(alarmMessage, sensor)
+             .arg(state ? 1 : 0);

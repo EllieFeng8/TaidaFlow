@@ -1,0 +1,346 @@
+﻿diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index ffc6ca6..e7d082d 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -900,9 +900,10 @@ bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QStrin
+     });
+ }
+ 
+-bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg)
++bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg,
++                             qint64* insertedId)
+ {
+-    return runOnThread([this, occurrence, reason, errMsg]() {
++    return runOnThread([this, occurrence, reason, errMsg, insertedId]() {
+         QString key = monthKey(occurrence.date());
+         QSqlDatabase db = openDataDb(key);
+         if (!db.isValid() || !db.isOpen())
+@@ -927,6 +928,11 @@ bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason,
+             if (errMsg) *errMsg = query.lastError().text();
+             return false;
+         }
++        if (insertedId)
++        {
++            const QVariant id = query.lastInsertId();
++            *insertedId = id.isValid() ? id.toLongLong() : -1;
++        }
+         return true;
+     });
+ }
+@@ -936,6 +942,36 @@ bool SqlManager::insertAlarm(const QString& reason, QString* errMsg)
+     return insertAlarm(QDateTime::currentDateTime(), reason, errMsg);
+ }
+ 
++bool SqlManager::updateAlarmReason(const QDateTime& occurrence, qint64 id, const QString& reason,
++                                   QString* errMsg)
++{
++    return runOnThread([this, occurrence, id, reason, errMsg]() {
++        const QString key = monthKey(occurrence.date());
++        QSqlDatabase db = openDataDb(key);
++        if (!db.isValid() || !db.isOpen())
++        {
++            if (errMsg) *errMsg = "db open failed";
++            return false;
++        }
++
++        QSqlQuery query(db);
++        query.prepare("UPDATE alarm_history SET reason = :reason WHERE id = :id");
++        query.bindValue(":reason", reason);
++        query.bindValue(":id", id);
++        if (!query.exec())
++        {
++            if (errMsg) *errMsg = query.lastError().text();
++            return false;
++        }
++        if (query.numRowsAffected() != 1)
++        {
++            if (errMsg) *errMsg = QStringLiteral("no alarm_history row id=%1 in %2").arg(id).arg(key);
++            return false;
++        }
++        return true;
++    });
++}
++
+ bool SqlManager::getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)
+ {
+     return runOnThread([this, from, to, out, errMsg]() {
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index c82946f..252367a 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -51,8 +51,15 @@ public:
+     bool setReadFrequency(int value, QString* errMsg = nullptr);
+ 
+     // Alarm history helpers
+-    bool insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg = nullptr);
++    // insertedId (optional) receives the new row id.  Ids are per monthly data
++    // file, so a row is identified by (occurrence month, id).
++    bool insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg = nullptr,
++                     qint64* insertedId = nullptr);
+     bool insertAlarm(const QString& reason, QString* errMsg = nullptr);
++    // Replaces the reason of row 'id' in the data file of 'occurrence's month.
++    // Fails when no such row exists.
++    bool updateAlarmReason(const QDateTime& occurrence, qint64 id, const QString& reason,
++                           QString* errMsg = nullptr);
+     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
+ 
+ private:
+diff --git a/Core/core.cpp b/Core/core.cpp
+index 197be86..a62c230 100644
+--- a/Core/core.cpp
++++ b/Core/core.cpp
+@@ -39,30 +39,39 @@ constexpr auto kHmiInputSettingsGroup = "HmiInput";
+ // need attention is hidden.  A valid 'severity' stored in the JSON (嚴重/警告)
+ // overrides the table (no producer writes one today).  The database is not
+ // migrated: the conversion runs on every read, so existing rows are covered.
++//
++// w2-037: a DI alarm row (DI0/DI1/DI2) is updated in place when the input
++// returns to normal: Manager keeps 'status' (異常) and adds "resolved": true,
++// "resolvedAt" (epoch s) and "resolvedDetail" (e.g. 漏液檢出 解除（DI1=0）).
++// A row with resolved == true reads as alarmStatus 已解除; its severity still
++// comes from 'status', so a resolved 異常 row stays 嚴重.
+ struct AlarmUiFields {
+     QString alarmStatus;
+     QString severity;
+     bool known = true;
+ };
+ 
+-AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus)
++AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus, bool isResolved)
+ {
+     const QString unhandled = QStringLiteral("未處理");
+     const QString resolved = QStringLiteral("已解除");
+     const QString critical = QStringLiteral("嚴重");
+     const QString warning = QStringLiteral("警告");
+ 
++    AlarmUiFields fields{unhandled, warning, false};
+     if (!hasStatus)
+-        return {unhandled, warning, true};
+-    if (coreStatus == QStringLiteral("異常"))
+-        return {unhandled, critical, true};
+-    if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
+-        return {unhandled, warning, true};
+-    if (coreStatus == QStringLiteral("正常"))
+-        return {resolved, warning, true};
+-    if (coreStatus == unhandled || coreStatus == resolved)
+-        return {coreStatus, warning, true};
+-    return {unhandled, warning, false};
++        fields = {unhandled, warning, true};
++    else if (coreStatus == QStringLiteral("異常"))
++        fields = {unhandled, critical, true};
++    else if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
++        fields = {unhandled, warning, true};
++    else if (coreStatus == QStringLiteral("正常"))
++        fields = {resolved, warning, true};
++    else if (coreStatus == unhandled || coreStatus == resolved)
++        fields = {coreStatus, warning, true};
++    if (isResolved)
++        fields.alarmStatus = resolved;
++    return fields;
+ }
+ }
+ 
+@@ -363,7 +372,8 @@ void Core::loadAlarmRecords()
+                 : reasonObject.value(QStringLiteral("message")).toString(storedReason);
+         const bool hasStatus = reasonObject.value(QStringLiteral("status")).isString();
+         const QString coreStatus = reasonObject.value(QStringLiteral("status")).toString();
+-        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus);
++        const bool isResolved = reasonObject.value(QStringLiteral("resolved")).toBool(false);
++        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus, isResolved);
+         const QString storedSeverity = reasonObject.value(QStringLiteral("severity")).toString();
+         if (storedSeverity == QStringLiteral("嚴重") || storedSeverity == QStringLiteral("警告"))
+             ui.severity = storedSeverity;
+@@ -381,10 +391,11 @@ void Core::loadAlarmRecords()
+         const qint64 alarmId = static_cast<qint64>(alarm.value(QStringLiteral("id")).toDouble());
+         if (records.size() < kLoggedAlarmRows) {
+             qInfo().noquote()
+-                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4 -> alarmStatus=%5 severity=%6")
++                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4%5 -> alarmStatus=%6 severity=%7")
+                                .arg(alarmId)
+                                .arg(sensor, alarmMessage,
+                                     hasStatus ? coreStatus : QStringLiteral("(none)"),
++                                    isResolved ? QStringLiteral(" resolved=true") : QString(),
+                                     ui.alarmStatus, ui.severity);
+         }
+         records.append(QVariantMap{
+diff --git a/Core/manager.cpp b/Core/manager.cpp
+index acc5dd3..5bfd39d 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -227,6 +227,14 @@ void Manager::stop()
+ bool Manager::saveAlarm(const QString &sensor,
+                         const QString &message,
+                         const QString &status)
++{
++    return insertAlarmRow(sensor, message, status, nullptr);
++}
++
++bool Manager::insertAlarmRow(const QString &sensor,
++                             const QString &message,
++                             const QString &status,
++                             AlarmRow *row)
+ {
+     if (!m_sql) {
+         qWarning() << "[SQL] Insert alarm skipped: SqlManager is unavailable.";
+@@ -245,15 +253,62 @@ bool Manager::saveAlarm(const QString &sensor,
+     const QString reason = QString::fromUtf8(
+             QJsonDocument(alarm).toJson(QJsonDocument::Compact));
+ 
++    const QDateTime occurrence = QDateTime::currentDateTime();
+     QString errorMessage;
+-    if (!m_sql->insertAlarm(reason, &errorMessage)) {
++    qint64 id = -1;
++    if (!m_sql->insertAlarm(occurrence, reason, &errorMessage, &id)) {
+         qWarning().noquote() << "[SQL] Insert alarm failed:" << errorMessage;
+         return false;
+     }
+ 
+     qInfo().noquote()
+-            << QStringLiteral("[SQL] Alarm inserted: sensor=%1 message=%2 status=%3")
+-                       .arg(sensor, message, status);
++            << QStringLiteral("[SQL] Alarm inserted: sensor=%1 message=%2 status=%3 id=%4")
++                       .arg(sensor, message, status)
++                       .arg(id);
++    if (row) {
++        row->id = id;
++        row->occurrence = occurrence;
++        row->reason = alarm;
++    }
++    emit alarmSaved();
++    return true;
++}
++
++bool Manager::markAlarmRowResolved(const AlarmRow &row, const QString &detail)
++{
++    if (!m_sql) {
++        qWarning() << "[SQL] Resolve alarm skipped: SqlManager is unavailable.";
++        return false;
++    }
++
++    // The original fields (sensor, alarmMessage, status) stay as they are, so
++    // the severity derived from 'status' is unchanged.  'resolved' makes
++    // Core::loadAlarmRecords() report alarmStatus 已解除 for this row.
++    QJsonObject alarm = row.reason;
++    const QDateTime resolvedAt = QDateTime::currentDateTime();
++    alarm.insert(QStringLiteral("resolved"), true);
++    alarm.insert(QStringLiteral("resolvedAt"), resolvedAt.toSecsSinceEpoch());
++    alarm.insert(QStringLiteral("resolvedDetail"), detail);
++    const QString reason = QString::fromUtf8(
++            QJsonDocument(alarm).toJson(QJsonDocument::Compact));
++
++    QString errorMessage;
++    if (!m_sql->updateAlarmReason(row.occurrence, row.id, reason, &errorMessage)) {
++        qWarning().noquote()
++                << QStringLiteral("[SQL] Resolve alarm failed: id=%1 sensor=%2 (%3); will retry on the next poll.")
++                           .arg(row.id)
++                           .arg(alarm.value(QStringLiteral("sensor")).toString(), errorMessage);
++        return false;
++    }
++
++    qInfo().noquote()
++            << QStringLiteral("[SQL] Alarm resolved: id=%1 sensor=%2 message=%3 status=%4 detail=%5 resolvedAt=%6")
++                       .arg(row.id)
++                       .arg(alarm.value(QStringLiteral("sensor")).toString(),
++                            alarm.value(QStringLiteral("alarmMessage")).toString(),
++                            alarm.value(QStringLiteral("status")).toString(),
++                            detail,
++                            resolvedAt.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
+     emit alarmSaved();
+     return true;
+ }
+@@ -797,20 +852,45 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
+ 
+     // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
+     const bool alarmActive = diOffset == 0 ? !state : state;
++    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+     if (!alarmActive) {
+-        m_activeDigitalInputAlarms.remove(diOffset);
++        // Only an alarm raised during this run is resolved; a DI that has
++        // been normal all along changes nothing.  Rows left 未處理 by an
++        // earlier run are not touched (not known to this run).
++        const auto active = m_activeDigitalInputAlarms.constFind(diOffset);
++        if (active == m_activeDigitalInputAlarms.cend())
++            return;
++
++        if (active->id < 0) {
++            // Cannot happen with SQLite (lastInsertId is always set); without
++            // an id the row cannot be found, so stop tracking it.
++            qWarning().noquote()
++                    << QStringLiteral("[SQL] %1 alarm cleared but its row id is unknown; the row stays 未處理.")
++                               .arg(sensor);
++            m_activeDigitalInputAlarms.erase(active);
++            return;
++        }
++
++        // The row written when the alarm was raised is updated in place (no
++        // new row).  The DI stays tracked until the update succeeds, so a
++        // failed update is retried on the next poll.
++        const QString detail = QStringLiteral("%1 解除（%2=%3）")
++                .arg(alarmMessage, sensor)
++                .arg(state ? 1 : 0);
++        if (markAlarmRowResolved(active.value(), detail))
++            m_activeDigitalInputAlarms.remove(diOffset);
+         return;
+     }
+ 
+     if (m_activeDigitalInputAlarms.contains(diOffset))
+         return;
+ 
+-    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+     const QString message = QStringLiteral("%1（%2=%3）")
+             .arg(alarmMessage, sensor)
+             .arg(state ? 1 : 0);
+-    if (saveAlarm(sensor, message, QStringLiteral("異常")))
+-        m_activeDigitalInputAlarms.insert(diOffset);
++    AlarmRow row;
++    if (insertAlarmRow(sensor, message, QStringLiteral("異常"), &row))
++        m_activeDigitalInputAlarms.insert(diOffset, row);
+ }
+ 
+ void Manager::setWayValveOpenSv(bool open)
+diff --git a/Core/manager.h b/Core/manager.h
+index 6a155fb..7f83339 100644
+--- a/Core/manager.h
++++ b/Core/manager.h
+@@ -3,6 +3,9 @@
+ #include "ModbusMapping.h"
+ #include "Ms300FaultReader.h"
+ 
++#include <QDateTime>
++#include <QHash>
++#include <QJsonObject>
+ #include <QObject>
+ #include <QSet>
+ #include <QTimer>
+@@ -49,6 +52,19 @@ signals:
+     void serverHoldingRegisterUpdated(quint16 offset, quint16 value);
+ 
+ private:
++    // One alarm_history row written by this run.  Row ids are per monthly
++    // data file, so the insert time is kept to find the file again.
++    struct AlarmRow {
++        qint64 id = -1;
++        QDateTime occurrence;
++        QJsonObject reason;     // JSON stored in alarm_history.reason
++    };
++
++    bool insertAlarmRow(const QString &sensor,
++                        const QString &message,
++                        const QString &status,
++                        AlarmRow *row);
++    bool markAlarmRowResolved(const AlarmRow &row, const QString &detail);
+     void pollConfiguredPoints();
+     void mirrorClientData(ModbusClient::Device device,
+                           QModbusDataUnit::RegisterType registerType,
+@@ -88,7 +104,10 @@ private:
+     quint8 m_completedAiGroups = 0;
+     bool m_startVfdAfterFrequencyWrite = false;
+     QSet<quint16> m_activeHighInputAlarms;
+-    QSet<quint16> m_activeDigitalInputAlarms;
++    // w2-037: DI offset -> the row written when that DI alarm was raised in
++    // this run.  When the DI returns to normal that same row is marked
++    // resolved; the entry is removed only after the update succeeded.
++    QHash<quint16, AlarmRow> m_activeDigitalInputAlarms;
+     // The machine starts in the conservative state.  A true DI0 sample is
+     // required before either DO0 (00017) or DO3 (00020) can be energized.
+     bool m_di0OutputPermit = false;

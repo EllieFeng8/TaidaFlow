@@ -1,0 +1,105 @@
+﻿# w2-037 run A: every alarm insert, every UI reload summary, and the [Alarm][UI] lines for ids 53-65 (line numbers = 20-runA-desktop-full.log)
+12: [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+14: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+22: [SQL] Loaded 53 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=33 已解除=20; severity 嚴重=29 警告=24; unknown core status=0).
+34: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+42: [SQL] Loaded 53 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=33 已解除=20; severity 嚴重=29 警告=24; unknown core status=0).
+2922: [SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1） status=異常
+2924: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+2925: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2932: [SQL] Loaded 54 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=34 已解除=20; severity 嚴重=30 警告=24; unknown core status=0).
+3314: [SQL] Alarm inserted: sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+3316: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+3317: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+3318: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+3324: [SQL] Loaded 55 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=34 已解除=21; severity 嚴重=30 警告=25; unknown core status=0).
+3695: [SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1） status=異常
+3697: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+3698: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+3699: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+3700: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+3705: [SQL] Loaded 56 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=35 已解除=21; severity 嚴重=31 警告=25; unknown core status=0).
+4087: [SQL] Alarm inserted: sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+4089: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+4090: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+4091: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+4092: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+4093: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+4097: [SQL] Loaded 57 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=35 已解除=22; severity 嚴重=31 警告=26; unknown core status=0).
+5136: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+5138: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5139: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5140: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5141: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5142: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5143: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5146: [SQL] Loaded 58 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=36 已解除=22; severity 嚴重=32 警告=26; unknown core status=0).
+5488: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+5490: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5491: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5492: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5493: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5494: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5495: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5496: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5498: [SQL] Loaded 59 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=36 已解除=23; severity 嚴重=32 警告=27; unknown core status=0).
+5838: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+5840: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5841: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5842: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5843: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5844: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5845: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5846: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+5847: [Alarm][UI] id=53 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+5848: [SQL] Loaded 60 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=37 已解除=23; severity 嚴重=33 警告=27; unknown core status=0).
+6190: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+6192: [Alarm][UI] id=61 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6193: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6194: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6195: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6196: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6197: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6198: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6199: [Alarm][UI] id=54 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6200: [SQL] Loaded 61 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=37 已解除=24; severity 嚴重=33 警告=28; unknown core status=0).
+7096: [SQL] Alarm inserted: sensor=DI0 message=相位異常（DI0=0） status=異常
+7098: [Alarm][UI] id=62 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7099: [Alarm][UI] id=61 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7100: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7101: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7102: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7103: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7104: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7105: [Alarm][UI] id=55 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7106: [SQL] Loaded 62 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=38 已解除=24; severity 嚴重=34 警告=28; unknown core status=0).
+7452: [SQL] Alarm inserted: sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+7454: [Alarm][UI] id=63 sensor=DI0 message=相位異常 解除（DI0=1） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7455: [Alarm][UI] id=62 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7456: [Alarm][UI] id=61 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7457: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7458: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7459: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7460: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7461: [Alarm][UI] id=56 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7462: [SQL] Loaded 63 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=38 已解除=25; severity 嚴重=34 警告=29; unknown core status=0).
+7800: [SQL] Alarm inserted: sensor=DI0 message=相位異常（DI0=0） status=異常
+7802: [Alarm][UI] id=64 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7803: [Alarm][UI] id=63 sensor=DI0 message=相位異常 解除（DI0=1） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7804: [Alarm][UI] id=62 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7805: [Alarm][UI] id=61 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7806: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7807: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7808: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+7809: [Alarm][UI] id=57 sensor=DI1 message=漏液檢出 解除（DI1=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+7810: [SQL] Loaded 64 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=39 已解除=25; severity 嚴重=35 警告=29; unknown core status=0).
+11621: [SQL] Alarm inserted: sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+11623: [Alarm][UI] id=65 sensor=DI0 message=相位異常 解除（DI0=1） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+11624: [Alarm][UI] id=64 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+11625: [Alarm][UI] id=63 sensor=DI0 message=相位異常 解除（DI0=1） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+11626: [Alarm][UI] id=62 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+11627: [Alarm][UI] id=61 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+11628: [Alarm][UI] id=60 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+11629: [Alarm][UI] id=59 sensor=DI2 message=補水泵 OL 解除（DI2=0） coreStatus=正常 -> alarmStatus=已解除 severity=警告
+11630: [Alarm][UI] id=58 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+11631: [SQL] Loaded 65 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=39 已解除=26; severity 嚴重=35 警告=30; unknown core status=0).

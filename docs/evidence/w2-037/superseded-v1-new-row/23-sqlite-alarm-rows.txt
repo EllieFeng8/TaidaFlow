@@ -1,0 +1,22 @@
+﻿db=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\data\sensor_202609.sqlite (read-only) rows with id > 45:
+id=46 time=2026-09-24 17:10:10 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+id=47 time=2026-09-24 17:13:34 sensor=100 message=設備啟動 status=正常
+id=48 time=2026-09-24 17:13:35 sensor=TT-01 message=輸入值達到設定高限 25.0%（raw=18660，threshold=16384） status=數值異常
+id=49 time=2026-09-24 17:13:35 sensor=TT-02 message=輸入值達到設定高限 25.0%（raw=18945，threshold=16384） status=數值異常
+id=50 time=2026-09-24 17:13:35 sensor=TT-03 message=輸入值達到設定高限 25.0%（raw=22075，threshold=16384） status=數值異常
+id=51 time=2026-09-24 17:13:35 sensor=TT-04 message=輸入值達到設定高限 25.0%（raw=21506，threshold=16384） status=數值異常
+id=52 time=2026-09-24 17:24:51 sensor=100 message=設備啟動 status=正常
+id=53 time=2026-09-24 17:39:02 sensor=100 message=設備啟動 status=正常
+id=54 time=2026-09-24 17:39:52 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+id=55 time=2026-09-24 17:39:58 sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+id=56 time=2026-09-24 17:40:04 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+id=57 time=2026-09-24 17:40:10 sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+id=58 time=2026-09-24 17:40:28 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+id=59 time=2026-09-24 17:40:35 sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+id=60 time=2026-09-24 17:40:40 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+id=61 time=2026-09-24 17:40:47 sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+id=62 time=2026-09-24 17:41:02 sensor=DI0 message=相位異常（DI0=0） status=異常
+id=63 time=2026-09-24 17:41:08 sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+id=64 time=2026-09-24 17:41:14 sensor=DI0 message=相位異常（DI0=0） status=異常
+id=65 time=2026-09-24 17:42:22 sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+max_id=65 count=65

@@ -1,0 +1,21 @@
+﻿[2026-09-24 17:55:21] w2-037 postcheck (after final run B)
+processes TaidaFlowApp/Adam60xxSimulator: 0
+processes python (hold_db_lock etc.): 0
+listeners 502/8123/8125: 0
+connections on 8123/8125 (any state): 0
+TaidaFlowSettings.ini identical to .w2-037-before.bak (text): True
+git status --short (read-only):
+ M Core/SqlManager.cpp
+ M Core/SqlManager.h
+ M Core/core.cpp
+ M Core/manager.cpp
+ M Core/manager.h
+?? docs/evidence/w2-037/
+git log -1: 3ada4b0 fix(core): 頻率回授、漏液、補水泵 OL 連鎖、警報字詞對齊 UI、啟動改讀設備狀態
+git diff --stat:
+ Core/SqlManager.cpp | 40 +++++++++++++++++++++--
+ Core/SqlManager.h   |  9 ++++-
+ Core/core.cpp       | 37 +++++++++++++--------
+ Core/manager.cpp    | 94 +++++++++++++++++++++++++++++++++++++++++++++++++----
+ Core/manager.h      | 21 +++++++++++-
+ 5 files changed, 177 insertions(+), 24 deletions(-)

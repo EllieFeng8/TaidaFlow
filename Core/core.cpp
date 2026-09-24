@@ -39,30 +39,39 @@ constexpr auto kHmiInputSettingsGroup = "HmiInput";
 // need attention is hidden.  A valid 'severity' stored in the JSON (嚴重/警告)
 // overrides the table (no producer writes one today).  The database is not
 // migrated: the conversion runs on every read, so existing rows are covered.
+//
+// w2-037: a DI alarm row (DI0/DI1/DI2) is updated in place when the input
+// returns to normal: Manager keeps 'status' (異常) and adds "resolved": true,
+// "resolvedAt" (epoch s) and "resolvedDetail" (e.g. 漏液檢出 解除（DI1=0）).
+// A row with resolved == true reads as alarmStatus 已解除; its severity still
+// comes from 'status', so a resolved 異常 row stays 嚴重.
 struct AlarmUiFields {
     QString alarmStatus;
     QString severity;
     bool known = true;
 };
 
-AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus)
+AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus, bool isResolved)
 {
     const QString unhandled = QStringLiteral("未處理");
     const QString resolved = QStringLiteral("已解除");
     const QString critical = QStringLiteral("嚴重");
     const QString warning = QStringLiteral("警告");
 
+    AlarmUiFields fields{unhandled, warning, false};
     if (!hasStatus)
-        return {unhandled, warning, true};
-    if (coreStatus == QStringLiteral("異常"))
-        return {unhandled, critical, true};
-    if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
-        return {unhandled, warning, true};
-    if (coreStatus == QStringLiteral("正常"))
-        return {resolved, warning, true};
-    if (coreStatus == unhandled || coreStatus == resolved)
-        return {coreStatus, warning, true};
-    return {unhandled, warning, false};
+        fields = {unhandled, warning, true};
+    else if (coreStatus == QStringLiteral("異常"))
+        fields = {unhandled, critical, true};
+    else if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
+        fields = {unhandled, warning, true};
+    else if (coreStatus == QStringLiteral("正常"))
+        fields = {resolved, warning, true};
+    else if (coreStatus == unhandled || coreStatus == resolved)
+        fields = {coreStatus, warning, true};
+    if (isResolved)
+        fields.alarmStatus = resolved;
+    return fields;
 }
 }
 
@@ -363,7 +372,8 @@ void Core::loadAlarmRecords()
                 : reasonObject.value(QStringLiteral("message")).toString(storedReason);
         const bool hasStatus = reasonObject.value(QStringLiteral("status")).isString();
         const QString coreStatus = reasonObject.value(QStringLiteral("status")).toString();
-        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus);
+        const bool isResolved = reasonObject.value(QStringLiteral("resolved")).toBool(false);
+        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus, isResolved);
         const QString storedSeverity = reasonObject.value(QStringLiteral("severity")).toString();
         if (storedSeverity == QStringLiteral("嚴重") || storedSeverity == QStringLiteral("警告"))
             ui.severity = storedSeverity;
@@ -381,10 +391,11 @@ void Core::loadAlarmRecords()
         const qint64 alarmId = static_cast<qint64>(alarm.value(QStringLiteral("id")).toDouble());
         if (records.size() < kLoggedAlarmRows) {
             qInfo().noquote()
-                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4 -> alarmStatus=%5 severity=%6")
+                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4%5 -> alarmStatus=%6 severity=%7")
                                .arg(alarmId)
                                .arg(sensor, alarmMessage,
                                     hasStatus ? coreStatus : QStringLiteral("(none)"),
+                                    isResolved ? QStringLiteral(" resolved=true") : QString(),
                                     ui.alarmStatus, ui.severity);
         }
         records.append(QVariantMap{

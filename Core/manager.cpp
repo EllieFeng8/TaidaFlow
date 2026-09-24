@@ -228,6 +228,14 @@ bool Manager::saveAlarm(const QString &sensor,
                         const QString &message,
                         const QString &status)
 {
+    return insertAlarmRow(sensor, message, status, nullptr);
+}
+
+bool Manager::insertAlarmRow(const QString &sensor,
+                             const QString &message,
+                             const QString &status,
+                             AlarmRow *row)
+{
     if (!m_sql) {
         qWarning() << "[SQL] Insert alarm skipped: SqlManager is unavailable.";
         return false;
@@ -245,15 +253,62 @@ bool Manager::saveAlarm(const QString &sensor,
     const QString reason = QString::fromUtf8(
             QJsonDocument(alarm).toJson(QJsonDocument::Compact));
 
+    const QDateTime occurrence = QDateTime::currentDateTime();
     QString errorMessage;
-    if (!m_sql->insertAlarm(reason, &errorMessage)) {
+    qint64 id = -1;
+    if (!m_sql->insertAlarm(occurrence, reason, &errorMessage, &id)) {
         qWarning().noquote() << "[SQL] Insert alarm failed:" << errorMessage;
         return false;
     }
 
     qInfo().noquote()
-            << QStringLiteral("[SQL] Alarm inserted: sensor=%1 message=%2 status=%3")
-                       .arg(sensor, message, status);
+            << QStringLiteral("[SQL] Alarm inserted: sensor=%1 message=%2 status=%3 id=%4")
+                       .arg(sensor, message, status)
+                       .arg(id);
+    if (row) {
+        row->id = id;
+        row->occurrence = occurrence;
+        row->reason = alarm;
+    }
+    emit alarmSaved();
+    return true;
+}
+
+bool Manager::markAlarmRowResolved(const AlarmRow &row, const QString &detail)
+{
+    if (!m_sql) {
+        qWarning() << "[SQL] Resolve alarm skipped: SqlManager is unavailable.";
+        return false;
+    }
+
+    // The original fields (sensor, alarmMessage, status) stay as they are, so
+    // the severity derived from 'status' is unchanged.  'resolved' makes
+    // Core::loadAlarmRecords() report alarmStatus 已解除 for this row.
+    QJsonObject alarm = row.reason;
+    const QDateTime resolvedAt = QDateTime::currentDateTime();
+    alarm.insert(QStringLiteral("resolved"), true);
+    alarm.insert(QStringLiteral("resolvedAt"), resolvedAt.toSecsSinceEpoch());
+    alarm.insert(QStringLiteral("resolvedDetail"), detail);
+    const QString reason = QString::fromUtf8(
+            QJsonDocument(alarm).toJson(QJsonDocument::Compact));
+
+    QString errorMessage;
+    if (!m_sql->updateAlarmReason(row.occurrence, row.id, reason, &errorMessage)) {
+        qWarning().noquote()
+                << QStringLiteral("[SQL] Resolve alarm failed: id=%1 sensor=%2 (%3); will retry on the next poll.")
+                           .arg(row.id)
+                           .arg(alarm.value(QStringLiteral("sensor")).toString(), errorMessage);
+        return false;
+    }
+
+    qInfo().noquote()
+            << QStringLiteral("[SQL] Alarm resolved: id=%1 sensor=%2 message=%3 status=%4 detail=%5 resolvedAt=%6")
+                       .arg(row.id)
+                       .arg(alarm.value(QStringLiteral("sensor")).toString(),
+                            alarm.value(QStringLiteral("alarmMessage")).toString(),
+                            alarm.value(QStringLiteral("status")).toString(),
+                            detail,
+                            resolvedAt.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
     emit alarmSaved();
     return true;
 }
@@ -797,20 +852,45 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
 
     // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
     const bool alarmActive = diOffset == 0 ? !state : state;
+    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
     if (!alarmActive) {
-        m_activeDigitalInputAlarms.remove(diOffset);
+        // Only an alarm raised during this run is resolved; a DI that has
+        // been normal all along changes nothing.  Rows left 未處理 by an
+        // earlier run are not touched (not known to this run).
+        const auto active = m_activeDigitalInputAlarms.constFind(diOffset);
+        if (active == m_activeDigitalInputAlarms.cend())
+            return;
+
+        if (active->id < 0) {
+            // Cannot happen with SQLite (lastInsertId is always set); without
+            // an id the row cannot be found, so stop tracking it.
+            qWarning().noquote()
+                    << QStringLiteral("[SQL] %1 alarm cleared but its row id is unknown; the row stays 未處理.")
+                               .arg(sensor);
+            m_activeDigitalInputAlarms.erase(active);
+            return;
+        }
+
+        // The row written when the alarm was raised is updated in place (no
+        // new row).  The DI stays tracked until the update succeeds, so a
+        // failed update is retried on the next poll.
+        const QString detail = QStringLiteral("%1 解除（%2=%3）")
+                .arg(alarmMessage, sensor)
+                .arg(state ? 1 : 0);
+        if (markAlarmRowResolved(active.value(), detail))
+            m_activeDigitalInputAlarms.remove(diOffset);
         return;
     }
 
     if (m_activeDigitalInputAlarms.contains(diOffset))
         return;
 
-    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
     const QString message = QStringLiteral("%1（%2=%3）")
             .arg(alarmMessage, sensor)
             .arg(state ? 1 : 0);
-    if (saveAlarm(sensor, message, QStringLiteral("異常")))
-        m_activeDigitalInputAlarms.insert(diOffset);
+    AlarmRow row;
+    if (insertAlarmRow(sensor, message, QStringLiteral("異常"), &row))
+        m_activeDigitalInputAlarms.insert(diOffset, row);
 }
 
 void Manager::setWayValveOpenSv(bool open)

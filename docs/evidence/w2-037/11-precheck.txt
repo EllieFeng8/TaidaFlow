@@ -1,0 +1,11 @@
+﻿[2026-09-24 17:34:04] w2-037 precheck
+processes TaidaFlowApp/Adam60xxSimulator:
+
+listeners 502/8123/8125:
+
+connections to 8123/8125 (any state):
+
+[2026-09-24 17:49:40] w2-037 precheck (final run B)
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8125: 0
+connections on 8123/8125 (any state): 0

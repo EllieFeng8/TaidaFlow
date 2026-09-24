@@ -1,0 +1,5 @@
+﻿[2026-09-24 17:39:14 approx] w2-037 run A, 12 s after app start (pid 62916): Get-NetTCPConnection on 8123/8125, any state (transcribed from the session console output, command: Get-NetTCPConnection | ? { RemotePort -in 8123,8125 -or LocalPort -in 8123,8125 }):
+  127.0.0.1:8125 Listen pid=62916 (TaidaFlowApp, this run)
+  no other rows: no 8125 client connection, nothing on 8123 (no Edge / browser-pane mirror client seen).
+No foreign TaidaFlowApp/Adam60xxSimulator before start (11-precheck.txt).
+Non-w2-037 effect observed during the run: none on the app or simulator. One w2-037 input went astray: see input-log.txt NOTE and report summary (17:40:55.329 click at screen(1556,1846), outside the simulator; the window at that point afterwards was the Claude desktop app).

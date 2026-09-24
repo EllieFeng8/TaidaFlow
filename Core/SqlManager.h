@@ -51,8 +51,15 @@ public:
     bool setReadFrequency(int value, QString* errMsg = nullptr);
 
     // Alarm history helpers
-    bool insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg = nullptr);
+    // insertedId (optional) receives the new row id.  Ids are per monthly data
+    // file, so a row is identified by (occurrence month, id).
+    bool insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg = nullptr,
+                     qint64* insertedId = nullptr);
     bool insertAlarm(const QString& reason, QString* errMsg = nullptr);
+    // Replaces the reason of row 'id' in the data file of 'occurrence's month.
+    // Fails when no such row exists.
+    bool updateAlarmReason(const QDateTime& occurrence, qint64 id, const QString& reason,
+                           QString* errMsg = nullptr);
     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
 
 private:

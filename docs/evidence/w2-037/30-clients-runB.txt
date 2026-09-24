@@ -1,0 +1,7 @@
+﻿[2026-09-24 17:50:23] run B, 12 s after app start: Get-NetTCPConnection on 8123/8125 (any state)
+LocalAddress LocalPort RemoteAddress RemotePort  State OwningProcess
+------------ --------- ------------- ----------  ----- -------------
+127.0.0.1         8125 0.0.0.0                0 Listen         79076
+
+
+

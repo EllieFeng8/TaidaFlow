@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Core 1.0
+import TaidaFlowBackend 1.0
 
 // =========================================================
 // 異常警告頁面
@@ -8,7 +8,9 @@ import Core 1.0
 Item {
     id: alarmPage
 
-    anchors.top: topNavBar.bottom
+    // Below the offline banner (TopNav.qml): the banner pushes this page down
+    // while shown; hidden it has height 0, i.e. this equals topNavBar.bottom.
+    anchors.top: offlineBanner.bottom
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: parent.bottom

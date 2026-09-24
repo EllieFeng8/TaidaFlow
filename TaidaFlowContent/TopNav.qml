@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import TaidaFlowBackend 1.0
 
 Rectangle {
     id: root
@@ -296,6 +297,76 @@ Rectangle {
     }
     HistoryPage{
         visible: root.currentPage === 2
+    }
+
+    // =========================================================
+    // 離線提示 (transport overlay, wasm-mirror pack §9)
+    // Td.transportReady is a local STORED false property: always true on the
+    // desktop (banner never shown), false on WebAssembly while the desktop Core
+    // is unreachable / synchronizing. All write controls are disabled meanwhile
+    // (Main.qml controlsEnabled, HistoryPage paging); the page keeps the last
+    // synchronized state.
+    // Layout: the banner never covers page content. It takes space only while it
+    // is shown: AlarmPage / HistoryPage anchor their top to offlineBanner.bottom,
+    // so the banner pushes them down (titles, filter bar and "下載 CSV" stay fully
+    // visible); Main's first content row starts below the banner anyway (see the
+    // note in Main.qml). Hidden -> height 0 -> the pages sit exactly at
+    // topNavBar.bottom, i.e. the desktop layout is unchanged.
+    // =========================================================
+    Rectangle {
+        id: offlineBanner
+        objectName: "offlineBanner"
+
+        anchors.top: topNavBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: visible ? 64 : 0
+        z: 200
+        visible: !Td.transportReady
+
+        // Opaque: the banner now sits in its own row (nothing is drawn behind it).
+        color: "#B3261E"
+        border.color: "#FF8A80"
+        border.width: 2
+
+        Row {
+            anchors.centerIn: parent
+            spacing: 18
+
+            Rectangle {
+                width: 84
+                height: 36
+                radius: 6
+                anchors.verticalCenter: parent.verticalCenter
+                color: "#FFFFFF"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "離線"
+                    color: "#B3261E"
+                    font.pixelSize: 22
+                    font.bold: true
+                }
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 2
+
+                Text {
+                    text: "未連線到桌面端，所有操作已停用（畫面保留最後同步的狀態）"
+                    color: "white"
+                    font.pixelSize: 22
+                    font.bold: true
+                }
+
+                Text {
+                    text: Td.transportMessage
+                    color: "#FFE0DC"
+                    font.pixelSize: 15
+                }
+            }
+        }
     }
 
 }

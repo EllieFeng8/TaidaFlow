@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Core 1.0
+import TaidaFlowBackend 1.0
 
 // =========================================================
 // 歷史紀錄頁面
@@ -8,7 +8,9 @@ import Core 1.0
 Item {
     id: historyPage
 
-    anchors.top: topNavBar.bottom
+    // Below the offline banner (TopNav.qml): the banner pushes this page down
+    // while shown; hidden it has height 0, i.e. this equals topNavBar.bottom.
+    anchors.top: offlineBanner.bottom
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: parent.bottom
@@ -133,6 +135,11 @@ Item {
         var savedPath = Td.saveHistoryCsv(lines.join("\r\n"))
         if (savedPath.indexOf("ERROR:") === 0)
             exportMessage = "下載失敗：" + savedPath.substring(6)
+        else if (savedPath.indexOf("DOWNLOAD:") === 0)
+            // WebAssembly: the browser download was started asynchronously; the
+            // file name is only a hint, the browser decides where the file goes.
+            exportMessage = "已開始下載 " + filteredHistoryModel.length + " 筆資料（"
+                    + savedPath.substring(9) + "）"
         else if (savedPath.length > 0)
             exportMessage = "已下載 " + filteredHistoryModel.length + " 筆資料"
         else
@@ -532,7 +539,9 @@ Item {
                         id: previousPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage > 1
+                        // historyCurrentPage is a mirrored property: paging is a remote
+                        // write, so it is disabled while the WASM transport is offline.
+                        enabled: currentPage > 1 && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -568,7 +577,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage < totalPages
+                        enabled: currentPage < totalPages && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {

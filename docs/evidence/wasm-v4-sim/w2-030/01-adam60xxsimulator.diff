@@ -1,0 +1,985 @@
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/adamdeviceserver.cpp" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/adamdeviceserver.cpp"
+index 1bd0a05..9ad1712 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/adamdeviceserver.cpp"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/adamdeviceserver.cpp"
+@@ -436,10 +436,25 @@ QList<AdamDeviceProfile> AdamDeviceServer::defaultProfiles()
+         {QModbusDataUnit::HoldingRegisters, 302, 1},
+         {QModbusDataUnit::HoldingRegisters, 304, 1},
+     };
++    // DO meanings follow taidaflow core branch Core/ModbusMapping.h
++    // defaultWriteBindings() and Manager::mirrorClientData().
++    static const std::array<const char *, 5> coreDoMeaning{
++        "Core VfdRun: VFD enable / circulation pump (with ADAM-6022 HR10 frequency)",
++        "Core InverterReset: VFD reset pulse",
++        "Core EmergencyStop: emergency-stop circuit, active-low (0 = stop asserted)",
++        "Core MotorRunning: makeup pump command; read back as motorRunningPv",
++        "Core WayValveOpen: two-way / circulation bypass valve; read back as wayValveOpenPv",
++    };
+     for (int channel = 0; channel < 16; ++channel) {
++        const QString description = channel < static_cast<int>(coreDoMeaning.size())
++                ? QStringLiteral("Digital output. %1")
++                          .arg(QString::fromLatin1(coreDoMeaning[channel]))
++                : channel <= 8
++                        ? QStringLiteral("Digital output (read back by Core, no meaning assigned)")
++                        : QStringLiteral("Digital output (not used by Core)");
+         adam6256.points.append(point(QModbusDataUnit::Coils, 16 + channel,
+                                      QStringLiteral("DO%1").arg(channel),
+-                                     QStringLiteral("Digital output"), true));
++                                     description, true));
+         adam6256.points.append(point(QModbusDataUnit::HoldingRegisters, channel * 2,
+                                      QStringLiteral("DO%1 Pulse Low High Word").arg(channel),
+                                      QStringLiteral("Pulse low width, 0.1 ms units"), true));
+@@ -494,16 +509,26 @@ QList<AdamDeviceProfile> AdamDeviceServer::defaultProfiles()
+         {QModbusDataUnit::HoldingRegisters, 400, 4},
+         {QModbusDataUnit::HoldingRegisters, 410, 4},
+     };
++    // DI meanings follow taidaflow core branch Core/manager.cpp
++    // digitalInputAlarmMessage() / checkDigitalInputAlarm() / tripDi0Interlock().
++    static const std::array<const char *, 4> coreDiMeaning{
++        "Phase OK: 1 = normal, 0 = Core alarm '相位異常' + DO0/DO3 interlock",
++        "Leak detected: 1 = Core alarm '漏液檢出'",
++        "Makeup pump overload (OL): 1 = Core alarm '補水泵 OL'",
++        "Spare: not read by Core (Core reads DI0..DI2 only)",
++    };
+     for (int channel = 0; channel < 4; ++channel) {
++        const QString meaning = QString::fromUtf8(coreDiMeaning[channel]);
+         adam6224.points.append(point(QModbusDataUnit::HoldingRegisters, channel,
+                                      QStringLiteral("AO%1").arg(channel),
+-                                     QStringLiteral("12-bit analog output"), true));
++                                     QStringLiteral("12-bit analog output; Core MV%1 opening 0..100 % = raw 0..4095")
++                                             .arg(channel + 1), true));
+         adam6224.points.append(point(QModbusDataUnit::Coils, channel,
+                                      QStringLiteral("DI%1 (FC01)").arg(channel),
+-                                     QStringLiteral("Digital input, official 0X map")));
++                                     QStringLiteral("Digital input, official 0X map. %1").arg(meaning)));
+         adam6224.points.append(point(QModbusDataUnit::DiscreteInputs, channel,
+                                      QStringLiteral("DI%1 (FC02 alias)").arg(channel),
+-                                     QStringLiteral("Compatibility alias used by TaidaFlow Core")));
++                                     QStringLiteral("Alias read by TaidaFlow Core. %1").arg(meaning)));
+         adam6224.points.append(point(QModbusDataUnit::HoldingRegisters, 100 + channel * 2,
+                                      QStringLiteral("AO%1 Status 0").arg(channel),
+                                      QStringLiteral("Output status word 0")));
+@@ -559,13 +584,16 @@ QList<AdamDeviceProfile> AdamDeviceServer::defaultProfiles()
+     for (int channel = 0; channel < 2; ++channel) {
+         adam6022.points.append(point(QModbusDataUnit::HoldingRegisters, 10 + channel,
+                                      QStringLiteral("AO%1").arg(channel),
+-                                     QStringLiteral("12-bit analog output"), true));
++                                     channel == 0
++                                             ? QStringLiteral("12-bit analog output; Core Pump2Hz: VFD 0..60 Hz = raw 0..4095")
++                                             : QStringLiteral("12-bit analog output (not used by Core)"),
++                                     true));
+         adam6022.points.append(point(QModbusDataUnit::Coils, channel,
+                                      QStringLiteral("DI%1 (FC01)").arg(channel),
+-                                     QStringLiteral("Digital input")));
++                                     QStringLiteral("Digital input (not used by Core; independent of ADAM-6224 DI)")));
+         adam6022.points.append(point(QModbusDataUnit::DiscreteInputs, channel,
+                                      QStringLiteral("DI%1 (FC02 alias)").arg(channel),
+-                                     QStringLiteral("Digital input compatibility alias")));
++                                     QStringLiteral("Digital input compatibility alias (not used by Core)")));
+         adam6022.points.append(point(QModbusDataUnit::Coils, 16 + channel,
+                                      QStringLiteral("DO%1").arg(channel),
+                                      QStringLiteral("Digital output"), true));
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/mainwindow.cpp" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/mainwindow.cpp"
+index 2c0ffba..26d7880 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/mainwindow.cpp"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/mainwindow.cpp"
+@@ -67,19 +67,70 @@ MainWindow::MainWindow(QWidget *parent)
+     connect(m_heaterSpin, &QDoubleSpinBox::valueChanged,
+             m_process.get(), &ProcessSimulator::setHeaterLoad);
+ 
++    connect(m_process.get(), &ProcessSimulator::processEvent,
++            this, &MainWindow::appendLog);
++
+     for (int channel = 0; channel < static_cast<int>(m_diChecks.size()); ++channel) {
++        m_diChecks[channel]->setChecked(m_process->digitalInput(channel));
+         connect(m_diChecks[channel], &QCheckBox::toggled, this,
+                 [this, channel](bool checked) {
+             m_process->setDigitalInput(channel, checked);
+         });
+     }
++    m_estopInterlockCheck->setChecked(m_process->emergencyStopInterlock());
++    connect(m_estopInterlockCheck, &QCheckBox::toggled,
++            m_process.get(), &ProcessSimulator::setEmergencyStopInterlock);
+ 
+     applyEndpointPreset();
+     populateRawIoTable();
+     refreshProcessUi();
++    QStringList diDefaults;
++    for (int channel = 0; channel < static_cast<int>(m_diChecks.size()); ++channel) {
++        diDefaults.append(QStringLiteral("%1=%2")
++                                  .arg(ProcessSimulator::digitalInputName(channel))
++                                  .arg(m_process->digitalInput(channel) ? 1 : 0));
++    }
++    appendLog(tr("點位對齊 taidaflow core 分支；ADAM-6224 DI 初始值：%1")
++                      .arg(diDefaults.join(QStringLiteral("，"))));
+     appendLog(tr("完整設備模擬器已就緒。請啟動全部 ADAM Server。"));
+ }
+ 
++QString MainWindow::describeExternalWrite(const AdamDeviceServer *server,
++                                          QModbusDataUnit::RegisterType table,
++                                          int address,
++                                          const QList<quint16> &values)
++{
++    QStringList meanings;
++    for (qsizetype index = 0; index < values.size(); ++index) {
++        const int current = address + static_cast<int>(index);
++        const quint16 value = values.at(index);
++        if (server->profile().id == AdamDeviceId::Adam6256
++                && table == QModbusDataUnit::Coils) {
++            const QString name = ProcessSimulator::coilName(current);
++            if (name.isEmpty())
++                continue;
++            QString state = value ? QStringLiteral("ON") : QStringLiteral("OFF");
++            if (current == CorePoints::CoilEmergencyStop)
++                state = value ? tr("1=急停釋放") : tr("0=急停");
++            meanings.append(QStringLiteral("%1 %2").arg(name, state));
++        } else if (server->profile().id == AdamDeviceId::Adam6022
++                   && table == QModbusDataUnit::HoldingRegisters
++                   && current == CorePoints::HoldingPumpFrequency) {
++            meanings.append(tr("AO0 變頻器頻率 %1 Hz")
++                                    .arg(std::min<int>(value, 4095) * 60.0 / 4095.0, 0, 'f', 2));
++        } else if (server->profile().id == AdamDeviceId::Adam6224
++                   && table == QModbusDataUnit::HoldingRegisters
++                   && current >= 0 && current <= 3) {
++            meanings.append(tr("MV%1 開度 %2 %")
++                                    .arg(current + 1)
++                                    .arg(std::min<int>(value, 4095) * 100.0 / 4095.0, 0, 'f', 2));
++        }
++    }
++    return meanings.isEmpty()
++            ? QString()
++            : QStringLiteral("（%1）").arg(meanings.join(QStringLiteral("，")));
++}
++
+ MainWindow::~MainWindow()
+ {
+     m_process.reset();
+@@ -124,11 +175,12 @@ void MainWindow::createDeviceServers()
+                 [this, rawServer](QModbusDataUnit::RegisterType table,
+                                   int address,
+                                   const QList<quint16> &values) {
+-            appendLog(tr("Core → %1：%2 offset %3 = [%4]")
++            appendLog(tr("Core → %1：%2 offset %3 = [%4]%5")
+                           .arg(rawServer->profile().name,
+                                AdamDeviceServer::tableName(table))
+                           .arg(address)
+-                          .arg(valuesText(values)));
++                          .arg(valuesText(values))
++                          .arg(describeExternalWrite(rawServer, table, address, values)));
+             refreshProcessUi();
+         });
+ 
+@@ -220,36 +272,51 @@ void MainWindow::buildUi()
+     m_heaterSpin->setSuffix(tr(" %"));
+     m_heaterSpin->setValue(45.0);
+     modelLayout->addWidget(m_heaterSpin);
++    m_estopInterlockCheck = new QCheckBox(tr("急停硬體連鎖（DO2=0 停泵）"), modelGroup);
++    m_estopInterlockCheck->setToolTip(
++            tr("預設關閉：Core 啟動時不寫 DO2，若啟用則 Core 每次重啟後需先在 HMI 解除急停，泵浦才能運轉。"));
++    modelLayout->addWidget(m_estopInterlockCheck);
+     modelLayout->addStretch();
+     processLayout->addWidget(modelGroup);
+ 
+-    auto *faultGroup = new QGroupBox(tr("ADAM-6224 DI 狀態／故障注入"), processPage);
++    auto *faultGroup = new QGroupBox(
++            tr("ADAM-6224 DI 狀態／故障注入（對齊 taidaflow core 分支；Core 讀 DI0–DI2）"),
++            processPage);
+     auto *faultLayout = new QHBoxLayout(faultGroup);
+-    const QStringList faultNames{
+-        tr("DI0 漏液"), tr("DI1 緊急停止"), tr("DI2 低液位"), tr("DI3 加熱器故障")
+-    };
+-    for (const QString &name : faultNames) {
+-        auto *check = new QCheckBox(name, faultGroup);
++    for (int channel = 0; channel < CorePoints::DiCount; ++channel) {
++        auto *check = new QCheckBox(ProcessSimulator::digitalInputName(channel), faultGroup);
+         m_diChecks.push_back(check);
+         faultLayout->addWidget(check);
+     }
++    m_diChecks[CorePoints::DiPhaseOk]->setToolTip(tr("勾選 = 1 = 相位正常（Core 預設需要 1）；取消 = 相位異常，Core 觸發 DO0/DO3 連鎖"));
++    m_diChecks[CorePoints::DiLeakDetected]->setToolTip(tr("勾選 = 1 = 漏液檢出；流量降為 65%，系統水量下降"));
++    m_diChecks[CorePoints::DiMakeupPumpOverload]->setToolTip(tr("勾選 = 1 = 補水泵 OL；補水泵停止"));
++    m_diChecks[CorePoints::DiSpare]->setToolTip(tr("Core 不讀此點，無製程效果"));
+     faultLayout->addStretch();
+     processLayout->addWidget(faultGroup);
+ 
+     auto *stateLayout = new QHBoxLayout;
+     m_pumpStateLabel = new QLabel(processPage);
++    m_makeupStateLabel = new QLabel(processPage);
+     m_flowLabel = new QLabel(processPage);
+     QFont stateFont = m_pumpStateLabel->font();
+     stateFont.setBold(true);
+     stateFont.setPointSize(stateFont.pointSize() + 2);
+     m_pumpStateLabel->setFont(stateFont);
++    m_makeupStateLabel->setFont(stateFont);
+     m_flowLabel->setFont(stateFont);
+     stateLayout->addWidget(m_pumpStateLabel);
+-    stateLayout->addSpacing(30);
++    stateLayout->addSpacing(24);
++    stateLayout->addWidget(m_makeupStateLabel);
++    stateLayout->addSpacing(24);
+     stateLayout->addWidget(m_flowLabel);
+     stateLayout->addStretch();
+     processLayout->addLayout(stateLayout);
+ 
++    m_doStateLabel = new QLabel(processPage);
++    m_doStateLabel->setTextFormat(Qt::RichText);
++    processLayout->addWidget(m_doStateLabel);
++
+     auto *processSplitter = new QSplitter(Qt::Horizontal, processPage);
+     m_valveTable = new QTableWidget(4, 4, processSplitter);
+     m_valveTable->setHorizontalHeaderLabels({
+@@ -392,13 +459,49 @@ void MainWindow::refreshProcessUi()
+ 
+     m_updatingTables = true;
+     const ProcessSnapshot &snapshot = m_process->snapshot();
+-    m_pumpStateLabel->setText(tr("循環泵：%1（命令 %2，%3 Hz）")
++    const QString pumpReason = m_process->pumpBlockReason();
++    m_pumpStateLabel->setText(tr("循環泵（DO0）：%1（命令 %2，%3 Hz）%4")
+                               .arg(snapshot.pumpRunning ? tr("運轉") : tr("停止"))
+                               .arg(snapshot.pumpCommand ? QStringLiteral("ON") : QStringLiteral("OFF"))
+-                              .arg(snapshot.pumpFrequencyHz, 0, 'f', 1));
++                              .arg(snapshot.pumpFrequencyHz, 0, 'f', 1)
++                              .arg(snapshot.pumpCommand && !pumpReason.isEmpty()
++                                           ? tr(" ⚠ %1").arg(pumpReason) : QString()));
+     m_pumpStateLabel->setStyleSheet(snapshot.pumpRunning
+             ? QStringLiteral("color: #187b35;") : QStringLiteral("color: #a33;"));
+-    m_flowLabel->setText(tr("流量：%1 %").arg(snapshot.flow, 0, 'f', 1));
++    const QString makeupReason = m_process->makeupPumpBlockReason();
++    m_makeupStateLabel->setText(tr("補水泵（DO3）：%1（命令 %2）%3")
++                                .arg(snapshot.makeupPumpRunning ? tr("運轉") : tr("停止"))
++                                .arg(snapshot.makeupPumpCommand ? QStringLiteral("ON") : QStringLiteral("OFF"))
++                                .arg(snapshot.makeupPumpCommand && !makeupReason.isEmpty()
++                                             ? tr(" ⚠ %1").arg(makeupReason) : QString()));
++    m_makeupStateLabel->setStyleSheet(snapshot.makeupPumpRunning
++            ? QStringLiteral("color: #187b35;") : QStringLiteral("color: #a33;"));
++    m_flowLabel->setText(tr("流量：%1 %　系統水量：%2 %")
++                         .arg(snapshot.flow, 0, 'f', 1)
++                         .arg(snapshot.waterInventory, 0, 'f', 1));
++
++    const auto onOff = [](bool on, const QString &onText, const QString &offText) {
++        return on ? QStringLiteral("<b style='color:#187b35'>%1</b>").arg(onText)
++                  : QStringLiteral("<b style='color:#a33'>%1</b>").arg(offText);
++    };
++    m_doStateLabel->setText(
++            tr("ADAM-6256 DO（Core 命令）："
++               "DO0 變頻器啟動 %1　DO1 變頻器復歸 %2　DO2 急停 %3　DO3 補水泵 %4　DO4 二通閥 %5"
++               "　｜　ADAM-6224 DI：DI0 相位 %6　DI1 漏液 %7　DI2 補水泵 OL %8")
++                    .arg(onOff(snapshot.pumpCommand, QStringLiteral("ON"), QStringLiteral("OFF")),
++                         onOff(snapshot.inverterReset, QStringLiteral("ON"), QStringLiteral("OFF")),
++                         snapshot.emergencyStopCoil
++                                 ? QStringLiteral("<b style='color:#187b35'>%1</b>").arg(tr("1 釋放"))
++                                 : QStringLiteral("<b style='color:#a33'>%1</b>").arg(tr("0 急停")),
++                         onOff(snapshot.makeupPumpCommand, QStringLiteral("ON"), QStringLiteral("OFF")),
++                         onOff(snapshot.bypassValveOpen, tr("開"), tr("關")),
++                         onOff(snapshot.phaseOk, tr("1 正常"), tr("0 異常")),
++                         snapshot.leakDetected
++                                 ? QStringLiteral("<b style='color:#a33'>%1</b>").arg(tr("1 漏液"))
++                                 : QStringLiteral("<b style='color:#187b35'>%1</b>").arg(tr("0 正常")),
++                         snapshot.makeupPumpOverload
++                                 ? QStringLiteral("<b style='color:#a33'>%1</b>").arg(tr("1 故障"))
++                                 : QStringLiteral("<b style='color:#187b35'>%1</b>").arg(tr("0 正常"))));
+ 
+     AdamDeviceServer *adam6224 = device(AdamDeviceId::Adam6224);
+     for (int row = 0; row < 4; ++row) {
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/mainwindow.h" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/mainwindow.h"
+index 2dc9b68..38306fb 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/mainwindow.h"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/mainwindow.h"
+@@ -47,6 +47,10 @@ private:
+     void updateServerControls();
+     void appendLog(const QString &message);
+     AdamDeviceServer *device(AdamDeviceId id) const;
++    static QString describeExternalWrite(const AdamDeviceServer *server,
++                                         QModbusDataUnit::RegisterType table,
++                                         int address,
++                                         const QList<quint16> &values);
+ 
+     std::vector<std::unique_ptr<AdamDeviceServer>> m_devices;
+     std::unique_ptr<ProcessSimulator> m_process;
+@@ -61,7 +65,10 @@ private:
+     QDoubleSpinBox *m_ambientSpin = nullptr;
+     QDoubleSpinBox *m_heaterSpin = nullptr;
+     std::vector<QCheckBox *> m_diChecks;
++    QCheckBox *m_estopInterlockCheck = nullptr;
+     QLabel *m_pumpStateLabel = nullptr;
++    QLabel *m_makeupStateLabel = nullptr;
++    QLabel *m_doStateLabel = nullptr;
+     QLabel *m_flowLabel = nullptr;
+     QTableWidget *m_valveTable = nullptr;
+     QTableWidget *m_sensorTable = nullptr;
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/processsimulator.cpp" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/processsimulator.cpp"
+index c7b5318..c295bbf 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/processsimulator.cpp"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/processsimulator.cpp"
+@@ -77,12 +77,79 @@ bool ProcessSimulator::digitalInput(int channel) const
+             : false;
+ }
+ 
++bool ProcessSimulator::emergencyStopInterlock() const
++{
++    return m_emergencyStopInterlock;
++}
++
++QString ProcessSimulator::digitalInputName(int channel)
++{
++    switch (channel) {
++    case CorePoints::DiPhaseOk: return tr("DI0 相位正常");
++    case CorePoints::DiLeakDetected: return tr("DI1 漏液檢出");
++    case CorePoints::DiMakeupPumpOverload: return tr("DI2 補水泵 OL");
++    case CorePoints::DiSpare: return tr("DI3 備用（Core 未使用）");
++    default: return tr("DI%1").arg(channel);
++    }
++}
++
++QString ProcessSimulator::coilName(int coil)
++{
++    switch (coil) {
++    case CorePoints::CoilVfdRun: return tr("DO0 變頻器啟動/循環泵");
++    case CorePoints::CoilInverterReset: return tr("DO1 變頻器復歸");
++    case CorePoints::CoilEmergencyStop: return tr("DO2 急停（active-low，0=急停）");
++    case CorePoints::CoilMakeupPump: return tr("DO3 補水泵");
++    case CorePoints::CoilBypassValve: return tr("DO4 二通閥/旁通閥");
++    default:
++        if (coil >= 16 && coil < 32)
++            return tr("DO%1（Core 未使用）").arg(coil - 16);
++        return {};
++    }
++}
++
++QString ProcessSimulator::pumpBlockReason() const
++{
++    if (!m_snapshot.pumpCommand)
++        return tr("DO0 未啟動");
++    if (!m_snapshot.phaseOk)
++        return tr("相位異常（DI0=0）");
++    if (m_emergencyStopInterlock && !m_snapshot.emergencyStopCoil)
++        return tr("急停迴路（DO2=0）");
++    return {};
++}
++
++QString ProcessSimulator::makeupPumpBlockReason() const
++{
++    if (!m_snapshot.makeupPumpCommand)
++        return tr("DO3 未啟動");
++    if (!m_snapshot.phaseOk)
++        return tr("相位異常（DI0=0）");
++    if (m_snapshot.makeupPumpOverload)
++        return tr("補水泵 OL 跳脫（DI2=1）");
++    if (m_emergencyStopInterlock && !m_snapshot.emergencyStopCoil)
++        return tr("急停迴路（DO2=0）");
++    return {};
++}
++
+ void ProcessSimulator::setAutoEnabled(bool enabled)
+ {
+     m_autoEnabled = enabled;
+     emit updated();
+ }
+ 
++void ProcessSimulator::setEmergencyStopInterlock(bool enabled)
++{
++    if (m_emergencyStopInterlock == enabled)
++        return;
++    m_emergencyStopInterlock = enabled;
++    emit processEvent(enabled
++            ? tr("急停硬體連鎖已啟用：DO2=0 時循環泵與補水泵停止")
++            : tr("急停硬體連鎖已停用：DO2 僅顯示，不影響製程"));
++    updateRunStates();
++    emit updated();
++}
++
+ void ProcessSimulator::setAmbientTemperature(double value)
+ {
+     m_ambientTemperature = std::clamp(value, -20.0, 80.0);
+@@ -97,8 +164,33 @@ void ProcessSimulator::setDigitalInput(int channel, bool value)
+ {
+     if (channel < 0 || channel >= static_cast<int>(m_digitalInputs.size()))
+         return;
++    if (m_digitalInputs[channel] == value)
++        return;
+     m_digitalInputs[channel] = value;
++    QString effect;
++    switch (channel) {
++    case CorePoints::DiPhaseOk:
++        effect = value ? tr("相位恢復正常；Core 重新允許 DO0/DO3")
++                       : tr("相位異常；Core 應產生「相位異常」警報並強制 DO0/DO3 OFF，泵浦無法運轉");
++        break;
++    case CorePoints::DiLeakDetected:
++        effect = value ? tr("漏液；Core 應產生「漏液檢出」警報，流量降為 65% 且系統水量下降")
++                       : tr("漏液解除");
++        break;
++    case CorePoints::DiMakeupPumpOverload:
++        effect = value ? tr("補水泵過載跳脫；Core 應產生「補水泵 OL」警報，補水泵停止")
++                       : tr("補水泵 OL 解除");
++        break;
++    default:
++        effect = tr("Core 未讀取此點");
++        break;
++    }
++    emit processEvent(tr("ADAM-6224 %1 = %2：%3")
++                              .arg(digitalInputName(channel))
++                              .arg(value ? 1 : 0)
++                              .arg(effect));
+     synchronizeDigitalInputs();
++    updateRunStates();
+     emit updated();
+ }
+ 
+@@ -107,6 +199,7 @@ void ProcessSimulator::step()
+     readCommands();
+     synchronizeAdam6256();
+     synchronizeDigitalInputs();
++    updateRunStates();
+     if (m_autoEnabled) {
+         updateAutomaticModel();
+         writeProcessInputs();
+@@ -115,14 +208,27 @@ void ProcessSimulator::step()
+     if (++m_stepsSinceLog >= 5) {
+         m_stepsSinceLog = 0;
+         qInfo().noquote()
+-                << QStringLiteral("[Process] pumpCommand=%1 pumpRunning=%2 frequencyHz=%3 "
+-                                  "flow=%4 PT05=%5 MV1Feedback=%6")
++                << QStringLiteral("[Process] DO0=%1 pumpRunning=%2 frequencyHz=%3 "
++                                  "flow=%4 PT01=%5 PT05=%6 MV1Feedback=%7 "
++                                  "DO1=%8 DO2=%9 DO3=%10 makeupRunning=%11 DO4=%12 "
++                                  "DI0=%13 DI1=%14 DI2=%15 DI3=%16 water=%17")
+                            .arg(m_snapshot.pumpCommand ? 1 : 0)
+                            .arg(m_snapshot.pumpRunning ? 1 : 0)
+                            .arg(m_snapshot.pumpFrequencyHz, 0, 'f', 1)
+                            .arg(m_snapshot.flow, 0, 'f', 2)
++                           .arg(m_snapshot.pressures[0], 0, 'f', 2)
+                            .arg(m_snapshot.pressures[4], 0, 'f', 2)
+-                           .arg(m_snapshot.valvePositions[0], 0, 'f', 2);
++                           .arg(m_snapshot.valvePositions[0], 0, 'f', 2)
++                           .arg(m_snapshot.inverterReset ? 1 : 0)
++                           .arg(m_snapshot.emergencyStopCoil ? 1 : 0)
++                           .arg(m_snapshot.makeupPumpCommand ? 1 : 0)
++                           .arg(m_snapshot.makeupPumpRunning ? 1 : 0)
++                           .arg(m_snapshot.bypassValveOpen ? 1 : 0)
++                           .arg(m_digitalInputs[0] ? 1 : 0)
++                           .arg(m_digitalInputs[1] ? 1 : 0)
++                           .arg(m_digitalInputs[2] ? 1 : 0)
++                           .arg(m_digitalInputs[3] ? 1 : 0)
++                           .arg(m_snapshot.waterInventory, 0, 'f', 1);
+     }
+     emit updated();
+ }
+@@ -176,9 +282,16 @@ void ProcessSimulator::initializeRegisters()
+ void ProcessSimulator::readCommands()
+ {
+     if (AdamDeviceServer *server = device(AdamDeviceId::Adam6256)) {
+-        quint16 value = 0;
+-        server->value(QModbusDataUnit::Coils, 16, &value);
+-        m_snapshot.pumpCommand = value != 0;
++        const auto coil = [server](int address) {
++            quint16 value = 0;
++            server->value(QModbusDataUnit::Coils, address, &value);
++            return value != 0;
++        };
++        m_snapshot.pumpCommand = coil(CorePoints::CoilVfdRun);
++        m_snapshot.inverterReset = coil(CorePoints::CoilInverterReset);
++        m_snapshot.emergencyStopCoil = coil(CorePoints::CoilEmergencyStop);
++        m_snapshot.makeupPumpCommand = coil(CorePoints::CoilMakeupPump);
++        m_snapshot.bypassValveOpen = coil(CorePoints::CoilBypassValve);
+     }
+ 
+     if (AdamDeviceServer *server = device(AdamDeviceId::Adam6224)) {
+@@ -192,18 +305,54 @@ void ProcessSimulator::readCommands()
+ 
+     if (AdamDeviceServer *server = device(AdamDeviceId::Adam6022)) {
+         quint16 value = 0;
+-        server->value(QModbusDataUnit::HoldingRegisters, 10, &value);
++        server->value(QModbusDataUnit::HoldingRegisters,
++                      CorePoints::HoldingPumpFrequency, &value);
+         m_snapshot.pumpFrequencyHz = std::min(value, quint16(4095))
+                 * 60.0 / ValveRawMaximum;
+     }
+ }
+ 
++void ProcessSimulator::updateRunStates()
++{
++    m_snapshot.phaseOk = m_digitalInputs[CorePoints::DiPhaseOk];
++    m_snapshot.leakDetected = m_digitalInputs[CorePoints::DiLeakDetected];
++    m_snapshot.makeupPumpOverload = m_digitalInputs[CorePoints::DiMakeupPumpOverload];
++
++    const bool previousPump = m_snapshot.pumpRunning;
++    const bool previousMakeup = m_snapshot.makeupPumpRunning;
++    // A three-phase motor cannot run on a phase fault; the makeup pump's
++    // thermal overload relay (DI2) opens its contactor. The hard-wired
++    // emergency-stop circuit (DO2, active-low) is only modelled when the
++    // optional interlock is enabled in the UI, because Core does not write
++    // DO2 at start-up (see docs/core-compatibility.md).
++    m_snapshot.pumpRunning = pumpBlockReason().isEmpty();
++    m_snapshot.makeupPumpRunning = makeupPumpBlockReason().isEmpty();
++
++    if (!m_runStateInitialized) {
++        m_runStateInitialized = true;
++        return;
++    }
++    if (previousPump != m_snapshot.pumpRunning) {
++        emit processEvent(m_snapshot.pumpRunning
++                ? tr("循環泵運轉（DO0=1，%1 Hz）").arg(m_snapshot.pumpFrequencyHz, 0, 'f', 1)
++                : tr("循環泵停止：%1").arg(pumpBlockReason()));
++    }
++    if (previousMakeup != m_snapshot.makeupPumpRunning) {
++        emit processEvent(m_snapshot.makeupPumpRunning
++                ? tr("補水泵運轉（DO3=1），系統水量上升")
++                : tr("補水泵停止：%1").arg(makeupPumpBlockReason()));
++    }
++}
++
+ void ProcessSimulator::updateAutomaticModel()
+ {
+-    const bool emergencyStop = m_digitalInputs[1];
+-    const bool lowLevel = m_digitalInputs[2];
+-    const bool heaterFault = m_digitalInputs[3];
+-    m_snapshot.pumpRunning = m_snapshot.pumpCommand && !emergencyStop && !lowLevel;
++    constexpr double stepSeconds = StepIntervalMs / 1000.0;
++    // Loop water inventory: a leak drains it, the makeup pump refills it.
++    if (m_snapshot.leakDetected)
++        m_snapshot.waterInventory -= 0.4 * stepSeconds;
++    if (m_snapshot.makeupPumpRunning)
++        m_snapshot.waterInventory += 0.8 * stepSeconds;
++    m_snapshot.waterInventory = std::clamp(m_snapshot.waterInventory, 0.0, 100.0);
+ 
+     for (int channel = 0; channel < 4; ++channel) {
+         m_snapshot.valvePositions[channel] +=
+@@ -216,13 +365,17 @@ void ProcessSimulator::updateAutomaticModel()
+     averageOpening /= m_snapshot.valvePositions.size();
+ 
+     const double pumpFactor = std::clamp(m_snapshot.pumpFrequencyHz / 60.0, 0.0, 1.0);
+-    const double leakFactor = m_digitalInputs[0] ? 0.65 : 1.0;
++    // DI1 leak: part of the pumped water is lost before the flow meter.
++    const double leakFactor = m_snapshot.leakDetected ? 0.65 : 1.0;
++    // Below 15 % inventory the circulation pump starts to run dry.
++    const double suctionFactor = std::clamp(m_snapshot.waterInventory / 15.0, 0.0, 1.0);
+     const double targetFlow = m_snapshot.pumpRunning
+-            ? 120.0 * pumpFactor * (0.08 + 0.92 * averageOpening / 100.0) * leakFactor
++            ? 120.0 * pumpFactor * (0.08 + 0.92 * averageOpening / 100.0)
++                    * leakFactor * suctionFactor
+             : 0.0;
+     m_snapshot.flow += (targetFlow - m_snapshot.flow) * 0.10;
+ 
+-    const double heat = heaterFault ? 0.0 : m_heaterLoad;
++    const double heat = m_heaterLoad;
+     const double cooling = std::min(m_snapshot.flow * 0.025, 5.0);
+     const std::array<double, 4> temperatureTargets{
+         m_ambientTemperature + heat * 0.08 - cooling,
+@@ -237,8 +390,12 @@ void ProcessSimulator::updateAutomaticModel()
+                 (temperatureTargets[channel] - m_snapshot.temperatures[channel]) * 0.035;
+     }
+ 
+-    constexpr double staticPressure = 18.0;
+-    const double pumpPressure = m_snapshot.pumpRunning ? 900.0 * pumpFactor : 0.0;
++    // Static (fill) pressure follows the water inventory: 18 kPa at the
++    // initial 80 %, so a running makeup pump raises it and a leak lowers it.
++    const double staticPressure = 18.0 * m_snapshot.waterInventory / 80.0;
++    const double pumpPressure = m_snapshot.pumpRunning
++            ? 900.0 * pumpFactor * suctionFactor * (m_snapshot.leakDetected ? 0.85 : 1.0)
++            : 0.0;
+     const double restriction = 1.0 - averageOpening / 100.0;
+     const std::array<double, 7> pressureTargets{
+         staticPressure + pumpPressure,
+@@ -393,10 +550,6 @@ void ProcessSimulator::refreshSnapshotFromRegisters()
+             }
+         }
+     }
+-
+-    m_snapshot.pumpRunning = m_snapshot.pumpCommand
+-            && !m_digitalInputs[1]
+-            && !m_digitalInputs[2];
+ }
+ 
+ void ProcessSimulator::synchronizeAdam6256()
+@@ -417,10 +570,15 @@ void ProcessSimulator::synchronizeAdam6256()
+ 
+ void ProcessSimulator::synchronizeDigitalInputs()
+ {
++    // ADAM-6224 DI0..DI3: Core reads FC02 Discrete Inputs 0..2; the same
++    // state is mirrored to the official FC01 coil alias 0..3, the latched
++    // event status (Holding 110..113) and the packed mask (Holding 300).
++    // The ADAM-6022's own DI0/DI1 are independent inputs that Core does not
++    // read; they are no longer tied to the 6224 DI (they stay 0).
+     AdamDeviceServer *adam6224 = device(AdamDeviceId::Adam6224);
+     if (adam6224) {
+         quint16 mask = 0;
+-        for (int channel = 0; channel < 4; ++channel) {
++        for (int channel = 0; channel < CorePoints::DiCount; ++channel) {
+             const quint16 value = m_digitalInputs[channel] ? 1 : 0;
+             adam6224->setValue(QModbusDataUnit::Coils, channel, value);
+             adam6224->setValue(QModbusDataUnit::DiscreteInputs, channel, value);
+@@ -430,15 +588,6 @@ void ProcessSimulator::synchronizeDigitalInputs()
+         }
+         adam6224->setValue(QModbusDataUnit::HoldingRegisters, 300, mask);
+     }
+-
+-    AdamDeviceServer *adam6022 = device(AdamDeviceId::Adam6022);
+-    if (adam6022) {
+-        for (int channel = 0; channel < 2; ++channel) {
+-            const quint16 value = m_digitalInputs[channel] ? 1 : 0;
+-            adam6022->setValue(QModbusDataUnit::Coils, channel, value);
+-            adam6022->setValue(QModbusDataUnit::DiscreteInputs, channel, value);
+-        }
+-    }
+ }
+ 
+ void ProcessSimulator::handleExternalWrite(AdamDeviceServer *server,
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/processsimulator.h" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/processsimulator.h"
+index 635c8c7..10f4971 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\src/processsimulator.h"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\src/processsimulator.h"
+@@ -3,17 +3,53 @@
+ #include "adamdeviceserver.h"
+ 
+ #include <QObject>
++#include <QString>
+ #include <QTimer>
+ #include <QVector>
+ 
+ #include <array>
+ #include <limits>
+ 
++// Point meanings follow the taidaflow "core" branch (Core/manager.cpp,
++// Core/ModbusMapping.h, Core/ModbusServerBridgeMapping.h). Offsets are
++// zero-based Modbus PDU offsets.
++namespace CorePoints {
++// ADAM-6224 DI (Core reads Discrete Inputs 0..2 every second).
++constexpr int DiPhaseOk = 0;            // 1 = phase normal; 0 = "相位異常" + DO0/DO3 interlock
++constexpr int DiLeakDetected = 1;       // 1 = "漏液檢出"
++constexpr int DiMakeupPumpOverload = 2; // 1 = "補水泵 OL"
++constexpr int DiSpare = 3;              // not used by Core
++constexpr int DiCount = 4;
++
++// ADAM-6256 DO coils (Core writes coils 16..20 and reads 16..24).
++constexpr int CoilVfdRun = 16;          // DO0 VfdRun: circulation pump VFD enable
++constexpr int CoilInverterReset = 17;   // DO1 InverterReset
++constexpr int CoilEmergencyStop = 18;   // DO2 EmergencyStop, active-low (0 = stop asserted)
++constexpr int CoilMakeupPump = 19;      // DO3 MotorRunning = makeup pump (motorRunningPv)
++constexpr int CoilBypassValve = 20;     // DO4 WayValveOpen = two-way/bypass valve (wayValveOpenPv)
++
++// ADAM-6022 AO0: VFD frequency 0..60 Hz = raw 0..4095 (Core Pump2Hz).
++constexpr int HoldingPumpFrequency = 10;
++}
++
+ struct ProcessSnapshot
+ {
++    // ADAM-6256 DO0 (coil 16): VFD run command for the circulation pump.
+     bool pumpCommand = false;
+     bool pumpRunning = false;
+     double pumpFrequencyHz = 0.0;
++    // ADAM-6256 DO1..DO4 (coils 17..20) as last written by the client.
++    bool inverterReset = false;
++    bool emergencyStopCoil = false;   // raw DO2; active-low, false = stop asserted
++    bool makeupPumpCommand = false;   // DO3
++    bool makeupPumpRunning = false;
++    bool bypassValveOpen = false;     // DO4
++    // ADAM-6224 DI0..DI2 as presented to the client.
++    bool phaseOk = true;
++    bool leakDetected = false;
++    bool makeupPumpOverload = false;
++    // Simulator-only process quantity: loop water inventory in percent.
++    double waterInventory = 80.0;
+     double flow = 0.0;
+     std::array<double, 4> valveCommands{};
+     std::array<double, 4> valvePositions{};
+@@ -34,15 +70,23 @@ public:
+     double ambientTemperature() const;
+     double heaterLoad() const;
+     bool digitalInput(int channel) const;
++    bool emergencyStopInterlock() const;
++
++    static QString digitalInputName(int channel);
++    static QString coilName(int coil);
++    QString pumpBlockReason() const;
++    QString makeupPumpBlockReason() const;
+ 
+ public slots:
+     void setAutoEnabled(bool enabled);
+     void setAmbientTemperature(double value);
+     void setHeaterLoad(double value);
+     void setDigitalInput(int channel, bool value);
++    void setEmergencyStopInterlock(bool enabled);
+ 
+ signals:
+     void updated();
++    void processEvent(const QString &message);
+ 
+ private slots:
+     void step();
+@@ -51,6 +95,7 @@ private:
+     AdamDeviceServer *device(AdamDeviceId id) const;
+     void initializeRegisters();
+     void readCommands();
++    void updateRunStates();
+     void updateAutomaticModel();
+     void writeProcessInputs();
+     void update6217Diagnostics(AdamDeviceServer *server,
+@@ -75,9 +120,11 @@ private:
+     QTimer m_timer;
+     ProcessSnapshot m_snapshot;
+     bool m_autoEnabled = true;
++    bool m_emergencyStopInterlock = false;
+     double m_ambientTemperature = 25.0;
+     double m_heaterLoad = 45.0;
+-    std::array<bool, 4> m_digitalInputs{};
++    // Core default-safe state: phase OK (DI0 = 1), no leak, no overload.
++    std::array<bool, CorePoints::DiCount> m_digitalInputs{true, false, false, false};
+     QVector<quint16> m_maximumsA;
+     QVector<quint16> m_minimumsA;
+     QVector<quint16> m_maximumsB;
+@@ -87,4 +134,5 @@ private:
+     quint16 m_averageMaximumB = 0;
+     quint16 m_averageMinimumB = std::numeric_limits<quint16>::max();
+     int m_stepsSinceLog = 0;
++    bool m_runStateInitialized = false;
+ };
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\docs\\core-compatibility.md" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\docs\\core-compatibility.md"
+index 07eea92..1312535 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\docs\\core-compatibility.md"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\docs\\core-compatibility.md"
+@@ -1,51 +1,86 @@
+-# taidaflow2 Core 相容性對照
++# taidaflow core 分支 相容性對照
+ 
+-本文件只對照 taidaflow2/Core 的原始碼契約。Adam60xxSimulator 不 include、link、import 或在執行期讀取該目錄。
++本文件以 **taidaflow `core` 分支**（`D:\repo\codex\qmlTester\taidaflow`，對照時 HEAD `7d06ef1`）的 Core 原始碼為點位事實來源，逐點對照 Adam60xxSimulator。w2-030 之前本文件對照的是 taidaflow2（已作廢，舊版備份在 `backup/pre-w2-030-*.zip`）。
++
++Adam60xxSimulator 不 include、link、import 或在執行期讀取 taidaflow 目錄；下列 Core 符號只是人工比對的出處。所有數字都是 Modbus PDU zero-based offset（手冊 00017 = Coil offset 16，40011 = Holding offset 10）。
++
++Core 出處縮寫：
++
++- `MM` = `Core/ModbusMapping.h`（`defaultReadBindings()` / `defaultWriteBindings()`）
++- `SBM` = `Core/ModbusServerBridgeMapping.h`
++- `MGR` = `Core/manager.cpp`（`pollConfiguredPoints()`、`mirrorClientData()`、`checkDigitalInputAlarm()`、`digitalInputAlarmMessage()`、`tripDi0Interlock()`、`writeCommand()`、`setPump2HzSv()`、`setEmergencyStopSv()`）
++- `MC` = `Core/Modbus_Client.cpp`（裝置位址；`TAIDAFLOW_DEVICE_PROFILE=simulator` 時為 127.0.0.201..205）
+ 
+ ## 連線契約
+ 
+-| 項目 | Core 來源 | Simulator 對應 |
++| 項目 | Core | Simulator |
+ |---|---|---|
+-| 五台裝置 | Core/Modbus_Client.cpp：ModbusClient::ModbusClient() 建立 ADAM-6256、6217 A、6217 B、6224、6022 sessions | src/adamdeviceserver.cpp：AdamDeviceServer::defaultProfiles() 建立五個獨立 AdamDeviceProfile |
+-| 本機 IP | Core/Modbus_Client.cpp：目前啟用 127.0.0.201..205 | MainWindow::applyEndpointPreset() 將 profile 的 192.168.1.* 替換成 127.0.0.* |
+-| Port | Core/Modbus_Client.h：DeviceConfig::port = 502 | 本機與實機 preset 都預設 502 |
+-| Unit ID | Core/Modbus_Client.h：DeviceConfig::unitId = 1 | UI 預設及 --autostart 使用 Unit ID 1 |
+-| 隔離 | Core 為每個 DeviceConfig 建立一個 QModbusTcpClient | 每個 profile 擁有自己的 DeviceModbusTcpServer 與 QModbusDataUnitMap |
++| 五台裝置 | `MC`：ADAM-6256 .201、6217 A .202、6217 B .203、6224 .204、6022 .205 | `AdamDeviceServer::defaultProfiles()` 五份獨立 process image |
++| 位址 | 預設 192.168.1.201..205；`TAIDAFLOW_DEVICE_PROFILE=simulator` → 127.0.0.201..205（w2-029，測試用） | `--autostart` / 「本機 Core」preset = 127.0.0.201..205 |
++| Port / Unit | 502 / 1 | 502 / 1 |
++| 輪詢 | `MGR` 每 1000 ms | 製程模型每 200 ms |
++
++## ADAM-6224 DI（Core 讀 FC02 Discrete Inputs 0..2，每秒一次）
++
++| DI | Core 符號與語意（`MGR`） | 告警訊息 | Simulator（w2-030 後） | 預設 |
++|---|---|---|---|---|
++| DI0 | `digitalInputAlarmMessage(0)`；**1 = 相位正常**，0 = 故障 → `checkDigitalInputAlarm` 告警 + `tripDi0Interlock()` 強制 DO0/DO3 OFF；DI0 未知或 0 時 `writeCommand` 拒絕 VfdRun/MotorRunning 通電 | 相位異常（DI0=0） | 「DI0 相位正常」勾選 = 1；取消 → 循環泵與補水泵都無法運轉（三相馬達缺相） | **1** |
++| DI1 | `digitalInputAlarmMessage(1)`；1 = 漏液 | 漏液檢出（DI1=1） | 「DI1 漏液檢出」；1 → 流量 ×0.65、泵壓 ×0.85、系統水量 −0.4 %/s | 0 |
++| DI2 | `digitalInputAlarmMessage(2)`；1 = 補水泵過載 | 補水泵 OL（DI2=1） | 「DI2 補水泵 OL」；1 → 補水泵停止（熱過載跳脫） | 0 |
++| DI3 | Core 不讀（`SBM::ServerDiCount = 3`） | — | 「DI3 備用（Core 未使用）」，無製程效果 | 0 |
++
++同一 DI 狀態同步到：FC02 Discrete Input 0..3（Core 讀這個）、FC01 Coil 0..3（官方 0X map alias）、Holding 110..113（DI event status）、Holding 300（4-bit mask）。這四個 alias 由 `ProcessSimulator::synchronizeDigitalInputs()` 每 200 ms 寫入，對外唯讀。
+ 
+-## Core 實際 I/O
++w2-030 之前的錯位：模擬器 DI0=漏液、DI1=緊急停止、DI2=低液位、DI3=加熱器故障，預設全 0 → Core 啟動第一次讀 DI0=0 即判相位異常並強制 DO0/DO3 OFF，泵浦永遠無法運轉（w2-029 報告已記錄）。另外舊版把 6224 DI0/DI1 鏡像到 ADAM-6022 DI0/DI1；Core 不讀 6022 DI，w2-030 起兩者脫鉤，6022 DI 維持 0。
+ 
+-| 設備/用途 | Core table 與 PDU offset | Core 符號 | Simulator map / 權限 |
+-|---|---|---|---|
+-| 6217 A：TT-01..04、PT-01..04 | Holding 0–7，一次讀 8 | ModbusMapping::defaultReadBindings()；Manager::pollConfiguredPoints() | adam6217Profile()：Holding 0–304 mapped；AI 0–7 對外唯讀 |
+-| 6217 B：PT-05..07、Flow、MV1..4 feedback | Holding 0–7，一次讀 8 | ModbusMapping::defaultReadBindings()；B 的 valueOffset 0..7 | 獨立的第二份 adam6217Profile()；Holding 0–7 對外唯讀 |
+-| 6224：MV1..4 AO | Holding 0–3；raw 0..4095 | ModbusMapping::defaultWriteBindings()；Adam6224AoMaximumRawValue | defaultProfiles()：Holding 0–3 mapped + external writable；canWrite() 限制 0..4095 |
+-| 6224：DI0..2 | Discrete Inputs 0–2，一次讀 3 | Manager::pollConfiguredPoints()；Adam6224DiStart = 0 | Discrete Inputs 0–3 mapped read-only；同值也鏡像到 Coil 0–3 提供 FC01 相容 |
+-| 6256：Motor Running / DO0 | Coil 16；bridge 最多轉送 16–20 | MotorRunning binding；Adam6256DoStart = 16 | Coils 16–31 mapped + external writable；DO0 連動製程循環泵 |
+-| 6022 | 目前只有 session/connect，沒有 read/write binding | ModbusClient::Device::Adam6022_205 | Coils 0–17、Discrete 0–1、Holding 0–1510，含基本 I/O 與雙 PID image |
++## ADAM-6256 DO（Core 寫 Coil 16..20，讀回 Coil 16..24）
+ 
+-所有數字都是 Modbus PDU zero-based offset，不是手冊顯示的 1-based reference。
++| Coil | DO | Core 符號（`MM::defaultWriteBindings`） | Core 讀回（`MGR::mirrorClientData`） | Simulator |
++|---|---|---|---|---|
++| 16 | DO0 | `VfdRun`：變頻器啟動；`setPump2HzSv(>0)` 先寫 6022 HR10，寫入完成後才寫 DO0=1；頻率 ≤ 0 寫 DO0=0 | server coil 0 | **循環泵命令**；運轉 = DO0 ∧ DI0 ∧（選用急停連鎖）。轉速取 6022 HR10 |
++| 17 | DO1 | `InverterReset`：變頻器復歸（HMI 按鈕 true → false 脈衝） | server coil 1 | UI/log 顯示；無製程效果（未模擬變頻器故障） |
++| 18 | DO2 | `EmergencyStop`：active-low，HMI 急停 ON 寫 0、OFF 寫 1；急停 ON 同時寫 VfdRun=0、Pump2Hz=0、MotorRunning=0 | server coil 2 | UI/log 顯示「0 急停 / 1 釋放」；預設**不**參與製程（見下） |
++| 19 | DO3 | `MotorRunning`（log 名 `MakeupPumpStart`）：**補水泵** | `motorRunningPv` | **補水泵命令**；運轉 = DO3 ∧ DI0 ∧ ¬DI2 ∧（選用急停連鎖）；運轉時系統水量 +0.8 %/s |
++| 20 | DO4 | `WayValveOpen`：二通閥 / 循環旁通閥 | `wayValveOpenPv` | UI/log 顯示；無製程效果 |
++| 21..24 | DO5..DO8 | 未綁定 | 讀回但不使用 | 一般 DO，可寫 |
+ 
+-## Profile 範圍與外部寫入
++「急停硬體連鎖（DO2=0 停泵）」是 UI 選項，預設關閉。原因：Core 啟動時不寫 DO2（`core.cpp` 不還原 emergencyStopSv），模擬器 DO2 開機為 0；若預設啟用，每次 Core 重啟後都必須先在 HMI 切一次急停 ON→OFF 泵浦才能動。急停的實際停泵效果由 Core 自己強制 DO0/DO3=0 達成，與此選項無關。
+ 
+-| Profile | Mapped process image | External writable |
++## ADAM-6022 AO0 頻率（原本即一致，w2-030 未改）
++
++| 項目 | Core | Simulator |
+ |---|---|---|
+-| ADAM-6256 | Coil 16–307；Holding 0–304 | Coil 16–31、300–307；Holding 0–127、302、304 |
+-| ADAM-6217 A/B | Coil 100–307；Holding 0–304 | Coil reset/GCL 範圍；Holding 200–207、220、304 |
+-| ADAM-6224 | Coil 0–307；Discrete 0–3；Holding 0–413 | Coil 300–307；Holding 0–3、200–203、304、400–403、410–413 |
+-| ADAM-6022 | Coil 0–17；Discrete 0–1；Holding 0–1510 | Coil 16–17；Holding 10–11 與定義為 R/W 的成對 PID items |
++| 點位 | `MM`：`Pump2Hz` → 6022 Holding 10（手冊 40011），`SBM::Adam6022Ao0HoldingRegister = 10` | Holding 10 可寫，`canWrite()` 限 0..4095 |
++| 換算 | `kPumpFrequencyScale = 60/4095`：raw = round(Hz × 4095 / 60)，30 Hz → 2048 | `readCommands()`：Hz = raw × 60 / 4095 |
++| 順序 | `setPump2HzSv`：先寫 HR10，`writeSucceeded` 後寫 DO0=1 | 兩者任一改變都在下一個 200 ms step 生效 |
++
++## 其他 Core 使用的點位（未改）
++
++| 設備/用途 | Core | Simulator |
++|---|---|---|
++| 6217 A：TT-01..04、PT-01..04 | Holding 0..7 一次讀 8；TT = raw×100/65535，PT = raw×1000/65535 | 製程模型寫 Holding 0..7 與診斷區 |
++| 6217 B：PT-05..07、FlowMeter、MV1..4 回授 | Holding 0..7；FlowMeter **直接顯示 raw**（Core 註解：量程未提供） | 流量以 0..120 % 對應 raw 0..65535 |
++| 6224：MV1..4 | Holding 0..3，raw = % × 4095 / 100 | 可寫，限 0..4095；閥位回授一階追隨 |
++
++## 製程模型摘要（`src/processsimulator.cpp`）
+ 
+-DeviceModbusTcpServer::writeData() 對外部 request 呼叫 AdamDeviceServer::canWrite()；因此 6217 AI 與 6224 DI 的 client 寫入會被拒絕。AdamDeviceServer::setValues() 只在 local update 期間設定 bypassValidation，讓製程模型可以更新感測/回授，再立即恢復外部驗證；這是 simulator 自己的 local/external 邊界，不是修改 Core 聚合 Server。
++- `readCommands()`：讀 6256 Coil 16..20、6224 Holding 0..3、6022 Holding 10。
++- `updateRunStates()`：依 DI0/DI2/急停選項計算循環泵、補水泵是否運轉，狀態改變時發 `processEvent`（UI「Modbus 事件」與 stderr 都有）。
++- `updateAutomaticModel()`：系統水量（初始 80 %，漏液下降、補水泵上升，0..100 %）；靜壓 = 18 kPa × 水量 / 80；水量 < 15 % 時泵浦抽空；流量、七個壓力、四個溫度一階追隨。
++- 每秒一行 `[Process] DO0=… pumpRunning=… frequencyHz=… flow=… PT01=… PT05=… DO1=… DO2=… DO3=… makeupRunning=… DO4=… DI0..DI3=… water=…`。
++- Core 寫入的 log `Core → <設備>：<table> offset N = [v]（語意）` 會附上 DO/頻率/MV 的語意；只在值改變時出現（`QModbusServer::dataWritten`）。
+ 
+-## 製程關聯
++## 模擬器改不了、屬 Core/UI 的缺口（w2-030 聯調發現）
+ 
+-- ProcessSimulator::readCommands() 讀 ADAM-6256 Coil 16 與 ADAM-6224 Holding 0–3。
+-- ProcessSimulator::updateAutomaticModel() 計算 pump、flow、valve positions、TT/PT；靜態充壓和初始閥位讓啟動 process image 不會整排為 0。
+-- ProcessSimulator::writeProcessInputs() 寫兩台 6217 各自的 Holding 0–7 與診斷 register。
+-- ProcessSimulator::synchronizeDigitalInputs() 同步 6224 Coil/Discrete Input alias。
+-- ProcessSimulator::handleExternalWrite() 處理 client side effect；UI/stdout log 的 Core → ... 由 AdamDeviceServer::externalWrite 產生。
++見 `comms/reports/w2-030.json` 的 D5（在 7d06ef1 與「合併 origin/main 1f4ac44 後」的 core 都實測過）；摘要：
+ 
+-## Core 端既有異常的責任邊界
++- `pump2HzPv` 沒有人寫入：合併 main 後 UI 顯示 `PV:0.0Hz`（單位已修正），但 Core 仍不寫 → 30 Hz 運轉時 PV 仍為 0.0。
++- main（f921831）的 Proxy 新增 `leakDetectedPv`，Leakage Sensor 線會依它變紅；core 的 `Manager::mirrorClientData()` 沒把 DI1 寫進去 → 漏液時只有「漏液檢出」警報，線不會變紅。
++- 補水泵 OL（DI2=1）時 Core 只發警報，不關 DO3；`motorRunningPv` 是 DO3 命令讀回（coil 19），不是運轉回授 → 跳脫中的補水泵在 HMI 仍顯示運轉。
++- 警報頁結束時間以分鐘截斷，當分鐘產生的新警報在預設篩選與「顯示全部」都看不到（main 的 AlarmPage.qml 仍如此）。
++- Core 警報狀態字「異常／正常」與頁面計數用的「未處理」不一致 → 永遠「未處理 0 筆」。
++- 啟動時從 TaidaFlowSettings.ini 還原的 SV 不會寫到設備；DI 警報恢復時沒有解除紀錄；Core 啟動不寫 DO2。
+ 
+-Core/Modbus_Server.cpp 的 BridgeModbusTcpServer::writeData() 只允許聚合 Server 對外寫 Coil 0–4 與 Holding 0–3；同一檔案的 ModbusServer::setValue() 又以 QModbusServer::setData() 寫入 local mirror。該呼叫仍經過 overridden writeData()，所以 manager 鏡像至 Coil 10–12 或 Input Register 0–15 時會出現 [ModbusServer][Mirror] read-only or unmapped。這是 Core 聚合 Server 內部問題，與本 simulator 的五份 native process image 無關，本任務不修改它。
++## Core 端既有異常的責任邊界（沿用）
+ 
+-Core/SqlManager 的 Schema file not found 則是 schema 路徑/部署問題，也不屬於 Modbus simulator。
++Core/Modbus_Server.cpp 的 BridgeModbusTcpServer::writeData() 只允許聚合 Server 對外寫 Coil 0–4 與 Holding 0–3；manager 鏡像至 Coil 10–12 或 Input Register 0–15 時可能出現 `[ModbusServer][Mirror] read-only or unmapped`。這是 Core 聚合 Server 內部問題，與本 simulator 無關。Core 的 AnyIPv4:502 聚合 Server 與模擬器同 port：必須先啟動模擬器（w2-029 量測的 bind 順序）。
+diff --git "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\README.md" "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\README.md"
+index 1dd405a..fa11a6b 100644
+--- "a/C:\\Users\\TED\\AppData\\Local\\Temp\\claude\\D--repo-codex-qmlTester\\47cab9fd-1a84-4cd5-b3fc-bee390a592b1\\scratchpad\\stage-20260924-150733\\Adam60xxSimulator\\README.md"
++++ "b/D:\\repo\\codex\\qmlTester\\Adam60xxSimulator\\README.md"
+@@ -1,31 +1,47 @@
+ # Adam60xxSimulator
+ 
+-Adam60xxSimulator 是獨立的 Qt 6 Widgets + Modbus TCP 設備與製程模擬器。它在同一個 QWidget 應用程式內建立五台彼此隔離的 ADAM process image，供現有 taidaflow2 Core 或其他 Modbus TCP client 直接連線；不是把五台設備壓成一個共用 register array。
++Adam60xxSimulator 是獨立的 Qt 6 Widgets + Modbus TCP 設備與製程模擬器。它在同一個 QWidget 應用程式內建立五台彼此隔離的 ADAM process image，供 taidaflow Core 或其他 Modbus TCP client 直接連線；不是把五台設備壓成一個共用 register array。
+ 
+-本專案依 taidaflow2/Core 現有連線與點位契約重寫，建置和執行時不 include、link、import 或讀取其他專案。逐點相容性表見 docs/core-compatibility.md，設備研究資料見 docs/adam60xx_research.md。
++點位對照的事實來源是 **taidaflow `core` 分支**（`D:\repo\codex\qmlTester\taidaflow`，w2-030 對照 HEAD `7d06ef1`）的 `Core/manager.cpp`、`Core/ModbusMapping.h`、`Core/ModbusServerBridgeMapping.h`。專案最初由另一個 session 依 taidaflow2 建立；w2-030 起改為對照 taidaflow core 分支（改動前的原始碼備份在 `backup/pre-w2-030-*.zip`，sha256 在同名 `.sha256`）。建置和執行時不 include、link、import 或讀取其他專案。逐點相容性表見 docs/core-compatibility.md，設備研究資料見 docs/adam60xx_research.md。
+ 
+ ## 五台設備與 Core 端點
+ 
+-目前 Core 的 DeviceConfig 使用 Port 502、Unit ID 1；其本機設定使用以下端點：
++Core 使用 Port 502、Unit ID 1。taidaflow core 分支預設連 192.168.1.201..205；以 `TAIDAFLOW_DEVICE_PROFILE=simulator` 啟動時改連 127.0.0.201..205（w2-029 的測試用切換，`scripts\run-desktop.ps1 -DeviceProfile simulator`）。
+ 
+ | 設備 | 預設端點 | Core 使用點位 | 模擬內容 |
+ |---|---|---|---|
+-| ADAM-6256 | 127.0.0.201:502 | Coil 16–20（DO0–DO4） | 16 DO、packed DO、pulse/GCL process image |
++| ADAM-6256 | 127.0.0.201:502 | 寫 Coil 16–20（DO0–DO4），讀 Coil 16–24 | 16 DO、packed DO、pulse/GCL process image |
+ | ADAM-6217 A | 127.0.0.202:502 | Holding 0–7（TT-01..04、PT-01..04） | AI raw、平均、min/max、float、狀態、range |
+ | ADAM-6217 B | 127.0.0.203:502 | Holding 0–7（PT-05..07、流量、MV1..4 回授） | 與 A 完全隔離的 AI process image |
+-| ADAM-6224 | 127.0.0.204:502 | Holding 0–3（AO0–AO3）、Discrete Input 0–2 | 4 AO、4 DI；DI 同步支援 FC01/FC02 讀取 |
+-| ADAM-6022 | 127.0.0.205:502 | Core 目前只建立連線 | 6 AI、2 AO、2 DI、2 DO、雙 PID register image |
++| ADAM-6224 | 127.0.0.204:502 | Holding 0–3（MV1..4）、Discrete Input 0–2（DI0–DI2） | 4 AO、4 DI；DI 同步支援 FC01/FC02 讀取 |
++| ADAM-6022 | 127.0.0.205:502 | Holding 10（AO0 = 變頻器頻率） | 6 AI、2 AO、2 DI、2 DO、雙 PID register image |
+ 
+ 程式與 wire protocol 使用 zero-based PDU offset：手冊 40001 對應 Holding offset 0，00017 對應 Coil offset 16。
+ 
++## 與 Core 對齊的控制/狀態點位
++
++| 點位 | Core 語意 | 模擬器行為 |
++|---|---|---|
++| 6224 DI0 | 相位正常（1 正常，0 → 「相位異常」警報 + Core 強制 DO0/DO3 OFF） | **預設 1**；取消勾選 → 兩台泵浦都不能運轉 |
++| 6224 DI1 | 漏液檢出（1 → 「漏液檢出」警報） | 流量 ×0.65、泵壓 ×0.85、系統水量下降 |
++| 6224 DI2 | 補水泵 OL（1 → 「補水泵 OL」警報） | 補水泵停止 |
++| 6224 DI3 | Core 未使用 | 標示「備用（Core 未使用）」，無效果 |
++| 6256 Coil 16（DO0） | VfdRun：變頻器啟動/循環泵 | 循環泵命令，轉速 = 6022 HR10 |
++| 6256 Coil 17（DO1） | InverterReset | UI/log 顯示 |
++| 6256 Coil 18（DO2） | EmergencyStop，active-low（0 = 急停） | UI/log 顯示；「急停硬體連鎖」選項（預設關）開啟時 DO2=0 停泵 |
++| 6256 Coil 19（DO3） | MotorRunning = **補水泵**，讀回為 motorRunningPv | 補水泵命令；運轉時系統水量上升、靜壓上升 |
++| 6256 Coil 20（DO4） | WayValveOpen = 二通閥，讀回為 wayValveOpenPv | UI/log 顯示 |
++| 6022 Holding 10 | Pump2Hz：raw = Hz × 4095 / 60（30 Hz → 2048） | 原本即一致，未改 |
++
+ ## 存取與製程行為
+ 
+ - Client 可寫 ADAM-6256 DO、ADAM-6224 AO，以及 profile 明確列出的設定區。
+ - ADAM-6217 AI、ADAM-6224 DI 與量測/狀態區對外唯讀；非法 client 寫入會回覆 Modbus 錯誤。
+ - 內部製程更新走獨立 local-update 路徑，可更新唯讀 process image，不會被外部寫入規則擋下。
+ - ADAM-6224/6022 AO raw 限制為 0..4095；6217 AI 使用 0..65535。
+-- 模型每 200 ms 更新閥位、流量、七個壓力與四個溫度。已充壓的靜態管路及非零初始閥位讓 PT/feedback 在啟動後可被 Core 讀到，不會全部為 0。
+-- ADAM-6256 Coil 16 控制循環泵；ADAM-6224 Holding 0–3 控制 MV1..4。UI 可注入漏液、緊急停止、低液位和加熱器故障。
++- 模型每 200 ms 更新閥位、系統水量、流量、七個壓力與四個溫度。已充壓的靜態管路及非零初始閥位讓 PT/feedback 在啟動後可被 Core 讀到，不會全部為 0。
++- 系統水量（模擬器自有量，Core 讀不到）：初始 80 %，漏液 −0.4 %/s、補水泵運轉 +0.8 %/s；靜壓 = 18 kPa × 水量 / 80；低於 15 % 時循環泵抽空、流量下降。
++- 「製程總覽」頁顯示循環泵（DO0）與補水泵（DO3）的運轉狀態與不能運轉的原因、DO0–DO4 與 DI0–DI2 狀態列；「Modbus 事件」與 stderr 記錄 DI 切換、泵浦啟停與 Core 寫入（附語意，例如 `Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）`），每秒一行 `[Process] ...` 快照。
+ - 關閉「自動物理模型」後，可以在原始 I/O 頁面直接輸入 process image，測試邊界狀態。
+ 
+ ## 建置（Qt 6.8.3 / MSVC 2022）
+@@ -49,26 +65,27 @@ Adam60xxSimulator 是獨立的 Qt 6 Widgets + Modbus TCP 設備與製程模擬
+ 
+     [AdamDeviceServer] ADAM-.... listening on 127.0.0.20x:502 unit=1
+ 
+-UI 的「Core 實機設定」會切換為 192.168.1.201..205:502；主機必須先配置這五個本機 IP。
++UI 的「Core 實機設定」會切換為 192.168.1.201..205:502；主機必須先配置這五個本機 IP（本專案的測試不使用這個模式）。
++
++## 與 taidaflow（core 分支）桌面版真實聯調
++
++使用 taidaflow 的腳本（w2-029 建立，只讀使用）；**必須先啟動模擬器**，否則 Core 自己的 0.0.0.0:502 聚合 server 會接走 ADAM session。
+ 
+-## 與 TaidaFlowApp 真實聯調
++    rem 1. 啟動模擬器（工作目錄 taidaflow\build\sim-cwd；502 已被占用或已有模擬器在跑時拒絕）
++    powershell -ExecutionPolicy Bypass -File D:\repo\codex\qmlTester\taidaflow\scripts\run-simulator.ps1
++    rem 2. 安全探測 + 以 simulator profile 啟動桌面版（工作目錄 taidaflow\build\runtime-cwd）
++    powershell -ExecutionPolicy Bypass -File D:\repo\codex\qmlTester\taidaflow\scripts\run-desktop.ps1 -DeviceProfile simulator -Label manual
++    rem 3.（選用）網頁版：python taidaflow\scripts\serve_wasm.py，開 http://127.0.0.1:8123/TaidaFlowApp.html
+ 
+-1. 先從 Adam60xxSimulator 啟動模擬器並確認五台都 listening。
+-2. 建立 Adam60xxSimulator/build/integration-cwd 作為隔離工作目錄；它位於本專案且隨 build/ 一起被忽略。
+-3. 從該隔離目錄執行唯讀的 D:\repo\codex\qmlTester\taidaflow2\debug\TaidaFlowApp.exe，將 stdout/stderr 存到 Adam60xxSimulator/build/integration-logs/。以下 PowerShell 可直接啟動雙方：
++預期（w2-030 實測，證據在 taidaflow\docs\evidence\wasm-v4-sim\w2-030\）：
+ 
+-       $root = 'D:\repo\codex\qmlTester\Adam60xxSimulator'
+-       $cwd = Join-Path $root 'build\integration-cwd'
+-       $logs = Join-Path $root 'build\integration-logs'
+-       New-Item -ItemType Directory -Force $cwd, $logs | Out-Null
+-       $env:Path = 'C:\Qt\6.8.3\msvc2022_64\bin;' + $env:Path
+-       Start-Process (Join-Path $root 'build\Adam60xxSimulator.exe') -ArgumentList '--autostart' -WorkingDirectory $cwd -RedirectStandardOutput (Join-Path $logs 'simulator.stdout.log') -RedirectStandardError (Join-Path $logs 'simulator.stderr.log')
+-       Start-Process 'D:\repo\codex\qmlTester\taidaflow2\debug\TaidaFlowApp.exe' -WorkingDirectory $cwd -RedirectStandardOutput (Join-Path $logs 'taidaflow.stdout.log') -RedirectStandardError (Join-Path $logs 'taidaflow.stderr.log')
+-4. 至少等待三個 Core 輪詢週期（目前每秒一次），檢查 TaidaFlowApp 的 [Modbus][Read]：兩台 6217 的 TT/PT/feedback 不應整排 raw=0。
+-5. 在 TaidaFlowApp UI 改變 M1..M4 或 Motor Running；模擬器 log 應出現 Core → ADAM-6224 或 Core → ADAM-6256，後續 [Process] 應顯示狀態變化。
+-6. 關閉兩個視窗，確認沒有殘留 Adam60xxSimulator.exe 或 TaidaFlowApp.exe。
++1. Core 啟動後讀到 DI0=1，不再出現「相位異常」警報與 `[Safety Interlock]`。
++2. 桌面點左側泵浦 → 開啟：模擬器 `Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）`、補水泵運轉；Core `point=DO3 offset=19 raw=1`，泵浦燈（motorRunningPv）變綠。
++3. 下方泵浦輸入 30 Hz：模擬器 `Holding Register offset 10 = [2048]`、`Coil offset 16 = [1]`、循環泵運轉，流量/壓力上升。
++4. 勾選 DI1 / DI2：Core `[SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1）` / `補水泵 OL（DI2=1）`。
++5. 桌面急停 ON：模擬器 DO2 → 0、DO0/DO3 → OFF，兩台泵浦停止。
+ 
+-必須使用隔離 working directory，因為 TaidaFlowApp 會把 TaidaFlowSettings.ini、SQLite 或其他 runtime 檔寫到目前目錄。聯調前後以 git status --short -- taidaflow2 比對，結果必須完全相同；taidaflow2/ 在本任務全程唯讀。
++關閉時先關桌面版視窗，再關模擬器；確認 502/8123/8125 無殘留 listener。TaidaFlowApp 會把 TaidaFlowSettings.ini、SQLite 寫到工作目錄，所以一律用腳本指定的 taidaflow\build\ 子目錄。
+ 
+ ## Troubleshooting
+ 
+@@ -85,12 +102,16 @@ UI 的「Core 實機設定」會切換為 192.168.1.201..205:502；主機必須
+ 
+ ### Core 顯示 [ModbusServer][Mirror] read-only or unmapped
+ 
+-這是 taidaflow2 Core 內部聚合 Modbus Server 的 local mirror 寫入被自己的外部唯讀驗證拒絕；不是 ADAM simulator process image 寫入。Adam60xxSimulator 不會隱藏，也不宣稱修復此 Core 問題。
++這是 Core 內部聚合 Modbus Server 的 local mirror 寫入被自己的外部唯讀驗證拒絕；不是 ADAM simulator process image 寫入。Adam60xxSimulator 不會隱藏，也不宣稱修復此 Core 問題。
++
++### Core 一啟動就「相位異常」、泵浦開不起來
++
++確認模擬器是 w2-030 之後的版本（DI 群組標題含「對齊 taidaflow core 分支」）且「DI0 相位正常」為勾選。舊版 DI0 代表漏液、預設 0，會讓 Core 立即觸發 DI0 連鎖。
+ 
+-### Core 顯示 Schema file not found
++### 泵浦命令 ON 但模擬器顯示「停止 ⚠ …」
+ 
+-這是 TaidaFlowApp 依執行工作目錄尋找 data_schema.sql 的 Core/部署問題，與 ADAM Modbus 回覆無關。隔離目錄聯調可能刻意保留這筆 warning，以證明沒有往 taidaflow2/debug 寫 runtime 檔；本專案不修改或宣稱修復它。
++標籤會寫出原因：相位異常（DI0=0）、補水泵 OL 跳脫（DI2=1），或啟用了「急停硬體連鎖」且 DO2=0。Core 啟動時不寫 DO2，所以該選項預設關閉。
+ 
+ ## 已知範圍
+ 
+-目前涵蓋 Core 使用的 native Modbus 點位、主要診斷/設定區、I/O 副作用、簡化流體/溫度動態與故障注入。未模擬設備 Web UI、MQTT、SNMP、Peer-to-Peer、GCL 網路傳輸、firmware 更新或電氣層 timing/accuracy；ADAM-6022 提供 PID register image，但未實作完整閉迴路 PID 演算法。
++目前涵蓋 Core 使用的 native Modbus 點位、主要診斷/設定區、I/O 副作用、簡化流體/溫度/水量動態與故障注入。未模擬設備 Web UI、MQTT、SNMP、Peer-to-Peer、GCL 網路傳輸、firmware 更新或電氣層 timing/accuracy；ADAM-6022 提供 PID register image，但未實作完整閉迴路 PID 演算法；變頻器本身（MS300、COM2、故障/復歸）不在模擬範圍，DO1 復歸與 DO4 二通閥只顯示、無製程效果。依 Mango 指示本專案不含 Qt Test/CTest target，驗收以真實 TaidaFlowApp 聯調為準。

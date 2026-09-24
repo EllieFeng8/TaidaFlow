@@ -1,0 +1,77 @@
+diff --git a/App/main.cpp b/App/main.cpp
+index dd0c90e..95a618a 100644
+--- a/App/main.cpp
++++ b/App/main.cpp
+@@ -9,8 +9,14 @@
+ 
+ #include "autogen/environment.h"
+ #include "Core/TaidaFlowProxy.h"
++#include "embeddedfonts.h"
+ #include "infrastructure/proxy_mirror/wasmmirrorproxy.h"
+ 
++#if !defined(Q_OS_WASM)
++// Desktop-only authoritative Core (Modbus/MS300/REST/SQLite). Never part of WASM.
++#include "core.h"
++#include "e2epvdriver.h"
++#endif
+ 
+ 
+ int main(int argc, char *argv[])
+@@ -18,14 +24,34 @@ int main(int argc, char *argv[])
+     set_qt_environment();
+     QApplication app(argc, argv);
+ 
++    // (core only) WebAssembly has no system CJK fonts: register the embedded
++    // Noto Sans TC subset and make it the fallback for every UI font. The desktop
++    // keeps the platform's own fallback chain so its rendering is unchanged.
++    const QString cjkFamily = TaidaFlowFonts::loadEmbeddedCjkFont();
++#if defined(Q_OS_WASM)
++    TaidaFlowFonts::installCjkFallbackChain(cjkFamily);
++#endif
++
+     // ===== Proxy composition: the ONLY branch-specific block =====================
+-    // main (UI branch) has no backend, so the Proxy is a plain object on every
+-    // platform. When main is merged into core, replace just this block with core's
+-    // composition (WASM: std::make_unique<TaidaFlowProxy>(); desktop:
+-    // Core::instance().init(); Td = core.m_proxy). Everything below is shared.
++    // core branch composition (wasm-mirror pack 1.0.1, package-integration §7,
++    // guide §10): the desktop owns the authoritative Core (Modbus/MS300/REST/SQLite)
++    // and uses its Proxy; WebAssembly only builds a plain Proxy, whose constructor
++    // has no hardware side effect, so no MirrorReplica mode is needed.
+     // The owner is declared before the mirror so that the Proxy outlives it.
+-    std::unique_ptr<TaidaFlowProxy> proxyOwner = std::make_unique<TaidaFlowProxy>();
+-    TaidaFlowProxy *Td = proxyOwner.get();
++    std::unique_ptr<TaidaFlowProxy> wasmProxyOwner;
++    TaidaFlowProxy *Td = nullptr;
++#if defined(Q_OS_WASM)
++    wasmProxyOwner = std::make_unique<TaidaFlowProxy>();
++    Td = wasmProxyOwner.get();
++#else
++    Core& core = Core::instance();
++    core.init();
++    Td = core.m_proxy;
++    if (!Td) {
++        qCritical() << "TaidaFlowProxy is null.";
++        return EXIT_FAILURE;
++    }
++#endif
+     // ===== end of Proxy composition ==============================================
+ 
+     // The manual registration URI must not equal any qt_add_qml_module(URI ...)
+@@ -34,6 +60,16 @@ int main(int argc, char *argv[])
+     // imports `TaidaFlowBackend 1.0`.
+     qmlRegisterSingletonInstance<TaidaFlowProxy>("TaidaFlowBackend", 1, 0, "Td", Td);
+ 
++#if !defined(Q_OS_WASM)
++    // (core only) DEV/E2E only: inactive unless TAIDAFLOW_E2E_PV_FILE is set
++    // (see e2epvdriver.h).
++    std::unique_ptr<E2ePvDriver> e2ePvDriver;
++    if (qEnvironmentVariableIsSet("TAIDAFLOW_E2E_PV_FILE")) {
++        e2ePvDriver = std::make_unique<E2ePvDriver>(
++            Td, qEnvironmentVariable("TAIDAFLOW_E2E_PV_FILE"));
++    }
++#endif
++
+     WasmMirrorConfig mirrorConfig;
+     mirrorConfig.host = QStringLiteral("127.0.0.1");
+     mirrorConfig.port = 8125;

@@ -1,0 +1,49 @@
+﻿w2-030 own UI inputs (every click/key/type the worker sent; anything else in the logs is not from w2-030)
+run1 (pre-merge core 7d06ef1), reconstructed from the worker's command transcript:
+[15:14:25.467] run1 desk click (885,647) : makeup pump dialog 開啟 (dialog opened by click (365,655) just before)
+[15:15:30.792] run1 desk click (885,643) : pump Hz dialog 確認 after typing 30 (dialog opened by click (969,1003))
+[15:16:06.324] run1 sim click (227,712) : DI1 -> 1
+[~15:16:30]    run1 desk click (970,81) Alarm tab, (845,302) 顯示全部, end time 23:59 + 篩選
+[15:18:28.472] run1 sim click (382,712) : DI2 -> 1
+[15:22:31.103] run1 sim click (227,712) : DI1 -> 0
+[15:22:37.294] run1 sim click (227,712) : DI1 -> 1
+[15:22:56.859] run1 sim click (382,712) : DI2 -> 1
+[15:23:33.529] run1 desk alarm end time -> 23:59 + 篩選
+[15:24:20.921] run1 desk click (775,81) Main tab (swallowed as activation click)
+[15:24:27.686] run1 sim click (382,712) : swallowed as activation click (no event)
+[15:24:33.599] run1 sim click (227,712) : DI1 -> 0
+[15:24:54.627] run1 sim click (382,712) : intended DI2 -> 0; windows were minimized by someone else, log shows DI1 1/0 at 15:24:55/58 instead
+[15:27:03.343] run1 sim click (382,712) : DI2 -> 0
+[15:27:21.578] run1 desk click (775,81) : Main tab
+[15:27:43.955] run1 sim click (382,712) : DI2 -> 1
+[15:27:52.671] run1 sim click (382,712) : intended DI2 -> 0, but DI2 had already been flipped to 0 at 15:27:45 by someone else, so this set it to 1
+run2 (merged core, working-tree merge of origin/main 1f4ac44 into 7d06ef1), written live by step.ps1:
+[16:28:38.241] w2-030 run2 desk click (365,655) : (b) open makeup pump dialog
+[16:28:52.992] w2-030 run2 desk click (885,647) : (b) makeup pump 開啟
+[16:29:12.174] w2-030 run2 desk click (969,1003) : (e) open pump Hz dialog
+[16:29:14.452] w2-030 run2 desk  key ctrl+a type '30' : (e) type 30
+[16:29:16.153] w2-030 run2 desk click (885,643) : (e) 確認 30 Hz
+[16:29:53.140] w2-030 run2 desk click (885,643) : (e) 確認 30 Hz (retry after activation click on dialog title)
+[16:30:24.959] w2-030 run2 sim click (227,712) : (c) DI1 -> 1 leak
+[16:30:32.315] w2-030 run2 desk click (1500,150) : (c) activate desktop (blank area) for Main capture
+[16:30:50.099] w2-030 run2 sim click (382,712) : (d) DI2 -> 1 makeup pump OL
+[16:30:57.516] w2-030 run2 desk click (1500,150) : (d) activate desktop (blank area) for Main capture
+[16:31:10.653] w2-030 run2 desk click (970,81) : (c/d) Alarm tab
+[16:31:14.073] w2-030 run2 desk click (522,300) : (c/d) click end-time field
+[16:31:15.034] w2-030 run2 desk  key ctrl+a type '2026/09/24 23:59' : (c/d) end time 23:59
+[16:31:16.372] w2-030 run2 desk click (721,302) : (c/d) 篩選
+[16:31:36.309] w2-030 run2 started serve_wasm.py pid 85264 on 127.0.0.1:8123
+[~16:32] w2-030 run2 browser pane (Claude.exe) opened http://127.0.0.1:8123/TaidaFlowApp.html, clicked web Alarm tab; canvas saved as R2-70/R2-71
+[16:32:24.817] w2-030 run2 sim click (382,712) : (f prep) DI2 -> 0
+[16:32:28.552] w2-030 run2 sim click (227,712) : (f prep) DI1 -> 0
+[16:32:50.915] w2-030 run2 desk click (775,81) : (f) Main tab
+[16:32:54.483] w2-030 run2 desk click (213,350) : (f) 緊急停止 ON
+[16:33:26.059] w2-030 run2 desk click (213,350) : (D1 extra) 緊急停止 OFF
+[16:33:29.890] w2-030 run2 desk click (365,655) : (D1 extra) open makeup pump dialog
+[16:33:32.206] w2-030 run2 desk click (885,647) : (D1 extra) makeup pump 開啟
+[16:33:37.003] w2-030 run2 sim click (72,712) : (D1 extra) DI0 -> 0 phase fault
+[16:33:44.605] w2-030 run2 desk click (1500,150) : (D1 extra) activate desktop for capture
+[16:33:56.749] w2-030 run2 desk click (365,655) : (D1 extra) open makeup pump dialog while DI0=0
+[16:33:59.333] w2-030 run2 desk click (885,647) : (D1 extra) 開啟 while DI0=0 (expect interlock reject)
+[16:34:05.145] w2-030 run2 sim click (72,712) : (D1 extra) DI0 -> 1 phase restored
+NOTE 16:33:56/16:33:59: the reject-under-DI0=0 attempt is inconclusive - the first click after the window switch was swallowed, the dialog never opened (screenshot removed). Not DoD evidence.

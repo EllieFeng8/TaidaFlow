@@ -1,0 +1,2332 @@
+excerpt of build\runtime-logs\w2-030-run2-desktop.log (total lines 32839); filter: profile, interlock, alarms, writes, mirror, DO/DI changes, FlowMeter/PT-01
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 39 alarm-history records from the last 3 days into the UI.
+[SQL] Loaded 39 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+ADAM-6217 B (127.0.0.203) connected 
+ADAM-6022 (127.0.0.205) connected 
+ADAM-6256 (127.0.0.201) connected 
+ADAM-6217 A (127.0.0.202) connected 
+ADAM-6224 (127.0.0.204) connected 
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1178 value=17.975
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1181 value=18.021
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1186 value=18.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1194 value=18.219
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1204 value=18.372
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1215 value=18.540
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1226 value=18.708
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1235 value=18.845
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1246 value=19.013
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1258 value=19.196
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1269 value=19.364
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1281 value=19.547
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1293 value=19.730
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1305 value=19.913
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1316 value=20.081
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1328 value=20.264
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1340 value=20.447
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1352 value=20.630
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1364 value=20.813
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1375 value=20.981
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1385 value=21.134
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1397 value=21.317
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1408 value=21.485
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1420 value=21.668
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1432 value=21.851
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1444 value=22.034
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1455 value=22.202
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1463 value=22.324
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1468 value=22.400
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1471 value=22.446
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1472 value=22.461
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1473 value=22.477
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1474 value=22.492
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1475 value=22.507
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=30.000 raw=2048
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=7079 value=108.019
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=2504 value=2504.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=6875 value=6875.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=16864 value=257.328
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=22641 value=345.480
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=9456 value=9456.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26053 value=397.543
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=10980 value=10980.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=28068 value=428.290
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=11880 value=11880.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=29257 value=446.433
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12411 value=12411.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=29960 value=457.160
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12725 value=12725.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30374 value=463.478
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12910 value=12910.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30619 value=467.216
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13020 value=13020.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30741 value=469.078
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13074 value=13074.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30836 value=470.527
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13116 value=13116.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30892 value=471.382
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13142 value=13142.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30925 value=471.885
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13156 value=13156.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30944 value=472.175
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13165 value=13165.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30956 value=472.358
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13170 value=13170.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30963 value=472.465
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13173 value=13173.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30967 value=472.526
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13175 value=13175.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30969 value=472.557
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13176 value=13176.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30970 value=472.572
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30971 value=472.587
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30972 value=472.602
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=29451 value=449.393
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=11591 value=11591.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1） status=異常
+[SQL] Loaded 40 alarm-history records from the last 3 days into the UI.
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=28262 value=431.250
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=10352 value=10352.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=27672 value=422.248
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=9738 value=9738.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=27212 value=415.229
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=9258 value=9258.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26940 value=411.078
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8974 value=8974.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26779 value=408.621
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8807 value=8807.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26685 value=407.187
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8708 value=8708.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26629 value=406.332
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8650 value=8650.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26595 value=405.814
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8615 value=8615.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26576 value=405.524
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8595 value=8595.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26564 value=405.341
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8583 value=8583.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26558 value=405.249
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8576 value=8576.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26554 value=405.188
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8571 value=8571.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26551 value=405.142
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8569 value=8569.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26550 value=405.127
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8568 value=8568.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26549 value=405.112
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8567 value=8567.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26549 value=405.112
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8566 value=8566.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8566 value=8566.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8566 value=8566.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8566 value=8566.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8566 value=8566.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26548 value=405.097
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26547 value=405.081
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+[SQL] Loaded 41 alarm-history records from the last 3 days into the UI.
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26545 value=405.051
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26541 value=404.990
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26538 value=404.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26532 value=404.852
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26527 value=404.776
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26521 value=404.685
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26516 value=404.608
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26510 value=404.517
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26504 value=404.425
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26498 value=404.334
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26492 value=404.242
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26486 value=404.150
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26481 value=404.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26475 value=403.983
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26469 value=403.891
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26464 value=403.815
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26457 value=403.708
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26452 value=403.632
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26446 value=403.540
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26440 value=403.449
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26435 value=403.372
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26429 value=403.281
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26423 value=403.189
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26417 value=403.098
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26411 value=403.006
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26405 value=402.914
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26399 value=402.823
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26393 value=402.731
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26389 value=402.670
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26383 value=402.579
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26377 value=402.487
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26371 value=402.396
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26365 value=402.304
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26359 value=402.213
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26353 value=402.121
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26347 value=402.029
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26341 value=401.938
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26335 value=401.846
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26330 value=401.770
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26324 value=401.678
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26318 value=401.587
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26313 value=401.511
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26307 value=401.419
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26301 value=401.328
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26295 value=401.236
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26289 value=401.144
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26284 value=401.068
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26278 value=400.977
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26272 value=400.885
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26266 value=400.793
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26260 value=400.702
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26254 value=400.610
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26248 value=400.519
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26242 value=400.427
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26238 value=400.366
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26230 value=400.244
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26226 value=400.183
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26220 value=400.092
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26214 value=400.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26208 value=399.908
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26202 value=399.817
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26196 value=399.725
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26190 value=399.634
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26184 value=399.542
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26179 value=399.466
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26173 value=399.374
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26167 value=399.283
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26162 value=399.207
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26156 value=399.115
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26150 value=399.023
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26144 value=398.932
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26138 value=398.840
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26133 value=398.764
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26127 value=398.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26121 value=398.581
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26115 value=398.489
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26109 value=398.398
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26103 value=398.306
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26097 value=398.215
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26091 value=398.123
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26087 value=398.062
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26081 value=397.971
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26075 value=397.879
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26069 value=397.787
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26063 value=397.696
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26057 value=397.604
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26051 value=397.513
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26045 value=397.421
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26039 value=397.330
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26033 value=397.238
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26028 value=397.162
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26022 value=397.070
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26016 value=396.979
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26011 value=396.902
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26007 value=396.841
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26007 value=396.841
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26010 value=396.887
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=26014 value=396.948
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=8565 value=8565.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=27832 value=424.689
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=10454 value=10454.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=28911 value=441.154
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=11569 value=11569.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12228 value=12228.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=29552 value=450.935
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=29936 value=456.794
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12617 value=12617.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30167 value=460.319
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12846 value=12846.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30309 value=462.486
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=12982 value=12982.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30397 value=463.828
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13062 value=13062.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30454 value=464.698
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13109 value=13109.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30486 value=465.187
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13133 value=13133.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30520 value=465.705
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13154 value=13154.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30538 value=465.980
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13162 value=13162.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13168 value=13168.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30556 value=466.255
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30571 value=466.484
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13172 value=13172.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30585 value=466.697
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13174 value=13174.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30598 value=466.896
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13176 value=13176.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30610 value=467.079
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13176 value=13176.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30623 value=467.277
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30635 value=467.460
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30647 value=467.643
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30659 value=467.826
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13177 value=13177.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30670 value=467.994
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30682 value=468.177
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30694 value=468.360
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30704 value=468.513
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30715 value=468.681
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=1 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=30727 value=468.864
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=13178 value=13178.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=18656 value=284.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=7781 value=7781.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=11528 value=175.906
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=4595 value=4595.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=7319 value=111.681
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=2713 value=2713.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=4834 value=73.762
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=1602 value=1602.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=3367 value=51.377
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=946 value=946.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=2500 value=38.148
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=559 value=559.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1988 value=30.335
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=330 value=330.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1686 value=25.727
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=195 value=195.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1536 value=23.438
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=128 value=128.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1419 value=21.653
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=75 value=75.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1350 value=20.600
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=45 value=45.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1309 value=19.974
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=26 value=26.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1285 value=19.608
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=16 value=16.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1271 value=19.394
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=9 value=9.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1263 value=19.272
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=5 value=5.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1258 value=19.196
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=3 value=3.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1255 value=19.150
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=2 value=2.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1253 value=19.120
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=1 value=1.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1252 value=19.104
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=1 value=1.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1250 value=19.074
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1251 value=19.089
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1256 value=19.165
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1263 value=19.272
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1273 value=19.425
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1283 value=19.577
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1293 value=19.730
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[SQL] Alarm inserted: sensor=DI0 message=相位異常（DI0=0） status=異常
+[SQL] Loaded 42 alarm-history records from the last 3 days into the UI.
+[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1299 value=19.821
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1302 value=19.867
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1304 value=19.898
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1305 value=19.913
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1306 value=19.928
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1306 value=19.928
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1307 value=19.944
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1

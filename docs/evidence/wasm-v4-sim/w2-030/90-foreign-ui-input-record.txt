@@ -1,0 +1,49 @@
+w2-030 foreign UI input record (2026-09-24)
+============================================
+
+During the w2-030 live run someone else operated the machine at the same time as the
+w2-030 worker. The worker's own inputs are the timestamped lines in 91-w2-030-own-input-log.txt
+("[HH:mm:ss.fff] w2-030 ..."); every other change below was NOT made by w2-030.
+Nothing was closed or stopped because of it; the worker paused and waited for 90 s of
+silence (wait-quiet on the simulator event log) before continuing.
+
+Mirror clients seen on the desktop app's 127.0.0.1:8125 (netstat at ~15:21):
+  pid 32608 Claude.exe (network service)  -> the w2-030 browser pane (serve_wasm 8123 page)
+  pid 45996 msedge.exe (network service)  -> NOT started by w2-030 (someone's Edge tab on the web app)
+
+Simulator (Adam60xxSimulator pid 51888) DI toggles not made by w2-030
+(from the simulator's own "Modbus 事件" log, build\runtime-logs\w2-030-simulator.log):
+  15:18:38 .. 15:18:41  DI2 補水泵 OL toggled 0/1 six times
+  15:18:44 .. 15:18:45  DI3 備用 toggled 1/0 twice
+  15:18:57 .. 15:18:59  DI2 toggled 0/1/0
+  15:19:00 .. 15:19:01  DI1 漏液檢出 toggled 0/1/0/1
+  15:19:03 .. 15:19:18  DI2 / DI1 toggled several times
+  15:19:54 .. 15:20:31  DI2 / DI1 toggled several times (left DI1=1, DI2=0)
+  15:24:55              DI1 -> 1
+  15:24:58              DI1 -> 0
+  ~15:25                both the simulator window and the TaidaFlow desktop window were minimized
+                        (GetWindowRect = -32000,-32000 at 15:25:15)
+
+Each foreign DI1/DI2 rising edge produced a real Core alarm row ("漏液檢出（DI1=1）" /
+"補水泵 OL（DI2=1）") in build\runtime-cwd SQLite; those rows are visible in the alarm-page
+screenshots (15:19 / 15:20 rows) and are NOT used as w2-030 evidence.
+
+Core writes: the desktop log contains only the w2-030 write requests (MakeupPumpStart 15:14:25,
+Pump2Hz 30 Hz + VfdRun 15:15:31, and the emergency-stop sequence of D4(f)); no foreign HMI
+command was issued during the run (grep "Write request" in 12-desktop-log.txt).
+
+Second episode (after a 90 s quiet period that ended 15:26:32):
+  15:27:40  Core write "MakeupPumpStart offset=19 input=0"  -> NOT a w2-030 input
+  15:27:41  Core write "MakeupPumpStart offset=19 input=1"  -> NOT a w2-030 input
+  (later)   Core write "CirculationBypassValveOpen offset=20 input=1" -> NOT a w2-030 input
+  15:27:45  simulator DI2 -> 0, one second after the w2-030 click at 15:27:43.955 set it to 1
+  So the earlier "no foreign HMI command" statement only holds until 15:27:40. These are HMI
+  commands, so they came through the desktop window or a mirror client (the Edge tab was still
+  connected to 8125). Files 72-/73-*.png were captured after 15:27:45 and are NOT valid
+  evidence. D4(f) was not run. w2-030 stopped here and the PM paused the task.
+
+Evidence used for D4(c)/(d) is the re-run after the quiet period:
+  15:22:37 DI1 -> 1 (w2-030)  => "[SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1）"
+  15:22:57 DI2 -> 1 (w2-030)  => "[SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1）"
+plus the first D4(c) at 15:16:06 and D4(d) at 15:18:28, both before the foreign input started
+(15:18:38), whose alarm lines were read back at 15:16:12 and 15:18:33.

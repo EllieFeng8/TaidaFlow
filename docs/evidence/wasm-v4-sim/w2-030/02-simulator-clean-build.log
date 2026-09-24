@@ -1,0 +1,18 @@
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (0.3s)
+-- Generating done (0.3s)
+-- Build files have been written to: D:/repo/codex/qmlTester/Adam60xxSimulator/build
+[1/2] Cleaning additional files...
+[2/2] Cleaning all built files...
+Cleaning... 6 files.
+
+[1/7] Automatic MOC and UIC for target Adam60xxSimulator
+[2/7] Building CXX object CMakeFiles\Adam60xxSimulator.dir\src\processsimulator.cpp.obj
+[3/7] Building CXX object CMakeFiles\Adam60xxSimulator.dir\src\main.cpp.obj
+[4/7] Building CXX object CMakeFiles\Adam60xxSimulator.dir\src\adamdeviceserver.cpp.obj
+[5/7] Building CXX object CMakeFiles\Adam60xxSimulator.dir\Adam60xxSimulator_autogen\mocs_compilation.cpp.obj
+[6/7] Building CXX object CMakeFiles\Adam60xxSimulator.dir\src\mainwindow.cpp.obj
+[7/7] Linking CXX executable Adam60xxSimulator.exe
+simulator clean build exit=0

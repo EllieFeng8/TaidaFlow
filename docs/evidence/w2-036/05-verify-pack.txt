@@ -1,0 +1,30 @@
+﻿manifest: 24/24 ok
+legacy_VERSION_present=False VERSION.txt=1.0.1
+  same 692c45da52c6ab1b7ea447fb75dce6b4f386f6958d80904a004fe30b69b379c3  .gitignore
+  same 18485fe5dde8112f89259ea16b2cad3a1eb8f65d6490014b212d46e021122301  CMakeLists.txt
+  same f46ea8d7cc99093ffdb0b19a3a7bd11da6f7b1743242a64efd9aca068c4725bd  MANIFEST.sha256
+  same 887fb7935d5f61a401bcbc40af38aed4573d499903d720b698f57b39024ccae0  PROVENANCE.md
+  same 391712f427b2d95a7cadf97e01cf57cb3eab2d8b6ab39bfdba0316b55bc2de63  README.md
+  same 1b11c9bd2e3471d80da8cc3621c43e5ed3dc4a3885546bf28bc3b6e128bf8c27  VERSION.txt
+  same 44a201fe47dbe4f69e10b7b3e1c219397677c8080e51ffd0f20d8120aa50b76f  cmake/GenerateProxyRequestRelay.cmake
+  same 1c9bfd4d0757887e2bf49cef42344a766bb171cc974d215e32683987c38ec276  cmake/WasmMirrorProxyRegister.cmake
+  same 5856d2330d1dd8171d0326a36b6a4f407bd36042bc2f2340753abc2a2f325c80  docs/http-server-requirements.md
+  same 2df26af18bddebb95e1c482b035c339558741524c76cdc79a68ff6627662a21d  docs/wasm-mirror-integration.md
+  same 4a0b7d97dd4e3dceb3bae2276ad3ba66e17b2d6af8fd3241497e2a74bc1f1e57  examples/consumer/CMakeLists.txt
+  same 0966f3374dc72fd5506ed36fcd9281bc38854b73d415311eaf17d63471c65594  examples/consumer/exampleproxy.cpp
+  same 447310607c46af34c0a89b63272804d8448beac5de10750f04047a772d4d68d6  examples/consumer/exampleproxy.h
+  same 2e8e907548f23aa4246fa978f99d7c29a0a1418b899163f613af50aeeaad8a7e  examples/consumer/main.cpp
+  same 59f5f5a1b812fcb3c5fc7d4d95a52d4f5ec4581710f8bdfe8d853e8f3081b2b4  src/infrastructure/proxy_mirror/proxymirror.cpp
+  same 22321b8df3c0525af8f5ab93f325c6a51566a13f89c7b21c084dfee83eab701c  src/infrastructure/proxy_mirror/proxymirror.h
+  same 7068b0b635a106644348feb9c6f02121ecd24dbe9a0439af0850415d045bc638  src/infrastructure/proxy_mirror/proxyrequestrelay.h
+  same 74e5a4f9580213d738465e00c96aaf99140bd70a5e4412c6a631268596deca23  src/infrastructure/proxy_mirror/wasmmirrorproxy.cpp
+  same d83346e3ba3bc9dc27bd4397e4637bfe0f27cbb9fbe0a30465b34230ae983495  src/infrastructure/proxy_mirror/wasmmirrorproxy.h
+  same 22eb09be5369bc5799c7e0e4ad66ad1f844f9647d3a21a72ad7d904393d3b0c0  templates/CMakePresets.example.json
+  same 35ac84bd81b373172be34d7f12214d5317e203c600e502e83b70e204887bebfe  templates/HostCMakeLists.integration.cmake
+  same e7745688f8598eb4f4fc991973f97d07d60937d4df91a7587de320e21414cdfa  tests/CMakeLists.txt
+  same 81ae27582a4e733dc03f93d63efec892a142112034fb9767eb880f690e9031cf  tests/tst_proxymirror.cpp
+  same 45fb2617840d2f3c4f94682391971a2bea75fd9e26e41f8e88fd43694afc55ec  tests/tst_wasmmirrorproxy.cpp
+  same ed29b0ed75884a1438d7aa184fb7b882562948334e68f0ca1e49557e5df42d57  wasm-mirror-package-integration.md
+source compare: identical=25 source_files=25 pack_files=25 only_source=0 only_pack=0
+verify_pack exit=0
+exit=0

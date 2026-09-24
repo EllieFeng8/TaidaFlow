@@ -19,14 +19,12 @@ private:
 
     explicit Core(QObject* parent = nullptr) {}
     ~Core();
-    void saveHmiInputSettings();
-    void loadHmiInputSettings();
+    void reportIgnoredHmiInputSettings();
     void loadHistoryRecords();
     void loadAlarmRecords();
 
     Manager* m_manager = nullptr;
     ModbusServer* m_modbusServer = nullptr;
     SqlManager* m_sqlManager = nullptr;
-    bool m_loadingHmiInputSettings = false;
 
 };

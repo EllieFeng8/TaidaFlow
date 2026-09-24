@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QScopedValueRollback>
 #include <QSettings>
 #include <QStringList>
 
@@ -18,6 +19,19 @@
 namespace {
 constexpr int kPollIntervalMs = 1000;
 constexpr double kDefaultAiHighAlarmPercent = 90.0;
+// A failed pump-frequency read-back is logged on the first failed poll and
+// then every kPump2HzFailureLogEvery polls, so an offline ADAM-6022 does not
+// flood the log.
+constexpr int kPump2HzFailureLogEvery = 30;
+
+// SVs taken from a device are rounded to 0.01 for display (QML shows the SV
+// with String()).  For the 12-bit AOs this is loss-free: the rounding error is
+// at most 0.005 Hz = 0.34 raw steps / 0.005 % = 0.20 raw steps (< 0.5), so
+// re-encoding the SV with writeCommand() gives back the same raw value.
+double roundSv(double value)
+{
+    return std::round(value * 100.0) / 100.0;
+}
 
 QString highInputAlarmSensorName(quint16 serverOffset)
 {
@@ -219,6 +233,10 @@ bool Manager::saveAlarm(const QString &sensor,
         return false;
     }
 
+    // 'status' is stored in Core's source vocabulary (異常 / 警告 / 數值異常 /
+    // 正常).  It is translated to the UI contract (alarmStatus 未處理/已解除,
+    // severity 嚴重/警告) when the rows are read back: see
+    // alarmUiFieldsForStatus() in core.cpp, which also covers existing rows.
     const QJsonObject alarm{
         {QStringLiteral("sensor"), sensor},
         {QStringLiteral("alarmMessage"), message},
@@ -240,28 +258,51 @@ bool Manager::saveAlarm(const QString &sensor,
     return true;
 }
 
+bool Manager::isSvWriteSuppressed(const char *svName)
+{
+    if (!m_syncingSvFromDevice)
+        return false;
+
+    ++m_suppressedSvWrites;
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] %1 changed by the startup device sync; Modbus write suppressed.")
+                       .arg(QLatin1String(svName));
+    return true;
+}
+
 void Manager::setM1Sv(double value)
 {
+    if (isSvWriteSuppressed("m1ValueSv"))
+        return;
     writeCommand(ModbusMapping::CommandPoint::M1, value);
 }
 
 void Manager::setM2Sv(double value)
 {
+    if (isSvWriteSuppressed("m2ValueSv"))
+        return;
     writeCommand(ModbusMapping::CommandPoint::M2, value);
 }
 
 void Manager::setM3Sv(double value)
 {
+    if (isSvWriteSuppressed("m3ValueSv"))
+        return;
     writeCommand(ModbusMapping::CommandPoint::M3, value);
 }
 
 void Manager::setM4Sv(double value)
 {
+    if (isSvWriteSuppressed("m4ValueSv"))
+        return;
     writeCommand(ModbusMapping::CommandPoint::M4, value);
 }
 
 void Manager::setPump2HzSv(double value)
 {
+    if (isSvWriteSuppressed("pump2HzSv"))
+        return;
+
     if (value <= 0.0) {
         m_startVfdAfterFrequencyWrite = false;
         writeCommand(ModbusMapping::CommandPoint::VfdRun, 0.0);
@@ -278,6 +319,9 @@ void Manager::setPump2HzSv(double value)
 
 void Manager::setMotorRunningSv(bool running)
 {
+    if (isSvWriteSuppressed("motorRunningSv"))
+        return;
+
     if (!writeCommand(ModbusMapping::CommandPoint::MotorRunning, running ? 1.0 : 0.0)
             && running && m_proxy && m_proxy->motorRunningSv()) {
         // Keep HMI state consistent with the safety-rejected physical command.
@@ -305,6 +349,266 @@ void Manager::pollConfiguredPoints()
                   QModbusDataUnit::Coils,
                   ModbusServerBridgeMapping::Adam6256DoStart,
                   9);
+
+    // Pump frequency feedback: read back ADAM-6022 AO0 (HR10 / 40011) every
+    // poll.  A read that has not succeeded by the next poll counts as failed;
+    // pump2HzPv is then left unchanged (last good value).
+    if (m_pump2HzReadOutstanding) {
+        ++m_pump2HzReadFailures;
+        if (m_pump2HzReadFailures == 1
+                || m_pump2HzReadFailures % kPump2HzFailureLogEvery == 0) {
+            qWarning().noquote()
+                    << QStringLiteral("[Pump2Hz feedback] ADAM-6022 HR%1 read had no successful reply "
+                                      "(%2 consecutive poll(s)); pump2HzPv kept at %3 Hz.")
+                               .arg(ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister)
+                               .arg(m_pump2HzReadFailures)
+                               .arg(m_proxy ? m_proxy->pump2HzPv() : 0.0, 0, 'f', 3);
+        }
+    }
+    m_pump2HzReadOutstanding = true;
+    m_modbus.read(ModbusClient::Device::Adam6022_205,
+                  QModbusDataUnit::HoldingRegisters,
+                  ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister,
+                  1);
+
+    // ADAM-6224 AO0..AO3 (HR0..HR3 = MV1..MV4) are read only until the
+    // startup SV sync has used them once.
+    if (!m_svSyncedAdam6224) {
+        m_modbus.read(ModbusClient::Device::Adam6224_204,
+                      QModbusDataUnit::HoldingRegisters,
+                      ModbusServerBridgeMapping::ServerAoStart,
+                      ModbusServerBridgeMapping::ServerAoCount);
+    }
+}
+
+double Manager::decodeCommandRaw(ModbusMapping::CommandPoint point, quint16 raw) const
+{
+    // Inverse of writeCommand(): value = raw * scale + offset, using the same
+    // binding (ModbusMapping.h is the single source of truth for scaling).
+    for (const ModbusMapping::WriteBinding &binding : m_writeBindings) {
+        if (binding.point == point)
+            return static_cast<double>(raw) * binding.scale + binding.offset;
+    }
+    return static_cast<double>(raw);
+}
+
+void Manager::handlePump2HzFeedback(const QList<quint16> &values)
+{
+    if (values.isEmpty())
+        return;
+
+    m_pump2HzReadOutstanding = false;
+    if (m_pump2HzReadFailures > 0) {
+        qInfo().noquote()
+                << QStringLiteral("[Pump2Hz feedback] ADAM-6022 HR%1 read recovered after %2 failed poll(s).")
+                           .arg(ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister)
+                           .arg(m_pump2HzReadFailures);
+        m_pump2HzReadFailures = 0;
+    }
+
+    const quint16 raw = values.constFirst();
+    // raw 0..4095 = 0..10 V = 0..60 Hz (raw x 60 / 4095).
+    const double hz = decodeCommandRaw(ModbusMapping::CommandPoint::Pump2Hz, raw);
+    qInfo().noquote()
+            << QStringLiteral("[Modbus][Read] device=%1 point=Pump2Hz(AO0 read-back) offset=%2 raw=%3 value=%4 -> pump2HzPv")
+                       .arg(ModbusClient::displayName(ModbusClient::Device::Adam6022_205))
+                       .arg(ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister)
+                       .arg(raw)
+                       .arg(hz, 0, 'f', 3);
+    if (m_proxy)
+        m_proxy->setPump2HzPv(hz);
+
+    if (m_svSyncedAdam6022 || !m_proxy)
+        return;
+
+    m_svSyncedAdam6022 = true;
+    const double svBefore = m_proxy->pump2HzSv();
+    const double sv = roundSv(hz);
+    {
+        const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
+        m_proxy->setPump2HzSv(sv);
+    }
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] pump2HzSv <- %1 Hz from ADAM-6022 HR%2 raw=%3 (was %4)")
+                       .arg(sv, 0, 'f', 2)
+                       .arg(ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister)
+                       .arg(raw)
+                       .arg(svBefore, 0, 'f', 2);
+    logStartupSyncProgress();
+}
+
+void Manager::handleAdam6224AnalogOutputs(const QList<quint16> &values)
+{
+    if (m_svSyncedAdam6224 || !m_proxy
+            || values.size() < ModbusServerBridgeMapping::ServerAoCount) {
+        return;
+    }
+
+    m_svSyncedAdam6224 = true;
+    using Setter = void (TaidaFlowProxy::*)(double);
+    using Getter = double (TaidaFlowProxy::*)() const;
+    struct AoSv {
+        ModbusMapping::CommandPoint point;
+        const char *name;
+        Getter get;
+        Setter set;
+    };
+    const AoSv svs[] = {
+        {ModbusMapping::CommandPoint::M1, "m1ValueSv", &TaidaFlowProxy::m1ValueSv, &TaidaFlowProxy::setM1ValueSv},
+        {ModbusMapping::CommandPoint::M2, "m2ValueSv", &TaidaFlowProxy::m2ValueSv, &TaidaFlowProxy::setM2ValueSv},
+        {ModbusMapping::CommandPoint::M3, "m3ValueSv", &TaidaFlowProxy::m3ValueSv, &TaidaFlowProxy::setM3ValueSv},
+        {ModbusMapping::CommandPoint::M4, "m4ValueSv", &TaidaFlowProxy::m4ValueSv, &TaidaFlowProxy::setM4ValueSv},
+    };
+
+    for (int index = 0; index < ModbusServerBridgeMapping::ServerAoCount; ++index) {
+        const AoSv &entry = svs[index];
+        const quint16 raw = values.at(index);
+        // raw 0..4095 = 0..10 V = 0..100 % valve opening (raw x 100 / 4095).
+        const double sv = roundSv(decodeCommandRaw(entry.point, raw));
+        const double svBefore = (m_proxy->*entry.get)();
+        {
+            const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
+            (m_proxy->*entry.set)(sv);
+        }
+        qInfo().noquote()
+                << QStringLiteral("[SV sync] %1 <- %2 % from ADAM-6224 HR%3 raw=%4 (was %5)")
+                           .arg(QLatin1String(entry.name))
+                           .arg(sv, 0, 'f', 2)
+                           .arg(ModbusServerBridgeMapping::ServerAoStart + index)
+                           .arg(raw)
+                           .arg(svBefore, 0, 'f', 2);
+    }
+    logStartupSyncProgress();
+}
+
+void Manager::syncCoilSvsFromAdam6256(int startAddress, const QList<quint16> &values)
+{
+    if (m_svSyncedAdam6256 || !m_proxy)
+        return;
+
+    const auto coilAt = [&](int doOffset, bool *state) {
+        const qsizetype index = ModbusServerBridgeMapping::Adam6256DoStart + doOffset - startAddress;
+        if (index < 0 || index >= values.size())
+            return false;
+        *state = values.at(index) != 0;
+        return true;
+    };
+
+    bool do2 = false;
+    bool do3 = false;
+    bool do4 = false;
+    if (!coilAt(2, &do2) || !coilAt(3, &do3) || !coilAt(4, &do4))
+        return;
+
+    m_svSyncedAdam6256 = true;
+
+    // DO3 (00020) = makeup pump command: 1 = running.
+    // A safety trip that has already happened (DI0 = 0 known, or DI2 OL) wrote
+    // DO3 = 0; this read may predate that write, so keep the SV off then.
+    bool motorRunning = do3;
+    if (motorRunning && ((m_di0StateKnown && !m_di0OutputPermit) || m_makeupPumpOverload)) {
+        qWarning().noquote()
+                << QStringLiteral("[SV sync] DO3 read 1 but a safety interlock (DI0=0 or DI2 OL) is active; motorRunningSv kept false.");
+        motorRunning = false;
+    }
+    // DO4 (00021) = circulation bypass / two-way valve: 1 = open.
+    const bool wayValveOpen = do4;
+    // DO2 (00019) = emergency stop, active-low (Manager::setEmergencyStopSv
+    // writes DO2 = 0 for UI ON).  So emergencyStopSv = (DO2 == 0).
+    const bool emergencyStop = !do2;
+
+    const bool motorBefore = m_proxy->motorRunningSv();
+    const bool valveBefore = m_proxy->wayValveOpenSv();
+    const bool estopBefore = m_proxy->emergencyStopSv();
+    {
+        const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
+        m_proxy->setMotorRunningSv(motorRunning);
+        m_proxy->setWayValveOpenSv(wayValveOpen);
+        m_proxy->setEmergencyStopSv(emergencyStop);
+    }
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] motorRunningSv <- %1 from ADAM-6256 DO3 (coil 19) = %2 (was %3)")
+                       .arg(motorRunning ? QStringLiteral("true") : QStringLiteral("false"))
+                       .arg(do3 ? 1 : 0)
+                       .arg(motorBefore ? QStringLiteral("true") : QStringLiteral("false"));
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] wayValveOpenSv <- %1 from ADAM-6256 DO4 (coil 20) = %2 (was %3)")
+                       .arg(wayValveOpen ? QStringLiteral("true") : QStringLiteral("false"))
+                       .arg(do4 ? 1 : 0)
+                       .arg(valveBefore ? QStringLiteral("true") : QStringLiteral("false"));
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] emergencyStopSv <- %1 from ADAM-6256 DO2 (coil 18) = %2, active-low (was %3)")
+                       .arg(emergencyStop ? QStringLiteral("true") : QStringLiteral("false"))
+                       .arg(do2 ? 1 : 0)
+                       .arg(estopBefore ? QStringLiteral("true") : QStringLiteral("false"));
+    logStartupSyncProgress();
+}
+
+void Manager::logStartupSyncProgress()
+{
+    if (m_startupSyncReported
+            || !m_svSyncedAdam6224 || !m_svSyncedAdam6022 || !m_svSyncedAdam6256) {
+        return;
+    }
+
+    m_startupSyncReported = true;
+    qInfo().noquote()
+            << QStringLiteral("[SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, "
+                              "ADAM-6256 DO2..DO4): SV-triggered writes suppressed=%1, "
+                              "Modbus write requests since start=%2.")
+                       .arg(m_suppressedSvWrites)
+                       .arg(m_modbusWriteRequests);
+}
+
+void Manager::countModbusWriteRequest()
+{
+    ++m_modbusWriteRequests;
+}
+
+void Manager::updateLeakDetected(bool leak)
+{
+    if (!m_proxy)
+        return;
+
+    if (!m_di1StateKnown || m_proxy->leakDetectedPv() != leak) {
+        qInfo().noquote()
+                << QStringLiteral("[Leak] ADAM-6224 DI1=%1 -> leakDetectedPv=%2")
+                           .arg(leak ? 1 : 0)
+                           .arg(leak ? QStringLiteral("true") : QStringLiteral("false"));
+    }
+    m_di1StateKnown = true;
+    m_proxy->setLeakDetectedPv(leak);
+}
+
+void Manager::updateMakeupPumpOverload(bool overload)
+{
+    const bool wasKnown = m_di2StateKnown;
+    const bool wasActive = m_makeupPumpOverload;
+    m_di2StateKnown = true;
+    m_makeupPumpOverload = overload;
+
+    if (overload && (!wasKnown || !wasActive)) {
+        tripMakeupPumpOverload();
+    } else if (!overload && wasKnown && wasActive) {
+        qInfo().noquote()
+                << QStringLiteral("[Safety Interlock] ADAM-6224 DI2 (makeup pump OL) cleared; "
+                                  "DO3 stays off until the operator starts the makeup pump again.");
+    }
+}
+
+void Manager::tripMakeupPumpOverload()
+{
+    qWarning().noquote()
+            << QStringLiteral("[Safety Interlock] ADAM-6224 DI2 (makeup pump OL) is 1; "
+                              "forcing ADAM-6256 DO3 (00020) off and motorRunningSv=false.");
+
+    // Same pattern as tripDi0Interlock(): clearing the SV drives
+    // Manager::setMotorRunningSv(false), which writes DO3 = 0.  If the SV is
+    // already off, write DO3 = 0 explicitly so a stale output is still made safe.
+    if (m_proxy && m_proxy->motorRunningSv())
+        m_proxy->setMotorRunningSv(false);
+    else
+        writeCommand(ModbusMapping::CommandPoint::MotorRunning, 0.0);
 }
 
 void Manager::mirrorClientData(ModbusClient::Device device,
@@ -312,6 +616,20 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                int startAddress,
                                const QList<quint16> &values)
 {
+    if (device == ModbusClient::Device::Adam6022_205
+            && registerType == QModbusDataUnit::HoldingRegisters
+            && startAddress == ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister) {
+        handlePump2HzFeedback(values);
+        return;
+    }
+
+    if (device == ModbusClient::Device::Adam6224_204
+            && registerType == QModbusDataUnit::HoldingRegisters
+            && startAddress == ModbusServerBridgeMapping::ServerAoStart) {
+        handleAdam6224AnalogOutputs(values);
+        return;
+    }
+
     if (registerType == QModbusDataUnit::HoldingRegisters
             && (device == ModbusClient::Device::Adam6217_202
                 || device == ModbusClient::Device::Adam6217_203)) {
@@ -374,6 +692,12 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                 m_di0StateKnown = true;
                 if (mustTrip)
                     tripDi0Interlock();
+            } else if (diOffset == 1) {
+                // DI1 = leak sensor (1 = leak).  The '漏液檢出' alarm above is kept.
+                updateLeakDetected(state);
+            } else if (diOffset == 2) {
+                // DI2 = makeup pump overload (1 = OL tripped).
+                updateMakeupPumpOverload(state);
             }
         }
         return;
@@ -407,6 +731,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                                .arg(values.at(index))
                                .arg(state ? 1 : 0);
         }
+        syncCoilSvsFromAdam6256(startAddress, values);
     }
 }
 
@@ -490,6 +815,8 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
 
 void Manager::setWayValveOpenSv(bool open)
 {
+    if (isSvWriteSuppressed("wayValveOpenSv"))
+        return;
     writeCommand(ModbusMapping::CommandPoint::WayValveOpen, open ? 1.0 : 0.0);
 }
 
@@ -500,6 +827,9 @@ void Manager::setInverterResetSv(bool active)
 
 void Manager::setEmergencyStopSv(bool active)
 {
+    if (isSvWriteSuppressed("emergencyStopSv"))
+        return;
+
     // The emergency-stop circuit is active-low: UI ON asserts the stop by
     // writing DO2 = 0; UI OFF releases it by writing DO2 = 1.
     writeCommand(ModbusMapping::CommandPoint::EmergencyStop, active ? 0.0 : 1.0);
@@ -599,6 +929,13 @@ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
                                    .arg(doOffset);
                 permittedValues[index] = 0;
                 emit serverCoilUpdated(static_cast<quint16>(doOffset), false);
+            } else if (doOffset == 3
+                       && permittedValues.at(index) != 0
+                       && m_makeupPumpOverload) {
+                qWarning().noquote()
+                        << QStringLiteral("[Safety Interlock] DI2 makeup pump OL is active; rejecting ADAM-6256 DO3 command.");
+                permittedValues[index] = 0;
+                emit serverCoilUpdated(static_cast<quint16>(doOffset), false);
             }
         }
 
@@ -607,6 +944,7 @@ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
                            .arg(offset)
                            .arg(offset + values.size() - 1)
                            .arg(modbusValuesText(permittedValues));
+        countModbusWriteRequest();
         m_modbus.write(ModbusClient::Device::Adam6256_201,
                        QModbusDataUnit::Coils,
                        ModbusServerBridgeMapping::Adam6256DoStart + offset,
@@ -630,6 +968,7 @@ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
         qInfo().noquote()
                 << QStringLiteral("[ModbusServer->Client] ADAM-6022 AO0 values=%1")
                            .arg(modbusValuesText(values));
+        countModbusWriteRequest();
         m_modbus.write(ModbusClient::Device::Adam6022_205,
                        QModbusDataUnit::HoldingRegisters,
                        ModbusServerBridgeMapping::Adam6022Ao0HoldingRegister,
@@ -656,6 +995,7 @@ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
                            .arg(offset)
                            .arg(offset + values.size() - 1)
                            .arg(modbusValuesText(values));
+        countModbusWriteRequest();
         m_modbus.write(ModbusClient::Device::Adam6224_204,
                        QModbusDataUnit::HoldingRegisters,
                        offset,
@@ -727,6 +1067,14 @@ bool Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
         return false;
     }
 
+    if (point == ModbusMapping::CommandPoint::MotorRunning
+            && value != 0.0 && m_makeupPumpOverload) {
+        qWarning().noquote()
+                << QStringLiteral("[Safety Interlock] DI2 makeup pump OL is active; %1 was not energized.")
+                           .arg(commandPointName(point));
+        return false;
+    }
+
     for (const ModbusMapping::WriteBinding &binding : m_writeBindings) {
         if (binding.point != point)
             continue;
@@ -758,6 +1106,7 @@ bool Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
                            .arg(roundedValue);
         const quint16 encodedValue = static_cast<quint16>(roundedValue);
         mirrorHmiCommandToServer(binding, encodedValue);
+        countModbusWriteRequest();
         return m_modbus.write(binding.device,
                               binding.registerType,
                               binding.startAddress,

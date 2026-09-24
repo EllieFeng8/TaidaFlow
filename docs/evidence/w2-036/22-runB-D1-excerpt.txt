@@ -1,0 +1,29 @@
+== w2-036 D1 run B (app started 17:08:01)
+-- startup: first read-back and SV sync
+2:[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=45, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+78:[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=1365 value=20.000 -> pump2HzPv
+79:[SV sync] pump2HzSv changed by the startup device sync; Modbus write suppressed.
+-- 17:09:05.751 modbus_poke writes simulator ADAM-6022 HR10 = 2048 (30 Hz); simulator:
+[17:09:05] Core → ADAM-6022：Holding Register offset 10 = [2048]（AO0 變頻器頻率 30.01 Hz）
+-- Core read-back after it (first 3 lines with raw=2048):
+3567:[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+3623:[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+3679:[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+-- read-failure case: simulator process suspended 17:09:18.355..17:09:24.388 (tools/suspend_process.ps1, input-log.txt); desktop log lines 4160..4629, ADAM-6022/Pump2Hz/timeout lines only (MS300 COM2 noise omitted):
+4182: [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+4222: [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 30.007 Hz.
+4238: ADAM-6022 (127.0.0.205) Request timeout.
+4239: ADAM-6256 (127.0.0.201) Request timeout.
+4240: ADAM-6224 (127.0.0.204) Request timeout.
+4241: ADAM-6217 B (127.0.0.203) Request timeout.
+4242: ADAM-6217 A (127.0.0.202) Request timeout.
+4285: [Pump2Hz feedback] ADAM-6022 HR10 read recovered after 5 failed poll(s).
+4286: [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+4287: [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+4377: [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+4433: [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007 -> pump2HzPv
+   => between the last good read (before suspend) and 'recovered' there is no Pump2Hz read line, i.e. pump2HzPv was not written while reads failed (kept at 30.007 Hz).
+-- pump2HzPv values written during the whole run (distinct):
+     62 Pump2Hz(AO0 read-back) offset=10 raw=1365 value=20.000
+    152 Pump2Hz(AO0 read-back) offset=10 raw=2048 value=30.007
+-- Core Pump2Hz / VfdRun write requests in run B (write logic unchanged, not exercised): 0

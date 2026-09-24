@@ -1,0 +1,40 @@
+== w2-036 D4: alarm vocabulary (Core status -> UI alarmStatus/severity), conversion on read (Core::loadAlarmRecords); mapping table: core.cpp alarmUiFieldsForStatus()
+-- stored rows in build/runtime-cwd/data/sensor_202609.sqlite alarm_history after all runs (read-only query; DB not migrated): count per stored reason.status
+   數值異常 4
+   正常 18
+   異常 29
+-- runs B+C: distinct mappings logged by [Alarm][UI] (count of log lines):
+     10 coreStatus=數值異常 -> alarmStatus=未處理 severity=警告
+     29 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+     41 coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+-- run B summary lines (every alarmRecords load):
+22:[SQL] Loaded 44 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=27 已解除=17; severity 嚴重=27 警告=17; unknown core status=0).
+42:[SQL] Loaded 44 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=27 已解除=17; severity 嚴重=27 警告=17; unknown core status=0).
+5733:[SQL] Loaded 45 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=28 已解除=17; severity 嚴重=28 警告=17; unknown core status=0).
+6979:[SQL] Loaded 46 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=29 已解除=17; severity 嚴重=29 警告=17; unknown core status=0).
+-- run B first load at startup (rows from earlier runs incl. w2-030 ids <= 42, converted on read):
+14:[Alarm][UI] id=44 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+15:[Alarm][UI] id=43 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+16:[Alarm][UI] id=42 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+17:[Alarm][UI] id=41 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+18:[Alarm][UI] id=40 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+19:[Alarm][UI] id=39 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+20:[Alarm][UI] id=38 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+21:[Alarm][UI] id=37 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+-- run B load after the DI2 alarm (new rows 45/46):
+6971: [Alarm][UI] id=46 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6972: [Alarm][UI] id=45 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6973: [Alarm][UI] id=44 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6974: [Alarm][UI] id=43 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6975: [Alarm][UI] id=42 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6976: [Alarm][UI] id=41 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6977: [Alarm][UI] id=40 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+6978: [Alarm][UI] id=39 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+6979: [SQL] Loaded 46 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=29 已解除=17; severity 嚴重=29 警告=17; unknown core status=0).
+-- run C ([Alarm] aiHighAlarmPercent temporarily 25, see input-log.txt): AI high alarms 數值異常:
+10:[Alarm] AI high-alarm setting loaded: 25.0% (raw >= 16384).
+79:[SQL] Alarm inserted: sensor=TT-01 message=輸入值達到設定高限 25.0%（raw=18660，threshold=16384） status=數值異常
+81:[Alarm][UI] id=48 sensor=TT-01 message=輸入值達到設定高限 25.0%（raw=18660，threshold=16384） coreStatus=數值異常 -> alarmStatus=未處理 severity=警告
+95:[Alarm][UI] id=49 sensor=TT-02 message=輸入值達到設定高限 25.0%（raw=18945，threshold=16384） coreStatus=數值異常 -> alarmStatus=未處理 severity=警告
+131:[SQL] Loaded 51 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=33 已解除=18; severity 嚴重=29 警告=22; unknown core status=0).
+-- not exercised live: 警告 (MS300 warning; no MS300/COM2 in this environment) - covered by the table and code review only.

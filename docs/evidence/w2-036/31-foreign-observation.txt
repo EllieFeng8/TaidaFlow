@@ -1,0 +1,12 @@
+w2-036 observation of things not started by w2-036
+
+Run B netstat (30-runB-netstat-before-close.txt, 17:11:23): one WASM mirror client was connected to the
+desktop app's ws://127.0.0.1:8125/mirror from 127.0.0.1:51176, owned by pid 32608
+= C:\Program Files\WindowsApps\Claude_2.7032.0.0_x64__pzs8sxrjxfjjc\app\Claude.exe (started 2026-09-23 12:55:58).
+w2-036 opened no browser pane and started no serve_wasm.py (8123 had no listener). The same pid was the
+browser pane of w2-030 (its report names Claude.exe pid 32608), so this is most likely that page reconnecting.
+
+Effect on the judgement: none observed. Run B has exactly 3 '[Modbus][Write request]' lines
+(20-runB-desktop-full.log lines 6982, 8691, 10373) and each one follows a w2-036 input recorded in input-log.txt
+(DI2 -> 1 at 17:10:09.770; HMI 開啟 during OL at 17:10:40.849; HMI 開啟 after OL at 17:11:10.705).
+No SV change or write appears that w2-036 did not cause. Runs A and C have 0 write requests.

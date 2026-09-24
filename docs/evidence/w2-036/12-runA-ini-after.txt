@@ -1,0 +1,13 @@
+﻿INI hash after runA: 43CAABBCB938B5E1537CA8325140745A53D88A44241188669701FDF06E522D0C (before: AEAC85B8F281FD81A571C0C9FF63D8590C47ECBBDD89178E163A3B3C5C23857B)
+[Alarm]
+aiHighAlarmPercent=90
+
+[HmiInput]
+m1ValueSv=12.3
+m2ValueSv=35
+m3ValueSv=33
+m4ValueSv=40
+pump2HzSv=45
+motorRunningSv=false
+wayValveOpenSv=false
+INI [HmiInput]/[Alarm] content identical after runA (only line endings changed: the pre-existing Manager::loadAiHighAlarmPercentSetting() rewrites [Alarm] via QSettings with CRLF). Verified with: diff <(tr -d '\r' < 10-runA-ini-before-start.ini) <(tr -d '\r' < build/runtime-cwd/TaidaFlowSettings.ini) -> identical

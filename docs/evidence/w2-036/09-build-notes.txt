@@ -1,0 +1,18 @@
+w2-036 build notes
+- 01-desktop-fresh-build.log / 02-wasm-release-fresh-build.log were built at HEAD 92b0853 (+ w2-036 Core changes).
+  Their last line 'exit=0' was written by 'call echo ... %ERRORLEVEL%' inside the same cmd /c line, which expands
+  %ERRORLEVEL% before the build runs, so that line is NOT a valid exit code. Both logs end with the final link step
+  ('[567/567] Linking CXX executable TaidaFlowApp.exe' / '[559/559] Linking CXX executable TaidaFlowApp.js') and have
+  no ninja 'FAILED:' line; runs A/B/C used that desktop binary. The 'Failed to run spirv-opt' lines are the usual
+  non-fatal qsb messages (also in 07/08).
+- The PM then merged origin/main 77eb577 (AlarmPage.qml only) into core: HEAD ca2370a. Authoritative builds at ca2370a,
+  exit code captured by PowerShell $LASTEXITCODE:
+    07-desktop-fresh-build-ca2370a.log       -> 'desktop fresh build exit=0'
+    08-wasm-release-fresh-build-ca2370a.log  -> 'wasm-release fresh build exit=0', TaidaFlowApp.wasm 33,661,384 bytes
+  03-06 checks were re-run on these builds.
+- 07a-desktop-fresh-build-ca2370a-attempt1-FAILED.log: the first fresh desktop attempt at ca2370a FAILED (ninja
+  'subcommand failed': c1xx C1083 'cannot open source file' for generated *_init.cpp / mocs_compilation.cpp under
+  build\desktop, i.e. generated files disappeared during the build). Not reproduced: the immediate retry (07) passed
+  with no source change. No cmake/ninja process of anyone else was running when checked afterwards; cause unknown
+  (possibly concurrent access to build\desktop around the PM's merge). Recorded, not hidden.
+- 08a-...-unreliable-exit-echo.log: an earlier wasm build at ca2370a with the same invalid echo; superseded by 08.

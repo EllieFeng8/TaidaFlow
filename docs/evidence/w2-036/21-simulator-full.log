@@ -1,0 +1,363 @@
+[17:06:07] 已套用本機回送端點；Core 端點也需改成相同設定。
+[17:06:07] 點位對齊 taidaflow core 分支；ADAM-6224 DI 初始值：DI0 相位正常=1，DI1 漏液檢出=0，DI2 補水泵 OL=0，DI3 備用（Core 未使用）=0
+[17:06:07] 完整設備模擬器已就緒。請啟動全部 ADAM Server。
+[17:06:07] ADAM-6256: Listening
+[AdamDeviceServer] ADAM-6256 listening on 127.0.0.201:502 unit=1
+[17:06:07] ADAM-6217 A: Listening
+[AdamDeviceServer] ADAM-6217 A listening on 127.0.0.202:502 unit=1
+[17:06:07] ADAM-6217 B: Listening
+[AdamDeviceServer] ADAM-6217 B listening on 127.0.0.203:502 unit=1
+[17:06:07] ADAM-6224: Listening
+[AdamDeviceServer] ADAM-6224 listening on 127.0.0.204:502 unit=1
+[17:06:07] ADAM-6022: Listening
+[AdamDeviceServer] ADAM-6022 listening on 127.0.0.205:502 unit=1
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=7.37 PT05=6.19 MV1Feedback=9.45 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=11.72 PT05=9.85 MV1Feedback=14.43 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=14.29 PT05=12.01 MV1Feedback=17.06 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=15.81 PT05=13.28 MV1Feedback=18.45 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=16.71 PT05=14.03 MV1Feedback=19.18 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.24 PT05=14.48 MV1Feedback=19.57 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.55 PT05=14.74 MV1Feedback=19.77 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.73 PT05=14.90 MV1Feedback=19.88 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[17:06:16] Core → ADAM-6224：Holding Register offset 1 = [1638]（MV2 開度 40.00 %）
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.84 PT05=14.99 MV1Feedback=19.94 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[17:06:16] Core → ADAM-6224：Holding Register offset 2 = [2457]（MV3 開度 60.00 %）
+[17:06:16] Core → ADAM-6224：Holding Register offset 3 = [3276]（MV4 開度 80.00 %）
+[17:06:16] Core → ADAM-6022：Holding Register offset 10 = [2048]（AO0 變頻器頻率 30.01 Hz）
+[17:06:16] Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）
+[17:06:16] 補水泵運轉（DO3=1），系統水量上升
+[17:06:16] Core → ADAM-6256：Coil offset 20 = [1]（DO4 二通閥/旁通閥 ON）
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=17.94 PT05=15.07 MV1Feedback=19.97 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=80.6
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.07 PT05=15.18 MV1Feedback=19.98 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=81.4
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.22 PT05=15.31 MV1Feedback=19.99 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=82.2
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.38 PT05=15.44 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=83.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.55 PT05=15.59 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=83.8
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.73 PT05=15.73 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=84.6
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=18.91 PT05=15.88 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=85.4
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.08 PT05=16.03 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=86.2
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.26 PT05=16.18 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=87.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.44 PT05=16.33 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=87.8
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.62 PT05=16.48 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=88.6
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.80 PT05=16.63 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=89.4
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=19.98 PT05=16.78 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=90.2
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=20.16 PT05=16.93 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=91.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=20.34 PT05=17.09 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=91.8
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=20.52 PT05=17.24 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=92.6
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=20.70 PT05=17.39 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=93.4
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=20.88 PT05=17.54 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=94.2
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.06 PT05=17.69 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=95.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.24 PT05=17.84 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=95.8
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.42 PT05=17.99 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=96.6
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.60 PT05=18.14 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=97.4
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.78 PT05=18.30 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=98.2
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=21.96 PT05=18.45 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=99.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.14 PT05=18.60 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=99.8
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.29 PT05=18.72 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.37 PT05=18.79 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.43 PT05=18.84 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.46 PT05=18.86 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.47 PT05=18.88 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.48 PT05=18.89 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.49 PT05=18.89 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.49 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=20.00 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:07:43] Core → ADAM-6224：Holding Register offset 0 = [4095]（MV1 開度 100.00 %）
+[17:07:44] Core → ADAM-6224：Holding Register offset 1 = [0]（MV2 開度 0.00 %）
+[17:07:44] Core → ADAM-6224：Holding Register offset 2 = [2048]（MV3 開度 50.01 %）
+[17:07:44] Core → ADAM-6224：Holding Register offset 3 = [1024]（MV4 開度 25.01 %）
+[17:07:44] Core → ADAM-6022：Holding Register offset 10 = [1365]（AO0 變頻器頻率 20.00 Hz）
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=52.02 DO1=0 DO2=0 DO3=1 makeupRunning=1 DO4=1 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:07:44] Core → ADAM-6256：Coil offset 18 = [1]（DO2 急停（active-low，0=急停） 1=急停釋放）
+[17:07:44] Core → ADAM-6256：Coil offset 20 = [0]（DO4 二通閥/旁通閥 OFF）
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=74.68 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=86.64 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=92.95 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=96.28 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=98.04 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=98.96 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.45 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.71 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.85 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.92 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.96 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.98 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.99 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=99.99 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=20.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:09:05] Core → ADAM-6022：Holding Register offset 10 = [2048]（AO0 變頻器頻率 30.01 Hz）
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:09:48] ADAM-6224 DI1 漏液檢出 = 1：漏液；Core 應產生「漏液檢出」警報，流量降為 65% 且系統水量下降
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=1 DI2=0 DI3=0 water=100.0
+[17:09:59] ADAM-6224 DI1 漏液檢出 = 0：漏液解除
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:10:10] ADAM-6224 DI2 補水泵 OL = 1：補水泵過載跳脫；Core 應產生「補水泵 OL」警報，補水泵停止
+[17:10:10] 補水泵停止：補水泵 OL 跳脫（DI2=1）
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[17:10:10] Core → ADAM-6256：Coil offset 19 = [0]（DO3 補水泵 OFF）
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=1 DI3=0 water=100.0
+[17:10:52] ADAM-6224 DI2 補水泵 OL = 0：補水泵 OL 解除
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[17:11:10] Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）
+[17:11:11] 補水泵運轉（DO3=1），系統水量上升
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=30.0 flow=0.00 PT01=22.50 PT05=18.90 MV1Feedback=100.00 DO1=0 DO2=1 DO3=1 makeupRunning=1 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=100.0
+[AdamDeviceServer] ADAM-6256 stopped
+[AdamDeviceServer] ADAM-6217 A stopped
+[AdamDeviceServer] ADAM-6217 B stopped
+[AdamDeviceServer] ADAM-6224 stopped
+[AdamDeviceServer] ADAM-6022 stopped

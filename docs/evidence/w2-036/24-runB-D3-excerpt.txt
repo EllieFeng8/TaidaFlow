@@ -1,0 +1,26 @@
+== w2-036 D3 run B (makeup pump running at startup: DO3=1, motorRunningSv synced true)
+105:[SV sync] motorRunningSv <- true from ADAM-6256 DO3 (coil 19) = 1 (was false)
+-- 17:10:09.770 simulator DI2 -> 1 (OL); simulator:
+[17:10:10] ADAM-6224 DI2 補水泵 OL = 1：補水泵過載跳脫；Core 應產生「補水泵 OL」警報，補水泵停止
+[17:10:10] 補水泵停止：補水泵 OL 跳脫（DI2=1）
+[17:10:10] Core → ADAM-6256：Coil offset 19 = [0]（DO3 補水泵 OFF）
+[17:10:52] ADAM-6224 DI2 補水泵 OL = 0：補水泵 OL 解除
+[17:11:10] Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）
+[17:11:11] 補水泵運轉（DO3=1），系統水量上升
+-- Core: every Safety Interlock / MakeupPump write / DO3 readback change (lines 6489-end, DO3 readback deduplicated):
+6524: [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+6969: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+6981: [Safety Interlock] ADAM-6224 DI2 (makeup pump OL) is 1; forcing ADAM-6256 DO3 (00020) off and motorRunningSv=false.
+6982: [Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+7011: [Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+7047: [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+8690: [Safety Interlock] DI2 makeup pump OL is active; MakeupPumpStart was not energized.
+8691: [Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+8693: [Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+9341: [Safety Interlock] ADAM-6224 DI2 (makeup pump OL) cleared; DO3 stays off until the operator starts the makeup pump again.
+10373: [Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=1.000 raw=1
+10376: [Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+10411: [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=1 value=1
+-- 17:10:38.571/17:10:40.849 HMI: open makeup-pump dialog + 開啟 while DI2=1 -> rejected (line 'DI2 makeup pump OL is active; MakeupPumpStart was not energized.'); the following raw=0 write is the pre-existing Manager::setMotorRunningSv() reset of the SV to false (DO3 already 0, so the simulator logs no change).
+-- 17:10:52.124 DI2 -> 0: 'cleared' line; DO3 read back 0 until the operator restart at 17:11:10.705 (raw=1 request) -> simulator 17:11:10 'Coil offset 19 = [1]'.
+-- Core write requests in run B total: 3 (all MakeupPumpStart: trip 0, reject-reset 0, operator restart 1)

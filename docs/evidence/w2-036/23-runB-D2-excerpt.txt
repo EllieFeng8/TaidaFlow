@@ -1,0 +1,9 @@
+== w2-036 D2 run B: DI1 clicked in the simulator at 17:09:47.942 (->1) and 17:09:58.875 (->0), input-log.txt
+-- simulator:
+[17:09:48] ADAM-6224 DI1 漏液檢出 = 1：漏液；Core 應產生「漏液檢出」警報，流量降為 65% 且系統水量下降
+[17:09:59] ADAM-6224 DI1 漏液檢出 = 0：漏液解除
+-- Core (all [Leak] lines + DI1 alarm):
+84:[Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+5723:[SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1） status=異常
+5735:[Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+6352:[Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false

@@ -1,0 +1,23 @@
+﻿netstat at 17:11:23 (before close)
+  TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       80404
+  TCP    127.0.0.1:8125         0.0.0.0:0              LISTENING       80404
+  TCP    127.0.0.1:8125         127.0.0.1:51176        ESTABLISHED     80404
+  TCP    127.0.0.1:51176        127.0.0.1:8125         ESTABLISHED     32608
+  TCP    127.0.0.1:51177        127.0.0.201:502        ESTABLISHED     80404
+  TCP    127.0.0.1:51178        127.0.0.202:502        ESTABLISHED     80404
+  TCP    127.0.0.1:51179        127.0.0.203:502        ESTABLISHED     80404
+  TCP    127.0.0.1:51180        127.0.0.204:502        ESTABLISHED     80404
+  TCP    127.0.0.1:51181        127.0.0.205:502        ESTABLISHED     80404
+  TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       42756
+  TCP    127.0.0.201:502        127.0.0.1:51177        ESTABLISHED     42756
+  TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       42756
+  TCP    127.0.0.202:502        127.0.0.1:51178        ESTABLISHED     42756
+  TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       42756
+  TCP    127.0.0.203:502        127.0.0.1:51179        ESTABLISHED     42756
+  TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       42756
+  TCP    127.0.0.204:502        127.0.0.1:51180        ESTABLISHED     42756
+  TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       42756
+  TCP    127.0.0.205:502        127.0.0.1:51181        ESTABLISHED     42756
+processes:
+Adam60xxSimulator pid=42756 start=09/24/2026 17:06:06
+TaidaFlowApp pid=80404 start=09/24/2026 17:08:01

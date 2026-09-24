@@ -1,0 +1,11 @@
+﻿postcheck at 2026-09-24 17:25:06 (after run D, ca2370a build)
+TaidaFlowApp/Adam60xxSimulator processes: 0
+listeners 502/8123/8125: 0
+git status --short:
+ M Core/core.cpp
+ M Core/core.h
+ M Core/manager.cpp
+ M Core/manager.h
+?? docs/evidence/w2-036/
+HEAD: ca2370a merge: origin/main (77eb577) into core
+INI: [Alarm] | aiHighAlarmPercent=90 |  | [HmiInput] | m1ValueSv=12.3 | m2ValueSv=35 | m3ValueSv=33 | m4ValueSv=40 | pump2HzSv=0 | motorRunningSv=false | wayValveOpenSv=false

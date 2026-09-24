@@ -1,0 +1,58 @@
+[17:06:15.976] modbus_poke write-hr 127.0.0.204 0 819: wrote HR0 = 819; read back [819]  (runA seed: MV1 20%)
+[17:06:16.086] modbus_poke write-hr 127.0.0.204 1 1638: wrote HR1 = 1638; read back [1638]  (runA seed: MV2 40%)
+[17:06:16.219] modbus_poke write-hr 127.0.0.204 2 2457: wrote HR2 = 2457; read back [2457]  (runA seed: MV3 60%)
+[17:06:16.352] modbus_poke write-hr 127.0.0.204 3 3276: wrote HR3 = 3276; read back [3276]  (runA seed: MV4 80%)
+[17:06:16.472] modbus_poke write-hr 127.0.0.205 10 2048: wrote HR10 = 2048; read back [2048]  (runA seed: 6022 AO0 30 Hz)
+[17:06:16.599] modbus_poke write-coil 127.0.0.201 19 1: wrote coil19 = 1; read back [1]  (runA seed: DO3 makeup pump ON)
+[17:06:16.721] modbus_poke write-coil 127.0.0.201 20 1: wrote coil20 = 1; read back [1]  (runA seed: DO4 bypass valve open)
+[17:06:16.776] modbus_poke read-coils 127.0.0.201 16 9: coil16..24 = [0, 0, 0, 1, 1, 0, 0, 0, 0]  (runA check: coils 16..24 (DO2 left at simulator default 0 = e-stop asserted))
+[17:06:16.840] modbus_poke read-di 127.0.0.204 0 4: DI0..3 = [1, 0, 0, 0]  (runA check: 6224 DI0..3)
+[17:06:23.127] w2-036 runA: launching desktop app (run-desktop.ps1 -DeviceProfile simulator)
+[17:07:09.101] w2-036 runA: WM_CLOSE to TaidaFlow
+[17:07:43.949] modbus_poke write-hr 127.0.0.204 0 4095: wrote HR0 = 4095; read back [4095]  (runB seed: MV1 100%)
+[17:07:44.077] modbus_poke write-hr 127.0.0.204 1 0: wrote HR1 = 0; read back [0]  (runB seed: MV2 0%)
+[17:07:44.213] modbus_poke write-hr 127.0.0.204 2 2048: wrote HR2 = 2048; read back [2048]  (runB seed: MV3 50.01%)
+[17:07:44.322] modbus_poke write-hr 127.0.0.204 3 1024: wrote HR3 = 1024; read back [1024]  (runB seed: MV4 25.01%)
+[17:07:44.451] modbus_poke write-hr 127.0.0.205 10 1365: wrote HR10 = 1365; read back [1365]  (runB seed: 6022 AO0 20 Hz)
+[17:07:44.585] modbus_poke write-coil 127.0.0.201 18 1: wrote coil18 = 1; read back [1]  (runB seed: DO2=1 e-stop released)
+[17:07:44.711] modbus_poke write-coil 127.0.0.201 20 0: wrote coil20 = 0; read back [0]  (runB seed: DO4 valve closed)
+[17:07:44.785] modbus_poke read-coils 127.0.0.201 16 9: coil16..24 = [0, 0, 1, 1, 0, 0, 0, 0, 0]  (runB check: coils 16..24 (DO3 still 1 = makeup pump running))
+[17:07:44.846] modbus_poke read-di 127.0.0.204 0 4: DI0..3 = [1, 0, 0, 0]  (runB check: 6224 DI0..3)
+[17:07:51.769] w2-036 runB: launching desktop app (run-desktop.ps1 -DeviceProfile simulator)
+[17:09:05.751] modbus_poke write-hr 127.0.0.205 10 2048: wrote HR10 = 2048; read back [2048]  (runB D1: simulator AO0 -> 30 Hz while app runs)
+[17:09:17.351] w2-036 marker: desktop log line 4160 : before D1 read-failure case (simulator suspend)
+[17:09:18.355] w2-036 suspend Adam60xxSimulator pid=42756 (NtSuspendProcess rc=0) for 6s : D1 read-failure case
+[17:09:24.388] w2-036 resume Adam60xxSimulator pid=42756 (NtResumeProcess rc=0)
+[17:09:29.505] w2-036 marker: desktop log line 4629 : after D1 read-failure case
+[17:09:47.356] w2-036 marker: desktop log line 5635 : before D2 DI1 -> 1
+[17:09:47.942] w2-036 sim click (227,712) : D2 DI1 -> 1 (leak) (exit 0; clicked window(227,712) screen(1326,1111))
+[17:09:51.539] w2-036 marker: desktop log line 5877 : after D2 DI1 -> 1
+[17:09:58.602] w2-036 marker: desktop log line 6320 : before D2 DI1 -> 0
+[17:09:58.875] w2-036 sim click (227,712) : D2 DI1 -> 0 (leak cleared) (exit 0; clicked window(227,712) screen(1326,1111))
+[17:10:02.205] w2-036 marker: desktop log line 6489 : after D2 DI1 -> 0
+[17:10:09.495] w2-036 marker: desktop log line 6881 : before D3 DI2 -> 1 (makeup pump running)
+[17:10:09.770] w2-036 sim click (382,712) : D3 DI2 -> 1 (makeup pump OL) while DO3=1 (exit 0; clicked window(382,712) screen(1481,1111))
+[17:10:14.116] w2-036 marker: desktop log line 7180 : after D3 DI2 -> 1
+[17:10:38.286] w2-036 marker: desktop log line 8522 : before D3 open-pump attempt during OL
+[17:10:38.571] w2-036 desk click (365,655) : D3 open makeup pump dialog (DI2=1) (exit 0; clicked window(365,655) screen(1314,1114))
+[17:10:40.849] w2-036 desk click (885,647) : D3 makeup pump 開啟 during OL (expect reject) (exit 0; clicked window(885,647) screen(1834,1106))
+[17:10:44.179] w2-036 marker: desktop log line 8861 : after D3 open-pump attempt
+[17:10:51.850] w2-036 marker: desktop log line 9308 : before D3 DI2 -> 0
+[17:10:52.124] w2-036 sim click (382,712) : D3 DI2 -> 0 (OL cleared) (exit 0; clicked window(382,712) screen(1481,1111))
+[17:11:00.719] w2-036 marker: desktop log line 9813 : after D3 DI2 -> 0 (+8 s, no operator input)
+[17:11:08.162] w2-036 marker: desktop log line 10205 : before D3 operator restart after OL cleared
+[17:11:08.430] w2-036 desk click (365,655) : D3 open makeup pump dialog (DI2=0) (exit 0; clicked window(365,655) screen(1314,1114))
+[17:11:10.705] w2-036 desk click (885,647) : D3 makeup pump open (operator restart, expect DO3=1) (exit 0; clicked window(885,647) screen(1834,1106))
+[17:11:14.037] w2-036 marker: desktop log line 10544 : after D3 operator restart
+[17:11:41.643] w2-036 runB: WM_CLOSE to TaidaFlow
+[17:11:41.826] w2-036: CloseMainWindow to Adam60xxSimulator pid 42756
+[17:13:14.409] w2-036 runC prep: build\runtime-cwd\TaidaFlowSettings.ini [Alarm] aiHighAlarmPercent 90 -> 25 (to raise a live '數值異常' alarm for D4); restored at the end
+[17:13:24.447] w2-036 runC: launching desktop app (run-desktop.ps1 -DeviceProfile simulator), simulator at defaults
+[17:13:51.432] w2-036 runC: WM_CLOSE to TaidaFlow
+[17:13:51.579] w2-036 runC: CloseMainWindow to Adam60xxSimulator pid 84504
+[17:13:51.690] w2-036: restored build\runtime-cwd\TaidaFlowSettings.ini from TaidaFlowSettings.ini.w2-036-before.bak
+[17:24:35.479] modbus_poke write-hr 127.0.0.205 10 2048: wrote HR10 = 2048; read back [2048]  (runD seed (ca2370a build smoke): 6022 AO0 30 Hz)
+[17:24:35.609] modbus_poke write-coil 127.0.0.201 18 1: wrote coil18 = 1; read back [1]  (runD seed: DO2=1 e-stop released)
+[17:24:35.615] w2-036 runD: launching desktop app built at ca2370a (smoke: startup sync + 0 writes)
+[17:25:06.297] w2-036 runD: WM_CLOSE to TaidaFlow
+[17:25:06.454] w2-036 runD: CloseMainWindow to Adam60xxSimulator pid 75368

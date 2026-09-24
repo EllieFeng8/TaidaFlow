@@ -1,0 +1,27 @@
+== w2-036 D5 runs B and C (runs A: 14-runA-D5-excerpt.txt)
+-- 20-runB-desktop-full.log:
+2:[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=45, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+80:[SV sync] pump2HzSv <- 20.00 Hz from ADAM-6022 HR10 raw=1365 (was 0.00)
+87:[SV sync] m1ValueSv <- 100.00 % from ADAM-6224 HR0 raw=4095 (was 0.00)
+88:[SV sync] m2ValueSv <- 0.00 % from ADAM-6224 HR1 raw=0 (was 0.00)
+90:[SV sync] m3ValueSv <- 50.01 % from ADAM-6224 HR2 raw=2048 (was 0.00)
+92:[SV sync] m4ValueSv <- 25.01 % from ADAM-6224 HR3 raw=1024 (was 0.00)
+105:[SV sync] motorRunningSv <- true from ADAM-6256 DO3 (coil 19) = 1 (was false)
+106:[SV sync] wayValveOpenSv <- false from ADAM-6256 DO4 (coil 20) = 0 (was false)
+107:[SV sync] emergencyStopSv <- false from ADAM-6256 DO2 (coil 18) = 1, active-low (was false)
+108:[SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=5, Modbus write requests since start=0.
+   write requests before 'sync complete': 0
+-- 26-runC-desktop-full.log:
+2:[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=45, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+157:[SV sync] pump2HzSv <- 40.00 Hz from ADAM-6022 HR10 raw=2730 (was 0.00)
+169:[SV sync] motorRunningSv <- false from ADAM-6256 DO3 (coil 19) = 0 (was false)
+170:[SV sync] wayValveOpenSv <- false from ADAM-6256 DO4 (coil 20) = 0 (was false)
+171:[SV sync] emergencyStopSv <- true from ADAM-6256 DO2 (coil 18) = 0, active-low (was false)
+178:[SV sync] m1ValueSv <- 20.00 % from ADAM-6224 HR0 raw=819 (was 0.00)
+180:[SV sync] m2ValueSv <- 30.01 % from ADAM-6224 HR1 raw=1229 (was 0.00)
+182:[SV sync] m3ValueSv <- 40.00 % from ADAM-6224 HR2 raw=1638 (was 0.00)
+184:[SV sync] m4ValueSv <- 50.01 % from ADAM-6224 HR3 raw=2048 (was 0.00)
+185:[SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=7, Modbus write requests since start=0.
+   write requests before 'sync complete': 0
+-- run C simulator 'Core →' (external write) lines: 0 (simulator at defaults; no modbus_poke in run C)
+-- run B simulator 'Core →' lines between app start 17:08:01 and first operator input 17:09:05: 0

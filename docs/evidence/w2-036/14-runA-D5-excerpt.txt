@@ -1,0 +1,36 @@
+== w2-036 D5 run A (app started 17:06:23, simulator seeded 17:06:15-16 by modbus_poke, see input-log.txt)
+-- grep '\[HmiInput\]|\[SV sync\]' 13-runA-desktop-full.log
+2:[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=45, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+55:[SV sync] pump2HzSv changed by the startup device sync; Modbus write suppressed.
+56:[SV sync] pump2HzSv <- 30.01 Hz from ADAM-6022 HR10 raw=2048 (was 0.00)
+62:[SV sync] m1ValueSv changed by the startup device sync; Modbus write suppressed.
+63:[SV sync] m1ValueSv <- 20.00 % from ADAM-6224 HR0 raw=819 (was 0.00)
+64:[SV sync] m2ValueSv changed by the startup device sync; Modbus write suppressed.
+65:[SV sync] m2ValueSv <- 40.00 % from ADAM-6224 HR1 raw=1638 (was 0.00)
+66:[SV sync] m3ValueSv changed by the startup device sync; Modbus write suppressed.
+67:[SV sync] m3ValueSv <- 60.00 % from ADAM-6224 HR2 raw=2457 (was 0.00)
+68:[SV sync] m4ValueSv changed by the startup device sync; Modbus write suppressed.
+69:[SV sync] m4ValueSv <- 80.00 % from ADAM-6224 HR3 raw=3276 (was 0.00)
+81:[SV sync] motorRunningSv changed by the startup device sync; Modbus write suppressed.
+82:[SV sync] wayValveOpenSv changed by the startup device sync; Modbus write suppressed.
+83:[SV sync] emergencyStopSv changed by the startup device sync; Modbus write suppressed.
+84:[SV sync] motorRunningSv <- true from ADAM-6256 DO3 (coil 19) = 1 (was false)
+85:[SV sync] wayValveOpenSv <- true from ADAM-6256 DO4 (coil 20) = 1 (was false)
+86:[SV sync] emergencyStopSv <- true from ADAM-6256 DO2 (coil 18) = 0, active-low (was false)
+87:[SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=8, Modbus write requests since start=0.
+-- counts in 13-runA-desktop-full.log (whole run, 17:06:23 - WM_CLOSE):
+  '\[Modbus\]\[Write request\]' = 0
+  '\[Modbus\]\[Write completed\]' = 0
+  '\[ModbusServer->Client\]' = 0
+  '\[Safety Interlock\]' = 0
+  '\[Emergency Stop\]' = 0
+-- simulator external writes (any Modbus client) logged as 'Core →' at/after 17:06:17:
+0
+-- all simulator 'Core →' lines before run B seeding (17:07:43):
+[17:06:16] Core → ADAM-6224：Holding Register offset 1 = [1638]（MV2 開度 40.00 %）
+[17:06:16] Core → ADAM-6224：Holding Register offset 2 = [2457]（MV3 開度 60.00 %）
+[17:06:16] Core → ADAM-6224：Holding Register offset 3 = [3276]（MV4 開度 80.00 %）
+[17:06:16] Core → ADAM-6022：Holding Register offset 10 = [2048]（AO0 變頻器頻率 30.01 Hz）
+[17:06:16] Core → ADAM-6256：Coil offset 19 = [1]（DO3 補水泵 ON）
+[17:06:16] Core → ADAM-6256：Coil offset 20 = [1]（DO4 二通閥/旁通閥 ON）
+-- note: the 17:06:15.976 seed 'HR0 = 819' produced no simulator log line because the simulator's MV1 AO default is already 819 (20 %; [Process] MV1Feedback->20 before the seed) and the simulator logs changes only; modbus_poke read back 819 (input-log.txt). The simulator's default 6022 AO0 is 40 Hz ([Process] frequencyHz=40.0), so HR10 = 2048 (30.01 Hz) is a non-default value.

@@ -9,12 +9,61 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QSettings>
+#include <QStringList>
 #include <QTime>
 #include <QVariantMap>
 
 namespace {
 constexpr auto kHmiInputSettingsFile = "TaidaFlowSettings.ini";
 constexpr auto kHmiInputSettingsGroup = "HmiInput";
+
+// Alarm vocabulary: Core status (stored in alarm.reason JSON 'status') ->
+// UI contract fields of Td.alarmRecords (AlarmPage.qml counts and colours
+// alarmStatus === "未處理"; severity === "嚴重" is red, anything else amber).
+//
+//  Core status   | produced by                                  | alarmStatus | severity
+//  --------------+----------------------------------------------+-------------+---------
+//  異常          | DI0 相位異常 / DI1 漏液檢出 / DI2 補水泵 OL    | 未處理      | 嚴重
+//                | (Manager::checkDigitalInputAlarm), MS300     |             |
+//                | fault code != 0 (Ms300FaultReader)           |             |
+//  警告          | MS300 warning code only (fault code == 0)    | 未處理      | 警告
+//  數值異常      | AI >= high limit (Manager::checkHighInputAlarm) | 未處理   | 警告
+//  正常          | 設備啟動 (Core::init) - informational record  | 已解除      | 警告
+//  未處理/已解除 | already UI vocabulary (pass-through)         | same        | 警告
+//  (missing)     | legacy plain-text reason / JSON w/o status   | 未處理      | 警告
+//  anything else | unknown                                      | 未處理      | 警告
+//
+// 設備啟動 is not a fault: 已解除 keeps it out of the page's "未處理" count and
+// shows it green; the UI has no info level, so it takes the lower level 警告.
+// Unknown or missing statuses default to 未處理 so that nothing that might
+// need attention is hidden.  A valid 'severity' stored in the JSON (嚴重/警告)
+// overrides the table (no producer writes one today).  The database is not
+// migrated: the conversion runs on every read, so existing rows are covered.
+struct AlarmUiFields {
+    QString alarmStatus;
+    QString severity;
+    bool known = true;
+};
+
+AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus)
+{
+    const QString unhandled = QStringLiteral("未處理");
+    const QString resolved = QStringLiteral("已解除");
+    const QString critical = QStringLiteral("嚴重");
+    const QString warning = QStringLiteral("警告");
+
+    if (!hasStatus)
+        return {unhandled, warning, true};
+    if (coreStatus == QStringLiteral("異常"))
+        return {unhandled, critical, true};
+    if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
+        return {unhandled, warning, true};
+    if (coreStatus == QStringLiteral("正常"))
+        return {resolved, warning, true};
+    if (coreStatus == unhandled || coreStatus == resolved)
+        return {coreStatus, warning, true};
+    return {unhandled, warning, false};
+}
 }
 
 Core& Core::instance()
@@ -25,8 +74,6 @@ Core& Core::instance()
 
 Core::~Core()
 {
-    saveHmiInputSettings();
-
     if (m_modbusServer) {
         m_modbusServer->stop();
         delete m_modbusServer;
@@ -51,9 +98,11 @@ void Core::init()
         return;
 
     m_proxy = new TaidaFlowProxy(this);
-    // Load before Manager and ModbusServer signal connections exist. The
-    // restored SVs therefore update only the HMI and never drive an ADAM.
-    loadHmiInputSettings();
+    // w2-036: SVs are no longer restored from TaidaFlowSettings.ini.  They
+    // start at the proxy defaults and Manager replaces them with the actual
+    // device state after each device's first successful read (no Modbus
+    // write).  Old [HmiInput] keys are left in the file untouched, only logged.
+    reportIgnoredHmiInputSettings();
     m_sqlManager = SqlManager::instance();
     if (!m_sqlManager->initialize())
         qWarning() << "SqlManager initialization failed; Server Input Registers will not be saved.";
@@ -85,24 +134,9 @@ void Core::init()
     connect(m_proxy, &TaidaFlowProxy::emergencyStopSvChanged,
             m_manager, &Manager::setEmergencyStopSv);
 
-    connect(m_proxy, &TaidaFlowProxy::m1ValueSvChanged, this,
-            [this](double) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::m2ValueSvChanged, this,
-            [this](double) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::m3ValueSvChanged, this,
-            [this](double) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::m4ValueSvChanged, this,
-            [this](double) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::pump2HzSvChanged, this,
-            [this](double) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::motorRunningSvChanged, this,
-            [this](bool) { saveHmiInputSettings(); });
-    connect(m_proxy, &TaidaFlowProxy::wayValveOpenSvChanged, this,
-            [this](bool) { saveHmiInputSettings(); });
-
-    // Ensure every restorable HMI setting has an explicit value in the INI
-    // file, even if the operator has never changed its default value.
-    saveHmiInputSettings();
+    // w2-036: the SV -> [HmiInput] INI write-back was removed together with
+    // the restore: a value that is never read back has no purpose, and the
+    // device itself is now the source of the SVs at startup.
 
     connect(m_modbusServer, &ModbusServer::writeRequested,
             m_manager, &Manager::writeServerData);
@@ -119,47 +153,31 @@ void Core::init()
     loadAlarmRecords();
 }
 
-void Core::saveHmiInputSettings()
+void Core::reportIgnoredHmiInputSettings()
 {
-    if (!m_proxy || m_loadingHmiInputSettings)
-        return;
-
+    // Read-only: the file is not modified here.  Other groups (e.g. [Alarm]
+    // aiHighAlarmPercent, handled by Manager) are unaffected.
     QSettings settings(QString::fromLatin1(kHmiInputSettingsFile), QSettings::IniFormat);
     settings.beginGroup(QString::fromLatin1(kHmiInputSettingsGroup));
-    settings.setValue(QStringLiteral("m1ValueSv"), m_proxy->m1ValueSv());
-    settings.setValue(QStringLiteral("m2ValueSv"), m_proxy->m2ValueSv());
-    settings.setValue(QStringLiteral("m3ValueSv"), m_proxy->m3ValueSv());
-    settings.setValue(QStringLiteral("m4ValueSv"), m_proxy->m4ValueSv());
-    settings.setValue(QStringLiteral("pump2HzSv"), m_proxy->pump2HzSv());
-    settings.setValue(QStringLiteral("motorRunningSv"), m_proxy->motorRunningSv());
-    settings.setValue(QStringLiteral("wayValveOpenSv"), m_proxy->wayValveOpenSv());
+    const QStringList keys = settings.childKeys();
+    QStringList pairs;
+    for (const QString &key : keys)
+        pairs.append(QStringLiteral("%1=%2").arg(key, settings.value(key).toString()));
     settings.endGroup();
-    settings.sync();
 
-    if (settings.status() != QSettings::NoError)
-        qWarning() << "Failed to save HMI input settings:" << settings.fileName();
-}
-
-void Core::loadHmiInputSettings()
-{
-    if (!m_proxy)
-        return;
-
-    QSettings settings(QString::fromLatin1(kHmiInputSettingsFile), QSettings::IniFormat);
-    m_loadingHmiInputSettings = true;
-    settings.beginGroup(QString::fromLatin1(kHmiInputSettingsGroup));
-    m_proxy->setM1ValueSv(settings.value(QStringLiteral("m1ValueSv"), 0.0).toDouble());
-    m_proxy->setM2ValueSv(settings.value(QStringLiteral("m2ValueSv"), 0.0).toDouble());
-    m_proxy->setM3ValueSv(settings.value(QStringLiteral("m3ValueSv"), 0.0).toDouble());
-    m_proxy->setM4ValueSv(settings.value(QStringLiteral("m4ValueSv"), 0.0).toDouble());
-    m_proxy->setPump2HzSv(settings.value(QStringLiteral("pump2HzSv"), 0.0).toDouble());
-    m_proxy->setMotorRunningSv(settings.value(QStringLiteral("motorRunningSv"), false).toBool());
-    m_proxy->setWayValveOpenSv(settings.value(QStringLiteral("wayValveOpenSv"), false).toBool());
-    settings.endGroup();
-    m_loadingHmiInputSettings = false;
-
-    if (settings.status() != QSettings::NoError)
-        qWarning() << "Failed to load HMI input settings:" << settings.fileName();
+    if (pairs.isEmpty()) {
+        qInfo().noquote()
+                << QStringLiteral("[HmiInput] SVs are not restored from %1; they are taken from the "
+                                  "first successful device read.")
+                           .arg(settings.fileName());
+    } else {
+        qInfo().noquote()
+                << QStringLiteral("[HmiInput] Ignoring stale [%1] values in %2 (%3); SVs are taken "
+                                  "from the first successful device read instead.")
+                           .arg(QString::fromLatin1(kHmiInputSettingsGroup),
+                                settings.fileName(),
+                                pairs.join(QStringLiteral(", ")));
+    }
 }
 
 void Core::loadHistoryRecords()
@@ -314,6 +332,13 @@ void Core::loadAlarmRecords()
     }
 
     records.reserve(history.size());
+    // Only the newest rows are logged field by field, the rest are counted.
+    constexpr qsizetype kLoggedAlarmRows = 8;
+    int unhandledCount = 0;
+    int resolvedCount = 0;
+    int criticalCount = 0;
+    int warningCount = 0;
+    int unknownStatusCount = 0;
     // SqlManager returns oldest first. AlarmPage expects newest first when it
     // constructs its default date range and its "show all" range.
     for (qsizetype index = history.size(); index > 0; --index) {
@@ -336,8 +361,32 @@ void Core::loadAlarmRecords()
         const QString alarmMessage = reasonObject.contains(QStringLiteral("alarmMessage"))
                 ? reasonObject.value(QStringLiteral("alarmMessage")).toString()
                 : reasonObject.value(QStringLiteral("message")).toString(storedReason);
-        const QString status = reasonObject.value(QStringLiteral("status"))
-                .toString(QStringLiteral("未處理"));
+        const bool hasStatus = reasonObject.value(QStringLiteral("status")).isString();
+        const QString coreStatus = reasonObject.value(QStringLiteral("status")).toString();
+        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus);
+        const QString storedSeverity = reasonObject.value(QStringLiteral("severity")).toString();
+        if (storedSeverity == QStringLiteral("嚴重") || storedSeverity == QStringLiteral("警告"))
+            ui.severity = storedSeverity;
+        if (!ui.known)
+            ++unknownStatusCount;
+        if (ui.alarmStatus == QStringLiteral("未處理"))
+            ++unhandledCount;
+        else
+            ++resolvedCount;
+        if (ui.severity == QStringLiteral("嚴重"))
+            ++criticalCount;
+        else
+            ++warningCount;
+
+        const qint64 alarmId = static_cast<qint64>(alarm.value(QStringLiteral("id")).toDouble());
+        if (records.size() < kLoggedAlarmRows) {
+            qInfo().noquote()
+                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4 -> alarmStatus=%5 severity=%6")
+                               .arg(alarmId)
+                               .arg(sensor, alarmMessage,
+                                    hasStatus ? coreStatus : QStringLiteral("(none)"),
+                                    ui.alarmStatus, ui.severity);
+        }
         records.append(QVariantMap{
             {QStringLiteral("id"), static_cast<qint64>(
                     alarm.value(QStringLiteral("id")).toDouble())},
@@ -347,13 +396,19 @@ void Core::loadAlarmRecords()
             {QStringLiteral("equipment"), QStringLiteral("系統")},
             {QStringLiteral("sensorName"), sensor},
             {QStringLiteral("alarmMessage"), alarmMessage},
-            {QStringLiteral("severity"), QStringLiteral("警告")},
-            {QStringLiteral("alarmStatus"), status},
+            {QStringLiteral("severity"), ui.severity},
+            {QStringLiteral("alarmStatus"), ui.alarmStatus},
         });
     }
 
     qInfo().noquote()
-            << QStringLiteral("[SQL] Loaded %1 alarm-history records from the last 3 days into the UI.")
-                       .arg(records.size());
+            << QStringLiteral("[SQL] Loaded %1 alarm-history records from the last 3 days into the UI "
+                              "(alarmStatus 未處理=%2 已解除=%3; severity 嚴重=%4 警告=%5; unknown core status=%6).")
+                       .arg(records.size())
+                       .arg(unhandledCount)
+                       .arg(resolvedCount)
+                       .arg(criticalCount)
+                       .arg(warningCount)
+                       .arg(unknownStatusCount);
     m_proxy->setAlarmRecords(records);
 }

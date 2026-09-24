@@ -15,8 +15,9 @@ Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123]
 Open:   http://127.0.0.1:8123/TaidaFlowApp.html
 
 Evidence capture (optional, off by default): with --evidence-dir DIR the server also
-accepts `PUT /__evidence/<name>.png|.txt` from the page (same origin) and stores the body
-in DIR. Used only to save browser-side screenshots/console logs for the E2E report.
+accepts `PUT /__evidence/<name>.png|.txt|.json|.csv` from the page (same origin) and stores
+the body in DIR. Used only to save browser-side screenshots/console logs for the E2E report,
+and a byte copy of every Blob download the page triggers (download-<file name>).
 """
 from __future__ import annotations
 
@@ -28,7 +29,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-EVIDENCE_NAME = re.compile(r"^/__evidence/([A-Za-z0-9._-]{1,100}\.(?:png|txt|json))$")
+EVIDENCE_NAME = re.compile(r"^/__evidence/([A-Za-z0-9._-]{1,100}\.(?:png|txt|json|csv))$")
 
 
 # Injected into the HTML *only* in --evidence-dir mode: keeps the WebGL back buffer
@@ -42,6 +43,61 @@ EVIDENCE_SHIM = b"""
           if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl')
             attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
           return orig.call(this, type, attrs);
+        };
+        // Download capture: the page's own download (e.g. QFileDialog::saveFileContent ->
+        // Blob + <a download>.click()) still goes to the browser unchanged; a copy of the
+        // Blob bytes is PUT to /__evidence/download-<name> so the report can compare it.
+        //
+        // QFileDialog::saveFileContent (Qt 6.8, qwasmlocalfileaccess.cpp) takes one of two
+        // paths: if the File System Access API exists (hasLocalFilesApi() tests
+        // window.showOpenFilePicker; true on Chromium) it calls showSaveFilePicker and writes
+        // through FileSystemWritableFileStream; otherwise (Firefox/Safari, which have neither
+        // picker) it falls back to downloadDataAsFile = Blob + <a download>.click(). Both paths
+        // write the same QByteArray. Picker calls and outcomes are logged in __evidencePicker.
+        // Opening the page with ?evidence-download=anchor removes BOTH pickers BEFORE the app
+        // loads, i.e. presents the page as Firefox/Safari do, so Qt takes its own fallback
+        // path; used where the embedded browser cannot show a native save picker.
+        window.__evidencePicker = [];
+        if (location.search.indexOf('evidence-download=anchor') >= 0) {
+          for (const n of ['showSaveFilePicker', 'showOpenFilePicker']) {
+            delete Window.prototype[n];
+            delete window[n];
+          }
+          window.__evidencePicker.push({ note: 'showSaveFilePicker/showOpenFilePicker removed (evidence-download=anchor)',
+                                         showOpenFilePicker: typeof window.showOpenFilePicker,
+                                         showSaveFilePicker: typeof window.showSaveFilePicker });
+        } else if (typeof window.showSaveFilePicker === 'function') {
+          const origPicker = window.showSaveFilePicker;
+          window.showSaveFilePicker = function (opts) {
+            const rec = { time: new Date().toISOString(), opts: JSON.stringify(opts),
+                          userActivation: !!(navigator.userActivation && navigator.userActivation.isActive) };
+            window.__evidencePicker.push(rec);
+            const p = origPicker.call(window, opts);
+            p.then(h => { rec.result = 'handle:' + h.name; },
+                   e => { rec.result = 'rejected:' + e.name + ': ' + e.message; });
+            return p;
+          };
+        }
+        const blobs = new Map();
+        const origCreate = URL.createObjectURL.bind(URL);
+        URL.createObjectURL = function (obj) {
+          const url = origCreate(obj);
+          if (obj instanceof Blob) blobs.set(url, obj);
+          return url;
+        };
+        window.__evidenceDownloads = [];
+        const origClick = HTMLAnchorElement.prototype.click;
+        HTMLAnchorElement.prototype.click = function () {
+          const blob = blobs.get(this.href);
+          if (this.hasAttribute('download') && blob) {
+            const name = 'download-' + this.download.replace(/[^A-Za-z0-9._-]/g, '_');
+            const rec = { time: new Date().toISOString(), download: this.download,
+                          size: blob.size, type: blob.type, evidence: name, status: 'pending' };
+            window.__evidenceDownloads.push(rec);
+            fetch('/__evidence/' + name, { method: 'PUT', body: blob })
+              .then(r => { rec.status = r.status; }, e => { rec.status = String(e); });
+          }
+          return origClick.call(this);
         };
         window.__evidenceLog = [];
         for (const level of ['log', 'info', 'warn', 'error', 'debug']) {

@@ -135,3 +135,16 @@
   listener 127.0.0.1:8123 pid=64576 (python)
   port 8123 = WASM HTTP server (expected during E2E, informational)
   verdict: SAFE
+=== safety probe 2026-09-24T14:27:03.740+08:00 reason="before launch: Mango manual test (w2-028 CSV) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.168.108/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.1:8123 pid=47324 (python)
+  port 8123 = WASM HTTP server (expected during E2E, informational)
+  verdict: SAFE

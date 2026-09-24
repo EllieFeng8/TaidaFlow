@@ -204,8 +204,27 @@ public:
         emit motorRunningPvChanged(value);
     }
 
+    // Not relayed by the Mirror: runs locally on whichever side the button is pressed.
+    // Return value (read by HistoryPage.qml downloadCsv()):
+    //   ""                  -> cancelled, no message
+    //   "ERROR:<reason>"    -> write failed (desktop only)
+    //   "DOWNLOAD:<name>"   -> WebAssembly: browser download started (asynchronous)
+    //   any other string    -> desktop: absolute path of the saved file
     Q_INVOKABLE QString saveHistoryCsv(const QString &csvContent)
     {
+#if defined(Q_OS_WASM)
+        // In the browser a QFile would only land in the in-memory Emscripten file
+        // system, so hand the bytes to the browser instead: saveFileContent() triggers
+        // the native save/download and returns immediately (Qt 6.8 QFileDialog docs).
+        // Same bytes as the desktop branch: UTF-8 BOM + the CSV text from QML.
+        const QString fileNameHint = QStringLiteral("TaidaFlow_History_")
+                + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
+                + QStringLiteral(".csv");
+        QByteArray content = QByteArrayLiteral("\xEF\xBB\xBF");
+        content += csvContent.toUtf8();
+        QFileDialog::saveFileContent(content, fileNameHint);
+        return QStringLiteral("DOWNLOAD:") + fileNameHint;
+#else
         const QString suggestedName = QDir::homePath()
                 + QStringLiteral("/TaidaFlow_History_")
                 + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
@@ -230,6 +249,7 @@ public:
         file.write(csvContent.toUtf8());
         file.close();
         return fileName;
+#endif
     }
 signals:
     void m1ValueSvChanged(double value);

@@ -133,6 +133,11 @@ Item {
         var savedPath = Td.saveHistoryCsv(lines.join("\r\n"))
         if (savedPath.indexOf("ERROR:") === 0)
             exportMessage = "下載失敗：" + savedPath.substring(6)
+        else if (savedPath.indexOf("DOWNLOAD:") === 0)
+            // WebAssembly: the browser download was started asynchronously; the
+            // file name is only a hint, the browser decides where the file goes.
+            exportMessage = "已開始下載 " + filteredHistoryModel.length + " 筆資料（"
+                    + savedPath.substring(9) + "）"
         else if (savedPath.length > 0)
             exportMessage = "已下載 " + filteredHistoryModel.length + " 筆資料"
         else

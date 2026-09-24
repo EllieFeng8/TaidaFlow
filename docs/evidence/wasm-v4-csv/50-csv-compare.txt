@@ -1,0 +1,19 @@
+== 24-desktop-export-TaidaFlow_History_desktop.csv
+   bytes=1408 sha256=c382ad07cc000bd537f42e362be5fc1fdf023bcd82696e4cc75faa956201a414
+   bom=efbbbf header_cols=18 data_rows=8 cjk_chars=序時號間 em_dash_cells=1
+   header/rows/cells match fixture: OK
+== 36-wasm-online-download-TaidaFlow_History_20260924_141600.csv
+   bytes=1408 sha256=c382ad07cc000bd537f42e362be5fc1fdf023bcd82696e4cc75faa956201a414
+   bom=efbbbf header_cols=18 data_rows=8 cjk_chars=序時號間 em_dash_cells=1
+   header/rows/cells match fixture: OK
+== 42-wasm-offline-download-TaidaFlow_History_20260924_141649.csv
+   bytes=1408 sha256=c382ad07cc000bd537f42e362be5fc1fdf023bcd82696e4cc75faa956201a414
+   bom=efbbbf header_cols=18 data_rows=8 cjk_chars=序時號間 em_dash_cells=1
+   header/rows/cells match fixture: OK
+== 34-browser-pane-downloads-folder-copy.csv
+   bytes=1408 sha256=c382ad07cc000bd537f42e362be5fc1fdf023bcd82696e4cc75faa956201a414
+   bom=efbbbf header_cols=18 data_rows=8 cjk_chars=序時號間 em_dash_cells=1
+   header/rows/cells match fixture: OK
+distinct_sha256=1 files=4
+RESULT PASS
+exit=0

@@ -35,6 +35,15 @@ $lines.Add("=== safety probe $stamp reason=`"$Reason`" host=$env:COMPUTERNAME")
 $unsafe = $false
 $busy = $false
 
+# 0. Local IPv4 addresses (informational): the Wi-Fi segment of this host changes, so the
+#    record shows which network the 192.168.1.201..205 probe below was made from.
+try {
+    $ips = @(Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop |
+             Where-Object { $_.IPAddress -notlike '169.254.*' -and $_.IPAddress -ne '127.0.0.1' } |
+             ForEach-Object { "$($_.IPAddress)/$($_.PrefixLength)" })
+    $lines.Add("  local IPv4: " + ($(if ($ips.Count) { $ips -join ', ' } else { '<none>' })))
+} catch { $lines.Add("  local IPv4: <query failed: $($_.Exception.Message)>") }
+
 # 1. ADAM devices: TCP connect only, 1.5 s timeout, no data written.
 foreach ($i in 201..205) {
     $ip = "192.168.1.$i"

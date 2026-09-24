@@ -1,0 +1,77 @@
+== desktop-20260924-140208.log (stderr, cp950 -> utf-8; lines 'request was not sent' / MS300 / socket error / ADAM connect noise removed; counts below)
+   last write 14:03:00, bytes 80360
+   request_was_not_sent_lines=864
+   modbus_read_lines=0
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 1 alarm-history records from the last 3 days into the UI.
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded 1 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+[ModbusServer] stopped
+== desktop-20260924-140330.log (stderr, cp950 -> utf-8; lines 'request was not sent' / MS300 / socket error / ADAM connect noise removed; counts below)
+   last write 14:07:40, bytes 410837
+   request_was_not_sent_lines=4464
+   modbus_read_lines=0
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 2 alarm-history records from the last 3 days into the UI.
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded sensor-history page 1/1: 8 record(s).
+[SQL] Loaded 2 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+[ModbusServer] stopped
+== desktop-20260924-141109.log (stderr, cp950 -> utf-8; lines 'request was not sent' / MS300 / socket error / ADAM connect noise removed; counts below)
+   last write 14:14:26, bytes 327512
+   request_was_not_sent_lines=3538
+   modbus_read_lines=0
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 3 alarm-history records from the last 3 days into the UI.
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded sensor-history page 1/1: 8 record(s).
+[SQL] Loaded 3 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+[HMI->ModbusServer] coil=2 value=0
+[HMI->ModbusServer] coil=0 value=0
+[HMI->ModbusServer] holdingRegister=4 raw=0
+[HMI->ModbusServer] coil=3 value=0
+[ModbusServer][Local update] type=2 offset=2 count=1
+[HMI->ModbusServer] coil=2 value=1
+[ModbusServer][Local update] type=2 offset=2 count=1
+[HMI->ModbusServer] coil=2 value=0
+[HMI->ModbusServer] coil=0 value=0
+[HMI->ModbusServer] holdingRegister=4 raw=0
+[HMI->ModbusServer] coil=3 value=0
+[ModbusServer][Local update] type=2 offset=2 count=1
+[HMI->ModbusServer] coil=2 value=1
+[ModbusServer] stopped
+== desktop-20260924-141533.log (stderr, cp950 -> utf-8; lines 'request was not sent' / MS300 / socket error / ADAM connect noise removed; counts below)
+   last write 14:16:38, bytes 105090
+   request_was_not_sent_lines=1134
+   modbus_read_lines=0
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 4 alarm-history records from the last 3 days into the UI.
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded sensor-history page 1/1: 8 record(s).
+[SQL] Loaded 4 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+[ModbusServer] stopped
+
+== manual-safety.log (NOT written by w2-028; another session, 13:48)
+﻿=== safety probe 2026-09-24T13:48:12.197+08:00 reason="User requested desktop and simulator manual testing" host=LAPTOP-0B3CPPED
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <query failed: 拒絕存取 >
+  listeners 502/8123/8125: <none>
+  verdict: SAFE

@@ -1,0 +1,18 @@
+﻿== main vs dc91f01 baseline: 02-baseline-dc91f01-main.png vs 02-desktop-main.png
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=1012 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== alarm vs dc91f01 baseline: 03-baseline-dc91f01-alarm.png vs 03-desktop-alarm.png
+size=1942x1136 masks=3 tolerance=2 pixels_any_diff=473 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== history vs dc91f01 baseline: 04-baseline-dc91f01-history.png vs 04-desktop-history-empty.png
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=998 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== main vs 65b019a (w2-027): 05-after-desktop-main.png vs 02-desktop-main.png
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=705 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== alarm vs 65b019a (w2-027): 06-after-desktop-alarm.png vs 03-desktop-alarm.png
+size=1942x1136 masks=3 tolerance=2 pixels_any_diff=274 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== history vs 65b019a (w2-027): 07-after-desktop-history.png vs 04-desktop-history-empty.png
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=663 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0

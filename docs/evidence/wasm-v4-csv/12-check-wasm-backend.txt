@@ -1,0 +1,14 @@
+build\desktop [desktop] target=TaidaFlowApp.exe binary_bytes=2605568 commands=567
+  backend_sources (7): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (11): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient
+  verdict: OK
+build\wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33657326 commands=559
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+check_wasm_backend exit=0
+exit=0

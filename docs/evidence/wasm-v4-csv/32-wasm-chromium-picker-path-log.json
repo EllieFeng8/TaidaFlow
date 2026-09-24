@@ -1,0 +1,23 @@
+{
+ "page": "http://127.0.0.1:8123/TaidaFlowApp.html",
+ "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/2.7032.0 Chrome/152.0.7977.130 Safari/537.36 MSIX",
+ "showSaveFilePicker": "function",
+ "picker": [
+  {
+   "time": "2026-09-24T06:11:38.230Z",
+   "opts": "{\"suggestedName\":\"TaidaFlow_History_20260924_141138.csv\"}",
+   "userActivation": true,
+   "result": "rejected:AbortError: Failed to execute 'showSaveFilePicker' on 'Window': The user aborted a request."
+  }
+ ],
+ "anchorDownloads": [],
+ "console": [
+  "2026-09-24T06:11:15.793Z [log] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold\n",
+  "2026-09-24T06:11:15.794Z [log] CJK fallback chain: DejaVu Sans,Segoe UI,Arial,Verdana,Sans Serif -> TaidaFlow Noto Sans TC | Consolas -> DejaVu Sans Mono,TaidaFlow Noto Sans TC\n",
+  "2026-09-24T06:11:15.795Z [log] WASM Mirror endpoint: ws://127.0.0.1:8125/mirror\n",
+  "2026-09-24T06:11:15.938Z [log] Transport overlay: transportReady = false message = Synchronizing with the Qt desktop Core...\n",
+  "2026-09-24T06:11:15.956Z [log] Transport overlay: transportReady = true message = \n",
+  "2026-09-24T06:11:15.957Z [log] Transport overlay: transportReady = true message = \n",
+  "2026-09-24T06:11:15.957Z [log] WASM Mirror ready: true\n"
+ ]
+}

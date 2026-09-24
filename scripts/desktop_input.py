@@ -9,6 +9,8 @@ same frame as screenshots taken with scripts/capture-window.ps1.
   python scripts/desktop_input.py type "12.5"          (plain ASCII text, via Unicode SendInput)
   python scripts/desktop_input.py key enter|esc|tab|backspace|ctrl+a
   python scripts/desktop_input.py close                (WM_CLOSE, like clicking the X button)
+  python scripts/desktop_input.py --title "下載歷史資料" click X Y   (target another top-level
+                                                       window by exact title, e.g. a native dialog)
 
 Exit code 0 on success, 2 if the window is not found.
 """
@@ -74,6 +76,8 @@ def find_window(title: str = "TaidaFlow") -> int:
 
 
 def focus(hwnd: int) -> None:
+    if user32.GetForegroundWindow() == hwnd:
+        return  # already active: no ALT tap (it would move focus inside dialogs)
     user32.ShowWindow(hwnd, 9)  # SW_RESTORE
     send(key_input(0x12), key_input(0x12, flags=KEYEVENTF_KEYUP))  # ALT tap unlocks foreground
     user32.SetForegroundWindow(hwnd)
@@ -84,12 +88,17 @@ VK = {"enter": 0x0D, "esc": 0x1B, "tab": 0x09, "backspace": 0x08, "ctrl": 0x11, 
 
 
 def main(argv: list[str]) -> int:
+    title = "TaidaFlow"
+    if len(argv) >= 3 and argv[1] == "--title":
+        # e.g. the desktop CSV export's native save dialog: --title 下載歷史資料
+        title = argv[2]
+        argv = argv[:1] + argv[3:]
     if len(argv) < 2:
         print(__doc__)
         return 1
-    hwnd = find_window()
+    hwnd = find_window(title)
     if not hwnd:
-        print("TaidaFlow window not found")
+        print(f"{title} window not found")
         return 2
     rect = wintypes.RECT()
     user32.GetWindowRect(hwnd, ctypes.byref(rect))

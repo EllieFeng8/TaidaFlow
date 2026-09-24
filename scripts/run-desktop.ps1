@@ -6,6 +6,7 @@
 #   -Exe     : default build\desktop\TaidaFlowApp.exe (baseline: build\baseline-desktop\...)
 #   -LogFile : stderr log (default build\runtime-logs\desktop-<time>.log; stdout -> .stdout)
 #   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
+#   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)
 #   -Wait    : block until the app exits and return its exit code
 #
 # Safety (taidaflow WASM v4 spec §2):
@@ -20,6 +21,7 @@ param(
     [string]$Exe = "",
     [string]$LogFile = "",
     [string]$PvFile = "",
+    [string]$ProbeLog = "",
     [switch]$Wait
 )
 $ErrorActionPreference = 'Stop'
@@ -31,7 +33,13 @@ if (Get-Process TaidaFlowApp -ErrorAction SilentlyContinue) {
     Write-Output 'TaidaFlowApp is already running - close it first'; exit 2
 }
 
-& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'safety_probe.ps1') -Reason "before launch: $Label ($Exe)"
+$probeArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'safety_probe.ps1'),
+               '-Reason', "before launch: $Label ($Exe)")
+if ($ProbeLog -ne "") {
+    if (-not [System.IO.Path]::IsPathRooted($ProbeLog)) { $ProbeLog = Join-Path $root $ProbeLog }
+    $probeArgs += @('-LogFile', $ProbeLog)
+}
+& powershell @probeArgs
 if ($LASTEXITCODE -ne 0) {
     Write-Output "SAFETY PROBE verdict not SAFE (exit $LASTEXITCODE) - desktop app NOT started"
     exit 3

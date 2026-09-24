@@ -1,0 +1,8 @@
+﻿=== 2026-09-24T14:19:08.0022382+08:00 final cleanup check
+TaidaFlowApp processes: 0
+serve_wasm python listening 8123: 0
+listeners 502/8123/8125: 0
+git status runtime files (pattern '\.ini$|\.sqlite$|runtime-cwd'): 0
+HEAD: 65b019a feat: WebAssembly 版(wasm-mirror pack 1.0.1,後端只在桌面版,斷線鎖定)
+backup/wasm-v2-pack1.0.0: 908f6e91a9c2520571f3fc64dd7496ed8eaea7f2
+stash count: 2

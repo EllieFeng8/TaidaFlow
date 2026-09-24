@@ -1,0 +1,56 @@
+﻿diff --git a/Core/TaidaFlowProxy.h b/Core/TaidaFlowProxy.h
+index 217de6a..854dcde 100644
+--- a/Core/TaidaFlowProxy.h
++++ b/Core/TaidaFlowProxy.h
+@@ -204,8 +204,27 @@ public:
+         emit motorRunningPvChanged(value);
+     }
+ 
++    // Not relayed by the Mirror: runs locally on whichever side the button is pressed.
++    // Return value (read by HistoryPage.qml downloadCsv()):
++    //   ""                  -> cancelled, no message
++    //   "ERROR:<reason>"    -> write failed (desktop only)
++    //   "DOWNLOAD:<name>"   -> WebAssembly: browser download started (asynchronous)
++    //   any other string    -> desktop: absolute path of the saved file
+     Q_INVOKABLE QString saveHistoryCsv(const QString &csvContent)
+     {
++#if defined(Q_OS_WASM)
++        // In the browser a QFile would only land in the in-memory Emscripten file
++        // system, so hand the bytes to the browser instead: saveFileContent() triggers
++        // the native save/download and returns immediately (Qt 6.8 QFileDialog docs).
++        // Same bytes as the desktop branch: UTF-8 BOM + the CSV text from QML.
++        const QString fileNameHint = QStringLiteral("TaidaFlow_History_")
++                + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
++                + QStringLiteral(".csv");
++        QByteArray content = QByteArrayLiteral("\xEF\xBB\xBF");
++        content += csvContent.toUtf8();
++        QFileDialog::saveFileContent(content, fileNameHint);
++        return QStringLiteral("DOWNLOAD:") + fileNameHint;
++#else
+         const QString suggestedName = QDir::homePath()
+                 + QStringLiteral("/TaidaFlow_History_")
+                 + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"))
+@@ -230,6 +249,7 @@ public:
+         file.write(csvContent.toUtf8());
+         file.close();
+         return fileName;
++#endif
+     }
+ signals:
+     void m1ValueSvChanged(double value);
+diff --git a/TaidaFlowContent/HistoryPage.qml b/TaidaFlowContent/HistoryPage.qml
+index 0704f15..006587e 100644
+--- a/TaidaFlowContent/HistoryPage.qml
++++ b/TaidaFlowContent/HistoryPage.qml
+@@ -133,6 +133,11 @@ Item {
+         var savedPath = Td.saveHistoryCsv(lines.join("\r\n"))
+         if (savedPath.indexOf("ERROR:") === 0)
+             exportMessage = "下載失敗：" + savedPath.substring(6)
++        else if (savedPath.indexOf("DOWNLOAD:") === 0)
++            // WebAssembly: the browser download was started asynchronously; the
++            // file name is only a hint, the browser decides where the file goes.
++            exportMessage = "已開始下載 " + filteredHistoryModel.length + " 筆資料（"
++                    + savedPath.substring(9) + "）"
+         else if (savedPath.length > 0)
+             exportMessage = "已下載 " + filteredHistoryModel.length + " 筆資料"
+         else

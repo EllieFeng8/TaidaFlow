@@ -1,0 +1,50 @@
+﻿=== safety probe 2026-09-24T14:01:55.663+08:00 reason="before launch: w2-028 pixel regression (clean runtime-cwd) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.168.108/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 502/8123/8125: <none>
+  verdict: SAFE
+=== safety probe 2026-09-24T14:03:20.105+08:00 reason="before launch: w2-028 E2E run1 (seeded SQLite history, desktop CSV export + web download) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.168.108/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 502/8123/8125: <none>
+  verdict: SAFE
+=== safety probe 2026-09-24T14:10:59.769+08:00 reason="before launch: w2-028 E2E run2 (after unexplained clean exit of run1; web download) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.168.108/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.1:8123 pid=63768 (python)
+  port 8123 = WASM HTTP server (expected during E2E, informational)
+  verdict: SAFE
+=== safety probe 2026-09-24T14:15:24.325+08:00 reason="before launch: w2-028 E2E run3 (run2 ended by unknown actor: emergency toggles + close not issued by w2-028) (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.168.108/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.1:8123 pid=11724 (python)
+  port 8123 = WASM HTTP server (expected during E2E, informational)
+  verdict: SAFE

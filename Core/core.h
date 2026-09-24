@@ -21,6 +21,7 @@ private:
     ~Core();
     void saveHmiInputSettings();
     void loadHmiInputSettings();
+    void loadHistoryRecords();
     void loadAlarmRecords();
 
     Manager* m_manager = nullptr;

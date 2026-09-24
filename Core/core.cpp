@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QSettings>
+#include <QTime>
 #include <QVariantMap>
 
 namespace {
@@ -59,11 +60,14 @@ void Core::init()
 
     m_manager = new Manager(m_proxy, m_sqlManager, this);
     connect(m_manager, &Manager::alarmSaved, this, &Core::loadAlarmRecords);
+    connect(m_manager, &Manager::serverInputDataSaved,
+            this, &Core::loadHistoryRecords);
+    connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this,
+            [this](int) { loadHistoryRecords(); });
     if (!m_manager->saveAlarm(QStringLiteral("100"),
                               QStringLiteral("設備啟動"),
                               QStringLiteral("正常"))) {
         // Existing alarm rows must still display if the startup insert fails.
-        loadAlarmRecords();
     }
     m_modbusServer = new ModbusServer(this);
 
@@ -96,6 +100,10 @@ void Core::init()
     connect(m_proxy, &TaidaFlowProxy::wayValveOpenSvChanged, this,
             [this](bool) { saveHmiInputSettings(); });
 
+    // Ensure every restorable HMI setting has an explicit value in the INI
+    // file, even if the operator has never changed its default value.
+    saveHmiInputSettings();
+
     connect(m_modbusServer, &ModbusServer::writeRequested,
             m_manager, &Manager::writeServerData);
     connect(m_manager, &Manager::serverCoilUpdated,
@@ -107,6 +115,8 @@ void Core::init()
 
     m_manager->start();
     m_modbusServer->start();
+    loadHistoryRecords();
+    loadAlarmRecords();
 }
 
 void Core::saveHmiInputSettings()
@@ -150,6 +160,133 @@ void Core::loadHmiInputSettings()
 
     if (settings.status() != QSettings::NoError)
         qWarning() << "Failed to load HMI input settings:" << settings.fileName();
+}
+
+void Core::loadHistoryRecords()
+{
+    if (!m_proxy)
+        return;
+
+    m_proxy->setHistoryTitle(QVariantList{
+        QStringLiteral("時間"),
+        QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
+        QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
+        QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
+        QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
+        QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
+        QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
+        QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
+        QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)")
+    });
+
+    QVariantList records;
+    if (!m_sqlManager) {
+        qWarning() << "[SQL] Sensor history skipped: SqlManager is unavailable.";
+        m_proxy->setHistoryRecords(records);
+        return;
+    }
+
+    constexpr int kHistoryPageSize = 10;
+    const QDate today = QDate::currentDate();
+    const QDate monthStart(today.year(), today.month(), 1);
+    const qint64 from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
+    const qint64 to = QDateTime(monthStart.addMonths(1), QTime(0, 0))
+                           .addSecs(-1)
+                           .toSecsSinceEpoch();
+
+    qint64 totalRows = 0;
+    QString errorMessage;
+    if (!m_sqlManager->countSensorRange(from, to, &totalRows, &errorMessage)) {
+        qWarning().noquote() << "[SQL] Failed to count sensor-history rows:" << errorMessage;
+        m_proxy->setHistoryTotalPages(1);
+        m_proxy->setHistoryRecords(records);
+        return;
+    }
+
+    const int totalPages = totalRows > 0
+            ? static_cast<int>((totalRows + kHistoryPageSize - 1) / kHistoryPageSize)
+            : 1;
+    m_proxy->setHistoryTotalPages(totalPages);
+
+    const int currentPage = m_proxy->historyCurrentPage();
+    if (currentPage > totalPages) {
+        m_proxy->setHistoryCurrentPage(totalPages);
+        return;
+    }
+    if (totalRows == 0) {
+        m_proxy->setHistoryRecords(records);
+        return;
+    }
+
+    // SqlManager reads chronological pages.  This calculates the matching
+    // chronological interval for a newest-first UI page.
+    const qint64 endRow = totalRows
+            - static_cast<qint64>(currentPage - 1) * kHistoryPageSize;
+    const qint64 startRow = qMax<qint64>(0, endRow - kHistoryPageSize);
+    const int firstSqlPage = static_cast<int>(startRow / kHistoryPageSize) + 1;
+    const int lastSqlPage = static_cast<int>((endRow - 1) / kHistoryPageSize) + 1;
+
+    QJsonArray samples;
+    for (int sqlPage = firstSqlPage; sqlPage <= lastSqlPage; ++sqlPage) {
+        QJsonArray pageSamples;
+        if (!m_sqlManager->queryRangeJsonPaged(from, to, sqlPage,
+                                                kHistoryPageSize, &pageSamples,
+                                                &errorMessage)) {
+            qWarning().noquote() << "[SQL] Failed to load sensor-history page:"
+                                 << errorMessage;
+            m_proxy->setHistoryRecords(QVariantList{});
+            return;
+        }
+
+        const qint64 pageStartRow = static_cast<qint64>(sqlPage - 1) * kHistoryPageSize;
+        const qint64 copyStart = qMax(startRow, pageStartRow);
+        const qint64 copyEnd = qMin(endRow, pageStartRow
+                                    + static_cast<qint64>(pageSamples.size()));
+        for (qint64 row = copyStart; row < copyEnd; ++row)
+            samples.append(pageSamples.at(static_cast<qsizetype>(row - pageStartRow)));
+    }
+
+    constexpr double adcFullScale = 65535.0;
+    records.reserve(samples.size());
+    for (const QJsonValue &sampleValue : samples) {
+        const QJsonObject sample = sampleValue.toObject();
+        const qint64 timestamp = static_cast<qint64>(
+                sample.value(QStringLiteral("ts")).toDouble());
+        if (timestamp <= 0)
+            continue;
+
+        const auto valueAt = [&sample](int sensorIndex, double scale = 1.0) -> QVariant {
+            const QJsonValue sensorValue = sample.value(
+                    QStringLiteral("s%1").arg(sensorIndex));
+            if (sensorValue.isNull() || sensorValue.isUndefined())
+                return {};
+            bool isNumber = false;
+            const double rawValue = sensorValue.toVariant().toDouble(&isNumber);
+            return isNumber ? QVariant(rawValue * scale) : QVariant();
+        };
+
+        const QDateTime sampleTime = QDateTime::fromSecsSinceEpoch(timestamp);
+        QVariantList values{sampleTime.toString(QStringLiteral("yyyy/MM/dd HH:mm:ss"))};
+        for (int sensorIndex = 1; sensorIndex <= 4; ++sensorIndex)
+            values.append(valueAt(sensorIndex, 100.0 / adcFullScale));
+        for (int sensorIndex = 5; sensorIndex <= 11; ++sensorIndex)
+            values.append(valueAt(sensorIndex, 1000.0 / adcFullScale));
+        values.append(valueAt(12));
+        for (int sensorIndex = 13; sensorIndex <= 16; ++sensorIndex)
+            values.append(valueAt(sensorIndex, 100.0 / adcFullScale));
+
+        records.append(QVariantMap{
+            {QStringLiteral("timestampMs"), timestamp * 1000},
+            {QStringLiteral("values"), values}
+        });
+    }
+
+    qInfo().noquote()
+            << QStringLiteral("[SQL] Loaded sensor-history page %1/%2: %3 record(s).")
+                       .arg(currentPage)
+                       .arg(totalPages)
+                       .arg(records.size());
+    m_proxy->setHistoryRecords(records);
 }
 
 void Core::loadAlarmRecords()

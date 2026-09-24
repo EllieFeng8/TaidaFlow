@@ -21,117 +21,74 @@ Item {
     property color dangerColor: "#FF5964"
     property string filterMessage: ""
     property string exportMessage: ""
-    property int currentPage: 1
-    property int pageSize: 9
-    readonly property int totalPages: Math.max(1, Math.ceil(filteredHistoryModel.count / pageSize))
+    readonly property int currentPage: Td.historyCurrentPage
+    readonly property int totalPages: Td.historyTotalPages
 
-    ListModel { id: historySourceModel }
-    ListModel { id: filteredHistoryModel }
-    ListModel { id: pagedHistoryModel }
+    readonly property var columnTitles: Td.historyTitle
+    property var historySourceModel: []
+    property var filteredHistoryModel: []
+    readonly property int tableWidth: 64 + 210 + 160 + Math.max(0, columnTitles.length - 2) * 146
+
+    function columnWidth(index) { return index === 0 ? 210 : index === 1 ? 160 : 146 }
+    function cellText(value) {
+        return value === undefined || value === null ? "—"
+             : typeof value === "number" ? value.toFixed(2) : String(value)
+    }
 
     function twoDigits(value) {
         return value < 10 ? "0" + value : String(value)
     }
 
-    function formatDateTime(date) {
+    function formatDate(date) {
         return date.getFullYear() + "/"
                 + twoDigits(date.getMonth() + 1) + "/"
-                + twoDigits(date.getDate()) + " "
-                + twoDigits(date.getHours()) + ":"
-                + twoDigits(date.getMinutes())
+                + twoDigits(date.getDate())
     }
 
-    function parseDateTime(value) {
-        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})\s+(\d{2}):(\d{2})$/)
+    function parseDate(value) {
+        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})$/)
         if (!match)
             return null
 
         var date = new Date(Number(match[1]), Number(match[2]) - 1,
-                            Number(match[3]), Number(match[4]), Number(match[5]), 0, 0)
+                            Number(match[3]), 0, 0, 0, 0)
         if (date.getFullYear() !== Number(match[1])
                 || date.getMonth() !== Number(match[2]) - 1
-                || date.getDate() !== Number(match[3])
-                || date.getHours() !== Number(match[4])
-                || date.getMinutes() !== Number(match[5]))
+                || date.getDate() !== Number(match[3]))
             return null
 
         return date
     }
 
     function reloadHistoryData() {
-        historySourceModel.clear()
+        var rows = []
         var records = Td.historyRecords
-        for (var i = 0; i < records.length; ++i) {
-            var row = records[i]
-            historySourceModel.append({
-                "timestampMs": Number(row.timestampMs),
-                "recordTime": String(row.recordTime),
-                "equipment": String(row.equipment),
-                "sensorName": String(row.sensorName),
-                "switchState": String(row.switchState),
-                "leakState": String(row.leakState)
-            })
-        }
+        for (var i = 0; i < records.length; ++i)
+            rows.push({ timestampMs: Number(records[i].timestampMs), values: records[i].values })
+        rows.sort(function(a, b) { return b.timestampMs - a.timestampMs })
+        historySourceModel = rows
     }
 
     function applyFilter() {
-        var startDate = parseDateTime(startTimeField.text)
-        var endDate = parseDateTime(endTimeField.text)
+        var startDate = parseDate(startDateField.text)
+        var endDate = parseDate(endDateField.text)
 
         if (!startDate || !endDate) {
-            filterMessage = "請輸入正確時間（YYYY/MM/DD HH:MM）"
+            filterMessage = "請輸入正確日期（YYYY/MM/DD）"
             return
         }
         if (startDate.getTime() > endDate.getTime()) {
-            filterMessage = "起始時間不可晚於結束時間"
+            filterMessage = "起始日期不可晚於結束日期"
             return
         }
 
         filterMessage = ""
-        filteredHistoryModel.clear()
-        for (var i = 0; i < historySourceModel.count; ++i) {
-            var row = historySourceModel.get(i)
-            if (row.timestampMs >= startDate.getTime()
-                    && row.timestampMs <= endDate.getTime()) {
-                filteredHistoryModel.append({
-                    "timestampMs": row.timestampMs,
-                    "recordTime": row.recordTime,
-                    "equipment": row.equipment,
-                    "sensorName": row.sensorName,
-                    "switchState": row.switchState,
-                    "leakState": row.leakState
-                })
-            }
-        }
-        currentPage = 1
-        refreshPagedModel()
-    }
-
-    function refreshPagedModel() {
-        pagedHistoryModel.clear()
-
-        if (filteredHistoryModel.count === 0) {
-            currentPage = 1
-            return
-        }
-
-        currentPage = Math.max(1, Math.min(currentPage, totalPages))
-        var startIndex = (currentPage - 1) * pageSize
-        var endIndex = Math.min(startIndex + pageSize, filteredHistoryModel.count)
-
-        for (var i = startIndex; i < endIndex; ++i) {
-            var row = filteredHistoryModel.get(i)
-            pagedHistoryModel.append({
-                "serialNumber": i + 1,
-                "timestampMs": row.timestampMs,
-                "recordTime": row.recordTime,
-                "equipment": row.equipment,
-                "sensorName": row.sensorName,
-                "switchState": row.switchState,
-                "leakState": row.leakState
-            })
-        }
-
+        // Include the entire end date, using the next local calendar day's midnight.
+        var endExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
+        filteredHistoryModel = historySourceModel.filter(function(row) {
+            return row.timestampMs >= startDate.getTime()
+                    && row.timestampMs < endExclusive.getTime()
+        })
         historyList.positionViewAtBeginning()
     }
 
@@ -139,16 +96,15 @@ Item {
         if (page < 1 || page > totalPages || page === currentPage)
             return
 
-        currentPage = page
-        refreshPagedModel()
+        Td.historyCurrentPage = page
     }
 
     function showAllRecords() {
-        if (historySourceModel.count === 0)
+        if (historySourceModel.length === 0)
             return
 
-        startTimeField.text = historySourceModel.get(historySourceModel.count - 1).recordTime
-        endTimeField.text = historySourceModel.get(0).recordTime
+        startDateField.text = formatDate(new Date(historySourceModel[historySourceModel.length - 1].timestampMs))
+        endDateField.text = formatDate(new Date(historySourceModel[0].timestampMs))
         applyFilter()
     }
 
@@ -157,28 +113,28 @@ Item {
     }
 
     function downloadCsv() {
-        if (filteredHistoryModel.count === 0) {
+        if (filteredHistoryModel.length === 0) {
             exportMessage = "目前沒有可下載的資料"
             exportMessageTimer.restart()
             return
         }
 
-        var lines = ["序號,時間,設備,SENSOR,開關,漏水"]
-        for (var i = 0; i < filteredHistoryModel.count; ++i) {
-            var row = filteredHistoryModel.get(i)
-            lines.push(csvCell(i + 1) + ","
-                       + csvCell(row.recordTime) + ","
-                       + csvCell(row.equipment) + ","
-                       + csvCell(row.sensorName) + ","
-                       + csvCell(row.switchState) + ","
-                       + csvCell(row.leakState))
+        var headings = [csvCell("序號")]
+        for (var c = 0; c < columnTitles.length; ++c)
+            headings.push(csvCell(columnTitles[c]))
+        var lines = [headings.join(",")]
+        for (var i = 0; i < filteredHistoryModel.length; ++i) {
+            var cells = [csvCell(i + 1)]
+            for (var j = 0; j < columnTitles.length; ++j)
+                cells.push(csvCell(cellText(filteredHistoryModel[i].values[j])))
+            lines.push(cells.join(","))
         }
 
         var savedPath = Td.saveHistoryCsv(lines.join("\r\n"))
         if (savedPath.indexOf("ERROR:") === 0)
             exportMessage = "下載失敗：" + savedPath.substring(6)
         else if (savedPath.length > 0)
-            exportMessage = "已下載 " + filteredHistoryModel.count + " 筆資料"
+            exportMessage = "已下載 " + filteredHistoryModel.length + " 筆資料"
         else
             exportMessage = ""
 
@@ -189,9 +145,9 @@ Item {
     Component.onCompleted: {
         reloadHistoryData()
         var now = new Date()
-        var oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-        startTimeField.text = formatDateTime(oneDayAgo)
-        endTimeField.text = formatDateTime(now)
+        var oneDayAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+        startDateField.text = formatDate(oneDayAgo)
+        endDateField.text = formatDate(now)
         applyFilter()
     }
 
@@ -233,7 +189,7 @@ Item {
                 }
 
                 Text {
-                    text: "查看設備運行、感測器與漏水狀態"
+                    text: "感測器與設備紀錄 · " + columnTitles.length + " 個欄位 · 左右捲動查看完整資料"
                     color: mutedTextColor
                     font.pixelSize: 14
                 }
@@ -267,11 +223,24 @@ Item {
 
         Rectangle {
             width: parent.width
-            height: 124
+            height: 132
             radius: 10
             color: "#111D32"
             border.color: dividerColor
             border.width: 1
+
+            Text {
+                anchors.top: parent.top
+                anchors.topMargin: 8
+                anchors.left: parent.left
+                anchors.leftMargin: 24
+                anchors.right: parent.right
+                anchors.rightMargin: 24
+                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料"
+                color: historyPage.mutedTextColor
+                font.pixelSize: 12
+                elide: Text.ElideRight
+            }
 
             Row {
                 anchors.left: parent.left
@@ -283,26 +252,26 @@ Item {
                     spacing: 8
 
                     Text {
-                        text: "起始時間"
+                        text: "起始日期"
                         color: mutedTextColor
                         font.pixelSize: 13
                     }
 
                     TextField {
-                        id: startTimeField
-                        width: 260
+                        id: startDateField
+                        width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
                         height: 46
                         color: "white"
                         font.pixelSize: 16
                         font.family: "Consolas"
                         selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
+                        placeholderText: "YYYY/MM/DD"
                         placeholderTextColor: "#5F7890"
 
                         background: Rectangle {
                             radius: 6
                             color: "#0B1527"
-                            border.color: startTimeField.activeFocus ? root.mainBlue : dividerColor
+                            border.color: startDateField.activeFocus ? root.mainBlue : dividerColor
                             border.width: 1
                         }
 
@@ -322,26 +291,26 @@ Item {
                     spacing: 8
 
                     Text {
-                        text: "結束時間"
+                        text: "結束日期"
                         color: mutedTextColor
                         font.pixelSize: 13
                     }
 
                     TextField {
-                        id: endTimeField
-                        width: 260
+                        id: endDateField
+                        width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
                         height: 46
                         color: "white"
                         font.pixelSize: 16
                         font.family: "Consolas"
                         selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
+                        placeholderText: "YYYY/MM/DD"
                         placeholderTextColor: "#5F7890"
 
                         background: Rectangle {
                             radius: 6
                             color: "#0B1527"
-                            border.color: endTimeField.activeFocus ? root.mainBlue : dividerColor
+                            border.color: endDateField.activeFocus ? root.mainBlue : dividerColor
                             border.width: 1
                         }
 
@@ -404,10 +373,11 @@ Item {
             Text {
                 anchors.right: parent.right
                 anchors.rightMargin: 24
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
                 text: filterMessage.length > 0
                       ? filterMessage
-                      : "共 " + filteredHistoryModel.count + " 筆"
+                      : "共 " + filteredHistoryModel.length + " 筆"
                 color: filterMessage.length > 0 ? dangerColor : mutedTextColor
                 font.pixelSize: 14
             }
@@ -415,196 +385,127 @@ Item {
 
         Rectangle {
             width: parent.width
-            height: parent.height - 222
+            height: parent.height - 230
             radius: 10
             color: "#111D32"
             border.color: dividerColor
             border.width: 1
             clip: true
 
-            Rectangle {
-                id: tableHeader
+            Flickable {
+                id: horizontalTable
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: 56
-                color: "#172941"
+                anchors.bottom: paginationBar.top
+                anchors.bottomMargin: 18
+                contentWidth: Math.max(width, historyPage.tableWidth)
+                contentHeight: height
+                flickableDirection: Flickable.HorizontalFlick
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
 
-                Row {
-                    anchors.fill: parent
-                    anchors.leftMargin: 24
-                    anchors.rightMargin: 24
+                ScrollBar.horizontal: ScrollBar {
+                    id: xbar
+                    parent: horizontalTable.parent
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: paginationBar.top
+                    height: 18
+                    policy: ScrollBar.AlwaysOn
+                }
 
-                    Repeater {
-                        model: [
-                            { "title": "序號", "ratio": 0.07 },
-                            { "title": "時間", "ratio": 0.21 },
-                            { "title": "設備", "ratio": 0.20 },
-                            { "title": "SENSOR", "ratio": 0.19 },
-                            { "title": "開關", "ratio": 0.15 },
-                            { "title": "漏水 (ON/OFF)", "ratio": 0.18 }
-                        ]
-
-                        Item {
-                            width: (tableHeader.width - 48) * modelData.ratio
-                            height: tableHeader.height
-
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: modelData.title
+                Rectangle {
+                    id: tableHeader
+                    width: horizontalTable.contentWidth
+                    height: 56
+                    color: "#172941"
+                    Row {
+                        Text {
+                            width: 64; height: 56
+                            text: "序號"
+                            color: historyPage.mutedTextColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        Repeater {
+                            model: historyPage.columnTitles
+                            delegate: Text {
+                                required property int index
+                                required property var modelData
+                                width: historyPage.columnWidth(index); height: 56
+                                text: modelData
                                 color: "#BFD8EC"
                                 font.pixelSize: 14
                                 font.bold: true
+                                verticalAlignment: Text.AlignVCenter
                             }
+                        }
+                    }
+                }
+
+                ListView {
+                    id: historyList
+                    y: tableHeader.height
+                    width: horizontalTable.contentWidth
+                    height: horizontalTable.height - tableHeader.height
+                    model: historyPage.filteredHistoryModel
+                    clip: true
+                    boundsBehavior: Flickable.StopAtBounds
+                    ScrollBar.vertical: ScrollBar {
+                        x: horizontalTable.contentX + horizontalTable.width - width
+                        policy: ScrollBar.AsNeeded
+                    }
+                    delegate: Rectangle {
+                        id: recordRow
+                        required property int index
+                        required property var modelData
+                        width: historyList.width
+                        height: 54
+                        color: index % 2 === 0 ? "#101C30" : "#132139"
+                        Row {
+                            Text {
+                                width: 64; height: 54
+                                text: recordRow.index + 1
+                                color: historyPage.mutedTextColor
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            Repeater {
+                                model: historyPage.columnTitles
+                                delegate: Item {
+                                    required property int index
+                                    width: historyPage.columnWidth(index); height: 54
+                                    Text {
+                                        anchors.fill: parent
+                                        anchors.rightMargin: 12
+                                        text: historyPage.cellText(recordRow.modelData.values[index])
+                                        color: text === "ON" ? historyPage.dangerColor
+                                             : text === "OFF" ? historyPage.successColor
+                                             : index < 2 ? root.textColor : "#A7D9F5"
+                                        font.pixelSize: 14
+                                        font.family: index === 1 ? "Microsoft JhengHei" : "Consolas"
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                                }
+                            }
+                        }
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            width: parent.width; height: 1
+                            color: "#203B57"
                         }
                     }
                 }
             }
 
-            ListView {
-                id: historyList
-                anchors.top: tableHeader.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: paginationBar.top
-                model: pagedHistoryModel
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
-
-                ScrollBar.vertical: ScrollBar {
-                    policy: ScrollBar.AsNeeded
-                }
-
-                delegate: Rectangle {
-                    width: historyList.width
-                    height: 62
-                    color: index % 2 === 0 ? "#101C30" : "#132139"
-
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        height: 1
-                        color: "#203B57"
-                    }
-
-                    Row {
-                        anchors.fill: parent
-                        anchors.leftMargin: 24
-                        anchors.rightMargin: 24
-
-                        Item {
-                            width: (historyList.width - 48) * 0.07
-                            height: parent.height
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: model.serialNumber
-                                color: historyPage.mutedTextColor
-                                font.pixelSize: 15
-                                font.family: "Consolas"
-                            }
-                        }
-
-                        Item {
-                            width: (historyList.width - 48) * 0.21
-                            height: parent.height
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: model.recordTime
-                                color: root.textColor
-                                font.pixelSize: 15
-                                font.family: "Consolas"
-                            }
-                        }
-
-                        Item {
-                            width: (historyList.width - 48) * 0.20
-                            height: parent.height
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: model.equipment
-                                color: root.textColor
-                                font.pixelSize: 15
-                            }
-                        }
-
-                        Item {
-                            width: (historyList.width - 48) * 0.19
-                            height: parent.height
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: model.sensorName
-                                color: root.lightBlue
-                                font.pixelSize: 15
-                                font.bold: true
-                                font.family: "Consolas"
-                            }
-                        }
-
-                        Item {
-                            width: (historyList.width - 48) * 0.15
-                            height: parent.height
-
-                            Rectangle {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 68
-                                height: 30
-                                radius: 15
-                                color: model.switchState === "ON" ? "#183E32" : "#3B2D37"
-                                border.color: model.switchState === "ON" ? successColor : dangerColor
-                                border.width: 1
-
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: model.switchState
-                                    color: model.switchState === "ON" ? "#6EE7A0" : "#FF8790"
-                                    font.pixelSize: 13
-                                    font.bold: true
-                                    font.family: "Consolas"
-                                }
-                            }
-                        }
-
-                        Item {
-                            width: (historyList.width - 48) * 0.18
-                            height: parent.height
-
-                            Rectangle {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 68
-                                height: 30
-                                radius: 15
-                                color: model.leakState === "ON" ? "#462B35" : "#173A32"
-                                border.color: model.leakState === "ON" ? dangerColor : successColor
-                                border.width: 1
-
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: model.leakState
-                                    color: model.leakState === "ON" ? "#FF8790" : "#6EE7A0"
-                                    font.pixelSize: 13
-                                    font.bold: true
-                                    font.family: "Consolas"
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    visible: filteredHistoryModel.count === 0 && filterMessage.length === 0
-                    text: "此時間區間沒有歷史資料"
-                    color: mutedTextColor
-                    font.pixelSize: 18
-                }
+            Text {
+                anchors.centerIn: horizontalTable
+                visible: filteredHistoryModel.length === 0 && filterMessage.length === 0
+                text: "此日期區間沒有歷史資料"
+                color: mutedTextColor
+                font.pixelSize: 18
             }
 
             Rectangle {

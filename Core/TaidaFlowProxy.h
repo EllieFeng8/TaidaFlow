@@ -60,7 +60,10 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double flowMeterValuePv READ flowMeterValuePv WRITE setFlowMeterValuePv NOTIFY flowMeterValuePvChanged)
 
     // List data is owned by the authoritative side. QML only reads a local copy.
+    Q_PROPERTY(QVariantList historyTitle READ historyTitle WRITE setHistoryTitle NOTIFY historyTitleChanged)
     Q_PROPERTY(QVariantList historyRecords READ historyRecords WRITE setHistoryRecords NOTIFY historyRecordsChanged)
+    Q_PROPERTY(int historyCurrentPage READ historyCurrentPage WRITE setHistoryCurrentPage NOTIFY historyCurrentPageChanged)
+    Q_PROPERTY(int historyTotalPages READ historyTotalPages WRITE setHistoryTotalPages NOTIFY historyTotalPagesChanged)
     Q_PROPERTY(QVariantList alarmRecords READ alarmRecords WRITE setAlarmRecords NOTIFY alarmRecordsChanged)
 
 public:
@@ -103,7 +106,10 @@ public:
     double pt06ValuePv() const { return m_pt06ValuePv; }
     double pt07ValuePv() const { return m_pt07ValuePv; }
     double flowMeterValuePv() const { return m_flowMeterValuePv; }
+    QVariantList historyTitle() const { return m_historyTitle; }
     QVariantList historyRecords() const { return m_historyRecords; }
+    int historyCurrentPage() const { return m_historyCurrentPage; }
+    int historyTotalPages() const { return m_historyTotalPages; }
     QVariantList alarmRecords() const { return m_alarmRecords; }
 
     void setM1ValueSv(double value) { setWritableValue(m_m1ValueSv, value, &TaidaFlowProxy::m1ValueSvChanged); }
@@ -132,10 +138,31 @@ public:
     void setPt06ValuePv(double value) { setProcessValue(m_pt06ValuePv, value, &TaidaFlowProxy::pt06ValuePvChanged); }
     void setPt07ValuePv(double value) { setProcessValue(m_pt07ValuePv, value, &TaidaFlowProxy::pt07ValuePvChanged); }
     void setFlowMeterValuePv(double value) { setProcessValue(m_flowMeterValuePv, value, &TaidaFlowProxy::flowMeterValuePvChanged); }
+
+    void setHistoryTitle(const QVariantList &title)
+    {
+        m_historyTitle = title;
+        emit historyTitleChanged(title);
+    }
     void setHistoryRecords(const QVariantList &records)
     {
         m_historyRecords = records;
         emit historyRecordsChanged(records);
+    }
+    // Page metadata comes from the authoritative side, independently of row count.
+    void setHistoryCurrentPage(int page)
+    {
+        if (page < 1 || m_historyCurrentPage == page)
+            return;
+        m_historyCurrentPage = page;
+        emit historyCurrentPageChanged(page);
+    }
+    void setHistoryTotalPages(int pages)
+    {
+        if (pages < 1 || m_historyTotalPages == pages)
+            return;
+        m_historyTotalPages = pages;
+        emit historyTotalPagesChanged(pages);
     }
     void setAlarmRecords(const QVariantList &records)
     {
@@ -210,7 +237,10 @@ signals:
     void pt06ValuePvChanged(double value);
     void pt07ValuePvChanged(double value);
     void flowMeterValuePvChanged(double value);
+    void historyTitleChanged(const QVariantList &title);
     void historyRecordsChanged(const QVariantList &records);
+    void historyCurrentPageChanged(int page);
+    void historyTotalPagesChanged(int pages);
     void alarmRecordsChanged(const QVariantList &records);
 
 private:
@@ -251,10 +281,20 @@ private:
             QStringLiteral("循環泵浦 A"), QStringLiteral("循環泵浦 B"),
             QStringLiteral("主水槽"), QStringLiteral("過濾器"),
             QStringLiteral("測試設備"), QStringLiteral("加熱器")};
-        static const QStringList historySensors{
-            QStringLiteral("TT-01"), QStringLiteral("PT-02"),
-            QStringLiteral("LS-01"), QStringLiteral("FM-01"),
-            QStringLiteral("TT-03"), QStringLiteral("PT-06")};
+        // Column order is shared by the table and CSV export. Each row has 20 cells.
+        const QStringList titles{
+            QStringLiteral("時間"), QStringLiteral("設備"),
+            QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
+            QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
+            QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
+            QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
+            QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
+            QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
+            QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
+            QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)"),
+            QStringLiteral("泵浦頻率 (Hz)"), QStringLiteral("漏水 (ON/OFF)")};
+        for (const auto &title : titles)
+            m_historyTitle.append(title);
         static const QStringList alarmDevices{
             QStringLiteral("循環泵浦 A"), QStringLiteral("主水槽"),
             QStringLiteral("過濾器"), QStringLiteral("測試設備"),
@@ -269,16 +309,25 @@ private:
             QStringLiteral("加熱溫度偏高"), QStringLiteral("流量低於設定值")};
 
         const QDateTime now = QDateTime::currentDateTime();
+        const QDateTime historyNow = now.addMSecs(-now.time().msec()).addSecs(-now.time().second());
         for (int i = 0; i < 36; ++i) {
-            const QDateTime recordTime = now.addSecs(-i * 2 * 60 * 60);
+            const QDateTime recordTime = historyNow.addSecs(-i * 2 * 60 * 60);
             const bool leakOn = i == 7 || i == 19;
+            QVariantList values{
+                recordTime.toString(QStringLiteral("yyyy/MM/dd HH:mm")),
+                historyDevices.at(i % historyDevices.size())};
+            for (int sensor = 0; sensor < 4; ++sensor)
+                values.append(24.0 + sensor * 3.0 + ((i * 7 + sensor * 3) % 21) / 10.0);
+            for (int sensor = 0; sensor < 7; ++sensor)
+                values.append(1.2 + sensor * 0.2 + ((i * 3 + sensor) % 11) / 100.0);
+            values.append(18.0 + (i * 7 % 45) / 10.0);
+            for (int motor = 0; motor < 4; ++motor)
+                values.append(leakOn ? 0.0 : 45.0 + (i * 3 + motor * 11) % 46);
+            values.append(leakOn ? 0.0 : 35.0 + (i * 3 % 150) / 10.0);
+            values.append(leakOn ? QStringLiteral("ON") : QStringLiteral("OFF"));
             m_historyRecords.append(QVariantMap{
                 {QStringLiteral("timestampMs"), recordTime.toMSecsSinceEpoch()},
-                {QStringLiteral("recordTime"), recordTime.toString(QStringLiteral("yyyy/MM/dd HH:mm"))},
-                {QStringLiteral("equipment"), historyDevices.at(i % historyDevices.size())},
-                {QStringLiteral("sensorName"), historySensors.at(i % historySensors.size())},
-                {QStringLiteral("switchState"), (i % 5 == 0 || leakOn) ? QStringLiteral("OFF") : QStringLiteral("ON")},
-                {QStringLiteral("leakState"), leakOn ? QStringLiteral("ON") : QStringLiteral("OFF")}});
+                {QStringLiteral("values"), values}});
         }
 
         for (int i = 0; i < 14; ++i) {
@@ -349,7 +398,10 @@ private:
     double m_pt06ValuePv = 0.0;
     double m_pt07ValuePv = 0.0;
     double m_flowMeterValuePv = 0.0;
+    QVariantList m_historyTitle;
     QVariantList m_historyRecords;
+    int m_historyCurrentPage = 1;
+    int m_historyTotalPages = 1;
     QVariantList m_alarmRecords;
 
     double m_testTemperature = 0.0;

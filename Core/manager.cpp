@@ -8,14 +8,16 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSettings>
 #include <QStringList>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
 namespace {
 constexpr int kPollIntervalMs = 1000;
-constexpr quint16 kInputHighAlarmThreshold = 58982; // 65535 * 90 %, strict greater-than.
+constexpr double kDefaultAiHighAlarmPercent = 90.0;
 
 QString highInputAlarmSensorName(quint16 serverOffset)
 {
@@ -31,6 +33,16 @@ QString highInputAlarmSensorName(quint16 serverOffset)
     case 8: return QStringLiteral("PT-05");
     case 9: return QStringLiteral("PT-06");
     case 10: return QStringLiteral("PT-07");
+    default: return {};
+    }
+}
+
+QString digitalInputAlarmMessage(quint16 diOffset)
+{
+    switch (diOffset) {
+    case 0: return QStringLiteral("相位異常");
+    case 1: return QStringLiteral("漏液檢出");
+    case 2: return QStringLiteral("補水泵 OL");
     default: return {};
     }
 }
@@ -92,10 +104,12 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, QObject *parent)
     , m_proxy(proxy)
     , m_sql(sql)
     , m_modbus(this)
+    , m_ms300FaultReader(this)
     , m_readBindings(ModbusMapping::defaultReadBindings())
     , m_writeBindings(ModbusMapping::defaultWriteBindings())
     , m_serverInputRegisters(ModbusServerBridgeMapping::ServerInputRegisterCount, 0)
 {
+    loadAiHighAlarmPercentSetting();
     m_pollTimer.setInterval(kPollIntervalMs);
     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
 
@@ -164,6 +178,17 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, QObject *parent)
             [](ModbusClient::Device device, const QString &message) {
         qWarning().noquote() << ModbusClient::displayName(device) << message;
     });
+
+    connect(&m_ms300FaultReader, &Ms300FaultReader::faultStatusChanged, this,
+            [this](quint8 faultCode, quint8 warningCode, const QString &message) {
+        if (faultCode == 0 && warningCode == 0)
+            return;
+
+        const QString status = faultCode != 0
+                ? QStringLiteral("異常")
+                : QStringLiteral("警告");
+        saveAlarm(QStringLiteral("MS300"), message, status);
+    });
 }
 
 Manager::~Manager()
@@ -174,12 +199,14 @@ Manager::~Manager()
 void Manager::start()
 {
     m_modbus.connectAll();
+    m_ms300FaultReader.start();
     m_pollTimer.start();
 }
 
 void Manager::stop()
 {
     m_pollTimer.stop();
+    m_ms300FaultReader.stop();
     m_modbus.disconnectAll();
 }
 
@@ -333,6 +360,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                     - ModbusServerBridgeMapping::Adam6224DiStart);
             const bool state = values.at(index) != 0;
             emit serverCoilUpdated(serverOffset, state);
+            checkDigitalInputAlarm(static_cast<quint16>(diOffset), state);
             qInfo().noquote()
                     << QStringLiteral("[ModbusServer][Mirror] coil=%1 device=%2 DI=%3 value=%4")
                                .arg(serverOffset)
@@ -388,7 +416,9 @@ void Manager::checkHighInputAlarm(quint16 serverOffset, quint16 rawValue)
     if (sensor.isEmpty())
         return;
 
-    if (rawValue < kInputHighAlarmThreshold) {
+    const quint16 threshold = static_cast<quint16>(std::ceil(
+            std::numeric_limits<quint16>::max() * m_aiHighAlarmPercent / 100.0));
+    if (rawValue < threshold) {
         m_activeHighInputAlarms.remove(serverOffset);
         return;
     }
@@ -396,10 +426,66 @@ void Manager::checkHighInputAlarm(quint16 serverOffset, quint16 rawValue)
     if (m_activeHighInputAlarms.contains(serverOffset))
         return;
 
-    const QString message = QStringLiteral("輸入值超過量程 90%（raw=%1）")
-            .arg(rawValue);
+    const QString message = QStringLiteral("輸入值達到設定高限 %1%（raw=%2，threshold=%3）")
+            .arg(m_aiHighAlarmPercent, 0, 'f', 1)
+            .arg(rawValue)
+            .arg(threshold);
     if (saveAlarm(sensor, message, QStringLiteral("數值異常")))
         m_activeHighInputAlarms.insert(serverOffset);
+}
+
+void Manager::loadAiHighAlarmPercentSetting()
+{
+    QSettings settings(QStringLiteral("TaidaFlowSettings.ini"), QSettings::IniFormat);
+    settings.beginGroup(QStringLiteral("Alarm"));
+
+    bool isValidNumber = false;
+    const double storedPercent = settings.value(
+            QStringLiteral("aiHighAlarmPercent"), kDefaultAiHighAlarmPercent)
+            .toDouble(&isValidNumber);
+    const double requestedPercent = isValidNumber && std::isfinite(storedPercent)
+            ? storedPercent
+            : kDefaultAiHighAlarmPercent;
+    m_aiHighAlarmPercent = std::clamp(requestedPercent, 1.0, 100.0);
+
+    settings.setValue(QStringLiteral("aiHighAlarmPercent"), m_aiHighAlarmPercent);
+    settings.endGroup();
+    settings.sync();
+
+    if (settings.status() != QSettings::NoError) {
+        qWarning() << "[Alarm] Failed to save AI high-alarm setting:" << settings.fileName();
+    }
+
+    const quint16 threshold = static_cast<quint16>(std::ceil(
+            std::numeric_limits<quint16>::max() * m_aiHighAlarmPercent / 100.0));
+    qInfo().noquote()
+            << QStringLiteral("[Alarm] AI high-alarm setting loaded: %1% (raw >= %2).")
+                       .arg(m_aiHighAlarmPercent, 0, 'f', 1)
+                       .arg(threshold);
+}
+
+void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
+{
+    const QString alarmMessage = digitalInputAlarmMessage(diOffset);
+    if (alarmMessage.isEmpty())
+        return;
+
+    // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
+    const bool alarmActive = diOffset == 0 ? !state : state;
+    if (!alarmActive) {
+        m_activeDigitalInputAlarms.remove(diOffset);
+        return;
+    }
+
+    if (m_activeDigitalInputAlarms.contains(diOffset))
+        return;
+
+    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+    const QString message = QStringLiteral("%1（%2=%3）")
+            .arg(alarmMessage, sensor)
+            .arg(state ? 1 : 0);
+    if (saveAlarm(sensor, message, QStringLiteral("異常")))
+        m_activeDigitalInputAlarms.insert(diOffset);
 }
 
 void Manager::setWayValveOpenSv(bool open)
@@ -459,6 +545,7 @@ void Manager::saveServerInputData()
         qInfo().noquote()
                 << QStringLiteral("[SQL] Saved Server Input Registers 0..%1 to sensor_data.")
                            .arg(m_serverInputRegisters.size() - 1);
+        emit serverInputDataSaved();
     } else {
         qWarning() << "[SQL] Failed to save Server Input Register sample.";
     }

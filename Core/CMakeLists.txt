@@ -9,6 +9,8 @@ qt_add_qml_module(Core STATIC
         manager.cpp
         Modbus_Client.h
         Modbus_Client.cpp
+        Ms300FaultReader.h
+        Ms300FaultReader.cpp
         Modbus_Server.h
         Modbus_Server.cpp
         ModbusServerBridgeMapping.h
@@ -34,6 +36,7 @@ target_link_libraries(Core
         Qt${QT_VERSION_MAJOR}::Network
         Qt${QT_VERSION_MAJOR}::Concurrent
         Qt${QT_VERSION_MAJOR}::SerialBus
+        Qt${QT_VERSION_MAJOR}::SerialPort
         Qt${QT_VERSION_MAJOR}::Sql
         Qt${QT_VERSION_MAJOR}::HttpServer
 #        Qt${QT_VERSION_MAJOR}::OpcUa

@@ -1,0 +1,33 @@
+﻿=== 2026-09-24T14:42:22.0409258+08:00 netstat while simulator profile desktop running: TaidaFlowApp pid=27764, Adam60xxSimulator pid=72392
+--- netstat -ano (lines owned by TaidaFlowApp pid 27764)
+  TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       27764
+  TCP    127.0.0.1:8125         0.0.0.0:0              LISTENING       27764
+  TCP    127.0.0.1:62387        127.0.0.201:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62388        127.0.0.202:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62389        127.0.0.203:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62390        127.0.0.204:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62391        127.0.0.205:502        ESTABLISHED     27764
+--- netstat -ano (lines owned by Adam60xxSimulator pid 72392)
+  TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       72392
+  TCP    127.0.0.201:502        127.0.0.1:62387        ESTABLISHED     72392
+  TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       72392
+  TCP    127.0.0.202:502        127.0.0.1:62388        ESTABLISHED     72392
+  TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       72392
+  TCP    127.0.0.203:502        127.0.0.1:62389        ESTABLISHED     72392
+  TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       72392
+  TCP    127.0.0.204:502        127.0.0.1:62390        ESTABLISHED     72392
+  TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       72392
+  TCP    127.0.0.205:502        127.0.0.1:62391        ESTABLISHED     72392
+--- any line containing 192.168.1. (expect none)
+<none>
+--- TaidaFlowApp remote endpoints (Get-NetTCPConnection, non-listen)
+0.0.0.0:62391 -> 0.0.0.0:0 Bound
+0.0.0.0:62390 -> 0.0.0.0:0 Bound
+0.0.0.0:62389 -> 0.0.0.0:0 Bound
+0.0.0.0:62388 -> 0.0.0.0:0 Bound
+0.0.0.0:62387 -> 0.0.0.0:0 Bound
+127.0.0.1:62391 -> 127.0.0.205:502 Established
+127.0.0.1:62390 -> 127.0.0.204:502 Established
+127.0.0.1:62389 -> 127.0.0.203:502 Established
+127.0.0.1:62388 -> 127.0.0.202:502 Established
+127.0.0.1:62387 -> 127.0.0.201:502 Established

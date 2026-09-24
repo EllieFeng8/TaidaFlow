@@ -1,0 +1,159 @@
+﻿diff --git a/scripts/run-desktop.ps1 b/scripts/run-desktop.ps1
+index fc38fdd..5ee67a7 100644
+--- a/scripts/run-desktop.ps1
++++ b/scripts/run-desktop.ps1
+@@ -8,6 +8,12 @@
+ #   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
+ #   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)
+ #   -Wait    : block until the app exits and return its exit code
++#   -DeviceProfile simulator : TEST ONLY. Runs the probe in simulator mode (502 may only be
++#              held by Adam60xxSimulator.exe on 127.0.0.201..205) and starts the app with
++#              TAIDAFLOW_DEVICE_PROFILE=simulator (ADAM sessions -> 127.0.0.201..205:502).
++#              Not combinable with -PvFile. Default probe log: docs\evidence\wasm-v4-sim\.
++#              Without it (default) TAIDAFLOW_DEVICE_PROFILE is removed from the app's
++#              environment, so the app always uses the plant addresses the probe checked.
+ #
+ # Safety (taidaflow WASM v4 spec §2):
+ #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
+@@ -22,9 +28,14 @@ param(
+     [string]$LogFile = "",
+     [string]$PvFile = "",
+     [string]$ProbeLog = "",
+-    [switch]$Wait
++    [switch]$Wait,
++    [ValidateSet('default', 'simulator')]
++    [string]$DeviceProfile = "default"
+ )
+ $ErrorActionPreference = 'Stop'
++if ($DeviceProfile -eq 'simulator' -and $PvFile -ne "") {
++    Write-Output '-PvFile (dev-only PV driver) cannot be combined with -DeviceProfile simulator'; exit 2
++}
+ $root = Split-Path -Parent $PSScriptRoot
+ if ($Exe -eq "") { $Exe = Join-Path $root 'build\desktop\TaidaFlowApp.exe' }
+ if (-not [System.IO.Path]::IsPathRooted($Exe)) { $Exe = Join-Path $root $Exe }
+@@ -35,6 +46,7 @@ if (Get-Process TaidaFlowApp -ErrorAction SilentlyContinue) {
+ 
+ $probeArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'safety_probe.ps1'),
+                '-Reason', "before launch: $Label ($Exe)")
++if ($DeviceProfile -eq 'simulator') { $probeArgs += @('-DeviceProfile', 'simulator') }
+ if ($ProbeLog -ne "") {
+     if (-not [System.IO.Path]::IsPathRooted($ProbeLog)) { $ProbeLog = Join-Path $root $ProbeLog }
+     $probeArgs += @('-LogFile', $ProbeLog)
+@@ -62,10 +74,15 @@ if ($PvFile -ne "") {
+ } else {
+     Remove-Item Env:\TAIDAFLOW_E2E_PV_FILE -ErrorAction SilentlyContinue
+ }
++if ($DeviceProfile -eq 'simulator') {
++    $env:TAIDAFLOW_DEVICE_PROFILE = 'simulator'
++} else {
++    Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue
++}
+ 
+ $p = Start-Process -FilePath $Exe -WorkingDirectory $cwd -PassThru `
+         -RedirectStandardError $LogFile -RedirectStandardOutput "$LogFile.stdout"
+ $null = $p.Handle
+-Write-Output "PID=$($p.Id) CWD=$cwd LOG=$LogFile"
++Write-Output "PID=$($p.Id) CWD=$cwd LOG=$LogFile$(if ($DeviceProfile -eq 'simulator') { ' PROFILE=simulator' })"
+ if ($Wait) { $p.WaitForExit(); exit $p.ExitCode }
+ exit 0
+diff --git a/scripts/safety_probe.ps1 b/scripts/safety_probe.ps1
+index 6f35786..d0dadbb 100644
+--- a/scripts/safety_probe.ps1
++++ b/scripts/safety_probe.ps1
+@@ -18,19 +18,39 @@
+ # only reported (it is the WASM HTTP server started for the E2E test).
+ #
+ # Usage: powershell -ExecutionPolicy Bypass -File scripts\safety_probe.ps1 -Reason "before run 1"
++#
++# -DeviceProfile simulator (test-only; the app is then started with
++# TAIDAFLOW_DEVICE_PROFILE=simulator and its five ADAM sessions go to 127.0.0.201..205):
++#   * steps 1 and 2 are unchanged (192.168.1.201..205:502 must be unreachable, no COM2);
++#   * a listener on port 502 is accepted ONLY when its owning process image is
++#     Adam60xxSimulator.exe AND its local address is one of 127.0.0.201..205; any other 502
++#     listener (another address, another process, IPv6, ...) is still UNSAFE (exit 3);
++#   * all five simulator endpoints must already be listening, otherwise exit 5
++#     (SIMULATOR-NOT-READY): an app started first would connect its ADAM sessions to its
++#     own 0.0.0.0:502 aggregate server instead of the simulator;
++#   * default log: docs/evidence/wasm-v4-sim/safety-probe.log.
++# Without -DeviceProfile (or with -DeviceProfile default) the behaviour is exactly as above.
+ param(
+     [string]$Reason = "manual",
+-    [string]$LogFile = ""
++    [string]$LogFile = "",
++    [ValidateSet('default', 'simulator')]
++    [string]$DeviceProfile = "default"
+ )
+ $ErrorActionPreference = 'Stop'
+ $root = Split-Path -Parent $PSScriptRoot
+-if ($LogFile -eq "") { $LogFile = Join-Path $root 'docs\evidence\wasm-v4\safety-probe.log' }
++$simulator = ($DeviceProfile -eq 'simulator')
++$simulatorHosts = @(201..205 | ForEach-Object { "127.0.0.$_" })
++if ($LogFile -eq "") {
++    if ($simulator) { $LogFile = Join-Path $root 'docs\evidence\wasm-v4-sim\safety-probe.log' }
++    else { $LogFile = Join-Path $root 'docs\evidence\wasm-v4\safety-probe.log' }
++}
+ $logDir = Split-Path -Parent $LogFile
+ if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Force $logDir | Out-Null }
+ 
+ $lines = New-Object System.Collections.Generic.List[string]
+ $stamp = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss.fffK')
+-$lines.Add("=== safety probe $stamp reason=`"$Reason`" host=$env:COMPUTERNAME")
++$profileTag = if ($simulator) { ' profile=simulator' } else { '' }
++$lines.Add("=== safety probe $stamp reason=`"$Reason`" host=$env:COMPUTERNAME$profileTag")
+ 
+ $unsafe = $false
+ $busy = $false
+@@ -92,22 +112,51 @@ if ($allSerial -match '(?i)\bCOM2\b') {
+ # 3. Local listeners.
+ $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
+             Where-Object { $_.LocalPort -in 502, 8123, 8125 })
++$simListening = @()
+ if ($listen.Count -eq 0) {
+     $lines.Add("  listeners 502/8123/8125: <none>")
+ } else {
+     foreach ($l in $listen) {
+         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
+         $lines.Add(("  listener {0}:{1} pid={2} ({3})" -f $l.LocalAddress, $l.LocalPort, $l.OwningProcess, $pname))
+-        if ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
++        if ($l.LocalPort -eq 502 -and $simulator) {
++            # Simulator profile: only Adam60xxSimulator.exe on 127.0.0.201..205 is acceptable.
++            $image = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).Path } catch { '' }
++            $leaf = if ($image) { Split-Path -Leaf $image } else { '' }
++            if ($leaf -eq 'Adam60xxSimulator.exe' -and $simulatorHosts -contains $l.LocalAddress) {
++                $simListening += $l.LocalAddress
++                $lines.Add("  port 502 on $($l.LocalAddress) = Adam60xxSimulator ($image) -> accepted (simulator profile)")
++            } else {
++                $unsafe = $true
++                $lines.Add("  port 502 listener is not Adam60xxSimulator.exe on 127.0.0.201..205 (image=`"$image`") -> conflict, do not launch (do NOT stop the owner)")
++            }
++        }
++        elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
+         elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror) already in use -> stale desktop instance, do not launch") }
+         else { $lines.Add("  port 8123 = WASM HTTP server (expected during E2E, informational)") }
+     }
+ }
++$simMissing = $false
++if ($simulator) {
++    $simListening = @($simListening | Sort-Object -Unique)
++    $missing = @($simulatorHosts | Where-Object { $simListening -notcontains $_ })
++    $lines.Add(("  simulator endpoints listening: {0}/5{1}" -f $simListening.Count,
++                $(if ($missing.Count) { " (missing: " + ($missing -join ', ') + ")" } else { '' })))
++    if ($missing.Count) {
++        # Measured (w2-029, evidence 14-bind-order-core-first.txt): if the app starts first,
++        # its ADAM sessions to 127.0.0.20x:502 are accepted by the app's OWN 0.0.0.0:502
++        # aggregate server and stay there after the simulator starts. So all five endpoints
++        # must already be listening before a simulator-profile launch.
++        $simMissing = $true
++        $lines.Add("  simulator not ready -> do not launch (start scripts\run-simulator.ps1 first)")
++    }
++}
+ 
+-$verdict = if ($unsafe) { 'UNSAFE' } elseif ($busy) { 'BUSY' } else { 'SAFE' }
++$verdict = if ($unsafe) { 'UNSAFE' } elseif ($busy) { 'BUSY' } elseif ($simMissing) { 'SIMULATOR-NOT-READY' } else { 'SAFE' }
+ $lines.Add("  verdict: $verdict")
+ Add-Content -Path $LogFile -Value $lines -Encoding utf8
+ $lines | ForEach-Object { Write-Output $_ }
+ if ($unsafe) { exit 3 }
+ if ($busy) { exit 4 }
++if ($simMissing) { exit 5 }
+ exit 0

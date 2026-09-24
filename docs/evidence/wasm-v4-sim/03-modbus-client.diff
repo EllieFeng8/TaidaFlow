@@ -1,0 +1,99 @@
+﻿diff --git a/Core/Modbus_Client.cpp b/Core/Modbus_Client.cpp
+index 98f10f2..70b2382 100644
+--- a/Core/Modbus_Client.cpp
++++ b/Core/Modbus_Client.cpp
+@@ -1,5 +1,6 @@
+ #include "Modbus_Client.h"
+ 
++#include <QDebug>
+ #include <QModbusDevice>
+ #include <QModbusReply>
+ #include <QModbusTcpClient>
+@@ -9,6 +10,35 @@
+ namespace {
+ constexpr int kReconnectDelayMs = 3000;
+ 
++// Test-only device address switch.  TAIDAFLOW_DEVICE_PROFILE=simulator points the five
++// ADAM sessions at Adam60xxSimulator (127.0.0.201..205, same port and unit id).  Unset
++// (or empty) keeps the plant addresses 192.168.1.201..205; any other value is logged as a
++// warning and also keeps the plant addresses.
++bool useSimulatorProfile()
++{
++    static const bool simulator = [] {
++        const QString profile = qEnvironmentVariable("TAIDAFLOW_DEVICE_PROFILE");
++        if (profile.isEmpty())
++            return false;
++        if (profile == QLatin1String("simulator"))
++            return true;
++        qWarning().noquote()
++                << QStringLiteral("[Modbus] Unknown TAIDAFLOW_DEVICE_PROFILE=\"%1\" "
++                                  "(expected \"simulator\"); using default device addresses.")
++                           .arg(profile);
++        return false;
++    }();
++    return simulator;
++}
++
++QString profileHost(const QString &plantHost)
++{
++    if (!useSimulatorProfile())
++        return plantHost;
++    QString host = plantHost;
++    return host.replace(QLatin1String("192.168.1."), QLatin1String("127.0.0."));
++}
++
+ QString readRequestKey(ModbusClient::Device device,
+                        QModbusDataUnit::RegisterType registerType,
+                        int startAddress,
+@@ -33,13 +63,23 @@ ModbusClient::ModbusClient(QObject *parent)
+     : QObject(parent)
+ {
+     const QList<DeviceConfig> configs{
+-        {Device::Adam6256_201, QStringLiteral("ADAM-6256"), QStringLiteral("192.168.1.201")},
+-        {Device::Adam6217_202, QStringLiteral("ADAM-6217 A"), QStringLiteral("192.168.1.202")},
+-        {Device::Adam6217_203, QStringLiteral("ADAM-6217 B"), QStringLiteral("192.168.1.203")},
+-        {Device::Adam6224_204, QStringLiteral("ADAM-6224"), QStringLiteral("192.168.1.204")},
+-        {Device::Adam6022_205, QStringLiteral("ADAM-6022"), QStringLiteral("192.168.1.205")},
++        {Device::Adam6256_201, QStringLiteral("ADAM-6256"), profileHost(QStringLiteral("192.168.1.201"))},
++        {Device::Adam6217_202, QStringLiteral("ADAM-6217 A"), profileHost(QStringLiteral("192.168.1.202"))},
++        {Device::Adam6217_203, QStringLiteral("ADAM-6217 B"), profileHost(QStringLiteral("192.168.1.203"))},
++        {Device::Adam6224_204, QStringLiteral("ADAM-6224"), profileHost(QStringLiteral("192.168.1.204"))},
++        {Device::Adam6022_205, QStringLiteral("ADAM-6022"), profileHost(QStringLiteral("192.168.1.205"))},
+     };
+ 
++    qInfo().noquote() << QStringLiteral("[Modbus] device profile=%1")
++                                 .arg(useSimulatorProfile() ? QStringLiteral("simulator")
++                                                            : QStringLiteral("default"));
++    for (const DeviceConfig &config : configs) {
++        qInfo().noquote() << QStringLiteral("[Modbus] device %1 -> %2:%3 unit=%4")
++                                     .arg(config.name, config.host)
++                                     .arg(config.port)
++                                     .arg(config.unitId);
++    }
++
+     for (const DeviceConfig &config : configs) {
+         auto session = std::make_unique<DeviceSession>();
+         session->config = config;
+@@ -205,15 +245,15 @@ QString ModbusClient::displayName(Device device)
+ {
+     switch (device) {
+     case Device::Adam6256_201:
+-        return QStringLiteral("ADAM-6256 (192.168.1.201)");
++        return QStringLiteral("ADAM-6256 (%1)").arg(profileHost(QStringLiteral("192.168.1.201")));
+     case Device::Adam6217_202:
+-        return QStringLiteral("ADAM-6217 A (192.168.1.202)");
++        return QStringLiteral("ADAM-6217 A (%1)").arg(profileHost(QStringLiteral("192.168.1.202")));
+     case Device::Adam6217_203:
+-        return QStringLiteral("ADAM-6217 B (192.168.1.203)");
++        return QStringLiteral("ADAM-6217 B (%1)").arg(profileHost(QStringLiteral("192.168.1.203")));
+     case Device::Adam6224_204:
+-        return QStringLiteral("ADAM-6224 (192.168.1.204)");
++        return QStringLiteral("ADAM-6224 (%1)").arg(profileHost(QStringLiteral("192.168.1.204")));
+     case Device::Adam6022_205:
+-        return QStringLiteral("ADAM-6022 (192.168.1.205)");
++        return QStringLiteral("ADAM-6022 (%1)").arg(profileHost(QStringLiteral("192.168.1.205")));
+     case Device::Unassigned:
+         return QStringLiteral("Unassigned device");
+     }
+ Core/Modbus_Client.cpp | 60 +++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 50 insertions(+), 10 deletions(-)

@@ -8,6 +8,12 @@
 #   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
 #   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)
 #   -Wait    : block until the app exits and return its exit code
+#   -DeviceProfile simulator : TEST ONLY. Runs the probe in simulator mode (502 may only be
+#              held by Adam60xxSimulator.exe on 127.0.0.201..205) and starts the app with
+#              TAIDAFLOW_DEVICE_PROFILE=simulator (ADAM sessions -> 127.0.0.201..205:502).
+#              Not combinable with -PvFile. Default probe log: docs\evidence\wasm-v4-sim\.
+#              Without it (default) TAIDAFLOW_DEVICE_PROFILE is removed from the app's
+#              environment, so the app always uses the plant addresses the probe checked.
 #
 # Safety (taidaflow WASM v4 spec §2):
 #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
@@ -22,9 +28,14 @@ param(
     [string]$LogFile = "",
     [string]$PvFile = "",
     [string]$ProbeLog = "",
-    [switch]$Wait
+    [switch]$Wait,
+    [ValidateSet('default', 'simulator')]
+    [string]$DeviceProfile = "default"
 )
 $ErrorActionPreference = 'Stop'
+if ($DeviceProfile -eq 'simulator' -and $PvFile -ne "") {
+    Write-Output '-PvFile (dev-only PV driver) cannot be combined with -DeviceProfile simulator'; exit 2
+}
 $root = Split-Path -Parent $PSScriptRoot
 if ($Exe -eq "") { $Exe = Join-Path $root 'build\desktop\TaidaFlowApp.exe' }
 if (-not [System.IO.Path]::IsPathRooted($Exe)) { $Exe = Join-Path $root $Exe }
@@ -35,6 +46,7 @@ if (Get-Process TaidaFlowApp -ErrorAction SilentlyContinue) {
 
 $probeArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'safety_probe.ps1'),
                '-Reason', "before launch: $Label ($Exe)")
+if ($DeviceProfile -eq 'simulator') { $probeArgs += @('-DeviceProfile', 'simulator') }
 if ($ProbeLog -ne "") {
     if (-not [System.IO.Path]::IsPathRooted($ProbeLog)) { $ProbeLog = Join-Path $root $ProbeLog }
     $probeArgs += @('-LogFile', $ProbeLog)
@@ -62,10 +74,15 @@ if ($PvFile -ne "") {
 } else {
     Remove-Item Env:\TAIDAFLOW_E2E_PV_FILE -ErrorAction SilentlyContinue
 }
+if ($DeviceProfile -eq 'simulator') {
+    $env:TAIDAFLOW_DEVICE_PROFILE = 'simulator'
+} else {
+    Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue
+}
 
 $p = Start-Process -FilePath $Exe -WorkingDirectory $cwd -PassThru `
         -RedirectStandardError $LogFile -RedirectStandardOutput "$LogFile.stdout"
 $null = $p.Handle
-Write-Output "PID=$($p.Id) CWD=$cwd LOG=$LogFile"
+Write-Output "PID=$($p.Id) CWD=$cwd LOG=$LogFile$(if ($DeviceProfile -eq 'simulator') { ' PROFILE=simulator' })"
 if ($Wait) { $p.WaitForExit(); exit $p.ExitCode }
 exit 0

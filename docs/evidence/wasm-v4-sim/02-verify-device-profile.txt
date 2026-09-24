@@ -1,0 +1,49 @@
+﻿  [default] probe exit=0   verdict: SAFE
+  [default] log D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\profile-default.log (211 lines):
+      [Modbus] device profile=default
+      [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1
+      [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1
+      [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1
+      [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1
+      [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1
+  [default] OK   profile line = default
+  [default] OK   five address lines = 192.168.1.201..205:502 unit=1
+  [default] OK   Unknown-profile warning present = False
+  [default] OK   no 127.0.0.20x in the log
+  [default] OK   no ESTABLISHED Modbus connection (192.168.1.x unreachable)
+  [default] OK   no 502/8125 listener left after close
+  [bogus] probe exit=0   verdict: SAFE
+  [bogus] log D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\profile-bogus.log (235 lines):
+      [Modbus] device profile=default
+      [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1
+      [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1
+      [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1
+      [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1
+      [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1
+      [Modbus] Unknown TAIDAFLOW_DEVICE_PROFILE="bogus" (expected "simulator"); using default device addresses.
+  [bogus] OK   profile line = default
+  [bogus] OK   five address lines = 192.168.1.201..205:502 unit=1
+  [bogus] OK   Unknown-profile warning present = True
+  [bogus] OK   no 127.0.0.20x in the log
+  [bogus] OK   no ESTABLISHED Modbus connection (192.168.1.x unreachable)
+  [bogus] OK   no 502/8125 listener left after close
+  [simulator] probe exit=0   verdict: SAFE
+  [simulator] log D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\profile-simulator.log (663 lines):
+      [Modbus] device profile=simulator
+      [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+      [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+      [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+      [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+      [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+  [simulator] OK   profile line = simulator
+  [simulator] OK   five address lines = 127.0.0.201..205:502 unit=1
+  [simulator] OK   Unknown-profile warning present = False
+  [simulator] OK   no 192.168.1. anywhere in the log
+      app ESTABLISHED -> 127.0.0.201, 127.0.0.202, 127.0.0.203, 127.0.0.204, 127.0.0.205 ; simulator-owned server ends: 127.0.0.201, 127.0.0.202, 127.0.0.203, 127.0.0.204, 127.0.0.205
+  [simulator] OK   app connected to exactly 127.0.0.201..205:502
+  [simulator] OK   those five connections terminate in the simulator process
+      [Modbus][Read] lines=250 with raw!=0: 150; e.g. [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=990 value=15.106
+  [simulator] OK   [Modbus][Read] with non-zero raw value
+  [simulator] OK   no 502/8125 listener left after close
+verify_device_profile exit=0
+EXIT=0

@@ -1,0 +1,60 @@
+# w2-029: UI input on the desktop window that was NOT issued by w2-029 (recorded, not stopped)
+#
+# Setup: TaidaFlowApp pid 27764 (started 14:40:13 by w2-029, simulator profile) and
+# Adam60xxSimulator pid 72392 (started 14:39:10 by w2-029). No network client was connected to
+# 127.0.0.1:8125 or 0.0.0.0:502 at 14:45:18 (Get-NetTCPConnection), i.e. the extra commands came
+# from mouse input on the desktop window itself. At 14:45:40 the foreground window was
+# TaidaFlowApp and the cursor was at screen (1267,1243) while w2-029 ran no input command.
+# All targets were the local simulator (127.0.0.20x); the 192.168.1.x probe was SAFE.
+#
+# w2-029's own desktop inputs (scripts\desktop_input.py, SendInput) in this window:
+#   14:43:19-14:43:31  M1 dialog: click (113,735), ctrl+a, type "35", click OK (885,657)
+#                      -> Core "[Modbus][Write request] ... command=MV1 offset=0 input=35.000 raw=1433"
+#                      -> simulator "[14:43:31] Core -> ADAM-6224: Holding Register offset 0 = [1433]"
+#   14:44:04-14:44:10  three clicks at (213,350) meant for the emergency-stop switch; none of
+#                      them produced an EmergencyStop write (cursor was apparently moved by the
+#                      other input between SetCursorPos and the click)
+#   ~14:44:48          one click at (222,350) -> the FIRST EmergencyStop raw=0 in the Core log
+#                      (+ VfdRun/Pump2Hz/MakeupPumpStart forced off; simulator logged
+#                      "[14:44:49] Core -> ADAM-6022: Holding Register offset 10 = [0]")
+#
+# Writes seen by the simulator that w2-029 did NOT issue (simulator stdout, 'Core ->' lines):
+[14:44:10] Core -> ADAM-6256: Coil offset 17 = [1]      (InverterReset pulse)
+[14:44:10] Core -> ADAM-6256: Coil offset 17 = [0]
+[14:44:49] Core -> ADAM-6256: Coil offset 18 = [1]      (emergency stop released)
+[14:44:50] Core -> ADAM-6256: Coil offset 18 = [0]      (emergency stop set)
+[14:44:58] Core -> ADAM-6256: Coil offset 18 = [1]
+[14:44:59] Core -> ADAM-6256: Coil offset 18 = [0]
+[14:45:03] Core -> ADAM-6256: Coil offset 17 = [1]
+[14:45:03] Core -> ADAM-6256: Coil offset 17 = [0]
+[14:45:04] Core -> ADAM-6256: Coil offset 18 = [1]
+[14:45:05] Core -> ADAM-6256: Coil offset 17 = [1]
+[14:45:05] Core -> ADAM-6256: Coil offset 17 = [0]
+[14:45:06] Core -> ADAM-6256: Coil offset 18 = [0]
+[14:45:15] Core -> ADAM-6256: Coil offset 18 = [1]
+[14:45:16] Core -> ADAM-6256: Coil offset 17 = [1]
+[14:45:16] Core -> ADAM-6256: Coil offset 17 = [0]
+[14:45:38] Core -> ADAM-6224: Holding Register offset 1 = [1433]   (M2 = 35)
+[14:45:46] Core -> ADAM-6224: Holding Register offset 2 = [1351]   (M3 = 33)
+[14:45:53] Core -> ADAM-6224: Holding Register offset 3 = [1638]   (M4 = 40)
+[14:46:35] Core -> ADAM-6256: Coil offset 20 = [1]      (two-way valve)
+[14:46:39] Core -> ADAM-6256: Coil offset 20 = [0]
+[14:46:41] Core -> ADAM-6256: Coil offset 20 = [1]
+[14:46:44] Core -> ADAM-6256: Coil offset 20 = [0]
+[14:46:49] Core -> ADAM-6022: Holding Register offset 10 = [2048]   (pump-2 frequency)
+[14:46:55] Core -> ADAM-6256: Coil offset 17 = [1]
+[14:46:55] Core -> ADAM-6256: Coil offset 17 = [0]
+[14:47:02] Core -> ADAM-6022: Holding Register offset 10 = [2730]
+[14:49:32] Core -> ADAM-6256: Coil offset 18 = [1]      (just before w2-029's desktop click 1)
+[14:49:32] Core -> ADAM-6256: Coil offset 18 = [0]
+# Writes in the same period that ARE w2-029's (timestamps match w2-029 inputs):
+#   14:48:17 ADAM-6224 HR0 = [504]   <- browser pane (WASM) M1 dialog "12.3" + OK (06:48:17Z)
+#   14:49:11 ADAM-6256 Coil 18 = [0] + ADAM-6022 HR10 = [0]  <- browser pane emergency-stop ON
+#   14:49:33 ADAM-6256 Coil 18 = [1] <- desktop click 1 at 14:49:33.050 (emergency OFF)
+#   14:49:35 ADAM-6256 Coil 18 = [0] <- desktop click 2 at 14:49:35.333 (emergency ON)
+# Note: at 14:49:33 the desktop window had been moved (click landed at screen 766,847 instead
+# of 1175,875), i.e. someone else was also moving the window.
+# Last foreign write 14:49:32. Screenshot of the state at 14:45:58
+# (M2 35, M3 33, M4 40, emergency stop OFF) is 91-desktop-state-after-foreign-input.png.
+# These writes are NOT used as w2-029 evidence; D3(c) evidence uses only writes whose
+# timestamps match a w2-029 input (see 42-*/43-* and the report).

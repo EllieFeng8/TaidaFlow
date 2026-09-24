@@ -1,0 +1,7 @@
+2026-09-24T06:47:48.042Z [log] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-24T06:47:48.042Z [log] CJK fallback chain: DejaVu Sans,Segoe UI,Arial,Verdana,Sans Serif -> TaidaFlow Noto Sans TC | Consolas -> DejaVu Sans Mono,TaidaFlow Noto Sans TC
+2026-09-24T06:47:48.045Z [log] WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+2026-09-24T06:47:48.138Z [log] Transport overlay: transportReady = false message = Synchronizing with the Qt desktop Core...
+2026-09-24T06:47:48.158Z [log] Transport overlay: transportReady = true message = 
+2026-09-24T06:47:48.159Z [log] Transport overlay: transportReady = true message = 
+2026-09-24T06:47:48.159Z [log] WASM Mirror ready: true

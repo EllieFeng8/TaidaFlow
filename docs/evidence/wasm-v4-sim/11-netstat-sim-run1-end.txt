@@ -1,0 +1,11 @@
+﻿=== 2026-09-24T14:50:05.5929815+08:00 netstat at end of run1 (TaidaFlowApp pid=27764)
+  TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       27764
+  TCP    127.0.0.1:8125         0.0.0.0:0              LISTENING       27764
+  TCP    127.0.0.1:8125         127.0.0.1:57299        ESTABLISHED     27764
+  TCP    127.0.0.1:62387        127.0.0.201:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62388        127.0.0.202:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62389        127.0.0.203:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62390        127.0.0.204:502        ESTABLISHED     27764
+  TCP    127.0.0.1:62391        127.0.0.205:502        ESTABLISHED     27764
+--- lines containing 192.168.1. :
+<none>

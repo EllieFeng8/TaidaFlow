@@ -102,6 +102,7 @@
 | DV-8 | `CMakePresets.json` | `core` 的 `.gitignore` 排除了它,commit 時需 `git add -f` |
 | DV-9 | `docs/evidence/wasm-v4/`(47 個證據檔)、`docs/evidence/wasm-v4-csv/`(CSV 下載) | 驗證紀錄 |
 | DV-10 | `saveHistoryCsv` 網頁分支與 `HistoryPage.qml` 下載訊息(§4.4) | 網頁版下載檔案 |
+| DV-11 | `Core/Modbus_Client.cpp` 測試用位址切換 `TAIDAFLOW_DEVICE_PROFILE=simulator`;`scripts/run-simulator.ps1`、`probe_selftest_sim.ps1`,`safety_probe.ps1`/`run-desktop.ps1` 的 `-DeviceProfile simulator`(§4.6) | Mango 決定接模擬器做真實資料聯調(w2-029) |
 
 ---
 
@@ -187,6 +188,8 @@ PM 另外獨立抽測(2026-09-24 12:07~12:10,每次啟動前探測皆 SAFE):網�
 4. **Modbus server 綁在 0.0.0.0:502**,外部網卡看得到,也會和本機其他 502 服務衝突。
 5. **設備位址寫死在程式裡**(ADAM 192.168.1.201~205、MS300 COM2),沒辦法改接模擬器
    (`Adam60xxSimulator` 用的是 127.0.0.201~205)。
+   → **已提供測試用切換**(w2-029,§4.6):環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator` 時五台 ADAM
+   改連 127.0.0.201~205;未設定時與原本完全相同。MS300(COM2)未改。正式的可設定化仍見 §5 建議 8。
 6. **找不到 `data_schema.sql`**:Core 會到「目前工作目錄」找這個檔案,啟動 log 有多行
    `Schema file not found`。
 7. **沒有設備時 log 量很大**:約 4 分鐘產生 3,590 行 `request was not sent`;MS300 每秒
@@ -243,6 +246,44 @@ PM 另外獨立抽測(2026-09-24 12:07~12:10,每次啟動前探測皆 SAFE):網�
 | G-7 | 路徑範例不一致:§5.1、§7 用 `/mirror`,guide §10 用 `/` |
 | G-8 | 只要求驗證 MANIFEST,沒提醒 `core.autocrlf=true` 會在 checkout 時破壞 hash;建議附 `.gitattributes` 範本 |
 
+### 4.6 接 Adam60xxSimulator 聯調(w2-029,測試用位址切換)
+
+**做法**(只動位址,程式改動集中在 `Core/Modbus_Client.cpp`):
+- `TAIDAFLOW_DEVICE_PROFILE=simulator` → 五台 ADAM 改連 `127.0.0.201~205:502`(port 502、unit 1 不變);
+  未設定/空字串 → 原本的 `192.168.1.201~205`;其他值 → 記警告並維持原位址。
+- 啟動 log 印出 `[Modbus] device profile=…` 與五行 `[Modbus] device <名稱> -> <位址>:502 unit=1`;
+  log 內的設備名稱(`ADAM-6256 (…)`)也跟著顯示實際位址。重連、補送、interlock、MS300、聚合 server 都沒改。
+- 腳本:`scripts/run-simulator.ps1`(以 `build/sim-cwd` 為工作目錄起模擬器)、
+  `safety_probe.ps1 / run-desktop.ps1 -DeviceProfile simulator`(照舊探測 192.168.1.x 與序列埠;
+  502 只接受 `Adam60xxSimulator.exe` 在 127.0.0.201~205 的 listener;五個端點都要在聽)。
+
+**實測結果**(證據 `docs/evidence/wasm-v4-sim/`):
+| 項目 | 結果 |
+|---|---|
+| 連線 | netstat:app 只有 5 條 `127.0.0.1 → 127.0.0.201~205:502` ESTABLISHED,沒有任何 192.168.1.x |
+| 讀值 | 約 10 分鐘 14,775 行 `[Modbus][Read]`,`request was not sent` 0 行;TT-01~04 28.6~34.0 °C、PT-01~07 13.7~18.0、MV1~4 位置回授 20/30/40/50 % 等非零值。流量為 0(泵浦停止,見下) |
+| 桌面改 M1 | 35 % → `Core → ADAM-6224:Holding Register offset 0 = [1433]`,模擬器閥位回授 → 畫面 PV 34.99 % |
+| 急停 | 桌面按下 → `Core → ADAM-6256:Coil offset 18 = [0]`(DO2,急停迴路 active-low) |
+| 網頁版 | 看到模擬器來的 PV;網頁改 M1 = 12.3 → `HR0 = [504]`,閥位回授 12.3 % 回到網頁;網頁按急停 → `Coil 18 = [0]` + 6022 頻率 `HR10 = [0]` |
+
+**聚合 Modbus server(0.0.0.0:502)與模擬器同機的 bind 行為**(實測):
+- 模擬器先起:app 的 `0.0.0.0:502` 仍 bind 成功並與模擬器的 `127.0.0.20x:502` 並存;app 的 ADAM 連線
+  由較精確的模擬器 bind 接手(正確)。
+- app 先起:app 的 ADAM 連線被 **app 自己的** `0.0.0.0:502` 接走(兩端 pid 相同),讀值全 0、
+  6224/6256 回 Modbus exception;之後模擬器也能 bind 成功,但既有連線不會換過去。
+  → 探測在 simulator 模式要求五個端點都已在聽(否則 exit 5,不啟動)。
+- 這也再次說明 §5 建議 6:聚合 server 綁 0.0.0.0 會接住本機所有 127.x 的 502 連線。
+
+**觀察到的落差(未修改,記錄)**:
+- ADAM-6224 DI 定義不一致:Core 視 DI0 為「相位正常」,模擬器的 DI0 是「漏液」且預設 0 →
+  app 一啟動就 `[Safety Interlock] ADAM-6224 DI0 is false`,泵浦運轉會被擋,流量維持 0。
+  補水泵(coil 19)在模擬器製程中只被儲存回讀。模擬器端之後另案調整。
+- 模擬器只在值改變時記 `Core → …`(`QModbusServer::dataWritten`);寫入同值只看得到 Core 的
+  `[Modbus][Write completed]`。例如 app 啟動後 DO2(急停迴路)在模擬器是 0,而畫面急停顯示 OFF——
+  Core 連線後不會把畫面 SV 寫到設備(§4.3-13)。
+- 聯調期間有**不屬於本任務的滑鼠操作**在桌面視窗上(復歸、急停、M2~M4、二通閥、泵浦頻率),
+  逐筆記錄於 `90-foreign-ui-input-record.txt`;上表只採用時間與本任務操作吻合的寫入。
+
 ---
 
 ## 5. 維護方建議
@@ -268,6 +309,8 @@ PM 另外獨立抽測(2026-09-24 12:07~12:10,每次啟動前探測皆 SAFE):網�
 
 8. **設備位址改成可設定**(ADAM IP、MS300 COM port,例如放進 `TaidaFlowSettings.ini`)。
    這樣可以接 `Adam60xxSimulator` 做開發測試,也降低開發機誤連真實設備的風險。
+   (本輪已提供**測試用**切換 `TAIDAFLOW_DEVICE_PROFILE=simulator`,只為開發聯調,見 §4.6;
+   正式、可設定的位址與 COM port 仍由維護方決定與實作。)
 9. **決定歷史頁頁碼要不要共享**。若希望每個畫面各自翻頁,把頁碼改成各端自己保存,
    翻頁改用 request signal 向桌面查詢。
 10. **修正 `data_schema.sql` 找不到**。部署時一起帶這個檔案,或改用 qrc 內嵌。
@@ -299,5 +342,13 @@ scripts\build-wasm.bat wasm-release  :: 網頁版
    (會先做安全探測,並以 `build\runtime-cwd` 為工作目錄)
 2. 啟動網頁伺服器:`python scripts\serve_wasm.py`
 3. 瀏覽器開 `http://127.0.0.1:8123/TaidaFlowApp.html`
+
+**如何接模擬器(測試用)**:
+1. 先起模擬器:`powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1`
+   (工作目錄 `build\sim-cwd`;等到 127.0.0.201~205:502 五台都在聽)
+2. 再起桌面版:`powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator`
+   (simulator 模式探測,並幫 app 設 `TAIDAFLOW_DEVICE_PROFILE=simulator`;log 應有
+   `[Modbus] device profile=simulator` 與五行 127.0.0.20x)
+3. 網頁版照上面 2、3 步。順序不能反(§4.6)。
 
 詳細說明見 `README.md`。

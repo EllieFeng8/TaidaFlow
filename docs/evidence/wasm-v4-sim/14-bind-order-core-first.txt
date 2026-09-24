@@ -1,0 +1,62 @@
+﻿# w2-029 bind-order test (run2): Core FIRST (TAIDAFLOW_DEVICE_PROFILE=simulator, TaidaFlowApp pid 73032, started ~14:50:50 after a SAFE probe with 0/5 simulator endpoints),
+# then Adam60xxSimulator started directly at 14:51:15 (pid 37716, cwd build\sim-cwd; run-simulator.ps1 refuses because 502 is in use).
+# Captured 2026-09-24T14:51:45.6877936+08:00
+## TCP (502/8125, TimeWait omitted)
+127.0.0.1:62361 -> 127.0.0.205:502 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:62360 -> 127.0.0.204:502 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:62359 -> 127.0.0.203:502 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:62358 -> 127.0.0.202:502 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:62357 -> 127.0.0.201:502 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:8125 -> 127.0.0.1:64665 Established pid=73032 (TaidaFlowApp)
+127.0.0.1:8125 -> 0.0.0.0:0 Listen pid=73032 (TaidaFlowApp)
+127.0.0.205:502 -> 127.0.0.1:62361 Established pid=73032 (TaidaFlowApp)
+127.0.0.205:502 -> 0.0.0.0:0 Listen pid=37716 (Adam60xxSimulator)
+127.0.0.204:502 -> 127.0.0.1:62360 Established pid=73032 (TaidaFlowApp)
+127.0.0.204:502 -> 0.0.0.0:0 Listen pid=37716 (Adam60xxSimulator)
+127.0.0.203:502 -> 127.0.0.1:62359 Established pid=73032 (TaidaFlowApp)
+127.0.0.203:502 -> 0.0.0.0:0 Listen pid=37716 (Adam60xxSimulator)
+127.0.0.202:502 -> 127.0.0.1:62358 Established pid=73032 (TaidaFlowApp)
+127.0.0.202:502 -> 0.0.0.0:0 Listen pid=37716 (Adam60xxSimulator)
+127.0.0.201:502 -> 127.0.0.1:62357 Established pid=73032 (TaidaFlowApp)
+127.0.0.201:502 -> 0.0.0.0:0 Listen pid=37716 (Adam60xxSimulator)
+0.0.0.0:502 -> 0.0.0.0:0 Listen pid=73032 (TaidaFlowApp)
+## Core log: startup + connection lines
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+ADAM-6256 (127.0.0.201) connected 
+ADAM-6217 A (127.0.0.202) connected 
+ADAM-6217 B (127.0.0.203) connected 
+ADAM-6224 (127.0.0.204) connected 
+ADAM-6022 (127.0.0.205) connected 
+## Core log counts
+     816  '[Modbus][Read]'
+     102  'Modbus Exception Response'
+       0  '[Modbus][Write request]'
+       0  'request was not sent'
+## last [Modbus][Read] lines (all raw=0: Core is reading its OWN aggregate server)
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=0 value=0.000
+## simulator log (non-[Process])
+[14:51:15] 已套用本機回送端點；Core 端點也需改成相同設定。
+[14:51:15] 完整設備模擬器已就緒。請啟動全部 ADAM Server。
+[14:51:15] ADAM-6256: Listening
+[AdamDeviceServer] ADAM-6256 listening on 127.0.0.201:502 unit=1
+[14:51:15] ADAM-6217 A: Listening
+[AdamDeviceServer] ADAM-6217 A listening on 127.0.0.202:502 unit=1
+[14:51:15] ADAM-6217 B: Listening
+[AdamDeviceServer] ADAM-6217 B listening on 127.0.0.203:502 unit=1
+[14:51:15] ADAM-6224: Listening
+[AdamDeviceServer] ADAM-6224 listening on 127.0.0.204:502 unit=1
+[14:51:15] ADAM-6022: Listening
+[AdamDeviceServer] ADAM-6022 listening on 127.0.0.205:502 unit=1

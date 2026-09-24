@@ -1,8 +1,9 @@
 # TaidaFlow
 
 TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷史)。本分支 `core`
-含真實後端 `Core/`:`core.cpp`、`manager.cpp`、`Modbus_Client`(5 台 ADAM,**寫死**
-`192.168.1.201~205:502`,會寫 DO/AO)、`Modbus_Server`(bind `AnyIPv4:502`)、
+含真實後端 `Core/`:`core.cpp`、`manager.cpp`、`Modbus_Client`(5 台 ADAM,預設
+`192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
+改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
 `Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)。
 
 QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBackend`)。
@@ -27,7 +28,9 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
 - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
   `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`)。`build/`
   已被 `.gitignore` 排除,work tree 保持乾淨。
-- 不要為了接模擬器改 Core 的裝置位址或網路設定。
+- 不要為了接模擬器改網路設定(不加 IP alias)或改 Core 程式;要接模擬器請用下方
+  「接 Adam60xxSimulator」的測試用 profile。`run-desktop.ps1` 在預設模式會**移除**
+  `TAIDAFLOW_DEVICE_PROFILE`,確保 app 用的就是探測過的 192.168.1.x。
 
 ## 需求環境
 
@@ -100,6 +103,51 @@ python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.htm
 
 desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)。
 純本機的檢視控制(分頁切換、日期篩選、警報頁分頁、CSV 匯出)不受影響。
+
+## 接 Adam60xxSimulator(測試用設備位址切換)
+
+`Adam60xxSimulator`(repo 內另一個專案,**只執行它已建好的 exe**,不建置、不在其資料夾寫檔)
+以 `--autostart` 在 `127.0.0.201~205:502`(Unit ID 1)開五台 ADAM。Core 的切換只在
+`Core/Modbus_Client.cpp`:
+
+| `TAIDAFLOW_DEVICE_PROFILE` | 五台 ADAM 位址 | log |
+|---|---|---|
+| 未設定 / 空字串 | `192.168.1.201~205:502`(與原本相同) | `[Modbus] device profile=default` + 五行位址 |
+| `simulator` | `127.0.0.201~205:502`(port、unit 不變) | `[Modbus] device profile=simulator` + 五行位址 |
+| 其他值 | 維持 `192.168.1.x` | 先記 `[Modbus] Unknown TAIDAFLOW_DEVICE_PROFILE="…"` 警告 |
+
+只換位址:重連、補送、interlock、MS300(COM2)、聚合 Modbus server(`0.0.0.0:502`)行為都不變。
+這是**開發測試用**切換;正式的設備位址可設定化仍屬維護方建議(`docs/wasm-integration-report.md` §5 建議 8)。
+
+```powershell
+# 1. 先起模擬器(工作目錄 build\sim-cwd;502 已被占用就拒絕,不會關掉別人的程式)
+powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1
+# 2. 再起桌面版(simulator 模式探測 + 幫 app 設 TAIDAFLOW_DEVICE_PROFILE=simulator)
+powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator -Label "sim"
+# 3. 網頁版照舊
+python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.html
+```
+
+- **順序一定是模擬器先**。實測(`docs/evidence/wasm-v4-sim/14-bind-order-core-first.txt`):
+  app 先起時,它對 `127.0.0.20x:502` 的 ADAM 連線會被 app **自己的** `0.0.0.0:502` 聚合 server
+  接走(讀值全 0、6224/6256 回 Modbus exception),之後再起模擬器也不會換過去。所以
+  `safety_probe.ps1 -DeviceProfile simulator` 要求五個模擬器端點都已在聽,否則 exit 5
+  (`SIMULATOR-NOT-READY`),`run-desktop.ps1` 不啟動。模擬器先起時,app 的 `0.0.0.0:502`
+  仍 bind 成功,兩者並存(連 `127.0.0.20x` 的連線由較精確的模擬器 bind 接手)。
+- simulator 模式的探測:照舊 TCP 探測 `192.168.1.201~205:502`、列序列埠(可達或有 COM2 → exit 3);
+  port 502 的 listener **只**接受「程序映像檔是 `Adam60xxSimulator.exe` 且位址在
+  `127.0.0.201~205`」,其他(別的程式、別的位址、IPv6)一律 UNSAFE(exit 3)。紀錄預設寫到
+  `docs/evidence/wasm-v4-sim/safety-probe.log`。預設模式(不帶 `-DeviceProfile`)行為與輸出不變。
+- `-DeviceProfile simulator` 不能與 `-PvFile`(dev-only PV 注入)並用。
+- 已知點位落差(不是切換造成,之後另案處理):模擬器 ADAM-6224 DI0 是「漏液」且預設 0,
+  Core 把 DI0 當「相位正常」→ 啟動後立即 `[Safety Interlock] ... DI0 is false`,泵浦啟動會被擋;
+  Core 補水泵寫 6256 coil 19,模擬器製程只把 coil 16 當泵浦。
+- 模擬器只在值**改變**時記 `Core → ADAM-…` log(`QModbusServer::dataWritten`);寫入同值不會出現,
+  以 Core log 的 `[Modbus][Write completed]` 為準。
+- D2 自我測試(真的起模擬器與假 listener,exit code 判定):
+  `powershell -ExecutionPolicy Bypass -File scripts\probe_selftest_sim.ps1`。
+- 注意:`run-desktop.ps1` / `run-simulator.ps1` 的輸出若接到管線(`| Select-Object` 等),被啟動
+  的程式可能繼承該管線,指令要等程式結束才返回;直接執行或導向檔案即可。
 
 ## 中文字型(WebAssembly)
 

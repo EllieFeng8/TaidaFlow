@@ -1,0 +1,1423 @@
+﻿# excerpt of build\runtime-logs\sim-desktop-run1.log (TaidaFlowApp stderr, TAIDAFLOW_DEVICE_PROFILE=simulator, started 14:40:13, closed 14:50:05)
+# total_lines=32928
+## counts
+   14775  lines containing '[Modbus][Read]'
+   11229  lines containing '[ModbusServer][Mirror]'
+       0  lines containing 'request was not sent'
+       0  lines containing '192.168.1.'
+      65  lines containing '[Modbus][Write request]'
+      65  lines containing '[Modbus][Write completed]'
+    2960  lines containing '[MS300]'
+       0  lines containing 'TCP socket error'
+## first 32 lines
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=�]�ƱҰ� status=���`
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Loaded 6 alarm-history records from the last 3 days into the UI.
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[MS300] Referenced serial device does not exist.
+[MS300] �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Connection request failed: �t�Χ䤣����w���ɮסC
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Loaded sensor-history page 1/1: 8 record(s).
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Loaded 6 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+ADAM-6256 (127.0.0.201) connected 
+ADAM-6217 A (127.0.0.202) connected 
+ADAM-6022 (127.0.0.205) connected 
+ADAM-6217 B (127.0.0.203) connected 
+ADAM-6224 (127.0.0.204) connected 
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Referenced serial device does not exist.
+## all write / interlock / emergency / connection lines (in order)
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+ADAM-6256 (127.0.0.201) connected 
+ADAM-6217 A (127.0.0.202) connected 
+ADAM-6022 (127.0.0.205) connected 
+ADAM-6217 B (127.0.0.203) connected 
+ADAM-6224 (127.0.0.204) connected 
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6224 (127.0.0.204) command=MV1 offset=0 input=35.000 raw=1433
+[Modbus][Write completed] device=ADAM-6224 (127.0.0.204) type=4 offset=0 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=1.000 raw=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6224 (127.0.0.204) command=MV2 offset=1 input=35.000 raw=1433
+[Modbus][Write completed] device=ADAM-6224 (127.0.0.204) type=4 offset=1 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6224 (127.0.0.204) command=MV3 offset=2 input=33.000 raw=1351
+[Modbus][Write completed] device=ADAM-6224 (127.0.0.204) type=4 offset=2 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6224 (127.0.0.204) command=MV4 offset=3 input=40.000 raw=1638
+[Modbus][Write completed] device=ADAM-6224 (127.0.0.204) type=4 offset=3 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=CirculationBypassValveOpen offset=20 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=20 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=CirculationBypassValveOpen offset=20 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=20 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=CirculationBypassValveOpen offset=20 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=20 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=CirculationBypassValveOpen offset=20 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=20 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=30.000 raw=2048
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Safety Interlock] DI0 is false/unknown; VfdRun was not energized.
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=InverterReset offset=17 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=17 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=40.000 raw=2730
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Safety Interlock] DI0 is false/unknown; VfdRun was not energized.
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Safety Interlock] ADAM-6224 DI0 is false; forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6224 (127.0.0.204) command=MV1 offset=0 input=12.300 raw=504
+[Modbus][Write completed] device=ADAM-6224 (127.0.0.204) type=4 offset=0 count=1
+[Safety Interlock] DI0 is false/unknown; MakeupPumpStart was not energized.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Safety Interlock] DI0 is false/unknown; MakeupPumpStart was not energized.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=VfdRun offset=16 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6022 (127.0.0.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[Modbus][Write request] device=ADAM-6256 (127.0.0.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[Modbus][Write completed] device=ADAM-6022 (127.0.0.205) type=4 offset=10 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=18 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=16 count=1
+[Modbus][Write completed] device=ADAM-6256 (127.0.0.201) type=2 offset=19 count=1
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+[MS300] Disconnected from COM2, Unit ID 1: �t�Χ䤣����w���ɮסC
+ADAM-6256 (127.0.0.201) disconnected 
+ADAM-6217 A (127.0.0.202) disconnected 
+ADAM-6217 B (127.0.0.203) disconnected 
+ADAM-6224 (127.0.0.204) disconnected 
+ADAM-6022 (127.0.0.205) disconnected 
+## last 24 [Modbus][Read] lines (one full poll cycle)
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=19038 value=29.050
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=22282 value=34.000
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21692 value=33.100
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=897 value=13.687
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=8066 value=12.308
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=22933 value=34.994
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=21621 value=32.992
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=26214 value=40.000
+## last 6 lines
+[ModbusServer] stopped
+ADAM-6256 (127.0.0.201) disconnected 
+ADAM-6217 A (127.0.0.202) disconnected 
+ADAM-6217 B (127.0.0.203) disconnected 
+ADAM-6224 (127.0.0.204) disconnected 
+ADAM-6022 (127.0.0.205) disconnected 

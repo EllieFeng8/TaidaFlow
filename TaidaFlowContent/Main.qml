@@ -18,6 +18,12 @@ Item {
         }
     }
 
+    // Offline banner (TopNav.qml, 64 px, window y 72..136): this page is scaled 1.5x
+    // and pulled 70 px up under the nav bar, so its first content row starts at local
+    // y 92 = window y 140 and the band the banner uses is empty here. Main therefore
+    // stays anchored at topNavBar.bottom (pushing it down would cut its bottom row,
+    // "Leakage Sensor", off the 1080 px window); AlarmPage/HistoryPage, which start
+    // right under the nav bar, anchor to offlineBanner.bottom and are pushed down.
     anchors.top: topNavBar.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -80,8 +86,10 @@ Item {
                 background: Rectangle {
                     radius: 6
                     color: inverterResetButton.down ? "#0877B5" : "#0087DC"
-                    border.color: inverterResetButton.hovered ? "#8EDCFF" : "transparent"
-                    border.width: inverterResetButton.hovered ? 1 : 0
+                    // Qt Quick Controls still report `hovered` on a disabled Button, so
+                    // the hover border is gated on enabled (no "clickable" cue offline).
+                    border.color: inverterResetButton.hovered && inverterResetButton.enabled ? "#8EDCFF" : "transparent"
+                    border.width: inverterResetButton.hovered && inverterResetButton.enabled ? 1 : 0
                     opacity: inverterResetButton.enabled ? 1.0 : 0.45
                 }
 
@@ -172,6 +180,12 @@ Item {
         }
         // FM 從 >0 變成 0 時，也立即重新畫成灰色
         onFlowRunningChanged: {
+            requestPaint()
+        }
+        // 漏液狀態(Td.leakDetectedPv,後端由 ADAM-6224 DI1 寫入);漏液時 Leakage Sensor 線變紅
+        property bool leakDetected: Td.leakDetectedPv
+        property color leakColor: "#FF4D4D"
+        onLeakDetectedChanged: {
             requestPaint()
         }
 
@@ -446,7 +460,7 @@ Item {
             // =====================================================
             // leakage sensor
             // =====================================================
-            ctx.strokeStyle = "#6864FF"
+            ctx.strokeStyle = pipes.leakDetected ? pipes.leakColor : "#6864FF"
             ctx.lineWidth = 6
             line(ctx, 483, 680, 729, 680)
         }
@@ -953,7 +967,7 @@ Item {
                 }
 
                 Text {
-                    text: Td.pump2HzPv+"%"
+                    text: Td.pump2HzPv.toFixed(1) + "Hz"
                     color: "#FFD166"
                     font.pixelSize: 14
                     font.family: "Consolas"
@@ -1251,7 +1265,7 @@ Item {
         x: 416
         y: 658
         text: "Leakage\nSensor"
-        color: root.textColor
+        color: pipes.leakDetected ? pipes.leakColor : root.textColor
         font.pixelSize: 15
         font.family: "Consolas"
         horizontalAlignment: Text.AlignHCenter

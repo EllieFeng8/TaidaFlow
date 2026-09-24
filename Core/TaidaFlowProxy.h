@@ -58,6 +58,8 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(double pt06ValuePv READ pt06ValuePv WRITE setPt06ValuePv NOTIFY pt06ValuePvChanged)
     Q_PROPERTY(double pt07ValuePv READ pt07ValuePv WRITE setPt07ValuePv NOTIFY pt07ValuePvChanged)
     Q_PROPERTY(double flowMeterValuePv READ flowMeterValuePv WRITE setFlowMeterValuePv NOTIFY flowMeterValuePvChanged)
+    // Leakage sensor state: written by the core backend from ADAM-6224 DI1 (1 = leak detected).
+    Q_PROPERTY(bool leakDetectedPv READ leakDetectedPv WRITE setLeakDetectedPv NOTIFY leakDetectedPvChanged)
 
     // List data is owned by the authoritative side. QML only reads a local copy.
     Q_PROPERTY(QVariantList historyTitle READ historyTitle WRITE setHistoryTitle NOTIFY historyTitleChanged)
@@ -114,6 +116,7 @@ public:
     double pt06ValuePv() const { return m_pt06ValuePv; }
     double pt07ValuePv() const { return m_pt07ValuePv; }
     double flowMeterValuePv() const { return m_flowMeterValuePv; }
+    bool leakDetectedPv() const { return m_leakDetectedPv; }
     QVariantList historyTitle() const { return m_historyTitle; }
     QVariantList historyRecords() const { return m_historyRecords; }
     int historyCurrentPage() const { return m_historyCurrentPage; }
@@ -162,6 +165,7 @@ public:
     void setPt06ValuePv(double value) { setProcessValue(m_pt06ValuePv, value, &TaidaFlowProxy::pt06ValuePvChanged); }
     void setPt07ValuePv(double value) { setProcessValue(m_pt07ValuePv, value, &TaidaFlowProxy::pt07ValuePvChanged); }
     void setFlowMeterValuePv(double value) { setProcessValue(m_flowMeterValuePv, value, &TaidaFlowProxy::flowMeterValuePvChanged); }
+    void setLeakDetectedPv(bool value) { setBooleanValue(m_leakDetectedPv, value, &TaidaFlowProxy::leakDetectedPvChanged); }
 
     void setHistoryTitle(const QVariantList &title)
     {
@@ -281,6 +285,7 @@ signals:
     void pt06ValuePvChanged(double value);
     void pt07ValuePvChanged(double value);
     void flowMeterValuePvChanged(double value);
+    void leakDetectedPvChanged(bool value);
     void historyTitleChanged(const QVariantList &title);
     void historyRecordsChanged(const QVariantList &records);
     void historyCurrentPageChanged(int page);
@@ -444,6 +449,7 @@ private:
     double m_pt06ValuePv = 0.0;
     double m_pt07ValuePv = 0.0;
     double m_flowMeterValuePv = 0.0;
+    bool m_leakDetectedPv = false;
     QVariantList m_historyTitle;
     QVariantList m_historyRecords;
     int m_historyCurrentPage = 1;

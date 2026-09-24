@@ -306,6 +306,12 @@ Rectangle {
     // is unreachable / synchronizing. All write controls are disabled meanwhile
     // (Main.qml controlsEnabled, HistoryPage paging); the page keeps the last
     // synchronized state.
+    // Layout: the banner never covers page content. It takes space only while it
+    // is shown: AlarmPage / HistoryPage anchor their top to offlineBanner.bottom,
+    // so the banner pushes them down (titles, filter bar and "下載 CSV" stay fully
+    // visible); Main's first content row starts below the banner anyway (see the
+    // note in Main.qml). Hidden -> height 0 -> the pages sit exactly at
+    // topNavBar.bottom, i.e. the desktop layout is unchanged.
     // =========================================================
     Rectangle {
         id: offlineBanner
@@ -314,11 +320,12 @@ Rectangle {
         anchors.top: topNavBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 64
+        height: visible ? 64 : 0
         z: 200
         visible: !Td.transportReady
 
-        color: "#E6B3261E"
+        // Opaque: the banner now sits in its own row (nothing is drawn behind it).
+        color: "#B3261E"
         border.color: "#FF8A80"
         border.width: 2
 

@@ -105,6 +105,10 @@ Item {
 
             MouseArea {
                 id: valueMouseArea
+                // Explicit, like Main.qml's motorMouse: a MouseArea keeps reporting
+                // containsMouse (hover highlight, pointing-hand cursor) under a disabled
+                // parent, so it is switched off together with the MotorIcon.
+                enabled: motorIcon.enabled
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true

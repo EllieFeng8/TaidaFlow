@@ -1,0 +1,111 @@
+﻿19:54:16.336 [t70408] [Modbus] device profile=simulator
+19:54:16.351 [t70408] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes)
+19:54:16.361 [t70408] [ExportHTTP] download service listening on 0.0.0.0:8124, GET /exports/<file> from D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+19:54:16.448 [t70408] [ModbusServer] listening on 0.0.0.0:502 unit=1
+19:54:16.448 [t70408] [History] request #1 (start-up) page 1, range 1788192000 .. 1790783999 s, posted to SqlManager thread in 20 us.
+19:54:16.481 [t70408] WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+19:54:17.127 [t70408] [History] #1 applied: page 1/129653, 10 record(s), total 1296526 row(s) in 1 month file(s) (0 count(s) from cache); SqlManager thread count 30.20 ms + page 1.23 ms; request-to-apply 678.27 ms.
+19:54:35.185 [t70408] [History] request #2 (page shown) page 1, range 1788192000 .. 1790783999 s, posted to SqlManager thread in 18 us.
+19:54:35.224 [t70408] [History] #2 applied: page 1/129655, 10 record(s), total 1296544 row(s) in 1 month file(s) (0 count(s) from cache); SqlManager thread count 29.74 ms + page 0.87 ms; request-to-apply 38.72 ms.
+19:54:41.301 [t70408] [History] range requested: 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s)
+19:54:41.307 [t70408] [History] request #3 (range changed) page 1, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 15 us.
+19:54:41.366 [t70408] [History] #3 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (0 count(s) from cache); SqlManager thread count 57.77 ms + page 0.93 ms; request-to-apply 58.91 ms.
+19:54:44.535 [t70408] [History] request #4 (page changed) page 2, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 51 us.
+19:54:44.566 [t70408] [History] #4 applied: page 2/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (1 count(s) from cache); SqlManager thread count 28.91 ms + page 1.05 ms; request-to-apply 30.15 ms.
+19:54:46.029 [t70408] [History] request #5 (page changed) page 3, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 19 us.
+19:54:46.059 [t70408] [History] #5 applied: page 3/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (1 count(s) from cache); SqlManager thread count 29.04 ms + page 0.96 ms; request-to-apply 30.15 ms.
+19:54:49.277 [t70408] [History] range requested: 0 .. 8640000000000000 ms (1 .. 8640000000000 s)
+19:54:49.278 [t70408] [History] request #6 (range changed) page 1, range 1 .. 8640000000000 s, posted to SqlManager thread in 14 us.
+19:54:49.337 [t70408] [History] #6 applied: page 1/259266, 10 record(s), total 2592658 row(s) in 3 month file(s) (0 count(s) from cache); SqlManager thread count 57.73 ms + page 0.70 ms; request-to-apply 59.19 ms.
+19:54:55.426 [t70408] [History] range requested: 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s)
+19:54:55.432 [t70408] [History] request #7 (range changed) page 1, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 16 us.
+19:54:55.497 [t70408] [History] #7 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (0 count(s) from cache); SqlManager thread count 57.86 ms + page 1.08 ms; request-to-apply 63.73 ms.
+19:55:39.515 [t70408] [Export] desktop: opening the save dialog, suggested C:\Users\TED\Documents\desktop_20260924_195539.csv
+19:55:44.453 [t70408] [Export] #1 queued: session desktop, desktop save-as, range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_30days.csv
+19:55:44.455 [t70408] [Export] #1 running: session desktop (0 still queued)
+19:55:44.525 [t70408] [Export] #1 2592003 row(s) to write
+19:55:49.466 [t70408] [Export] #1 done: session desktop, 5012.1 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 70.0 ms, total 5011.5 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 8.01 ms; 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_30days.csv
+19:56:05.501 [t36808] Failed to insert sensor data: "database is locked 無法抓取列"
+19:56:10.562 [t36808] Failed to insert sensor data: "database is locked 無法抓取列"
+19:56:10.574 [t70408] [Export] request from "desktop" rejected: this session already has an export queued or running
+19:56:15.612 [t36808] Failed to insert sensor data: "database is locked 無法抓取列"
+19:56:15.616 [t70408] [Export] desktop: opening the save dialog, suggested C:\Users\TED\Documents\desktop_20260924_195615.csv
+19:56:20.742 [t36808] Failed to insert sensor data: "database is locked 無法抓取列"
+19:56:25.492 [t70408] [Export] #2 queued: session desktop, desktop save-as, range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_cancel_test.csv
+19:56:25.493 [t70408] [Export] #2 running: session desktop (0 still queued)
+19:56:25.572 [t70408] [Export] #2 2592003 row(s) to write
+19:56:28.010 [t70408] [Export] #2 cancel requested while running: session desktop
+19:56:28.014 [t70408] [Export] #2 cancelled: session desktop, 2521.4 ms; cancelled after 1296000 row(s); partial file discarded; 218203256 byte(s) -> (no file)
+19:57:22.666 [t70408] [Export] desktop: opening the save dialog, suggested C:\Users\TED\Documents\desktop_20260924_195722.csv
+19:57:23.694 [t70408] [Export] desktop: save dialog cancelled -> state cancelled
+19:57:48.827 [t70408] [History] request #8 (page shown) page 1, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 18 us.
+19:57:48.865 [t70408] [History] #8 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (1 count(s) from cache); SqlManager thread count 35.82 ms + page 0.99 ms; request-to-apply 37.12 ms.
+19:57:49.109 [t70408] [History] request #9 (page shown) page 1, range 1786896000 .. 1789487999 s, posted to SqlManager thread in 18 us.
+19:57:49.111 [t70408] [History] #9 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache); SqlManager thread count 0.45 ms + page 0.84 ms; request-to-apply 1.49 ms.
+19:58:03.212 [t70408] [Export] desktop: opening the save dialog, suggested C:\Users\TED\Documents\desktop_20260924_195803.csv
+19:58:10.018 [t70408] [Export] #3 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195810.csv
+19:58:10.025 [t70408] [Export] #3 running: session web-5564 (0 still queued)
+19:58:10.096 [t70408] [Export] #3 2592003 row(s) to write
+19:58:11.296 [t70408] [Export] #4 queued: session web-968f, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195811.csv
+19:58:15.013 [t70408] [Export] #3 done: session web-5564, 4989.4 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 70.4 ms, total 4987.7 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 8.86 ms; cleanup: removed 0 [], failed 0 [], left 3 file(s) / 1312551540 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195810.csv
+19:58:15.014 [t70408] [Export] #4 running: session web-968f (0 still queued)
+19:58:15.083 [t70408] [Export] #4 2592003 row(s) to write
+19:58:19.768 [t70408] [Export] #5 queued: session desktop, desktop save-as, range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_queued.csv
+19:58:20.004 [t70408] [Export] #4 done: session web-968f, 4989.9 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 69.0 ms, total 4989.2 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 11.02 ms; cleanup: removed 0 [], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195811.csv
+19:58:20.004 [t70408] [Export] #5 running: session desktop (0 still queued)
+19:58:20.072 [t70408] [Export] #5 2592003 row(s) to write
+19:58:25.026 [t70408] [Export] #5 done: session desktop, 5021.7 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 67.7 ms, total 5020.9 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 10.85 ms; 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_queued.csv
+19:58:39.976 [t70408] [Export] #6 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195839.csv
+19:58:39.977 [t70408] [Export] #6 running: session web-5564 (0 still queued)
+19:58:40.052 [t70408] [Export] #6 2592003 row(s) to write
+19:58:40.275 [t70408] [Export] #7 queued: session web-968f, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195840.csv
+19:58:44.994 [t70408] [Export] #6 done: session web-5564, 5017.4 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 73.5 ms, total 4978.7 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 7.57 ms; cleanup: removed 1 [web-733f_20260924_194533.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195839.csv
+19:58:44.995 [t70408] [Export] #7 running: session web-968f (0 still queued)
+19:58:45.069 [t70408] [Export] #7 2592003 row(s) to write
+19:58:50.034 [t70408] [Export] #7 done: session web-968f, 5039.7 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 74.0 ms, total 5000.3 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 8.09 ms; cleanup: removed 1 [web-c24a_20260924_194533.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195840.csv
+19:59:33.191 [t70408] [Export] #8 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195933.csv
+19:59:33.197 [t70408] [Export] #8 running: session web-5564 (0 still queued)
+19:59:33.270 [t70408] [Export] #8 2592003 row(s) to write
+19:59:33.425 [t70408] [Export] #9 queued: session web-968f, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195933.csv
+19:59:38.246 [t70408] [Export] #8 done: session web-5564, 5049.4 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 72.3 ms, total 4997.1 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 12.57 ms; cleanup: removed 1 [web-5564_20260924_195810.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_195933.csv
+19:59:38.247 [t70408] [Export] #9 running: session web-968f (0 still queued)
+19:59:38.319 [t70408] [Export] #9 2592003 row(s) to write
+19:59:43.332 [t70408] [Export] #9 done: session web-968f, 5085.3 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 72.3 ms, total 5040.3 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 11.14 ms; cleanup: removed 1 [web-968f_20260924_195811.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_195933.csv
+20:00:04.637 [t70408] [Export] #10 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200004.csv
+20:00:04.637 [t70408] [Export] #10 running: session web-5564 (0 still queued)
+20:00:04.706 [t70408] [Export] #10 2592003 row(s) to write
+20:00:09.671 [t70408] [Export] #10 done: session web-5564, 5034.2 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 68.8 ms, total 4981.5 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 11.02 ms; cleanup: removed 1 [web-5564_20260924_195839.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200004.csv
+20:00:41.219 [t70408] [Export] #11 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200041.csv
+20:00:41.219 [t70408] [Export] #11 running: session web-5564 (0 still queued)
+20:00:41.296 [t70408] [Export] #11 2592003 row(s) to write
+20:00:46.228 [t70408] [Export] #11 done: session web-5564, 5008.0 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 75.6 ms, total 4964.4 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 11.95 ms; cleanup: removed 1 [web-968f_20260924_195840.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200041.csv
+20:00:58.335 [t70408] [Export] #12 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200058.csv
+20:00:58.341 [t70408] [Export] #12 running: session web-5564 (0 still queued)
+20:00:58.412 [t70408] [Export] #12 2592003 row(s) to write
+20:01:00.864 [t70408] [Export] #12 cancel requested while running: session web-5564
+20:01:00.868 [t70408] [Export] #12 cancelled: session web-5564, 2527.4 ms; cancelled after 1322003 row(s); partial file discarded; 222265504 byte(s) -> (no file)
+20:01:20.998 [t70408] [Export] #13 queued: session web-5564, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200120.csv
+20:01:20.998 [t70408] [Export] #13 running: session web-5564 (0 still queued)
+20:01:21.067 [t70408] [Export] #13 2592003 row(s) to write
+20:01:21.373 [t70408] [Export] #14 queued: session web-968f, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-968f_20260924_200121.csv
+20:01:23.699 [t70408] [Export] #14 cancelled while queued (position 1): session web-968f
+20:01:26.065 [t70408] [Export] #13 done: session web-5564, 5067.3 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 68.4 ms, total 5024.5 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 8.95 ms; cleanup: removed 1 [web-5564_20260924_195933.csv], failed 0 [], left 4 file(s) / 1750068720 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-5564_20260924_200120.csv
+20:02:19.960 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 200, 437517180 byte(s) streamed from disk
+20:02:43.864 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 192.168.0.125 -> 200, 437517180 byte(s) streamed from disk
+20:03:08.528 [t83000] [ExportHTTP] GET /exports/../TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.547 [t83000] [ExportHTTP] GET /exports/..%2FTaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.566 [t83000] [ExportHTTP] GET /exports/..%2FTaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.585 [t83000] [ExportHTTP] GET /exports/../data/sensor_202609.sqlite from 127.0.0.1 -> 404 (no such route)
+20:03:08.602 [t83000] [ExportHTTP] GET /exports/..%5Cdata%5Csensor_202609.sqlite from 127.0.0.1 -> 400 (rejected name "..\data\sensor_202609.sqlite")
+20:03:08.618 [t83000] [ExportHTTP] GET /exports/..%5Cdata%5Csensor_202609.sqlite from 127.0.0.1 -> 400 (rejected name "..\data\sensor_202609.sqlite")
+20:03:08.636 [t83000] [ExportHTTP] GET /exports/.. from 127.0.0.1 -> 400 (rejected name "..")
+20:03:08.653 [t83000] [ExportHTTP] GET /exports/C:%5CWindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected name "C:\Windows\win.ini")
+20:03:08.670 [t83000] [ExportHTTP] GET /exports//TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.702 [t83000] [ExportHTTP] GET /TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.719 [t83000] [ExportHTTP] GET /exports/ from 127.0.0.1 -> 404 (no such route)
+20:03:08.737 [t83000] [ExportHTTP] GET /exports/data_20260924_000000.csv from 127.0.0.1 -> 404 (no file "data_20260924_000000.csv")
+20:03:08.754 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv%00.txt from 127.0.0.1 -> 400 (rejected name "web-5564_20260924_200120.csv
+20:03:08.773 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv%2500 from 127.0.0.1 -> 400 (rejected name "web-5564_20260924_200120.csv%00")
+20:03:08.791 [t83000] [ExportHTTP] POST /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 404 (no such route)
+20:03:08.810 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 200, 437517180 byte(s) streamed from disk
+20:03:24.878 [t70408] [Export] stopped (export thread and download service).

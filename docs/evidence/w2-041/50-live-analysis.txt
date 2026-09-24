@@ -1,0 +1,27 @@
+﻿== desktop 30-day export (#1, log 19:55:44.455 running -> 19:55:49.466 done); dialog open 19:55:39.515, confirmed ~19:55:44.2
+[idle-before] 19:55:31.000 .. 19:55:39.400
+  ui ping: n=804 p50=0.08 ms p99=3.39 ms max=5.69 ms above20ms=0
+  memory: n=83 private 182.4..182.9 MB, working set 192.3..192.6 MB
+[export-running] 19:55:44.455 .. 19:55:49.466
+  ui ping: n=477 p50=0.09 ms p99=1.97 ms max=39.45 ms above20ms=1
+  memory: n=50 private 191.3..208.7 MB, working set 228.1..243.3 MB
+[after-export] 19:55:49.500 .. 19:55:59.900
+  ui ping: n=996 p50=0.09 ms p99=3.18 ms max=5.36 ms above20ms=0
+  memory: n=103 private 190.1..194.6 MB, working set 226.9..229.9 MB
+[verifier-lock-incident] 19:56:00.000 .. 19:56:21.000
+  ui ping: n=59 p50=0.08 ms p99=inf ms max=inf ms above20ms=7
+  memory: n=178 private 190.0..191.1 MB, working set 226.8..228.6 MB
+== queue: web-5564 #3 19:58:10.025-19:58:15.013, web-968f #4 19:58:15.014-19:58:20.004, desktop #5 19:58:20.004-19:58:25.026 (save dialog open 19:58:03.2 .. 19:58:19.6)
+[3-exports-back-to-back] 19:58:10.025 .. 19:58:25.026
+  ui ping: n=1423 p50=0.09 ms p99=2.37 ms max=78.49 ms above20ms=2
+[after] 19:58:25.100 .. 19:59:03.000
+  ui ping: n=3627 p50=0.09 ms p99=3.37 ms max=8.55 ms above20ms=0
+== downloads from 8124 (log 20:02:19.960 loopback 20 MB/s -> 20:02:40.839; 20:02:43.864 LAN full speed -> 20:02:48.644)
+[before] 20:02:14.000 .. 20:02:19.900
+  memory: n=45 private 193.3..193.3 MB, working set 202.9..202.9 MB
+[download-20MBps] 20:02:19.960 .. 20:02:40.839
+  memory: n=208 private 193.6..201.5 MB, working set 194.0..207.1 MB
+[download-LAN] 20:02:43.864 .. 20:02:48.644
+  memory: n=48 private 193.7..193.8 MB, working set 192.9..193.0 MB
+[after] 20:02:48.700 .. 20:02:55.000
+  memory: n=63 private 193.8..201.7 MB, working set 191.2..197.9 MB

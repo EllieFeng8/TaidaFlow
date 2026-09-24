@@ -1,0 +1,37 @@
+﻿final live app 0.0.0.0:8124, 2026-09-24T20:03:08.5129944+08:00; outside-folder targets: build\runtime-cwd\TaidaFlowSettings.ini, data\sensor_202609.sqlite; curl --path-as-is (no client-side normalisation)
+GET /exports/../TaidaFlowSettings.ini -> 404 10
+GET /exports/..%2FTaidaFlowSettings.ini -> 404 10
+GET /exports/%2e%2e%2fTaidaFlowSettings.ini -> 404 10
+GET /exports/%2e%2e/data/sensor_202609.sqlite -> 404 10
+GET /exports/..%5Cdata%5Csensor_202609.sqlite -> 400 14
+GET /exports/..\data\sensor_202609.sqlite -> 400 14
+GET /exports/%2e%2e -> 400 14
+GET /exports/C:%5CWindows%5Cwin.ini -> 400 14
+GET /exports//TaidaFlowSettings.ini -> 404 10
+GET /TaidaFlowSettings.ini -> 404 10
+GET /exports/ -> 404 10
+GET /exports/data_20260924_000000.csv -> 404 10
+GET /exports/web-5564_20260924_200120.csv%00.txt -> 400 14
+GET /exports/web-5564_20260924_200120.csv%2500 -> 400 14
+POST /exports/web-5564_20260924_200120.csv -> 404
+GET /exports/web-5564_20260924_200120.csv (valid, control) -> 200 437517180
+--- app log lines:
+19:54:16.361 [t70408] [ExportHTTP] download service listening on 0.0.0.0:8124, GET /exports/<file> from D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+20:02:19.960 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 200, 437517180 byte(s) streamed from disk
+20:02:43.864 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 192.168.0.125 -> 200, 437517180 byte(s) streamed from disk
+20:03:08.528 [t83000] [ExportHTTP] GET /exports/../TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.547 [t83000] [ExportHTTP] GET /exports/..%2FTaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.566 [t83000] [ExportHTTP] GET /exports/..%2FTaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.585 [t83000] [ExportHTTP] GET /exports/../data/sensor_202609.sqlite from 127.0.0.1 -> 404 (no such route)
+20:03:08.602 [t83000] [ExportHTTP] GET /exports/..%5Cdata%5Csensor_202609.sqlite from 127.0.0.1 -> 400 (rejected name "..\data\sensor_202609.sqlite")
+20:03:08.618 [t83000] [ExportHTTP] GET /exports/..%5Cdata%5Csensor_202609.sqlite from 127.0.0.1 -> 400 (rejected name "..\data\sensor_202609.sqlite")
+20:03:08.636 [t83000] [ExportHTTP] GET /exports/.. from 127.0.0.1 -> 400 (rejected name "..")
+20:03:08.653 [t83000] [ExportHTTP] GET /exports/C:%5CWindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected name "C:\Windows\win.ini")
+20:03:08.670 [t83000] [ExportHTTP] GET /exports//TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.702 [t83000] [ExportHTTP] GET /TaidaFlowSettings.ini from 127.0.0.1 -> 404 (no such route)
+20:03:08.719 [t83000] [ExportHTTP] GET /exports/ from 127.0.0.1 -> 404 (no such route)
+20:03:08.737 [t83000] [ExportHTTP] GET /exports/data_20260924_000000.csv from 127.0.0.1 -> 404 (no file "data_20260924_000000.csv")
+20:03:08.754 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv%00.txt from 127.0.0.1 -> 400 (rejected name "web-5564_20260924_200120.csv
+20:03:08.773 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv%2500 from 127.0.0.1 -> 400 (rejected name "web-5564_20260924_200120.csv%00")
+20:03:08.791 [t83000] [ExportHTTP] POST /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 404 (no such route)
+20:03:08.810 [t83000] [ExportHTTP] GET /exports/web-5564_20260924_200120.csv from 127.0.0.1 -> 200, 437517180 byte(s) streamed from disk

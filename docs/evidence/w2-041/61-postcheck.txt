@@ -1,0 +1,22 @@
+﻿postcheck 2026-09-24T20:05:33.3706251+08:00
+processes TaidaFlowApp/Adam60xxSimulator: 0
+my python helpers still running: 0
+listeners 502/8123/8124/8125/18125: 0
+git HEAD: 31417f4
+git status --short:
+ M Core/CMakeLists.txt
+ M Core/SqlManager.cpp
+ M Core/SqlManager.h
+ M Core/core.cpp
+ M Core/core.h
+ M README.md
+ M docs/evidence/wasm-v4/safety-probe.log
+ M scripts/check_wasm_backend.py
+ M scripts/run-desktop.ps1
+ M scripts/safety_probe.ps1
+ M scripts/serve_wasm.py
+ M scripts/verify-desktop-startup.ps1
+?? Core/HistoryExport.cpp
+?? Core/HistoryExport.h
+?? docs/evidence/w2-041/
+Documents stray file present: False

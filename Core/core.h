@@ -6,6 +6,7 @@
 
 class ModbusServer;
 class SqlManager;
+class HistoryExportManager;
 struct SensorHistoryPageResult;
 
 class Core : public QObject
@@ -24,6 +25,7 @@ private:
     void reportIgnoredHmiInputSettings();
     void setHistoryTitleOnce();
     void loadHistoryRecords(const char *reason);
+    void onHistoryRangeRequested(double fromMs, double toMs);
     void applyHistoryPage(const SensorHistoryPageResult &result);
     void loadAlarmRecords();
 
@@ -34,5 +36,9 @@ private:
     // stale and dropped.
     quint64 m_historyRequestId = 0;
     QElapsedTimer m_historyRequestClock;   // started when the newest request is posted
+    // w2-041: set while a new History range moves the page back to 1, so that
+    // the load triggered by historyCurrentPageChanged is logged as a range change.
+    bool m_historyRangeChangePending = false;
+    HistoryExportManager* m_historyExport = nullptr;   // raw CSV export + download service
 
 };

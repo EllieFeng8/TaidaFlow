@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Development static HTTP server for the TaidaFlow WebAssembly build.
 
-Serves build/wasm-release (or --dir) on http://127.0.0.1:8123/ as required by the
-wasm-mirror pack (integration-pack/wasm-mirror/docs/http-server-requirements.md):
+Serves build/wasm-release (or --dir) on port 8123 as required by the wasm-mirror pack
+(integration-pack/wasm-mirror/docs/http-server-requirements.md).  w2-041: it binds 0.0.0.0 by
+default so that other machines on the plant LAN can open the page (internal network, no access
+control); `--host 127.0.0.1` restores the old local-only binding.
   * the page Origin http://127.0.0.1:8123 is in the desktop mirror allowedOrigins
   * correct MIME types (.wasm -> application/wasm, .js -> text/javascript)
   * Cache-Control: no-store so HTML/JS/WASM from different builds never mix
@@ -11,8 +13,8 @@ wasm-mirror pack (integration-pack/wasm-mirror/docs/http-server-requirements.md)
     for a wasm_multithread build, which needs cross-origin isolation)
 The mirror WebSocket (ws://127.0.0.1:8125/mirror) is served by the desktop app, not here.
 
-Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123]
-Open:   http://127.0.0.1:8123/TaidaFlowApp.html
+Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123] [--host 0.0.0.0]
+Open:   http://127.0.0.1:8123/TaidaFlowApp.html  (this PC)  or  http://<this PC's LAN IP>:8123/...
 
 Evidence capture (optional, off by default): with --evidence-dir DIR the server also
 accepts `PUT /__evidence/<name>.png|.txt|.json|.csv` from the page (same origin) and stores
@@ -164,7 +166,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dir", type=Path, default=ROOT / "build" / "wasm-release")
-    ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--host", default="0.0.0.0",
+                    help="bind address (default 0.0.0.0 = all interfaces, LAN; 127.0.0.1 = this PC only)")
     ap.add_argument("--port", type=int, default=8123)
     ap.add_argument("--evidence-dir", type=Path, default=None,
                     help="enable PUT /__evidence/<name> uploads into this directory")
@@ -181,7 +184,10 @@ def main() -> int:
 
     handler = functools.partial(Handler, directory=str(root))
     with http.server.ThreadingHTTPServer((args.host, args.port), handler) as httpd:
-        print(f"serving {root} at http://{args.host}:{args.port}/TaidaFlowApp.html", flush=True)
+        shown = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
+        scope = " (all interfaces: also http://<LAN IP>:%d/TaidaFlowApp.html)" % args.port             if args.host in ("0.0.0.0", "") else ""
+        print(f"serving {root} on {args.host}:{args.port} -> "
+              f"http://{shown}:{args.port}/TaidaFlowApp.html{scope}", flush=True)
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

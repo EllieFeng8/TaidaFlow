@@ -1,0 +1,7 @@
+﻿before:
+  sensor_202609.sqlite: rows=3024 min=1790227687 max=1790246380 size=331776
+after seed:
+  sensor_202607.sqlite: rows=102 min=-5 max=1783656099 size=53248
+  sensor_202608.sqlite: rows=1296000 min=1786896000 max=1788191999 size=299409408
+  sensor_202609.sqlite: rows=1296026 min=1788192000 max=1790249557 size=299413504
+  backup present: sensor_202609.sqlite.w2-041-before.bak size=331776

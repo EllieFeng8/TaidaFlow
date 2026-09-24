@@ -1,0 +1,8 @@
+﻿checking build\w2-041-qtest\work\exports_30d\web-t30d_20260924_195321.csv size 437517180 bytes
+lines compared: 2592004 (header + 2592003 rows), mismatches: 0
+RESULT: IDENTICAL
+rc=0
+checking build\w2-041-qtest\work\exports_30d\web-t1d_20260924_195333.csv size 14437059 bytes
+lines compared: 86401 (header + 86400 rows), mismatches: 0
+RESULT: IDENTICAL
+rc=0

@@ -4,6 +4,7 @@
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
 # Exit 0 = probe SAFE, log has the mirror endpoint and the Core's Modbus server line,
 #          127.0.0.1:8125 and 0.0.0.0:502 were listening, app exited, 502/8125 free after.
+#          w2-041: also the CSV download service line and 0.0.0.0:8124 listening, 8124 free after.
 # Exit 3 = safety probe not SAFE (app not started); 1 = any other check failed.
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -18,13 +19,15 @@ $null = $p.Handle
 Start-Sleep -Seconds 8
 $l8125 = [bool](Get-NetTCPConnection -LocalAddress 127.0.0.1 -LocalPort 8125 -State Listen -ErrorAction SilentlyContinue)
 $l502  = [bool](Get-NetTCPConnection -LocalPort 502 -State Listen -ErrorAction SilentlyContinue)
+$l8124 = [bool](Get-NetTCPConnection -LocalAddress 0.0.0.0 -LocalPort 8124 -State Listen -ErrorAction SilentlyContinue)
 $text = Get-Content $log -Encoding utf8
 $endpoint = [bool]($text | Select-String -SimpleMatch 'WASM Mirror endpoint: ws://127.0.0.1:8125/mirror')
 $modbus   = [bool]($text | Select-String -SimpleMatch '[ModbusServer] listening on 0.0.0.0:502')
+$download = [bool]($text | Select-String -SimpleMatch '[ExportHTTP] download service listening on 0.0.0.0:8124')
 $text | Where-Object { $_ -notmatch 'request was not sent|\[MS300\]' } | Select-Object -First 25
 & $py (Join-Path $PSScriptRoot 'desktop_input.py') close | Out-Null
 if (-not $p.WaitForExit(15000)) { Stop-Process -Id $p.Id -Force; Write-Output 'app did not exit on WM_CLOSE (killed)' }
 Start-Sleep -Seconds 1
-$left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8125 })
-Write-Output "endpoint_line=$endpoint modbus_server_line=$modbus listening_8125=$l8125 listening_502=$l502 app_exit_code=$($p.ExitCode) listeners_left=$($left.Count)"
-if ($endpoint -and $modbus -and $l8125 -and $l502 -and $left.Count -eq 0) { exit 0 } else { exit 1 }
+$left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8124, 8125 })
+Write-Output "endpoint_line=$endpoint modbus_server_line=$modbus download_service_line=$download listening_8125=$l8125 listening_502=$l502 listening_8124=$l8124 app_exit_code=$($p.ExitCode) listeners_left=$($left.Count)"
+if ($endpoint -and $modbus -and $download -and $l8125 -and $l502 -and $l8124 -and $left.Count -eq 0) { exit 0 } else { exit 1 }

@@ -17,6 +17,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QElapsedTimer>
+#include <QRegularExpression>
+#include <algorithm>
 #include <limits>
 
 SqlManager* SqlManager::s_instance = nullptr;
@@ -981,6 +983,274 @@ void SqlManager::requestSensorHistoryPage(quint64 requestId, qint64 from, qint64
         result.pageMs = timer.nsecsElapsed() / 1.0e6;
         emit sensorHistoryPageReady(result);
     }, Qt::QueuedConnection);
+}
+
+// ---------------------------------------------------------------------------
+// w2-041: History range across months + export file list.
+// ---------------------------------------------------------------------------
+
+namespace
+{
+    // SQLite database header, offset 24: "file change counter" (big endian),
+    // incremented by every write transaction in rollback-journal mode (the
+    // mode of the sensor files).  Returns false if the header cannot be read.
+    bool readSqliteChangeCounter(const QString& path, quint32* counter, qint64* size)
+    {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly))
+            return false;
+        *size = file.size();
+        const QByteArray header = file.read(28);
+        if (header.size() < 28)
+            return false;
+        const auto* b = reinterpret_cast<const uchar*>(header.constData()) + 24;
+        *counter = (quint32(b[0]) << 24) | (quint32(b[1]) << 16) | (quint32(b[2]) << 8) | quint32(b[3]);
+        return true;
+    }
+}
+
+QList<SqlManager::SensorMonthFile> SqlManager::sensorMonthFilesInRange(qint64 from, qint64 to) const
+{
+    // Lists the data directory instead of walking month by month from 'from'
+    // to 'to': the unbounded range (epoch 0 .. year 275760) would be millions
+    // of months.  Newest month first.
+    QList<SensorMonthFile> months;
+    if (to < from)
+        return months;
+    static const QRegularExpression pattern(QStringLiteral("^sensor_(\\d{4})(\\d{2})\\.sqlite$"));
+    const QStringList names = QDir(m_dataDir).entryList(QStringList{QStringLiteral("sensor_*.sqlite")},
+                                                        QDir::Files, QDir::Name);
+    for (const QString& name : names)
+    {
+        const QRegularExpressionMatch m = pattern.match(name);
+        if (!m.hasMatch())
+            continue;
+        const QDate monthStart(m.captured(1).toInt(), m.captured(2).toInt(), 1);
+        if (!monthStart.isValid())
+            continue;
+        SensorMonthFile month;
+        month.key = monthKey(monthStart);
+        month.monthFrom = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
+        month.monthTo = QDateTime(monthStart.addMonths(1), QTime(0, 0)).toSecsSinceEpoch() - 1;
+        if (month.monthTo < from || month.monthFrom > to)
+            continue;
+        months.append(month);
+    }
+    std::sort(months.begin(), months.end(), [](const SensorMonthFile& a, const SensorMonthFile& b) {
+        return a.monthFrom > b.monthFrom;
+    });
+    return months;
+}
+
+bool SqlManager::countSensorMonthCached(const SensorMonthFile& month, qint64 from, qint64 to,
+                                        qint64* count, bool* cacheHit, QString* errMsg)
+{
+    *count = 0;
+    *cacheHit = false;
+    const qint64 lo = qMax(from, month.monthFrom);
+    const qint64 hi = qMin(to, month.monthTo);
+    const QString path = dataFileForKey(month.key);
+
+    quint32 counter = 0;
+    qint64 size = -1;
+    const bool stampOk = readSqliteChangeCounter(path, &counter, &size);
+    if (stampOk)
+    {
+        const auto it = m_rangeCountCache.constFind(month.key);
+        if (it != m_rangeCountCache.constEnd() && it->from == lo && it->to == hi
+            && it->fileSize == size && it->changeCounter == counter)
+        {
+            *count = it->count;
+            *cacheHit = true;
+            return true;
+        }
+    }
+
+    QSqlDatabase db = openDataDb(month.key);
+    if (!db.isValid() || !db.isOpen())
+    {
+        if (errMsg) *errMsg = "db open failed";
+        return false;
+    }
+    if (!ensureDataSchema(db))
+    {
+        if (errMsg) *errMsg = "ensure schema failed";
+        return false;
+    }
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(1) FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to");
+    query.bindValue(":from", lo);
+    query.bindValue(":to", hi);
+    if (!query.exec() || !query.next())
+    {
+        if (errMsg) *errMsg = query.lastError().text();
+        return false;
+    }
+    *count = query.value(0).toLongLong();
+    query.finish();
+
+    // Stamp taken again after the COUNT: if a write landed in between, the
+    // entry simply misses next time.
+    quint32 counterAfter = 0;
+    qint64 sizeAfter = -1;
+    if (stampOk && readSqliteChangeCounter(path, &counterAfter, &sizeAfter)
+        && counterAfter == counter && sizeAfter == size)
+    {
+        m_rangeCountCache.insert(month.key, RangeCountCacheEntry{lo, hi, size, counter, *count});
+    }
+    else
+    {
+        m_rangeCountCache.remove(month.key);
+    }
+    return true;
+}
+
+bool SqlManager::querySensorDescOffset(const QString& key, qint64 from, qint64 to, qint64 offset,
+                                       int limit, QJsonArray* out, QString* errMsg)
+{
+    QSqlDatabase db = openDataDb(key);
+    if (!db.isValid() || !db.isOpen())
+    {
+        if (errMsg) *errMsg = "db open failed";
+        return false;
+    }
+    if (!ensureDataSchema(db))
+    {
+        if (errMsg) *errMsg = "ensure schema failed";
+        return false;
+    }
+
+    QStringList columns;
+    columns << "timestamp";
+    for (int i = 0; i < kSensorCount; ++i)
+    {
+        columns << QString("s%1").arg(i + 1);
+    }
+
+    // Same statement as querySensorRangeDescPaged(), with a free offset.
+    QSqlQuery query(db);
+    query.setForwardOnly(true);
+    query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to "
+                          "ORDER BY timestamp DESC, rowid DESC LIMIT :limit OFFSET :offset")
+                      .arg(columns.join(", ")));
+    query.bindValue(":from", from);
+    query.bindValue(":to", to);
+    query.bindValue(":limit", limit);
+    query.bindValue(":offset", offset);
+    if (!query.exec())
+    {
+        if (errMsg) *errMsg = query.lastError().text();
+        return false;
+    }
+    while (query.next())
+    {
+        QJsonObject obj;
+        obj.insert("ts", query.value(0).toLongLong());
+        for (int i = 0; i < kSensorCount; ++i)
+        {
+            obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
+        }
+        out->append(obj);
+    }
+    return true;
+}
+
+void SqlManager::requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
+                                               int page, int pageSize)
+{
+    quint64 latest = m_latestHistoryRequestId.load();
+    while (latest < requestId
+           && !m_latestHistoryRequestId.compare_exchange_weak(latest, requestId))
+    {
+    }
+
+    QMetaObject::invokeMethod(this, [this, requestId, from, to, page, pageSize]() {
+        SensorHistoryPageResult result;
+        result.requestId = requestId;
+        result.page = page;
+        result.pageSize = pageSize;
+
+        if (requestId < m_latestHistoryRequestId.load())
+        {
+            result.superseded = true;
+            emit sensorHistoryPageReady(result);
+            return;
+        }
+        if (page <= 0 || pageSize <= 0 || to < from)
+        {
+            result.errorMessage = to < from ? "to < from" : "page and pageSize must be positive";
+            emit sensorHistoryPageReady(result);
+            return;
+        }
+
+        QElapsedTimer timer;
+        timer.start();
+        const QList<SensorMonthFile> months = sensorMonthFilesInRange(from, to);
+        result.months = months.size();
+        QVector<qint64> monthCounts;
+        monthCounts.reserve(months.size());
+        QString err;
+        for (const SensorMonthFile& month : months)
+        {
+            qint64 n = 0;
+            bool hit = false;
+            if (!countSensorMonthCached(month, from, to, &n, &hit, &err))
+            {
+                result.errorMessage = QStringLiteral("%1: %2").arg(month.key, err);
+                result.countMs = timer.nsecsElapsed() / 1.0e6;
+                emit sensorHistoryPageReady(result);
+                return;
+            }
+            if (hit)
+                ++result.countCacheHits;
+            monthCounts.append(n);
+            result.totalRows += n;
+        }
+        result.countOk = true;
+        result.countMs = timer.nsecsElapsed() / 1.0e6;
+
+        timer.restart();
+        qint64 skip = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
+        int take = pageSize;
+        result.ok = true;
+        if (skip < result.totalRows)
+        {
+            // Months newest first: skip whole months, then take the page, which
+            // may continue into the next (older) month.
+            for (int i = 0; i < months.size() && take > 0; ++i)
+            {
+                const qint64 n = monthCounts.at(i);
+                if (skip >= n)
+                {
+                    skip -= n;
+                    continue;
+                }
+                const SensorMonthFile& month = months.at(i);
+                const int before = result.samples.size();
+                if (!querySensorDescOffset(month.key, qMax(from, month.monthFrom), qMin(to, month.monthTo),
+                                           skip, take, &result.samples, &err))
+                {
+                    result.ok = false;
+                    result.errorMessage = QStringLiteral("%1: %2").arg(month.key, err);
+                    break;
+                }
+                take -= result.samples.size() - before;
+                skip = 0;
+            }
+        }
+        result.pageMs = timer.nsecsElapsed() / 1.0e6;
+        emit sensorHistoryPageReady(result);
+    }, Qt::QueuedConnection);
+}
+
+QStringList SqlManager::sensorDataFilesInRange(qint64 from, qint64 to)
+{
+    return runOnThread([this, from, to]() {
+        QStringList files;
+        for (const SensorMonthFile& month : sensorMonthFilesInRange(from, to))
+            files << QFileInfo(dataFileForKey(month.key)).absoluteFilePath();
+        return files;
+    });
 }
 
 bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)

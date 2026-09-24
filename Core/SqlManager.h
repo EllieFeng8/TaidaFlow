@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <QString>
 #include <QtGlobal>
+#include <QHash>
+#include <QList>
 #include <atomic>
 
 // w2-039: result of one History-page load (one COUNT + one newest-first page),
@@ -30,6 +32,10 @@ struct SensorHistoryPageResult
     QString errorMessage;
     double countMs = 0.0;      // measured on the SqlManager thread
     double pageMs = 0.0;
+    // w2-041 (requestSensorHistoryRangePage only): month files in the range and
+    // how many of their COUNTs came from the count cache.
+    int months = 0;
+    int countCacheHits = 0;
 };
 Q_DECLARE_METATYPE(SensorHistoryPageResult)
 
@@ -97,6 +103,25 @@ public:
     void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
                                   int page, int pageSize);
 
+    // w2-041 History range (spec §2): like requestSensorHistoryPage(), but
+    // [from, to] (epoch seconds, both inclusive) may span any number of months,
+    // including the "unbounded" range.  Only month files that exist in the data
+    // directory are visited (newest month first); totalRows is the sum of the
+    // per-month COUNTs and the page is taken newest first across months
+    // (ORDER BY timestamp DESC, rowid DESC inside each month).  Per-month COUNTs
+    // are cached and reused while the month file is unchanged (same size and
+    // same SQLite file change counter).  Returns immediately; the result comes
+    // through sensorHistoryPageReady() and shares the request-id sequence
+    // (superseded handling) with requestSensorHistoryPage().
+    void requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
+                                       int page, int pageSize);
+
+    // w2-041 export: absolute paths of the existing sensor_YYYYMM.sqlite files
+    // whose month intersects [from, to] (epoch seconds), newest month first.
+    // Only lists files (no query).  Blocking like the other public functions
+    // when called from another thread.
+    QStringList sensorDataFilesInRange(qint64 from, qint64 to);
+
 signals:
     void sensorHistoryPageReady(const SensorHistoryPageResult& result);
 
@@ -115,6 +140,28 @@ private:
     QThread* m_thread;
     bool m_threadStarted;
     std::atomic<quint64> m_latestHistoryRequestId{0};
+
+    // w2-041 (SqlManager thread only)
+    struct SensorMonthFile
+    {
+        QString key;          // yyyyMM
+        qint64 monthFrom = 0; // first second of the month (local time)
+        qint64 monthTo = 0;   // last second of the month
+    };
+    struct RangeCountCacheEntry
+    {
+        qint64 from = 0;
+        qint64 to = 0;
+        qint64 fileSize = -1;
+        quint32 changeCounter = 0;
+        qint64 count = 0;
+    };
+    QHash<QString, RangeCountCacheEntry> m_rangeCountCache;   // key = yyyyMM
+    QList<SensorMonthFile> sensorMonthFilesInRange(qint64 from, qint64 to) const;
+    bool countSensorMonthCached(const SensorMonthFile& month, qint64 from, qint64 to,
+                                qint64* count, bool* cacheHit, QString* errMsg);
+    bool querySensorDescOffset(const QString& key, qint64 from, qint64 to, qint64 offset,
+                               int limit, QJsonArray* out, QString* errMsg);
 
     QString monthKey(const QDate& date) const;
     QString dataFileForKey(const QString& key) const;

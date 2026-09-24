@@ -1,5 +1,6 @@
 #include "core.h"
 
+#include "HistoryExport.h"
 #include "Modbus_Server.h"
 #include "SqlManager.h"
 
@@ -89,6 +90,12 @@ Core::~Core()
     // ~QObject.  The SqlManager side only captures its own 'this' and values.
     if (m_sqlManager)
         disconnect(m_sqlManager, nullptr, this, nullptr);
+    // w2-041: normally already stopped on QCoreApplication::aboutToQuit; this
+    // covers the other exit paths (export thread + download service).
+    if (m_historyExport) {
+        delete m_historyExport;
+        m_historyExport = nullptr;
+    }
     if (m_modbusServer) {
         m_modbusServer->stop();
         delete m_modbusServer;
@@ -134,8 +141,16 @@ void Core::init()
             this, &Core::applyHistoryPage, Qt::QueuedConnection);
     connect(m_proxy, &TaidaFlowProxy::historyRefreshRequested, this,
             [this]() { loadHistoryRecords("page shown"); });
-    connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this,
-            [this](int) { loadHistoryRecords("page changed"); });
+    connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this, [this](int) {
+        const bool rangeChange = m_historyRangeChangePending;
+        m_historyRangeChangePending = false;
+        loadHistoryRecords(rangeChange ? "range changed" : "page changed");
+    });
+    // w2-041 (spec §2): History range, relayed from WASM like the page number.
+    connect(m_proxy, &TaidaFlowProxy::historyRangeRequested, this, &Core::onHistoryRangeRequested);
+    // w2-041 (spec §3): raw CSV export queue/engine + download service
+    // (0.0.0.0:8124, export folder <working directory>/exports).
+    m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, HistoryExportManager::Options{}, this);
     if (!m_manager->saveAlarm(QStringLiteral("100"),
                               QStringLiteral("設備啟動"),
                               QStringLiteral("正常"))) {
@@ -211,17 +226,34 @@ void Core::setHistoryTitleOnce()
     if (!m_proxy)
         return;
 
-    m_proxy->setHistoryTitle(QVariantList{
-        QStringLiteral("時間"),
-        QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
-        QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
-        QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
-        QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
-        QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
-        QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
-        QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
-        QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)")
-    });
+    // w2-041: the same 17 titles are the CSV export header (after 序號), so
+    // they are defined once in HistoryExport.
+    m_proxy->setHistoryTitle(HistoryExport::historyColumnTitles());
+}
+
+void Core::onHistoryRangeRequested(double fromMs, double toMs)
+{
+    // w2-041 (spec §2): epoch ms, both ends inclusive; 0 .. 8640000000000000
+    // is "all months".  The range and the page are shared by every client.
+    if (!m_proxy)
+        return;
+    qint64 fromSec = 0;
+    qint64 toSec = 0;
+    if (!HistoryExport::rangeMsToSecs(fromMs, toMs, &fromSec, &toSec)) {
+        qWarning().noquote() << QStringLiteral("[History] range request ignored: invalid range %1 .. %2 ms")
+                                        .arg(fromMs, 0, 'f', 0).arg(toMs, 0, 'f', 0);
+        return;
+    }
+    qInfo().noquote() << QStringLiteral("[History] range requested: %1 .. %2 ms (%3 .. %4 s)")
+                                 .arg(fromMs, 0, 'f', 0).arg(toMs, 0, 'f', 0).arg(fromSec).arg(toSec);
+    m_proxy->setHistoryRangeFromMs(fromMs);
+    m_proxy->setHistoryRangeToMs(toMs);
+    if (m_proxy->historyCurrentPage() != 1) {
+        m_historyRangeChangePending = true;
+        m_proxy->setHistoryCurrentPage(1);        // loads through historyCurrentPageChanged
+        return;
+    }
+    loadHistoryRecords("range changed");
 }
 
 namespace {
@@ -239,25 +271,34 @@ void Core::loadHistoryRecords(const char *reason)
         return;
     }
 
-    const QDate today = QDate::currentDate();
-    const QDate monthStart(today.year(), today.month(), 1);
-    const qint64 from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
-    const qint64 to = QDateTime(monthStart.addMonths(1), QTime(0, 0))
-                           .addSecs(-1)
-                           .toSecsSinceEpoch();
+    // w2-041 (spec §2): the range is the shared historyRangeFromMs/ToMs (the
+    // Proxy starts with the current month, as before; 0 .. 8640000000000000 =
+    // all months), converted to whole seconds, and may span several months.
+    qint64 from = 0;
+    qint64 to = 0;
+    if (!HistoryExport::rangeMsToSecs(m_proxy->historyRangeFromMs(), m_proxy->historyRangeToMs(),
+                                      &from, &to)) {
+        const QDate today = QDate::currentDate();
+        const QDate monthStart(today.year(), today.month(), 1);
+        from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
+        to = QDateTime(monthStart.addMonths(1), QTime(0, 0)).addSecs(-1).toSecsSinceEpoch();
+        qWarning().noquote() << "[History] invalid historyRangeFromMs/ToMs; using the current month.";
+    }
     const int page = m_proxy->historyCurrentPage();
 
-    // w2-039: asynchronous.  One COUNT plus one newest-first page run on the
-    // SqlManager thread; applyHistoryPage() receives the result queued.  Only
-    // the result of the newest request is applied.
+    // w2-039: asynchronous.  The per-month COUNTs plus one newest-first page
+    // run on the SqlManager thread; applyHistoryPage() receives the result
+    // queued.  Only the result of the newest request is applied.
     const quint64 requestId = ++m_historyRequestId;
     m_historyRequestClock.start();
-    m_sqlManager->requestSensorHistoryPage(requestId, from, to, page, kHistoryPageSize);
+    m_sqlManager->requestSensorHistoryRangePage(requestId, from, to, page, kHistoryPageSize);
     qInfo().noquote()
-            << QStringLiteral("[History] request #%1 (%2) page %3 posted to SqlManager thread in %4 us.")
+            << QStringLiteral("[History] request #%1 (%2) page %3, range %4 .. %5 s, posted to SqlManager thread in %6 us.")
                        .arg(requestId)
                        .arg(QString::fromLatin1(reason))
                        .arg(page)
+                       .arg(from)
+                       .arg(to)
                        .arg(m_historyRequestClock.nsecsElapsed() / 1000);
 }
 
@@ -351,8 +392,9 @@ void Core::applyHistoryPage(const SensorHistoryPageResult &result)
                        .arg(totalPages)
                        .arg(records.size());
     qInfo().noquote()
-            << QStringLiteral("[History] #%1 applied: page %2/%3, %4 record(s), total %5 row(s); "
-                              "SqlManager thread count %6 ms + page %7 ms; request-to-apply %8 ms.")
+            << QStringLiteral("[History] #%1 applied: page %2/%3, %4 record(s), total %5 row(s) in %9 month file(s) "
+                              "(%10 count(s) from cache); SqlManager thread count %6 ms + page %7 ms; "
+                              "request-to-apply %8 ms.")
                        .arg(result.requestId)
                        .arg(result.page)
                        .arg(totalPages)
@@ -360,7 +402,9 @@ void Core::applyHistoryPage(const SensorHistoryPageResult &result)
                        .arg(totalRows)
                        .arg(result.countMs, 0, 'f', 2)
                        .arg(result.pageMs, 0, 'f', 2)
-                       .arg(roundTripMs, 0, 'f', 2);
+                       .arg(roundTripMs, 0, 'f', 2)
+                       .arg(result.months)
+                       .arg(result.countCacheHits);
     m_proxy->setHistoryRecords(records);
 }
 

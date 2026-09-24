@@ -1,0 +1,4 @@
+﻿checking D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\dl_lan.csv size 437517180 bytes
+lines compared: 2592004 (header + 2592003 rows), mismatches: 0
+RESULT: IDENTICAL
+rc=0

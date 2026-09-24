@@ -1,0 +1,23 @@
+﻿== 1) curl -D - http://127.0.0.1:8124/exports/web-5564_20260924_200120.csv --limit-rate 20M (start 20:02:19.939)
+HTTP/1.1 200 OK
+content-type: text/csv; charset=utf-8
+content-disposition: attachment; filename="web-5564_20260924_200120.csv"
+access-control-allow-origin: *
+cache-control: no-store
+content-length: 437517180
+
+HTTP 200 size_download=437517180 time_total=20.877029s speed=20956873B/s
+== end 20:02:40.839
+== 2) curl full speed via the PC's LAN address http://192.168.0.125:8124/exports/web-5564_20260924_200120.csv (start 20:02:43.847)
+HTTP/1.1 200 OK
+content-type: text/csv; charset=utf-8
+content-disposition: attachment; filename="web-5564_20260924_200120.csv"
+access-control-allow-origin: *
+cache-control: no-store
+content-length: 437517180
+
+HTTP 200 size_download=437517180 time_total=4.779789s speed=91534888B/s
+== end 20:02:48.644
+sha256 server file CC5EFC2DEF8938C2E8053D141E56E92EAF607D4ED9A705BFF304BEF221A794A7
+sha256 dl_limited  CC5EFC2DEF8938C2E8053D141E56E92EAF607D4ED9A705BFF304BEF221A794A7 same=True
+sha256 dl_lan      CC5EFC2DEF8938C2E8053D141E56E92EAF607D4ED9A705BFF304BEF221A794A7 same=True

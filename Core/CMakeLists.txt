@@ -26,6 +26,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
         SqlManager.cpp
         RESTManager.h
         RESTManager.cpp
+        # w2-041: History CSV export queue/engine + download service (QHttpServer, 0.0.0.0:8124)
+        HistoryExport.h
+        HistoryExport.cpp
     )
 endif()
 

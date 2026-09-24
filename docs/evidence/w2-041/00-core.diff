@@ -1,0 +1,2164 @@
+diff --git a/Core/CMakeLists.txt b/Core/CMakeLists.txt
+index 8a6414e..b9f7d03 100644
+--- a/Core/CMakeLists.txt
++++ b/Core/CMakeLists.txt
+@@ -26,6 +26,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         SqlManager.cpp
+         RESTManager.h
+         RESTManager.cpp
++        # w2-041: History CSV export queue/engine + download service (QHttpServer, 0.0.0.0:8124)
++        HistoryExport.h
++        HistoryExport.cpp
+     )
+ endif()
+ 
+diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index 281d98c..29df544 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -17,6 +17,8 @@
+ #include <QFile>
+ #include <QTextStream>
+ #include <QElapsedTimer>
++#include <QRegularExpression>
++#include <algorithm>
+ #include <limits>
+ 
+ SqlManager* SqlManager::s_instance = nullptr;
+@@ -983,6 +985,274 @@ void SqlManager::requestSensorHistoryPage(quint64 requestId, qint64 from, qint64
+     }, Qt::QueuedConnection);
+ }
+ 
++// ---------------------------------------------------------------------------
++// w2-041: History range across months + export file list.
++// ---------------------------------------------------------------------------
++
++namespace
++{
++    // SQLite database header, offset 24: "file change counter" (big endian),
++    // incremented by every write transaction in rollback-journal mode (the
++    // mode of the sensor files).  Returns false if the header cannot be read.
++    bool readSqliteChangeCounter(const QString& path, quint32* counter, qint64* size)
++    {
++        QFile file(path);
++        if (!file.open(QIODevice::ReadOnly))
++            return false;
++        *size = file.size();
++        const QByteArray header = file.read(28);
++        if (header.size() < 28)
++            return false;
++        const auto* b = reinterpret_cast<const uchar*>(header.constData()) + 24;
++        *counter = (quint32(b[0]) << 24) | (quint32(b[1]) << 16) | (quint32(b[2]) << 8) | quint32(b[3]);
++        return true;
++    }
++}
++
++QList<SqlManager::SensorMonthFile> SqlManager::sensorMonthFilesInRange(qint64 from, qint64 to) const
++{
++    // Lists the data directory instead of walking month by month from 'from'
++    // to 'to': the unbounded range (epoch 0 .. year 275760) would be millions
++    // of months.  Newest month first.
++    QList<SensorMonthFile> months;
++    if (to < from)
++        return months;
++    static const QRegularExpression pattern(QStringLiteral("^sensor_(\\d{4})(\\d{2})\\.sqlite$"));
++    const QStringList names = QDir(m_dataDir).entryList(QStringList{QStringLiteral("sensor_*.sqlite")},
++                                                        QDir::Files, QDir::Name);
++    for (const QString& name : names)
++    {
++        const QRegularExpressionMatch m = pattern.match(name);
++        if (!m.hasMatch())
++            continue;
++        const QDate monthStart(m.captured(1).toInt(), m.captured(2).toInt(), 1);
++        if (!monthStart.isValid())
++            continue;
++        SensorMonthFile month;
++        month.key = monthKey(monthStart);
++        month.monthFrom = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
++        month.monthTo = QDateTime(monthStart.addMonths(1), QTime(0, 0)).toSecsSinceEpoch() - 1;
++        if (month.monthTo < from || month.monthFrom > to)
++            continue;
++        months.append(month);
++    }
++    std::sort(months.begin(), months.end(), [](const SensorMonthFile& a, const SensorMonthFile& b) {
++        return a.monthFrom > b.monthFrom;
++    });
++    return months;
++}
++
++bool SqlManager::countSensorMonthCached(const SensorMonthFile& month, qint64 from, qint64 to,
++                                        qint64* count, bool* cacheHit, QString* errMsg)
++{
++    *count = 0;
++    *cacheHit = false;
++    const qint64 lo = qMax(from, month.monthFrom);
++    const qint64 hi = qMin(to, month.monthTo);
++    const QString path = dataFileForKey(month.key);
++
++    quint32 counter = 0;
++    qint64 size = -1;
++    const bool stampOk = readSqliteChangeCounter(path, &counter, &size);
++    if (stampOk)
++    {
++        const auto it = m_rangeCountCache.constFind(month.key);
++        if (it != m_rangeCountCache.constEnd() && it->from == lo && it->to == hi
++            && it->fileSize == size && it->changeCounter == counter)
++        {
++            *count = it->count;
++            *cacheHit = true;
++            return true;
++        }
++    }
++
++    QSqlDatabase db = openDataDb(month.key);
++    if (!db.isValid() || !db.isOpen())
++    {
++        if (errMsg) *errMsg = "db open failed";
++        return false;
++    }
++    if (!ensureDataSchema(db))
++    {
++        if (errMsg) *errMsg = "ensure schema failed";
++        return false;
++    }
++    QSqlQuery query(db);
++    query.prepare("SELECT COUNT(1) FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to");
++    query.bindValue(":from", lo);
++    query.bindValue(":to", hi);
++    if (!query.exec() || !query.next())
++    {
++        if (errMsg) *errMsg = query.lastError().text();
++        return false;
++    }
++    *count = query.value(0).toLongLong();
++    query.finish();
++
++    // Stamp taken again after the COUNT: if a write landed in between, the
++    // entry simply misses next time.
++    quint32 counterAfter = 0;
++    qint64 sizeAfter = -1;
++    if (stampOk && readSqliteChangeCounter(path, &counterAfter, &sizeAfter)
++        && counterAfter == counter && sizeAfter == size)
++    {
++        m_rangeCountCache.insert(month.key, RangeCountCacheEntry{lo, hi, size, counter, *count});
++    }
++    else
++    {
++        m_rangeCountCache.remove(month.key);
++    }
++    return true;
++}
++
++bool SqlManager::querySensorDescOffset(const QString& key, qint64 from, qint64 to, qint64 offset,
++                                       int limit, QJsonArray* out, QString* errMsg)
++{
++    QSqlDatabase db = openDataDb(key);
++    if (!db.isValid() || !db.isOpen())
++    {
++        if (errMsg) *errMsg = "db open failed";
++        return false;
++    }
++    if (!ensureDataSchema(db))
++    {
++        if (errMsg) *errMsg = "ensure schema failed";
++        return false;
++    }
++
++    QStringList columns;
++    columns << "timestamp";
++    for (int i = 0; i < kSensorCount; ++i)
++    {
++        columns << QString("s%1").arg(i + 1);
++    }
++
++    // Same statement as querySensorRangeDescPaged(), with a free offset.
++    QSqlQuery query(db);
++    query.setForwardOnly(true);
++    query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to "
++                          "ORDER BY timestamp DESC, rowid DESC LIMIT :limit OFFSET :offset")
++                      .arg(columns.join(", ")));
++    query.bindValue(":from", from);
++    query.bindValue(":to", to);
++    query.bindValue(":limit", limit);
++    query.bindValue(":offset", offset);
++    if (!query.exec())
++    {
++        if (errMsg) *errMsg = query.lastError().text();
++        return false;
++    }
++    while (query.next())
++    {
++        QJsonObject obj;
++        obj.insert("ts", query.value(0).toLongLong());
++        for (int i = 0; i < kSensorCount; ++i)
++        {
++            obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
++        }
++        out->append(obj);
++    }
++    return true;
++}
++
++void SqlManager::requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
++                                               int page, int pageSize)
++{
++    quint64 latest = m_latestHistoryRequestId.load();
++    while (latest < requestId
++           && !m_latestHistoryRequestId.compare_exchange_weak(latest, requestId))
++    {
++    }
++
++    QMetaObject::invokeMethod(this, [this, requestId, from, to, page, pageSize]() {
++        SensorHistoryPageResult result;
++        result.requestId = requestId;
++        result.page = page;
++        result.pageSize = pageSize;
++
++        if (requestId < m_latestHistoryRequestId.load())
++        {
++            result.superseded = true;
++            emit sensorHistoryPageReady(result);
++            return;
++        }
++        if (page <= 0 || pageSize <= 0 || to < from)
++        {
++            result.errorMessage = to < from ? "to < from" : "page and pageSize must be positive";
++            emit sensorHistoryPageReady(result);
++            return;
++        }
++
++        QElapsedTimer timer;
++        timer.start();
++        const QList<SensorMonthFile> months = sensorMonthFilesInRange(from, to);
++        result.months = months.size();
++        QVector<qint64> monthCounts;
++        monthCounts.reserve(months.size());
++        QString err;
++        for (const SensorMonthFile& month : months)
++        {
++            qint64 n = 0;
++            bool hit = false;
++            if (!countSensorMonthCached(month, from, to, &n, &hit, &err))
++            {
++                result.errorMessage = QStringLiteral("%1: %2").arg(month.key, err);
++                result.countMs = timer.nsecsElapsed() / 1.0e6;
++                emit sensorHistoryPageReady(result);
++                return;
++            }
++            if (hit)
++                ++result.countCacheHits;
++            monthCounts.append(n);
++            result.totalRows += n;
++        }
++        result.countOk = true;
++        result.countMs = timer.nsecsElapsed() / 1.0e6;
++
++        timer.restart();
++        qint64 skip = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
++        int take = pageSize;
++        result.ok = true;
++        if (skip < result.totalRows)
++        {
++            // Months newest first: skip whole months, then take the page, which
++            // may continue into the next (older) month.
++            for (int i = 0; i < months.size() && take > 0; ++i)
++            {
++                const qint64 n = monthCounts.at(i);
++                if (skip >= n)
++                {
++                    skip -= n;
++                    continue;
++                }
++                const SensorMonthFile& month = months.at(i);
++                const int before = result.samples.size();
++                if (!querySensorDescOffset(month.key, qMax(from, month.monthFrom), qMin(to, month.monthTo),
++                                           skip, take, &result.samples, &err))
++                {
++                    result.ok = false;
++                    result.errorMessage = QStringLiteral("%1: %2").arg(month.key, err);
++                    break;
++                }
++                take -= result.samples.size() - before;
++                skip = 0;
++            }
++        }
++        result.pageMs = timer.nsecsElapsed() / 1.0e6;
++        emit sensorHistoryPageReady(result);
++    }, Qt::QueuedConnection);
++}
++
++QStringList SqlManager::sensorDataFilesInRange(qint64 from, qint64 to)
++{
++    return runOnThread([this, from, to]() {
++        QStringList files;
++        for (const SensorMonthFile& month : sensorMonthFilesInRange(from, to))
++            files << QFileInfo(dataFileForKey(month.key)).absoluteFilePath();
++        return files;
++    });
++}
++
+ bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)
+ {
+     return runOnThread([this, from, to, total, errMsg]() {
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index 5bff957..7623ec0 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -13,6 +13,8 @@
+ #include <type_traits>
+ #include <QString>
+ #include <QtGlobal>
++#include <QHash>
++#include <QList>
+ #include <atomic>
+ 
+ // w2-039: result of one History-page load (one COUNT + one newest-first page),
+@@ -30,6 +32,10 @@ struct SensorHistoryPageResult
+     QString errorMessage;
+     double countMs = 0.0;      // measured on the SqlManager thread
+     double pageMs = 0.0;
++    // w2-041 (requestSensorHistoryRangePage only): month files in the range and
++    // how many of their COUNTs came from the count cache.
++    int months = 0;
++    int countCacheHits = 0;
+ };
+ Q_DECLARE_METATYPE(SensorHistoryPageResult)
+ 
+@@ -97,6 +103,25 @@ public:
+     void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
+                                   int page, int pageSize);
+ 
++    // w2-041 History range (spec §2): like requestSensorHistoryPage(), but
++    // [from, to] (epoch seconds, both inclusive) may span any number of months,
++    // including the "unbounded" range.  Only month files that exist in the data
++    // directory are visited (newest month first); totalRows is the sum of the
++    // per-month COUNTs and the page is taken newest first across months
++    // (ORDER BY timestamp DESC, rowid DESC inside each month).  Per-month COUNTs
++    // are cached and reused while the month file is unchanged (same size and
++    // same SQLite file change counter).  Returns immediately; the result comes
++    // through sensorHistoryPageReady() and shares the request-id sequence
++    // (superseded handling) with requestSensorHistoryPage().
++    void requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
++                                       int page, int pageSize);
++
++    // w2-041 export: absolute paths of the existing sensor_YYYYMM.sqlite files
++    // whose month intersects [from, to] (epoch seconds), newest month first.
++    // Only lists files (no query).  Blocking like the other public functions
++    // when called from another thread.
++    QStringList sensorDataFilesInRange(qint64 from, qint64 to);
++
+ signals:
+     void sensorHistoryPageReady(const SensorHistoryPageResult& result);
+ 
+@@ -116,6 +141,28 @@ private:
+     bool m_threadStarted;
+     std::atomic<quint64> m_latestHistoryRequestId{0};
+ 
++    // w2-041 (SqlManager thread only)
++    struct SensorMonthFile
++    {
++        QString key;          // yyyyMM
++        qint64 monthFrom = 0; // first second of the month (local time)
++        qint64 monthTo = 0;   // last second of the month
++    };
++    struct RangeCountCacheEntry
++    {
++        qint64 from = 0;
++        qint64 to = 0;
++        qint64 fileSize = -1;
++        quint32 changeCounter = 0;
++        qint64 count = 0;
++    };
++    QHash<QString, RangeCountCacheEntry> m_rangeCountCache;   // key = yyyyMM
++    QList<SensorMonthFile> sensorMonthFilesInRange(qint64 from, qint64 to) const;
++    bool countSensorMonthCached(const SensorMonthFile& month, qint64 from, qint64 to,
++                                qint64* count, bool* cacheHit, QString* errMsg);
++    bool querySensorDescOffset(const QString& key, qint64 from, qint64 to, qint64 offset,
++                               int limit, QJsonArray* out, QString* errMsg);
++
+     QString monthKey(const QDate& date) const;
+     QString dataFileForKey(const QString& key) const;
+     QString dataConnectionName(const QString& key) const;
+diff --git a/Core/core.cpp b/Core/core.cpp
+index ce2f94a..98f26bd 100644
+--- a/Core/core.cpp
++++ b/Core/core.cpp
+@@ -1,5 +1,6 @@
+ #include "core.h"
+ 
++#include "HistoryExport.h"
+ #include "Modbus_Server.h"
+ #include "SqlManager.h"
+ 
+@@ -89,6 +90,12 @@ Core::~Core()
+     // ~QObject.  The SqlManager side only captures its own 'this' and values.
+     if (m_sqlManager)
+         disconnect(m_sqlManager, nullptr, this, nullptr);
++    // w2-041: normally already stopped on QCoreApplication::aboutToQuit; this
++    // covers the other exit paths (export thread + download service).
++    if (m_historyExport) {
++        delete m_historyExport;
++        m_historyExport = nullptr;
++    }
+     if (m_modbusServer) {
+         m_modbusServer->stop();
+         delete m_modbusServer;
+@@ -134,8 +141,16 @@ void Core::init()
+             this, &Core::applyHistoryPage, Qt::QueuedConnection);
+     connect(m_proxy, &TaidaFlowProxy::historyRefreshRequested, this,
+             [this]() { loadHistoryRecords("page shown"); });
+-    connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this,
+-            [this](int) { loadHistoryRecords("page changed"); });
++    connect(m_proxy, &TaidaFlowProxy::historyCurrentPageChanged, this, [this](int) {
++        const bool rangeChange = m_historyRangeChangePending;
++        m_historyRangeChangePending = false;
++        loadHistoryRecords(rangeChange ? "range changed" : "page changed");
++    });
++    // w2-041 (spec §2): History range, relayed from WASM like the page number.
++    connect(m_proxy, &TaidaFlowProxy::historyRangeRequested, this, &Core::onHistoryRangeRequested);
++    // w2-041 (spec §3): raw CSV export queue/engine + download service
++    // (0.0.0.0:8124, export folder <working directory>/exports).
++    m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, HistoryExportManager::Options{}, this);
+     if (!m_manager->saveAlarm(QStringLiteral("100"),
+                               QStringLiteral("設備啟動"),
+                               QStringLiteral("正常"))) {
+@@ -211,17 +226,34 @@ void Core::setHistoryTitleOnce()
+     if (!m_proxy)
+         return;
+ 
+-    m_proxy->setHistoryTitle(QVariantList{
+-        QStringLiteral("時間"),
+-        QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
+-        QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
+-        QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
+-        QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
+-        QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
+-        QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
+-        QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
+-        QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)")
+-    });
++    // w2-041: the same 17 titles are the CSV export header (after 序號), so
++    // they are defined once in HistoryExport.
++    m_proxy->setHistoryTitle(HistoryExport::historyColumnTitles());
++}
++
++void Core::onHistoryRangeRequested(double fromMs, double toMs)
++{
++    // w2-041 (spec §2): epoch ms, both ends inclusive; 0 .. 8640000000000000
++    // is "all months".  The range and the page are shared by every client.
++    if (!m_proxy)
++        return;
++    qint64 fromSec = 0;
++    qint64 toSec = 0;
++    if (!HistoryExport::rangeMsToSecs(fromMs, toMs, &fromSec, &toSec)) {
++        qWarning().noquote() << QStringLiteral("[History] range request ignored: invalid range %1 .. %2 ms")
++                                        .arg(fromMs, 0, 'f', 0).arg(toMs, 0, 'f', 0);
++        return;
++    }
++    qInfo().noquote() << QStringLiteral("[History] range requested: %1 .. %2 ms (%3 .. %4 s)")
++                                 .arg(fromMs, 0, 'f', 0).arg(toMs, 0, 'f', 0).arg(fromSec).arg(toSec);
++    m_proxy->setHistoryRangeFromMs(fromMs);
++    m_proxy->setHistoryRangeToMs(toMs);
++    if (m_proxy->historyCurrentPage() != 1) {
++        m_historyRangeChangePending = true;
++        m_proxy->setHistoryCurrentPage(1);        // loads through historyCurrentPageChanged
++        return;
++    }
++    loadHistoryRecords("range changed");
+ }
+ 
+ namespace {
+@@ -239,25 +271,34 @@ void Core::loadHistoryRecords(const char *reason)
+         return;
+     }
+ 
+-    const QDate today = QDate::currentDate();
+-    const QDate monthStart(today.year(), today.month(), 1);
+-    const qint64 from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
+-    const qint64 to = QDateTime(monthStart.addMonths(1), QTime(0, 0))
+-                           .addSecs(-1)
+-                           .toSecsSinceEpoch();
++    // w2-041 (spec §2): the range is the shared historyRangeFromMs/ToMs (the
++    // Proxy starts with the current month, as before; 0 .. 8640000000000000 =
++    // all months), converted to whole seconds, and may span several months.
++    qint64 from = 0;
++    qint64 to = 0;
++    if (!HistoryExport::rangeMsToSecs(m_proxy->historyRangeFromMs(), m_proxy->historyRangeToMs(),
++                                      &from, &to)) {
++        const QDate today = QDate::currentDate();
++        const QDate monthStart(today.year(), today.month(), 1);
++        from = QDateTime(monthStart, QTime(0, 0)).toSecsSinceEpoch();
++        to = QDateTime(monthStart.addMonths(1), QTime(0, 0)).addSecs(-1).toSecsSinceEpoch();
++        qWarning().noquote() << "[History] invalid historyRangeFromMs/ToMs; using the current month.";
++    }
+     const int page = m_proxy->historyCurrentPage();
+ 
+-    // w2-039: asynchronous.  One COUNT plus one newest-first page run on the
+-    // SqlManager thread; applyHistoryPage() receives the result queued.  Only
+-    // the result of the newest request is applied.
++    // w2-039: asynchronous.  The per-month COUNTs plus one newest-first page
++    // run on the SqlManager thread; applyHistoryPage() receives the result
++    // queued.  Only the result of the newest request is applied.
+     const quint64 requestId = ++m_historyRequestId;
+     m_historyRequestClock.start();
+-    m_sqlManager->requestSensorHistoryPage(requestId, from, to, page, kHistoryPageSize);
++    m_sqlManager->requestSensorHistoryRangePage(requestId, from, to, page, kHistoryPageSize);
+     qInfo().noquote()
+-            << QStringLiteral("[History] request #%1 (%2) page %3 posted to SqlManager thread in %4 us.")
++            << QStringLiteral("[History] request #%1 (%2) page %3, range %4 .. %5 s, posted to SqlManager thread in %6 us.")
+                        .arg(requestId)
+                        .arg(QString::fromLatin1(reason))
+                        .arg(page)
++                       .arg(from)
++                       .arg(to)
+                        .arg(m_historyRequestClock.nsecsElapsed() / 1000);
+ }
+ 
+@@ -351,8 +392,9 @@ void Core::applyHistoryPage(const SensorHistoryPageResult &result)
+                        .arg(totalPages)
+                        .arg(records.size());
+     qInfo().noquote()
+-            << QStringLiteral("[History] #%1 applied: page %2/%3, %4 record(s), total %5 row(s); "
+-                              "SqlManager thread count %6 ms + page %7 ms; request-to-apply %8 ms.")
++            << QStringLiteral("[History] #%1 applied: page %2/%3, %4 record(s), total %5 row(s) in %9 month file(s) "
++                              "(%10 count(s) from cache); SqlManager thread count %6 ms + page %7 ms; "
++                              "request-to-apply %8 ms.")
+                        .arg(result.requestId)
+                        .arg(result.page)
+                        .arg(totalPages)
+@@ -360,7 +402,9 @@ void Core::applyHistoryPage(const SensorHistoryPageResult &result)
+                        .arg(totalRows)
+                        .arg(result.countMs, 0, 'f', 2)
+                        .arg(result.pageMs, 0, 'f', 2)
+-                       .arg(roundTripMs, 0, 'f', 2);
++                       .arg(roundTripMs, 0, 'f', 2)
++                       .arg(result.months)
++                       .arg(result.countCacheHits);
+     m_proxy->setHistoryRecords(records);
+ }
+ 
+diff --git a/Core/core.h b/Core/core.h
+index dab5e54..c2c016a 100644
+--- a/Core/core.h
++++ b/Core/core.h
+@@ -6,6 +6,7 @@
+ 
+ class ModbusServer;
+ class SqlManager;
++class HistoryExportManager;
+ struct SensorHistoryPageResult;
+ 
+ class Core : public QObject
+@@ -24,6 +25,7 @@ private:
+     void reportIgnoredHmiInputSettings();
+     void setHistoryTitleOnce();
+     void loadHistoryRecords(const char *reason);
++    void onHistoryRangeRequested(double fromMs, double toMs);
+     void applyHistoryPage(const SensorHistoryPageResult &result);
+     void loadAlarmRecords();
+ 
+@@ -34,5 +36,9 @@ private:
+     // stale and dropped.
+     quint64 m_historyRequestId = 0;
+     QElapsedTimer m_historyRequestClock;   // started when the newest request is posted
++    // w2-041: set while a new History range moves the page back to 1, so that
++    // the load triggered by historyCurrentPageChanged is logged as a range change.
++    bool m_historyRangeChangePending = false;
++    HistoryExportManager* m_historyExport = nullptr;   // raw CSV export + download service
+ 
+ };
+diff --git a/README.md b/README.md
+index 3abc985..f1bd1bc 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,8 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷
+ 含真實後端 `Core/`:`core.cpp`、`manager.cpp`、`Modbus_Client`(5 台 ADAM,預設
+ `192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
+ 改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
+-`Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)。
++`Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)、
++`HistoryExport`(歷史 CSV 匯出佇列 + 下載服務 `0.0.0.0:8124`,見「歷史資料:時間區間與匯出」)。
+ 
+ QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBackend`)。
+ 透過 `integration-pack/wasm-mirror`(pack **1.0.1**,wire protocol 3,**唯讀、由維護方提供**,
+@@ -22,12 +23,14 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
+ 緊急停止迴路),開 `COM2`,並在 `0.0.0.0:502` 開 Modbus server。在非現場的開發機上:
+ 
+ - 一律用 `scripts\run-desktop.ps1` 啟動。它先跑 `scripts\safety_probe.ps1`(對 5 台 ADAM 只做
+-  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8125 是否已有人
+-  listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3)。每次探測都附加
++  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8123/8124/8125 是否已有人
++  listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror)或
++  8124(CSV 下載服務)已被占用 → 不啟動(exit 4,不會關掉別人的程式)。每次探測都附加
+   寫入 `docs/evidence/wasm-v4/safety-probe.log`。
++- desktop 另在 `0.0.0.0:8124` 開 CSV 下載服務(內網、不做存取控管;只提供匯出資料夾裡的檔,見下方)。
+ - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
+-  `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`)。`build/`
+-  已被 `.gitignore` 排除,work tree 保持乾淨。
++  `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`),網頁匯出的 CSV
++  寫在 `exports\`。`build/` 已被 `.gitignore` 排除,work tree 保持乾淨。
+ - 不要為了接模擬器改網路設定(不加 IP alias)或改 Core 程式;要接模擬器請用下方
+   「接 Adam60xxSimulator」的測試用 profile。`run-desktop.ps1` 在預設模式會**移除**
+   `TAIDAFLOW_DEVICE_PROFILE`,確保 app 用的就是探測過的 192.168.1.x。
+@@ -78,14 +81,19 @@ WASM 產物:`build\wasm-release\TaidaFlowApp.html / .js / .wasm`、`qtloader.js`
+ 
+ ```powershell
+ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"   # 先探測再啟動
+-python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.html
++python scripts\serve_wasm.py            # 綁 0.0.0.0:8123;本機開 http://127.0.0.1:8123/TaidaFlowApp.html
++python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
+ ```
+ 
+ - `run-desktop.ps1` 設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin,log 寫到
+-  `build\runtime-logs\`。啟動 log 應含 `[ModbusServer] listening on 0.0.0.0:502 unit=1` 與
+-  `WASM Mirror endpoint: ws://127.0.0.1:8125/mirror`。
+-- `serve_wasm.py`:8123 是 desktop `allowedOrigins` 允許的 Origin;送 `application/wasm`、
+-  `Cache-Control: no-store`、COOP/COEP(符合 `integration-pack/wasm-mirror/docs/http-server-requirements.md`)。
++  `build\runtime-logs\`。啟動 log 應含 `[ModbusServer] listening on 0.0.0.0:502 unit=1`、
++  `WASM Mirror endpoint: ws://127.0.0.1:8125/mirror` 與
++  `[ExportHTTP] download service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
++- `serve_wasm.py`:預設綁 **`0.0.0.0`**(內網其他電腦可開網頁;`--host 127.0.0.1` 改回只給本機);
++  送 `application/wasm`、`Cache-Control: no-store`、COOP/COEP(符合
++  `integration-pack/wasm-mirror/docs/http-server-requirements.md`)。
++  注意:本分支 desktop mirror 仍是 `127.0.0.1:8125`、`allowedOrigins` 只有 `127.0.0.1:8123` /
++  `localhost:8123`;區網電腦要連 mirror 需 main 的區網連線工作調整 mirror 綁定與 allowedOrigins。
+ - 瀏覽器 console:`WASM Mirror ready: true` 即同步完成。
+ 
+ ### 離線提示(transport overlay,pack §9)
+@@ -102,7 +110,8 @@ python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.htm
+ - 畫面保留最後一份 authoritative 狀態;重連並收到完整 snapshot 後自動恢復。
+ 
+ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)。
+-純本機的檢視控制(分頁切換、日期篩選、警報頁分頁、CSV 匯出)不受影響。
++純本機的檢視控制(分頁切換、警報頁分頁)不受影響;歷史頁的日期篩選 / 顯示全部 / 下載 CSV / 取消
++改由 desktop Core 執行(request signal 經 mirror),離線時由 HistoryPage.qml 停用。
+ 
+ ## 接 Adam60xxSimulator(測試用設備位址切換)
+ 
+@@ -185,16 +194,60 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+   Qt 走它自己的 `<a download>` 後備路徑(內建 browser pane 不支援原生存檔對話框時使用)。
+ - `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
+ 
+-## 下載歷史資料(CSV)
+-
+-`Td.saveHistoryCsv(csv)` 是 Q_INVOKABLE,**不經 Mirror**,在按下按鈕的那一端本機執行,內容一律是
+-UTF-8 BOM + HistoryPage.qml 組好的 CSV 字串:
+-- desktop:`QFileDialog::getSaveFileName` + `QFile`(原行為不變),成功回傳檔案路徑,畫面顯示「已下載 N 筆資料」。
+-- WebAssembly:`QFileDialog::saveFileContent(內容, "TaidaFlow_History_yyyyMMdd_HHmmss.csv")`,交給瀏覽器
+-  存檔/下載並立即返回,回傳 `DOWNLOAD:<檔名>`,畫面顯示「已開始下載 N 筆資料(檔名)」。Chromium 系
+-  (Chrome/Edge)會開原生「另存新檔」對話框(File System Access API);Firefox/Safari 直接下載。
+-  Qt 不回報使用者是否取消,所以訊息是「已開始」而不是「已下載」。
+-- 離線時匯出仍可用:它只讀本機畫面上最後同步的資料、不送任何指令給 desktop(離線橫幅已說明畫面是最後同步狀態)。
++## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
++
++### 時間區間查詢(spec §2)
++
++- 歷史頁按「篩選」/ Enter 發 `Td.historyRangeRequested(fromMs, toMs)`,「顯示全部」發
++  `(0, 8640000000000000)`(不限區間)。單位 epoch 毫秒、本機時區日界、兩端都含(w2-040 契約)。
++- Core(`Core::onHistoryRangeRequested`)寫回同步屬性 `historyRangeFromMs/ToMs`、回到第 1 頁
++  (`historyCurrentPage` 不是 1 時設成 1,由它觸發載入),載入沿用 w2-039 的非同步 + 序號機制,每次只推送 10 筆。
++  預設區間 = 啟動當月(Proxy 預設值)。區間與頁碼是**所有連線端共享**(與頁碼相同)。
++- 秒換算:`ceil(fromMs/1000) .. floor(toMs/1000)`,且至少從 1 開始(timestamp <= 0 的列歷史頁本來就不顯示)。
++- 跨月:`SqlManager::requestSensorHistoryRangePage` 只列出資料夾裡**實際存在**且與區間相交的
++  `sensor_YYYYMM.sqlite`(不逐月走,「全部」不會掃幾百萬個月),新月份在前;總數 = 各月 COUNT 加總;
++  頁面在月份間串接(每月內 `ORDER BY timestamp DESC, rowid DESC`)。各月 COUNT 有快取:月份檔大小與
++  SQLite 檔頭 change counter 都沒變才沿用(有寫入的月份會重算)。
++
++### 匯出(spec §3)
++
++- 觸發:`Td.historyExportRequested(sessionId, fromMs, toMs)`(區間 = 目前查詢區間);取消:
++  `Td.historyExportCancelRequested(sessionId)`。`sessionId` 是 `clientSessionId`(桌面 `desktop`,
++  網頁 `web-xxxx`;只接受 `[A-Za-z0-9_-]{1,40}`)。
++- 佇列(`HistoryExportManager`,主執行緒):**同時只跑一個**,其餘 FIFO;排隊中取消 → 直接移出;
++  執行中取消 → 背景執行緒在下一段(<= 2000 列)停下,未完成檔刪除。同一 sessionId 已有排隊/執行中
++  的匯出時再要求:**拒絕**(原本那筆的狀態與進度不動,只把它的 `message` 設成「已有匯出進行中,請取消後再試」,
++  log 記 warning)。
++- 狀態:`historyExportStatus[sessionId] = {state, progress, queuePosition, rowsWritten, totalRows,
++  fileName, url, downloadPort, savedPath, message}`;`state` = queued / running / done / cancelled / error;
++  `queuePosition` 1 = 下一個、執行中 0。進度只在「比上次多 >= 1 個百分點**且**距上次 >= 500 ms」時更新
++  (每 1% 與每 500 ms 取較少者),狀態轉換立即更新。已結束的項目最多保留 30 筆。
++- 生成(`HistoryExportWorker`,專用低優先權執行緒):用**自己的唯讀 SQLite 連線**讀月份檔(新月份在前),
++  以 keyset 分段(每段 <= 2000 列,每段是一個獨立的短 statement,讀鎖只持有一段),邊讀邊寫
++  (1 MB 緩衝)到 `QSaveFile`,完成才改名成正式檔名;取消 / 失敗時暫存檔丟棄。記憶體不隨檔案大小成長。
++  SqlManager 執行緒(每秒存檔、歷史頁)不被匯出占用。
++- CSV:UTF-8 BOM、CRLF、每格加雙引號;欄位 = `序號` + 歷史頁的 17 個標題(`時間`、TT-01..04、
++  PT-01..07、FM-01、M1..M4,與 `Td.historyTitle` 同一份定義);順序同歷史頁(新到舊),序號 1..N;
++  數值 = 歷史頁的換算(TT/M ×100/65535、PT ×1000/65535、FM-01 ×1),格式與頁面 `toFixed(2)` 相同
++  (含剛好 .xx5 的進位規則);空值 `—`。檔名 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(要求時間)。
++- **桌面**(`desktop`):先跳「下載歷史資料」另存新檔對話框(預設「文件」資料夾 + 上述檔名),選定後
++  同樣排隊/進度/可取消,直接寫到選定位置(不經暫存、不占名額),完成填 `savedPath`;對話框按取消 →
++  `state = cancelled`(「已取消儲存」)。
++- **網頁**:寫到 **`<desktop 工作目錄>\exports\`**(正式執行即 `build\runtime-cwd\exports\`;與 `data\`、
++  `settings.sqlite` 同一個基準,重開 app 後連結仍有效)。完成時 `url = "/exports/<檔名>"`、
++  `downloadPort = 8124`,網頁以 `http://<pageHost>:8124/exports/<檔名>` 下載(pageHost 由 main 的網頁端提供)。
++  清理:每產生一個網頁檔後,若 `*.csv` 超過 20 個**或**總量超過 2 GB,依修改時間刪最舊的,直到兩個條件都
++  滿足;不刪剛產生的檔,它單獨就超過 2 GB 時保留並記 log;正在被下載而刪不掉的檔記 log 跳過。
++  啟動時刪除上次當機留下的暫存檔(`*.csv.XXXXXX`)。
++- **下載服務**(`ExportDownloadServer`,專用執行緒上的 `QHttpServer`):綁 `0.0.0.0:8124`,只有
++  `GET /exports/<檔名>`;檔名必須是 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(不能含 `/ \ .. :`、不能是其他
++  副檔名),且實際路徑必須在匯出資料夾內;回應 `Content-Type: text/csv; charset=utf-8`、
++  `Content-Disposition: attachment; filename="<檔名>"`、`Access-Control-Allow-Origin: *`、
++  `Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟分段送出(Qt 6.8 文件:
++  非 sequential 裝置一次宣告全長、分段讀取,不整檔讀進記憶體)。其他路徑 404、壞檔名 400。
++  綁定失敗只記 warning,app 繼續執行(網頁匯出檔仍會寫出)。
++- 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)已沒有 QML 呼叫者;宣告在
++  `TaidaFlowProxy.h`(main 分支負責),待 main 刪除。
+ 
+ ## 測試 / 驗證(全部以 exit code 判定)
+ 
+@@ -214,8 +267,14 @@ python scripts\check_wasm_backend.py build\desktop build\wasm-release
+ python scripts\check_version_shadow.py build\desktop build\wasm-release
+ :: 4. 字型子集涵蓋所有來源字元
+ python scripts\make_font_subset.py --check
+-:: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror 起來、關閉後 502/8125 無殘留)
++:: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror + 8124 下載服務起來、關閉後 502/8124/8125 無殘留)
+ powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
++:: 5b. (w2-041) 歷史區間 + CSV 匯出的 QTest(編譯真的 SqlManager / HistoryExport / Proxy 原始碼):
++::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)
++python docs\evidence\w2-041\tools\make_bench_db.py
++docs\evidence\w2-041\tools\run-qtest.bat
++::     30 天匯出檔逐列比對(獨立的 Python 實作)
++python docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-041-qtest\work\exports_30d\web-t30d_*.csv" --data build\w2-041-bench\data --from 1786896000 --to 1789487999
+ :: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
+ python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
+ ```
+diff --git a/scripts/check_wasm_backend.py b/scripts/check_wasm_backend.py
+index 6cbcb72..c236eb3 100644
+--- a/scripts/check_wasm_backend.py
++++ b/scripts/check_wasm_backend.py
+@@ -8,7 +8,8 @@ on WebAssembly) it reports, from Ninja's own build graph and the produced binary
+ 
+   backend_sources   : backend .cpp files (Core/core.cpp, manager.cpp, Modbus_Client.cpp,
+                       Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp,
+-                      RESTManager.cpp) that appear in `ninja -t commands <target>`
++                      RESTManager.cpp, HistoryExport.cpp [w2-041]) that appear in
++                      `ninja -t commands <target>`
+                       (every compile/link command needed to produce the target)
+   backend_qt_libs   : Qt SerialBus / SerialPort / Sql / HttpServer / Concurrent libraries
+                       on the final link command
+@@ -33,11 +34,13 @@ from pathlib import Path
+ 
+ NINJA = r"C:\Qt\Tools\Ninja\ninja.exe"
+ BACKEND_SOURCES = ["core.cpp", "manager.cpp", "Modbus_Client.cpp", "Modbus_Server.cpp",
+-                   "Ms300FaultReader.cpp", "SqlManager.cpp", "RESTManager.cpp"]
++                   "Ms300FaultReader.cpp", "SqlManager.cpp", "RESTManager.cpp",
++                   "HistoryExport.cpp"]
+ BACKEND_MODULES = ["SerialBus", "SerialPort", "Sql", "HttpServer", "Concurrent"]
+ BACKEND_STRINGS = [b"192.168.1.201", b"192.168.1.205", b"COM2", b"TaidaFlowSettings.ini",
+                    b"settings.sqlite", b"device_info.ini", b"[ModbusServer]", b"[MS300]",
+-                   b"ModbusClient", b"SqlManager", b"RESTManager", b"QModbusTcpClient"]
++                   b"ModbusClient", b"SqlManager", b"RESTManager", b"QModbusTcpClient",
++                   b"HistoryExportManager", b"[ExportHTTP]"]
+ 
+ 
+ def analyse(build: Path) -> tuple[bool, str]:
+diff --git a/scripts/run-desktop.ps1 b/scripts/run-desktop.ps1
+index 5ee67a7..1c1405e 100644
+--- a/scripts/run-desktop.ps1
++++ b/scripts/run-desktop.ps1
+@@ -17,7 +17,7 @@
+ #
+ # Safety (taidaflow WASM v4 spec §2):
+ #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
+-#      serial port list, 502/8123/8125 listeners). Any non-zero verdict -> the app is NOT
++#      serial port list, 502/8123/8124/8125 listeners). Any non-zero verdict -> the app is NOT
+ #      started and this script exits 3.
+ #   2. The working directory is ALWAYS build\runtime-cwd: the Core writes
+ #      TaidaFlowSettings.ini, device_info.ini and SQLite files (settings.sqlite, data\)
+diff --git a/scripts/safety_probe.ps1 b/scripts/safety_probe.ps1
+index d0dadbb..5eb6a00 100644
+--- a/scripts/safety_probe.ps1
++++ b/scripts/safety_probe.ps1
+@@ -8,13 +8,15 @@
+ # This script only *observes*; it never sends a Modbus frame:
+ #   1. TCP connect (no payload) to 192.168.1.201..205:502 with a 1.5 s timeout, then close.
+ #   2. Lists local serial ports (.NET GetPortNames + registry SERIALCOMM + PnP "(COMx)").
+-#   3. Lists TCP listeners on 502 (Core's Modbus server), 8123 (HTTP) and 8125 (mirror).
++#   3. Lists TCP listeners on 502 (Core's Modbus server), 8123 (HTTP), 8124 (Core's CSV
++#      download service, w2-041) and 8125 (mirror).
+ # Every run appends a timestamped record to docs/evidence/wasm-v4/safety-probe.log.
+ #
+ # Exit code: 0 = safe to launch; 3 = UNSAFE (a device answered, COM2 exists, or port 502
+ # already has a listener - e.g. Mango's modbusserver, which must NOT be stopped); the
+-# desktop app must not be started.  A listener on 8125 (mirror) also blocks (exit 4),
+-# because a stale desktop instance would make the result ambiguous; a listener on 8123 is
++# desktop app must not be started.  A listener on 8125 (mirror) or 8124 (export download
++# service) also blocks (exit 4), because a stale desktop instance would make the result
++# ambiguous (and the new instance could not bind it); a listener on 8123 is
+ # only reported (it is the WASM HTTP server started for the E2E test).
+ #
+ # Usage: powershell -ExecutionPolicy Bypass -File scripts\safety_probe.ps1 -Reason "before run 1"
+@@ -111,10 +113,10 @@ if ($allSerial -match '(?i)\bCOM2\b') {
+ 
+ # 3. Local listeners.
+ $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
+-            Where-Object { $_.LocalPort -in 502, 8123, 8125 })
++            Where-Object { $_.LocalPort -in 502, 8123, 8124, 8125 })
+ $simListening = @()
+ if ($listen.Count -eq 0) {
+-    $lines.Add("  listeners 502/8123/8125: <none>")
++    $lines.Add("  listeners 502/8123/8124/8125: <none>")
+ } else {
+     foreach ($l in $listen) {
+         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
+@@ -133,6 +135,7 @@ if ($listen.Count -eq 0) {
+         }
+         elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
+         elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror) already in use -> stale desktop instance, do not launch") }
++        elseif ($l.LocalPort -eq 8124) { $busy = $true; $lines.Add("  port 8124 (CSV download service) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
+         else { $lines.Add("  port 8123 = WASM HTTP server (expected during E2E, informational)") }
+     }
+ }
+diff --git a/scripts/serve_wasm.py b/scripts/serve_wasm.py
+index a1fc943..6516b69 100644
+--- a/scripts/serve_wasm.py
++++ b/scripts/serve_wasm.py
+@@ -1,8 +1,10 @@
+ #!/usr/bin/env python3
+ """Development static HTTP server for the TaidaFlow WebAssembly build.
+ 
+-Serves build/wasm-release (or --dir) on http://127.0.0.1:8123/ as required by the
+-wasm-mirror pack (integration-pack/wasm-mirror/docs/http-server-requirements.md):
++Serves build/wasm-release (or --dir) on port 8123 as required by the wasm-mirror pack
++(integration-pack/wasm-mirror/docs/http-server-requirements.md).  w2-041: it binds 0.0.0.0 by
++default so that other machines on the plant LAN can open the page (internal network, no access
++control); `--host 127.0.0.1` restores the old local-only binding.
+   * the page Origin http://127.0.0.1:8123 is in the desktop mirror allowedOrigins
+   * correct MIME types (.wasm -> application/wasm, .js -> text/javascript)
+   * Cache-Control: no-store so HTML/JS/WASM from different builds never mix
+@@ -11,8 +13,8 @@ wasm-mirror pack (integration-pack/wasm-mirror/docs/http-server-requirements.md)
+     for a wasm_multithread build, which needs cross-origin isolation)
+ The mirror WebSocket (ws://127.0.0.1:8125/mirror) is served by the desktop app, not here.
+ 
+-Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123]
+-Open:   http://127.0.0.1:8123/TaidaFlowApp.html
++Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123] [--host 0.0.0.0]
++Open:   http://127.0.0.1:8123/TaidaFlowApp.html  (this PC)  or  http://<this PC's LAN IP>:8123/...
+ 
+ Evidence capture (optional, off by default): with --evidence-dir DIR the server also
+ accepts `PUT /__evidence/<name>.png|.txt|.json|.csv` from the page (same origin) and stores
+@@ -164,7 +166,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
+ def main() -> int:
+     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+     ap.add_argument("--dir", type=Path, default=ROOT / "build" / "wasm-release")
+-    ap.add_argument("--host", default="127.0.0.1")
++    ap.add_argument("--host", default="0.0.0.0",
++                    help="bind address (default 0.0.0.0 = all interfaces, LAN; 127.0.0.1 = this PC only)")
+     ap.add_argument("--port", type=int, default=8123)
+     ap.add_argument("--evidence-dir", type=Path, default=None,
+                     help="enable PUT /__evidence/<name> uploads into this directory")
+@@ -181,7 +184,10 @@ def main() -> int:
+ 
+     handler = functools.partial(Handler, directory=str(root))
+     with http.server.ThreadingHTTPServer((args.host, args.port), handler) as httpd:
+-        print(f"serving {root} at http://{args.host}:{args.port}/TaidaFlowApp.html", flush=True)
++        shown = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
++        scope = " (all interfaces: also http://<LAN IP>:%d/TaidaFlowApp.html)" % args.port             if args.host in ("0.0.0.0", "") else ""
++        print(f"serving {root} on {args.host}:{args.port} -> "
++              f"http://{shown}:{args.port}/TaidaFlowApp.html{scope}", flush=True)
+         try:
+             httpd.serve_forever()
+         except KeyboardInterrupt:
+diff --git a/scripts/verify-desktop-startup.ps1 b/scripts/verify-desktop-startup.ps1
+index fb9aec1..09ff3b9 100644
+--- a/scripts/verify-desktop-startup.ps1
++++ b/scripts/verify-desktop-startup.ps1
+@@ -4,6 +4,7 @@
+ # Usage: powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
+ # Exit 0 = probe SAFE, log has the mirror endpoint and the Core's Modbus server line,
+ #          127.0.0.1:8125 and 0.0.0.0:502 were listening, app exited, 502/8125 free after.
++#          w2-041: also the CSV download service line and 0.0.0.0:8124 listening, 8124 free after.
+ # Exit 3 = safety probe not SAFE (app not started); 1 = any other check failed.
+ $ErrorActionPreference = 'Stop'
+ $root = Split-Path -Parent $PSScriptRoot
+@@ -18,13 +19,15 @@ $null = $p.Handle
+ Start-Sleep -Seconds 8
+ $l8125 = [bool](Get-NetTCPConnection -LocalAddress 127.0.0.1 -LocalPort 8125 -State Listen -ErrorAction SilentlyContinue)
+ $l502  = [bool](Get-NetTCPConnection -LocalPort 502 -State Listen -ErrorAction SilentlyContinue)
++$l8124 = [bool](Get-NetTCPConnection -LocalAddress 0.0.0.0 -LocalPort 8124 -State Listen -ErrorAction SilentlyContinue)
+ $text = Get-Content $log -Encoding utf8
+ $endpoint = [bool]($text | Select-String -SimpleMatch 'WASM Mirror endpoint: ws://127.0.0.1:8125/mirror')
+ $modbus   = [bool]($text | Select-String -SimpleMatch '[ModbusServer] listening on 0.0.0.0:502')
++$download = [bool]($text | Select-String -SimpleMatch '[ExportHTTP] download service listening on 0.0.0.0:8124')
+ $text | Where-Object { $_ -notmatch 'request was not sent|\[MS300\]' } | Select-Object -First 25
+ & $py (Join-Path $PSScriptRoot 'desktop_input.py') close | Out-Null
+ if (-not $p.WaitForExit(15000)) { Stop-Process -Id $p.Id -Force; Write-Output 'app did not exit on WM_CLOSE (killed)' }
+ Start-Sleep -Seconds 1
+-$left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8125 })
+-Write-Output "endpoint_line=$endpoint modbus_server_line=$modbus listening_8125=$l8125 listening_502=$l502 app_exit_code=$($p.ExitCode) listeners_left=$($left.Count)"
+-if ($endpoint -and $modbus -and $l8125 -and $l502 -and $left.Count -eq 0) { exit 0 } else { exit 1 }
++$left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8124, 8125 })
++Write-Output "endpoint_line=$endpoint modbus_server_line=$modbus download_service_line=$download listening_8125=$l8125 listening_502=$l502 listening_8124=$l8124 app_exit_code=$($p.ExitCode) listeners_left=$($left.Count)"
++if ($endpoint -and $modbus -and $download -and $l8125 -and $l502 -and $l8124 -and $left.Count -eq 0) { exit 0 } else { exit 1 }
+diff --git a/Core/HistoryExport.h b/Core/HistoryExport.h
+new file mode 100644
+index 0000000..80369f9
+--- /dev/null
++++ b/Core/HistoryExport.h
+@@ -0,0 +1,224 @@
++#pragma once
++// w2-041 (desktop only, never compiled into WebAssembly): raw History export
++// (docs/taidaflow_history_export_spec.md §3).
++//
++//  * HistoryExportManager (main thread): FIFO queue keyed by clientSessionId,
++//    one export at a time, cancel queued/running, throttled
++//    TaidaFlowProxy::historyExportStatus updates, desktop "save as" dialog.
++//  * HistoryExportWorker (its own QThread): streams the rows newest first
++//    straight from the month files (own read-only SQLite connections, keyset
++//    chunks) into a QSaveFile, so memory does not grow with the file.
++//  * ExportDownloadServer (its own QThread): QHttpServer on 0.0.0.0:8124 that
++//    only serves GET /exports/<file name> from the export folder (streamed from
++//    the QFile by QHttpServerResponder, never read into memory as a whole).
++#include <QByteArray>
++#include <QDateTime>
++#include <QElapsedTimer>
++#include <QList>
++#include <QObject>
++#include <QString>
++#include <QStringList>
++#include <QThread>
++#include <QVariantList>
++#include <QVariantMap>
++#include <atomic>
++#include <limits>
++#include <memory>
++
++class SqlManager;
++class TaidaFlowProxy;
++
++namespace HistoryExport {
++
++constexpr quint16 kDefaultDownloadPort = 8124;
++constexpr int kMaxExportFiles = 20;
++constexpr qint64 kMaxExportBytes = 2LL * 1024 * 1024 * 1024;   // 2 GB
++constexpr int kDefaultChunkRows = 2000;
++
++// History page column titles (Td.historyTitle), shared by the page and the CSV.
++QVariantList historyColumnTitles();
++
++// UI range contract (w2-040): epoch milliseconds, both ends inclusive,
++// 0 .. 8640000000000000 = unbounded.  Converted to the whole seconds of
++// sensor_data.timestamp: ceil(from/1000) .. floor(to/1000); rows with
++// timestamp <= 0 are never shown (Core skips them), so from is at least 1.
++// Returns false for non-finite values or from > to.
++bool rangeMsToSecs(double fromMs, double toMs, qint64 *fromSec, qint64 *toSec);
++
++// CSV pieces (same cells as the History page / its former QML CSV export:
++// every cell quoted, 序號 + the 17 titles, numbers like JS toFixed(2), missing
++// value "—", CRLF line ends, UTF-8 with BOM).
++QByteArray csvHeader();                          // BOM + header line + CRLF
++void appendFixed2(QByteArray &out, double v);    // == JS Number(v).toFixed(2)
++
++struct TimeFormatCache
++{
++    qint64 minute = std::numeric_limits<qint64>::min();
++    bool aligned = false;
++    QByteArray prefix;                           // "yyyy/MM/dd HH:mm:"
++};
++void appendLocalTime(QByteArray &out, qint64 epochSec, TimeFormatCache &cache);
++
++// One History row: raw s1..s16 values (valid[i] false = SQL NULL).
++void appendCsvRow(QByteArray &out, qint64 sequence, qint64 epochSec, const double *raw,
++                  const bool *valid, TimeFormatCache &cache);
++
++bool isValidSessionId(const QString &sessionId);       // [A-Za-z0-9_-]{1,40}
++bool isValidExportFileName(const QString &fileName);   // what the download server accepts
++QString exportFileName(const QString &sessionId, const QDateTime &time);
++
++// Cleanup of the web export folder (spec §3.5): while there are more than
++// maxFiles *.csv files or they total more than maxBytes, delete the oldest
++// (modification time) - never keepFileName.  If keepFileName alone is larger
++// than maxBytes it is kept and keptOversize is set.
++struct CleanupResult
++{
++    QStringList removed;
++    QStringList failed;          // could not be deleted (e.g. being downloaded)
++    int filesLeft = 0;
++    qint64 bytesLeft = 0;
++    bool keptOversize = false;
++};
++CleanupResult cleanupExportDir(const QString &dir, const QString &keepFileName,
++                               int maxFiles = kMaxExportFiles, qint64 maxBytes = kMaxExportBytes);
++
++struct RunSpec
++{
++    quint64 id = 0;
++    QString sessionId;
++    qint64 fromSec = 0;
++    qint64 toSec = 0;
++    QString targetPath;          // final file (written through QSaveFile)
++    bool webFile = false;        // true: in exportDir, cleanup afterwards
++    QString exportDir;
++    int maxFiles = kMaxExportFiles;
++    qint64 maxBytes = kMaxExportBytes;
++    int chunkRows = kDefaultChunkRows;
++};
++
++enum Outcome { Done = 0, Cancelled = 1, Failed = 2 };
++
++} // namespace HistoryExport
++
++class HistoryExportWorker : public QObject
++{
++    Q_OBJECT
++public:
++    explicit HistoryExportWorker(SqlManager *sql) : m_sql(sql) {}
++    // Runs on the worker thread.
++    void run(const HistoryExport::RunSpec &spec, std::shared_ptr<std::atomic_bool> cancel);
++
++signals:
++    void counted(quint64 id, qint64 totalRows);
++    void progress(quint64 id, qint64 rowsWritten, qint64 totalRows);
++    void finished(quint64 id, int outcome, qint64 rowsWritten, qint64 bytes, QString message,
++                  QString logDetail);
++
++private:
++    SqlManager *m_sql = nullptr;
++};
++
++class ExportDownloadServer : public QObject
++{
++    Q_OBJECT
++public:
++    ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent = nullptr);
++    ~ExportDownloadServer() override;
++    // Binds 0.0.0.0:<port> on the server thread.  On failure it logs and returns
++    // false; the application keeps running.
++    bool start();
++    void stop();
++    bool isListening() const { return m_listening; }
++    quint16 port() const { return m_port; }
++
++private:
++    QString m_exportDir;
++    quint16 m_port;
++    QThread m_thread;
++    QObject *m_impl = nullptr;           // lives on m_thread
++    bool m_listening = false;
++};
++
++class HistoryExportManager : public QObject
++{
++    Q_OBJECT
++public:
++    struct Options
++    {
++        QString exportDir;                                   // web exports (spec §3.5)
++        quint16 downloadPort = HistoryExport::kDefaultDownloadPort;
++        bool startDownloadServer = true;
++        int maxFiles = HistoryExport::kMaxExportFiles;
++        qint64 maxBytes = HistoryExport::kMaxExportBytes;
++        int chunkRows = HistoryExport::kDefaultChunkRows;
++    };
++
++    HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sql, const Options &options,
++                         QObject *parent = nullptr);
++    ~HistoryExportManager() override;
++
++    // Connected to TaidaFlowProxy::historyExportRequested / ...CancelRequested.
++    void requestExport(const QString &sessionId, double fromMs, double toMs);
++    void cancelExport(const QString &sessionId);
++    // Desktop flow after the "save as" dialog returned a path (spec §3.6).
++    void enqueueDesktopExport(const QString &targetPath, double fromMs, double toMs);
++    void shutdown();
++
++    QString exportDir() const { return m_options.exportDir; }
++    bool downloadServerListening() const;
++    int statusPublishCount() const { return m_publishCount; }
++
++signals:
++    void jobFinished(const QString &sessionId, const QString &state);
++
++private:
++    struct Job
++    {
++        quint64 id = 0;
++        QString sessionId;
++        double fromMs = 0;
++        double toMs = 0;
++        qint64 fromSec = 0;
++        qint64 toSec = 0;
++        bool desktop = false;
++        QString targetPath;
++        QString fileName;
++        qint64 rowsWritten = 0;
++        qint64 totalRows = 0;
++        int progress = 0;
++        QString message;
++        std::shared_ptr<std::atomic_bool> cancel;
++        QElapsedTimer runClock;
++    };
++
++    void openDesktopDialog(double fromMs, double toMs);
++    void enqueue(Job job);
++    void startNext();
++    bool sessionBusy(const QString &sessionId) const;
++    void setEntry(const QString &sessionId, const QVariantMap &entry);
++    QVariantMap entryFor(const Job &job, const QString &state, int queuePosition) const;
++    void publishQueue();
++    void publishRunning(bool force);
++    void rejectRequest(const QString &sessionId, const QString &message, const QString &logReason);
++    void onCounted(quint64 id, qint64 totalRows);
++    void onProgress(quint64 id, qint64 rowsWritten, qint64 totalRows);
++    void onFinished(quint64 id, int outcome, qint64 rowsWritten, qint64 bytes,
++                    const QString &message, const QString &logDetail);
++
++    TaidaFlowProxy *m_proxy = nullptr;
++    SqlManager *m_sql = nullptr;
++    Options m_options;
++    QThread m_workerThread;
++    HistoryExportWorker *m_worker = nullptr;
++    std::unique_ptr<ExportDownloadServer> m_downloadServer;
++    QList<Job> m_queue;
++    std::unique_ptr<Job> m_running;
++    quint64 m_nextJobId = 1;
++    bool m_desktopDialogOpen = false;
++    bool m_shutDown = false;
++    QVariantMap m_status;
++    QStringList m_finishedOrder;       // finished session ids, oldest first (pruning)
++    QElapsedTimer m_lastPublishClock;
++    int m_lastPublishedProgress = 0;
++    int m_publishCount = 0;
++};
+diff --git a/Core/HistoryExport.cpp b/Core/HistoryExport.cpp
+new file mode 100644
+index 0000000..d1ec169
+--- /dev/null
++++ b/Core/HistoryExport.cpp
+@@ -0,0 +1,1036 @@
++#include "HistoryExport.h"
++
++#include "SqlManager.h"
++#include "TaidaFlowProxy.h"
++
++#include <QCoreApplication>
++#include <QDir>
++#include <QFile>
++#include <QFileDialog>
++#include <QFileInfo>
++#include <QHostAddress>
++#include <QHttpHeaders>
++#include <QMetaObject>
++#include <QRegularExpression>
++#include <QSaveFile>
++#include <QSqlDatabase>
++#include <QSqlError>
++#include <QSqlQuery>
++#include <QStandardPaths>
++#include <QTcpServer>
++#include <QTimer>
++#include <QtHttpServer/QHttpServer>
++#include <QtHttpServer/QHttpServerRequest>
++#include <QtHttpServer/QHttpServerResponder>
++
++#include <algorithm>
++#include <charconv>
++#include <cmath>
++
++namespace HistoryExport {
++
++namespace {
++// History page conversion (Core::applyHistoryPage): value = raw * scale.
++constexpr double kAdcFullScale = 65535.0;
++constexpr int kExportedSensors = 16;                    // s1..s16
++double scaleForSensor(int sensorIndex)                  // 1-based
++{
++    if (sensorIndex <= 4)
++        return 100.0 / kAdcFullScale;                   // TT-01..04 (°C)
++    if (sensorIndex <= 11)
++        return 1000.0 / kAdcFullScale;                  // PT-01..07 (bar)
++    if (sensorIndex == 12)
++        return 1.0;                                     // FM-01 (L/min)
++    return 100.0 / kAdcFullScale;                       // M1..M4 (%)
++}
++
++const QRegularExpression &sessionIdPattern()
++{
++    static const QRegularExpression re(QStringLiteral("^[A-Za-z0-9_-]{1,40}$"));
++    return re;
++}
++
++const QRegularExpression &exportFilePattern()
++{
++    // <sessionId>_<yyyyMMdd_HHmmss>.csv, nothing else (no dots, no separators).
++    static const QRegularExpression re(QStringLiteral("^[A-Za-z0-9_-]{1,40}_\\d{8}_\\d{6}\\.csv$"));
++    return re;
++}
++
++const QByteArray kMissingValue = QByteArrayLiteral("\xE2\x80\x94");   // "—" (cellText of null)
++} // namespace
++
++QVariantList historyColumnTitles()
++{
++    return QVariantList{
++        QStringLiteral("時間"),
++        QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
++        QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
++        QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
++        QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
++        QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
++        QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
++        QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
++        QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)")
++    };
++}
++
++bool rangeMsToSecs(double fromMs, double toMs, qint64 *fromSec, qint64 *toSec)
++{
++    if (!std::isfinite(fromMs) || !std::isfinite(toMs) || fromMs > toMs)
++        return false;
++    // 8.64e15 ms (the unbounded end) is 8.64e12 s, far inside qint64.
++    constexpr double kLimitMs = 8.64e15;
++    const double from = std::clamp(fromMs, -kLimitMs, kLimitMs);
++    const double to = std::clamp(toMs, -kLimitMs, kLimitMs);
++    *fromSec = std::max<qint64>(1, static_cast<qint64>(std::ceil(from / 1000.0)));
++    *toSec = static_cast<qint64>(std::floor(to / 1000.0));
++    return true;
++}
++
++QByteArray csvHeader()
++{
++    QByteArray out = QByteArrayLiteral("\xEF\xBB\xBF");
++    out += "\"";
++    out += QStringLiteral("序號").toUtf8();
++    out += "\"";
++    for (const QVariant &title : historyColumnTitles()) {
++        out += ",\"";
++        out += title.toString().replace(QLatin1Char('"'), QStringLiteral("\"\"")).toUtf8();
++        out += "\"";
++    }
++    out += "\r\n";
++    return out;
++}
++
++void appendFixed2(QByteArray &out, double v)
++{
++    // JS toFixed(2) picks the nearest 2-decimal value of the EXACT double and,
++    // on an exact tie, the larger magnitude.  std::to_chars(fixed, 2) is also
++    // exact-value rounding, so the two only differ on exact ties.  A double is
++    // exactly halfway between two cents only if it is an odd multiple of 1/8
++    // (x.125/.375/.625/.875); those are nudged away from zero first.
++    if (!std::isfinite(v)) {
++        out += std::isnan(v) ? "NaN" : (v > 0 ? "Infinity" : "-Infinity");
++        return;
++    }
++    if (v == 0.0)
++        v = 0.0;                                    // (-0).toFixed(2) === "0.00"
++    const double eighths = v * 8.0;                 // exact (power of two)
++    if (std::fabs(eighths) < 9.0e15 && eighths == std::floor(eighths)
++        && std::fmod(std::fabs(eighths), 2.0) == 1.0)
++        v += v > 0 ? 0.001 : -0.001;
++    char buffer[64];
++    const auto result = std::to_chars(buffer, buffer + sizeof(buffer), v,
++                                      std::chars_format::fixed, 2);
++    out.append(buffer, int(result.ptr - buffer));
++}
++
++void appendLocalTime(QByteArray &out, qint64 epochSec, TimeFormatCache &cache)
++{
++    // Same text as the History page ("yyyy/MM/dd HH:mm:ss", local time), but
++    // QDateTime is only asked once per minute.
++    const qint64 minute = epochSec >= 0 ? epochSec / 60 : -((-epochSec + 59) / 60);
++    if (minute != cache.minute) {
++        const QDateTime start = QDateTime::fromSecsSinceEpoch(minute * 60);
++        cache.minute = minute;
++        cache.aligned = start.time().second() == 0;
++        cache.prefix = start.toString(QStringLiteral("yyyy/MM/dd HH:mm:")).toLatin1();
++    }
++    if (!cache.aligned) {
++        out += QDateTime::fromSecsSinceEpoch(epochSec)
++                       .toString(QStringLiteral("yyyy/MM/dd HH:mm:ss")).toLatin1();
++        return;
++    }
++    const int second = int(epochSec - minute * 60);
++    out += cache.prefix;
++    out += char('0' + second / 10);
++    out += char('0' + second % 10);
++}
++
++void appendCsvRow(QByteArray &out, qint64 sequence, qint64 epochSec, const double *raw,
++                  const bool *valid, TimeFormatCache &cache)
++{
++    char buffer[32];
++    const auto seq = std::to_chars(buffer, buffer + sizeof(buffer), sequence);
++    out += '"';
++    out.append(buffer, int(seq.ptr - buffer));
++    out += "\",\"";
++    appendLocalTime(out, epochSec, cache);
++    out += '"';
++    for (int i = 0; i < kExportedSensors; ++i) {
++        out += ",\"";
++        if (valid[i])
++            appendFixed2(out, raw[i] * scaleForSensor(i + 1));
++        else
++            out += kMissingValue;
++        out += '"';
++    }
++    out += "\r\n";
++}
++
++bool isValidSessionId(const QString &sessionId)
++{
++    return sessionIdPattern().match(sessionId).hasMatch();
++}
++
++bool isValidExportFileName(const QString &fileName)
++{
++    return exportFilePattern().match(fileName).hasMatch();
++}
++
++QString exportFileName(const QString &sessionId, const QDateTime &time)
++{
++    return QStringLiteral("%1_%2.csv").arg(sessionId, time.toString(QStringLiteral("yyyyMMdd_HHmmss")));
++}
++
++CleanupResult cleanupExportDir(const QString &dir, const QString &keepFileName, int maxFiles,
++                               qint64 maxBytes)
++{
++    CleanupResult result;
++    QFileInfoList files = QDir(dir).entryInfoList(QStringList{QStringLiteral("*.csv")},
++                                                  QDir::Files | QDir::NoDotAndDotDot);
++    std::sort(files.begin(), files.end(), [](const QFileInfo &a, const QFileInfo &b) {
++        const QDateTime ta = a.lastModified();
++        const QDateTime tb = b.lastModified();
++        return ta != tb ? ta < tb : a.fileName() < b.fileName();
++    });
++    qint64 total = 0;
++    for (const QFileInfo &file : files)
++        total += file.size();
++    int count = int(files.size());
++
++    for (const QFileInfo &file : files) {
++        if (count <= maxFiles && total <= maxBytes)
++            break;
++        if (file.fileName() == keepFileName)
++            continue;                                   // never the file just produced
++        if (QFile::remove(file.absoluteFilePath())) {
++            result.removed << file.fileName();
++            --count;
++            total -= file.size();
++        } else {
++            result.failed << file.fileName();
++        }
++    }
++    result.filesLeft = count;
++    result.bytesLeft = total;
++    const QFileInfo kept(QDir(dir).filePath(keepFileName));
++    result.keptOversize = kept.exists() && kept.size() > maxBytes;
++    return result;
++}
++
++} // namespace HistoryExport
++
++using namespace HistoryExport;
++
++// ---------------------------------------------------------------------------
++// Worker (export thread)
++// ---------------------------------------------------------------------------
++
++void HistoryExportWorker::run(const RunSpec &spec, std::shared_ptr<std::atomic_bool> cancel)
++{
++    QElapsedTimer clock;
++    clock.start();
++    qint64 rowsWritten = 0;
++    qint64 totalRows = 0;
++
++    // The month files are listed by SqlManager (it owns the data directory);
++    // this is a short blocking call into the SqlManager thread (directory
++    // listing only).  Rows are then read here with our own read-only SQLite
++    // connections, so the SqlManager thread (per-second saves, History page)
++    // is never occupied by the export.
++    const QStringList files = m_sql ? m_sql->sensorDataFilesInRange(spec.fromSec, spec.toSec)
++                                    : QStringList();
++
++    struct Source
++    {
++        QString connection;
++        QString path;
++        qint64 count = 0;
++    };
++    QList<Source> sources;
++    // Every QSqlQuery/QSqlDatabase handle lives inside the step lambdas below,
++    // so they are gone before the connections are removed here.
++    const auto closeAll = [&sources]() {
++        for (const Source &source : std::as_const(sources)) {
++            {
++                QSqlDatabase db = QSqlDatabase::database(source.connection, false);
++                if (db.isValid())
++                    db.close();
++            }
++            QSqlDatabase::removeDatabase(source.connection);
++        }
++        sources.clear();
++    };
++    const auto fail = [&](const QString &message, const QString &detail) {
++        closeAll();
++        emit finished(spec.id, Failed, rowsWritten, 0, message, detail);
++    };
++
++    // Step 1: open each month file read-only and count the rows in range.
++    QString error;
++    const auto openAndCount = [&](int index) -> bool {
++        Source source;
++        source.connection = QStringLiteral("tf_export_%1_%2").arg(spec.id).arg(index);
++        source.path = files.at(index);
++        QSqlDatabase db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), source.connection);
++        db.setDatabaseName(source.path);
++        db.setConnectOptions(QStringLiteral("QSQLITE_OPEN_READONLY;QSQLITE_BUSY_TIMEOUT=5000"));
++        sources.append(source);
++        if (!db.open()) {
++            error = QStringLiteral("open %1: %2").arg(source.path, db.lastError().text());
++            return false;
++        }
++        QSqlQuery count(db);
++        count.prepare(QStringLiteral("SELECT COUNT(1) FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to"));
++        count.bindValue(QStringLiteral(":from"), spec.fromSec);
++        count.bindValue(QStringLiteral(":to"), spec.toSec);
++        if (!count.exec() || !count.next()) {
++            error = QStringLiteral("count %1: %2").arg(source.path, count.lastError().text());
++            return false;
++        }
++        sources.last().count = count.value(0).toLongLong();
++        totalRows += sources.last().count;
++        return true;
++    };
++    for (int i = 0; i < files.size(); ++i) {
++        if (!openAndCount(i)) {
++            fail(QStringLiteral("讀取資料失敗"), error);
++            return;
++        }
++        if (cancel->load()) {
++            closeAll();
++            emit finished(spec.id, Cancelled, 0, 0, QString(), QStringLiteral("cancelled while counting"));
++            return;
++        }
++    }
++    emit counted(spec.id, totalRows);
++    const double countMs = clock.nsecsElapsed() / 1.0e6;
++
++    if (spec.webFile && !QDir().mkpath(spec.exportDir)) {
++        fail(QStringLiteral("寫入失敗"), QStringLiteral("cannot create %1").arg(spec.exportDir));
++        return;
++    }
++    QSaveFile out(spec.targetPath);       // temp file + rename on commit; discarded otherwise
++    if (!out.open(QIODevice::WriteOnly)) {
++        fail(QStringLiteral("寫入失敗"), QStringLiteral("open %1: %2").arg(spec.targetPath, out.errorString()));
++        return;
++    }
++
++    QByteArray buffer;
++    constexpr qsizetype kFlushBytes = 1 << 20;
++    buffer.reserve(kFlushBytes + 64 * 1024);
++    buffer += csvHeader();
++    qint64 bytes = 0;
++    const auto flush = [&]() -> bool {
++        if (buffer.isEmpty())
++            return true;
++        if (out.write(buffer) != buffer.size())
++            return false;
++        bytes += buffer.size();
++        buffer.clear();
++        return true;
++    };
++
++    QString columns = QStringLiteral("rowid, timestamp");
++    for (int i = 1; i <= kExportedSensors; ++i)
++        columns += QStringLiteral(", s%1").arg(i);
++    // Keyset pagination, newest first: each chunk is its own short statement
++    // (finished before the next one), so the read lock on the month file is
++    // held for one chunk only and the SqlManager writer is never starved.
++    const QString sql = QStringLiteral(
++            "SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :upper "
++            "AND (timestamp < :upper2 OR rowid < :lastRowid) "
++            "ORDER BY timestamp DESC, rowid DESC LIMIT :limit").arg(columns);
++
++    TimeFormatCache timeCache;
++    double raw[kExportedSensors];
++    bool valid[kExportedSensors];
++    QElapsedTimer progressClock;
++    progressClock.start();
++    qint64 chunks = 0;
++    double maxChunkMs = 0.0;
++
++    // Step 2: stream one month file (newest first) into the CSV buffer.
++    enum class Read { Ok, Cancelled, ReadFailed, WriteFailed };
++    const auto readSource = [&](const Source &source) -> Read {
++        QSqlDatabase db = QSqlDatabase::database(source.connection, false);
++        QSqlQuery query(db);
++        query.setForwardOnly(true);
++        if (!query.prepare(sql)) {
++            error = QStringLiteral("prepare %1: %2").arg(source.path, query.lastError().text());
++            return Read::ReadFailed;
++        }
++        qint64 upper = spec.toSec;
++        qint64 lastRowid = std::numeric_limits<qint64>::max();
++        for (;;) {
++            if (cancel->load())
++                return Read::Cancelled;
++            QElapsedTimer chunkClock;
++            chunkClock.start();
++            query.bindValue(QStringLiteral(":from"), spec.fromSec);
++            query.bindValue(QStringLiteral(":upper"), upper);
++            query.bindValue(QStringLiteral(":upper2"), upper);
++            query.bindValue(QStringLiteral(":lastRowid"), lastRowid);
++            query.bindValue(QStringLiteral(":limit"), spec.chunkRows);
++            if (!query.exec()) {
++                error = QStringLiteral("chunk %1: %2").arg(source.path, query.lastError().text());
++                return Read::ReadFailed;
++            }
++            int got = 0;
++            while (query.next()) {
++                lastRowid = query.value(0).toLongLong();
++                upper = query.value(1).toLongLong();
++                for (int i = 0; i < kExportedSensors; ++i) {
++                    const QVariant value = query.value(i + 2);
++                    valid[i] = !value.isNull();
++                    raw[i] = valid[i] ? value.toDouble() : 0.0;
++                }
++                appendCsvRow(buffer, ++rowsWritten, upper, raw, valid, timeCache);
++                ++got;
++            }
++            query.finish();                    // releases the SHARED lock now
++            ++chunks;
++            maxChunkMs = std::max(maxChunkMs, chunkClock.nsecsElapsed() / 1.0e6);
++            if (buffer.size() >= kFlushBytes && !flush()) {
++                error = QStringLiteral("write: %1").arg(out.errorString());
++                return Read::WriteFailed;
++            }
++            if (progressClock.elapsed() >= 100) {
++                progressClock.restart();
++                emit progress(spec.id, rowsWritten, std::max(totalRows, rowsWritten));
++            }
++            if (got < spec.chunkRows)
++                return Read::Ok;
++        }
++    };
++
++    for (const Source &source : std::as_const(sources)) {
++        if (source.count == 0)
++            continue;
++        const Read result = readSource(source);
++        if (result == Read::Ok)
++            continue;
++        out.cancelWriting();                   // the unfinished temp file is removed
++        if (result == Read::Cancelled) {
++            closeAll();
++            emit finished(spec.id, Cancelled, rowsWritten, bytes, QString(),
++                          QStringLiteral("cancelled after %1 row(s); partial file discarded").arg(rowsWritten));
++        } else {
++            fail(result == Read::WriteFailed ? QStringLiteral("寫入失敗") : QStringLiteral("讀取資料失敗"), error);
++        }
++        return;
++    }
++    closeAll();
++
++    if (!flush() || !out.commit()) {
++        fail(QStringLiteral("寫入失敗"), QStringLiteral("commit %1: %2").arg(spec.targetPath, out.errorString()));
++        return;
++    }
++
++    QString detail = QStringLiteral("%1 row(s), %2 byte(s), %3 month file(s), count %4 ms, total %5 ms, "
++                                    "%6 chunk(s) of <= %7 rows, longest chunk read %8 ms")
++                             .arg(rowsWritten).arg(bytes).arg(files.size())
++                             .arg(countMs, 0, 'f', 1).arg(clock.nsecsElapsed() / 1.0e6, 0, 'f', 1)
++                             .arg(chunks).arg(spec.chunkRows).arg(maxChunkMs, 0, 'f', 2);
++    if (spec.webFile) {
++        const CleanupResult cleanup = cleanupExportDir(spec.exportDir, QFileInfo(spec.targetPath).fileName(),
++                                                       spec.maxFiles, spec.maxBytes);
++        detail += QStringLiteral("; cleanup: removed %1 [%2], failed %3 [%4], left %5 file(s) / %6 byte(s)")
++                          .arg(QString::number(cleanup.removed.size()), cleanup.removed.join(QStringLiteral(", ")),
++                               QString::number(cleanup.failed.size()), cleanup.failed.join(QStringLiteral(", ")),
++                               QString::number(cleanup.filesLeft), QString::number(cleanup.bytesLeft));
++        if (cleanup.keptOversize)
++            detail += QStringLiteral("; the new file alone exceeds %1 bytes and is kept").arg(spec.maxBytes);
++    }
++    emit finished(spec.id, Done, rowsWritten, bytes, QString(), detail);
++}
++
++// ---------------------------------------------------------------------------
++// Download server (server thread)
++// ---------------------------------------------------------------------------
++
++namespace {
++class ExportHttpImpl : public QObject
++{
++public:
++    explicit ExportHttpImpl(const QString &exportDir) : m_exportDir(exportDir) {}
++
++    bool listen(quint16 port, QString *error)
++    {
++        auto *tcp = new QTcpServer(this);
++        if (!tcp->listen(QHostAddress::AnyIPv4, port)) {
++            *error = tcp->errorString();
++            delete tcp;
++            return false;
++        }
++        m_http = new QHttpServer(this);
++        m_http->route(QStringLiteral("/exports/<arg>"), QHttpServerRequest::Method::Get, this,
++                      [this](const QString &name, const QHttpServerRequest &request,
++                             QHttpServerResponder &responder) { serve(name, request, responder); });
++        m_http->setMissingHandler(this, [](const QHttpServerRequest &request,
++                                           QHttpServerResponder &responder) {
++            qInfo().noquote() << QStringLiteral("[ExportHTTP] %1 %2 from %3 -> 404 (no such route)")
++                                         .arg(QString::fromLatin1(methodName(request)),
++                                              request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
++                                              request.remoteAddress().toString());
++            responder.write(QByteArrayLiteral("not found\n"), errorHeaders(),
++                            QHttpServerResponder::StatusCode::NotFound);
++        });
++        if (!m_http->bind(tcp)) {
++            *error = QStringLiteral("QHttpServer::bind failed");
++            return false;
++        }
++        return true;
++    }
++
++private:
++    static QByteArray methodName(const QHttpServerRequest &request)
++    {
++        switch (request.method()) {
++        case QHttpServerRequest::Method::Get: return "GET";
++        case QHttpServerRequest::Method::Head: return "HEAD";
++        case QHttpServerRequest::Method::Post: return "POST";
++        case QHttpServerRequest::Method::Put: return "PUT";
++        case QHttpServerRequest::Method::Delete: return "DELETE";
++        case QHttpServerRequest::Method::Options: return "OPTIONS";
++        default: return "OTHER";
++        }
++    }
++
++    static QHttpHeaders errorHeaders()
++    {
++        QHttpHeaders headers;
++        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/plain; charset=utf-8");
++        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
++        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
++        return headers;
++    }
++
++    void reject(const QHttpServerRequest &request, QHttpServerResponder &responder,
++                QHttpServerResponder::StatusCode code, const QByteArray &body, const QString &why)
++    {
++        // One multi-argument arg() call: a "%NN" in the requested URL must not be
++        // taken as a place marker by a following arg().
++        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> %3 (%4)")
++                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
++                                          request.remoteAddress().toString(),
++                                          QString::number(int(code)), why);
++        responder.write(body, errorHeaders(), code);
++    }
++
++    void serve(const QString &name, const QHttpServerRequest &request, QHttpServerResponder &responder)
++    {
++        // Only <sessionId>_<yyyyMMdd_HHmmss>.csv directly inside the export
++        // folder: no separators, no "..", no drive letters, no other types.
++        if (!isValidExportFileName(name)) {
++            reject(request, responder, QHttpServerResponder::StatusCode::BadRequest,
++                   QByteArrayLiteral("bad file name\n"), QStringLiteral("rejected name \"%1\"").arg(name));
++            return;
++        }
++        const QDir dir(m_exportDir);
++        const QFileInfo info(dir.filePath(name));
++        if (!info.exists() || !info.isFile()) {
++            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
++                   QByteArrayLiteral("not found\n"), QStringLiteral("no file \"%1\"").arg(name));
++            return;
++        }
++        if (info.canonicalPath() != QFileInfo(m_exportDir).canonicalFilePath()) {
++            reject(request, responder, QHttpServerResponder::StatusCode::Forbidden,
++                   QByteArrayLiteral("forbidden\n"), QStringLiteral("outside the export folder"));
++            return;
++        }
++        auto *file = new QFile(info.absoluteFilePath());
++        if (!file->open(QIODevice::ReadOnly)) {
++            const QString error = file->errorString();
++            delete file;
++            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
++                   QByteArrayLiteral("not found\n"), QStringLiteral("open failed: %1").arg(error));
++            return;
++        }
++        QHttpHeaders headers;
++        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/csv; charset=utf-8");
++        headers.append(QHttpHeaders::WellKnownHeader::ContentDisposition,
++                       QByteArrayLiteral("attachment; filename=\"") + name.toLatin1() + '"');
++        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
++        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
++        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> 200, %3 byte(s) streamed from disk")
++                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
++                                          request.remoteAddress().toString(),
++                                          QString::number(file->size()));
++        // Qt 6.8: for a non-sequential device the responder sends Content-Length
++        // and then reads the file in chunks as the socket drains
++        // (QHttpServerResponder::write(QIODevice*, ...), takes ownership).
++        responder.write(file, headers, QHttpServerResponder::StatusCode::Ok);
++    }
++
++    QString m_exportDir;
++    QHttpServer *m_http = nullptr;
++};
++} // namespace
++
++ExportDownloadServer::ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent)
++    : QObject(parent), m_exportDir(exportDir), m_port(port)
++{
++    m_thread.setObjectName(QStringLiteral("ExportDownloadThread"));
++}
++
++ExportDownloadServer::~ExportDownloadServer()
++{
++    stop();
++}
++
++bool ExportDownloadServer::start()
++{
++    if (m_impl)
++        return m_listening;
++    auto *impl = new ExportHttpImpl(m_exportDir);
++    impl->moveToThread(&m_thread);
++    connect(&m_thread, &QThread::finished, impl, &QObject::deleteLater);
++    m_impl = impl;
++    m_thread.start();
++    QString error;
++    bool ok = false;
++    QMetaObject::invokeMethod(impl, [impl, this, &ok, &error]() { ok = impl->listen(m_port, &error); },
++                              Qt::BlockingQueuedConnection);
++    m_listening = ok;
++    if (ok) {
++        qInfo().noquote() << QStringLiteral("[ExportHTTP] download service listening on 0.0.0.0:%1, "
++                                            "GET /exports/<file> from %2")
++                                     .arg(m_port).arg(QDir::toNativeSeparators(m_exportDir));
++    } else {
++        qWarning().noquote() << QStringLiteral("[ExportHTTP] download service NOT started on 0.0.0.0:%1: %2 "
++                                               "(web exports are still written; the application keeps running)")
++                                        .arg(m_port).arg(error);
++    }
++    return ok;
++}
++
++void ExportDownloadServer::stop()
++{
++    if (!m_impl)
++        return;
++    m_thread.quit();
++    m_thread.wait();
++    m_impl = nullptr;                     // deleted by deleteLater when the thread finished
++    m_listening = false;
++}
++
++// ---------------------------------------------------------------------------
++// Manager (main thread)
++// ---------------------------------------------------------------------------
++
++namespace {
++QString stateName(int outcome)
++{
++    return outcome == Done ? QStringLiteral("done")
++         : outcome == Cancelled ? QStringLiteral("cancelled")
++                                : QStringLiteral("error");
++}
++constexpr int kMaxFinishedEntries = 30;
++} // namespace
++
++HistoryExportManager::HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sql,
++                                           const Options &options, QObject *parent)
++    : QObject(parent), m_proxy(proxy), m_sql(sql), m_options(options)
++{
++    if (m_options.exportDir.isEmpty())
++        m_options.exportDir = QDir::currentPath() + QStringLiteral("/exports");
++    m_options.exportDir = QDir(m_options.exportDir).absolutePath();
++    QDir().mkpath(m_options.exportDir);
++
++    // A QSaveFile temp file (<name>.csv.XXXXXX) can only be left behind by a
++    // crash; nothing can finish it, so remove it at start-up.
++    static const QRegularExpression leftover(QStringLiteral("\\.csv\\.[^.]+$"));
++    const QStringList names = QDir(m_options.exportDir).entryList(QDir::Files);
++    for (const QString &name : names) {
++        if (leftover.match(name).hasMatch() && QFile::remove(QDir(m_options.exportDir).filePath(name)))
++            qInfo().noquote() << "[Export] removed unfinished temp file" << name;
++    }
++
++    m_worker = new HistoryExportWorker(sql);
++    m_worker->moveToThread(&m_workerThread);
++    connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
++    connect(m_worker, &HistoryExportWorker::counted, this, &HistoryExportManager::onCounted);
++    connect(m_worker, &HistoryExportWorker::progress, this, &HistoryExportManager::onProgress);
++    connect(m_worker, &HistoryExportWorker::finished, this, &HistoryExportManager::onFinished);
++    m_workerThread.setObjectName(QStringLiteral("HistoryExportThread"));
++    m_workerThread.start(QThread::LowPriority);
++
++    if (m_proxy) {
++        connect(m_proxy, &TaidaFlowProxy::historyExportRequested, this,
++                &HistoryExportManager::requestExport);
++        connect(m_proxy, &TaidaFlowProxy::historyExportCancelRequested, this,
++                &HistoryExportManager::cancelExport);
++    }
++    if (QCoreApplication::instance()) {
++        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
++                &HistoryExportManager::shutdown);
++    }
++
++    qInfo().noquote() << QStringLiteral("[Export] web export folder %1 (max %2 files / %3 bytes)")
++                                 .arg(QDir::toNativeSeparators(m_options.exportDir))
++                                 .arg(m_options.maxFiles).arg(m_options.maxBytes);
++    if (m_options.startDownloadServer) {
++        m_downloadServer = std::make_unique<ExportDownloadServer>(m_options.exportDir, m_options.downloadPort);
++        m_downloadServer->start();
++    }
++}
++
++HistoryExportManager::~HistoryExportManager()
++{
++    shutdown();
++}
++
++bool HistoryExportManager::downloadServerListening() const
++{
++    return m_downloadServer && m_downloadServer->isListening();
++}
++
++void HistoryExportManager::shutdown()
++{
++    if (m_shutDown)
++        return;
++    m_shutDown = true;
++    if (m_running)
++        m_running->cancel->store(true);
++    m_queue.clear();
++    m_workerThread.quit();
++    m_workerThread.wait();                // a running export stops at its next chunk
++    if (m_downloadServer)
++        m_downloadServer->stop();
++    qInfo().noquote() << "[Export] stopped (export thread and download service).";
++}
++
++bool HistoryExportManager::sessionBusy(const QString &sessionId) const
++{
++    if (m_running && m_running->sessionId == sessionId)
++        return true;
++    for (const Job &job : m_queue) {
++        if (job.sessionId == sessionId)
++            return true;
++    }
++    return sessionId == QStringLiteral("desktop") && m_desktopDialogOpen;
++}
++
++void HistoryExportManager::rejectRequest(const QString &sessionId, const QString &message,
++                                         const QString &logReason)
++{
++    qWarning().noquote() << QStringLiteral("[Export] request from \"%1\" rejected: %2").arg(sessionId, logReason);
++    QVariantMap entry = m_status.value(sessionId).toMap();
++    if (entry.isEmpty()) {
++        entry = QVariantMap{
++            {QStringLiteral("state"), QStringLiteral("error")},
++            {QStringLiteral("progress"), 0}, {QStringLiteral("queuePosition"), 0},
++            {QStringLiteral("rowsWritten"), 0.0}, {QStringLiteral("totalRows"), 0.0},
++            {QStringLiteral("fileName"), QString()}, {QStringLiteral("url"), QString()},
++            {QStringLiteral("downloadPort"), 0}, {QStringLiteral("savedPath"), QString()},
++        };
++    }
++    entry.insert(QStringLiteral("message"), message);
++    setEntry(sessionId, entry);
++}
++
++void HistoryExportManager::requestExport(const QString &sessionId, double fromMs, double toMs)
++{
++    if (m_shutDown)
++        return;
++    if (!isValidSessionId(sessionId)) {
++        rejectRequest(sessionId, QStringLiteral("匯出失敗:連線端錯誤"),
++                      QStringLiteral("invalid session id"));
++        return;
++    }
++    qint64 fromSec = 0;
++    qint64 toSec = 0;
++    if (!rangeMsToSecs(fromMs, toMs, &fromSec, &toSec)) {
++        rejectRequest(sessionId, QStringLiteral("匯出失敗:日期區間錯誤"),
++                      QStringLiteral("invalid range %1 .. %2").arg(fromMs, 0, 'f', 0).arg(toMs, 0, 'f', 0));
++        return;
++    }
++    // Same session already queued/running: the new request is refused (the
++    // running/queued job and its progress stay as they are; only the message
++    // of that entry says why).  See the w2-041 report.
++    if (sessionBusy(sessionId)) {
++        if (m_running && m_running->sessionId == sessionId)
++            m_running->message = QStringLiteral("已有匯出進行中,請取消後再試");
++        rejectRequest(sessionId, QStringLiteral("已有匯出進行中,請取消後再試"),
++                      QStringLiteral("this session already has an export queued or running"));
++        return;
++    }
++
++    if (sessionId == QStringLiteral("desktop")) {
++        // Desktop (spec §3.6): ask for the target first.  Deferred so that the
++        // native dialog's nested loop does not run inside the QML signal
++        // emission; the queue, other exports and the mirror keep running while
++        // the dialog is open.
++        m_desktopDialogOpen = true;
++        QTimer::singleShot(0, this, [this, fromMs, toMs]() { openDesktopDialog(fromMs, toMs); });
++        return;
++    }
++
++    Job job;
++    job.id = m_nextJobId++;
++    job.sessionId = sessionId;
++    job.fromMs = fromMs;
++    job.toMs = toMs;
++    job.fromSec = fromSec;
++    job.toSec = toSec;
++    job.fileName = exportFileName(sessionId, QDateTime::currentDateTime());
++    job.targetPath = QDir(m_options.exportDir).filePath(job.fileName);
++    enqueue(std::move(job));
++}
++
++void HistoryExportManager::openDesktopDialog(double fromMs, double toMs)
++{
++    const QString suggested = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
++            .filePath(exportFileName(QStringLiteral("desktop"), QDateTime::currentDateTime()));
++    qInfo().noquote() << "[Export] desktop: opening the save dialog, suggested" << QDir::toNativeSeparators(suggested);
++    const QString path = QFileDialog::getSaveFileName(nullptr, QStringLiteral("下載歷史資料"), suggested,
++                                                      QStringLiteral("CSV 檔案 (*.csv)"));
++    m_desktopDialogOpen = false;
++    if (m_shutDown)
++        return;
++    if (path.isEmpty()) {
++        qInfo().noquote() << "[Export] desktop: save dialog cancelled -> state cancelled";
++        QVariantMap entry{
++            {QStringLiteral("state"), QStringLiteral("cancelled")},
++            {QStringLiteral("progress"), 0}, {QStringLiteral("queuePosition"), 0},
++            {QStringLiteral("rowsWritten"), 0.0}, {QStringLiteral("totalRows"), 0.0},
++            {QStringLiteral("fileName"), QString()}, {QStringLiteral("url"), QString()},
++            {QStringLiteral("downloadPort"), 0}, {QStringLiteral("savedPath"), QString()},
++            {QStringLiteral("message"), QStringLiteral("已取消儲存")},
++        };
++        setEntry(QStringLiteral("desktop"), entry);
++        emit jobFinished(QStringLiteral("desktop"), QStringLiteral("cancelled"));
++        return;
++    }
++    enqueueDesktopExport(path, fromMs, toMs);
++}
++
++void HistoryExportManager::enqueueDesktopExport(const QString &targetPath, double fromMs, double toMs)
++{
++    if (m_shutDown)
++        return;
++    qint64 fromSec = 0;
++    qint64 toSec = 0;
++    if (!rangeMsToSecs(fromMs, toMs, &fromSec, &toSec)) {
++        rejectRequest(QStringLiteral("desktop"), QStringLiteral("匯出失敗:日期區間錯誤"),
++                      QStringLiteral("invalid range"));
++        return;
++    }
++    if (m_running && m_running->sessionId == QStringLiteral("desktop")) {
++        rejectRequest(QStringLiteral("desktop"), QStringLiteral("已有匯出進行中,請取消後再試"),
++                      QStringLiteral("desktop export already running"));
++        return;
++    }
++    for (const Job &queued : std::as_const(m_queue)) {
++        if (queued.sessionId == QStringLiteral("desktop")) {
++            rejectRequest(QStringLiteral("desktop"), QStringLiteral("已有匯出進行中,請取消後再試"),
++                          QStringLiteral("desktop export already queued"));
++            return;
++        }
++    }
++    Job job;
++    job.id = m_nextJobId++;
++    job.sessionId = QStringLiteral("desktop");
++    job.desktop = true;
++    job.fromMs = fromMs;
++    job.toMs = toMs;
++    job.fromSec = fromSec;
++    job.toSec = toSec;
++    job.targetPath = QFileInfo(targetPath).absoluteFilePath();
++    job.fileName = QFileInfo(targetPath).fileName();
++    enqueue(std::move(job));
++}
++
++void HistoryExportManager::enqueue(Job job)
++{
++    job.cancel = std::make_shared<std::atomic_bool>(false);
++    qInfo().noquote() << QStringLiteral("[Export] #%1 queued: session %2, %3, range %4 .. %5 s, file %6")
++                                 .arg(job.id).arg(job.sessionId,
++                                                  job.desktop ? QStringLiteral("desktop save-as")
++                                                              : QStringLiteral("web (export folder)"))
++                                 .arg(job.fromSec).arg(job.toSec)
++                                 .arg(QDir::toNativeSeparators(job.targetPath));
++    m_finishedOrder.removeAll(job.sessionId);
++    m_queue.append(std::move(job));
++    publishQueue();
++    startNext();
++}
++
++void HistoryExportManager::startNext()
++{
++    if (m_running || m_queue.isEmpty() || m_shutDown)
++        return;
++    m_running = std::make_unique<Job>(m_queue.takeFirst());
++    m_running->message = QStringLiteral("讀取資料中");
++    m_running->runClock.start();
++    qInfo().noquote() << QStringLiteral("[Export] #%1 running: session %2 (%3 still queued)")
++                                 .arg(m_running->id).arg(m_running->sessionId).arg(m_queue.size());
++    publishQueue();
++    publishRunning(true);
++
++    RunSpec spec;
++    spec.id = m_running->id;
++    spec.sessionId = m_running->sessionId;
++    spec.fromSec = m_running->fromSec;
++    spec.toSec = m_running->toSec;
++    spec.targetPath = m_running->targetPath;
++    spec.webFile = !m_running->desktop;
++    spec.exportDir = m_options.exportDir;
++    spec.maxFiles = m_options.maxFiles;
++    spec.maxBytes = m_options.maxBytes;
++    spec.chunkRows = m_options.chunkRows;
++    HistoryExportWorker *worker = m_worker;
++    auto cancel = m_running->cancel;
++    QMetaObject::invokeMethod(worker, [worker, spec, cancel]() { worker->run(spec, cancel); },
++                              Qt::QueuedConnection);
++}
++
++void HistoryExportManager::cancelExport(const QString &sessionId)
++{
++    if (m_shutDown)
++        return;
++    for (qsizetype i = 0; i < m_queue.size(); ++i) {
++        if (m_queue.at(i).sessionId != sessionId)
++            continue;
++        Job job = m_queue.takeAt(i);
++        qInfo().noquote() << QStringLiteral("[Export] #%1 cancelled while queued (position %2): session %3")
++                                     .arg(job.id).arg(i + 1).arg(sessionId);
++        job.message = QStringLiteral("已取消");
++        setEntry(sessionId, entryFor(job, QStringLiteral("cancelled"), 0));
++        m_finishedOrder.append(sessionId);
++        publishQueue();
++        emit jobFinished(sessionId, QStringLiteral("cancelled"));
++        return;
++    }
++    if (m_running && m_running->sessionId == sessionId) {
++        qInfo().noquote() << QStringLiteral("[Export] #%1 cancel requested while running: session %2")
++                                     .arg(m_running->id).arg(sessionId);
++        m_running->cancel->store(true);
++        m_running->message = QStringLiteral("取消中");
++        publishRunning(true);
++        return;                    // becomes "cancelled" when the worker stops (file discarded)
++    }
++    qInfo().noquote() << QStringLiteral("[Export] cancel from \"%1\" ignored: nothing queued or running").arg(sessionId);
++}
++
++QVariantMap HistoryExportManager::entryFor(const Job &job, const QString &state, int queuePosition) const
++{
++    const bool done = state == QStringLiteral("done");
++    return QVariantMap{
++        {QStringLiteral("state"), state},
++        {QStringLiteral("progress"), job.progress},
++        {QStringLiteral("queuePosition"), queuePosition},
++        {QStringLiteral("rowsWritten"), double(job.rowsWritten)},
++        {QStringLiteral("totalRows"), double(job.totalRows)},
++        {QStringLiteral("fileName"), job.fileName},
++        {QStringLiteral("url"), done && !job.desktop ? QStringLiteral("/exports/") + job.fileName : QString()},
++        {QStringLiteral("downloadPort"), job.desktop ? 0 : int(m_options.downloadPort)},
++        {QStringLiteral("savedPath"), done && job.desktop ? QDir::toNativeSeparators(job.targetPath) : QString()},
++        {QStringLiteral("message"), job.message},
++    };
++}
++
++void HistoryExportManager::setEntry(const QString &sessionId, const QVariantMap &entry)
++{
++    m_status.insert(sessionId, entry);
++    // Keep the mirrored map small: drop the oldest finished entries.
++    while (m_finishedOrder.size() > kMaxFinishedEntries) {
++        const QString oldest = m_finishedOrder.takeFirst();
++        if (oldest != sessionId && !sessionBusy(oldest))
++            m_status.remove(oldest);
++    }
++    ++m_publishCount;
++    if (m_proxy)
++        m_proxy->setHistoryExportStatus(m_status);
++}
++
++void HistoryExportManager::publishQueue()
++{
++    for (qsizetype i = 0; i < m_queue.size(); ++i) {
++        Job &job = m_queue[i];
++        job.message.clear();                     // the page shows the queue position itself
++        const QVariantMap entry = entryFor(job, QStringLiteral("queued"), int(i + 1));
++        if (m_status.value(job.sessionId).toMap() != entry)
++            setEntry(job.sessionId, entry);
++    }
++}
++
++void HistoryExportManager::publishRunning(bool force)
++{
++    if (!m_running)
++        return;
++    Job &job = *m_running;
++    const int progress = job.totalRows > 0
++            ? int(std::min<qint64>(100, job.rowsWritten * 100 / job.totalRows))
++            : 0;
++    // Throttle (spec §3.2: 1% or 500 ms, whichever gives fewer updates): a progress-only update
++    // is published when progress rose by at least 1 point AND at least 500 ms
++    // passed since the previous one, i.e. at most one update per 1% and at
++    // most two per second, whichever is fewer.  State changes are immediate.
++    if (!force && (progress - m_lastPublishedProgress < 1 || m_lastPublishClock.elapsed() < 500))
++        return;
++    job.progress = progress;
++    m_lastPublishedProgress = progress;
++    m_lastPublishClock.start();
++    setEntry(job.sessionId, entryFor(job, QStringLiteral("running"), 0));
++}
++
++void HistoryExportManager::onCounted(quint64 id, qint64 totalRows)
++{
++    if (!m_running || m_running->id != id)
++        return;
++    m_running->totalRows = totalRows;
++    if (!m_running->cancel->load())
++        m_running->message = QStringLiteral("匯出中");
++    qInfo().noquote() << QStringLiteral("[Export] #%1 %2 row(s) to write").arg(id).arg(totalRows);
++    publishRunning(true);
++}
++
++void HistoryExportManager::onProgress(quint64 id, qint64 rowsWritten, qint64 totalRows)
++{
++    if (!m_running || m_running->id != id)
++        return;
++    m_running->rowsWritten = rowsWritten;
++    m_running->totalRows = totalRows;
++    publishRunning(false);
++}
++
++void HistoryExportManager::onFinished(quint64 id, int outcome, qint64 rowsWritten, qint64 bytes,
++                                      const QString &message, const QString &logDetail)
++{
++    if (!m_running || m_running->id != id)
++        return;
++    std::unique_ptr<Job> job = std::move(m_running);
++    const double elapsedMs = job->runClock.nsecsElapsed() / 1.0e6;
++    job->rowsWritten = rowsWritten;
++    if (outcome == Done) {
++        job->totalRows = rowsWritten;
++        job->progress = 100;
++        job->message = QStringLiteral("匯出完成,共 %1 筆").arg(rowsWritten);
++    } else if (outcome == Cancelled) {
++        job->message = QStringLiteral("已取消");
++    } else {
++        job->message = message.isEmpty() ? QStringLiteral("匯出失敗") : message;
++    }
++    const QString state = stateName(outcome);
++    // Single-pass arg(): logDetail may contain paths/file names with '%'.
++    const QString line = QStringLiteral("[Export] #%1 %2: session %3, %4 ms; %5; %6 byte(s) -> %7")
++                                 .arg(QString::number(id), state, job->sessionId,
++                                      QString::number(elapsedMs, 'f', 1), logDetail, QString::number(bytes),
++                                      outcome == Done ? QDir::toNativeSeparators(job->targetPath)
++                                                      : QStringLiteral("(no file)"));
++    if (outcome == Failed)
++        qWarning().noquote() << line;
++    else
++        qInfo().noquote() << line;
++    if (outcome == Done && !job->desktop && !downloadServerListening())
++        qWarning().noquote() << "[Export] the download service is not running; the file is only on disk.";
++
++    setEntry(job->sessionId, entryFor(*job, state, 0));
++    m_finishedOrder.append(job->sessionId);
++    emit jobFinished(job->sessionId, state);
++    startNext();
++}

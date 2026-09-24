@@ -1,0 +1,9 @@
+﻿scanned 176 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+charset changed since last build (9 new chars: –✕月求為要跨送隊) -> re-run without --check
+make_font_subset --check rc=1
+Core/HistoryExport.cpp []
+Core/HistoryExport.h []
+Core/SqlManager.cpp []
+Core/SqlManager.h []
+Core/core.cpp []
+Core/core.h []

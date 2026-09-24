@@ -1,0 +1,15 @@
+﻿before restore:
+  sensor_202607.sqlite: rows=102 min=-5 max=1783656099 size=53248
+  sensor_202608.sqlite: rows=1296000 min=1786896000 max=1788191999 size=299409408
+  sensor_202609.sqlite: rows=1297050 min=1788192000 max=1790251404 size=299511808
+  backup present: sensor_202609.sqlite.w2-041-before.bak size=331776
+TaidaFlowSettings.ini unchanged during the run: True
+after restore:
+  sensor_202609.sqlite: rows=3024 min=1790227687 max=1790246380 size=331776
+restore rc=0
+runtime-cwd\exports before cleanup:
+  web-5564_20260924_200004.csv 437517180
+  web-5564_20260924_200041.csv 437517180
+  web-5564_20260924_200120.csv 437517180
+  web-968f_20260924_195933.csv 437517180
+after: runtime-cwd\exports exists=False; build\w2-041-live exists=False; build\w2-041-final exists=False

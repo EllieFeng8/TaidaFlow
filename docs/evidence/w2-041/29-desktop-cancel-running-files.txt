@@ -1,0 +1,14 @@
+﻿files in target folder while running (19:56:26.982):
+  desktop_30days.csv 437517180
+  desktop_cancel_test.csv.raJBui 10691281
+clicked 取消 at 19:56:28.013
+files in target folder after cancel (19:56:30.766):
+  desktop_30days.csv 437517180
+--- log:
+19:56:10.574 [t70408] [Export] request from "desktop" rejected: this session already has an export queued or running
+19:56:15.616 [t70408] [Export] desktop: opening the save dialog, suggested C:\Users\TED\Documents\desktop_20260924_195615.csv
+19:56:25.492 [t70408] [Export] #2 queued: session desktop, desktop save-as, range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-041-final\desktop_cancel_test.csv
+19:56:25.493 [t70408] [Export] #2 running: session desktop (0 still queued)
+19:56:25.572 [t70408] [Export] #2 2592003 row(s) to write
+19:56:28.010 [t70408] [Export] #2 cancel requested while running: session desktop
+19:56:28.014 [t70408] [Export] #2 cancelled: session desktop, 2521.4 ms; cancelled after 1296000 row(s); partial file discarded; 218203256 byte(s) -> (no file)

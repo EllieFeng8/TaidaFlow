@@ -1,0 +1,15 @@
+﻿w2-041: safety_probe.ps1 with a dummy listener (tools\dummy_listener.py) on 127.0.0.1:8124
+=== safety probe 2026-09-24T20:07:10.240+08:00 reason="w2-041 probe self-test: dummy python listener on 127.0.0.1:8124" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.1:8124 pid=49612 (python)
+  port 8124 (CSV download service) already in use -> another instance/program, do not launch (do NOT stop the owner)
+  verdict: BUSY
+probe exit=4 (expected 4 = BUSY)

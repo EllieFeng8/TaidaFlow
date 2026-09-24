@@ -1,0 +1,4 @@
+﻿precheck 2026-09-24T19:38:06.2304892+08:00
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8124/8125/18125: 0
+git HEAD: 31417f4

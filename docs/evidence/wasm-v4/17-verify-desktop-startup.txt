@@ -1,0 +1,27 @@
+﻿=== safety probe 2026-09-24T11:58:23.221+08:00 reason="before launch: verify-desktop-startup (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.1:8123 pid=80048 (python)
+  port 8123 = WASM HTTP server (expected during E2E, informational)
+  verdict: SAFE
+PID=59380 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\verify-startup.log
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=�]�ƱҰ� status=���`
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Loaded 3 alarm-history records from the last 3 days into the UI.
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Loaded 3 alarm-history records from the last 3 days into the UI.
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+endpoint_line=True modbus_server_line=True listening_8125=True listening_502=True app_exit_code=0 listeners_left=0
+

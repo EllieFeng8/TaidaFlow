@@ -1,0 +1,5 @@
+# Vendored wasm-mirror pack: keep the release bytes exactly as shipped so that
+# integration-pack/wasm-mirror/MANIFEST.sha256 verifies in every checkout
+# (a global core.autocrlf=true would otherwise rewrite LF -> CRLF on checkout and
+# break all 24 hashes).
+integration-pack/wasm-mirror/** -text

@@ -1,0 +1,97 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "desktop-release",
+      "displayName": "Desktop MSVC 2022 x64 Release (run inside a vcvars64 shell)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/desktop",
+      "toolchainFile": "C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MAKE_PROGRAM": "C:/Qt/Tools/Ninja/ninja.exe"
+      },
+      "environment": {
+        "VSLANG": "1033"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "wasm-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "toolchainFile": "C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_MAKE_PROGRAM": "C:/Qt/Tools/Ninja/ninja.exe",
+        "BUILD_TESTING": "OFF",
+        "QT_CHAINLOAD_TOOLCHAIN_FILE": "C:/tools/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+        "EMSCRIPTEN_ROOT_PATH": "C:/tools/emsdk/upstream/emscripten",
+        "QT_HOST_PATH": "C:/Qt/6.8.3/msvc2022_64",
+        "QT_HOST_PATH_CMAKE_DIR": "C:/Qt/6.8.3/msvc2022_64/lib/cmake",
+        "CMAKE_CROSSCOMPILING_EMULATOR": "C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe"
+      },
+      "environment": {
+        "EMSDK": "C:/tools/emsdk",
+        "EM_CONFIG": "C:/tools/emsdk/.emscripten",
+        "EMSCRIPTEN": "C:/tools/emsdk/upstream/emscripten",
+        "EMSDK_PYTHON": "C:/tools/emsdk/python/3.9.2-nuget_64bit/python.exe",
+        "EMSDK_NODE": "C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe",
+        "PATH": "C:/tools/emsdk/python/3.9.2-nuget_64bit;C:/tools/emsdk/node/16.20.0_64bit/bin;C:/tools/emsdk/upstream/emscripten;C:/tools/emsdk/upstream/bin;C:/Qt/6.8.3/msvc2022_64/bin;C:/Qt/Tools/Ninja;C:/Qt/Tools/CMake_64/bin;C:/Windows/System32;C:/Windows;C:/Windows/System32/Wbem;C:/Windows/System32/WindowsPowerShell/v1.0"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "wasm-debug",
+      "displayName": "WASM Debug (Qt 6.8.3 wasm_singlethread + emsdk 3.1.56)",
+      "inherits": "wasm-base",
+      "binaryDir": "${sourceDir}/build/wasm-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "wasm-release",
+      "displayName": "WASM Release (Qt 6.8.3 wasm_singlethread + emsdk 3.1.56)",
+      "inherits": "wasm-base",
+      "binaryDir": "${sourceDir}/build/wasm-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "desktop-release",
+      "displayName": "Build Desktop App",
+      "configurePreset": "desktop-release",
+      "targets": ["TaidaFlowApp"]
+    },
+    {
+      "name": "wasm-debug",
+      "displayName": "Build WASM Debug",
+      "configurePreset": "wasm-debug",
+      "inheritConfigureEnvironment": true,
+      "targets": ["TaidaFlowApp"]
+    },
+    {
+      "name": "wasm-release",
+      "displayName": "Build WASM Release",
+      "configurePreset": "wasm-release",
+      "inheritConfigureEnvironment": true,
+      "targets": ["TaidaFlowApp"]
+    }
+  ]
+}

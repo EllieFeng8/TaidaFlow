@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Core 1.0
+import TaidaFlowBackend 1.0
 
 // =========================================================
 // 異常警告頁面

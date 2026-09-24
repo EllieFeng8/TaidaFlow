@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Core 1.0
+import TaidaFlowBackend 1.0
 
 // =========================================================
 // 歷史紀錄頁面
@@ -532,7 +532,9 @@ Item {
                         id: previousPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage > 1
+                        // historyCurrentPage is a mirrored property: paging is a remote
+                        // write, so it is disabled while the WASM transport is offline.
+                        enabled: currentPage > 1 && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -568,7 +570,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage < totalPages
+                        enabled: currentPage < totalPages && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {

@@ -1,0 +1,65 @@
+﻿# excerpt of build\runtime-logs\e2e-run1.log (stderr, QT_FORCE_STDERR_LOGGING=1). Repetitive poll/MS300 lines are summarised below.
+# total_lines=5254
+## line counts of repeated lines
+  1792  ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  1792  ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+   449  [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+   229  ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+   226  ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+   225  [MS300] Referenced serial device does not exist.
+   225  [MS300] 系統找不到指定的檔案。
+   225  [MS300] Connection request failed: 系統找不到指定的檔案。
+     5  ADAM-6217 B (192.168.1.203) TCP socket error (連線逾時).
+     5  ADAM-6224 (192.168.1.204) TCP socket error (連線逾時).
+     5  ADAM-6022 (192.168.1.205) TCP socket error (連線逾時).
+     5  ADAM-6256 (192.168.1.201) TCP socket error (連線逾時).
+     5  ADAM-6217 A (192.168.1.202) TCP socket error (連線逾時).
+     4  ADAM-6224 (192.168.1.204) disconnected TCP socket error (連線逾時).
+     4  ADAM-6256 (192.168.1.201) disconnected TCP socket error (連線逾時).
+     4  ADAM-6022 (192.168.1.205) disconnected TCP socket error (連線逾時).
+     4  Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+     4  ADAM-6217 A (192.168.1.202) disconnected TCP socket error (連線逾時).
+     4  ADAM-6217 B (192.168.1.203) disconnected TCP socket error (連線逾時).
+## all other lines (in order)
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 1 alarm-history records from the last 3 days into the UI.
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded 1 alarm-history records from the last 3 days into the UI.
+E2E PV driver (dev-only) watching D:\repo\codex\qmlTester\taidaflow\build\e2e-pv.txt
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+ADAM-6256 (192.168.1.201) disconnected 
+ADAM-6217 A (192.168.1.202) disconnected 
+ADAM-6217 B (192.168.1.203) disconnected 
+ADAM-6224 (192.168.1.204) disconnected 
+ADAM-6022 (192.168.1.205) disconnected 
+[Modbus][Write request] device=ADAM-6224 (192.168.1.204) command=MV1 offset=0 input=12.500 raw=512
+[ModbusServer][Local update] type=4 offset=0 count=1
+[HMI->ModbusServer] holdingRegister=0 raw=512
+[Modbus][Write request] device=ADAM-6224 (192.168.1.204) command=MV2 offset=1 input=34.250 raw=1403
+[ModbusServer][Local update] type=4 offset=1 count=1
+[HMI->ModbusServer] holdingRegister=1 raw=1403
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[HMI->ModbusServer] coil=2 value=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=VfdRun offset=16 input=0.000 raw=0
+[HMI->ModbusServer] coil=0 value=0
+[Modbus][Write request] device=ADAM-6022 (192.168.1.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[HMI->ModbusServer] holdingRegister=4 raw=0
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[HMI->ModbusServer] coil=3 value=0
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=EmergencyStop offset=18 input=1.000 raw=1
+[ModbusServer][Local update] type=2 offset=2 count=1
+[HMI->ModbusServer] coil=2 value=1
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=CirculationBypassValveOpen offset=20 input=1.000 raw=1
+[ModbusServer][Local update] type=2 offset=4 count=1
+[HMI->ModbusServer] coil=4 value=1
+E2E PV driver set tt01ValuePv = 42.5
+E2E PV driver set pt01ValuePv = 101.3
+E2E PV driver set motorRunningPv = true
+E2E PV driver set wayValveOpenPv = true
+[ModbusServer] stopped

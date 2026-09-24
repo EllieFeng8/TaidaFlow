@@ -129,6 +129,21 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 `WasmMirrorProxy` 核心刻意不依賴 `QQmlApplicationEngine`。因此沒有 QML 的 Qt client 也可以使用這個 transport。
 
+> **Qt Design Studio / `CMAKE_INCLUDE_CURRENT_DIR` 注意事項**
+>
+> pack 1.0.1 已把舊的無副檔名 `VERSION` 改為 `VERSION.txt`，並在 pack
+> 子目錄關閉 `CMAKE_INCLUDE_CURRENT_DIR`。這可避免 Windows/MSVC 把 package
+> metadata 誤當成 C++ 標準頭 `<version>`。若仍在導入 1.0.0，建議直接升級；
+> 暫時無法升級時，至少在 `add_subdirectory()` 前後保存並關閉該選項：
+
+```cmake
+set(_MYAPP_SAVED_INCLUDE_CURRENT_DIR "${CMAKE_INCLUDE_CURRENT_DIR}")
+set(CMAKE_INCLUDE_CURRENT_DIR OFF)
+add_subdirectory("${WASM_MIRROR_PACK_DIR}" "${CMAKE_BINARY_DIR}/wasm-mirror-pack")
+set(CMAKE_INCLUDE_CURRENT_DIR "${_MYAPP_SAVED_INCLUDE_CURRENT_DIR}")
+unset(_MYAPP_SAVED_INCLUDE_CURRENT_DIR)
+```
+
 ### 2.1 加入來源檔
 
 以下範例假設既有專案有一個同時供 Desktop 與 WASM 使用的 `MyApplicationCore` target：
@@ -725,6 +740,15 @@ HTTP server 與 Mirror WebSocket 可以使用不同 port，但必須同時滿足
 
 Config-only Mirror 不會操作 `QQmlApplicationEngine`。既有 QML 註冊方式全部保留。
 
+> **WASM 靜態 QML module URI 不可撞名**
+>
+> 手動註冊使用的 URI（例如 `qmlRegisterSingletonInstance("Core", ...)`）不可與任何
+> `qt_add_qml_module(URI Core ...)` 相同。Desktop 動態 plugin 有時看似正常，但 WASM
+> 全靜態連結會讓整個 QML module 載入失敗，而且錯誤通常不會直接指出 URI 撞名。
+> 請把產品 QML module 與手動 singleton 放到不同 URI。改 URI 後必須對 Desktop 與
+> WASM 都做 fresh configure／clean build；殘留的舊 `qmldir` 或 plugin metadata 可能
+> 讓 Desktop 接著出現 `plugin not found`。
+
 例如 singleton：
 
 ```cpp
@@ -1055,6 +1079,12 @@ Proxy header、Mirror 核心與 QML-facing API 必須是 Desktop/WASM 共用來�
 backend、Desktop-only Qt module、tests 與 Windows GUI executable 屬性都必須一起
 條件化。只切換 `.cpp` 仍會讓 WASM 在 configure 階段失敗。
 
+導入前必須盤點既有專案所有 `find_package(Qt6 ... COMPONENTS ...)`、
+`target_link_libraries(... Qt6::...)` 與對應 source，不可只檢查 Mirror 自己的三個
+依賴。凡是 target WASM kit 沒有的 module（`wasm_singlethread` 常見為
+`Concurrent`、`SerialBus`、`Test`），其 component、source 與 link target 必須一起
+移入 Desktop branch。
+
 下面是可直接套用的結構；實際 target 名稱與來源檔請換成既有專案名稱：
 
 ```cmake
@@ -1079,6 +1109,8 @@ find_package(Qt6 REQUIRED COMPONENTS
 # 只能向 Desktop Qt kit 查找的 module。
 if(MYAPP_IS_WINDOWS_DESKTOP)
     set(MYAPP_DESKTOP_QT_COMPONENTS SerialBus)
+    # wasm_singlethread 不提供 Qt Concurrent；只有 Desktop source 使用時才加入。
+    # list(APPEND MYAPP_DESKTOP_QT_COMPONENTS Concurrent)
     # 若導入專案用 QHttpServer 提供頁面，再加入 HttpServer；否則使用自己的 server。
     # list(APPEND MYAPP_DESKTOP_QT_COMPONENTS HttpServer)
     if(BUILD_TESTING)
@@ -1114,7 +1146,10 @@ target_link_libraries(MyApplicationCore PUBLIC
     Qt6::Core Qt6::Network Qt6::WebSockets
 )
 if(MYAPP_IS_WINDOWS_DESKTOP)
-    target_link_libraries(MyApplicationCore PUBLIC Qt6::SerialBus)
+    target_link_libraries(MyApplicationCore PUBLIC
+        Qt6::SerialBus
+        # Qt6::Concurrent # 只有上面有加入 Concurrent 時才啟用
+    )
 endif()
 
 qt_add_executable(MyApplication
@@ -1142,7 +1177,11 @@ endif()
 三個常見 configure 陷阱：
 
 1. 不要用 `CMAKE_HOST_WIN32` 判斷 Desktop；在 Windows 上交叉編譯 WASM 時它仍為 true。必須先判斷 `EMSCRIPTEN`，再判斷 `WIN32`。
-2. `SerialBus`、`Test`（以及導入專案若使用的 `HttpServer`）的 `find_package`、source、link target 與 `add_subdirectory(tests)` 都要放進 Desktop branch；只條件化 link 不夠。
+2. `SerialBus`、`Concurrent`、`Test`（以及導入專案若使用的 `HttpServer`）的
+   `find_package`、source、link target 與 `add_subdirectory(tests)` 都要放進 Desktop
+   branch；只條件化 link 不夠。特別是 `wasm_singlethread` 不提供
+   `Qt6ConcurrentConfig.cmake`，把 `Concurrent` 留在共用 components 會在 configure
+   階段直接失敗。
 3. `WIN32_EXECUTABLE TRUE` 只能給 native Windows target，不能套用到 Emscripten。
 
 CalculatorCore 這類 pure local Core 可以放在 common sources，但必須保持無 I/O、
@@ -1558,9 +1597,11 @@ QT_FORCE_STDERR_LOGGING=1
 - [ ] WASM 使用的每一種具體 Proxy 類別都已在 WASM target 呼叫 `wasm_mirror_register_proxy()`。
 - [ ] 每個需要 relay 的 target 只呼叫一次 `wasm_mirror_finalize_proxy_registration()`。
 - [ ] Desktop/WASM 使用同一份 Proxy header。
+- [ ] 已盤點既有 target 的全部 Qt modules；WASM kit 不提供的 component、source 與 link target 已一起移入 Desktop branch。
 - [ ] 每個同步 Q_PROPERTY 都有 READ、WRITE、NOTIFY 與支援型別。
 - [ ] 一般 signal 沒有同名 overload。
 - [ ] QML 與 Mirror 使用同一個 Proxy 實體。
+- [ ] 手動 QML 註冊使用的 module URI 沒有與任何 `qt_add_qml_module(URI ...)` 重複；若改過 URI，Desktop/WASM 已 clean build。
 - [ ] runtime 與註冊 Proxy 位於 application／GUI main thread；硬體 worker 由 Core 隔離。
 - [ ] WASM replica Proxy 建構時不會啟動硬體或 Desktop thread；只有建構有副作用的 Proxy 才新增 `MirrorReplica` mode。
 - [ ] authoritative hardware Core 只在 Desktop 建立；pure local Core 可在兩端各自建立且不加入 Mirror。

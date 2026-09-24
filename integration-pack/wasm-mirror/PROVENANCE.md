@@ -1,6 +1,6 @@
 # Pack provenance
 
-- Pack version：`1.0.0`
+- Pack version：`1.0.1`
 - Assembled：`2026-08-17`
 - Source code baseline commit：`d52bd18a56527a6b2ba36b06c1668519df8e656d`
 - Wire protocol：`3`
@@ -18,6 +18,12 @@
 - Consumer example：MSVC Debug 編譯通過。
 - Consumer example：Qt 6.8.3 `wasm_singlethread` 編譯通過，產生
   HTML／JavaScript／WASM／`qtloader.js`。
+- Qt Design Studio 型 host（`CMAKE_INCLUDE_CURRENT_DIR=ON`）可直接
+  `add_subdirectory()` 並完成 MSVC 編譯；標準頭 `<version>` 會正確解析到 MSVC STL，
+  不再被 pack metadata 遮蔽。
+
+`1.0.1` 僅修正封裝 metadata 名稱、CMake 防護與導入文件；核心 C++ 與 wire protocol
+仍維持上述 `d52bd18a` baseline。
 
 更新 pack 時必須一起更新全部核心檔案、重新產生 `MANIFEST.sha256`，並重新執行
 native tests、WASM build 與真實 browser 測試。不要只替換其中一個 `.cpp`。

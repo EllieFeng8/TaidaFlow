@@ -1,0 +1,62 @@
+﻿# excerpt of build\runtime-logs\e2e-run2.log (stderr, QT_FORCE_STDERR_LOGGING=1). Repetitive poll/MS300 lines are summarised below.
+# total_lines=1956
+## line counts of repeated lines
+   648  ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+   648  ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+   163  [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+    84  ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+    82  ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+    82  [MS300] 系統找不到指定的檔案。
+    82  [MS300] Referenced serial device does not exist.
+    82  [MS300] Connection request failed: 系統找不到指定的檔案。
+     9  ADAM-6217 A (192.168.1.202) TCP socket error (無法連線網路).
+     9  ADAM-6217 A (192.168.1.202) disconnected TCP socket error (無法連線網路).
+     9  ADAM-6217 B (192.168.1.203) disconnected TCP socket error (無法連線網路).
+     9  ADAM-6217 B (192.168.1.203) TCP socket error (無法連線網路).
+     4  Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+## all other lines (in order)
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常
+[SQL] Loaded 2 alarm-history records from the last 3 days into the UI.
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[SQL] Loaded 2 alarm-history records from the last 3 days into the UI.
+E2E PV driver (dev-only) watching D:\repo\codex\qmlTester\taidaflow\build\e2e-pv.txt
+WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+ADAM-6022 (192.168.1.205) disconnected 
+ADAM-6022 (192.168.1.205) TCP socket error (無法連線網路).
+ADAM-6217 B (192.168.1.203) disconnected 
+ADAM-6224 (192.168.1.204) disconnected 
+ADAM-6224 (192.168.1.204) TCP socket error (無法連線網路).
+ADAM-6256 (192.168.1.201) disconnected 
+ADAM-6256 (192.168.1.201) TCP socket error (無法連線網路).
+ADAM-6217 A (192.168.1.202) disconnected 
+ADAM-6224 (192.168.1.204) disconnected TCP socket error (無法連線網路).
+ADAM-6224 (192.168.1.204) TCP socket error (無法連線網路).
+ADAM-6256 (192.168.1.201) disconnected TCP socket error (無法連線網路).
+ADAM-6256 (192.168.1.201) TCP socket error (無法連線網路).
+[Modbus][Write request] device=ADAM-6224 (192.168.1.204) command=MV3 offset=2 input=7.500 raw=307
+[ModbusServer][Local update] type=4 offset=2 count=1
+[HMI->ModbusServer] holdingRegister=2 raw=307
+ADAM-6217 A (192.168.1.202) TCP socket error (連線逾時).
+ADAM-6217 B (192.168.1.203) TCP socket error (連線逾時).
+ADAM-6224 (192.168.1.204) disconnected TCP socket error (無法連線網路).
+ADAM-6224 (192.168.1.204) TCP socket error (連線逾時).
+ADAM-6256 (192.168.1.201) disconnected TCP socket error (無法連線網路).
+ADAM-6256 (192.168.1.201) TCP socket error (連線逾時).
+ADAM-6022 (192.168.1.205) disconnected TCP socket error (無法連線網路).
+ADAM-6022 (192.168.1.205) TCP socket error (連線逾時).
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=EmergencyStop offset=18 input=0.000 raw=0
+[HMI->ModbusServer] coil=2 value=0
+[Emergency Stop] Setting frequency to 0 Hz and forcing ADAM-6256 DO0 (00017) and DO3 (00020) off.
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=VfdRun offset=16 input=0.000 raw=0
+[HMI->ModbusServer] coil=0 value=0
+[Modbus][Write request] device=ADAM-6022 (192.168.1.205) command=Pump2Hz offset=10 input=0.000 raw=0
+[HMI->ModbusServer] holdingRegister=4 raw=0
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+[Modbus][Write request] device=ADAM-6256 (192.168.1.201) command=MakeupPumpStart offset=19 input=0.000 raw=0
+[HMI->ModbusServer] coil=3 value=0
+E2E PV driver set tt02ValuePv = 7.7
+[ModbusServer] stopped

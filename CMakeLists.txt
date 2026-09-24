@@ -16,10 +16,34 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
     FORCE
 )
 
+# Target platform (wasm-mirror pack 1.0.1: package-integration §5.4, guide §11).
+# Test EMSCRIPTEN first: CMAKE_HOST_WIN32 is still true while cross-compiling WASM.
+set(TAIDAFLOW_IS_WASM OFF)
+set(TAIDAFLOW_IS_WINDOWS_DESKTOP OFF)
+if(EMSCRIPTEN)
+    set(TAIDAFLOW_IS_WASM ON)
+elseif(WIN32)
+    set(TAIDAFLOW_IS_WINDOWS_DESKTOP ON)
+else()
+    message(FATAL_ERROR "TaidaFlow supports Windows Desktop and Qt WebAssembly only")
+endif()
+
+# Desktop/WASM shared components; the WASM mirror client needs Network + WebSockets.
 find_package(Qt6 6.8 REQUIRED COMPONENTS
-    Core Gui Widgets Qml Quick QuickTimeline ShaderTools SerialBus SerialPort Sql
-    Network WebSockets HttpServer
+    Core Gui Widgets Qml Quick QuickTimeline ShaderTools
+    Network WebSockets
 )
+
+# Desktop-only Core ("Desktop-only Core / WASM 只建 Proxy", package-integration §1, §5.4;
+# guide §10, §11): the authoritative hardware backend (Modbus client/server, MS300 RTU,
+# REST, SQLite) and its Qt modules exist only in the Windows Desktop build. The Qt 6.8.3
+# wasm_singlethread kit ships no SerialBus/SerialPort/Sql/HttpServer/Concurrent config, so
+# the component (here), the sources and the links (Core/, App/) stay in this branch together.
+if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+    set(TAIDAFLOW_DESKTOP_QT_COMPONENTS SerialBus SerialPort Sql HttpServer Concurrent)
+    find_package(Qt6 6.8 REQUIRED COMPONENTS ${TAIDAFLOW_DESKTOP_QT_COMPONENTS})
+endif()
+
 qt_standard_project_setup()
 
 set(WASM_MIRROR_PACK_DIR

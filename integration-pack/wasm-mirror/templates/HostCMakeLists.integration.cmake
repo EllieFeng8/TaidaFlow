@@ -19,6 +19,8 @@ find_package(Qt6 6.8 REQUIRED COMPONENTS
 
 if(MYAPP_IS_WINDOWS_DESKTOP)
     set(MYAPP_DESKTOP_QT_COMPONENTS SerialBus)
+    # 使用 QtConcurrent 的 Desktop source 才加入；wasm_singlethread 沒有此 module。
+    # list(APPEND MYAPP_DESKTOP_QT_COMPONENTS Concurrent)
     if(BUILD_TESTING)
         list(APPEND MYAPP_DESKTOP_QT_COMPONENTS Test)
     endif()
@@ -37,6 +39,8 @@ add_subdirectory(
 # MyApplicationCore 必須先由導入專案建立。PUBLIC 讓分離的 executable main.cpp
 # 也能取得 Mirror headers；若所有呼叫端都在同一 executable target，才可用 PRIVATE。
 target_link_libraries(MyApplicationCore PUBLIC WasmMirror::Core)
+# 若 Desktop Core 使用 QtConcurrent，Qt6::Concurrent 也只能在
+# MYAPP_IS_WINDOWS_DESKTOP branch 中連結，且相關 source 同樣要放在該 branch。
 set_target_properties(MyApplicationCore PROPERTIES AUTOMOC ON)
 
 include("${WASM_MIRROR_PACK_DIR}/cmake/WasmMirrorProxyRegister.cmake")

@@ -1,7 +1,20 @@
 cmake_minimum_required(VERSION 3.21)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    project(WasmMirrorIntegrationPack VERSION 1.0.0 LANGUAGES CXX)
+    project(WasmMirrorIntegrationPack VERSION 1.0.1 LANGUAGES CXX)
+endif()
+
+# Qt Design Studio projects commonly enable this globally. Keeping it enabled
+# inside this subdirectory would add the package root to compiler include paths.
+set(CMAKE_INCLUDE_CURRENT_DIR OFF)
+
+# 1.0.0 used a bare VERSION file. On case-insensitive Windows filesystems it
+# shadows the C++ standard header <version>. Fail with an actionable message if
+# an overlay upgrade left that legacy file behind.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
+    message(FATAL_ERROR
+        "Legacy wasm-mirror/VERSION detected. Remove it and keep VERSION.txt; "
+        "the extensionless file shadows the C++ standard header <version>.")
 endif()
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS

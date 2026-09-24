@@ -1,0 +1,28 @@
+build\desktop [desktop] target=TaidaFlowApp.exe binary_bytes=2605056 commands=567
+  backend_sources (7): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (11): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient
+  verdict: OK
+build\wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33641584 commands=559
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+check_wasm_backend exit=0
+wasm Core.dir object: Core\CMakeFiles\Core.dir\core_qmltyperegistrations.cpp.o
+wasm Core.dir object: Core\CMakeFiles\Core.dir\.qt\rcc\qrc_qmake_Core.cpp.o
+wasm Core.dir object: Core\CMakeFiles\Core.dir\Core_autogen\mocs_compilation.cpp.o
+wasm Core.dir object: Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.o
+desktop Core.dir object: Core\CMakeFiles\Core.dir\core.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\core_qmltyperegistrations.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\manager.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\Modbus_Client.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\Modbus_Server.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\Ms300FaultReader.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\RESTManager.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\SqlManager.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\.qt\rcc\qrc_qmake_Core.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\Core_autogen\mocs_compilation.cpp.obj
+desktop Core.dir object: Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.obj

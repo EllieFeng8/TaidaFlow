@@ -1,9 +1,22 @@
 import QtQuick
 import QtQuick.Controls
 import "components" as Components
-import Core 1.0
+import TaidaFlowBackend 1.0
 Item {
     id: mainPage
+
+    // Transport overlay (wasm-mirror §9): false only on WebAssembly while the
+    // desktop Core is unreachable / synchronizing. Every control that writes a
+    // mirrored property is disabled then, and any open write dialog is closed, so
+    // the page keeps showing the last authoritative snapshot. Always true on desktop.
+    readonly property bool controlsEnabled: Td.transportReady
+    onControlsEnabledChanged: {
+        if (!controlsEnabled) {
+            motor2ValueDialog.close()
+            wayValveDialog.close()
+            motorDialog.close()
+        }
+    }
 
     anchors.top: topNavBar.bottom
     anchors.left: parent.left
@@ -57,6 +70,7 @@ Item {
                 height: 42
                 text: "變頻器復歸"
                 // enabled: !Td.emergencyStopSv
+                enabled: mainPage.controlsEnabled
 
                 onClicked: {
                     Td.inverterResetSv = true
@@ -94,6 +108,7 @@ Item {
 
                 Switch {
                     id: emergencyStopSwitch
+                    enabled: mainPage.controlsEnabled
                     checked: Td.emergencyStopSv
                     onToggled: Td.emergencyStopSv = checked
 
@@ -104,6 +119,7 @@ Item {
                         color: emergencyStopSwitch.checked ? "#D9363E" : "#4B5563"
                         border.color: emergencyStopSwitch.checked ? "#FFB4B8" : "#7B8794"
                         border.width: 1
+                        opacity: emergencyStopSwitch.enabled ? 1.0 : 0.45
 
                         Rectangle {
                             width: 22
@@ -440,6 +456,7 @@ Item {
     // =========================================================
 
     Components.MotorIcon {
+        enabled: mainPage.controlsEnabled
         x: 30
         y: 374
         motorName: "M1"
@@ -449,6 +466,7 @@ Item {
     }
 
     Components.MotorIcon {
+        enabled: mainPage.controlsEnabled
         x: 195
         y: 259
         motorName: "M2"
@@ -458,6 +476,7 @@ Item {
     }
 
     Components.MotorIcon {
+        enabled: mainPage.controlsEnabled
         x: 350
         y: 369
         motorName: "M3"
@@ -467,6 +486,7 @@ Item {
     }
 
     Components.MotorIcon {
+        enabled: mainPage.controlsEnabled
         x: 85
         y: 474
         motorName: "M4"
@@ -498,6 +518,7 @@ Item {
             }
             MouseArea {
                 id: motorMouse
+                enabled: mainPage.controlsEnabled
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
@@ -766,6 +787,7 @@ Item {
 
             MouseArea {
                 id: wayValveMouse
+                enabled: mainPage.controlsEnabled
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
@@ -940,6 +962,7 @@ Item {
 
             MouseArea {
                 id: motorMouseArea
+                enabled: mainPage.controlsEnabled
                 anchors.fill: parent
 
                 hoverEnabled: true
@@ -954,6 +977,7 @@ Item {
 
         Dialog {
             id: motor2ValueDialog
+            enabled: mainPage.controlsEnabled
 
             width: Overlay.overlay.width * 0.3
             height: Overlay.overlay.height * 0.3
@@ -1234,6 +1258,7 @@ Item {
     }
     Dialog {
         id: wayValveDialog
+        enabled: mainPage.controlsEnabled
         parent: Overlay.overlay
         anchors.centerIn: parent
         width: 400
@@ -1326,6 +1351,7 @@ Item {
 
     Dialog {
         id: motorDialog
+        enabled: mainPage.controlsEnabled
 
         width: Overlay.overlay.width * 0.3
         height: Overlay.overlay.height * 0.3

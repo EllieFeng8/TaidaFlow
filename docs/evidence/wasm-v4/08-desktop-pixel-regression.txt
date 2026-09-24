@@ -1,0 +1,9 @@
+﻿== main
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=840 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== alarm
+size=1942x1136 masks=3 tolerance=2 pixels_any_diff=418 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0
+== history
+size=1942x1136 masks=2 tolerance=2 pixels_any_diff=992 max_channel_diff=1 changed_pixels=0 (0.000000%) bbox=None
+exit=0

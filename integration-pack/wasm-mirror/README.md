@@ -44,7 +44,7 @@ Module 的 implementation，版本必須一致。
 wasm-mirror/
 ├─ CMakeLists.txt                     可 add_subdirectory() 的 library target
 ├─ wasm-mirror-package-integration.md 既有專案的 package 導入手冊
-├─ VERSION                            pack、wire 與來源版本
+├─ VERSION.txt                        pack、wire 與來源版本
 ├─ MANIFEST.sha256                    核心檔案校驗值
 ├─ cmake/
 │  ├─ WasmMirrorProxyRegister.cmake   Proxy class 註冊 Interface
@@ -70,6 +70,20 @@ wasm-mirror/
 
 Mirror 不依賴 Modbus、OPC UA、SerialBus、React、Spring Boot、WebGateway 或
 `QQmlApplicationEngine`。
+
+`wasm_singlethread` 不提供 `Qt6::Concurrent`。若導入專案的 Desktop Core 使用
+QtConcurrent，必須把相關 source、`find_package(... Concurrent)` 與
+`Qt6::Concurrent` link 一起放進 Desktop branch；不可把 `Concurrent` 列在
+Desktop/WASM 共用的 Qt components。
+
+pack 1.0.1 已把 1.0.0 的無副檔名 `VERSION` 改為 `VERSION.txt`。舊檔在 Windows
+會遮蔽 C++ 標準頭 `<version>`，尤其 QDS 預設開啟 `CMAKE_INCLUDE_CURRENT_DIR`
+時會造成 MSVC C2059。升級不可直接覆蓋資料夾：請先刪除舊 `VERSION`，再放入
+1.0.1；新版 CMake 偵測到殘留舊檔會以明確訊息停止。
+
+導入既有專案時，還要檢查手動 QML 註冊的 module URI，不可與任何
+`qt_add_qml_module(URI ...)` 重複。這種衝突在 Desktop 可能沒有症狀，但在 WASM
+靜態連結會讓 QML module 載入失敗；改 URI 後兩個 build tree 都要 clean rebuild。
 
 ## 4. 導入 CMake
 
@@ -290,9 +304,12 @@ consumer build。內容雜湊與驗證基準記錄於 `MANIFEST.sha256`、`PROVE
 - [ ] Host target 已連結 `WasmMirror::Core`。
 - [ ] 每種 concrete Proxy class 已 register，最後已 finalize。
 - [ ] Desktop/WASM 使用同一份 Proxy header。
+- [ ] 舊版無副檔名 `VERSION` 已移除，只保留 `VERSION.txt`。
+- [ ] 已盤點既有 target 的全部 Qt modules；WASM kit 缺少的 component、source 與 link 已移入 Desktop branch。
 - [ ] 所有同步 property 都有 READ／WRITE／NOTIFY。
 - [ ] 本機狀態使用 `STORED false` 或 `CONSTANT`。
 - [ ] QML 與 Config 使用同一 QObject instance。
+- [ ] 手動 QML registration URI 未與任何 `qt_add_qml_module(URI ...)` 重複。
 - [ ] authoritative hardware Core 只在 Desktop 建立。
 - [ ] Proxy 與 Mirror runtime 都在 GUI/main thread，且 Proxy 比 runtime 活得久。
 - [ ] Desktop/WASM 使用相同固定 port、path 與 mirrorName。

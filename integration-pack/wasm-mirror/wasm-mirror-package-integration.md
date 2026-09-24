@@ -72,12 +72,17 @@ MyExistingProject/
       ├─ src/
       ├─ tests/
       ├─ templates/
-      ├─ VERSION
+      ├─ VERSION.txt
       └─ MANIFEST.sha256
 ```
 
 `src/`、`cmake/` 與 generator 是同一版本的 Module implementation。更新時應整包
 替換，並用 `MANIFEST.sha256` 驗證檔案，不要混用不同版本。
+
+從 1.0.0 升級時必須先刪除舊的無副檔名 `VERSION`，不可直接覆蓋資料夾。
+Windows/MSVC 會把該檔誤認為 C++ 標準頭 `<version>`；QDS 專案預設的
+`CMAKE_INCLUDE_CURRENT_DIR ON` 會提高觸發機率。1.0.1 改用 `VERSION.txt`，且 CMake
+會對殘留舊檔給出明確錯誤。
 
 所有 `build-*`、`CMakeCache.txt`、`.obj`、`.pdb` 及產物目錄都不屬於 package
 發佈內容。它們可能包含建立者電腦的絕對路徑；直接複製或製作 ZIP 時必須排除。
@@ -94,8 +99,8 @@ MyExistingProject/
 - Qt 6.8.3 對應 Emscripten 3.1.56。
 - 本團隊 EMSDK 路徑：`C:/tools/emsdk`。
 
-Package 不依賴 `SerialBus`、`HttpServer` 或 `Qt6::Test`；這些應依產品 target
-分別加入。
+Package 不依賴 `SerialBus`、`Concurrent`、`HttpServer` 或 `Qt6::Test`；這些應依
+產品 target 分別加入。
 
 ## 5. 接入 CMake
 
@@ -120,6 +125,10 @@ target_link_libraries(MyApplicationCore
 上例使用 `PUBLIC`，讓分離的 final executable/main.cpp 也能取得 Mirror 的 include
 與 link usage requirements。若所有 Mirror 呼叫都和 Proxy 位於同一 executable target，
 該 executable 可改用 `PRIVATE`。
+
+QDS 或其他開啟 `CMAKE_INCLUDE_CURRENT_DIR` 的 host 使用 1.0.1 不需額外處理；pack
+子目錄會自行關閉它。若因相容性暫時仍使用 1.0.0，請在 `add_subdirectory()` 前後
+保存、關閉再恢復，完整範例見 `docs/wasm-mirror-integration.md` §2。
 
 ### 5.2 開啟 AUTOMOC
 
@@ -186,6 +195,8 @@ find_package(Qt6 6.8 REQUIRED COMPONENTS
 
 if(MYAPP_IS_WINDOWS_DESKTOP)
     set(MYAPP_DESKTOP_COMPONENTS SerialBus HttpServer)
+    # 使用 QtConcurrent 的 Desktop source 才加入；wasm_singlethread 不提供此 module。
+    # list(APPEND MYAPP_DESKTOP_COMPONENTS Concurrent)
     if(BUILD_TESTING)
         list(APPEND MYAPP_DESKTOP_COMPONENTS Test)
     endif()
@@ -201,6 +212,7 @@ if(MYAPP_IS_WINDOWS_DESKTOP)
     target_link_libraries(MyApplicationCore PRIVATE
         Qt6::SerialBus
         Qt6::HttpServer
+        # Qt6::Concurrent # 只有上面有加入 Concurrent 時才啟用
     )
 endif()
 
@@ -221,7 +233,9 @@ endif()
 - `WIN32_EXECUTABLE`。
 - Desktop-only tests。
 
-只隱藏 source、不隱藏 `find_package(SerialBus/Test)`，WASM configure 仍會失敗。
+只隱藏 source、不隱藏 `find_package(SerialBus/Concurrent/Test)`，WASM configure
+仍會失敗。`wasm_singlethread` 沒有 `Qt6ConcurrentConfig.cmake`；使用 QtConcurrent
+的 source、component 與 link target 必須三者一起留在 Desktop branch。
 
 ## 6. Proxy contract
 
@@ -326,6 +340,12 @@ meta-object contract。
 ## 7. 在 main 建立 Mirror
 
 以下以既有 singleton Core 與 `OpcUaKepwareProxy` 為例：
+
+手動 registration 使用的 module URI 不可與任何 `qt_add_qml_module(URI ...)`
+重複。例如 `qt_add_qml_module(URI Core)` 與
+`qmlRegisterSingletonInstance("Core", ...)` 不可並存。Desktop 可能看似正常，
+WASM 靜態連結則可能讓整棵 QML 載入失敗。改 URI 後請刪除／重建 Desktop 與 WASM
+build tree，避免舊 `qmldir` 造成 `plugin not found`。
 
 ```cpp
 #include "infrastructure/proxy_mirror/wasmmirrorproxy.h"
@@ -619,6 +639,7 @@ Package 內部會使用 Qt signal/slot 實作 transport。導入方的產品架�
 - [ ] 整個 package 已以同一版本複製。
 - [ ] 發佈內容不含 `build-*`、`CMakeCache.txt` 或本機編譯產物。
 - [ ] `MANIFEST.sha256` 驗證通過。
+- [ ] 舊版無副檔名 `VERSION` 已移除，只保留 `VERSION.txt`。
 - [ ] Host target 已 link `WasmMirror::Core`。
 - [ ] Proxy target 已啟用 AUTOMOC。
 - [ ] 每種 concrete Proxy class 已 register，最後已 finalize。
@@ -628,6 +649,8 @@ Package 內部會使用 Qt signal/slot 實作 transport。導入方的產品架�
 - [ ] QML 與 Config 使用同一 QObject instance。
 - [ ] 硬體權威 Core 只在 Desktop 建立。
 - [ ] Desktop-only Qt components、sources、tests 與 WIN32_EXECUTABLE 已條件化。
+- [ ] 已盤點既有 target 連結的全部 Qt modules；WASM kit 不提供的 component、source 與 link 已移入 Desktop branch。
+- [ ] 手動 QML registration URI 未與任何 `qt_add_qml_module(URI ...)` 重複。
 - [ ] Proxy 與 runtime 在 GUI/main thread。
 - [ ] Proxy 比 runtime 活得久。
 - [ ] 多個 Proxy 的 mirrorName 唯一。

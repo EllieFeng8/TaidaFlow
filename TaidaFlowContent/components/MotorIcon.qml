@@ -19,6 +19,10 @@ Item {
         valueDialog.close()
     }
 
+    // Disabled by Main.qml while the WASM transport overlay is offline: the value
+    // dialog cannot open, and an already open one is disabled and closed.
+    onEnabledChanged: if (!enabled) valueDialog.close()
+
     width: 78
     height: 110
 
@@ -135,6 +139,7 @@ Item {
     // =====================================================
     Dialog {
         id: valueDialog
+        enabled: motorIcon.enabled
 
         width: Overlay.overlay.width * 0.3
         height: Overlay.overlay.height * 0.3

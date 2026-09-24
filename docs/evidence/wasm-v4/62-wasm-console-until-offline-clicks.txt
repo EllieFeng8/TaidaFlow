@@ -1,0 +1,298 @@
+2026-09-24T03:51:06.818Z [log] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+
+2026-09-24T03:51:06.818Z [log] CJK fallback chain: DejaVu Sans,Segoe UI,Arial,Verdana,Sans Serif -> TaidaFlow Noto Sans TC | Consolas -> DejaVu Sans Mono,TaidaFlow Noto Sans TC
+
+2026-09-24T03:51:06.826Z [log] WASM Mirror endpoint: ws://127.0.0.1:8125/mirror
+
+2026-09-24T03:51:08.878Z [warn] Proxy Mirror client resynchronizing: mirror=  
+
+2026-09-24T03:51:08.878Z [log] Transport overlay: transportReady = false message = 
+
+2026-09-24T03:51:08.878Z [log] WASM Mirror transport:  
+
+2026-09-24T03:51:08.878Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:08.880Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:08.880Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:08.880Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:08.880Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:11.192Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:11.192Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:11.192Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:11.192Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:11.192Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:11.192Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:11.192Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:11.193Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:13.779Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:13.779Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:13.780Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:13.780Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:13.780Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:13.780Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:13.780Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:13.780Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:16.934Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:16.934Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:16.934Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:16.934Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:16.934Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:16.934Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:16.934Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:16.935Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:20.997Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:20.997Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:20.997Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:20.997Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:20.998Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:20.998Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:20.998Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:20.998Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:27.103Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:27.104Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:27.104Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:34.808Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:34.809Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:34.809Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:42.353Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:42.353Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:42.353Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:42.353Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:42.353Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:42.354Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:42.354Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:42.354Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:50.624Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:50.624Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:50.624Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:50.624Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:50.624Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:50.624Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:50.624Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:50.625Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:59.018Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:59.018Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:59.018Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:59.018Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:51:59.019Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:51:59.019Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:51:59.019Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:51:59.019Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:52:09.824Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:52:09.824Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:52:09.824Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:52:09.824Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:52:09.824Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:52:09.825Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:52:09.825Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:52:09.825Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:52:16.150Z [log] Transport overlay: transportReady = false message = Synchronizing with the Qt desktop Core...
+
+2026-09-24T03:52:16.169Z [log] Transport overlay: transportReady = true message = 
+
+2026-09-24T03:52:16.170Z [log] Transport overlay: transportReady = true message = 
+
+2026-09-24T03:52:16.170Z [log] WASM Mirror ready: true
+
+2026-09-24T03:55:58.295Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:55:58.295Z [log] WASM Mirror ready: false
+
+2026-09-24T03:55:58.296Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:55:58.297Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:55:58.297Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:55:58.298Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:00.604Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:00.604Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:00.604Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:00.605Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:00.605Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:00.605Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:00.605Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:00.606Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:03.186Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:03.187Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:03.187Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:03.188Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:03.188Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:03.188Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:03.188Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:03.189Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:06.298Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:06.299Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:06.299Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:06.300Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:06.300Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:06.300Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:06.300Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:06.300Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:10.409Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:10.410Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:10.410Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:10.410Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:10.410Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:10.411Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:10.411Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:10.411Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:16.441Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:16.442Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:16.443Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:16.443Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:16.443Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:16.444Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:16.444Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:16.444Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:23.408Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:23.409Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:23.409Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:23.409Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+
+2026-09-24T03:56:23.410Z [warn] Proxy Mirror client resynchronizing: mirror=  The remote host closed the connection
+
+2026-09-24T03:56:23.410Z [log] Transport overlay: transportReady = false message = The remote host closed the connection
+
+2026-09-24T03:56:23.410Z [log] WASM Mirror transport:  The remote host closed the connection
+
+2026-09-24T03:56:23.410Z [log] Transport overlay: transportReady = false message = Qt desktop Core connection was lost.
+

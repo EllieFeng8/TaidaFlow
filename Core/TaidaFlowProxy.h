@@ -66,6 +66,14 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(int historyTotalPages READ historyTotalPages WRITE setHistoryTotalPages NOTIFY historyTotalPagesChanged)
     Q_PROPERTY(QVariantList alarmRecords READ alarmRecords WRITE setAlarmRecords NOTIFY alarmRecordsChanged)
 
+    // Local transport overlay (wasm-mirror pack 1.0.1, package-integration §6.2/§9).
+    // STORED false keeps both properties out of the Mirror contract, so the WASM
+    // offline state is never written back into the authoritative desktop Proxy.
+    // Desktop keeps the default `true`; only the WASM composition root (main.cpp)
+    // switches it to false before QML loads and installs transportStateHandler.
+    Q_PROPERTY(bool transportReady READ transportReady NOTIFY transportReadyChanged STORED false)
+    Q_PROPERTY(QString transportMessage READ transportMessage NOTIFY transportMessageChanged STORED false)
+
 public:
     explicit TaidaFlowProxy(QObject *parent = nullptr)
         : QObject(parent)
@@ -111,6 +119,22 @@ public:
     int historyCurrentPage() const { return m_historyCurrentPage; }
     int historyTotalPages() const { return m_historyTotalPages; }
     QVariantList alarmRecords() const { return m_alarmRecords; }
+    bool transportReady() const { return m_transportReady; }
+    QString transportMessage() const { return m_transportMessage; }
+
+    // Called only by the WASM composition root / transportStateHandler (main.cpp).
+    void setTransportState(bool ready, const QString &message)
+    {
+        // Update both members before notifying so observers see a consistent pair.
+        const bool readyChanged = m_transportReady != ready;
+        const bool messageChanged = m_transportMessage != message;
+        m_transportReady = ready;
+        m_transportMessage = message;
+        if (readyChanged)
+            emit transportReadyChanged();
+        if (messageChanged)
+            emit transportMessageChanged();
+    }
 
     void setM1ValueSv(double value) { setWritableValue(m_m1ValueSv, value, &TaidaFlowProxy::m1ValueSvChanged); }
     void setM2ValueSv(double value) { setWritableValue(m_m2ValueSv, value, &TaidaFlowProxy::m2ValueSvChanged); }
@@ -242,6 +266,8 @@ signals:
     void historyCurrentPageChanged(int page);
     void historyTotalPagesChanged(int pages);
     void alarmRecordsChanged(const QVariantList &records);
+    void transportReadyChanged();
+    void transportMessageChanged();
 
 private:
     using ValueSignal = void (TaidaFlowProxy::*)(double);
@@ -403,6 +429,10 @@ private:
     int m_historyCurrentPage = 1;
     int m_historyTotalPages = 1;
     QVariantList m_alarmRecords;
+    // Desktop has no remote transport to wait for, so the overlay default is
+    // "ready"; see main.cpp for the WASM-only initial false state.
+    bool m_transportReady = true;
+    QString m_transportMessage;
 
     double m_testTemperature = 0.0;
     bool m_temperatureIncreasing = false;

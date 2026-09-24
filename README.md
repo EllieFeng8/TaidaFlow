@@ -12,10 +12,11 @@ QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBa
 整包複製,`MANIFEST.sha256` 24/24),同一份程式可編成:
 
 - **Desktop(Windows MSVC)**:authoritative 端。`Core::instance().init()` 建立並擁有
-  `TaidaFlowProxy`、啟動全部硬體後端,並開 `ws://127.0.0.1:8125/mirror` Mirror server。
+  `TaidaFlowProxy`、啟動全部硬體後端,Mirror server 綁 `ws://127.0.0.1:18125/mirror`(內部 port,
+  只限本機),並由 `App/lanrelay.h` 在 `0.0.0.0:8125` 轉發給它(見「區網連線(mirror)」)。
 - **WebAssembly**:replica 端。**不編譯任何後端**(Desktop-only Core,pack 文件
   package-integration §1/§5.4、guide §10/§11),`main.cpp` 直接建立 `TaidaFlowProxy` 當 replica,
-  瀏覽器頁面連回 desktop,雙向同步 `Td` 的全部 Q_PROPERTY。
+  瀏覽器頁面連回**載入頁面的那台主機**(`location.hostname`)的 `8125`,雙向同步 `Td` 的全部 Q_PROPERTY。
 
 ## 安全注意(開 desktop 前必讀)
 
@@ -23,11 +24,12 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
 緊急停止迴路),開 `COM2`,並在 `0.0.0.0:502` 開 Modbus server。在非現場的開發機上:
 
 - 一律用 `scripts\run-desktop.ps1` 啟動。它先跑 `scripts\safety_probe.ps1`(對 5 台 ADAM 只做
-  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8123/8124/8125 是否已有人
-  listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror)或
-  8124(CSV 下載服務)已被占用 → 不啟動(exit 4,不會關掉別人的程式)。每次探測都附加
-  寫入 `docs/evidence/wasm-v4/safety-probe.log`。
-- desktop 另在 `0.0.0.0:8124` 開 CSV 下載服務(內網、不做存取控管;只提供匯出資料夾裡的檔,見下方)。
+  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8123/8124/8125/18125 是否
+  已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
+  區網轉發)、18125(內部 mirror)或 8124(CSV 下載服務)已被占用 → 不啟動(exit 4 `BUSY`,
+  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`。
+- desktop 另在 `0.0.0.0:8124` 開 CSV 下載服務、在 `0.0.0.0:8125` 開 mirror 區網轉發(內網、
+  都不做存取控管;下載服務只提供匯出資料夾裡的檔,見下方)。
 - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
   `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`),網頁匯出的 CSV
   寫在 `exports\`。`build/` 已被 `.gitignore` 排除,work tree 保持乾淨。
@@ -87,14 +89,33 @@ python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
 
 - `run-desktop.ps1` 設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin,log 寫到
   `build\runtime-logs\`。啟動 log 應含 `[ModbusServer] listening on 0.0.0.0:502 unit=1`、
-  `WASM Mirror endpoint: ws://127.0.0.1:8125/mirror` 與
+  `WASM Mirror endpoint: ws://127.0.0.1:18125/mirror`、
+  `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125` 與
   `[ExportHTTP] download service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
 - `serve_wasm.py`:預設綁 **`0.0.0.0`**(內網其他電腦可開網頁;`--host 127.0.0.1` 改回只給本機);
   送 `application/wasm`、`Cache-Control: no-store`、COOP/COEP(符合
   `integration-pack/wasm-mirror/docs/http-server-requirements.md`)。
-  注意:本分支 desktop mirror 仍是 `127.0.0.1:8125`、`allowedOrigins` 只有 `127.0.0.1:8123` /
-  `localhost:8123`;區網電腦要連 mirror 需 main 的區網連線工作調整 mirror 綁定與 allowedOrigins。
 - 瀏覽器 console:`WASM Mirror ready: true` 即同步完成。
+
+### 區網連線(mirror,合併自 main e4bc327 / w2-042)
+
+| 端點 | 綁定 | 用途 |
+|---|---|---|
+| 網頁(`serve_wasm.py`) | `0.0.0.0:8123` | 區網電腦開 `http://<desktop 的區網 IP>:8123/TaidaFlowApp.html` |
+| CSV 下載服務 | `0.0.0.0:8124` | 網頁匯出檔下載(見「歷史資料:時間區間與匯出」) |
+| mirror 區網轉發(`App/lanrelay.h`) | `0.0.0.0:8125` | 網頁連的公開 mirror port;每條連線原樣雙向轉發到 `127.0.0.1:18125` |
+| Mirror server(pack) | `127.0.0.1:18125` | 內部 port,只限本機,區網位址連不到 |
+
+- 網頁版的 mirror host = 載入頁面的主機名稱(`location.hostname`),port `8125`;取不到時退回
+  `127.0.0.1` 並記 warning。所以從哪個位址開網頁,就連回同一個位址的 8125。
+- Mirror `allowedOrigins = {}`(空清單 = 不限制 Origin);內網系統,依 Mango 決定不做存取控管,
+  轉發也不做來源限制。
+- 別台電腦要連進來,Windows 防火牆需放行 **8123/8124/8125**(TCP 輸入)。這由**管理員**設定,
+  本專案的腳本不改防火牆 / 網路設定;首次啟動 Windows 可能跳出防火牆詢問視窗。
+- 轉發是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
+  正式開關後,改由 Mirror 直接綁 `0.0.0.0:8125`,並刪除 `App/lanrelay.h` 與 `main.cpp` 中的使用。
+- 8125 綁定失敗(例如被占用)時只記 `LAN relay could not listen on 0.0.0.0:8125: ...`,desktop 照常執行
+  (本機的 Mirror 仍在 18125),只是網頁連不上。
 
 ### 離線提示(transport overlay,pack §9)
 
@@ -235,7 +256,12 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   `state = cancelled`(「已取消儲存」)。
 - **網頁**:寫到 **`<desktop 工作目錄>\exports\`**(正式執行即 `build\runtime-cwd\exports\`;與 `data\`、
   `settings.sqlite` 同一個基準,重開 app 後連結仍有效)。完成時 `url = "/exports/<檔名>"`、
-  `downloadPort = 8124`,網頁以 `http://<pageHost>:8124/exports/<檔名>` 下載(pageHost 由 main 的網頁端提供)。
+  `downloadPort = 8124`。Core 不知道網頁用哪個主機名稱,所以只送路徑 + port;下載連結由網頁組成
+  (`HistoryPage.qml` 的 `exportDownloadUrl()`):`url` 以 `/` 開頭 → `"http://" + Td.pageHost + ":" +
+  downloadPort + url`(downloadPort 缺少時用 8124),例如 `http://192.168.0.125:8124/exports/<檔名>`;
+  已是 `http...` 的完整網址則原樣使用。`Td.pageHost` 是 Proxy 的 **`STORED false`** 本機屬性(不進 Mirror
+  contract),WASM `main.cpp` 設成與 mirror host 相同的 `location.hostname`(同一個 `127.0.0.1` 後備);
+  desktop 保持空字串。「下載檔案」按鈕與完成時自動開啟都用這個網址。
   清理:每產生一個網頁檔後,若 `*.csv` 超過 20 個**或**總量超過 2 GB,依修改時間刪最舊的,直到兩個條件都
   滿足;不刪剛產生的檔,它單獨就超過 2 GB 時保留並記 log;正在被下載而刪不掉的檔記 log 跳過。
   啟動時刪除上次當機留下的暫存檔(`*.csv.XXXXXX`)。
@@ -246,8 +272,9 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   `Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟分段送出(Qt 6.8 文件:
   非 sequential 裝置一次宣告全長、分段讀取,不整檔讀進記憶體)。其他路徑 404、壞檔名 400。
   綁定失敗只記 warning,app 繼續執行(網頁匯出檔仍會寫出)。
-- 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)已沒有 QML 呼叫者;宣告在
-  `TaidaFlowProxy.h`(main 分支負責),待 main 刪除。
+- 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)**已刪除**(main w2-042 自
+  `TaidaFlowProxy.h` 移除,已合併進本分支);CSV 一律走上述匯出佇列。`docs/wasm-integration-report.md`
+  中關於它的段落是歷史紀錄。
 
 ## 測試 / 驗證(全部以 exit code 判定)
 
@@ -267,8 +294,12 @@ python scripts\check_wasm_backend.py build\desktop build\wasm-release
 python scripts\check_version_shadow.py build\desktop build\wasm-release
 :: 4. 字型子集涵蓋所有來源字元
 python scripts\make_font_subset.py --check
-:: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror + 8124 下載服務起來、關閉後 502/8124/8125 無殘留)
+:: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror 127.0.0.1:18125 + 區網轉發 0.0.0.0:8125
+::    (同一 app PID)+ 8124 下載服務起來、關閉後 502/8124/8125/18125 無殘留)
 powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
+:: 5a. (w2-043) 區網轉發:安全探測 SAFE 後啟動,以區網 IP:8125 與 127.0.0.1:8125 做 WebSocket upgrade
+::     拿到 101(非白名單 Origin 也不被關閉)、區網 IP:18125 連不到;port 被占用時每 30 秒重查最多 30 分鐘
+powershell -ExecutionPolicy Bypass -File docs\evidence\w2-043\tools\verify-lanrelay.ps1
 :: 5b. (w2-041) 歷史區間 + CSV 匯出的 QTest(編譯真的 SqlManager / HistoryExport / Proxy 原始碼):
 ::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)
 python docs\evidence\w2-041\tools\make_bench_db.py

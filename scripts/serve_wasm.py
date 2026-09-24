@@ -5,13 +5,18 @@ Serves build/wasm-release (or --dir) on port 8123 as required by the wasm-mirror
 (integration-pack/wasm-mirror/docs/http-server-requirements.md).  w2-041: it binds 0.0.0.0 by
 default so that other machines on the plant LAN can open the page (internal network, no access
 control); `--host 127.0.0.1` restores the old local-only binding.
-  * the page Origin http://127.0.0.1:8123 is in the desktop mirror allowedOrigins
   * correct MIME types (.wasm -> application/wasm, .js -> text/javascript)
   * Cache-Control: no-store so HTML/JS/WASM from different builds never mix
   * Cross-Origin-Opener-Policy: same-origin + Cross-Origin-Embedder-Policy: require-corp
     (not needed by wasm_singlethread, but harmless and makes the same server usable
     for a wasm_multithread build, which needs cross-origin isolation)
-The mirror WebSocket (ws://127.0.0.1:8125/mirror) is served by the desktop app, not here.
+The mirror WebSocket is served by the desktop app, not here: the page connects back to the
+host it was loaded from (location.hostname), i.e. ws://<that host>:8125/mirror. On the desktop,
+port 8125 is its LAN relay (0.0.0.0:8125, App/lanrelay.h), which forwards to the Mirror server
+on 127.0.0.1:18125 (internal; temporary until wasm-mirror pack 1.0.2). The Mirror's
+allowedOrigins is empty (= every Origin is accepted; intranet system, no access control), so
+the page Origin does not have to be on any list. Other machines additionally need the Windows
+firewall to allow 8123/8124/8125 (set by the administrator; not done by this script).
 
 Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123] [--host 0.0.0.0]
 Open:   http://127.0.0.1:8123/TaidaFlowApp.html  (this PC)  or  http://<this PC's LAN IP>:8123/...
@@ -185,7 +190,10 @@ def main() -> int:
     handler = functools.partial(Handler, directory=str(root))
     with http.server.ThreadingHTTPServer((args.host, args.port), handler) as httpd:
         shown = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
-        scope = " (all interfaces: also http://<LAN IP>:%d/TaidaFlowApp.html)" % args.port             if args.host in ("0.0.0.0", "") else ""
+        if args.host in ("0.0.0.0", ""):
+            scope = " (all interfaces: also http://<LAN IP>:%d/TaidaFlowApp.html)" % args.port
+        else:
+            scope = ""
         print(f"serving {root} on {args.host}:{args.port} -> "
               f"http://{shown}:{args.port}/TaidaFlowApp.html{scope}", flush=True)
         try:

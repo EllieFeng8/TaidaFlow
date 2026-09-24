@@ -1,0 +1,379 @@
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=default
+[Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1
+[Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1
+[Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes)
+[ExportHTTP] download service listening on 0.0.0.0:8124, GET /exports/<file> from D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=81
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=81 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=80 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=79 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=78 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=77 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=76 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=75 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=74 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[SQL] Loaded 81 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=39 已解除=42; severity 嚴重=43 警告=38; unknown core status=0).
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+[History] request #1 (start-up) page 1, range 1788192000 .. 1790783999 s, posted to SqlManager thread in 14 us.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=81 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=80 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=79 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=78 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=77 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=76 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=75 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=74 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[SQL] Loaded 81 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=39 已解除=42; severity 嚴重=43 警告=38; unknown core status=0).
+WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+[SQL] Loaded sensor-history page 1/303: 10 record(s).
+[History] #1 applied: page 1/303, 10 record(s), total 3024 row(s) in 1 month file(s) (0 count(s) from cache); SqlManager thread count 0.96 ms + page 0.65 ms; request-to-apply 520.41 ms.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+[Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+LAN relay: accepted 127.0.0.1:50422 -> 127.0.0.1:18125
+LAN relay: accepted 192.168.0.125:50424 -> 127.0.0.1:18125
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+LAN relay: closed 192.168.0.125:50424
+LAN relay: closed 127.0.0.1:50422
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[Export] stopped (export thread and download service).
+[ModbusServer] stopped

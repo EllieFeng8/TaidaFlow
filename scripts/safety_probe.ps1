@@ -9,15 +9,17 @@
 #   1. TCP connect (no payload) to 192.168.1.201..205:502 with a 1.5 s timeout, then close.
 #   2. Lists local serial ports (.NET GetPortNames + registry SERIALCOMM + PnP "(COMx)").
 #   3. Lists TCP listeners on 502 (Core's Modbus server), 8123 (HTTP), 8124 (Core's CSV
-#      download service, w2-041) and 8125 (mirror).
+#      download service, w2-041), 8125 (public mirror port = the desktop's LAN relay
+#      0.0.0.0:8125, App/lanrelay.h) and 18125 (the desktop's internal mirror server,
+#      127.0.0.1:18125; merged from main e4bc327 / w2-042).
 # Every run appends a timestamped record to docs/evidence/wasm-v4/safety-probe.log.
 #
 # Exit code: 0 = safe to launch; 3 = UNSAFE (a device answered, COM2 exists, or port 502
 # already has a listener - e.g. Mango's modbusserver, which must NOT be stopped); the
-# desktop app must not be started.  A listener on 8125 (mirror) or 8124 (export download
-# service) also blocks (exit 4), because a stale desktop instance would make the result
-# ambiguous (and the new instance could not bind it); a listener on 8123 is
-# only reported (it is the WASM HTTP server started for the E2E test).
+# desktop app must not be started.  A listener on 8125 (LAN relay), 18125 (internal mirror)
+# or 8124 (export download service) also blocks (exit 4, BUSY), because a stale desktop
+# instance would make the result ambiguous (and the new instance could not bind it); a
+# listener on 8123 is only reported (it is the WASM HTTP server started for the E2E test).
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\safety_probe.ps1 -Reason "before run 1"
 #
@@ -113,10 +115,10 @@ if ($allSerial -match '(?i)\bCOM2\b') {
 
 # 3. Local listeners.
 $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
-            Where-Object { $_.LocalPort -in 502, 8123, 8124, 8125 })
+            Where-Object { $_.LocalPort -in 502, 8123, 8124, 8125, 18125 })
 $simListening = @()
 if ($listen.Count -eq 0) {
-    $lines.Add("  listeners 502/8123/8124/8125: <none>")
+    $lines.Add("  listeners 502/8123/8124/8125/18125: <none>")
 } else {
     foreach ($l in $listen) {
         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
@@ -134,7 +136,8 @@ if ($listen.Count -eq 0) {
             }
         }
         elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
-        elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror) already in use -> stale desktop instance, do not launch") }
+        elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror LAN relay) already in use -> stale desktop instance, do not launch") }
+        elseif ($l.LocalPort -eq 18125) { $busy = $true; $lines.Add("  port 18125 (internal mirror) already in use -> stale desktop instance, do not launch") }
         elseif ($l.LocalPort -eq 8124) { $busy = $true; $lines.Add("  port 8124 (CSV download service) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
         else { $lines.Add("  port 8123 = WASM HTTP server (expected during E2E, informational)") }
     }

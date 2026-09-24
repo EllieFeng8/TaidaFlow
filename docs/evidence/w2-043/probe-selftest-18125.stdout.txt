@@ -1,0 +1,45 @@
+﻿[1] baseline (no 18125 listener)
+    === safety probe 2026-09-24T21:39:05.419+08:00 reason="w2-043 selftest 1: baseline" host=LAPTOP-0B3CPPED
+      local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+      tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+      serial GetPortNames: <none>
+      serial SERIALCOMM  : <none>
+      serial PnP (COMx)  : <none>
+      listeners 502/8123/8124/8125/18125: <none>
+      verdict: SAFE
+  -> exit 0
+[2] fake listener on 127.0.0.1:18125
+  occupier pid 54248; listener 127.0.0.1:18125 pid 54248
+    === safety probe 2026-09-24T21:39:16.264+08:00 reason="w2-043 selftest 2: fake 18125 listener" host=LAPTOP-0B3CPPED
+      local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+      tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+      serial GetPortNames: <none>
+      serial SERIALCOMM  : <none>
+      serial PnP (COMx)  : <none>
+      listener 127.0.0.1:18125 pid=54248 (python)
+      port 18125 (internal mirror) already in use -> stale desktop instance, do not launch
+      verdict: BUSY
+  -> exit 4
+[3] fake listener stopped
+    === safety probe 2026-09-24T21:39:26.957+08:00 reason="w2-043 selftest 3: after fake listener stopped" host=LAPTOP-0B3CPPED
+      local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+      tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+      tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+      serial GetPortNames: <none>
+      serial SERIALCOMM  : <none>
+      serial PnP (COMx)  : <none>
+      listeners 502/8123/8124/8125/18125: <none>
+      verdict: SAFE
+  -> exit 0
+RESULT PASS (baseline 0, 18125 listener 4 BUSY, after 0)

@@ -1,0 +1,39 @@
+﻿=== safety probe 2026-09-24T21:32:13.720+08:00 reason="before launch: verify-desktop-startup (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 502/8123/8124/8125/18125: <none>
+  verdict: SAFE
+PID=54072 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\verify-startup.log
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=default
+[Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1
+[Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1
+[Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes)
+[ExportHTTP] download service listening on 0.0.0.0:8124, GET /exports/<file> from D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=�]�ƱҰ� status=���` id=77
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=77 sensor=100 message=�]�ƱҰ� coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+[Alarm][UI] id=76 sensor=100 message=�]�ƱҰ� coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+[Alarm][UI] id=75 sensor=100 message=�]�ƱҰ� coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+[Alarm][UI] id=74 sensor=DI1 message=�|�G�˥X�]DI1=1�^ coreStatus=���` resolved=true -> alarmStatus=�w�Ѱ� severity=�Y��
+[Alarm][UI] id=73 sensor=DI1 message=�|�G�˥X�]DI1=1�^ coreStatus=���` resolved=true -> alarmStatus=�w�Ѱ� severity=�Y��
+[Alarm][UI] id=72 sensor=DI0 message=�ۦ첧�`�]DI0=0�^ coreStatus=���` resolved=true -> alarmStatus=�w�Ѱ� severity=�Y��
+[Alarm][UI] id=71 sensor=DI0 message=�ۦ첧�`�]DI0=0�^ coreStatus=���` resolved=true -> alarmStatus=�w�Ѱ� severity=�Y��
+[Alarm][UI] id=70 sensor=DI2 message=�ɤ�� OL�]DI2=1�^ coreStatus=���` resolved=true -> alarmStatus=�w�Ѱ� severity=�Y��
+[SQL] Loaded 77 alarm-history records from the last 3 days into the UI (alarmStatus ���B�z=39 �w�Ѱ�=38; severity �Y��=43 ĵ�i=34; unknown core status=0).
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+app_pid=54072 endpoint_line=True relay_line=True modbus_server_line=True download_service_line=True listening_18125_app=True listening_8125_app=True listening_502=True listening_8124=True app_exit_code=0 listeners_left=0

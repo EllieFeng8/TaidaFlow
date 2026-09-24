@@ -1,0 +1,56 @@
+﻿exe = D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+21:38:31 ports 502/8124/8125/18125 free
+LAN IPv4 = 192.168.0.125
+--- run-desktop.ps1 (exit 0) ---
+=== safety probe 2026-09-24T21:38:33.461+08:00 reason="before launch: w2-043-verify-lanrelay (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 502/8123/8124/8125/18125: <none>
+  verdict: SAFE
+PID=79916 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-043\run-lanrelay\app.stderr.log
+app pid 79916 (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)
+--- netstat (listening) ---
+TCP    0.0.0.0:8125           0.0.0.0:0              LISTENING       79916
+TCP    127.0.0.1:18125        0.0.0.0:0              LISTENING       79916
+--- netstat (probes connected, relayed legs) ---
+TCP    127.0.0.1:8125         127.0.0.1:64197        ESTABLISHED     79916
+TCP    127.0.0.1:18125        127.0.0.1:64198        ESTABLISHED     79916
+TCP    127.0.0.1:18125        127.0.0.1:64200        ESTABLISHED     79916
+TCP    127.0.0.1:64197        127.0.0.1:8125         ESTABLISHED     24940
+TCP    127.0.0.1:64198        127.0.0.1:18125        ESTABLISHED     79916
+TCP    127.0.0.1:64200        127.0.0.1:18125        ESTABLISHED     79916
+TCP    192.168.0.125:8125     192.168.0.125:64199    ESTABLISHED     79916
+TCP    192.168.0.125:64199    192.168.0.125:8125     ESTABLISHED     80424
+relayed legs app->127.0.0.1:18125 = 2
+--- probe loopback (127.0.0.1:8125) ---
+TCP_ESTABLISHED local=127.0.0.1:64197 remote=127.0.0.1:8125
+HTTP_STATUS HTTP/1.1 101 Switching Protocols
+HOLDING
+NO_CLOSE_FRAME_WITHIN 6.0s
+CLIENT_CLOSED
+--- probe lan (192.168.0.125:8125) ---
+TCP_ESTABLISHED local=192.168.0.125:64199 remote=192.168.0.125:8125
+HTTP_STATUS HTTP/1.1 101 Switching Protocols
+HOLDING
+NO_CLOSE_FRAME_WITHIN 6.0s
+CLIENT_CLOSED
+relayed legs still ESTABLISHED after clients closed = 0
+--- internal port on LAN address ---
+REFUSED 192.168.0.125:18125 (ConnectionRefusedError: [WinError 10061] 無法連線，因為目標電腦拒絕連線。)
+CloseMainWindow=True exited=True exitCode=0
+listeners 502/8124/8125/18125 after close = 0
+--- app log (relay / mirror lines) ---
+WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+LAN relay: accepted 127.0.0.1:64197 -> 127.0.0.1:18125
+LAN relay: accepted 192.168.0.125:64199 -> 127.0.0.1:18125
+LAN relay: closed 127.0.0.1:64197
+LAN relay: closed 192.168.0.125:64199
+RESULT PASS (lanrelay)

@@ -1,0 +1,5 @@
+﻿[ExportHTTP] download service listening on 0.0.0.0:8124, GET /exports/<file> from D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+[ModbusServer] stopped

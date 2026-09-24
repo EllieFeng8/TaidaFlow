@@ -182,6 +182,12 @@ Item {
         onFlowRunningChanged: {
             requestPaint()
         }
+        // 漏液狀態(Td.leakDetectedPv,後端由 ADAM-6224 DI1 寫入);漏液時 Leakage Sensor 線變紅
+        property bool leakDetected: Td.leakDetectedPv
+        property color leakColor: "#FF4D4D"
+        onLeakDetectedChanged: {
+            requestPaint()
+        }
 
         function temperatureColor(temp) {
 
@@ -454,7 +460,7 @@ Item {
             // =====================================================
             // leakage sensor
             // =====================================================
-            ctx.strokeStyle = "#6864FF"
+            ctx.strokeStyle = pipes.leakDetected ? pipes.leakColor : "#6864FF"
             ctx.lineWidth = 6
             line(ctx, 483, 680, 729, 680)
         }
@@ -1259,7 +1265,7 @@ Item {
         x: 416
         y: 658
         text: "Leakage\nSensor"
-        color: root.textColor
+        color: pipes.leakDetected ? pipes.leakColor : root.textColor
         font.pixelSize: 15
         font.family: "Consolas"
         horizontalAlignment: Text.AlignHCenter

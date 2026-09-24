@@ -99,14 +99,20 @@ Item {
             return
         }
 
+        // The fields are minute-granular (HH:MM, seconds = 0) while timestampMs keeps
+        // seconds/ms, so include the whole end minute: [start, end + 1 min).
+        filterByRange(startDate.getTime(), endDate.getTime() + 60 * 1000)
+    }
+
+    function filterByRange(startMs, endExclusiveMs) {
         filterMessage = ""
         activeAlarmCount = 0
         filteredAlarmModel.clear()
 
         for (var i = 0; i < alarmListModel.count; ++i) {
             var row = alarmListModel.get(i)
-            if (row.timestampMs >= startDate.getTime()
-                    && row.timestampMs <= endDate.getTime()) {
+            if (row.timestampMs >= startMs
+                    && row.timestampMs < endExclusiveMs) {
                 if (row.alarmStatus === "未處理")
                     activeAlarmCount += 1
 
@@ -131,9 +137,20 @@ Item {
         if (alarmListModel.count === 0)
             return
 
-        startTimeField.text = alarmListModel.get(alarmListModel.count - 1).alarmTime
-        endTimeField.text = alarmListModel.get(0).alarmTime
-        applyFilter()
+        // Fill the fields with the oldest/newest record for display only; the
+        // filter itself is unbounded so no record is cut off by minute truncation.
+        var oldest = alarmListModel.get(0)
+        var newest = oldest
+        for (var i = 1; i < alarmListModel.count; ++i) {
+            var row = alarmListModel.get(i)
+            if (row.timestampMs < oldest.timestampMs)
+                oldest = row
+            if (row.timestampMs > newest.timestampMs)
+                newest = row
+        }
+        startTimeField.text = oldest.alarmTime
+        endTimeField.text = newest.alarmTime
+        filterByRange(-Infinity, Infinity)
     }
 
     function refreshPagedModel() {

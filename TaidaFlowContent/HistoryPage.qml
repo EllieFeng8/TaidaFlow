@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import TaidaFlowBackend 1.0
+import "components" as Components
+import "components/DateTimeUtil.js" as DateTimeUtil
 
 // =========================================================
 // 歷史紀錄頁面
@@ -22,6 +24,15 @@ Item {
     property color successColor: "#22C55E"
     property color dangerColor: "#FF5964"
     property string filterMessage: ""
+    // Scale of TopNav (root): App.qml scales it by webScale on the web, 1 on the
+    // desktop. The date/time pickers are popups in the (unscaled) window overlay
+    // and apply this scale themselves (DateTimeField.popupScale). `parent` is
+    // root: this page anchors to its sibling offlineBanner, which is only
+    // possible as a direct child of TopNav's root.
+    readonly property real designScale: parent ? parent.scale : 1
+    // Room for 16 characters "YYYY/MM/DD HH:mm" (Consolas 16 px) plus the
+    // calendar button inside the field.
+    readonly property int dateFieldWidth: 280
     property string exportMessage: ""
 
     // Range convention shared with the Core (Core/TaidaFlowProxy.h): epoch ms,
@@ -67,37 +78,39 @@ Item {
     // The Core already pages the requested range (spec §2): this is the current
     // page (10 rows) exactly as pushed, no local filtering.
     property var historySourceModel: []
-    readonly property int tableWidth: 64 + 210 + 160 + Math.max(0, columnTitles.length - 2) * 146
+    // Column widths: at least the design widths (time 210, column 1 160, values
+    // 146 - wide enough for "yyyy/MM/dd HH:mm:ss" and the longest value text
+    // "65535.00"), and never narrower than the column title + 24 px, measured
+    // with the font actually used (desktop font / web embedded font), so no
+    // title overflows into the next column whatever the Core sends.
+    readonly property var columnWidths: {
+        var widths = []
+        for (var i = 0; i < columnTitles.length; ++i) {
+            var base = i === 0 ? 210 : i === 1 ? 160 : 146
+            widths.push(Math.max(base, Math.ceil(headerFontMetrics.advanceWidth(String(columnTitles[i]))) + 24))
+        }
+        return widths
+    }
+    readonly property int tableWidth: {
+        var total = 64
+        for (var i = 0; i < columnWidths.length; ++i)
+            total += columnWidths[i]
+        return total
+    }
 
-    function columnWidth(index) { return index === 0 ? 210 : index === 1 ? 160 : 146 }
+    function columnWidth(index) {
+        return index < columnWidths.length ? columnWidths[index] : 146
+    }
     function cellText(value) {
         return value === undefined || value === null ? "—"
              : typeof value === "number" ? value.toFixed(2) : String(value)
     }
 
-    function twoDigits(value) {
-        return value < 10 ? "0" + value : String(value)
-    }
-
-    function formatDate(date) {
-        return date.getFullYear() + "/"
-                + twoDigits(date.getMonth() + 1) + "/"
-                + twoDigits(date.getDate())
-    }
-
-    function parseDate(value) {
-        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})$/)
-        if (!match)
-            return null
-
-        var date = new Date(Number(match[1]), Number(match[2]) - 1,
-                            Number(match[3]), 0, 0, 0, 0)
-        if (date.getFullYear() !== Number(match[1])
-                || date.getMonth() !== Number(match[2]) - 1
-                || date.getDate() !== Number(match[3]))
-            return null
-
-        return date
+    // Same font as the table header titles below (14 px bold, default family).
+    FontMetrics {
+        id: headerFontMetrics
+        font.pixelSize: 14
+        font.bold: true
     }
 
     function reloadHistoryData() {
@@ -111,7 +124,9 @@ Item {
     }
 
     // Show the range the Core is currently paging (historyRangeFromMs/ToMs) in
-    // the date fields (e.g. "顯示前一周" -> 2026/09/19 .. 2026/09/25).
+    // the date/time fields as YYYY/MM/DD HH:mm, i.e. the minute of each end
+    // (e.g. "顯示前一周" -> 2026/09/19 00:00 .. 2026/09/25 23:59; the end
+    // 23:59:59.999 shows as 23:59).
     // Unbounded leaves the fields empty and rangeText() shows "全部": this page
     // never requests it any more, but the range is shared by all clients and an
     // older web page or another client may still send the unbounded range.
@@ -127,38 +142,45 @@ Item {
             endDateField.text = ""
             return
         }
-        startDateField.text = formatDate(new Date(Td.historyRangeFromMs))
-        endDateField.text = formatDate(new Date(Td.historyRangeToMs))
+        startDateField.text = DateTimeUtil.formatDateTime(new Date(Td.historyRangeFromMs))
+        endDateField.text = DateTimeUtil.formatDateTime(new Date(Td.historyRangeToMs))
     }
 
     function rangeText() {
         if (isUnboundedRange(Td.historyRangeFromMs, Td.historyRangeToMs))
             return "全部"
-        return formatDate(new Date(Td.historyRangeFromMs)) + " – "
-                + formatDate(new Date(Td.historyRangeToMs))
+        return DateTimeUtil.formatDateTime(new Date(Td.historyRangeFromMs)) + " – "
+                + DateTimeUtil.formatDateTime(new Date(Td.historyRangeToMs))
     }
 
-    // "篩選": ask the Core for the range (spec §2). Local calendar days:
-    // start day 00:00:00.000 .. end day 23:59:59.999 (next day's midnight - 1 ms).
+    // "篩選": ask the Core for the range (spec §2, revised 2026-09-25). Fields are
+    // YYYY/MM/DD HH:mm in local time, or the date only (start 00:00, end 23:59).
+    // From = the start minute's :00.000, to = the end minute's :59.999, both
+    // inclusive, built with new Date(y, m, d, h, mi, s, ms) (components/DateTimeUtil.js).
     function applyFilter() {
         if (!Td.transportReady)
             return
 
-        var startDate = parseDate(startDateField.text)
-        var endDate = parseDate(endDateField.text)
+        var start = DateTimeUtil.parseDateTime(startDateField.text, false)
+        var end = DateTimeUtil.parseDateTime(endDateField.text, true)
 
-        if (!startDate || !endDate) {
-            filterMessage = "請輸入正確日期（YYYY/MM/DD）"
+        if (!start || !end) {
+            filterMessage = "請輸入正確日期時間（YYYY/MM/DD HH:mm）"
             return
         }
-        if (startDate.getTime() > endDate.getTime()) {
-            filterMessage = "起始日期不可晚於結束日期"
+        var fromMs = DateTimeUtil.startMs(start)
+        var toMs = DateTimeUtil.endMs(end)
+        if (fromMs > toMs) {
+            filterMessage = "起始時間不可晚於結束時間"
             return
         }
 
         filterMessage = ""
-        var endExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
-        Td.historyRangeRequested(startDate.getTime(), endExclusive.getTime() - 1)
+        Td.historyRangeRequested(fromMs, toMs)
+        // Normalize the fields (a date-only entry shows its 00:00 / 23:59). The
+        // Core's write-back of the range (syncRangeFields) shows the same text.
+        startDateField.text = DateTimeUtil.formatDateTime(new Date(fromMs))
+        endDateField.text = DateTimeUtil.formatDateTime(new Date(toMs))
     }
 
     function goToPage(page) {
@@ -182,6 +204,10 @@ Item {
         var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
         var endExclusive = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
         Td.historyRangeRequested(startDate.getTime(), endExclusive.getTime() - 1)
+        // Fields: (today - 6) 00:00 .. today 23:59, also when the Core's range
+        // does not change (then there is no write-back to syncRangeFields()).
+        startDateField.text = DateTimeUtil.formatDateTime(startDate)
+        endDateField.text = DateTimeUtil.formatDateTime(new Date(endExclusive.getTime() - 1))
     }
 
     function formatCount(value) {
@@ -316,9 +342,11 @@ Item {
         anchors.bottomMargin: 36
         spacing: 22
 
+        // Height follows the content (at least 54): the export panel grows when
+        // its status text wraps (e.g. a long saved path), nothing is cut off.
         Row {
+            id: headerRow
             width: parent.width
-            height: 54
             spacing: 16
 
             Column {
@@ -335,21 +363,25 @@ Item {
                     font.bold: true
                 }
 
+                // Needs <= 354 px (measured); the column is 726 px wide even with the export
+                // panel shown (1824 - 166 - 900 - 2 x 16). Wraps instead of eliding.
                 Text {
                     width: parent.width
-                    text: "感測器與設備紀錄 · " + columnTitles.length + " 個欄位 · 左右捲動查看完整資料"
-                    color: mutedTextColor
+                    text: "感測器與設備紀錄 · " + historyPage.columnTitles.length + " 個欄位 · 左右捲動查看完整資料"
+                    color: historyPage.mutedTextColor
                     font.pixelSize: 14
-                    elide: Text.ElideRight
+                    wrapMode: Text.Wrap
                 }
             }
 
             // Export job of this client (historyExportStatus[clientSessionId],
             // spec §3.2): status line, progress bar and cancel / close actions.
+            // 900 px at the 1920 design width (was 480): the status text has >= 744 px
+            // and wraps (panel grows) instead of eliding a long file name / path.
             Rectangle {
                 id: exportPanel
-                width: Math.min(480, Math.max(300, parent.width * 0.32))
-                height: 54
+                width: Math.min(900, parent.width * 0.5)
+                height: Math.max(54, exportStatusLabel.implicitHeight + 32)
                 visible: historyPage.exportPanelShown
                 radius: 7
                 color: "#111D32"
@@ -369,7 +401,9 @@ Item {
                          : historyPage.exportState === "done" ? successColor
                          : root.textColor
                     font.pixelSize: 13
-                    elide: Text.ElideMiddle
+                    // Full text always: wraps (word boundary, or anywhere inside a
+                    // long path) and the panel height follows implicitHeight.
+                    wrapMode: Text.Wrap
                 }
 
                 Rectangle {
@@ -511,176 +545,184 @@ Item {
             }
         }
 
+        // Range filter, two rows: the format hint, then the date/time fields and
+        // buttons with the current range (or the input error) to their right.
+        // Height follows the content, so wrapped text is never cut off.
         Rectangle {
+            id: filterPanel
             width: parent.width
-            height: 132
+            height: filterContent.height + 26
             radius: 10
             color: "#111D32"
-            border.color: dividerColor
+            border.color: historyPage.dividerColor
             border.width: 1
 
-            Text {
+            Column {
+                id: filterContent
+                anchors.left: parent.left
+                anchors.leftMargin: 24
+                anchors.right: parent.right
+                anchors.rightMargin: 24
                 anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.left: parent.left
-                anchors.leftMargin: 24
-                anchors.right: parent.right
-                anchors.rightMargin: 24
-                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料；篩選可跨月，「顯示前一周」為今天往前 7 天（含今天）"
-                color: historyPage.mutedTextColor
-                font.pixelSize: 12
-                elide: Text.ElideRight
-            }
+                anchors.topMargin: 12
+                spacing: 10
 
-            Row {
-                anchors.left: parent.left
-                anchors.leftMargin: 24
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 14
-
-                Column {
-                    spacing: 8
-
-                    Text {
-                        text: "起始日期"
-                        color: mutedTextColor
-                        font.pixelSize: 13
-                    }
-
-                    TextField {
-                        id: startDateField
-                        width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
-                        height: 46
-                        color: "white"
-                        font.pixelSize: 16
-                        font.family: "Consolas"
-                        selectByMouse: true
-                        placeholderText: "YYYY/MM/DD"
-                        placeholderTextColor: "#5F7890"
-
-                        background: Rectangle {
-                            radius: 6
-                            color: "#0B1527"
-                            border.color: startDateField.activeFocus ? root.mainBlue : dividerColor
-                            border.width: 1
-                        }
-
-                        onAccepted: applyFilter()
-                    }
-                }
-
+                // One line at the 1920 design width (1776 px available); wraps
+                // instead of eliding if it ever gets longer.
                 Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    text: "—"
-                    color: mutedTextColor
-                    font.pixelSize: 20
+                    width: parent.width
+                    text: "日期時間格式：YYYY/MM/DD HH:mm（例如：2026/09/24 08:30），可直接輸入或按欄位右側的日曆圖示選擇；"
+                          + "只輸入日期時，起始為 00:00、結束為 23:59；結束時間包含該分鐘；"
+                          + "篩選可跨月，「顯示前一周」為今天往前 7 天（含今天，00:00 至 23:59）"
+                    color: historyPage.mutedTextColor
+                    font.pixelSize: 12
+                    wrapMode: Text.Wrap
                 }
 
-                Column {
-                    spacing: 8
+                Item {
+                    width: parent.width
+                    height: filterRow.height
 
-                    Text {
-                        text: "結束日期"
-                        color: mutedTextColor
-                        font.pixelSize: 13
-                    }
+                    Row {
+                        id: filterRow
+                        spacing: 14
 
-                    TextField {
-                        id: endDateField
-                        width: Math.max(170, Math.min(260, (historyPage.width - 450) / 2))
-                        height: 46
-                        color: "white"
-                        font.pixelSize: 16
-                        font.family: "Consolas"
-                        selectByMouse: true
-                        placeholderText: "YYYY/MM/DD"
-                        placeholderTextColor: "#5F7890"
+                        Column {
+                            spacing: 8
 
-                        background: Rectangle {
-                            radius: 6
-                            color: "#0B1527"
-                            border.color: endDateField.activeFocus ? root.mainBlue : dividerColor
-                            border.width: 1
+                            Text {
+                                text: "起始日期時間"
+                                color: historyPage.mutedTextColor
+                                font.pixelSize: 13
+                            }
+
+                            // Type YYYY/MM/DD HH:mm (or the date only -> 00:00) or pick it
+                            // with the calendar button; Enter runs the filter, picking does not.
+                            // Like the former TextField it stays enabled while offline
+                            // (applyFilter() itself needs the transport).
+                            Components.DateTimeField {
+                                id: startDateField
+                                width: historyPage.dateFieldWidth
+                                height: 46
+                                isEnd: false
+                                popupScale: historyPage.designScale
+                                borderColor: historyPage.dividerColor
+                                mutedTextColor: historyPage.mutedTextColor
+                                onAccepted: historyPage.applyFilter()
+                            }
                         }
 
-                        onAccepted: applyFilter()
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            text: "—"
+                            color: historyPage.mutedTextColor
+                            font.pixelSize: 20
+                        }
+
+                        Column {
+                            spacing: 8
+
+                            Text {
+                                text: "結束日期時間"
+                                color: historyPage.mutedTextColor
+                                font.pixelSize: 13
+                            }
+
+                            // Date only -> 23:59 (the whole end day, as before).
+                            Components.DateTimeField {
+                                id: endDateField
+                                width: historyPage.dateFieldWidth
+                                height: 46
+                                isEnd: true
+                                popupScale: historyPage.designScale
+                                borderColor: historyPage.dividerColor
+                                mutedTextColor: historyPage.mutedTextColor
+                                onAccepted: historyPage.applyFilter()
+                            }
+                        }
+
+                        Button {
+                            id: filterButton
+                            width: 110
+                            height: 46
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            // The range query is a request to the Core: disabled while offline.
+                            enabled: Td.transportReady
+                            hoverEnabled: true
+
+                            background: Rectangle {
+                                radius: 6
+                                color: !filterButton.enabled ? "#16243A"
+                                     : filterButton.hovered ? root.lightBlue : root.mainBlue
+                            }
+
+                            contentItem: Text {
+                                text: "篩選"
+                                color: filterButton.enabled ? "white" : "#536A80"
+                                font.pixelSize: 16
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: historyPage.applyFilter()
+                        }
+
+                        Button {
+                            id: lastWeekButton
+                            width: 110
+                            height: 46
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            enabled: Td.transportReady
+                            hoverEnabled: true
+
+                            background: Rectangle {
+                                radius: 6
+                                color: !lastWeekButton.enabled ? "#16243A"
+                                     : lastWeekButton.hovered ? "#223D5A" : "transparent"
+                                border.color: lastWeekButton.enabled ? historyPage.dividerColor : "transparent"
+                                border.width: 1
+                            }
+
+                            contentItem: Text {
+                                text: "顯示前一周"
+                                color: lastWeekButton.enabled ? root.textColor : "#536A80"
+                                font.pixelSize: 15
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: historyPage.showLastWeek()
+                        }
                     }
-                }
 
-                Button {
-                    id: filterButton
-                    width: 110
-                    height: 46
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    // The range query is a request to the Core: disabled while offline.
-                    enabled: Td.transportReady
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        radius: 6
-                        color: !filterButton.enabled ? "#16243A"
-                             : filterButton.hovered ? root.lightBlue : root.mainBlue
-                    }
-
-                    contentItem: Text {
-                        text: "篩選"
-                        color: filterButton.enabled ? "white" : "#536A80"
-                        font.pixelSize: 16
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
+                    // Current range (or the input error), level with the fields, in the
+                    // ~890 px right of the buttons; wraps rather than overlapping them.
+                    Text {
+                        anchors.left: filterRow.right
+                        anchors.leftMargin: 24
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        height: 46
+                        text: historyPage.filterMessage.length > 0
+                              ? historyPage.filterMessage
+                              : "區間：" + historyPage.rangeText() + " · 本頁 " + historyPage.historySourceModel.length + " 筆"
+                        color: historyPage.filterMessage.length > 0 ? historyPage.dangerColor : historyPage.mutedTextColor
+                        font.pixelSize: 14
+                        horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.Wrap
                     }
-
-                    onClicked: applyFilter()
                 }
-
-                Button {
-                    id: lastWeekButton
-                    width: 110
-                    height: 46
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    enabled: Td.transportReady
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        radius: 6
-                        color: !lastWeekButton.enabled ? "#16243A"
-                             : lastWeekButton.hovered ? "#223D5A" : "transparent"
-                        border.color: lastWeekButton.enabled ? dividerColor : "transparent"
-                        border.width: 1
-                    }
-
-                    contentItem: Text {
-                        text: "顯示前一周"
-                        color: lastWeekButton.enabled ? root.textColor : "#536A80"
-                        font.pixelSize: 15
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    onClicked: showLastWeek()
-                }
-            }
-
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 24
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 8
-                text: filterMessage.length > 0
-                      ? filterMessage
-                      : "區間：" + historyPage.rangeText() + " · 本頁 " + historySourceModel.length + " 筆"
-                color: filterMessage.length > 0 ? dangerColor : mutedTextColor
-                font.pixelSize: 14
             }
         }
 
         Rectangle {
             width: parent.width
-            height: parent.height - 230
+            height: parent.height - headerRow.height - filterPanel.height - 2 * parent.spacing
             radius: 10
             color: "#111D32"
             border.color: dividerColor
@@ -781,6 +823,9 @@ Item {
                                         font.pixelSize: 14
                                         font.family: index === 1 ? "Microsoft JhengHei" : "Consolas"
                                         verticalAlignment: Text.AlignVCenter
+                                        // Safety net only: every cell text fits its column
+                                        // (time "yyyy/MM/dd HH:mm:ss" in >= 198 px, values at
+                                        // most "65535.00" in >= 134 px, see columnWidths).
                                         elide: Text.ElideRight
                                     }
                                 }
@@ -852,8 +897,10 @@ Item {
                         onClicked: goToPage(currentPage - 1)
                     }
 
+                    // At least the former 110 px, wider when the page numbers need it
+                    // (e.g. "第 123456 / 123456 頁"), so the text is never cut off.
                     Text {
-                        width: 110
+                        width: Math.max(110, implicitWidth)
                         anchors.verticalCenter: parent.verticalCenter
                         text: "第 " + currentPage + " / " + totalPages + " 頁"
                         color: "#BFD8EC"

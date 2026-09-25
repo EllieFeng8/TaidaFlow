@@ -14,6 +14,8 @@ qt6_add_qml_module(TaidaFlowContent
         "HistoryPage.qml"
         "Main.qml"
         "TopNav.qml"
+        "components/DateTimeField.qml"
+        "components/DateTimeUtil.js"
         "components/InterfaceBox.qml"
         "components/MotorIcon.qml"
         "components/ValueTag.qml"

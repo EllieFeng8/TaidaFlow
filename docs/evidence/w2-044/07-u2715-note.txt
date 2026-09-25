@@ -1,0 +1,15 @@
+w2-044 note: U+2715 MULTIPLICATION X (✕)
+
+Used in: TaidaFlowContent/HistoryPage.qml:459 (closeExportButton contentItem text "✕").
+Source font C:/Windows/Fonts/NotoSansTC-VF.ttf (Noto Sans TC 2.004) has no glyph for U+2715
+(nor U+2716), so make_font_subset.py cannot put it in the subset; the script lists it as
+"note (not in source font, skipped)" and --check still exits 0 (non-CJK chars are notes).
+
+Not verified (no UI test allowed): whether the WebAssembly build shows ✕ through Qt's own
+fallback. Facts found by program checks:
+  * C:/Qt/6.8.3/wasm_singlethread/plugins/platforms/libqwasm.a contains the strings
+    "DejaVuSans" / "DejaVuSansMono" (Qt for WebAssembly bundles DejaVu Sans).
+  * DejaVu Sans 2.35 (matplotlib's copy, same family) has U+2715 and U+2013 in its cmap.
+Noto Sans TC does have U+00D7 MULTIPLICATION SIGN (×) and U+2573 (╳).
+If the web page shows a box for this button, the fix belongs to the UI (main), e.g. use "×"
+(U+00D7), which the subset would then include after re-running make_font_subset.py.

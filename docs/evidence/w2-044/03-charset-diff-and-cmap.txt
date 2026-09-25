@@ -1,0 +1,29 @@
+charset.txt: old=491 chars new=499 chars
+added (9): –✕月求為要跨送隊
+  + U+2013 – EN DASH
+  + U+2715 ✕ MULTIPLICATION X
+  + U+6708 月 CJK UNIFIED IDEOGRAPH-6708
+  + U+6C42 求 CJK UNIFIED IDEOGRAPH-6C42
+  + U+70BA 為 CJK UNIFIED IDEOGRAPH-70BA
+  + U+8981 要 CJK UNIFIED IDEOGRAPH-8981
+  + U+8DE8 跨 CJK UNIFIED IDEOGRAPH-8DE8
+  + U+9001 送 CJK UNIFIED IDEOGRAPH-9001
+  + U+968A 隊 CJK UNIFIED IDEOGRAPH-968A
+removed (1): 目
+size TaidaFlowNotoSansTC-Regular.ttf: 184952 -> 190276 bytes (delta +5324)
+size TaidaFlowNotoSansTC-Bold.ttf: 185636 -> 190956 bytes (delta +5320)
+cmap check (new fonts):
+  U+2013 – in_charset=yes source=yes Regular=yes Bold=yes
+  U+2715 ✕ in_charset=yes source=no Regular=NO Bold=NO  (not in source font NotoSansTC-VF; cannot be subset)
+  U+6708 月 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6C42 求 in_charset=yes source=yes Regular=yes Bold=yes
+  U+70BA 為 in_charset=yes source=yes Regular=yes Bold=yes
+  U+8981 要 in_charset=yes source=yes Regular=yes Bold=yes
+  U+8DE8 跨 in_charset=yes source=yes Regular=yes Bold=yes
+  U+9001 送 in_charset=yes source=yes Regular=yes Bold=yes
+  U+968A 隊 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6392 排 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E2D 中 in_charset=yes source=yes Regular=yes Bold=yes
+phrase '排隊中' fully covered in both styles: True
+rc=0
+exit=0

@@ -1,0 +1,9 @@
+﻿
+Algorithm Hash                                                             Path                                                                       
+--------- ----                                                             ----                                                                       
+SHA256    139E7E8E9EAC53094A8605878D30ECC87B12B40CA0A30DFE9FB4636D77507E3A D:\repo\codex\qmlTester\taidaflow\App\fonts\charset.txt                    
+SHA256    41FAE418CE77B00A6A75F5037B8939E71065A34271E371FD52DB9181B5AE1D7E D:\repo\codex\qmlTester\taidaflow\App\fonts\TaidaFlowNotoSansTC-Bold.ttf   
+SHA256    F0A3105384BB1C43BB4F58C5A6BC50802AA3360FCA2647014DA7C0446EDDD7B2 D:\repo\codex\qmlTester\taidaflow\App\fonts\TaidaFlowNotoSansTC-Regular.ttf
+
+
+

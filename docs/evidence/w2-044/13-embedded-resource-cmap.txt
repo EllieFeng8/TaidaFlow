@@ -1,0 +1,8 @@
+build/desktop: build\desktop\App\.qt\rcc\qrc_embedded_fonts.cpp resource_data_bytes=381240
+  TaidaFlowNotoSansTC-Regular.ttf: size=190276 embedded_verbatim=True cmap_has[排隊中–月求為要跨送]=all
+  TaidaFlowNotoSansTC-Bold.ttf: size=190956 embedded_verbatim=True cmap_has[排隊中–月求為要跨送]=all
+build/wasm-release: build\wasm-release\App\.qt\rcc\qrc_embedded_fonts.cpp resource_data_bytes=381240
+  TaidaFlowNotoSansTC-Regular.ttf: size=190276 embedded_verbatim=True cmap_has[排隊中–月求為要跨送]=all
+  TaidaFlowNotoSansTC-Bold.ttf: size=190956 embedded_verbatim=True cmap_has[排隊中–月求為要跨送]=all
+rc=0
+exit=0

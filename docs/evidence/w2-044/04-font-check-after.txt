@@ -1,0 +1,7 @@
+﻿> python -B scripts\make_font_subset.py --check   (after regenerate)
+scanned 177 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+  note (not in source font, skipped): U+2715 MULTIPLICATION X
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=882 size=190276 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=882 size=190956 missing=0
+chars: total=499 cjk=392 total_font_bytes=381232
+rc=0

@@ -1,0 +1,9 @@
+﻿> python -B scripts\make_font_subset.py   (regenerate from HEAD 8e87b70 sources, source C:\Windows\Fonts\NotoSansTC-VF.ttf)
+scanned 177 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+wrote App\fonts\TaidaFlowNotoSansTC-Regular.ttf  190276 bytes  wght=400
+wrote App\fonts\TaidaFlowNotoSansTC-Bold.ttf  190956 bytes  wght=700
+  note (not in source font, skipped): U+2715 MULTIPLICATION X
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=882 size=190276 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=882 size=190956 missing=0
+chars: total=499 cjk=392 total_font_bytes=381232
+rc=0

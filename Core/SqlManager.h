@@ -15,6 +15,7 @@
 #include <QtGlobal>
 #include <QHash>
 #include <QList>
+#include <QSet>
 #include <atomic>
 
 // w2-039: result of one History-page load (one COUNT + one newest-first page),
@@ -36,6 +37,20 @@ struct SensorHistoryPageResult
     // how many of their COUNTs came from the count cache.
     int months = 0;
     int countCacheHits = 0;
+    // w2-045 (requestSensorHistoryRangePage only, diagnostics): months whose
+    // cached COUNT was brought up to date by counting only the rows added since
+    // (by rowid); the queued steps the request ran in on the SqlManager thread,
+    // each step's duration, the longest one and the time from the request to
+    // the result; how the page rows were read ("offset-desc", "offset-asc",
+    // "keyset", "seek-desc", "seek-asc", or "none" for an empty page); and the
+    // MAX(rowid) of each month file that the counts and the page were taken at.
+    int countCacheDeltas = 0;
+    int steps = 0;
+    QVector<double> stepMs;
+    double maxStepMs = 0.0;
+    double totalMs = 0.0;
+    QString pageMethod;
+    QHash<QString, qint64> snapshotRowids;
 };
 Q_DECLARE_METATYPE(SensorHistoryPageResult)
 
@@ -113,6 +128,21 @@ public:
     // same SQLite file change counter).  Returns immediately; the result comes
     // through sensorHistoryPageReady() and shares the request-id sequence
     // (superseded handling) with requestSensorHistoryPage().
+    //
+    // w2-045: the work runs as a chain of short queued steps (about 6 ms of
+    // work each), so the blocking calls of other threads (the main thread's
+    // saveSensorData every second) run between the steps.  Before each step the
+    // request is dropped (result with superseded = true) when a newer request
+    // id exists.  Each month's COUNT and the page read take the month file's
+    // MAX(rowid) at the start as a snapshot: rows saved between the steps are
+    // not counted and not shown by this request (sensor_data rows are only
+    // ever inserted, so rowid only grows).  Long COUNTs and long OFFSET skips
+    // are split into chunks of index rows (keyset from the chunk's last row).
+    // A request for the page next to (or equal to) the previous result's
+    // page, with the same range, starts from that page's first/last row
+    // (timestamp + rowid keyset) instead of an OFFSET; other pages use
+    // OFFSET from the nearer end of the month file.
+    // The rows returned are the same as the OFFSET query on the snapshot.
     void requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
                                        int page, int pageSize);
 
@@ -155,13 +185,57 @@ private:
         qint64 fileSize = -1;
         quint32 changeCounter = 0;
         qint64 count = 0;
+        qint64 snapRowid = -1;   // w2-045: MAX(rowid) of sensor_data the count was taken at
+        QString path;            // w2-045: file the entry belongs to
     };
     QHash<QString, RangeCountCacheEntry> m_rangeCountCache;   // key = yyyyMM
     QList<SensorMonthFile> sensorMonthFilesInRange(qint64 from, qint64 to) const;
-    bool countSensorMonthCached(const SensorMonthFile& month, qint64 from, qint64 to,
-                                qint64* count, bool* cacheHit, QString* errMsg);
-    bool querySensorDescOffset(const QString& key, qint64 from, qint64 to, qint64 offset,
-                               int limit, QJsonArray* out, QString* errMsg);
+
+    // w2-045 (SqlManager thread only): stepped History range request.
+    struct HistoryMonth;
+    struct HistoryChunkWalk;
+    struct HistoryRow;
+    struct HistoryRangeJob;
+    struct HistoryAnchorRow
+    {
+        QString key;          // yyyyMM of the row's month file
+        qint64 ts = 0;
+        qint64 rowid = 0;
+        qint64 pos = -1;      // 0-based position, newest first, in the whole range
+    };
+    // First and last row of the previous result, with the month snapshots
+    // (MAX(rowid), row count) the result was taken at.
+    struct HistoryAnchor
+    {
+        bool valid = false;
+        qint64 from = 0;
+        qint64 to = 0;
+        int page = 0;
+        int pageSize = 0;
+        QHash<QString, QPair<qint64, qint64>> months;   // yyyyMM -> (snapshot rowid, count)
+        HistoryAnchorRow first;
+        HistoryAnchorRow last;
+    };
+    HistoryAnchor m_historyAnchor;
+    QSet<QString> m_historySchemaChecked;   // month keys whose schema was checked once
+    enum class HistoryKeyset { None, OlderOrEqual, Older, Newer };
+
+    void runHistoryRangeStep(const std::shared_ptr<HistoryRangeJob>& job);
+    bool historyRangeUnit(HistoryRangeJob& job);
+    bool historyCountUnit(HistoryRangeJob& job);
+    bool historyLocate(HistoryRangeJob& job);
+    bool historyFetchUnit(HistoryRangeJob& job);
+    void historyFinish(HistoryRangeJob& job, bool ok, const QString& error);
+    bool historyEvaluateAnchor(HistoryRangeJob& job, QString* errMsg);
+    bool historyOpenMonth(HistoryMonth& month, QSqlDatabase* db, QString* errMsg);
+    bool historyMaxRowid(QSqlDatabase& db, qint64* rowid, QString* errMsg);
+    bool historySnapFilter(QSqlDatabase& db, const HistoryMonth& month, bool* filter, QString* errMsg);
+    bool historyWalkUnit(QSqlDatabase& db, const HistoryMonth& month, bool snapFilter,
+                         HistoryChunkWalk& walk, QString* errMsg);
+    bool historyFetchRows(QSqlDatabase& db, const HistoryMonth& month, bool snapFilter,
+                          qint64 lo, qint64 hi, bool ascending, HistoryKeyset keyset,
+                          const HistoryAnchorRow& anchor, qint64 offset, qint64 limit,
+                          QList<HistoryRow>* rows, QString* errMsg);
 
     QString monthKey(const QDate& date) const;
     QString dataFileForKey(const QString& key) const;

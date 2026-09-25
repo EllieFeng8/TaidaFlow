@@ -1,0 +1,140 @@
+w2-045 D3 measurements; bench data 6.68 GiB in D:\repo\codex\qmlTester\taidaflow\build\w2-045-bench\data (12 month files, 1 row/s, ~31.0 M rows); free disk space 501.1 GiB
+idle baseline (no History request, 15 s), longest blocking save / longest queue wait: save every 20 ms: 5.73 / 0.97 ms, save every 1000 ms: 14.36 / 0.11 ms
+request_ms = main thread post -> result; steps/step_max/step_p90 = SqlManager thread (old: the whole request is one step); saves_during / save_max_ms_during = blocking saveSensorData calls of the main thread overlapping the request (whole blocking call); queue_wait = blocking no-op call into the SqlManager thread made just before each save (time the thread was busy with other work, e.g. a History step); tick_gap = longest main-thread 1 ms timer gap.
+
+impl  scenario        cache  save_ms  request       method       request_ms  steps  step_max_ms  step_p90_ms  saves_during  save_max_ms_during         queue_wait_max_ms  tick_gap_max_ms  rows/checks
+new   long            hot    1000     first-load    offset-desc  937.46      137    9.47         9.01         1             23.15                      3.21               26.44            31041421
+new   long            hot    1000     again-cached  keyset       1.88        1      1.77         1.77         0             0.00                       0.00               0.00             31041423
+new   long            hot    1000     == scenario                937.46      138    9.47         9.01         3             23.15 (idle 14.36, +8.79)  3.21               26.44            checks 2/mismatch 0
+new   long (restart)  hot    1000     first-load    offset-desc  950.52      142    9.20         8.48         1             21.16                      4.95               27.14            31041425
+new   long (restart)  hot    1000     again-cached  keyset       2.55        1      2.40         2.40         0             0.00                       0.00               0.00             31041427
+new   long (restart)  hot    1000     == scenario                950.52      143    9.20         8.48         3             21.16 (idle 14.36, +6.80)  4.95               27.14            checks 2/mismatch 0
+new   unbounded       hot    1000     first-load    offset-desc  935.94      135    9.60         9.00         1             18.29                      5.70               24.04            31041429
+new   unbounded       hot    1000     == scenario                935.94      135    9.60         9.00         3             18.29 (idle 14.36, +3.93)  5.70               24.04            checks 1/mismatch 0
+new   deep            hot    1000     jump-middle   seek-desc    987.08      145    12.58        8.95         1             22.03                      3.68               25.75            31041433
+new   deep            hot    1000     next-1        keyset       1.96        1      1.81         1.81         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-2        keyset       2.36        1      2.19         2.19         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-3        keyset       8.64        1      8.56         8.56         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-4        keyset       2.25        1      1.99         1.99         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-5        keyset       8.71        1      8.63         8.63         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-6        keyset       1.42        1      1.28         1.28         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-7        keyset       2.28        1      2.17         2.17         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-8        keyset       1.85        1      1.73         1.73         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-9        keyset       2.52        1      2.41         2.41         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-10       keyset       1.73        1      1.65         1.65         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-11       keyset       2.17        1      2.08         2.08         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-12       keyset       1.77        1      1.65         1.65         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-13       keyset       1.52        1      1.42         1.42         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-14       keyset       2.00        1      1.76         1.76         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-15       keyset       2.21        1      2.00         2.00         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-16       keyset       1.73        1      1.61         1.61         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-17       keyset       2.19        1      2.05         2.05         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-18       keyset       2.54        1      2.37         2.37         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-19       keyset       1.46        1      1.38         1.38         0             0.00                       0.00               0.00             31041435
+new   deep            hot    1000     next-20       keyset       2.32        1      2.19         2.19         0             0.00                       0.00               0.00             31041436
+new   deep            hot    1000     == scenario                987.08      165    12.58        8.77         4             22.03 (idle 14.36, +7.67)  3.68               25.75            checks 21/mismatch 0
+new   last            hot    1000     page-1        offset-desc  937.99      143    9.08         8.45         1             9.15                       8.58               18.70            31041438
+new   last            hot    1000     last-page     offset-asc   1.96        1      1.61         1.61         0             0.00                       0.00               0.00             31041440
+new   last            hot    1000     == scenario                937.99      144    9.08         8.45         3             12.96 (idle 14.36, -1.40)  8.58               18.70            checks 1/mismatch 0
+new   long            cold   1000     first-load    offset-desc  8096.07     1113   17.56        9.12         9             12.22                      7.40               19.66            31041442
+new   long            cold   1000     again-cached  keyset       2.54        1      2.42         2.42         0             0.00                       0.00               0.00             31041451
+new   long            cold   1000     == scenario                8096.07     1114   17.56        9.12         10            12.22 (idle 14.36, -2.14)  7.40               19.66            checks 2/mismatch 0
+new   long (restart)  cold   1000     first-load    offset-desc  8084.32     1111   19.09        9.13         9             12.85                      10.45              24.33            31041453
+new   long (restart)  cold   1000     again-cached  keyset       1.90        1      1.77         1.77         0             0.00                       0.00               0.00             31041462
+new   long (restart)  cold   1000     == scenario                8084.32     1112   19.09        9.13         10            12.85 (idle 14.36, -1.51)  10.45              24.33            checks 2/mismatch 0
+new   unbounded       cold   1000     first-load    offset-desc  8044.42     1093   17.16        9.15         9             12.36                      8.46               18.03            31041464
+new   unbounded       cold   1000     == scenario                8044.42     1093   17.16        9.15         10            12.36 (idle 14.36, -2.00)  8.46               18.03            checks 1/mismatch 0
+new   deep            cold   1000     jump-middle   seek-desc    8102.70     1113   19.19        9.16         9             12.36                      13.73              27.00            31041475
+new   deep            cold   1000     next-1        keyset       1.91        1      1.73         1.73         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-2        keyset       2.01        1      1.92         1.92         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-3        keyset       1.90        1      1.80         1.80         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-4        keyset       2.61        1      2.49         2.49         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-5        keyset       2.24        1      2.09         2.09         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-6        keyset       2.68        1      2.46         2.46         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-7        keyset       2.33        1      2.22         2.22         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-8        keyset       2.69        1      2.61         2.61         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-9        keyset       1.58        1      1.49         1.49         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-10       keyset       1.63        1      1.54         1.54         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-11       keyset       2.11        1      1.97         1.97         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-12       keyset       1.68        1      1.58         1.58         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-13       keyset       1.93        1      1.73         1.73         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-14       keyset       1.52        1      1.36         1.36         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-15       keyset       1.82        1      1.75         1.75         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-16       keyset       2.52        1      2.15         2.15         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-17       keyset       2.27        1      2.10         2.10         0             0.00                       0.00               0.00             31041484
+new   deep            cold   1000     next-18       keyset       1.69        1      1.57         1.57         0             0.00                       0.00               0.00             31041485
+new   deep            cold   1000     next-19       keyset       2.39        1      2.08         2.08         0             0.00                       0.00               0.00             31041485
+new   deep            cold   1000     next-20       keyset       2.71        1      2.59         2.59         0             0.00                       0.00               0.00             31041485
+new   deep            cold   1000     == scenario                8102.70     1133   19.19        9.16         11            12.77 (idle 14.36, -1.59)  13.73              27.00            checks 21/mismatch 0
+new   last            cold   1000     page-1        offset-desc  8191.53     1117   19.27        9.13         9             14.60                      9.16               24.82            31041487
+new   last            cold   1000     last-page     offset-asc   2.36        1      2.25         2.25         0             0.00                       0.00               0.00             31041496
+new   last            cold   1000     == scenario                8191.53     1118   19.27        9.13         10            14.60 (idle 14.36, +0.24)  9.16               24.82            checks 1/mismatch 0
+new   long            hot    20       first-load    offset-desc  1070.69     138    9.55         8.86         54            11.98                      9.24               21.52            31042445
+new   long            hot    20       again-cached  keyset       2.00        1      1.94         1.94         0             0.00                       0.00               0.00             31042514
+new   long            hot    20       == scenario                1070.69     139    9.55         8.86         144           11.98 (idle 5.73, +6.25)   9.24               21.52            checks 2/mismatch 0
+new   long (restart)  hot    20       first-load    offset-desc  1064.04     141    9.71         8.63         53            12.23                      8.38               19.31            31042688
+new   long (restart)  hot    20       again-cached  keyset       1.58        1      1.43         1.43         0             0.00                       0.00               0.00             31042756
+new   long (restart)  hot    20       == scenario                1064.04     142    9.71         8.63         143           12.23 (idle 5.73, +6.50)   8.38               19.31            checks 2/mismatch 0
+new   unbounded       hot    20       first-load    offset-desc  1070.04     140    9.07         8.74         54            12.38                      8.41               19.63            31042930
+new   unbounded       hot    20       == scenario                1070.04     140    9.07         8.74         129           12.38 (idle 5.73, +6.65)   8.41               19.63            checks 1/mismatch 0
+new   deep            hot    20       jump-middle   seek-desc    1121.49     147    9.82         8.72         56            12.35                      7.16               19.56            31043158
+new   deep            hot    20       next-1        keyset       2.06        1      1.96         1.96         0             0.00                       0.00               0.00             31043217
+new   deep            hot    20       next-2        keyset       4.93        1      1.88         1.88         1             2.90                       0.06               0.00             31043219
+new   deep            hot    20       next-3        keyset       2.44        1      2.35         2.35         0             0.00                       0.00               0.00             31043222
+new   deep            hot    20       next-4        keyset       1.77        1      1.68         1.68         0             0.00                       0.00               0.00             31043225
+new   deep            hot    20       next-5        keyset       6.16        1      2.72         2.72         1             3.28                       0.87               0.00             31043227
+new   deep            hot    20       next-6        keyset       2.27        1      2.19         2.19         0             0.00                       0.00               0.00             31043230
+new   deep            hot    20       next-7        keyset       2.25        1      2.16         2.16         0             0.00                       0.00               0.00             31043233
+new   deep            hot    20       next-8        keyset       5.45        1      2.27         2.27         1             3.06                       1.36               4.45             31043235
+new   deep            hot    20       next-9        keyset       2.27        1      2.19         2.19         0             0.00                       0.00               0.00             31043238
+new   deep            hot    20       next-10       keyset       1.72        1      1.52         1.52         0             0.00                       0.00               0.00             31043241
+new   deep            hot    20       next-11       keyset       5.43        1      2.56         2.56         1             2.76                       1.72               4.50             31043243
+new   deep            hot    20       next-12       keyset       2.46        1      2.34         2.34         0             0.00                       0.00               0.00             31043246
+new   deep            hot    20       next-13       keyset       2.34        1      2.24         2.24         0             0.00                       0.00               0.00             31043249
+new   deep            hot    20       next-14       keyset       4.59        1      1.63         1.63         1             2.81                       0.90               0.00             31043251
+new   deep            hot    20       next-15       keyset       1.84        1      1.62         1.62         0             0.00                       0.00               0.00             31043254
+new   deep            hot    20       next-16       keyset       1.82        1      1.73         1.73         0             0.00                       0.00               0.00             31043257
+new   deep            hot    20       next-17       keyset       2.22        1      2.08         2.08         0             0.00                       0.00               0.00             31043259
+new   deep            hot    20       next-18       keyset       1.76        1      1.60         1.60         0             0.00                       0.00               0.00             31043262
+new   deep            hot    20       next-19       keyset       2.08        1      1.96         1.96         0             0.00                       0.00               2.99             31043265
+new   deep            hot    20       next-20       keyset       1.72        1      1.60         1.60         0             0.00                       0.00               0.00             31043267
+new   deep            hot    20       == scenario                1121.49     167    9.82         8.55         184           12.35 (idle 5.73, +6.62)   7.16               19.56            checks 21/mismatch 0
+new   last            hot    20       page-1        offset-desc  1082.08     144    9.11         8.21         54            12.00                      8.09               17.30            31043441
+new   last            hot    20       last-page     offset-asc   5.94        1      2.26         2.26         1             3.53                       1.36               4.94             31043510
+new   last            hot    20       == scenario                1082.08     145    9.11         8.21         145           12.00 (idle 5.73, +6.27)   8.09               17.30            checks 1/mismatch 0
+new   long            cold   20       first-load    offset-desc  9413.59     1127   16.66        9.07         470           21.75                      11.10              28.87            31043685
+new   long            cold   20       again-cached  keyset       5.68        1      2.15         2.15         1             3.30                       0.44               0.00             31044170
+new   long            cold   20       == scenario                9413.59     1128   16.66        9.07         561           21.75 (idle 5.73, +16.02)  11.10              28.87            checks 2/mismatch 0
+new   long (restart)  cold   20       first-load    offset-desc  9466.10     1133   17.13        9.09         473           20.33                      13.27              28.26            31044345
+new   long (restart)  cold   20       again-cached  keyset       1.60        1      1.54         1.54         0             0.00                       0.00               0.00             31044833
+new   long (restart)  cold   20       == scenario                9466.10     1134   17.13        9.09         563           20.33 (idle 5.73, +14.60)  13.27              28.26            checks 2/mismatch 0
+new   unbounded       cold   20       first-load    offset-desc  9414.79     1118   16.98        9.13         471           17.70                      14.66              24.81            31045007
+new   unbounded       cold   20       == scenario                9414.79     1118   16.98        9.13         546           17.70 (idle 5.73, +11.97)  14.66              24.81            checks 1/mismatch 0
+new   deep            cold   20       jump-middle   seek-desc    9383.45     1124   17.50        9.07         469           17.48                      13.44              22.83            31045652
+new   deep            cold   20       next-1        keyset       1.71        1      1.57         1.57         0             0.00                       0.00               3.06             31046124
+new   deep            cold   20       next-2        keyset       2.21        1      2.12         2.12         0             0.00                       0.00               0.00             31046126
+new   deep            cold   20       next-3        keyset       1.89        1      1.79         1.79         0             0.00                       0.00               0.00             31046129
+new   deep            cold   20       next-4        keyset       2.20        1      2.08         2.08         0             0.00                       0.00               3.77             31046132
+new   deep            cold   20       next-5        keyset       2.57        1      2.28         2.28         0             0.00                       0.00               0.00             31046134
+new   deep            cold   20       next-6        keyset       2.05        1      1.94         1.94         0             0.00                       0.00               0.00             31046137
+new   deep            cold   20       next-7        keyset       1.59        1      1.47         1.47         0             0.00                       0.00               0.00             31046140
+new   deep            cold   20       next-8        keyset       2.43        1      2.27         2.27         0             0.00                       0.00               0.00             31046142
+new   deep            cold   20       next-9        keyset       1.58        1      1.47         1.47         0             0.00                       0.00               0.00             31046145
+new   deep            cold   20       next-10       keyset       5.35        1      2.31         2.31         1             2.93                       0.88               0.00             31046147
+new   deep            cold   20       next-11       keyset       1.88        1      1.77         1.77         0             0.00                       0.00               0.00             31046150
+new   deep            cold   20       next-12       keyset       1.74        1      1.61         1.61         0             0.00                       0.00               0.00             31046153
+new   deep            cold   20       next-13       keyset       5.27        1      2.00         2.00         1             3.07                       0.17               0.00             31046155
+new   deep            cold   20       next-14       keyset       1.70        1      1.58         1.58         0             0.00                       0.00               0.00             31046158
+new   deep            cold   20       next-15       keyset       1.49        1      1.42         1.42         0             0.00                       0.00               0.00             31046161
+new   deep            cold   20       next-16       keyset       2.20        1      2.02         2.02         0             0.00                       0.00               0.00             31046163
+new   deep            cold   20       next-17       keyset       1.98        1      1.91         1.91         0             0.00                       0.00               0.00             31046166
+new   deep            cold   20       next-18       keyset       2.21        1      2.11         2.11         0             0.00                       0.00               0.00             31046169
+new   deep            cold   20       next-19       keyset       2.37        1      2.18         2.18         0             0.00                       0.00               0.00             31046171
+new   deep            cold   20       next-20       keyset       1.76        1      1.53         1.53         0             0.00                       0.00               0.00             31046174
+new   deep            cold   20       == scenario                9383.45     1144   17.50        9.07         597           17.48 (idle 5.73, +11.75)  13.44              22.83            checks 21/mismatch 0
+new   last            cold   20       page-1        offset-desc  9468.42     1130   17.72        9.10         473           21.02                      14.42              28.00            31046348
+new   last            cold   20       last-page     offset-asc   5.04        1      2.00         2.00         1             2.91                       1.08               5.01             31046836
+new   last            cold   20       == scenario                9468.42     1131   17.72        9.10         564           21.02 (idle 5.73, +15.29)  14.42              28.00            checks 1/mismatch 0
+
+new implementation: SqlManager steps >= 40 ms: 0; scenarios whose longest save exceeds the idle baseline by more than 20 ms: 0 []
+runs with a non-zero exit (page check mismatch or error): 0 []

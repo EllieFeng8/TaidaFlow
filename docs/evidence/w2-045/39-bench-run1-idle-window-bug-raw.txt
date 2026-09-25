@@ -1,0 +1,529 @@
+bench data D:\repo\codex\qmlTester\taidaflow\build\w2-045-bench\data: 12 month files, 6.67 GiB; free disk space 501.1 GiB
+
+### long --save-ms 1000  impl=new  exit=0
+REQ long first-load impl=new page=1 ok=1 total_rows=31017665 months=12 hits=0 deltas=0 method=offset-desc request_ms=957.58 steps=138 step_max_ms=9.21 step_p50_ms=6.22 step_p90_ms=9.00 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=937.36 page_work_ms=0.46 saves_during=1 save_max_ms_during=17.77 tick_gap_max_ms_during=17.82
+REQ long again-cached impl=new page=1 ok=1 total_rows=31017667 months=12 hits=11 deltas=1 method=keyset request_ms=1.80 steps=1 step_max_ms=1.71 step_p50_ms=1.71 step_p90_ms=1.71 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.19 page_work_ms=0.52 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=0 save_every_ms=1000 measured_s=2.8 saves=3 save_max_ms=17.77 save_avg_ms=11.71 tick_gap_max_ms=17.82 steps=139 step_max_ms=9.21 step_p50_ms=6.22 step_p90_ms=9.00 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=957.58
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### idle --save-ms 1000 --idle-s 15  impl=new  exit=0
+SCENARIO idle impl=new cold=0 save_every_ms=1000 measured_s=0.0 saves=0 save_max_ms=0.00 save_avg_ms=0.00 tick_gap_max_ms=0.00 steps=0 step_max_ms=0.00 step_p50_ms=0.00 step_p90_ms=0.00 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=0.00
+CHECKS idle total=0 mismatches=0
+
+### long --save-ms 1000  impl=new  exit=0
+REQ long first-load impl=new page=1 ok=1 total_rows=31017683 months=12 hits=0 deltas=0 method=offset-desc request_ms=944.47 steps=143 step_max_ms=9.15 step_p50_ms=6.10 step_p90_ms=8.55 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=925.56 page_work_ms=0.40 saves_during=1 save_max_ms_during=15.71 tick_gap_max_ms_during=16.73
+REQ long again-cached impl=new page=1 ok=1 total_rows=31017685 months=12 hits=11 deltas=1 method=keyset request_ms=2.93 steps=1 step_max_ms=2.79 step_p50_ms=2.79 step_p90_ms=2.79 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=2.11 page_work_ms=0.68 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=0 save_every_ms=1000 measured_s=2.7 saves=3 save_max_ms=15.71 save_avg_ms=7.73 tick_gap_max_ms=16.73 steps=144 step_max_ms=9.15 step_p50_ms=6.10 step_p90_ms=8.55 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=944.47
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### long --save-ms 1000  impl=new  exit=0
+REQ long first-load impl=new page=1 ok=1 total_rows=31017687 months=12 hits=0 deltas=0 method=offset-desc request_ms=948.21 steps=139 step_max_ms=9.73 step_p50_ms=6.14 step_p90_ms=8.93 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=930.61 page_work_ms=0.41 saves_during=1 save_max_ms_during=18.28 tick_gap_max_ms_during=18.31
+REQ long again-cached impl=new page=1 ok=1 total_rows=31017689 months=12 hits=11 deltas=1 method=keyset request_ms=2.59 steps=1 step_max_ms=2.46 step_p50_ms=2.46 step_p90_ms=2.46 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.74 page_work_ms=0.72 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=0 save_every_ms=1000 measured_s=2.8 saves=3 save_max_ms=18.28 save_avg_ms=11.88 tick_gap_max_ms=18.31 steps=140 step_max_ms=9.73 step_p50_ms=6.14 step_p90_ms=8.93 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=948.21
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### unbounded --save-ms 1000  impl=new  exit=0
+REQ unbounded first-load impl=new page=1 ok=1 total_rows=31017691 months=12 hits=0 deltas=0 method=offset-desc request_ms=969.23 steps=145 step_max_ms=10.78 step_p50_ms=6.16 step_p90_ms=8.63 steps_over_10ms=1 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=947.96 page_work_ms=0.42 saves_during=1 save_max_ms_during=15.96 tick_gap_max_ms_during=16.00
+SCENARIO unbounded impl=new cold=0 save_every_ms=1000 measured_s=2.5 saves=3 save_max_ms=15.96 save_avg_ms=10.42 tick_gap_max_ms=16.00 steps=145 step_max_ms=10.78 step_p50_ms=6.16 step_p90_ms=8.63 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=969.23
+CHECK unbounded unbounded page=1 rows=10 same_as_offset_reference=1
+CHECKS unbounded total=1 mismatches=0
+
+### deep --save-ms 1000  impl=new  exit=0
+REQ deep jump-middle impl=new page=1663200 ok=1 total_rows=31017695 months=12 hits=0 deltas=0 method=seek-desc request_ms=1031.71 steps=146 step_max_ms=11.10 step_p50_ms=6.20 step_p90_ms=8.94 steps_over_10ms=2 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=957.41 page_work_ms=43.62 saves_during=2 save_max_ms_during=15.81 tick_gap_max_ms_during=15.89
+REQ deep next-1 impl=new page=1663201 ok=1 total_rows=31017697 months=12 hits=11 deltas=1 method=keyset request_ms=2.48 steps=1 step_max_ms=2.39 step_p50_ms=2.39 step_p90_ms=2.39 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.70 page_work_ms=0.68 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=new page=1663202 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.67 steps=1 step_max_ms=2.58 step_p50_ms=2.58 step_p90_ms=2.58 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=2.09 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=new page=1663203 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.07 steps=1 step_max_ms=1.80 step_p50_ms=1.80 step_p90_ms=1.80 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.32 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-4 impl=new page=1663204 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.51 steps=1 step_max_ms=1.40 step_p50_ms=1.40 step_p90_ms=1.40 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.87 page_work_ms=0.53 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-5 impl=new page=1663205 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.29 steps=1 step_max_ms=2.12 step_p50_ms=2.12 step_p90_ms=2.12 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.45 page_work_ms=0.66 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-6 impl=new page=1663206 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.62 steps=1 step_max_ms=1.93 step_p50_ms=1.93 step_p90_ms=1.93 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.32 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=new page=1663207 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.43 steps=1 step_max_ms=1.34 step_p50_ms=1.34 step_p90_ms=1.34 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.85 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-8 impl=new page=1663208 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.17 steps=1 step_max_ms=2.06 step_p50_ms=2.06 step_p90_ms=2.06 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.37 page_work_ms=0.69 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=new page=1663209 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.85 steps=1 step_max_ms=1.74 step_p50_ms=1.74 step_p90_ms=1.74 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.14 page_work_ms=0.61 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-10 impl=new page=1663210 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.44 steps=1 step_max_ms=2.20 step_p50_ms=2.20 step_p90_ms=2.20 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.41 page_work_ms=0.79 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-11 impl=new page=1663211 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.19 steps=1 step_max_ms=2.00 step_p50_ms=2.00 step_p90_ms=2.00 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.38 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=new page=1663212 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=3.18 steps=1 step_max_ms=2.91 step_p50_ms=2.91 step_p90_ms=2.91 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=2.13 page_work_ms=0.78 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=2.05
+REQ deep next-13 impl=new page=1663213 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.91 steps=1 step_max_ms=1.79 step_p50_ms=1.79 step_p90_ms=1.79 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.24 page_work_ms=0.55 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-14 impl=new page=1663214 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.68 steps=1 step_max_ms=1.57 step_p50_ms=1.57 step_p90_ms=1.57 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.11 page_work_ms=0.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=new page=1663215 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.64 steps=1 step_max_ms=1.51 step_p50_ms=1.51 step_p90_ms=1.51 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.00 page_work_ms=0.51 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=new page=1663216 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=2.90 steps=1 step_max_ms=2.52 step_p50_ms=2.52 step_p90_ms=2.52 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=2.04 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=new page=1663217 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.94 steps=1 step_max_ms=1.84 step_p50_ms=1.84 step_p90_ms=1.84 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.38 page_work_ms=0.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=new page=1663218 ok=1 total_rows=31017697 months=12 hits=12 deltas=0 method=keyset request_ms=1.39 steps=1 step_max_ms=1.32 step_p50_ms=1.32 step_p90_ms=1.32 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.87 page_work_ms=0.45 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-19 impl=new page=1663219 ok=1 total_rows=31017698 months=12 hits=11 deltas=1 method=keyset request_ms=1.56 steps=1 step_max_ms=1.50 step_p50_ms=1.50 step_p90_ms=1.50 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.10 page_work_ms=0.40 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-20 impl=new page=1663220 ok=1 total_rows=31017698 months=12 hits=12 deltas=0 method=keyset request_ms=2.24 steps=1 step_max_ms=2.13 step_p50_ms=2.13 step_p90_ms=2.13 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.65 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=new cold=0 save_every_ms=1000 measured_s=3.6 saves=4 save_max_ms=15.81 save_avg_ms=9.42 tick_gap_max_ms=15.89 steps=166 step_max_ms=11.10 step_p50_ms=6.15 step_p90_ms=8.90 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=1031.71
+CHECK deep jump-middle page=1663200 rows=10 same_as_offset_reference=1
+CHECK deep next-1 page=1663201 rows=10 same_as_offset_reference=1
+CHECK deep next-2 page=1663202 rows=10 same_as_offset_reference=1
+CHECK deep next-3 page=1663203 rows=10 same_as_offset_reference=1
+CHECK deep next-4 page=1663204 rows=10 same_as_offset_reference=1
+CHECK deep next-5 page=1663205 rows=10 same_as_offset_reference=1
+CHECK deep next-6 page=1663206 rows=10 same_as_offset_reference=1
+CHECK deep next-7 page=1663207 rows=10 same_as_offset_reference=1
+CHECK deep next-8 page=1663208 rows=10 same_as_offset_reference=1
+CHECK deep next-9 page=1663209 rows=10 same_as_offset_reference=1
+CHECK deep next-10 page=1663210 rows=10 same_as_offset_reference=1
+CHECK deep next-11 page=1663211 rows=10 same_as_offset_reference=1
+CHECK deep next-12 page=1663212 rows=10 same_as_offset_reference=1
+CHECK deep next-13 page=1663213 rows=10 same_as_offset_reference=1
+CHECK deep next-14 page=1663214 rows=10 same_as_offset_reference=1
+CHECK deep next-15 page=1663215 rows=10 same_as_offset_reference=1
+CHECK deep next-16 page=1663216 rows=10 same_as_offset_reference=1
+CHECK deep next-17 page=1663217 rows=10 same_as_offset_reference=1
+CHECK deep next-18 page=1663218 rows=10 same_as_offset_reference=1
+CHECK deep next-19 page=1663219 rows=10 same_as_offset_reference=1
+CHECK deep next-20 page=1663220 rows=10 same_as_offset_reference=1
+CHECKS deep total=21 mismatches=0
+
+### last --save-ms 1000  impl=new  exit=0
+REQ last page-1 impl=new page=1 ok=1 total_rows=31017700 months=12 hits=0 deltas=0 method=offset-desc request_ms=945.42 steps=140 step_max_ms=10.00 step_p50_ms=6.15 step_p90_ms=8.97 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=936.30 page_work_ms=0.40 saves_during=1 save_max_ms_during=7.20 tick_gap_max_ms_during=7.23
+REQ last last-page impl=new page=3101770 ok=1 total_rows=31017702 months=12 hits=11 deltas=1 method=offset-asc request_ms=2.05 steps=1 step_max_ms=1.98 step_p50_ms=1.98 step_p90_ms=1.98 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.56 page_work_ms=0.42 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO last impl=new cold=0 save_every_ms=1000 measured_s=2.7 saves=3 save_max_ms=12.42 save_avg_ms=7.76 tick_gap_max_ms=12.44 steps=141 step_max_ms=10.00 step_p50_ms=6.15 step_p90_ms=8.95 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=945.42
+CHECK last last-page page=3101770 rows=10 same_as_offset_reference=1
+CHECKS last total=1 mismatches=0
+
+### long --save-ms 1000 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=new page=1 ok=1 total_rows=31017704 months=12 hits=0 deltas=0 method=offset-desc request_ms=7760.57 steps=1059 step_max_ms=17.16 step_p50_ms=6.46 step_p90_ms=9.10 steps_over_10ms=16 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7701.80 page_work_ms=0.44 saves_during=8 save_max_ms_during=9.93 tick_gap_max_ms_during=11.04
+REQ long again-cached impl=new page=1 ok=1 total_rows=31017713 months=12 hits=11 deltas=1 method=keyset request_ms=1.99 steps=1 step_max_ms=1.65 step_p50_ms=1.65 step_p90_ms=1.65 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.14 page_work_ms=0.50 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=1 save_every_ms=1000 measured_s=9.6 saves=10 save_max_ms=9.93 save_avg_ms=5.74 tick_gap_max_ms=11.04 steps=1060 step_max_ms=17.16 step_p50_ms=6.46 step_p90_ms=9.10 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7760.57
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### long --save-ms 1000 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=new page=1 ok=1 total_rows=31017715 months=12 hits=0 deltas=0 method=offset-desc request_ms=7706.01 steps=1059 step_max_ms=18.58 step_p50_ms=6.44 step_p90_ms=9.10 steps_over_10ms=14 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7647.75 page_work_ms=0.47 saves_during=8 save_max_ms_during=10.92 tick_gap_max_ms_during=10.95
+REQ long again-cached impl=new page=1 ok=1 total_rows=31017723 months=12 hits=11 deltas=1 method=keyset request_ms=1.72 steps=1 step_max_ms=1.63 step_p50_ms=1.63 step_p90_ms=1.63 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.14 page_work_ms=0.50 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=1 save_every_ms=1000 measured_s=9.5 saves=10 save_max_ms=10.92 save_avg_ms=4.89 tick_gap_max_ms=10.95 steps=1060 step_max_ms=18.58 step_p50_ms=6.44 step_p90_ms=9.10 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7706.01
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### unbounded --save-ms 1000 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ unbounded first-load impl=new page=1 ok=1 total_rows=31017726 months=12 hits=0 deltas=0 method=offset-desc request_ms=7723.04 steps=1049 step_max_ms=18.12 step_p50_ms=6.52 step_p90_ms=9.09 steps_over_10ms=16 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7664.55 page_work_ms=0.48 saves_during=8 save_max_ms_during=16.27 tick_gap_max_ms_during=16.35
+SCENARIO unbounded impl=new cold=1 save_every_ms=1000 measured_s=9.2 saves=10 save_max_ms=16.27 save_avg_ms=7.03 tick_gap_max_ms=16.35 steps=1049 step_max_ms=18.12 step_p50_ms=6.52 step_p90_ms=9.09 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7723.04
+CHECK unbounded unbounded page=1 rows=10 same_as_offset_reference=1
+CHECKS unbounded total=1 mismatches=0
+
+### deep --save-ms 1000 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ deep jump-middle impl=new page=1663200 ok=1 total_rows=31017737 months=12 hits=0 deltas=0 method=seek-desc request_ms=7658.48 steps=1034 step_max_ms=16.64 step_p50_ms=6.56 step_p90_ms=9.11 steps_over_10ms=13 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7564.71 page_work_ms=40.53 saves_during=8 save_max_ms_during=17.56 tick_gap_max_ms_during=17.60
+REQ deep next-1 impl=new page=1663201 ok=1 total_rows=31017745 months=12 hits=11 deltas=1 method=keyset request_ms=1.80 steps=1 step_max_ms=1.71 step_p50_ms=1.71 step_p90_ms=1.71 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.18 page_work_ms=0.53 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=new page=1663202 ok=1 total_rows=31017745 months=12 hits=12 deltas=0 method=keyset request_ms=1.44 steps=1 step_max_ms=1.35 step_p50_ms=1.35 step_p90_ms=1.35 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=0.44 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=new page=1663203 ok=1 total_rows=31017745 months=12 hits=12 deltas=0 method=keyset request_ms=1.62 steps=1 step_max_ms=1.52 step_p50_ms=1.52 step_p90_ms=1.52 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=0.60 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-4 impl=new page=1663204 ok=1 total_rows=31017745 months=12 hits=12 deltas=0 method=keyset request_ms=1.50 steps=1 step_max_ms=1.40 step_p50_ms=1.40 step_p90_ms=1.40 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.86 page_work_ms=0.54 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-5 impl=new page=1663205 ok=1 total_rows=31017745 months=12 hits=12 deltas=0 method=keyset request_ms=1.65 steps=1 step_max_ms=1.54 step_p50_ms=1.54 step_p90_ms=1.54 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.92 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-6 impl=new page=1663206 ok=1 total_rows=31017745 months=12 hits=12 deltas=0 method=keyset request_ms=1.53 steps=1 step_max_ms=1.41 step_p50_ms=1.41 step_p90_ms=1.41 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.94 page_work_ms=0.47 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=new page=1663207 ok=1 total_rows=31017746 months=12 hits=11 deltas=1 method=keyset request_ms=1.58 steps=1 step_max_ms=1.51 step_p50_ms=1.51 step_p90_ms=1.51 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.00 page_work_ms=0.51 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-8 impl=new page=1663208 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.51 steps=1 step_max_ms=1.40 step_p50_ms=1.40 step_p90_ms=1.40 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.90 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=new page=1663209 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.62 steps=1 step_max_ms=1.53 step_p50_ms=1.53 step_p90_ms=1.53 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-10 impl=new page=1663210 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.55 steps=1 step_max_ms=1.38 step_p50_ms=1.38 step_p90_ms=1.38 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=0.47 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-11 impl=new page=1663211 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.85 steps=1 step_max_ms=1.75 step_p50_ms=1.75 step_p90_ms=1.75 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.02 page_work_ms=0.73 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=new page=1663212 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.58 steps=1 step_max_ms=1.47 step_p50_ms=1.47 step_p90_ms=1.47 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.95 page_work_ms=0.52 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-13 impl=new page=1663213 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.68 steps=1 step_max_ms=1.61 step_p50_ms=1.61 step_p90_ms=1.61 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.88 page_work_ms=0.73 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-14 impl=new page=1663214 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.44 steps=1 step_max_ms=1.37 step_p50_ms=1.37 step_p90_ms=1.37 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.89 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=new page=1663215 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.71 steps=1 step_max_ms=1.60 step_p50_ms=1.60 step_p90_ms=1.60 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.88 page_work_ms=0.72 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=new page=1663216 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.51 steps=1 step_max_ms=1.39 step_p50_ms=1.39 step_p90_ms=1.39 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.93 page_work_ms=0.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=new page=1663217 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.96 steps=1 step_max_ms=1.59 step_p50_ms=1.59 step_p90_ms=1.59 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.95 page_work_ms=0.64 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=new page=1663218 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.38 steps=1 step_max_ms=1.29 step_p50_ms=1.29 step_p90_ms=1.29 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.83 page_work_ms=0.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-19 impl=new page=1663219 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.68 steps=1 step_max_ms=1.62 step_p50_ms=1.62 step_p90_ms=1.62 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.88 page_work_ms=0.74 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-20 impl=new page=1663220 ok=1 total_rows=31017746 months=12 hits=12 deltas=0 method=keyset request_ms=1.95 steps=1 step_max_ms=1.53 step_p50_ms=1.53 step_p90_ms=1.53 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.90 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=new cold=1 save_every_ms=1000 measured_s=10.2 saves=11 save_max_ms=17.56 save_avg_ms=6.89 tick_gap_max_ms=17.60 steps=1054 step_max_ms=16.64 step_p50_ms=6.53 step_p90_ms=9.11 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7658.48
+CHECK deep jump-middle page=1663200 rows=10 same_as_offset_reference=1
+CHECK deep next-1 page=1663201 rows=10 same_as_offset_reference=1
+CHECK deep next-2 page=1663202 rows=10 same_as_offset_reference=1
+CHECK deep next-3 page=1663203 rows=10 same_as_offset_reference=1
+CHECK deep next-4 page=1663204 rows=10 same_as_offset_reference=1
+CHECK deep next-5 page=1663205 rows=10 same_as_offset_reference=1
+CHECK deep next-6 page=1663206 rows=10 same_as_offset_reference=1
+CHECK deep next-7 page=1663207 rows=10 same_as_offset_reference=1
+CHECK deep next-8 page=1663208 rows=10 same_as_offset_reference=1
+CHECK deep next-9 page=1663209 rows=10 same_as_offset_reference=1
+CHECK deep next-10 page=1663210 rows=10 same_as_offset_reference=1
+CHECK deep next-11 page=1663211 rows=10 same_as_offset_reference=1
+CHECK deep next-12 page=1663212 rows=10 same_as_offset_reference=1
+CHECK deep next-13 page=1663213 rows=10 same_as_offset_reference=1
+CHECK deep next-14 page=1663214 rows=10 same_as_offset_reference=1
+CHECK deep next-15 page=1663215 rows=10 same_as_offset_reference=1
+CHECK deep next-16 page=1663216 rows=10 same_as_offset_reference=1
+CHECK deep next-17 page=1663217 rows=10 same_as_offset_reference=1
+CHECK deep next-18 page=1663218 rows=10 same_as_offset_reference=1
+CHECK deep next-19 page=1663219 rows=10 same_as_offset_reference=1
+CHECK deep next-20 page=1663220 rows=10 same_as_offset_reference=1
+CHECKS deep total=21 mismatches=0
+
+### last --save-ms 1000 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ last page-1 impl=new page=1 ok=1 total_rows=31017749 months=12 hits=0 deltas=0 method=offset-desc request_ms=7675.23 steps=1035 step_max_ms=18.11 step_p50_ms=6.55 step_p90_ms=9.12 steps_over_10ms=14 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7613.25 page_work_ms=0.47 saves_during=8 save_max_ms_during=18.50 tick_gap_max_ms_during=18.53
+REQ last last-page impl=new page=3101775 ok=1 total_rows=31017757 months=12 hits=11 deltas=1 method=offset-asc request_ms=2.46 steps=1 step_max_ms=2.34 step_p50_ms=2.34 step_p90_ms=2.34 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.62 page_work_ms=0.72 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO last impl=new cold=1 save_every_ms=1000 measured_s=9.5 saves=10 save_max_ms=18.50 save_avg_ms=7.30 tick_gap_max_ms=18.53 steps=1036 step_max_ms=18.11 step_p50_ms=6.55 step_p90_ms=9.12 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7675.23
+CHECK last last-page page=3101775 rows=10 same_as_offset_reference=1
+CHECKS last total=1 mismatches=0
+
+### idle --save-ms 20 --idle-s 15  impl=new  exit=0
+SCENARIO idle impl=new cold=0 save_every_ms=20 measured_s=0.0 saves=0 save_max_ms=0.00 save_avg_ms=0.00 tick_gap_max_ms=0.00 steps=0 step_max_ms=0.00 step_p50_ms=0.00 step_p90_ms=0.00 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=0.00
+CHECKS idle total=0 mismatches=0
+
+### long --save-ms 20  impl=new  exit=0
+REQ long first-load impl=new page=1 ok=1 total_rows=31018607 months=12 hits=0 deltas=0 method=offset-desc request_ms=1078.68 steps=144 step_max_ms=9.79 step_p50_ms=6.12 step_p90_ms=8.23 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=925.92 page_work_ms=0.36 saves_during=54 save_max_ms_during=11.50 tick_gap_max_ms_during=11.55
+REQ long again-cached impl=new page=1 ok=1 total_rows=31018676 months=12 hits=11 deltas=1 method=keyset request_ms=2.18 steps=1 step_max_ms=2.08 step_p50_ms=2.08 step_p90_ms=2.08 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.55 page_work_ms=0.53 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=0 save_every_ms=20 measured_s=2.9 saves=144 save_max_ms=11.50 save_avg_ms=4.45 tick_gap_max_ms=11.55 steps=145 step_max_ms=9.79 step_p50_ms=6.12 step_p90_ms=8.23 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=1078.68
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### long --save-ms 20  impl=new  exit=0
+REQ long first-load impl=new page=1 ok=1 total_rows=31018850 months=12 hits=0 deltas=0 method=offset-desc request_ms=1091.57 steps=143 step_max_ms=9.29 step_p50_ms=6.11 step_p90_ms=8.77 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=931.13 page_work_ms=0.49 saves_during=55 save_max_ms_during=10.10 tick_gap_max_ms_during=10.14
+REQ long again-cached impl=new page=1 ok=1 total_rows=31018920 months=12 hits=11 deltas=1 method=keyset request_ms=2.25 steps=1 step_max_ms=2.16 step_p50_ms=2.16 step_p90_ms=2.16 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.58 page_work_ms=0.58 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=0 save_every_ms=20 measured_s=2.9 saves=145 save_max_ms=10.10 save_avg_ms=4.31 tick_gap_max_ms=10.14 steps=144 step_max_ms=9.29 step_p50_ms=6.11 step_p90_ms=8.77 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=1091.57
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### unbounded --save-ms 20  impl=new  exit=0
+REQ unbounded first-load impl=new page=1 ok=1 total_rows=31019094 months=12 hits=0 deltas=0 method=offset-desc request_ms=1104.91 steps=143 step_max_ms=9.26 step_p50_ms=6.13 step_p90_ms=8.52 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=934.61 page_work_ms=0.36 saves_during=56 save_max_ms_during=11.09 tick_gap_max_ms_during=11.84
+SCENARIO unbounded impl=new cold=0 save_every_ms=20 measured_s=2.6 saves=131 save_max_ms=11.09 save_avg_ms=4.67 tick_gap_max_ms=11.84 steps=143 step_max_ms=9.26 step_p50_ms=6.13 step_p90_ms=8.52 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=1104.91
+CHECK unbounded unbounded page=1 rows=10 same_as_offset_reference=1
+CHECKS unbounded total=1 mismatches=0
+
+### deep --save-ms 20  impl=new  exit=0
+REQ deep jump-middle impl=new page=1663200 ok=1 total_rows=31019324 months=12 hits=0 deltas=0 method=seek-desc request_ms=1145.13 steps=147 step_max_ms=9.67 step_p50_ms=6.13 step_p90_ms=8.76 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=927.49 page_work_ms=49.97 saves_during=57 save_max_ms_during=10.15 tick_gap_max_ms_during=10.18
+REQ deep next-1 impl=new page=1663201 ok=1 total_rows=31019384 months=12 hits=11 deltas=1 method=keyset request_ms=2.54 steps=1 step_max_ms=2.44 step_p50_ms=2.44 step_p90_ms=2.44 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.82 page_work_ms=0.62 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=new page=1663202 ok=1 total_rows=31019386 months=12 hits=11 deltas=1 method=keyset request_ms=2.01 steps=1 step_max_ms=1.88 step_p50_ms=1.88 step_p90_ms=1.88 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.12 page_work_ms=0.76 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=new page=1663203 ok=1 total_rows=31019389 months=12 hits=11 deltas=1 method=keyset request_ms=1.64 steps=1 step_max_ms=1.54 step_p50_ms=1.54 step_p90_ms=1.54 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.04 page_work_ms=0.50 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-4 impl=new page=1663204 ok=1 total_rows=31019392 months=12 hits=11 deltas=1 method=keyset request_ms=2.39 steps=1 step_max_ms=2.23 step_p50_ms=2.23 step_p90_ms=2.23 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.41 page_work_ms=0.81 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=3.49
+REQ deep next-5 impl=new page=1663205 ok=1 total_rows=31019394 months=12 hits=11 deltas=1 method=keyset request_ms=1.72 steps=1 step_max_ms=1.62 step_p50_ms=1.62 step_p90_ms=1.62 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.12 page_work_ms=0.50 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-6 impl=new page=1663206 ok=1 total_rows=31019397 months=12 hits=11 deltas=1 method=keyset request_ms=2.01 steps=1 step_max_ms=1.89 step_p50_ms=1.89 step_p90_ms=1.89 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.09 page_work_ms=0.79 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=new page=1663207 ok=1 total_rows=31019400 months=12 hits=11 deltas=1 method=keyset request_ms=1.82 steps=1 step_max_ms=1.51 step_p50_ms=1.51 step_p90_ms=1.51 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.02 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=3.36
+REQ deep next-8 impl=new page=1663208 ok=1 total_rows=31019402 months=12 hits=11 deltas=1 method=keyset request_ms=2.31 steps=1 step_max_ms=2.11 step_p50_ms=2.11 step_p90_ms=2.11 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.52 page_work_ms=0.59 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=new page=1663209 ok=1 total_rows=31019405 months=12 hits=11 deltas=1 method=keyset request_ms=1.81 steps=1 step_max_ms=1.72 step_p50_ms=1.72 step_p90_ms=1.72 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.25 page_work_ms=0.47 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-10 impl=new page=1663210 ok=1 total_rows=31019407 months=12 hits=11 deltas=1 method=keyset request_ms=5.37 steps=1 step_max_ms=2.58 step_p50_ms=2.58 step_p90_ms=2.58 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.80 page_work_ms=0.77 saves_during=1 save_max_ms_during=4.45 tick_gap_max_ms_during=4.48
+REQ deep next-11 impl=new page=1663211 ok=1 total_rows=31019410 months=12 hits=11 deltas=1 method=keyset request_ms=2.28 steps=1 step_max_ms=2.17 step_p50_ms=2.17 step_p90_ms=2.17 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.66 page_work_ms=0.51 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=new page=1663212 ok=1 total_rows=31019413 months=12 hits=11 deltas=1 method=keyset request_ms=1.82 steps=1 step_max_ms=1.69 step_p50_ms=1.69 step_p90_ms=1.69 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.01 page_work_ms=0.68 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-13 impl=new page=1663213 ok=1 total_rows=31019416 months=12 hits=11 deltas=1 method=keyset request_ms=1.98 steps=1 step_max_ms=1.66 step_p50_ms=1.66 step_p90_ms=1.66 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.97 page_work_ms=0.70 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=3.04
+REQ deep next-14 impl=new page=1663214 ok=1 total_rows=31019418 months=12 hits=11 deltas=1 method=keyset request_ms=1.63 steps=1 step_max_ms=1.56 step_p50_ms=1.56 step_p90_ms=1.56 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.07 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=new page=1663215 ok=1 total_rows=31019421 months=12 hits=11 deltas=1 method=keyset request_ms=2.44 steps=1 step_max_ms=2.27 step_p50_ms=2.27 step_p90_ms=2.27 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.45 page_work_ms=0.83 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=new page=1663216 ok=1 total_rows=31019423 months=12 hits=11 deltas=1 method=keyset request_ms=4.71 steps=1 step_max_ms=1.91 step_p50_ms=1.91 step_p90_ms=1.91 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.39 page_work_ms=0.51 saves_during=1 save_max_ms_during=3.67 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=new page=1663217 ok=1 total_rows=31019426 months=12 hits=11 deltas=1 method=keyset request_ms=1.92 steps=1 step_max_ms=1.81 step_p50_ms=1.81 step_p90_ms=1.81 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.15 page_work_ms=0.65 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=new page=1663218 ok=1 total_rows=31019429 months=12 hits=11 deltas=1 method=keyset request_ms=1.66 steps=1 step_max_ms=1.55 step_p50_ms=1.55 step_p90_ms=1.55 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.03 page_work_ms=0.51 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-19 impl=new page=1663219 ok=1 total_rows=31019431 months=12 hits=11 deltas=1 method=keyset request_ms=5.49 steps=1 step_max_ms=2.24 step_p50_ms=2.24 step_p90_ms=2.24 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.62 page_work_ms=0.62 saves_during=1 save_max_ms_during=3.98 tick_gap_max_ms_during=0.00
+REQ deep next-20 impl=new page=1663220 ok=1 total_rows=31019434 months=12 hits=11 deltas=1 method=keyset request_ms=2.19 steps=1 step_max_ms=2.03 step_p50_ms=2.03 step_p90_ms=2.03 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.30 page_work_ms=0.73 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=new cold=0 save_every_ms=20 measured_s=3.7 saves=185 save_max_ms=10.15 save_avg_ms=4.11 tick_gap_max_ms=10.18 steps=167 step_max_ms=9.67 step_p50_ms=6.12 step_p90_ms=8.75 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=1145.13
+CHECK deep jump-middle page=1663200 rows=10 same_as_offset_reference=1
+CHECK deep next-1 page=1663201 rows=10 same_as_offset_reference=1
+CHECK deep next-2 page=1663202 rows=10 same_as_offset_reference=1
+CHECK deep next-3 page=1663203 rows=10 same_as_offset_reference=1
+CHECK deep next-4 page=1663204 rows=10 same_as_offset_reference=1
+CHECK deep next-5 page=1663205 rows=10 same_as_offset_reference=1
+CHECK deep next-6 page=1663206 rows=10 same_as_offset_reference=1
+CHECK deep next-7 page=1663207 rows=10 same_as_offset_reference=1
+CHECK deep next-8 page=1663208 rows=10 same_as_offset_reference=1
+CHECK deep next-9 page=1663209 rows=10 same_as_offset_reference=1
+CHECK deep next-10 page=1663210 rows=10 same_as_offset_reference=1
+CHECK deep next-11 page=1663211 rows=10 same_as_offset_reference=1
+CHECK deep next-12 page=1663212 rows=10 same_as_offset_reference=1
+CHECK deep next-13 page=1663213 rows=10 same_as_offset_reference=1
+CHECK deep next-14 page=1663214 rows=10 same_as_offset_reference=1
+CHECK deep next-15 page=1663215 rows=10 same_as_offset_reference=1
+CHECK deep next-16 page=1663216 rows=10 same_as_offset_reference=1
+CHECK deep next-17 page=1663217 rows=10 same_as_offset_reference=1
+CHECK deep next-18 page=1663218 rows=10 same_as_offset_reference=1
+CHECK deep next-19 page=1663219 rows=10 same_as_offset_reference=1
+CHECK deep next-20 page=1663220 rows=10 same_as_offset_reference=1
+CHECKS deep total=21 mismatches=0
+
+### last --save-ms 20  impl=new  exit=0
+REQ last page-1 impl=new page=1 ok=1 total_rows=31019575 months=12 hits=0 deltas=0 method=offset-desc request_ms=7294.59 steps=145 step_max_ms=9.75 step_p50_ms=6.24 step_p90_ms=8.77 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=985.64 page_work_ms=0.38 saves_during=140 save_max_ms_during=266.88 tick_gap_max_ms_during=266.91
+REQ last last-page impl=new page=3101958 ok=1 total_rows=31019722 months=12 hits=11 deltas=1 method=offset-asc request_ms=1.78 steps=1 step_max_ms=1.64 step_p50_ms=1.64 step_p90_ms=1.64 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.15 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO last impl=new cold=0 save_every_ms=20 measured_s=9.1 saves=221 save_max_ms=266.88 save_avg_ms=38.72 tick_gap_max_ms=266.91 steps=146 step_max_ms=9.75 step_p50_ms=6.24 step_p90_ms=8.77 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=7294.59
+CHECK last last-page page=3101958 rows=10 same_as_offset_reference=1
+CHECKS last total=1 mismatches=0
+
+### long --save-ms 20 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=new page=1 ok=1 total_rows=31019895 months=12 hits=0 deltas=0 method=offset-desc request_ms=9100.34 steps=1101 step_max_ms=16.65 step_p50_ms=6.38 step_p90_ms=9.07 steps_over_10ms=14 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7803.82 page_work_ms=0.38 saves_during=455 save_max_ms_during=15.12 tick_gap_max_ms_during=15.16
+REQ long again-cached impl=new page=1 ok=1 total_rows=31020365 months=12 hits=11 deltas=1 method=keyset request_ms=2.55 steps=1 step_max_ms=2.42 step_p50_ms=2.42 step_p90_ms=2.42 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.95 page_work_ms=0.47 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=1 save_every_ms=20 measured_s=10.9 saves=545 save_max_ms=15.12 save_avg_ms=6.08 tick_gap_max_ms=15.16 steps=1102 step_max_ms=16.65 step_p50_ms=6.38 step_p90_ms=9.07 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=9100.34
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### long --save-ms 20 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=new page=1 ok=1 total_rows=31020539 months=12 hits=0 deltas=0 method=offset-desc request_ms=9081.64 steps=1096 step_max_ms=16.29 step_p50_ms=6.40 step_p90_ms=9.04 steps_over_10ms=14 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7809.98 page_work_ms=0.44 saves_during=454 save_max_ms_during=15.74 tick_gap_max_ms_during=15.80
+REQ long again-cached impl=new page=1 ok=1 total_rows=31021008 months=12 hits=11 deltas=1 method=keyset request_ms=1.59 steps=1 step_max_ms=1.50 step_p50_ms=1.50 step_p90_ms=1.50 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.10 page_work_ms=0.40 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=new cold=1 save_every_ms=20 measured_s=10.9 saves=544 save_max_ms=15.74 save_avg_ms=5.90 tick_gap_max_ms=15.80 steps=1097 step_max_ms=16.29 step_p50_ms=6.40 step_p90_ms=9.04 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=9081.64
+CHECK long first-load page=1 rows=10 same_as_offset_reference=1
+CHECK long again-cached page=1 rows=10 same_as_offset_reference=1
+CHECKS long total=2 mismatches=0
+
+### unbounded --save-ms 20 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ unbounded first-load impl=new page=1 ok=1 total_rows=31021182 months=12 hits=0 deltas=0 method=offset-desc request_ms=8896.26 steps=1070 step_max_ms=17.45 step_p50_ms=6.39 step_p90_ms=9.05 steps_over_10ms=15 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7652.59 page_work_ms=0.44 saves_during=445 save_max_ms_during=16.70 tick_gap_max_ms_during=16.74
+SCENARIO unbounded impl=new cold=1 save_every_ms=20 measured_s=10.4 saves=520 save_max_ms=16.70 save_avg_ms=5.98 tick_gap_max_ms=16.74 steps=1070 step_max_ms=17.45 step_p50_ms=6.39 step_p90_ms=9.05 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=8896.26
+CHECK unbounded unbounded page=1 rows=10 same_as_offset_reference=1
+CHECKS unbounded total=1 mismatches=0
+
+### deep --save-ms 20 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ deep jump-middle impl=new page=1663200 ok=1 total_rows=31021801 months=12 hits=0 deltas=0 method=seek-desc request_ms=9049.16 steps=1090 step_max_ms=18.96 step_p50_ms=6.38 step_p90_ms=9.08 steps_over_10ms=15 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7733.00 page_work_ms=40.76 saves_during=452 save_max_ms_during=17.81 tick_gap_max_ms_during=18.81
+REQ deep next-1 impl=new page=1663201 ok=1 total_rows=31022256 months=12 hits=11 deltas=1 method=keyset request_ms=1.87 steps=1 step_max_ms=1.78 step_p50_ms=1.78 step_p90_ms=1.78 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.15 page_work_ms=0.64 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=new page=1663202 ok=1 total_rows=31022259 months=12 hits=11 deltas=1 method=keyset request_ms=1.63 steps=1 step_max_ms=1.54 step_p50_ms=1.54 step_p90_ms=1.54 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=0.63 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=new page=1663203 ok=1 total_rows=31022261 months=12 hits=11 deltas=1 method=keyset request_ms=1.63 steps=1 step_max_ms=1.53 step_p50_ms=1.53 step_p90_ms=1.53 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.05 page_work_ms=0.48 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-4 impl=new page=1663204 ok=1 total_rows=31022264 months=12 hits=11 deltas=1 method=keyset request_ms=1.52 steps=1 step_max_ms=1.46 step_p50_ms=1.46 step_p90_ms=1.46 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.97 page_work_ms=0.49 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-5 impl=new page=1663205 ok=1 total_rows=31022266 months=12 hits=11 deltas=1 method=keyset request_ms=5.18 steps=1 step_max_ms=2.60 step_p50_ms=2.60 step_p90_ms=2.60 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.89 page_work_ms=0.71 saves_during=1 save_max_ms_during=4.18 tick_gap_max_ms_during=5.17
+REQ deep next-6 impl=new page=1663206 ok=1 total_rows=31022269 months=12 hits=11 deltas=1 method=keyset request_ms=2.01 steps=1 step_max_ms=1.84 step_p50_ms=1.84 step_p90_ms=1.84 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.28 page_work_ms=0.56 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=new page=1663207 ok=1 total_rows=31022272 months=12 hits=11 deltas=1 method=keyset request_ms=2.49 steps=1 step_max_ms=2.15 step_p50_ms=2.15 step_p90_ms=2.15 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.48 page_work_ms=0.66 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-8 impl=new page=1663208 ok=1 total_rows=31022275 months=12 hits=11 deltas=1 method=keyset request_ms=2.19 steps=1 step_max_ms=2.09 step_p50_ms=2.09 step_p90_ms=2.09 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.45 page_work_ms=0.64 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=new page=1663209 ok=1 total_rows=31022277 months=12 hits=11 deltas=1 method=keyset request_ms=5.51 steps=1 step_max_ms=2.20 step_p50_ms=2.20 step_p90_ms=2.20 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.54 page_work_ms=0.66 saves_during=1 save_max_ms_during=4.46 tick_gap_max_ms_during=5.45
+REQ deep next-10 impl=new page=1663210 ok=1 total_rows=31022280 months=12 hits=11 deltas=1 method=keyset request_ms=2.40 steps=1 step_max_ms=2.30 step_p50_ms=2.30 step_p90_ms=2.30 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.66 page_work_ms=0.63 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-11 impl=new page=1663211 ok=1 total_rows=31022283 months=12 hits=11 deltas=1 method=keyset request_ms=2.21 steps=1 step_max_ms=1.93 step_p50_ms=1.93 step_p90_ms=1.93 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.25 page_work_ms=0.68 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=new page=1663212 ok=1 total_rows=31022286 months=12 hits=11 deltas=1 method=keyset request_ms=2.13 steps=1 step_max_ms=1.99 step_p50_ms=1.99 step_p90_ms=1.99 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.39 page_work_ms=0.60 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=3.00
+REQ deep next-13 impl=new page=1663213 ok=1 total_rows=31022288 months=12 hits=11 deltas=1 method=keyset request_ms=1.85 steps=1 step_max_ms=1.74 step_p50_ms=1.74 step_p90_ms=1.74 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=0.99 page_work_ms=0.75 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-14 impl=new page=1663214 ok=1 total_rows=31022291 months=12 hits=11 deltas=1 method=keyset request_ms=2.28 steps=1 step_max_ms=2.19 step_p50_ms=2.19 step_p90_ms=2.19 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.51 page_work_ms=0.68 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=new page=1663215 ok=1 total_rows=31022294 months=12 hits=11 deltas=1 method=keyset request_ms=2.39 steps=1 step_max_ms=2.29 step_p50_ms=2.29 step_p90_ms=2.29 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.44 page_work_ms=0.85 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=new page=1663216 ok=1 total_rows=31022296 months=12 hits=11 deltas=1 method=keyset request_ms=2.94 steps=1 step_max_ms=2.14 step_p50_ms=2.14 step_p90_ms=2.14 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.51 page_work_ms=0.63 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=new page=1663217 ok=1 total_rows=31022299 months=12 hits=11 deltas=1 method=keyset request_ms=2.37 steps=1 step_max_ms=2.25 step_p50_ms=2.25 step_p90_ms=2.25 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.51 page_work_ms=0.74 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=new page=1663218 ok=1 total_rows=31022301 months=12 hits=11 deltas=1 method=keyset request_ms=4.29 steps=1 step_max_ms=1.67 step_p50_ms=1.67 step_p90_ms=1.67 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.07 page_work_ms=0.60 saves_during=1 save_max_ms_during=4.23 tick_gap_max_ms_during=4.27
+REQ deep next-19 impl=new page=1663219 ok=1 total_rows=31022304 months=12 hits=11 deltas=1 method=keyset request_ms=1.67 steps=1 step_max_ms=1.57 step_p50_ms=1.57 step_p90_ms=1.57 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.06 page_work_ms=0.50 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-20 impl=new page=1663220 ok=1 total_rows=31022307 months=12 hits=11 deltas=1 method=keyset request_ms=1.73 steps=1 step_max_ms=1.64 step_p50_ms=1.64 step_p90_ms=1.64 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.05 page_work_ms=0.59 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=new cold=1 save_every_ms=20 measured_s=11.6 saves=581 save_max_ms=17.81 save_avg_ms=5.80 tick_gap_max_ms=18.81 steps=1110 step_max_ms=18.96 step_p50_ms=6.36 step_p90_ms=9.07 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=9049.16
+CHECK deep jump-middle page=1663200 rows=10 same_as_offset_reference=1
+CHECK deep next-1 page=1663201 rows=10 same_as_offset_reference=1
+CHECK deep next-2 page=1663202 rows=10 same_as_offset_reference=1
+CHECK deep next-3 page=1663203 rows=10 same_as_offset_reference=1
+CHECK deep next-4 page=1663204 rows=10 same_as_offset_reference=1
+CHECK deep next-5 page=1663205 rows=10 same_as_offset_reference=1
+CHECK deep next-6 page=1663206 rows=10 same_as_offset_reference=1
+CHECK deep next-7 page=1663207 rows=10 same_as_offset_reference=1
+CHECK deep next-8 page=1663208 rows=10 same_as_offset_reference=1
+CHECK deep next-9 page=1663209 rows=10 same_as_offset_reference=1
+CHECK deep next-10 page=1663210 rows=10 same_as_offset_reference=1
+CHECK deep next-11 page=1663211 rows=10 same_as_offset_reference=1
+CHECK deep next-12 page=1663212 rows=10 same_as_offset_reference=1
+CHECK deep next-13 page=1663213 rows=10 same_as_offset_reference=1
+CHECK deep next-14 page=1663214 rows=10 same_as_offset_reference=1
+CHECK deep next-15 page=1663215 rows=10 same_as_offset_reference=1
+CHECK deep next-16 page=1663216 rows=10 same_as_offset_reference=1
+CHECK deep next-17 page=1663217 rows=10 same_as_offset_reference=1
+CHECK deep next-18 page=1663218 rows=10 same_as_offset_reference=1
+CHECK deep next-19 page=1663219 rows=10 same_as_offset_reference=1
+CHECK deep next-20 page=1663220 rows=10 same_as_offset_reference=1
+CHECKS deep total=21 mismatches=0
+
+### last --save-ms 20 --cold  impl=new  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ last page-1 impl=new page=1 ok=1 total_rows=31022482 months=12 hits=0 deltas=0 method=offset-desc request_ms=10336.94 steps=1087 step_max_ms=16.25 step_p50_ms=6.47 step_p90_ms=9.07 steps_over_10ms=14 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=7817.70 page_work_ms=0.35 saves_during=517 save_max_ms_during=21.45 tick_gap_max_ms_during=21.48
+REQ last last-page impl=new page=3102249 ok=1 total_rows=31023014 months=12 hits=11 deltas=1 method=offset-asc request_ms=2.42 steps=1 step_max_ms=2.26 step_p50_ms=2.26 step_p90_ms=2.26 steps_over_10ms=0 steps_over_20ms=0 steps_over_40ms=0 count_work_ms=1.44 page_work_ms=0.82 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=2.12
+SCENARIO last impl=new cold=1 save_every_ms=20 measured_s=12.1 saves=607 save_max_ms=21.45 save_avg_ms=7.99 tick_gap_max_ms=21.48 steps=1088 step_max_ms=16.25 step_p50_ms=6.47 step_p90_ms=9.07 steps_over_20ms=0 steps_over_40ms=0 request_max_ms=10336.94
+CHECK last last-page page=3102249 rows=10 same_as_offset_reference=1
+CHECKS last total=1 mismatches=0
+
+### long --save-ms 1000  impl=old  exit=0
+REQ long first-load impl=old page=1 ok=1 total_rows=31023090 months=12 hits=0 deltas=0 method=old-offset request_ms=679.21 steps=1 step_max_ms=665.54 step_p50_ms=665.54 step_p90_ms=665.54 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=664.88 page_work_ms=0.67 saves_during=1 save_max_ms_during=667.30 tick_gap_max_ms_during=667.34
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023091 months=12 hits=11 deltas=0 method=old-offset request_ms=64.43 steps=1 step_max_ms=50.60 step_p50_ms=50.60 step_p90_ms=50.60 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=49.96 page_work_ms=0.64 saves_during=1 save_max_ms_during=31.02 tick_gap_max_ms_during=31.24
+SCENARIO long impl=old cold=0 save_every_ms=1000 measured_s=2.5 saves=3 save_max_ms=667.30 save_avg_ms=237.55 tick_gap_max_ms=667.34 steps=2 step_max_ms=665.54 step_p50_ms=665.54 step_p90_ms=665.54 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=679.21
+CHECKS long total=0 mismatches=0
+
+### long --save-ms 1000  impl=old  exit=0
+REQ long first-load impl=old page=1 ok=1 total_rows=31023094 months=12 hits=0 deltas=0 method=old-offset request_ms=682.28 steps=1 step_max_ms=678.27 step_p50_ms=678.27 step_p90_ms=678.27 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=677.58 page_work_ms=0.69 saves_during=1 save_max_ms_during=673.23 tick_gap_max_ms_during=674.44
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023095 months=12 hits=11 deltas=0 method=old-offset request_ms=58.79 steps=1 step_max_ms=45.75 step_p50_ms=45.75 step_p90_ms=45.75 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.13 page_work_ms=0.62 saves_during=1 save_max_ms_during=31.72 tick_gap_max_ms_during=32.77
+SCENARIO long impl=old cold=0 save_every_ms=1000 measured_s=2.5 saves=3 save_max_ms=673.23 save_avg_ms=239.30 tick_gap_max_ms=674.44 steps=2 step_max_ms=678.27 step_p50_ms=678.27 step_p90_ms=678.27 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=682.28
+CHECKS long total=0 mismatches=0
+
+### unbounded --save-ms 1000  impl=old  exit=0
+REQ unbounded first-load impl=old page=1 ok=1 total_rows=31023098 months=12 hits=0 deltas=0 method=old-offset request_ms=685.27 steps=1 step_max_ms=681.79 step_p50_ms=681.79 step_p90_ms=681.79 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=681.09 page_work_ms=0.70 saves_during=1 save_max_ms_during=681.46 tick_gap_max_ms_during=682.47
+SCENARIO unbounded impl=old cold=0 save_every_ms=1000 measured_s=2.2 saves=3 save_max_ms=681.46 save_avg_ms=235.63 tick_gap_max_ms=682.47 steps=1 step_max_ms=681.79 step_p50_ms=681.79 step_p90_ms=681.79 steps_over_20ms=1 steps_over_40ms=1 request_max_ms=685.27
+CHECKS unbounded total=0 mismatches=0
+
+### deep --save-ms 1000  impl=old  exit=0
+REQ deep jump-middle impl=old page=1663200 ok=1 total_rows=31023102 months=12 hits=0 deltas=0 method=old-offset request_ms=711.50 steps=1 step_max_ms=705.42 step_p50_ms=705.42 step_p90_ms=705.42 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=667.27 page_work_ms=38.15 saves_during=1 save_max_ms_during=705.62 tick_gap_max_ms_during=705.66
+REQ deep next-1 impl=old page=1663201 ok=1 total_rows=31023103 months=12 hits=11 deltas=0 method=old-offset request_ms=85.38 steps=1 step_max_ms=85.33 step_p50_ms=85.33 step_p90_ms=85.33 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.47 page_work_ms=39.86 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=old page=1663202 ok=1 total_rows=31023103 months=12 hits=12 deltas=0 method=old-offset request_ms=34.31 steps=1 step_max_ms=34.15 step_p50_ms=34.15 step_p90_ms=34.15 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.95 page_work_ms=33.20 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=old page=1663203 ok=1 total_rows=31023103 months=12 hits=12 deltas=0 method=old-offset request_ms=49.77 steps=1 step_max_ms=40.96 step_p50_ms=40.96 step_p90_ms=40.96 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=0.92 page_work_ms=40.04 saves_during=1 save_max_ms_during=25.71 tick_gap_max_ms_during=25.78
+REQ deep next-4 impl=old page=1663204 ok=1 total_rows=31023104 months=12 hits=11 deltas=0 method=old-offset request_ms=79.60 steps=1 step_max_ms=79.46 step_p50_ms=79.46 step_p90_ms=79.46 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.16 page_work_ms=34.29 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-5 impl=old page=1663205 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=44.11 steps=1 step_max_ms=44.03 step_p50_ms=44.03 step_p90_ms=44.03 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.32 page_work_ms=42.71 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-6 impl=old page=1663206 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=38.45 steps=1 step_max_ms=38.33 step_p50_ms=38.33 step_p90_ms=38.33 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.94 page_work_ms=37.39 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=old page=1663207 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=46.01 steps=1 step_max_ms=45.86 step_p50_ms=45.86 step_p90_ms=45.86 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.49 page_work_ms=44.36 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=2.03
+REQ deep next-8 impl=old page=1663208 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=40.52 steps=1 step_max_ms=40.35 step_p50_ms=40.35 step_p90_ms=40.35 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.40 page_work_ms=38.95 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=old page=1663209 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=48.33 steps=1 step_max_ms=48.21 step_p50_ms=48.21 step_p90_ms=48.21 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.36 page_work_ms=46.85 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-10 impl=old page=1663210 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=43.95 steps=1 step_max_ms=43.79 step_p50_ms=43.79 step_p90_ms=43.79 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.48 page_work_ms=42.31 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-11 impl=old page=1663211 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=47.17 steps=1 step_max_ms=47.07 step_p50_ms=47.07 step_p90_ms=47.07 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.55 page_work_ms=45.52 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=old page=1663212 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=37.64 steps=1 step_max_ms=37.53 step_p50_ms=37.53 step_p90_ms=37.53 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.98 page_work_ms=36.56 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-13 impl=old page=1663213 ok=1 total_rows=31023104 months=12 hits=12 deltas=0 method=old-offset request_ms=35.35 steps=1 step_max_ms=35.24 step_p50_ms=35.24 step_p90_ms=35.24 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.35 page_work_ms=33.89 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-14 impl=old page=1663214 ok=1 total_rows=31023105 months=12 hits=11 deltas=0 method=old-offset request_ms=83.06 steps=1 step_max_ms=82.98 step_p50_ms=82.98 step_p90_ms=82.98 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=47.52 page_work_ms=35.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=old page=1663215 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=44.43 steps=1 step_max_ms=44.34 step_p50_ms=44.34 step_p90_ms=44.34 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=0.88 page_work_ms=43.46 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=old page=1663216 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=36.02 steps=1 step_max_ms=35.90 step_p50_ms=35.90 step_p90_ms=35.90 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.87 page_work_ms=35.02 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=old page=1663217 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=42.41 steps=1 step_max_ms=42.26 step_p50_ms=42.26 step_p90_ms=42.26 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=0.89 page_work_ms=41.37 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=old page=1663218 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=35.67 steps=1 step_max_ms=35.56 step_p50_ms=35.56 step_p90_ms=35.56 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.50 page_work_ms=34.06 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-19 impl=old page=1663219 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=46.53 steps=1 step_max_ms=46.39 step_p50_ms=46.39 step_p90_ms=46.39 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=2.32 page_work_ms=44.07 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-20 impl=old page=1663220 ok=1 total_rows=31023105 months=12 hits=12 deltas=0 method=old-offset request_ms=38.25 steps=1 step_max_ms=38.12 step_p50_ms=38.12 step_p90_ms=38.12 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.96 page_work_ms=37.16 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=old cold=0 save_every_ms=1000 measured_s=4.2 saves=5 save_max_ms=705.62 save_avg_ms=152.73 tick_gap_max_ms=705.66 steps=21 step_max_ms=705.42 step_p50_ms=43.79 step_p90_ms=82.98 steps_over_20ms=21 steps_over_40ms=14 request_max_ms=711.50
+CHECKS deep total=0 mismatches=0
+
+### last --save-ms 1000  impl=old  exit=0
+REQ last page-1 impl=old page=1 ok=1 total_rows=31023108 months=12 hits=0 deltas=0 method=old-offset request_ms=668.44 steps=1 step_max_ms=665.53 step_p50_ms=665.53 step_p90_ms=665.53 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=664.82 page_work_ms=0.71 saves_during=1 save_max_ms_during=660.62 tick_gap_max_ms_during=660.64
+REQ last last-page impl=old page=3102311 ok=1 total_rows=31023109 months=12 hits=11 deltas=0 method=old-offset request_ms=123.32 steps=1 step_max_ms=109.21 step_p50_ms=109.21 step_p90_ms=109.21 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.36 page_work_ms=63.85 saves_during=1 save_max_ms_during=84.13 tick_gap_max_ms_during=84.18
+SCENARIO last impl=old cold=0 save_every_ms=1000 measured_s=2.6 saves=3 save_max_ms=660.62 save_avg_ms=252.73 tick_gap_max_ms=660.64 steps=2 step_max_ms=665.53 step_p50_ms=665.53 step_p90_ms=665.53 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=668.44
+CHECKS last total=0 mismatches=0
+
+### long --save-ms 1000 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=old page=1 ok=1 total_rows=31023112 months=12 hits=0 deltas=0 method=old-offset request_ms=6881.29 steps=1 step_max_ms=6874.87 step_p50_ms=6874.87 step_p90_ms=6874.87 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6874.20 page_work_ms=0.67 saves_during=2 save_max_ms_during=6868.49 tick_gap_max_ms_during=6868.53
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023115 months=12 hits=11 deltas=0 method=old-offset request_ms=45.76 steps=1 step_max_ms=45.51 step_p50_ms=45.51 step_p90_ms=45.51 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.88 page_work_ms=0.64 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=old cold=1 save_every_ms=1000 measured_s=8.7 saves=4 save_max_ms=6868.49 save_avg_ms=1719.66 tick_gap_max_ms=6868.53 steps=2 step_max_ms=6874.87 step_p50_ms=6874.87 step_p90_ms=6874.87 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6881.29
+CHECKS long total=0 mismatches=0
+
+### long --save-ms 1000 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=old page=1 ok=1 total_rows=31023117 months=12 hits=0 deltas=0 method=old-offset request_ms=6841.01 steps=1 step_max_ms=6833.87 step_p50_ms=6833.87 step_p90_ms=6833.87 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6833.04 page_work_ms=0.83 saves_during=2 save_max_ms_during=6828.99 tick_gap_max_ms_during=6829.03
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023120 months=12 hits=11 deltas=0 method=old-offset request_ms=45.91 steps=1 step_max_ms=45.67 step_p50_ms=45.67 step_p90_ms=45.67 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.98 page_work_ms=0.69 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO long impl=old cold=1 save_every_ms=1000 measured_s=8.7 saves=4 save_max_ms=6828.99 save_avg_ms=1710.55 tick_gap_max_ms=6829.03 steps=2 step_max_ms=6833.87 step_p50_ms=6833.87 step_p90_ms=6833.87 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6841.01
+CHECKS long total=0 mismatches=0
+
+### unbounded --save-ms 1000 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ unbounded first-load impl=old page=1 ok=1 total_rows=31023122 months=12 hits=0 deltas=0 method=old-offset request_ms=6895.57 steps=1 step_max_ms=6889.06 step_p50_ms=6889.06 step_p90_ms=6889.06 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6888.29 page_work_ms=0.77 saves_during=2 save_max_ms_during=6879.97 tick_gap_max_ms_during=6880.01
+SCENARIO unbounded impl=old cold=1 save_every_ms=1000 measured_s=8.4 saves=4 save_max_ms=6879.97 save_avg_ms=1722.90 tick_gap_max_ms=6880.01 steps=1 step_max_ms=6889.06 step_p50_ms=6889.06 step_p90_ms=6889.06 steps_over_20ms=1 steps_over_40ms=1 request_max_ms=6895.57
+CHECKS unbounded total=0 mismatches=0
+
+### deep --save-ms 1000 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ deep jump-middle impl=old page=1663200 ok=1 total_rows=31023127 months=12 hits=0 deltas=0 method=old-offset request_ms=6884.20 steps=1 step_max_ms=6876.60 step_p50_ms=6876.60 step_p90_ms=6876.60 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6844.46 page_work_ms=32.13 saves_during=2 save_max_ms_during=6868.89 tick_gap_max_ms_during=6868.94
+REQ deep next-1 impl=old page=1663201 ok=1 total_rows=31023129 months=12 hits=11 deltas=0 method=old-offset request_ms=76.57 steps=1 step_max_ms=76.47 step_p50_ms=76.47 step_p90_ms=76.47 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=43.73 page_work_ms=32.74 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-2 impl=old page=1663202 ok=1 total_rows=31023130 months=12 hits=11 deltas=0 method=old-offset request_ms=77.50 steps=1 step_max_ms=77.42 step_p50_ms=77.42 step_p90_ms=77.42 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.39 page_work_ms=33.02 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-3 impl=old page=1663203 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=35.76 steps=1 step_max_ms=35.59 step_p50_ms=35.59 step_p90_ms=35.59 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=2.33 page_work_ms=33.26 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-4 impl=old page=1663204 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=36.08 steps=1 step_max_ms=35.97 step_p50_ms=35.97 step_p90_ms=35.97 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.90 page_work_ms=35.07 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-5 impl=old page=1663205 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=34.56 steps=1 step_max_ms=34.43 step_p50_ms=34.43 step_p90_ms=34.43 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.52 page_work_ms=32.91 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-6 impl=old page=1663206 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=37.84 steps=1 step_max_ms=37.71 step_p50_ms=37.71 step_p90_ms=37.71 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=36.80 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-7 impl=old page=1663207 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=34.54 steps=1 step_max_ms=34.37 step_p50_ms=34.37 step_p90_ms=34.37 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.94 page_work_ms=33.43 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-8 impl=old page=1663208 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=35.25 steps=1 step_max_ms=35.17 step_p50_ms=35.17 step_p90_ms=35.17 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.90 page_work_ms=34.28 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-9 impl=old page=1663209 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=34.71 steps=1 step_max_ms=34.62 step_p50_ms=34.62 step_p90_ms=34.62 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.21 page_work_ms=33.41 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-10 impl=old page=1663210 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=40.28 steps=1 step_max_ms=40.15 step_p50_ms=40.15 step_p90_ms=40.15 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.27 page_work_ms=38.89 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-11 impl=old page=1663211 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=36.97 steps=1 step_max_ms=36.84 step_p50_ms=36.84 step_p90_ms=36.84 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.97 page_work_ms=35.87 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-12 impl=old page=1663212 ok=1 total_rows=31023130 months=12 hits=12 deltas=0 method=old-offset request_ms=36.89 steps=1 step_max_ms=36.67 step_p50_ms=36.67 step_p90_ms=36.67 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.45 page_work_ms=35.21 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-13 impl=old page=1663213 ok=1 total_rows=31023131 months=12 hits=11 deltas=0 method=old-offset request_ms=86.55 steps=1 step_max_ms=86.43 step_p50_ms=86.43 step_p90_ms=86.43 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=50.28 page_work_ms=36.14 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-14 impl=old page=1663214 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=44.75 steps=1 step_max_ms=44.68 step_p50_ms=44.68 step_p90_ms=44.68 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=1.51 page_work_ms=43.17 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-15 impl=old page=1663215 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=35.09 steps=1 step_max_ms=35.01 step_p50_ms=35.01 step_p90_ms=35.01 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.87 page_work_ms=34.14 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-16 impl=old page=1663216 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=34.83 steps=1 step_max_ms=34.71 step_p50_ms=34.71 step_p90_ms=34.71 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.28 page_work_ms=33.44 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-17 impl=old page=1663217 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=35.74 steps=1 step_max_ms=35.67 step_p50_ms=35.67 step_p90_ms=35.67 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.32 page_work_ms=34.35 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-18 impl=old page=1663218 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=34.38 steps=1 step_max_ms=34.25 step_p50_ms=34.25 step_p90_ms=34.25 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.91 page_work_ms=33.34 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+REQ deep next-19 impl=old page=1663219 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=35.27 steps=1 step_max_ms=35.00 step_p50_ms=35.00 step_p90_ms=35.00 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=0.97 page_work_ms=34.03 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=2.16
+REQ deep next-20 impl=old page=1663220 ok=1 total_rows=31023131 months=12 hits=12 deltas=0 method=old-offset request_ms=34.42 steps=1 step_max_ms=34.34 step_p50_ms=34.34 step_p90_ms=34.34 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=0 count_work_ms=1.11 page_work_ms=33.23 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO deep impl=old cold=1 save_every_ms=1000 measured_s=10.2 saves=6 save_max_ms=6868.89 save_avg_ms=1147.66 tick_gap_max_ms=6868.94 steps=21 step_max_ms=6876.60 step_p50_ms=35.67 step_p90_ms=77.42 steps_over_20ms=21 steps_over_40ms=6 request_max_ms=6884.20
+CHECKS deep total=0 mismatches=0
+
+### last --save-ms 1000 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ last page-1 impl=old page=1 ok=1 total_rows=31023134 months=12 hits=0 deltas=0 method=old-offset request_ms=6865.35 steps=1 step_max_ms=6858.75 step_p50_ms=6858.75 step_p90_ms=6858.75 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6858.04 page_work_ms=0.70 saves_during=2 save_max_ms_during=6846.70 tick_gap_max_ms_during=6847.71
+REQ last last-page impl=old page=3102314 ok=1 total_rows=31023137 months=12 hits=11 deltas=0 method=old-offset request_ms=108.86 steps=1 step_max_ms=108.71 step_p50_ms=108.71 step_p90_ms=108.71 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.75 page_work_ms=61.95 saves_during=0 save_max_ms_during=0.00 tick_gap_max_ms_during=0.00
+SCENARIO last impl=old cold=1 save_every_ms=1000 measured_s=8.8 saves=4 save_max_ms=6846.70 save_avg_ms=1714.89 tick_gap_max_ms=6847.71 steps=2 step_max_ms=6858.75 step_p50_ms=6858.75 step_p90_ms=6858.75 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6865.35
+CHECKS last total=0 mismatches=0
+
+### long --save-ms 20  impl=old  exit=0
+REQ long first-load impl=old page=1 ok=1 total_rows=31023237 months=12 hits=0 deltas=0 method=old-offset request_ms=690.51 steps=1 step_max_ms=673.73 step_p50_ms=673.73 step_p90_ms=673.73 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=673.08 page_work_ms=0.65 saves_during=2 save_max_ms_during=683.50 tick_gap_max_ms_during=685.08
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023254 months=12 hits=11 deltas=0 method=old-offset request_ms=56.11 steps=1 step_max_ms=50.65 step_p50_ms=50.65 step_p90_ms=50.65 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=49.87 page_work_ms=0.79 saves_during=2 save_max_ms_during=41.43 tick_gap_max_ms_during=42.50
+SCENARIO long impl=old cold=0 save_every_ms=20 measured_s=2.5 saves=94 save_max_ms=683.50 save_avg_ms=10.85 tick_gap_max_ms=685.08 steps=2 step_max_ms=673.73 step_p50_ms=673.73 step_p90_ms=673.73 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=690.51
+CHECKS long total=0 mismatches=0
+
+### long --save-ms 20  impl=old  exit=0
+REQ long first-load impl=old page=1 ok=1 total_rows=31023430 months=12 hits=0 deltas=0 method=old-offset request_ms=693.51 steps=1 step_max_ms=674.13 step_p50_ms=674.13 step_p90_ms=674.13 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=673.47 page_work_ms=0.65 saves_during=2 save_max_ms_during=675.97 tick_gap_max_ms_during=677.02
+REQ long again-cached impl=old page=1 ok=1 total_rows=31023448 months=12 hits=11 deltas=0 method=old-offset request_ms=56.12 steps=1 step_max_ms=46.87 step_p50_ms=46.87 step_p90_ms=46.87 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.25 page_work_ms=0.62 saves_during=2 save_max_ms_during=34.43 tick_gap_max_ms_during=35.40
+SCENARIO long impl=old cold=0 save_every_ms=20 measured_s=2.6 saves=95 save_max_ms=675.97 save_avg_ms=10.55 tick_gap_max_ms=677.02 steps=2 step_max_ms=674.13 step_p50_ms=674.13 step_p90_ms=674.13 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=693.51
+CHECKS long total=0 mismatches=0
+
+### unbounded --save-ms 20  impl=old  exit=0
+REQ unbounded first-load impl=old page=1 ok=1 total_rows=31023624 months=12 hits=0 deltas=0 method=old-offset request_ms=675.51 steps=1 step_max_ms=669.58 step_p50_ms=669.58 step_p90_ms=669.58 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=668.86 page_work_ms=0.72 saves_during=2 save_max_ms_during=660.59 tick_gap_max_ms_during=660.63
+SCENARIO unbounded impl=old cold=0 save_every_ms=20 measured_s=2.2 saves=77 save_max_ms=660.59 save_avg_ms=11.70 tick_gap_max_ms=660.63 steps=1 step_max_ms=669.58 step_p50_ms=669.58 step_p90_ms=669.58 steps_over_20ms=1 steps_over_40ms=1 request_max_ms=675.51
+CHECKS unbounded total=0 mismatches=0
+
+### deep --save-ms 20  impl=old  exit=0
+REQ deep jump-middle impl=old page=1663200 ok=1 total_rows=31023800 months=12 hits=0 deltas=0 method=old-offset request_ms=709.12 steps=1 step_max_ms=702.76 step_p50_ms=702.76 step_p90_ms=702.76 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=671.26 page_work_ms=31.50 saves_during=2 save_max_ms_during=694.08 tick_gap_max_ms_during=694.12
+REQ deep next-1 impl=old page=1663201 ok=1 total_rows=31023805 months=12 hits=11 deltas=0 method=old-offset request_ms=83.82 steps=1 step_max_ms=77.76 step_p50_ms=77.76 step_p90_ms=77.76 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.57 page_work_ms=33.18 saves_during=2 save_max_ms_during=67.62 tick_gap_max_ms_during=67.64
+REQ deep next-2 impl=old page=1663202 ok=1 total_rows=31023810 months=12 hits=11 deltas=0 method=old-offset request_ms=84.30 steps=1 step_max_ms=78.82 step_p50_ms=78.82 step_p90_ms=78.82 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.96 page_work_ms=33.86 saves_during=2 save_max_ms_during=64.36 tick_gap_max_ms_during=64.39
+REQ deep next-3 impl=old page=1663203 ok=1 total_rows=31023814 months=12 hits=11 deltas=0 method=old-offset request_ms=89.85 steps=1 step_max_ms=83.39 step_p50_ms=83.39 step_p90_ms=83.39 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.82 page_work_ms=36.57 saves_during=2 save_max_ms_during=84.72 tick_gap_max_ms_during=84.76
+REQ deep next-4 impl=old page=1663204 ok=1 total_rows=31023818 months=12 hits=11 deltas=0 method=old-offset request_ms=84.82 steps=1 step_max_ms=76.84 step_p50_ms=76.84 step_p90_ms=76.84 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.02 page_work_ms=32.82 saves_during=2 save_max_ms_during=77.18 tick_gap_max_ms_during=77.23
+REQ deep next-5 impl=old page=1663205 ok=1 total_rows=31023823 months=12 hits=11 deltas=0 method=old-offset request_ms=87.51 steps=1 step_max_ms=81.05 step_p50_ms=81.05 step_p90_ms=81.05 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=48.22 page_work_ms=32.83 saves_during=2 save_max_ms_during=75.50 tick_gap_max_ms_during=75.53
+REQ deep next-6 impl=old page=1663206 ok=1 total_rows=31023828 months=12 hits=11 deltas=0 method=old-offset request_ms=82.15 steps=1 step_max_ms=77.08 step_p50_ms=77.08 step_p90_ms=77.08 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.02 page_work_ms=33.06 saves_during=2 save_max_ms_during=69.35 tick_gap_max_ms_during=69.39
+REQ deep next-7 impl=old page=1663207 ok=1 total_rows=31023833 months=12 hits=11 deltas=0 method=old-offset request_ms=94.59 steps=1 step_max_ms=89.40 step_p50_ms=89.40 step_p90_ms=89.40 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=55.18 page_work_ms=34.22 saves_during=2 save_max_ms_during=75.36 tick_gap_max_ms_during=75.40
+REQ deep next-8 impl=old page=1663208 ok=1 total_rows=31023838 months=12 hits=11 deltas=0 method=old-offset request_ms=95.01 steps=1 step_max_ms=88.22 step_p50_ms=88.22 step_p90_ms=88.22 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.82 page_work_ms=43.40 saves_during=2 save_max_ms_during=79.45 tick_gap_max_ms_during=79.49
+REQ deep next-9 impl=old page=1663209 ok=1 total_rows=31023843 months=12 hits=11 deltas=0 method=old-offset request_ms=96.92 steps=1 step_max_ms=89.76 step_p50_ms=89.76 step_p90_ms=89.76 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=54.20 page_work_ms=35.56 saves_during=2 save_max_ms_during=87.22 tick_gap_max_ms_during=87.28
+REQ deep next-10 impl=old page=1663210 ok=1 total_rows=31023848 months=12 hits=11 deltas=0 method=old-offset request_ms=85.97 steps=1 step_max_ms=79.28 step_p50_ms=79.28 step_p90_ms=79.28 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.16 page_work_ms=34.12 saves_during=2 save_max_ms_during=65.95 tick_gap_max_ms_during=66.02
+REQ deep next-11 impl=old page=1663211 ok=1 total_rows=31023852 months=12 hits=11 deltas=0 method=old-offset request_ms=86.23 steps=1 step_max_ms=77.59 step_p50_ms=77.59 step_p90_ms=77.59 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.61 page_work_ms=32.98 saves_during=2 save_max_ms_during=80.98 tick_gap_max_ms_during=81.04
+REQ deep next-12 impl=old page=1663212 ok=1 total_rows=31023856 months=12 hits=11 deltas=0 method=old-offset request_ms=93.02 steps=1 step_max_ms=84.76 step_p50_ms=84.76 step_p90_ms=84.76 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=48.20 page_work_ms=36.57 saves_during=2 save_max_ms_during=84.37 tick_gap_max_ms_during=84.41
+REQ deep next-13 impl=old page=1663213 ok=1 total_rows=31023860 months=12 hits=11 deltas=0 method=old-offset request_ms=104.23 steps=1 step_max_ms=86.22 step_p50_ms=86.22 step_p90_ms=86.22 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.20 page_work_ms=40.01 saves_during=2 save_max_ms_during=96.38 tick_gap_max_ms_during=96.41
+REQ deep next-14 impl=old page=1663214 ok=1 total_rows=31023865 months=12 hits=11 deltas=0 method=old-offset request_ms=89.14 steps=1 step_max_ms=79.91 step_p50_ms=79.91 step_p90_ms=79.91 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.21 page_work_ms=35.71 saves_during=2 save_max_ms_during=77.41 tick_gap_max_ms_during=77.49
+REQ deep next-15 impl=old page=1663215 ok=1 total_rows=31023870 months=12 hits=11 deltas=0 method=old-offset request_ms=86.01 steps=1 step_max_ms=79.77 step_p50_ms=79.77 step_p90_ms=79.77 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.02 page_work_ms=34.75 saves_during=2 save_max_ms_during=74.83 tick_gap_max_ms_during=74.89
+REQ deep next-16 impl=old page=1663216 ok=1 total_rows=31023875 months=12 hits=11 deltas=0 method=old-offset request_ms=84.05 steps=1 step_max_ms=77.88 step_p50_ms=77.88 step_p90_ms=77.88 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.69 page_work_ms=33.20 saves_during=2 save_max_ms_during=68.98 tick_gap_max_ms_during=69.03
+REQ deep next-17 impl=old page=1663217 ok=1 total_rows=31023880 months=12 hits=11 deltas=0 method=old-offset request_ms=92.34 steps=1 step_max_ms=82.64 step_p50_ms=82.64 step_p90_ms=82.64 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=48.20 page_work_ms=34.44 saves_during=2 save_max_ms_during=70.36 tick_gap_max_ms_during=70.43
+REQ deep next-18 impl=old page=1663218 ok=1 total_rows=31023885 months=12 hits=11 deltas=0 method=old-offset request_ms=88.08 steps=1 step_max_ms=79.62 step_p50_ms=79.62 step_p90_ms=79.62 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.17 page_work_ms=33.46 saves_during=2 save_max_ms_during=69.19 tick_gap_max_ms_during=69.29
+REQ deep next-19 impl=old page=1663219 ok=1 total_rows=31023890 months=12 hits=11 deltas=0 method=old-offset request_ms=84.46 steps=1 step_max_ms=78.16 step_p50_ms=78.16 step_p90_ms=78.16 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.03 page_work_ms=33.12 saves_during=2 save_max_ms_during=65.51 tick_gap_max_ms_during=65.55
+REQ deep next-20 impl=old page=1663220 ok=1 total_rows=31023894 months=12 hits=11 deltas=0 method=old-offset request_ms=84.52 steps=1 step_max_ms=77.18 step_p50_ms=77.18 step_p90_ms=77.18 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.28 page_work_ms=32.91 saves_during=2 save_max_ms_during=78.85 tick_gap_max_ms_during=78.90
+SCENARIO deep impl=old cold=0 save_every_ms=20 measured_s=5.0 saves=172 save_max_ms=694.08 save_avg_ms=15.63 tick_gap_max_ms=694.12 steps=21 step_max_ms=702.76 step_p50_ms=79.77 step_p90_ms=89.40 steps_over_20ms=21 steps_over_40ms=21 request_max_ms=709.12
+CHECKS deep total=0 mismatches=0
+
+### last --save-ms 20  impl=old  exit=0
+REQ last page-1 impl=old page=1 ok=1 total_rows=31024071 months=12 hits=0 deltas=0 method=old-offset request_ms=684.02 steps=1 step_max_ms=678.64 step_p50_ms=678.64 step_p90_ms=678.64 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=677.92 page_work_ms=0.71 saves_during=2 save_max_ms_during=680.57 tick_gap_max_ms_during=680.60
+REQ last last-page impl=old page=3102408 ok=1 total_rows=31024088 months=12 hits=11 deltas=0 method=old-offset request_ms=129.14 steps=1 step_max_ms=110.66 step_p50_ms=110.66 step_p90_ms=110.66 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=48.25 page_work_ms=62.41 saves_during=2 save_max_ms_during=107.12 tick_gap_max_ms_during=107.16
+SCENARIO last impl=old cold=0 save_every_ms=20 measured_s=2.6 saves=94 save_max_ms=680.57 save_avg_ms=11.50 tick_gap_max_ms=680.60 steps=2 step_max_ms=678.64 step_p50_ms=678.64 step_p90_ms=678.64 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=684.02
+CHECKS last total=0 mismatches=0
+
+### long --save-ms 20 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=old page=1 ok=1 total_rows=31024264 months=12 hits=0 deltas=0 method=old-offset request_ms=6880.91 steps=1 step_max_ms=6874.87 step_p50_ms=6874.87 step_p90_ms=6874.87 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6874.21 page_work_ms=0.66 saves_during=2 save_max_ms_during=6875.58 tick_gap_max_ms_during=6875.62
+REQ long again-cached impl=old page=1 ok=1 total_rows=31024281 months=12 hits=11 deltas=0 method=old-offset request_ms=53.62 steps=1 step_max_ms=46.62 step_p50_ms=46.62 step_p90_ms=46.62 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.01 page_work_ms=0.61 saves_during=2 save_max_ms_during=48.15 tick_gap_max_ms_during=48.21
+SCENARIO long impl=old cold=1 save_every_ms=20 measured_s=8.7 saves=94 save_max_ms=6875.58 save_avg_ms=76.66 tick_gap_max_ms=6875.62 steps=2 step_max_ms=6874.87 step_p50_ms=6874.87 step_p90_ms=6874.87 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6880.91
+CHECKS long total=0 mismatches=0
+
+### long --save-ms 20 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ long first-load impl=old page=1 ok=1 total_rows=31024457 months=12 hits=0 deltas=0 method=old-offset request_ms=6910.92 steps=1 step_max_ms=6904.90 step_p50_ms=6904.90 step_p90_ms=6904.90 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6904.06 page_work_ms=0.84 saves_during=2 save_max_ms_during=6904.42 tick_gap_max_ms_during=6904.55
+REQ long again-cached impl=old page=1 ok=1 total_rows=31024474 months=12 hits=11 deltas=0 method=old-offset request_ms=52.54 steps=1 step_max_ms=45.90 step_p50_ms=45.90 step_p90_ms=45.90 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.23 page_work_ms=0.68 saves_during=2 save_max_ms_during=38.43 tick_gap_max_ms_during=38.50
+SCENARIO long impl=old cold=1 save_every_ms=20 measured_s=8.8 saves=95 save_max_ms=6904.42 save_avg_ms=76.20 tick_gap_max_ms=6904.55 steps=2 step_max_ms=6904.90 step_p50_ms=6904.90 step_p90_ms=6904.90 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6910.92
+CHECKS long total=0 mismatches=0
+
+### unbounded --save-ms 20 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ unbounded first-load impl=old page=1 ok=1 total_rows=31024651 months=12 hits=0 deltas=0 method=old-offset request_ms=6930.16 steps=1 step_max_ms=6924.54 step_p50_ms=6924.54 step_p90_ms=6924.54 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6923.89 page_work_ms=0.65 saves_during=2 save_max_ms_during=6918.61 tick_gap_max_ms_during=6918.66
+SCENARIO unbounded impl=old cold=1 save_every_ms=20 measured_s=8.4 saves=78 save_max_ms=6918.61 save_avg_ms=91.77 tick_gap_max_ms=6918.66 steps=1 step_max_ms=6924.54 step_p50_ms=6924.54 step_p90_ms=6924.54 steps_over_20ms=1 steps_over_40ms=1 request_max_ms=6930.16
+CHECKS unbounded total=0 mismatches=0
+
+### deep --save-ms 20 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ deep jump-middle impl=old page=1663200 ok=1 total_rows=31024828 months=12 hits=0 deltas=0 method=old-offset request_ms=6954.52 steps=1 step_max_ms=6947.21 step_p50_ms=6947.21 step_p90_ms=6947.21 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6914.44 page_work_ms=32.77 saves_during=2 save_max_ms_during=6936.79 tick_gap_max_ms_during=6936.83
+REQ deep next-1 impl=old page=1663201 ok=1 total_rows=31024833 months=12 hits=11 deltas=0 method=old-offset request_ms=89.30 steps=1 step_max_ms=81.85 step_p50_ms=81.85 step_p90_ms=81.85 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=47.30 page_work_ms=34.55 saves_during=2 save_max_ms_during=77.30 tick_gap_max_ms_during=77.34
+REQ deep next-2 impl=old page=1663202 ok=1 total_rows=31024838 months=12 hits=11 deltas=0 method=old-offset request_ms=85.48 steps=1 step_max_ms=79.17 step_p50_ms=79.17 step_p90_ms=79.17 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.19 page_work_ms=32.98 saves_during=2 save_max_ms_during=73.90 tick_gap_max_ms_during=73.94
+REQ deep next-3 impl=old page=1663203 ok=1 total_rows=31024843 months=12 hits=11 deltas=0 method=old-offset request_ms=83.36 steps=1 step_max_ms=76.42 step_p50_ms=76.42 step_p90_ms=76.42 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=43.81 page_work_ms=32.61 saves_during=2 save_max_ms_during=64.93 tick_gap_max_ms_during=64.98
+REQ deep next-4 impl=old page=1663204 ok=1 total_rows=31024847 months=12 hits=11 deltas=0 method=old-offset request_ms=85.02 steps=1 step_max_ms=79.26 step_p50_ms=79.26 step_p90_ms=79.26 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.53 page_work_ms=33.73 saves_during=2 save_max_ms_during=81.30 tick_gap_max_ms_during=81.33
+REQ deep next-5 impl=old page=1663205 ok=1 total_rows=31024851 months=12 hits=11 deltas=0 method=old-offset request_ms=90.74 steps=1 step_max_ms=85.04 step_p50_ms=85.04 step_p90_ms=85.04 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=51.54 page_work_ms=33.50 saves_during=2 save_max_ms_during=82.36 tick_gap_max_ms_during=82.39
+REQ deep next-6 impl=old page=1663206 ok=1 total_rows=31024855 months=12 hits=11 deltas=0 method=old-offset request_ms=86.58 steps=1 step_max_ms=80.88 step_p50_ms=80.88 step_p90_ms=80.88 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=47.19 page_work_ms=33.69 saves_during=2 save_max_ms_during=78.42 tick_gap_max_ms_during=78.45
+REQ deep next-7 impl=old page=1663207 ok=1 total_rows=31024860 months=12 hits=11 deltas=0 method=old-offset request_ms=85.51 steps=1 step_max_ms=79.68 step_p50_ms=79.68 step_p90_ms=79.68 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.56 page_work_ms=34.12 saves_during=2 save_max_ms_during=74.50 tick_gap_max_ms_during=74.53
+REQ deep next-8 impl=old page=1663208 ok=1 total_rows=31024865 months=12 hits=11 deltas=0 method=old-offset request_ms=87.74 steps=1 step_max_ms=79.41 step_p50_ms=79.41 step_p90_ms=79.41 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.17 page_work_ms=34.24 saves_during=2 save_max_ms_during=72.17 tick_gap_max_ms_during=72.21
+REQ deep next-9 impl=old page=1663209 ok=1 total_rows=31024870 months=12 hits=11 deltas=0 method=old-offset request_ms=92.72 steps=1 step_max_ms=86.22 step_p50_ms=86.22 step_p90_ms=86.22 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=53.06 page_work_ms=33.16 saves_during=2 save_max_ms_during=76.20 tick_gap_max_ms_during=76.25
+REQ deep next-10 impl=old page=1663210 ok=1 total_rows=31024875 months=12 hits=11 deltas=0 method=old-offset request_ms=101.90 steps=1 step_max_ms=95.49 step_p50_ms=95.49 step_p90_ms=95.49 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=49.30 page_work_ms=46.19 saves_during=2 save_max_ms_during=88.91 tick_gap_max_ms_during=88.94
+REQ deep next-11 impl=old page=1663211 ok=1 total_rows=31024880 months=12 hits=11 deltas=0 method=old-offset request_ms=87.74 steps=1 step_max_ms=79.00 step_p50_ms=79.00 step_p90_ms=79.00 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.14 page_work_ms=33.86 saves_during=2 save_max_ms_during=67.06 tick_gap_max_ms_during=67.13
+REQ deep next-12 impl=old page=1663212 ok=1 total_rows=31024885 months=12 hits=11 deltas=0 method=old-offset request_ms=85.64 steps=1 step_max_ms=79.10 step_p50_ms=79.10 step_p90_ms=79.10 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.57 page_work_ms=33.53 saves_during=2 save_max_ms_during=65.65 tick_gap_max_ms_during=65.69
+REQ deep next-13 impl=old page=1663213 ok=1 total_rows=31024889 months=12 hits=11 deltas=0 method=old-offset request_ms=87.99 steps=1 step_max_ms=81.83 step_p50_ms=81.83 step_p90_ms=81.83 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=46.28 page_work_ms=35.55 saves_during=2 save_max_ms_during=85.05 tick_gap_max_ms_during=85.08
+REQ deep next-14 impl=old page=1663214 ok=1 total_rows=31024893 months=12 hits=11 deltas=0 method=old-offset request_ms=87.65 steps=1 step_max_ms=78.77 step_p50_ms=78.77 step_p90_ms=78.77 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.55 page_work_ms=33.22 saves_during=2 save_max_ms_during=82.22 tick_gap_max_ms_during=82.27
+REQ deep next-15 impl=old page=1663215 ok=1 total_rows=31024897 months=12 hits=11 deltas=0 method=old-offset request_ms=88.18 steps=1 step_max_ms=80.43 step_p50_ms=80.43 step_p90_ms=80.43 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=47.06 page_work_ms=33.38 saves_during=2 save_max_ms_during=80.23 tick_gap_max_ms_during=80.29
+REQ deep next-16 impl=old page=1663216 ok=1 total_rows=31024901 months=12 hits=11 deltas=0 method=old-offset request_ms=84.98 steps=1 step_max_ms=76.86 step_p50_ms=76.86 step_p90_ms=76.86 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=43.94 page_work_ms=32.92 saves_during=2 save_max_ms_during=74.11 tick_gap_max_ms_during=74.18
+REQ deep next-17 impl=old page=1663217 ok=1 total_rows=31024906 months=12 hits=11 deltas=0 method=old-offset request_ms=85.92 steps=1 step_max_ms=77.60 step_p50_ms=77.60 step_p90_ms=77.60 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.49 page_work_ms=33.11 saves_during=2 save_max_ms_during=70.77 tick_gap_max_ms_during=70.83
+REQ deep next-18 impl=old page=1663218 ok=1 total_rows=31024911 months=12 hits=11 deltas=0 method=old-offset request_ms=88.10 steps=1 step_max_ms=79.40 step_p50_ms=79.40 step_p90_ms=79.40 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.03 page_work_ms=35.36 saves_during=2 save_max_ms_during=69.43 tick_gap_max_ms_during=69.48
+REQ deep next-19 impl=old page=1663219 ok=1 total_rows=31024916 months=12 hits=11 deltas=0 method=old-offset request_ms=86.75 steps=1 step_max_ms=77.74 step_p50_ms=77.74 step_p90_ms=77.74 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=44.86 page_work_ms=32.88 saves_during=2 save_max_ms_during=65.64 tick_gap_max_ms_during=65.75
+REQ deep next-20 impl=old page=1663220 ok=1 total_rows=31024921 months=12 hits=11 deltas=0 method=old-offset request_ms=87.40 steps=1 step_max_ms=79.93 step_p50_ms=79.93 step_p90_ms=79.93 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=47.01 page_work_ms=32.93 saves_during=2 save_max_ms_during=66.99 tick_gap_max_ms_during=67.05
+SCENARIO deep impl=old cold=1 save_every_ms=20 measured_s=11.2 saves=170 save_max_ms=6936.79 save_avg_ms=52.42 tick_gap_max_ms=6936.83 steps=21 step_max_ms=6947.21 step_p50_ms=79.41 step_p90_ms=86.22 steps_over_20ms=21 steps_over_40ms=21 request_max_ms=6954.52
+CHECKS deep total=0 mismatches=0
+
+### last --save-ms 20 --cold  impl=old  exit=0
+PURGE file cache of 12 month files (FILE_FLAG_NO_BUFFERING open)
+REQ last page-1 impl=old page=1 ok=1 total_rows=31025097 months=12 hits=0 deltas=0 method=old-offset request_ms=6875.33 steps=1 step_max_ms=6868.98 step_p50_ms=6868.98 step_p90_ms=6868.98 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=6868.34 page_work_ms=0.63 saves_during=2 save_max_ms_during=6870.90 tick_gap_max_ms_during=6871.97
+REQ last last-page impl=old page=3102510 ok=1 total_rows=31025114 months=12 hits=11 deltas=0 method=old-offset request_ms=114.03 steps=1 step_max_ms=108.27 step_p50_ms=108.27 step_p90_ms=108.27 steps_over_10ms=1 steps_over_20ms=1 steps_over_40ms=1 count_work_ms=45.33 page_work_ms=62.94 saves_during=2 save_max_ms_during=104.33 tick_gap_max_ms_during=105.31
+SCENARIO last impl=old cold=1 save_every_ms=20 measured_s=8.8 saves=94 save_max_ms=6870.90 save_avg_ms=77.43 tick_gap_max_ms=6871.97 steps=2 step_max_ms=6868.98 step_p50_ms=6868.98 step_p90_ms=6868.98 steps_over_20ms=2 steps_over_40ms=2 request_max_ms=6875.33
+CHECKS last total=0 mismatches=0

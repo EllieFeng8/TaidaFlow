@@ -405,6 +405,14 @@ void Core::applyHistoryPage(const SensorHistoryPageResult &result)
                        .arg(roundTripMs, 0, 'f', 2)
                        .arg(result.months)
                        .arg(result.countCacheHits);
+    // w2-045: the request ran as queued steps on the SqlManager thread.
+    qInfo().noquote()
+            << QStringLiteral("[History] #%1 steps: %2 (longest %3 ms), %4 count(s) updated by new rows, page read %5.")
+                       .arg(result.requestId)
+                       .arg(result.steps)
+                       .arg(result.maxStepMs, 0, 'f', 2)
+                       .arg(result.countCacheDeltas)
+                       .arg(result.pageMethod);
     m_proxy->setHistoryRecords(records);
 }
 

@@ -1,0 +1,13 @@
+sqlite 3.49.1; sensor_202603.sqlite: rows up to rowid 2678405, timestamps 1772294400 .. 1774972799
+snapshot MAX(rowid)                         0.02 ms  ['SEARCH sensor_data']
+chunk boundary DESC (first)                 1.17 ms  ['SEARCH sensor_data USING COVERING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+chunk boundary DESC (cursor, snapshot)      2.84 ms  ['SEARCH sensor_data USING COVERING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+chunk boundary ASC (cursor)                 2.30 ms  ['SEARCH sensor_data USING COVERING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+chunk remainder COUNT                       1.21 ms  ['SEARCH sensor_data USING COVERING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+cache delta COUNT (rowid range)             0.05 ms  ['SEARCH sensor_data USING INTEGER PRIMARY KEY (rowid>? AND rowid<?)']
+anchor delta COUNT (rowid range)            0.06 ms  ['SEARCH sensor_data USING INTEGER PRIMARY KEY (rowid>? AND rowid<?)']
+page OFFSET DESC                            0.74 ms  ['SEARCH sensor_data USING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+page OFFSET ASC (snapshot)                  0.99 ms  ['SEARCH sensor_data USING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+page keyset older-or-equal                  0.09 ms  ['SEARCH sensor_data USING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+page keyset newer                           0.08 ms  ['SEARCH sensor_data USING INDEX idx_sensor_data_ts (timestamp>? AND timestamp<?)']
+exit=0

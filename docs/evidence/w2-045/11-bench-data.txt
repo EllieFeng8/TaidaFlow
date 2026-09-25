@@ -1,0 +1,31 @@
+free disk space on D:: 508.4 GiB
+built sensor_202510.sqlite in 5 s
+built sensor_202511.sqlite in 5 s
+built sensor_202512.sqlite in 5 s
+built sensor_202601.sqlite in 5 s
+built sensor_202602.sqlite in 4 s
+built sensor_202603.sqlite in 5 s
+built sensor_202604.sqlite in 5 s
+built sensor_202605.sqlite in 5 s
+built sensor_202606.sqlite in 5 s
+built sensor_202607.sqlite in 5 s
+built sensor_202608.sqlite in 5 s
+built sensor_202609.sqlite in 4 s
+sensor_202510.sqlite: rows=2678405 min=1759248000 max=1761926399 max_rowid=2678405 size=618823680 journal=delete
+sensor_202511.sqlite: rows=2592005 min=1761926400 max=1764518399 max_rowid=2592005 size=598859776 journal=delete
+sensor_202512.sqlite: rows=2678405 min=1764518400 max=1767196799 max_rowid=2678405 size=618823680 journal=delete
+sensor_202601.sqlite: rows=2678405 min=1767196800 max=1769875199 max_rowid=2678405 size=618823680 journal=delete
+sensor_202602.sqlite: rows=2419205 min=1769875200 max=1772294399 max_rowid=2419205 size=558927872 journal=delete
+sensor_202603.sqlite: rows=2678405 min=1772294400 max=1774972799 max_rowid=2678405 size=618823680 journal=delete
+sensor_202604.sqlite: rows=2592005 min=1774972800 max=1777564799 max_rowid=2592005 size=598859776 journal=delete
+sensor_202605.sqlite: rows=2678405 min=1777564800 max=1780243199 max_rowid=2678405 size=618823680 journal=delete
+sensor_202606.sqlite: rows=2592005 min=1780243200 max=1782835199 max_rowid=2592005 size=598859776 journal=delete
+sensor_202607.sqlite: rows=2678405 min=1782835200 max=1785513599 max_rowid=2678405 size=618823680 journal=delete
+sensor_202608.sqlite: rows=2678405 min=1785513600 max=1788191999 max_rowid=2678405 size=618823680 journal=delete
+sensor_202609.sqlite: rows=2073605 min=1788192000 max=1790265599 max_rowid=2073605 size=479064064 journal=delete
+total rows=31017660; range 1759248000 .. 1790265599 s
+free disk space after: 501.7 GiB
+
+real	0m58.348s
+user	0m0.030s
+sys	0m0.000s

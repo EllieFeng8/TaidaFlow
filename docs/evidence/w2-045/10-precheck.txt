@@ -1,0 +1,6 @@
+﻿w2-045 pre-check / environment (2026-09-25T18:49:18)
+drive D: free 501.1 GiB (before the bench: 508.4 GiB, see 11-bench-data.txt), used 1361.9 GiB
+bench data build\w2-045-bench\data: 12 month files, 6.68 GiB (plan: 12 months because the disk had > 500 GiB free)
+RAM total 63.4 GiB, free now 25.9 GiB (the 6.7 GiB bench fits in the file cache: 'hot' runs are really hot; 'cold' runs purge the files first)
+cold-cache method check (scratch test, sensor_202608 of the w2-041 bench): random 4 KiB reads 3.2-3.6 us/read before, 60.0 us/read right after opening the file once with FILE_FLAG_NO_BUFFERING, 3.2 us/read again after that; with an SQLite handle kept open the purge had no effect, so every cold run is a new process that purges before SqlManager opens the files
+no TaidaFlowApp / simulator process was running; the desktop app was not started for this task (all measurements by QTest / w2045_bench with the real SqlManager)

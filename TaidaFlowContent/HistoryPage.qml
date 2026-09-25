@@ -26,7 +26,10 @@ Item {
 
     // Range convention shared with the Core (Core/TaidaFlowProxy.h): epoch ms,
     // both ends inclusive; 0 .. 8640000000000000 (largest JS Date value, finite
-    // so the mirror accepts it) = unbounded, i.e. "顯示全部" (all months).
+    // so the mirror accepts it) = unbounded (all months). This page no longer
+    // sends it (the former show-all button is now "顯示前一周", spec §2 revised
+    // 2026-09-25), but the Core still accepts it and older web pages / other
+    // clients may still request it, so the page must still recognise it.
     readonly property double unboundedFromMs: 0
     readonly property double unboundedToMs: 8640000000000000
 
@@ -108,7 +111,10 @@ Item {
     }
 
     // Show the range the Core is currently paging (historyRangeFromMs/ToMs) in
-    // the date fields. Unbounded ("顯示全部") leaves the fields empty.
+    // the date fields (e.g. "顯示前一周" -> 2026/09/19 .. 2026/09/25).
+    // Unbounded leaves the fields empty and rangeText() shows "全部": this page
+    // never requests it any more, but the range is shared by all clients and an
+    // older web page or another client may still send the unbounded range.
     function isUnboundedRange(fromMs, toMs) {
         return fromMs <= unboundedFromMs && toMs >= unboundedToMs
     }
@@ -162,13 +168,20 @@ Item {
         Td.historyCurrentPage = page
     }
 
-    // "顯示全部": unbounded range, all months (spec §2).
-    function showAllRecords() {
+    // "顯示前一周" (spec §2, revised 2026-09-25): the last 7 local calendar days
+    // including today, i.e. (today - 6 days) 00:00:00.000 .. today 23:59:59.999.
+    // Same day boundaries as applyFilter(); new Date(y, m, d +/- n) rolls over
+    // month/year ends and stays on local midnight across DST changes (no 24 h
+    // millisecond arithmetic).
+    function showLastWeek() {
         if (!Td.transportReady)
             return
 
         filterMessage = ""
-        Td.historyRangeRequested(unboundedFromMs, unboundedToMs)
+        var now = new Date()
+        var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
+        var endExclusive = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+        Td.historyRangeRequested(startDate.getTime(), endExclusive.getTime() - 1)
     }
 
     function formatCount(value) {
@@ -513,7 +526,7 @@ Item {
                 anchors.leftMargin: 24
                 anchors.right: parent.right
                 anchors.rightMargin: 24
-                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料；篩選可跨月，「顯示全部」為不限區間"
+                text: "日期格式：YYYY/MM/DD（例如：2026/09/24），結束日期包含當天全部資料；篩選可跨月，「顯示前一周」為今天往前 7 天（含今天）"
                 color: historyPage.mutedTextColor
                 font.pixelSize: 12
                 elide: Text.ElideRight
@@ -624,7 +637,7 @@ Item {
                 }
 
                 Button {
-                    id: allButton
+                    id: lastWeekButton
                     width: 110
                     height: 46
                     anchors.verticalCenter: parent.verticalCenter
@@ -634,21 +647,21 @@ Item {
 
                     background: Rectangle {
                         radius: 6
-                        color: !allButton.enabled ? "#16243A"
-                             : allButton.hovered ? "#223D5A" : "transparent"
-                        border.color: allButton.enabled ? dividerColor : "transparent"
+                        color: !lastWeekButton.enabled ? "#16243A"
+                             : lastWeekButton.hovered ? "#223D5A" : "transparent"
+                        border.color: lastWeekButton.enabled ? dividerColor : "transparent"
                         border.width: 1
                     }
 
                     contentItem: Text {
-                        text: "顯示全部"
-                        color: allButton.enabled ? root.textColor : "#536A80"
+                        text: "顯示前一周"
+                        color: lastWeekButton.enabled ? root.textColor : "#536A80"
                         font.pixelSize: 15
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
 
-                    onClicked: showAllRecords()
+                    onClicked: showLastWeek()
                 }
             }
 

@@ -1,0 +1,1 @@
+﻿build-wasm.bat wasm-release fresh exit=0  start=09/25/2026 23:01:15 end=09/25/2026 23:04:06

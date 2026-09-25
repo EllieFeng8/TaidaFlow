@@ -1,0 +1,64 @@
+﻿charset.txt: old=499 chars new=513 chars
+added (15): 三五今六只周四圖年或按擇曆至鐘
+  + U+4E09 三 CJK UNIFIED IDEOGRAPH-4E09
+  + U+4E94 五 CJK UNIFIED IDEOGRAPH-4E94
+  + U+4ECA 今 CJK UNIFIED IDEOGRAPH-4ECA
+  + U+516D 六 CJK UNIFIED IDEOGRAPH-516D
+  + U+53EA 只 CJK UNIFIED IDEOGRAPH-53EA
+  + U+5468 周 CJK UNIFIED IDEOGRAPH-5468
+  + U+56DB 四 CJK UNIFIED IDEOGRAPH-56DB
+  + U+5716 圖 CJK UNIFIED IDEOGRAPH-5716
+  + U+5E74 年 CJK UNIFIED IDEOGRAPH-5E74
+  + U+6216 或 CJK UNIFIED IDEOGRAPH-6216
+  + U+6309 按 CJK UNIFIED IDEOGRAPH-6309
+  + U+64C7 擇 CJK UNIFIED IDEOGRAPH-64C7
+  + U+66C6 曆 CJK UNIFIED IDEOGRAPH-66C6
+  + U+81F3 至 CJK UNIFIED IDEOGRAPH-81F3
+  + U+9418 鐘 CJK UNIFIED IDEOGRAPH-9418
+removed (1): 當
+  - U+7576 當 CJK UNIFIED IDEOGRAPH-7576
+size TaidaFlowNotoSansTC-Regular.ttf: 190276 -> 193284 bytes (delta +3008)
+size TaidaFlowNotoSansTC-Bold.ttf: 190956 -> 193956 bytes (delta +3000)
+charset chars NOT in source font NotoSansTC-VF (1):
+  U+2715 ✕ MULTIPLICATION X
+w1-047 D7(b) 15 chars all in 'added': True
+cmap check (new fonts):
+  U+4E09 三 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E94 五 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4ECA 今 in_charset=yes source=yes Regular=yes Bold=yes
+  U+516D 六 in_charset=yes source=yes Regular=yes Bold=yes
+  U+53EA 只 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5468 周 in_charset=yes source=yes Regular=yes Bold=yes
+  U+56DB 四 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5716 圖 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5E74 年 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6216 或 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6309 按 in_charset=yes source=yes Regular=yes Bold=yes
+  U+64C7 擇 in_charset=yes source=yes Regular=yes Bold=yes
+  U+66C6 曆 in_charset=yes source=yes Regular=yes Bold=yes
+  U+81F3 至 in_charset=yes source=yes Regular=yes Bold=yes
+  U+9418 鐘 in_charset=yes source=yes Regular=yes Bold=yes
+  U+2039 ‹ in_charset=yes source=yes Regular=yes Bold=yes
+  U+203A › in_charset=yes source=yes Regular=yes Bold=yes
+  U+986F 顯 in_charset=yes source=yes Regular=yes Bold=yes
+  U+793A 示 in_charset=yes source=yes Regular=yes Bold=yes
+  U+524D 前 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E00 一 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6642 時 in_charset=yes source=yes Regular=yes Bold=yes
+  U+9593 間 in_charset=yes source=yes Regular=yes Bold=yes
+  U+78BA 確 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5B9A 定 in_charset=yes source=yes Regular=yes Bold=yes
+  U+53D6 取 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6D88 消 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6708 月 in_charset=yes source=yes Regular=yes Bold=yes
+  U+65E5 日 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E8C 二 in_charset=yes source=yes Regular=yes Bold=yes
+phrase '顯示前一周' fully covered in both styles: True
+phrase '時間' fully covered in both styles: True
+phrase '確定' fully covered in both styles: True
+phrase '取消' fully covered in both styles: True
+phrase '年' fully covered in both styles: True
+phrase '月' fully covered in both styles: True
+phrase '日一二三四五六' fully covered in both styles: True
+rc=0
+exit=0

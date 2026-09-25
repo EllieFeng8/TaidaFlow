@@ -1,0 +1,1 @@
+﻿w2-045 run-qtest.bat exit=0  start=09/25/2026 23:06:38 end=09/25/2026 23:07:32  (after 'cmake --build build\w2-045-qtest --target clean', so the Core sources of HEAD 6585485 were recompiled)

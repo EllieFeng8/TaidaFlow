@@ -1,0 +1,1 @@
+﻿w2-041 run-qtest.bat exit=0  start=09/25/2026 23:06:07 end=09/25/2026 23:06:38  (after 'cmake --build build\w2-041-qtest --target clean', so SqlManager.cpp/HistoryExport.cpp of HEAD 6585485 were recompiled)

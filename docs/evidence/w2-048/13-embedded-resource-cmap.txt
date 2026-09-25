@@ -1,0 +1,8 @@
+﻿build/desktop: build\desktop\App\.qt\rcc\qrc_embedded_fonts.cpp resource_data_bytes=387248
+  TaidaFlowNotoSansTC-Regular.ttf: size=193284 embedded_verbatim=True cmap_has[顯示前一周時間確定取消年月日二三四五六今只圖或按擇曆至鐘‹›]=all
+  TaidaFlowNotoSansTC-Bold.ttf: size=193956 embedded_verbatim=True cmap_has[顯示前一周時間確定取消年月日二三四五六今只圖或按擇曆至鐘‹›]=all
+build/wasm-release: build\wasm-release\App\.qt\rcc\qrc_embedded_fonts.cpp resource_data_bytes=387248
+  TaidaFlowNotoSansTC-Regular.ttf: size=193284 embedded_verbatim=True cmap_has[顯示前一周時間確定取消年月日二三四五六今只圖或按擇曆至鐘‹›]=all
+  TaidaFlowNotoSansTC-Bold.ttf: size=193956 embedded_verbatim=True cmap_has[顯示前一周時間確定取消年月日二三四五六今只圖或按擇曆至鐘‹›]=all
+rc=0
+exit=0

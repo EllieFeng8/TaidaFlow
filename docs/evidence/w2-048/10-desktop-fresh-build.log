@@ -1,0 +1,641 @@
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Release"
+  CMAKE_MAKE_PROGRAM="C:/Qt/Tools/Ninja/ninja.exe"
+  CMAKE_TOOLCHAIN_FILE:FILEPATH="C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake"
+
+Preset environment variables:
+
+  VSLANG="1033"
+
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0001 is not set: ':/qt/qml/' is the default resource prefix
+  for QML modules.  Check https://doc.qt.io/qt-6/qt-cmake-policy-qtp0001.html
+  for policy details.  Use the qt_policy command to set the policy and
+  suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:719 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:1254 (qt6_add_qml_module)
+  Core/CMakeLists.txt:35 (qt_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0004 is not set: You need qmldir files for each extra
+  directory that contains .qml files for your module.  Check
+  https://doc.qt.io/qt-6/qt-cmake-policy-qtp0004.html for policy details.
+  Use the qt_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:3520 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:916 (qt6_target_qml_sources)
+  TaidaFlowContent/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+shaders/dropShadow.frag -> shaders/dropShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadow.frag.qsb
+shaders/dropShadowClip.frag -> shaders/dropShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadowClip.frag.qsb
+shaders/gaussianBlur.frag -> shaders/gaussianBlur.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/gaussianBlur.frag.qsb
+shaders/innerShadow.frag -> shaders/innerShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadow.frag.qsb
+shaders/innerShadowClip.frag -> shaders/innerShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadowClip.frag.qsb
+shaders/opacityMask.frag -> shaders/opacityMask.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/opacityMask.frag.qsb
+-- Configuring done (5.6s)
+-- Generating done (1.0s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/desktop
+[1/572] Copying TaidaFlowContent qml sources into build dir
+[2/572] Copying TaidaFlowContent qml resources into build dir
+[3/572] Copying QuickUltraLiteStudioExtras qml sources into build dir
+[4/572] Copying QuickUltraLiteStudioExtras qml resources into build dir
+[5/572] Copying QuickStudioUtils qml sources into build dir
+[6/572] Copying QuickStudioUtils qml resources into build dir
+[7/572] Copying TaidaFlow qml sources into build dir
+[8/572] Copying TaidaFlow qml resources into build dir
+[9/572] Copying QuickUltraLiteStudioComponents qml sources into build dir
+[10/572] Copying QuickUltraLiteStudioComponents qml resources into build dir
+[11/572] Copying QuickUltraLiteStudioLayers qml sources into build dir
+[12/572] Copying QuickUltraLiteStudioLayers qml resources into build dir
+[13/572] Copying QuickUltraLiteStudioProfiling qml sources into build dir
+[14/572] Copying QuickUltraLiteStudioProfiling qml resources into build dir
+[15/572] Copying QuickStudioComponents qml sources into build dir
+[16/572] Copying QuickStudioComponents qml resources into build dir
+[17/572] Copying QuickStudioDesignEffects qml sources into build dir
+[18/572] Copying QuickStudioDesignEffects qml resources into build dir
+[19/572] Copying FlowView qml sources into build dir
+[20/572] Copying FlowView qml resources into build dir
+[21/572] Copying QuickStudioLogicHelper qml sources into build dir
+[22/572] Copying QuickStudioLogicHelper qml resources into build dir
+[23/572] Copying QuickStudioEventSimulator qml sources into build dir
+[24/572] Copying QuickStudioEventSimulator qml resources into build dir
+[25/572] Copying QuickStudioEventSystem qml sources into build dir
+[26/572] Copying QuickStudioEventSystem qml resources into build dir
+[27/572] Automatic MOC and UIC for target TaidaFlowContent
+[28/572] Automatic MOC and UIC for target QuickStudioApplication
+[29/572] Automatic MOC and UIC for target QuickUltraLiteStudioExtras
+[30/572] Copying QuickStudioEffects qml sources into build dir
+[31/572] Automatic MOC and UIC for target QuickStudioUtils
+[32/572] Copying QuickStudioEffects qml resources into build dir
+[33/572] Automatic MOC and UIC for target TaidaFlow
+[34/572] Copying QuickStudioMultiText qml sources into build dir
+[35/572] Automatic MOC and UIC for target QuickUltraLiteStudioComponents
+[36/572] Copying QuickStudioMultiText qml resources into build dir
+[37/572] Automatic MOC and UIC for target QuickUltraLiteStudioLayers
+[38/572] Automatic MOC and UIC for target Coreplugin
+[39/572] Automatic MOC and UIC for target QuickUltraLiteStudioProfiling
+[40/572] Automatic MOC and UIC for target Coreplugin_init
+[41/572] Automatic MOC and UIC for target QuickStudioComponents
+[42/572] Automatic MOC and UIC for target TaidaFlowplugin_init
+[43/572] Automatic MOC and UIC for target QuickStudioDesignEffects
+[44/572] Automatic MOC and UIC for target TaidaFlowContentplugin
+[45/572] Automatic MOC and UIC for target FlowView
+[46/572] Automatic MOC and UIC for target TaidaFlowContentplugin_init
+[47/572] Automatic MOC and UIC for target QuickStudioLogicHelper
+[48/572] Automatic MOC and UIC for target QuickStudioApplicationplugin
+[49/572] Automatic MOC and UIC for target QuickStudioEventSimulator
+[50/572] Automatic MOC and UIC for target QuickStudioApplicationplugin_init
+[51/572] Automatic MOC and UIC for target QuickStudioEventSystem
+[52/572] Running AUTOMOC file extraction for target TaidaFlowContent
+[53/572] Running AUTOMOC file extraction for target QuickStudioApplication
+[54/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioExtras
+[55/572] Running rcc for resource qmake_TaidaFlowContent
+[56/572] Running AUTOMOC file extraction for target QuickStudioUtils
+[57/572] Automatic MOC and UIC for target QuickStudioEffects
+[58/572] Running AUTOMOC file extraction for target TaidaFlow
+[59/572] Generating .rcc/qmlcache/TaidaFlowContent_qmlcache_loader.cpp
+[60/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioComponents
+[61/572] Automatic MOC and UIC for target QuickStudioMultiText
+[62/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioLayers
+[63/572] Running rcc for resource TaidaFlowContent_raw_qml_0
+[64/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioProfiling
+[65/572] Running rcc for resource qmake_QtQuick_Studio_Application
+[66/572] Running AUTOMOC file extraction for target QuickStudioComponents
+[67/572] Running rcc for resource qmake_QtQuickUltralite_Extras
+[68/572] Running AUTOMOC file extraction for target QuickStudioDesignEffects
+[69/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_qmlcache_loader.cpp
+[70/572] Automatic MOC and UIC for target WasmMirrorProxyCore
+[71/572] Running AUTOMOC file extraction for target FlowView
+[72/572] Running rcc for resource QuickUltraLiteStudioExtras_raw_qml_0
+[73/572] Running AUTOMOC file extraction for target QuickStudioLogicHelper
+[74/572] Running AUTOMOC file extraction for target QuickStudioEventSimulator
+[75/572] Running AUTOMOC file extraction for target QuickStudioEventSystem
+[76/572] Running moc --collect-json for target TaidaFlowContent
+[77/572] Running moc --collect-json for target QuickStudioApplication
+[78/572] Running moc --collect-json for target QuickUltraLiteStudioExtras
+[79/572] Running moc --collect-json for target QuickStudioUtils
+[80/572] Running AUTOMOC file extraction for target QuickStudioEffects
+[81/572] Running moc --collect-json for target TaidaFlow
+[82/572] Running moc --collect-json for target QuickUltraLiteStudioComponents
+[83/572] Running AUTOMOC file extraction for target QuickStudioMultiText
+[84/572] Running moc --collect-json for target QuickUltraLiteStudioLayers
+[85/572] Running moc --collect-json for target QuickUltraLiteStudioProfiling
+[86/572] Running moc --collect-json for target QuickStudioComponents
+[87/572] Running rcc for resource FlowView_raw_qml_0
+[88/572] Running moc --collect-json for target QuickStudioDesignEffects
+[89/572] Running rcc for resource qmake_QtQuick_Studio_EventSimulator
+[90/572] Running moc --collect-json for target FlowView
+[91/572] Running moc --collect-json for target QuickStudioLogicHelper
+[92/572] Running moc --collect-json for target QuickStudioEventSimulator
+[93/572] Automatic QML type registration for target TaidaFlowContent
+[94/572] Running moc --collect-json for target QuickStudioEventSystem
+[95/572] Automatic QML type registration for target QuickUltraLiteStudioExtras
+[96/572] Automatic QML type registration for target QuickStudioUtils
+[97/572] Automatic QML type registration for target QuickStudioApplication
+[98/572] Automatic QML type registration for target TaidaFlow
+[99/572] Automatic QML type registration for target QuickUltraLiteStudioComponents
+[100/572] Running moc --collect-json for target QuickStudioEffects
+[101/572] Automatic QML type registration for target QuickUltraLiteStudioLayers
+[102/572] Automatic QML type registration for target QuickUltraLiteStudioProfiling
+[103/572] Automatic QML type registration for target QuickStudioComponents
+[104/572] Running moc --collect-json for target QuickStudioMultiText
+[105/572] Automatic QML type registration for target QuickStudioDesignEffects
+[106/572] Running rcc for resource QuickStudioEventSimulator_raw_qml_0
+[107/572] Automatic QML type registration for target FlowView
+[108/572] Generating .qsb/shaders/dropShadow.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-RUfAqr\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-RUfAqr\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[109/572] Automatic QML type registration for target QuickStudioLogicHelper
+[110/572] Generating .qsb/shaders/dropShadowClip.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-EDLtWE\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-EDLtWE\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[111/572] Automatic QML type registration for target QuickStudioEventSimulator
+[112/572] Generating .rcc/qmlcache/TaidaFlowContent_AlarmPage_qml.cpp, .rcc/qmlcache/TaidaFlowContent_AlarmPage_qml.cpp.aotstats
+[113/572] Generating .rcc/qmlcache/TaidaFlowContent_App_qml.cpp, .rcc/qmlcache/TaidaFlowContent_App_qml.cpp.aotstats
+[114/572] Generating .rcc/qmlcache/TaidaFlowContent_HistoryPage_qml.cpp, .rcc/qmlcache/TaidaFlowContent_HistoryPage_qml.cpp.aotstats
+[115/572] Generating .qsb/shaders/gaussianBlur.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-gVxFXu\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-gVxFXu\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[116/572] Generating .rcc/qmlcache/TaidaFlowContent_Main_qml.cpp, .rcc/qmlcache/TaidaFlowContent_Main_qml.cpp.aotstats
+[117/572] Generating .rcc/qmlcache/TaidaFlowContent_TopNav_qml.cpp, .rcc/qmlcache/TaidaFlowContent_TopNav_qml.cpp.aotstats
+[118/572] Generating .rcc/qmlcache/TaidaFlowContent_components/DateTimeField_qml.cpp, .rcc/qmlcache/TaidaFlowContent_components/DateTimeField_qml.cpp.aotstats
+[119/572] Generating .qsb/shaders/innerShadow.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-DFLEZg\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-DFLEZg\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[120/572] Generating .rcc/qmlcache/TaidaFlowContent_components/DateTimeUtil_js.cpp
+[121/572] Generating .rcc/qmlcache/TaidaFlowContent_components/InterfaceBox_qml.cpp, .rcc/qmlcache/TaidaFlowContent_components/InterfaceBox_qml.cpp.aotstats
+[122/572] Generating .rcc/qmlcache/TaidaFlowContent_components/MotorIcon_qml.cpp, .rcc/qmlcache/TaidaFlowContent_components/MotorIcon_qml.cpp.aotstats
+[123/572] Generating .qsb/shaders/innerShadowClip.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-fqTjlq\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-fqTjlq\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[124/572] Generating .rcc/qmlcache/TaidaFlowContent_components/ValueTag_qml.cpp, .rcc/qmlcache/TaidaFlowContent_components/ValueTag_qml.cpp.aotstats
+[125/572] Generating .qsb/shaders/opacityMask.frag.qsb
+Failed to run spirv-opt -O C:\Users\TED\AppData\Local\Temp\qsb-FCweKT\qsb_spv_temp -o C:\Users\TED\AppData\Local\Temp\qsb-FCweKT\qsb_spv_temp_out: Process failed to start: ╰参тぃ﹚郎
+[126/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_AnimatedSpriteDirectory_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioExtras_AnimatedSpriteDirectory_qml.cpp.aotstats
+[127/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_ColorizedImage_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioExtras_ColorizedImage_qml.cpp.aotstats
+[128/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_ItemBuffer_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioExtras_ItemBuffer_qml.cpp.aotstats
+[129/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_StaticText_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioExtras_StaticText_qml.cpp.aotstats
+[130/572] Generating .rcc/qmlcache/QuickUltraLiteStudioExtras_QulPerf_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioExtras_QulPerf_qml.cpp.aotstats
+[131/572] Automatic QML type registration for target QuickStudioEventSystem
+[132/572] Running rcc for resource qmake_QtQuick_Studio_EventSystem
+[133/572] Running rcc for resource QuickStudioEventSystem_raw_qml_0
+[134/572] Running rcc for resource qmake_QtQuick_Studio_Utils
+[135/572] Generating .rcc/qmlcache/QuickStudioUtils_qmlcache_loader.cpp
+[136/572] Generating .rcc/qmlcache/QuickStudioUtils_JsonListModel_qml.cpp, .rcc/qmlcache/QuickStudioUtils_JsonListModel_qml.cpp.aotstats
+[137/572] Generating .rcc/qmlcache/QuickStudioUtils_JsonBackend_qml.cpp, .rcc/qmlcache/QuickStudioUtils_JsonBackend_qml.cpp.aotstats
+[138/572] Generating .rcc/qmlcache/QuickStudioUtils_ChildListModel_qml.cpp, .rcc/qmlcache/QuickStudioUtils_ChildListModel_qml.cpp.aotstats
+[139/572] Running rcc for resource QuickStudioUtils_raw_qml_0
+[140/572] Running rcc for resource qmake_TaidaFlow
+[141/572] Generating .rcc/qmlcache/TaidaFlow_qmlcache_loader.cpp
+[142/572] Generating .rcc/qmlcache/TaidaFlow_Constants_qml.cpp, .rcc/qmlcache/TaidaFlow_Constants_qml.cpp.aotstats
+[143/572] Generating .rcc/qmlcache/TaidaFlow_EventListModel_qml.cpp, .rcc/qmlcache/TaidaFlow_EventListModel_qml.cpp.aotstats
+[144/572] Generating .rcc/qmlcache/TaidaFlow_EventListSimulator_qml.cpp, .rcc/qmlcache/TaidaFlow_EventListSimulator_qml.cpp.aotstats
+[145/572] Running rcc for resource TaidaFlow_raw_qml_0
+[146/572] Running rcc for resource qmake_QtQuickUltralite_Studio_Components
+[147/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\TaidaFlowContent_autogen\mocs_compilation.cpp.obj
+[148/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplication.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Application.cpp.obj
+[149/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.qt\rcc\qrc_qmake_TaidaFlowContent.cpp.obj
+[150/572] Generating .rcc/qmlcache/QuickUltraLiteStudioComponents_qmlcache_loader.cpp
+[151/572] Running rcc for resource QuickUltraLiteStudioComponents_raw_qml_0
+[152/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.qt\rcc\qrc_TaidaFlowContent_raw_qml_0.cpp.obj
+[153/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\QuickUltraLiteStudioExtras_autogen\mocs_compilation.cpp.obj
+[154/572] Generating .rcc/qmlcache/QuickUltraLiteStudioComponents_ArcItem_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioComponents_ArcItem_qml.cpp.aotstats
+[155/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Extras.cpp.obj
+[156/572] Automatic MOC and UIC for target QuickUltraLiteStudioComponentsplugin_init
+[157/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.qt\rcc\qrc_QuickUltraLiteStudioExtras_raw_qml_0.cpp.obj
+[158/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\quickultralitestudioextras_qmltyperegistrations.cpp.obj
+[159/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\taidaflowcontent_qmltyperegistrations.cpp.obj
+[160/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_AnimatedSpriteDirectory_qml.cpp.obj
+[161/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_ItemBuffer_qml.cpp.obj
+[162/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_components\InterfaceBox_qml.cpp.obj
+[163/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_StaticText_qml.cpp.obj
+[164/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_qmlcache_loader.cpp
+[165/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_components\DateTimeUtil_js.cpp.obj
+[166/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_components\ValueTag_qml.cpp.obj
+[167/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplication.dir\quickstudioapplication_qmltyperegistrations.cpp.obj
+[168/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplication.dir\QuickStudioApplication_autogen\mocs_compilation.cpp.obj
+[169/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_QulPerf_qml.cpp.obj
+[170/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_ImageLayer_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_ImageLayer_qml.cpp.aotstats
+[171/572] Building CXX object wasm-mirror-pack\CMakeFiles\WasmMirrorProxyCore.dir\WasmMirrorProxyCore_autogen\mocs_compilation.cpp.obj
+[172/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_ItemLayer_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_ItemLayer_qml.cpp.aotstats
+[173/572] Running rcc for resource qmake_QtQuickUltralite_Layers
+[174/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_components\MotorIcon_qml.cpp.obj
+[175/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_Screen_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_Screen_qml.cpp.aotstats
+[176/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_ColorizedImage_qml.cpp.obj
+[177/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_SpriteLayer_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_SpriteLayer_qml.cpp.aotstats
+[178/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_+DesignMode/Screen_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_+DesignMode/Screen_qml.cpp.aotstats
+[179/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_App_qml.cpp.obj
+[180/572] Automatic MOC and UIC for target QuickUltraLiteStudioExtrasplugin_init
+[181/572] Running rcc for resource QuickUltraLiteStudioLayers_raw_qml_0
+[182/572] Running rcc for resource QuickUltraLiteStudioLayers_raw_qml_0_extra_qmldirs
+[183/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_TopNav_qml.cpp.obj
+[184/572] Generating .rcc/qmlcache/QuickUltraLiteStudioLayers_ApplicationScreens_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioLayers_ApplicationScreens_qml.cpp.aotstats
+[185/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_Main_qml.cpp.obj
+[186/572] Automatic MOC and UIC for target QuickUltraLiteStudioLayersplugin_init
+[187/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_components\DateTimeField_qml.cpp.obj
+[188/572] Running rcc for resource qmake_QtQuickUltralite_Profiling
+[189/572] Generating .rcc/qmlcache/QuickUltraLiteStudioProfiling_qmlcache_loader.cpp
+[190/572] Automatic MOC and UIC for target QuickUltraLiteStudioExtrasplugin
+[191/572] Generating .rcc/qmlcache/QuickUltraLiteStudioProfiling_QulPerfOverlay_qml.cpp, .rcc/qmlcache/QuickUltraLiteStudioProfiling_QulPerfOverlay_qml.cpp.aotstats
+[192/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_qmlcache_loader.cpp.obj
+[193/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras.dir\.rcc\qmlcache\QuickUltraLiteStudioExtras_qmlcache_loader.cpp.obj
+[194/572] Running rcc for resource QuickUltraLiteStudioProfiling_raw_qml_0
+[195/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_AlarmPage_qml.cpp.obj
+[196/572] Automatic MOC and UIC for target QuickUltraLiteStudioProfilingplugin_init
+[197/572] Running rcc for resource qmake_QtQuick_Studio_Components
+[198/572] Generating .rcc/qmlcache/QuickStudioComponents_qmlcache_loader.cpp
+[199/572] Generating .rcc/qmlcache/QuickStudioComponents_ArcArrow_qml.cpp, .rcc/qmlcache/QuickStudioComponents_ArcArrow_qml.cpp.aotstats
+[200/572] Generating .rcc/qmlcache/QuickStudioComponents_ArcItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_ArcItem_qml.cpp.aotstats
+[201/572] Generating .rcc/qmlcache/QuickStudioComponents_BorderItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_BorderItem_qml.cpp.aotstats
+[202/572] Generating .rcc/qmlcache/QuickStudioComponents_EllipseItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_EllipseItem_qml.cpp.aotstats
+[203/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent.dir\.rcc\qmlcache\TaidaFlowContent_HistoryPage_qml.cpp.obj
+[204/572] Generating .rcc/qmlcache/QuickStudioComponents_FlipableItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_FlipableItem_qml.cpp.aotstats
+[205/572] Generating .rcc/qmlcache/QuickStudioComponents_GroupItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_GroupItem_qml.cpp.aotstats
+[206/572] Generating .rcc/qmlcache/QuickStudioComponents_PieItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_PieItem_qml.cpp.aotstats
+[207/572] Generating .rcc/qmlcache/QuickStudioComponents_RectangleItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_RectangleItem_qml.cpp.aotstats
+[208/572] Generating .rcc/qmlcache/QuickStudioComponents_RegularPolygonItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_RegularPolygonItem_qml.cpp.aotstats
+[209/572] Generating .rcc/qmlcache/QuickStudioComponents_StarItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_StarItem_qml.cpp.aotstats
+[210/572] Generating .rcc/qmlcache/QuickStudioComponents_StraightArrow_qml.cpp, .rcc/qmlcache/QuickStudioComponents_StraightArrow_qml.cpp.aotstats
+[211/572] Generating .rcc/qmlcache/QuickStudioComponents_SvgPathItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_SvgPathItem_qml.cpp.aotstats
+[212/572] Generating .rcc/qmlcache/QuickStudioComponents_TextItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_TextItem_qml.cpp.aotstats
+[213/572] Generating .rcc/qmlcache/QuickStudioComponents_TriangleItem_qml.cpp, .rcc/qmlcache/QuickStudioComponents_TriangleItem_qml.cpp.aotstats
+[214/572] Running rcc for resource QuickStudioComponents_raw_qml_0
+[215/572] Automatic MOC and UIC for target QuickStudioComponentsplugin_init
+[216/572] Running rcc for resource qmake_QtQuick_Studio_DesignEffects
+[217/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_qmlcache_loader.cpp
+[218/572] Building CXX object wasm-mirror-pack\CMakeFiles\WasmMirrorProxyCore.dir\src\infrastructure\proxy_mirror\proxymirror.cpp.obj
+[219/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignBackgroundBlurPrivate_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignBackgroundBlurPrivate_qml.cpp.aotstats
+[220/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignDropShadow_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignDropShadow_qml.cpp.aotstats
+[221/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignDropShadowPrivate_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignDropShadowPrivate_qml.cpp.aotstats
+[222/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignEffect_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignEffect_qml.cpp.aotstats
+[223/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignEffectPrivate_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignEffectPrivate_qml.cpp.aotstats
+[224/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignInnerShadow_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignInnerShadow_qml.cpp.aotstats
+[225/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignInnerShadowPrivate_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignInnerShadowPrivate_qml.cpp.aotstats
+[226/572] Generating .rcc/qmlcache/QuickStudioDesignEffects_DesignLayerBlurPrivate_qml.cpp, .rcc/qmlcache/QuickStudioDesignEffects_DesignLayerBlurPrivate_qml.cpp.aotstats
+[227/572] Running rcc for resource QuickStudioDesignEffects_raw_qml_0
+[228/572] Running rcc for resource designeffectsshaders
+[229/572] Automatic MOC and UIC for target QuickStudioDesignEffectsplugin_init
+[230/572] Automatic QML type registration for target QuickStudioEffects
+[231/572] Running rcc for resource qmake_QtQuick_Studio_Effects
+[232/572] Running rcc for resource QuickStudioEffects_raw_qml_0
+[233/572] Automatic MOC and UIC for target QuickStudioEffectsplugin_init
+[234/572] Automatic MOC and UIC for target FlowViewplugin
+[235/572] Automatic MOC and UIC for target FlowViewplugin_init
+[236/572] Running rcc for resource qmake_QtQuick_Studio_LogicHelper
+[237/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_qmlcache_loader.cpp
+[238/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_BidirectionalBinding_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_BidirectionalBinding_qml.cpp.aotstats
+[239/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_RangeMapper_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_RangeMapper_qml.cpp.aotstats
+[240/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_MinMaxMapper_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_MinMaxMapper_qml.cpp.aotstats
+[241/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_StringMapper_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_StringMapper_qml.cpp.aotstats
+[242/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_OrOperator_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_OrOperator_qml.cpp.aotstats
+[243/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_AndOperator_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_AndOperator_qml.cpp.aotstats
+[244/572] Generating .rcc/qmlcache/QuickStudioLogicHelper_NotOperator_qml.cpp, .rcc/qmlcache/QuickStudioLogicHelper_NotOperator_qml.cpp.aotstats
+[245/572] Running rcc for resource QuickStudioLogicHelper_raw_qml_0
+[246/572] Automatic MOC and UIC for target QuickStudioLogicHelperplugin_init
+[247/572] Automatic QML type registration for target QuickStudioMultiText
+[248/572] Running rcc for resource qmake_QtQuick_Studio_MultiText
+[249/572] Running rcc for resource QuickStudioMultiText_raw_qml_0
+[250/572] Automatic MOC and UIC for target QuickStudioMultiTextplugin_init
+[251/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowView.dir\FlowView_autogen\mocs_compilation.cpp.obj
+[252/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowView.dir\.qt\rcc\qrc_FlowView_raw_qml_0.cpp.obj
+[253/572] Automatic MOC and UIC for target QuickStudioEventSimulatorplugin
+[254/572] Automatic MOC and UIC for target QuickStudioEventSimulatorplugin_init
+[255/572] Automatic MOC and UIC for target QuickStudioEventSystemplugin
+[256/572] Automatic MOC and UIC for target QuickStudioEventSystemplugin_init
+[257/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator.dir\QuickStudioEventSimulator_autogen\mocs_compilation.cpp.obj
+[258/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_EventSimulator.cpp.obj
+[259/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator.dir\.qt\rcc\qrc_QuickStudioEventSimulator_raw_qml_0.cpp.obj
+[260/572] Automatic MOC and UIC for target QuickStudioUtilsplugin_init
+[261/572] Running AUTOMOC file extraction for target Coreplugin_init
+[262/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem.dir\QuickStudioEventSystem_autogen\mocs_compilation.cpp.obj
+[263/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_EventSystem.cpp.obj
+[264/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem.dir\.qt\rcc\qrc_QuickStudioEventSystem_raw_qml_0.cpp.obj
+[265/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Utils.cpp.obj
+[266/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.qt\rcc\qrc_QuickStudioUtils_raw_qml_0.cpp.obj
+[267/572] Running AUTOMOC file extraction for target TaidaFlowplugin_init
+[268/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\TaidaFlow_autogen\mocs_compilation.cpp.obj
+[269/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.qt\rcc\qrc_qmake_TaidaFlow.cpp.obj
+[270/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.qt\rcc\qrc_TaidaFlow_raw_qml_0.cpp.obj
+[271/572] Automatic MOC and UIC for target QuickStudioUtilsplugin
+[272/572] Linking CXX static library TaidaFlowContent\TaidaFlowContent.lib
+[273/572] Running AUTOMOC file extraction for target TaidaFlowContentplugin_init
+[274/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContentplugin.dir\TaidaFlowContentplugin_autogen\mocs_compilation.cpp.obj
+[275/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplicationplugin.dir\QuickStudioApplicationplugin_autogen\mocs_compilation.cpp.obj
+[276/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent_resources_2.dir\.qt\rcc\qrc_TaidaFlowContent_raw_qml_0_init.cpp.obj
+[277/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContent_resources_1.dir\.qt\rcc\qrc_qmake_TaidaFlowContent_init.cpp.obj
+[278/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplication_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Application_init.cpp.obj
+[279/572] Running AUTOMOC file extraction for target QuickStudioApplicationplugin_init
+[280/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\QuickUltraLiteStudioComponents_autogen\mocs_compilation.cpp.obj
+[281/572] Automatic MOC and UIC for target TaidaFlowplugin
+[282/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Studio_Components.cpp.obj
+[283/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\.qt\rcc\qrc_QuickUltraLiteStudioComponents_raw_qml_0.cpp.obj
+[284/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplication.dir\quickstudioapplication.cpp.obj
+[285/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioComponentsplugin_init
+[286/572] Linking CXX static library Dependencies\Components\imports\compat\Extras\QuickUltraLiteStudioExtras.lib
+[287/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras_resources_1.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Extras_init.cpp.obj
+[288/572] Linking CXX static library Dependencies\Components\imports\application\QuickStudioApplication.lib
+[289/572] Building CXX object wasm-mirror-pack\CMakeFiles\WasmMirrorProxyCore.dir\src\infrastructure\proxy_mirror\wasmmirrorproxy.cpp.obj
+[290/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtrasplugin.dir\QuickUltraLiteStudioExtrasplugin_autogen\mocs_compilation.cpp.obj
+[291/572] Automatic MOC and UIC for target QuickUltraLiteStudioComponentsplugin
+[292/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtras_resources_2.dir\.qt\rcc\qrc_QuickUltraLiteStudioExtras_raw_qml_0_init.cpp.obj
+[293/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioExtrasplugin_init
+[294/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\QuickUltraLiteStudioLayers_autogen\mocs_compilation.cpp.obj
+[295/572] Linking CXX static library wasm-mirror-pack\WasmMirrorProxyCore.lib
+[296/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Layers.cpp.obj
+[297/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.rcc\qmlcache\TaidaFlow_EventListModel_qml.cpp.obj
+[298/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.rcc\qmlcache\TaidaFlow_Constants_qml.cpp.obj
+[299/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem.dir\quickstudioeventsystem_qmltyperegistrations.cpp.obj
+[300/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\taidaflow_qmltyperegistrations.cpp.obj
+[301/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator.dir\quickstudioeventsimulator_qmltyperegistrations.cpp.obj
+[302/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.rcc\qmlcache\QuickStudioUtils_ChildListModel_qml.cpp.obj
+[303/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.rcc\qmlcache\TaidaFlow_EventListSimulator_qml.cpp.obj
+[304/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContentplugin.dir\TaidaFlowContentplugin_TaidaFlowContentPlugin.cpp.obj
+[305/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplicationplugin.dir\QuickStudioApplicationplugin_QtQuick_Studio_ApplicationPlugin.cpp.obj
+[306/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\quickultralitestudiocomponents_qmltyperegistrations.cpp.obj
+[307/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowView.dir\flowview_qmltyperegistrations.cpp.obj
+[308/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.rcc\qmlcache\QuickStudioUtils_JsonListModel_qml.cpp.obj
+[309/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.rcc\qmlcache\QuickStudioUtils_JsonBackend_qml.cpp.obj
+[310/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioLayersplugin_init
+[311/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\quickstudioutils_qmltyperegistrations.cpp.obj
+[312/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\QuickStudioUtils_autogen\mocs_compilation.cpp.obj
+[313/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\.rcc\qmlcache\QuickUltraLiteStudioComponents_ArcItem_qml.cpp.obj
+[314/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.qt\rcc\qrc_QuickUltraLiteStudioLayers_raw_qml_0.cpp.obj
+[315/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.qt\rcc\qrc_QuickUltraLiteStudioLayers_raw_qml_0_extra_qmldirs.cpp.obj
+[316/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\QuickUltraLiteStudioProfiling_autogen\mocs_compilation.cpp.obj
+[317/572] Running AUTOMOC file extraction for target QuickUltraLiteStudioProfilingplugin_init
+[318/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Profiling.cpp.obj
+[319/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\.qt\rcc\qrc_QuickUltraLiteStudioProfiling_raw_qml_0.cpp.obj
+[320/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow.dir\.rcc\qmlcache\TaidaFlow_qmlcache_loader.cpp.obj
+[321/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\QuickStudioComponents_autogen\mocs_compilation.cpp.obj
+[322/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\.rcc\qmlcache\QuickStudioUtils_qmlcache_loader.cpp.obj
+[323/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Components.cpp.obj
+[324/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents.dir\.rcc\qmlcache\QuickUltraLiteStudioComponents_qmlcache_loader.cpp.obj
+[325/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\quickstudiofilereader.cpp.obj
+[326/572] Automatic MOC and UIC for target QuickUltraLiteStudioLayersplugin
+[327/572] Automatic MOC and UIC for target Core
+[328/572] Automatic MOC and UIC for target QuickUltraLiteStudioProfilingplugin
+[329/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtrasplugin.dir\QuickUltraLiteStudioExtrasplugin_QtQuickUltralite_ExtrasPlugin.cpp.obj
+[330/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils.dir\quickstudiocsvtablemodel.cpp.obj
+[331/572] Running AUTOMOC file extraction for target Core
+[332/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\quickultralitestudiolayers_qmltyperegistrations.cpp.obj
+[333/572] Running rcc for resource qmake_Core
+[334/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\.rcc\qmlcache\QuickUltraLiteStudioProfiling_QulPerfOverlay_qml.cpp.obj
+[335/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_ImageLayer_qml.cpp.obj
+[336/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\quickultralitestudioprofiling_qmltyperegistrations.cpp.obj
+[337/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_ApplicationScreens_qml.cpp.obj
+[338/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\quickstudiocomponents_qmltyperegistrations.cpp.obj
+[339/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_+DesignMode\Screen_qml.cpp.obj
+[340/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_Screen_qml.cpp.obj
+[341/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_SpriteLayer_qml.cpp.obj
+[342/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_ItemLayer_qml.cpp.obj
+[343/572] Running moc --collect-json for target Core
+[344/572] Running AUTOMOC file extraction for target QuickStudioComponentsplugin_init
+[345/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.qt\rcc\qrc_QuickStudioComponents_raw_qml_0.cpp.obj
+[346/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\QuickStudioDesignEffects_autogen\mocs_compilation.cpp.obj
+[347/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_ArcArrow_qml.cpp.obj
+[348/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_DesignEffects.cpp.obj
+[349/572] Generating ProxyMirror relay metadata for TaidaFlowProxy
+[350/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_EllipseItem_qml.cpp.obj
+[351/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers.dir\.rcc\qmlcache\QuickUltraLiteStudioLayers_qmlcache_loader.cpp.obj
+[352/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_ArcItem_qml.cpp.obj
+[353/572] Generating aggregate ProxyMirror event relay for Core
+[354/572] Automatic QML type registration for target Core
+[355/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling.dir\.rcc\qmlcache\QuickUltraLiteStudioProfiling_qmlcache_loader.cpp.obj
+[356/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_FlipableItem_qml.cpp.obj
+[357/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_qmlcache_loader.cpp.obj
+[358/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.qt\rcc\qrc_QuickStudioDesignEffects_raw_qml_0.cpp.obj
+[359/572] Automatic MOC and UIC for target QuickStudioComponentsplugin
+[360/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_BorderItem_qml.cpp.obj
+[361/572] Building CXX object Core\CMakeFiles\Core.dir\.qt\rcc\qrc_qmake_Core.cpp.obj
+[362/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_GroupItem_qml.cpp.obj
+[363/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_StarItem_qml.cpp.obj
+[364/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_RegularPolygonItem_qml.cpp.obj
+[365/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_PieItem_qml.cpp.obj
+[366/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_RectangleItem_qml.cpp.obj
+[367/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_SvgPathItem_qml.cpp.obj
+[368/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignDropShadow_qml.cpp.obj
+[369/572] Building CXX object Core\CMakeFiles\Coreplugin.dir\Coreplugin_autogen\mocs_compilation.cpp.obj
+[370/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignInnerShadow_qml.cpp.obj
+[371/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\quickstudiodesigneffects_qmltyperegistrations.cpp.obj
+[372/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_StraightArrow_qml.cpp.obj
+[373/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.qt\rcc\qrc_designeffectsshaders.cpp.obj
+[374/572] Running AUTOMOC file extraction for target QuickStudioDesignEffectsplugin_init
+[375/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects.dir\QuickStudioEffects_autogen\mocs_compilation.cpp.obj
+[376/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignEffect_qml.cpp.obj
+[377/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_TextItem_qml.cpp.obj
+[378/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Effects.cpp.obj
+[379/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignEffectPrivate_qml.cpp.obj
+[380/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents.dir\.rcc\qmlcache\QuickStudioComponents_TriangleItem_qml.cpp.obj
+[381/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects.dir\.qt\rcc\qrc_QuickStudioEffects_raw_qml_0.cpp.obj
+[382/572] Running AUTOMOC file extraction for target QuickStudioEffectsplugin_init
+[383/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignBackgroundBlurPrivate_qml.cpp.obj
+[384/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowViewplugin.dir\FlowViewplugin_autogen\mocs_compilation.cpp.obj
+[385/572] Linking CXX static library Dependencies\Components\imports\flowview\FlowView.lib
+[386/572] Running AUTOMOC file extraction for target FlowViewplugin_init
+[387/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignLayerBlurPrivate_qml.cpp.obj
+[388/572] Building CXX object Core\CMakeFiles\Core.dir\Modbus_Client.cpp.obj
+[389/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\QuickStudioLogicHelper_autogen\mocs_compilation.cpp.obj
+[390/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_qmlcache_loader.cpp.obj
+[391/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_LogicHelper.cpp.obj
+[392/572] Automatic MOC and UIC for target QuickStudioDesignEffectsplugin
+[393/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowView_resources_1.dir\.qt\rcc\qrc_FlowView_raw_qml_0_init.cpp.obj
+[394/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignDropShadowPrivate_qml.cpp.obj
+[395/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects.dir\.rcc\qmlcache\QuickStudioDesignEffects_DesignInnerShadowPrivate_qml.cpp.obj
+[396/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.qt\rcc\qrc_QuickStudioLogicHelper_raw_qml_0.cpp.obj
+[397/572] Automatic MOC and UIC for target QuickStudioEffectsplugin
+[398/572] Running AUTOMOC file extraction for target QuickStudioLogicHelperplugin_init
+[399/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText.dir\QuickStudioMultiText_autogen\mocs_compilation.cpp.obj
+[400/572] Building CXX object Core\CMakeFiles\Core.dir\Ms300FaultReader.cpp.obj
+[401/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_MultiText.cpp.obj
+[402/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText.dir\.qt\rcc\qrc_QuickStudioMultiText_raw_qml_0.cpp.obj
+[403/572] Running AUTOMOC file extraction for target QuickStudioMultiTextplugin_init
+[404/572] Building CXX object Core\CMakeFiles\Core.dir\Modbus_Server.cpp.obj
+[405/572] Linking CXX static library Dependencies\Components\imports\tools\eventsimulator\QuickStudioEventSimulator.lib
+[406/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator_resources_2.dir\.qt\rcc\qrc_QuickStudioEventSimulator_raw_qml_0_init.cpp.obj
+[407/572] Automatic MOC and UIC for target QuickStudioLogicHelperplugin
+[408/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulator_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_EventSimulator_init.cpp.obj
+[409/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulatorplugin.dir\QuickStudioEventSimulatorplugin_autogen\mocs_compilation.cpp.obj
+[410/572] Building CXX object Core\CMakeFiles\Core.dir\core_qmltyperegistrations.cpp.obj
+[411/572] Running AUTOMOC file extraction for target QuickStudioEventSimulatorplugin_init
+[412/572] Linking CXX static library Dependencies\Components\imports\tools\eventsystem\QuickStudioEventSystem.lib
+[413/572] Building CXX object Core\CMakeFiles\Coreplugin.dir\Coreplugin_CorePlugin.cpp.obj
+[414/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_EventSystem_init.cpp.obj
+[415/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowViewplugin.dir\FlowViewplugin_FlowViewPlugin.cpp.obj
+[416/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystemplugin.dir\QuickStudioEventSystemplugin_autogen\mocs_compilation.cpp.obj
+[417/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystem_resources_2.dir\.qt\rcc\qrc_QuickStudioEventSystem_raw_qml_0_init.cpp.obj
+[418/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects.dir\quickstudioeffects_qmltyperegistrations.cpp.obj
+[419/572] Running AUTOMOC file extraction for target QuickStudioEventSystemplugin_init
+[420/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_MinMaxMapper_qml.cpp.obj
+[421/572] Automatic MOC and UIC for target QuickStudioMultiTextplugin
+[422/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\quickstudiologichelper_qmltyperegistrations.cpp.obj
+[423/572] Running AUTOMOC file extraction for target QuickStudioUtilsplugin_init
+[424/572] Linking CXX static library Dependencies\Components\imports\utils\QuickStudioUtils.lib
+[425/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtilsplugin.dir\QuickStudioUtilsplugin_autogen\mocs_compilation.cpp.obj
+[426/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_RangeMapper_qml.cpp.obj
+[427/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_AndOperator_qml.cpp.obj
+[428/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_NotOperator_qml.cpp.obj
+[429/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_BidirectionalBinding_qml.cpp.obj
+[430/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_StringMapper_qml.cpp.obj
+[431/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_OrOperator_qml.cpp.obj
+[432/572] Running moc --collect-json for target TaidaFlowplugin_init
+[433/572] Linking CXX static library TaidaFlow\TaidaFlow.lib
+[434/572] Linking CXX static library qml\TaidaFlowContent\TaidaFlowContentplugin.lib
+[435/572] Running moc --collect-json for target Coreplugin_init
+[436/572] Running moc --collect-json for target TaidaFlowContentplugin_init
+[437/572] Running rcc for resource embedded_fonts
+[438/572] Linking CXX static library qml\QtQuick\Studio\Application\QuickStudioApplicationplugin.lib
+[439/572] Running moc --collect-json for target QuickStudioApplicationplugin_init
+[440/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlowplugin.dir\TaidaFlowplugin_autogen\mocs_compilation.cpp.obj
+[441/572] Linking CXX static library Dependencies\Components\imports\compat\Components\QuickUltraLiteStudioComponents.lib
+[442/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper.dir\.rcc\qmlcache\QuickStudioLogicHelper_qmlcache_loader.cpp.obj
+[443/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponentsplugin.dir\QuickUltraLiteStudioComponentsplugin_autogen\mocs_compilation.cpp.obj
+[444/572] Running moc --collect-json for target QuickUltraLiteStudioComponentsplugin_init
+[445/572] Linking CXX static library qml\QtQuickUltralite\Extras\QuickUltraLiteStudioExtrasplugin.lib
+[446/572] Building CXX object Core\CMakeFiles\Core.dir\manager.cpp.obj
+[447/572] Linking CXX static library Dependencies\Components\imports\compat\Layers\QuickUltraLiteStudioLayers.lib
+[448/572] Running moc --collect-json for target QuickUltraLiteStudioExtrasplugin_init
+[449/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow_resources_1.dir\.qt\rcc\qrc_qmake_TaidaFlow_init.cpp.obj
+[450/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils_resources_2.dir\.qt\rcc\qrc_QuickStudioUtils_raw_qml_0_init.cpp.obj
+[451/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlow_resources_2.dir\.qt\rcc\qrc_TaidaFlow_raw_qml_0_init.cpp.obj
+[452/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtils_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Utils_init.cpp.obj
+[453/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents_resources_2.dir\.qt\rcc\qrc_QuickUltraLiteStudioComponents_raw_qml_0_init.cpp.obj
+[454/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers_resources_3.dir\.qt\rcc\qrc_QuickUltraLiteStudioLayers_raw_qml_0_extra_qmldirs_init.cpp.obj
+[455/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers_resources_2.dir\.qt\rcc\qrc_QuickUltraLiteStudioLayers_raw_qml_0_init.cpp.obj
+[456/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayers_resources_1.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Layers_init.cpp.obj
+[457/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponents_resources_1.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Studio_Components_init.cpp.obj
+[458/572] Building CXX object Core\CMakeFiles\Core.dir\core.cpp.obj
+[459/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayersplugin.dir\QuickUltraLiteStudioLayersplugin_autogen\mocs_compilation.cpp.obj
+[460/572] Running moc --collect-json for target QuickUltraLiteStudioProfilingplugin_init
+[461/572] Running moc --collect-json for target QuickUltraLiteStudioLayersplugin_init
+[462/572] Linking CXX static library Dependencies\Components\imports\compat\Profiling\QuickUltraLiteStudioProfiling.lib
+[463/572] Linking CXX static library Dependencies\Components\imports\components\QuickStudioComponents.lib
+[464/572] Building CXX object Core\CMakeFiles\Core.dir\SqlManager.cpp.obj
+[465/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfilingplugin.dir\QuickUltraLiteStudioProfilingplugin_autogen\mocs_compilation.cpp.obj
+[466/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponentsplugin.dir\QuickStudioComponentsplugin_autogen\mocs_compilation.cpp.obj
+[467/572] Running moc --collect-json for target QuickStudioComponentsplugin_init
+[468/572] Linking CXX static library Dependencies\Components\imports\designeffects\QuickStudioDesignEffects.lib
+[469/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffectsplugin.dir\QuickStudioDesignEffectsplugin_autogen\mocs_compilation.cpp.obj
+[470/572] Building CXX object Core\CMakeFiles\Core.dir\RESTManager.cpp.obj
+[471/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling_resources_2.dir\.qt\rcc\qrc_QuickUltraLiteStudioProfiling_raw_qml_0_init.cpp.obj
+[472/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Components_init.cpp.obj
+[473/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_DesignEffects_init.cpp.obj
+[474/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects_resources_3.dir\.qt\rcc\qrc_designeffectsshaders_init.cpp.obj
+[475/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfiling_resources_1.dir\.qt\rcc\qrc_qmake_QtQuickUltralite_Profiling_init.cpp.obj
+[476/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponents_resources_2.dir\.qt\rcc\qrc_QuickStudioComponents_raw_qml_0_init.cpp.obj
+[477/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffects_resources_2.dir\.qt\rcc\qrc_QuickStudioDesignEffects_raw_qml_0_init.cpp.obj
+[478/572] Running moc --collect-json for target QuickStudioEffectsplugin_init
+[479/572] Linking CXX static library Dependencies\Components\imports\effects_qt6\QuickStudioEffects.lib
+[480/572] Running moc --collect-json for target QuickStudioDesignEffectsplugin_init
+[481/572] Running qmlimportscanner for TaidaFlowApp
+[482/572] Linking CXX static library qml\FlowView\FlowViewplugin.lib
+[483/572] Running moc --collect-json for target FlowViewplugin_init
+[484/572] Linking CXX static library Dependencies\Components\imports\logichelper\QuickStudioLogicHelper.lib
+[485/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffectsplugin.dir\QuickStudioEffectsplugin_autogen\mocs_compilation.cpp.obj
+[486/572] Building CXX object Core\CMakeFiles\Core.dir\Core_autogen\mocs_compilation.cpp.obj
+[487/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelperplugin.dir\QuickStudioLogicHelperplugin_autogen\mocs_compilation.cpp.obj
+[488/572] Running moc --collect-json for target QuickStudioLogicHelperplugin_init
+[489/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiTextplugin.dir\QuickStudioMultiTextplugin_autogen\mocs_compilation.cpp.obj
+[490/572] Running moc --collect-json for target QuickStudioMultiTextplugin_init
+[491/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper_resources_2.dir\.qt\rcc\qrc_QuickStudioLogicHelper_raw_qml_0_init.cpp.obj
+[492/572] Building CXX object Core\CMakeFiles\Coreplugin_init.dir\Coreplugin_init_autogen\mocs_compilation.cpp.obj
+[493/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects_resources_2.dir\.qt\rcc\qrc_QuickStudioEffects_raw_qml_0_init.cpp.obj
+[494/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText_resources_2.dir\.qt\rcc\qrc_QuickStudioMultiText_raw_qml_0_init.cpp.obj
+[495/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelper_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_LogicHelper_init.cpp.obj
+[496/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_MultiText_init.cpp.obj
+[497/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffects_resources_1.dir\.qt\rcc\qrc_qmake_QtQuick_Studio_Effects_init.cpp.obj
+[498/572] Running moc --collect-json for target QuickStudioEventSimulatorplugin_init
+[499/572] Running moc --collect-json for target QuickStudioEventSystemplugin_init
+[500/572] Running moc --collect-json for target QuickStudioUtilsplugin_init
+[501/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlowplugin_init.dir\TaidaFlowplugin_init_autogen\mocs_compilation.cpp.obj
+[502/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContentplugin_init.dir\TaidaFlowContentplugin_init_autogen\mocs_compilation.cpp.obj
+[503/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponentsplugin_init.dir\QuickUltraLiteStudioComponentsplugin_init_autogen\mocs_compilation.cpp.obj
+[504/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplicationplugin_init.dir\QuickStudioApplicationplugin_init_autogen\mocs_compilation.cpp.obj
+[505/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtrasplugin_init.dir\QuickUltraLiteStudioExtrasplugin_init_autogen\mocs_compilation.cpp.obj
+[506/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayersplugin_init.dir\QuickUltraLiteStudioLayersplugin_init_autogen\mocs_compilation.cpp.obj
+[507/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfilingplugin_init.dir\QuickUltraLiteStudioProfilingplugin_init_autogen\mocs_compilation.cpp.obj
+[508/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponentsplugin_init.dir\QuickStudioComponentsplugin_init_autogen\mocs_compilation.cpp.obj
+[509/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiText.dir\quickstudiomultitext_qmltyperegistrations.cpp.obj
+[510/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffectsplugin_init.dir\QuickStudioDesignEffectsplugin_init_autogen\mocs_compilation.cpp.obj
+[511/572] Building CXX object Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.obj
+[512/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffectsplugin_init.dir\QuickStudioEffectsplugin_init_autogen\mocs_compilation.cpp.obj
+[513/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulatorplugin.dir\QuickStudioEventSimulatorplugin_QtQuick_Studio_EventSimulatorPlugin.cpp.obj
+[514/572] Linking CXX static library Dependencies\Components\imports\multitext\QuickStudioMultiText.lib
+[515/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowViewplugin_init.dir\FlowViewplugin_init_autogen\mocs_compilation.cpp.obj
+[516/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlowplugin.dir\TaidaFlowplugin_TaidaFlowPlugin.cpp.obj
+[517/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponentsplugin.dir\QuickUltraLiteStudioComponentsplugin_QtQuickUltralite_Studio_ComponentsPlugin.cpp.obj
+[518/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtilsplugin.dir\QuickStudioUtilsplugin_QtQuick_Studio_UtilsPlugin.cpp.obj
+[519/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelperplugin_init.dir\QuickStudioLogicHelperplugin_init_autogen\mocs_compilation.cpp.obj
+[520/572] Linking CXX static library qml\QtQuick\Studio\EventSimulator\QuickStudioEventSimulatorplugin.lib
+[521/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystemplugin.dir\QuickStudioEventSystemplugin_QtQuick_Studio_EventSystemPlugin.cpp.obj
+[522/572] Linking CXX static library qml\TaidaFlow\TaidaFlowplugin.lib
+[523/572] Linking CXX static library qml\QtQuickUltralite\Studio\Components\QuickUltraLiteStudioComponentsplugin.lib
+[524/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfilingplugin.dir\QuickUltraLiteStudioProfilingplugin_QtQuickUltralite_ProfilingPlugin.cpp.obj
+[525/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayersplugin.dir\QuickUltraLiteStudioLayersplugin_QtQuickUltralite_LayersPlugin.cpp.obj
+[526/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponentsplugin.dir\QuickStudioComponentsplugin_QtQuick_Studio_ComponentsPlugin.cpp.obj
+[527/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffectsplugin.dir\QuickStudioDesignEffectsplugin_QtQuick_Studio_DesignEffectsPlugin.cpp.obj
+[528/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffectsplugin.dir\QuickStudioEffectsplugin_QtQuick_Studio_EffectsPlugin.cpp.obj
+[529/572] Linking CXX static library qml\QtQuick\Studio\Utils\QuickStudioUtilsplugin.lib
+[530/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiTextplugin_init.dir\QuickStudioMultiTextplugin_init_autogen\mocs_compilation.cpp.obj
+[531/572] Linking CXX static library qml\QtQuickUltralite\Profiling\QuickUltraLiteStudioProfilingplugin.lib
+[532/572] Linking CXX static library qml\QtQuickUltralite\Layers\QuickUltraLiteStudioLayersplugin.lib
+[533/572] Linking CXX static library qml\QtQuick\Studio\EventSystem\QuickStudioEventSystemplugin.lib
+[534/572] Linking CXX static library qml\QtQuick\Studio\Components\QuickStudioComponentsplugin.lib
+[535/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulatorplugin_init.dir\QuickStudioEventSimulatorplugin_init_autogen\mocs_compilation.cpp.obj
+[536/572] Linking CXX static library qml\QtQuick\Studio\DesignEffects\QuickStudioDesignEffectsplugin.lib
+[537/572] Linking CXX static library qml\QtQuick\Studio\Effects\QuickStudioEffectsplugin.lib
+[538/572] Building CXX object Dependencies\Components\imports\compat\Extras\CMakeFiles\QuickUltraLiteStudioExtrasplugin_init.dir\QuickUltraLiteStudioExtrasplugin_init.cpp.obj
+[539/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtilsplugin_init.dir\QuickStudioUtilsplugin_init_autogen\mocs_compilation.cpp.obj
+[540/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystemplugin_init.dir\QuickStudioEventSystemplugin_init_autogen\mocs_compilation.cpp.obj
+[541/572] Building CXX object Dependencies\Components\imports\compat\Components\CMakeFiles\QuickUltraLiteStudioComponentsplugin_init.dir\QuickUltraLiteStudioComponentsplugin_init.cpp.obj
+[542/572] Building CXX object TaidaFlowContent\CMakeFiles\TaidaFlowContentplugin_init.dir\TaidaFlowContentplugin_init.cpp.obj
+[543/572] Building CXX object TaidaFlow\CMakeFiles\TaidaFlowplugin_init.dir\TaidaFlowplugin_init.cpp.obj
+[544/572] Building CXX object Dependencies\Components\imports\application\CMakeFiles\QuickStudioApplicationplugin_init.dir\QuickStudioApplicationplugin_init.cpp.obj
+[545/572] Building CXX object Core\CMakeFiles\Coreplugin_init.dir\Coreplugin_init.cpp.obj
+[546/572] Building CXX object Core\CMakeFiles\Core_resources_1.dir\.qt\rcc\qrc_qmake_Core_init.cpp.obj
+[547/572] Building CXX object Dependencies\Components\imports\compat\Layers\CMakeFiles\QuickUltraLiteStudioLayersplugin_init.dir\QuickUltraLiteStudioLayersplugin_init.cpp.obj
+[548/572] Building CXX object Dependencies\Components\imports\components\CMakeFiles\QuickStudioComponentsplugin_init.dir\QuickStudioComponentsplugin_init.cpp.obj
+[549/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiTextplugin.dir\QuickStudioMultiTextplugin_QtQuick_Studio_MultiTextPlugin.cpp.obj
+[550/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelperplugin.dir\QuickStudioLogicHelperplugin_QtQuick_Studio_LogicHelperPlugin.cpp.obj
+[551/572] Building CXX object Dependencies\Components\imports\compat\Profiling\CMakeFiles\QuickUltraLiteStudioProfilingplugin_init.dir\QuickUltraLiteStudioProfilingplugin_init.cpp.obj
+[552/572] Linking CXX static library qml\QtQuick\Studio\MultiText\QuickStudioMultiTextplugin.lib
+[553/572] Linking CXX static library qml\QtQuick\Studio\LogicHelper\QuickStudioLogicHelperplugin.lib
+[554/572] Building CXX object Core\CMakeFiles\Core.dir\HistoryExport.cpp.obj
+[555/572] Building CXX object Dependencies\Components\imports\designeffects\CMakeFiles\QuickStudioDesignEffectsplugin_init.dir\QuickStudioDesignEffectsplugin_init.cpp.obj
+[556/572] Linking CXX static library Core\Core.lib
+[557/572] Linking CXX static library qml\Core\Coreplugin.lib
+[558/572] Building CXX object Dependencies\Components\imports\effects_qt6\CMakeFiles\QuickStudioEffectsplugin_init.dir\QuickStudioEffectsplugin_init.cpp.obj
+[559/572] Automatic MOC and UIC for target TaidaFlowApp
+[560/572] Building CXX object Dependencies\Components\imports\flowview\CMakeFiles\FlowViewplugin_init.dir\FlowViewplugin_init.cpp.obj
+[561/572] Building CXX object Dependencies\Components\imports\logichelper\CMakeFiles\QuickStudioLogicHelperplugin_init.dir\QuickStudioLogicHelperplugin_init.cpp.obj
+[562/572] Building CXX object Dependencies\Components\imports\multitext\CMakeFiles\QuickStudioMultiTextplugin_init.dir\QuickStudioMultiTextplugin_init.cpp.obj
+[563/572] Building CXX object Dependencies\Components\imports\tools\eventsystem\CMakeFiles\QuickStudioEventSystemplugin_init.dir\QuickStudioEventSystemplugin_init.cpp.obj
+[564/572] Building CXX object Dependencies\Components\imports\tools\eventsimulator\CMakeFiles\QuickStudioEventSimulatorplugin_init.dir\QuickStudioEventSimulatorplugin_init.cpp.obj
+[565/572] Building CXX object Dependencies\Components\imports\utils\CMakeFiles\QuickStudioUtilsplugin_init.dir\QuickStudioUtilsplugin_init.cpp.obj
+[566/572] Running rcc for resource configuration
+[567/572] Building CXX object CMakeFiles\TaidaFlowApp.dir\TaidaFlowApp_autogen\mocs_compilation.cpp.obj
+[568/572] Building CXX object CMakeFiles\TaidaFlowApp.dir\build\desktop\.qt\rcc\qrc_configuration.cpp.obj
+[569/572] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\.qt\rcc\qrc_embedded_fonts.cpp.obj
+[570/572] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\embeddedfonts.cpp.obj
+[571/572] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\main.cpp.obj
+[572/572] Linking CXX executable TaidaFlowApp.exe

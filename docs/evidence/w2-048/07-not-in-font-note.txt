@@ -1,0 +1,25 @@
+w2-048 note: characters used in source that Noto Sans TC does not have
+
+Program check: docs/evidence/w2-048/03-charset-diff-and-cmap.txt, section
+"charset chars NOT in source font NotoSansTC-VF". Result after the regenerate at HEAD 6585485: 1 char.
+
+  U+2715 MULTIPLICATION X (✕)
+    Used in: TaidaFlowContent/HistoryPage.qml:506 (export panel close button, text "✕").
+    Same situation as in w2-044 (see docs/evidence/w2-044/07-u2715-note.txt): C:/Windows/Fonts/NotoSansTC-VF.ttf
+    (Noto Sans TC 2.004) has no glyph for it, so no subset can contain it. make_font_subset.py prints
+    "note (not in source font, skipped)" and --check still exits 0 (non-CJK chars are notes).
+    Not verified (no UI test allowed): whether the WebAssembly page shows it through Qt's bundled DejaVu Sans.
+    If a box appears there, the fix belongs to the UI (main), e.g. use U+00D7 "×", which Noto Sans TC has.
+
+Checked and OK (in the source font and in both new TTFs, Regular=yes Bold=yes):
+  U+2039 ‹  and  U+203A ›
+    Used in: components/DateTimeField.qml:281 / :311 (month buttons), HistoryPage.qml:890 / :928 and
+    AlarmPage.qml:654 / :690 (pager buttons). Already in charset.txt before this task (w2-030/w2-044), still there.
+
+Escaped characters: a search of App, Core, TaidaFlow, TaidaFlowContent (*.qml, *.js, *.mjs, *.cpp, *.h, *.hpp)
+for \uXXXX, \x.., String.fromCharCode and QChar(0x..) finds only Core/HistoryExport.cpp:60 ("\xE2\x80\x94" = "—",
+written into CSV files, not drawn; "—" is in the subset anyway) and Core/HistoryExport.cpp:93 (UTF-8 BOM for CSV).
+So no UI text is hidden from the literal-character scan of make_font_subset.py.
+
+Removed from charset.txt: U+7576 當. Its only use was the old HistoryPage hint text ("結束日期包含當天全部資料"),
+which w1-047 (main 1af6884) rewrote; git grep at HEAD finds 當 only in the old charset.txt.

@@ -1,0 +1,4 @@
+﻿> python -B scripts\make_font_subset.py --check   (HEAD 6585485 sources, fonts not yet regenerated)
+scanned 179 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+charset changed since last build (15 new chars: 三五今六只周四圖年或按擇曆至鐘) -> re-run without --check
+rc=1

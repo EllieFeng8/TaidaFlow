@@ -28,6 +28,8 @@ private:
     void onHistoryRangeRequested(double fromMs, double toMs);
     void applyHistoryPage(const SensorHistoryPageResult &result);
     void loadAlarmRecords();
+    // w2-049: web page + /exports on the AppHttpServer singleton (0.0.0.0:8124).
+    void startHttpServer();
 
     Manager* m_manager = nullptr;
     ModbusServer* m_modbusServer = nullptr;

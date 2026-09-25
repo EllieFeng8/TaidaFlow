@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+etag: "696-1a0d9f5b762"
+last-modified: Fri, 25 Sep 2026 19:05:54 GMT
+cache-control: no-cache
+vary: Accept-Encoding
+cross-origin-opener-policy: same-origin
+cross-origin-embedder-policy: require-corp
+cross-origin-resource-policy: same-origin
+content-type: image/svg+xml
+content-length: 1686
+

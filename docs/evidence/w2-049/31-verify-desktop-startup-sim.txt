@@ -1,0 +1,49 @@
+=== safety probe 2026-09-26T02:56:03.561+08:00 reason="before launch: verify-desktop-startup (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED profile=simulator
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.205:502 pid=41444 (Adam60xxSimulator)
+  port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.204:502 pid=41444 (Adam60xxSimulator)
+  port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.203:502 pid=41444 (Adam60xxSimulator)
+  port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.202:502 pid=41444 (Adam60xxSimulator)
+  port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.201:502 pid=41444 (Adam60xxSimulator)
+  port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  simulator endpoints listening: 5/5
+  verdict: SAFE
+PID=50524 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\verify-startup.log PROFILE=simulator
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes)
+apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+[Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports: mounted on AppHttpServer
+[Web] TAIDAFLOW_WEB_DIR is not set
+[Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> does not exist, skipped
+[Web] candidate development default: D:\repo\codex\qmlTester\taidaflow\build\wasm-release -> has TaidaFlowApp.html, used
+apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\wasm-release (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+[Web] web page folder (development default): D:\repo\codex\qmlTester\taidaflow\build\wasm-release -> http://<host>:8124/TaidaFlowApp.html
+apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+[Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=?]???? status=???` id=95
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=95 sensor=100 message=?]???? coreStatus=???` -> alarmStatus=?w??? severity=??i
+[Alarm][UI] id=94 sensor=100 message=?]???? coreStatus=???` -> alarmStatus=?w??? severity=??i
+app_pid=50524 endpoint_line=True relay_line=True modbus_server_line=True http_service_line=True web_dir_line=True page_status=200 listening_18125_app=True listening_8125_app=True listening_502=True listening_8124=True app_exit_code=0 listeners_left=0

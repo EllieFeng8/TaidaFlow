@@ -17,7 +17,7 @@
 #
 # Safety (taidaflow WASM v4 spec §2):
 #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
-#      serial port list, 502/8123/8124/8125/18125 listeners). Any non-zero verdict -> the app is NOT
+#      serial port list, 502/8124/8125/18125 listeners). Any non-zero verdict -> the app is NOT
 #      started and this script exits 3.
 #   2. The working directory is ALWAYS build\runtime-cwd: the Core writes
 #      TaidaFlowSettings.ini, device_info.ini and SQLite files (settings.sqlite, data\)

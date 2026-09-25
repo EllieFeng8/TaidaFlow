@@ -26,9 +26,14 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
         SqlManager.cpp
         RESTManager.h
         RESTManager.cpp
-        # w2-041: History CSV export queue/engine + download service (QHttpServer, 0.0.0.0:8124)
+        # w2-041: History CSV export queue/engine (w2-049: its downloads are the /exports mount
+        # of AppHttpServer below)
         HistoryExport.h
         HistoryExport.cpp
+        # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
+        # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
+        AppHttpServer/AppHttpServer.h
+        AppHttpServer/AppHttpServer.cpp
     )
 endif()
 
@@ -57,6 +62,10 @@ target_link_libraries(Core
 
 # Desktop-only Qt modules of the backend (find_package in the root CMakeLists.txt).
 if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+    # w2-049: development default of the web page folder (used only when neither
+    # TAIDAFLOW_WEB_DIR nor <exe folder>/web holds TaidaFlowApp.html).
+    get_filename_component(TAIDAFLOW_DEV_WEB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../build/wasm-release" ABSOLUTE)
+    target_compile_definitions(Core PRIVATE TAIDAFLOW_DEV_WEB_DIR="${TAIDAFLOW_DEV_WEB_DIR}")
     target_link_libraries(Core
             PRIVATE
             Qt${QT_VERSION_MAJOR}::Concurrent

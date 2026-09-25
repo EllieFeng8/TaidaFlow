@@ -1,0 +1,10 @@
+HTTP/1.1 304 Not Modified
+etag: "2042edf-1a0d9f82dd5"
+last-modified: Fri, 25 Sep 2026 19:08:35 GMT
+cache-control: no-cache
+vary: Accept-Encoding
+cross-origin-opener-policy: same-origin
+cross-origin-embedder-policy: require-corp
+cross-origin-resource-policy: same-origin
+content-length: 0
+

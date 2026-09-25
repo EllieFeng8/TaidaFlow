@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+etag: "bdee0d-1a0d9f82dd5-gz"
+last-modified: Fri, 25 Sep 2026 19:08:35 GMT
+cache-control: no-cache
+vary: Accept-Encoding
+cross-origin-opener-policy: same-origin
+cross-origin-embedder-policy: require-corp
+cross-origin-resource-policy: same-origin
+content-type: application/wasm
+content-encoding: gzip
+content-length: 12447245
+

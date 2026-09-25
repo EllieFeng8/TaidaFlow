@@ -1,10 +1,14 @@
 #include "core.h"
 
+#include "AppHttpServer/AppHttpServer.h"
 #include "HistoryExport.h"
 #include "Modbus_Server.h"
 #include "SqlManager.h"
 
+#include <QCoreApplication>
 #include <QDateTime>
+#include <QDir>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -96,6 +100,8 @@ Core::~Core()
         delete m_historyExport;
         m_historyExport = nullptr;
     }
+    // w2-049: normally already stopped on aboutToQuit (no-op then).
+    AppHttpServer::instance().stop();
     if (m_modbusServer) {
         m_modbusServer->stop();
         delete m_modbusServer;
@@ -148,9 +154,11 @@ void Core::init()
     });
     // w2-041 (spec §2): History range, relayed from WASM like the page number.
     connect(m_proxy, &TaidaFlowProxy::historyRangeRequested, this, &Core::onHistoryRangeRequested);
-    // w2-041 (spec §3): raw CSV export queue/engine + download service
-    // (0.0.0.0:8124, export folder <working directory>/exports).
+    // w2-041 (spec §3): raw CSV export queue/engine (export folder <working
+    // directory>/exports); it mounts GET /exports/<file> on the AppHttpServer
+    // singleton, which also serves the web page (w2-049, startHttpServer).
     m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, HistoryExportManager::Options{}, this);
+    startHttpServer();
     if (!m_manager->saveAlarm(QStringLiteral("100"),
                               QStringLiteral("設備啟動"),
                               QStringLiteral("正常"))) {
@@ -190,6 +198,90 @@ void Core::init()
     setHistoryTitleOnce();
     loadHistoryRecords("start-up");
     loadAlarmRecords();
+}
+
+namespace {
+constexpr auto kWebDirEnv = "TAIDAFLOW_WEB_DIR";
+const QString kWebPage = QStringLiteral("TaidaFlowApp.html");
+
+// w2-049: folder of the WebAssembly build served at http://<host>:8124/.
+// Order: TAIDAFLOW_WEB_DIR -> <exe folder>/web -> the repository's build/wasm-release
+// (development default, compiled in; only if it exists).  A candidate is used when it
+// holds TaidaFlowApp.html.  Every candidate and the result are logged.
+QString resolveWebDir(QString *source)
+{
+    struct Candidate { QString source; QString dir; };
+    QList<Candidate> candidates;
+    const QString env = qEnvironmentVariable(kWebDirEnv).trimmed();
+    if (env.isEmpty())
+        qInfo().noquote() << QStringLiteral("[Web] %1 is not set").arg(QLatin1String(kWebDirEnv));
+    else
+        candidates.append({QString::fromLatin1(kWebDirEnv), env});
+    candidates.append({QStringLiteral("<exe folder>/web"),
+                       QCoreApplication::applicationDirPath() + QStringLiteral("/web")});
+#ifdef TAIDAFLOW_DEV_WEB_DIR
+    candidates.append({QStringLiteral("development default"), QStringLiteral(TAIDAFLOW_DEV_WEB_DIR)});
+#endif
+    for (const Candidate &c : std::as_const(candidates)) {
+        const QString dir = QDir::cleanPath(QDir(c.dir).absolutePath());
+        const bool hasDir = QFileInfo(dir).isDir();
+        const bool hasPage = hasDir && QFileInfo(dir + QLatin1Char('/') + kWebPage).isFile();
+        qInfo().noquote() << QStringLiteral("[Web] candidate %1: %2 -> %3")
+                                     .arg(c.source, QDir::toNativeSeparators(dir),
+                                          hasPage ? QStringLiteral("has %1, used").arg(kWebPage)
+                                                  : hasDir ? QStringLiteral("no %1, skipped").arg(kWebPage)
+                                                           : QStringLiteral("does not exist, skipped"));
+        if (hasPage) {
+            *source = c.source;
+            return dir;
+        }
+    }
+    return QString();
+}
+} // namespace
+
+void Core::startHttpServer()
+{
+    AppHttpServer &http = AppHttpServer::instance();
+    QString source;
+    const QString webDir = resolveWebDir(&source);
+    if (webDir.isEmpty()) {
+        qWarning().noquote() << QStringLiteral("[Web] no web page folder found (set %1, or deploy with "
+                                               "scripts\\deploy-web.ps1 to <exe folder>\\web) - the web page "
+                                               "is not served; /exports downloads work as before")
+                                        .arg(QLatin1String(kWebDirEnv));
+    } else {
+        // Replaces the former Python development server (COOP/COEP/CORP on, as before),
+        // plus ETag/304 revalidation (Cache-Control: no-cache) and pre-compressed .gz files.
+        AppHttpServer::StaticOptions options;
+        options.indexFile = kWebPage;                  // "/" -> 302 /TaidaFlowApp.html
+        // Web file types only: the development default is the build folder itself, which
+        // also holds CMakeCache.txt, build.ninja, sources of generated code, ...
+        options.fileSuffixes = QStringList{
+            QStringLiteral("html"), QStringLiteral("js"), QStringLiteral("mjs"), QStringLiteral("wasm"),
+            QStringLiteral("css"), QStringLiteral("json"), QStringLiteral("map"), QStringLiteral("svg"),
+            QStringLiteral("png"), QStringLiteral("jpg"), QStringLiteral("ico"), QStringLiteral("ttf"),
+            QStringLiteral("otf"), QStringLiteral("woff"), QStringLiteral("woff2")};
+        if (http.mountStatic(QStringLiteral("/"), webDir, options)) {
+            qInfo().noquote() << QStringLiteral("[Web] web page folder (%1): %2 -> http://<host>:%3/%4")
+                                         .arg(source, QDir::toNativeSeparators(webDir))
+                                         .arg(HistoryExport::kDefaultDownloadPort).arg(kWebPage);
+        }
+    }
+    // One listener for the page and the CSV downloads.  A bind failure is only logged.
+    if (http.start(HistoryExport::kDefaultDownloadPort, QHostAddress::AnyIPv4)) {
+        qInfo().noquote() << QStringLiteral("[Web] HTTP service listening on 0.0.0.0:%1 (web page %2, /exports downloads)")
+                                     .arg(http.port())
+                                     .arg(webDir.isEmpty() ? QStringLiteral("NOT served") : QStringLiteral("served"));
+    } else {
+        qWarning().noquote() << QStringLiteral("[Web] HTTP service NOT started on 0.0.0.0:%1: %2 (web page and "
+                                               "CSV downloads unavailable; the application keeps running)")
+                                        .arg(HistoryExport::kDefaultDownloadPort).arg(http.lastError());
+    }
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
+                []() { AppHttpServer::instance().stop(); });
+    }
 }
 
 void Core::reportIgnoredHmiInputSettings()

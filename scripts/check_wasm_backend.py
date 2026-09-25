@@ -8,7 +8,8 @@ on WebAssembly) it reports, from Ninja's own build graph and the produced binary
 
   backend_sources   : backend .cpp files (Core/core.cpp, manager.cpp, Modbus_Client.cpp,
                       Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp,
-                      RESTManager.cpp, HistoryExport.cpp [w2-041]) that appear in
+                      RESTManager.cpp, HistoryExport.cpp [w2-041],
+                      AppHttpServer/AppHttpServer.cpp [w2-049]) that appear in
                       `ninja -t commands <target>`
                       (every compile/link command needed to produce the target)
   backend_qt_libs   : Qt SerialBus / SerialPort / Sql / HttpServer / Concurrent libraries
@@ -35,12 +36,14 @@ from pathlib import Path
 NINJA = r"C:\Qt\Tools\Ninja\ninja.exe"
 BACKEND_SOURCES = ["core.cpp", "manager.cpp", "Modbus_Client.cpp", "Modbus_Server.cpp",
                    "Ms300FaultReader.cpp", "SqlManager.cpp", "RESTManager.cpp",
-                   "HistoryExport.cpp"]
+                   "HistoryExport.cpp", "AppHttpServer.cpp"]
 BACKEND_MODULES = ["SerialBus", "SerialPort", "Sql", "HttpServer", "Concurrent"]
 BACKEND_STRINGS = [b"192.168.1.201", b"192.168.1.205", b"COM2", b"TaidaFlowSettings.ini",
                    b"settings.sqlite", b"device_info.ini", b"[ModbusServer]", b"[MS300]",
                    b"ModbusClient", b"SqlManager", b"RESTManager", b"QModbusTcpClient",
-                   b"HistoryExportManager", b"[ExportHTTP]"]
+                   b"HistoryExportManager",
+                   # w2-049: AppHttpServer singleton + Core's web page folder lookup
+                   b"[AppHttpServer]", b"AppHttpServerThread", b"TAIDAFLOW_WEB_DIR"]
 
 
 def analyse(build: Path) -> tuple[bool, str]:
@@ -54,7 +57,8 @@ def analyse(build: Path) -> tuple[bool, str]:
     commands = out.stdout.splitlines()
     compiled = []
     for src in BACKEND_SOURCES:
-        pat = re.compile(r"[/\\]Core[/\\]" + re.escape(src) + r"(\s|\"|$)")
+        # Core/<file>, or one class folder below Core (Core/AppHttpServer/AppHttpServer.cpp)
+        pat = re.compile(r"[/\\]Core[/\\](?:[A-Za-z0-9_]+[/\\])?" + re.escape(src) + r"(\s|\"|$)")
         if any(pat.search(c) for c in commands):
             compiled.append(src)
     # The final link edge in build.ninja: its LINK_LIBRARIES variable holds the libraries

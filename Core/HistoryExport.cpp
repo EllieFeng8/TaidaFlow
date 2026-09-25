@@ -1,5 +1,6 @@
 #include "HistoryExport.h"
 
+#include "AppHttpServer/AppHttpServer.h"
 #include "SqlManager.h"
 #include "TaidaFlowProxy.h"
 
@@ -8,8 +9,6 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QHostAddress>
-#include <QHttpHeaders>
 #include <QMetaObject>
 #include <QRegularExpression>
 #include <QSaveFile>
@@ -17,11 +16,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QStandardPaths>
-#include <QTcpServer>
 #include <QTimer>
-#include <QtHttpServer/QHttpServer>
-#include <QtHttpServer/QHttpServerRequest>
-#include <QtHttpServer/QHttpServerResponder>
 
 #include <algorithm>
 #include <charconv>
@@ -448,176 +443,6 @@ void HistoryExportWorker::run(const RunSpec &spec, std::shared_ptr<std::atomic_b
 }
 
 // ---------------------------------------------------------------------------
-// Download server (server thread)
-// ---------------------------------------------------------------------------
-
-namespace {
-class ExportHttpImpl : public QObject
-{
-public:
-    explicit ExportHttpImpl(const QString &exportDir) : m_exportDir(exportDir) {}
-
-    bool listen(quint16 port, QString *error)
-    {
-        auto *tcp = new QTcpServer(this);
-        if (!tcp->listen(QHostAddress::AnyIPv4, port)) {
-            *error = tcp->errorString();
-            delete tcp;
-            return false;
-        }
-        m_http = new QHttpServer(this);
-        m_http->route(QStringLiteral("/exports/<arg>"), QHttpServerRequest::Method::Get, this,
-                      [this](const QString &name, const QHttpServerRequest &request,
-                             QHttpServerResponder &responder) { serve(name, request, responder); });
-        m_http->setMissingHandler(this, [](const QHttpServerRequest &request,
-                                           QHttpServerResponder &responder) {
-            qInfo().noquote() << QStringLiteral("[ExportHTTP] %1 %2 from %3 -> 404 (no such route)")
-                                         .arg(QString::fromLatin1(methodName(request)),
-                                              request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
-                                              request.remoteAddress().toString());
-            responder.write(QByteArrayLiteral("not found\n"), errorHeaders(),
-                            QHttpServerResponder::StatusCode::NotFound);
-        });
-        if (!m_http->bind(tcp)) {
-            *error = QStringLiteral("QHttpServer::bind failed");
-            return false;
-        }
-        return true;
-    }
-
-private:
-    static QByteArray methodName(const QHttpServerRequest &request)
-    {
-        switch (request.method()) {
-        case QHttpServerRequest::Method::Get: return "GET";
-        case QHttpServerRequest::Method::Head: return "HEAD";
-        case QHttpServerRequest::Method::Post: return "POST";
-        case QHttpServerRequest::Method::Put: return "PUT";
-        case QHttpServerRequest::Method::Delete: return "DELETE";
-        case QHttpServerRequest::Method::Options: return "OPTIONS";
-        default: return "OTHER";
-        }
-    }
-
-    static QHttpHeaders errorHeaders()
-    {
-        QHttpHeaders headers;
-        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/plain; charset=utf-8");
-        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
-        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
-        return headers;
-    }
-
-    void reject(const QHttpServerRequest &request, QHttpServerResponder &responder,
-                QHttpServerResponder::StatusCode code, const QByteArray &body, const QString &why)
-    {
-        // One multi-argument arg() call: a "%NN" in the requested URL must not be
-        // taken as a place marker by a following arg().
-        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> %3 (%4)")
-                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
-                                          request.remoteAddress().toString(),
-                                          QString::number(int(code)), why);
-        responder.write(body, errorHeaders(), code);
-    }
-
-    void serve(const QString &name, const QHttpServerRequest &request, QHttpServerResponder &responder)
-    {
-        // Only <sessionId>_<yyyyMMdd_HHmmss>.csv directly inside the export
-        // folder: no separators, no "..", no drive letters, no other types.
-        if (!isValidExportFileName(name)) {
-            reject(request, responder, QHttpServerResponder::StatusCode::BadRequest,
-                   QByteArrayLiteral("bad file name\n"), QStringLiteral("rejected name \"%1\"").arg(name));
-            return;
-        }
-        const QDir dir(m_exportDir);
-        const QFileInfo info(dir.filePath(name));
-        if (!info.exists() || !info.isFile()) {
-            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
-                   QByteArrayLiteral("not found\n"), QStringLiteral("no file \"%1\"").arg(name));
-            return;
-        }
-        if (info.canonicalPath() != QFileInfo(m_exportDir).canonicalFilePath()) {
-            reject(request, responder, QHttpServerResponder::StatusCode::Forbidden,
-                   QByteArrayLiteral("forbidden\n"), QStringLiteral("outside the export folder"));
-            return;
-        }
-        auto *file = new QFile(info.absoluteFilePath());
-        if (!file->open(QIODevice::ReadOnly)) {
-            const QString error = file->errorString();
-            delete file;
-            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
-                   QByteArrayLiteral("not found\n"), QStringLiteral("open failed: %1").arg(error));
-            return;
-        }
-        QHttpHeaders headers;
-        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/csv; charset=utf-8");
-        headers.append(QHttpHeaders::WellKnownHeader::ContentDisposition,
-                       QByteArrayLiteral("attachment; filename=\"") + name.toLatin1() + '"');
-        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
-        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
-        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> 200, %3 byte(s) streamed from disk")
-                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
-                                          request.remoteAddress().toString(),
-                                          QString::number(file->size()));
-        // Qt 6.8: for a non-sequential device the responder sends Content-Length
-        // and then reads the file in chunks as the socket drains
-        // (QHttpServerResponder::write(QIODevice*, ...), takes ownership).
-        responder.write(file, headers, QHttpServerResponder::StatusCode::Ok);
-    }
-
-    QString m_exportDir;
-    QHttpServer *m_http = nullptr;
-};
-} // namespace
-
-ExportDownloadServer::ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent)
-    : QObject(parent), m_exportDir(exportDir), m_port(port)
-{
-    m_thread.setObjectName(QStringLiteral("ExportDownloadThread"));
-}
-
-ExportDownloadServer::~ExportDownloadServer()
-{
-    stop();
-}
-
-bool ExportDownloadServer::start()
-{
-    if (m_impl)
-        return m_listening;
-    auto *impl = new ExportHttpImpl(m_exportDir);
-    impl->moveToThread(&m_thread);
-    connect(&m_thread, &QThread::finished, impl, &QObject::deleteLater);
-    m_impl = impl;
-    m_thread.start();
-    QString error;
-    bool ok = false;
-    QMetaObject::invokeMethod(impl, [impl, this, &ok, &error]() { ok = impl->listen(m_port, &error); },
-                              Qt::BlockingQueuedConnection);
-    m_listening = ok;
-    if (ok) {
-        qInfo().noquote() << QStringLiteral("[ExportHTTP] download service listening on 0.0.0.0:%1, "
-                                            "GET /exports/<file> from %2")
-                                     .arg(m_port).arg(QDir::toNativeSeparators(m_exportDir));
-    } else {
-        qWarning().noquote() << QStringLiteral("[ExportHTTP] download service NOT started on 0.0.0.0:%1: %2 "
-                                               "(web exports are still written; the application keeps running)")
-                                        .arg(m_port).arg(error);
-    }
-    return ok;
-}
-
-void ExportDownloadServer::stop()
-{
-    if (!m_impl)
-        return;
-    m_thread.quit();
-    m_thread.wait();
-    m_impl = nullptr;                     // deleted by deleteLater when the thread finished
-    m_listening = false;
-}
-
-// ---------------------------------------------------------------------------
 // Manager (main thread)
 // ---------------------------------------------------------------------------
 
@@ -672,9 +497,16 @@ HistoryExportManager::HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sq
     qInfo().noquote() << QStringLiteral("[Export] web export folder %1 (max %2 files / %3 bytes)")
                                  .arg(QDir::toNativeSeparators(m_options.exportDir))
                                  .arg(m_options.maxFiles).arg(m_options.maxBytes);
-    if (m_options.startDownloadServer) {
-        m_downloadServer = std::make_unique<ExportDownloadServer>(m_options.exportDir, m_options.downloadPort);
-        m_downloadServer->start();
+    if (m_options.mountDownloads) {
+        // Same rules as the former ExportDownloadServer: only <sessionId>_<yyyyMMdd_HHmmss>.csv
+        // directly inside the export folder, attachment, ACAO *, no-store, streamed.
+        m_downloadsMounted = AppHttpServer::instance().mountDownloads(
+                QStringLiteral("/exports"), m_options.exportDir,
+                [](const QString &name) { return isValidExportFileName(name); });
+        qInfo().noquote() << QStringLiteral("[Export] download mount GET /exports/<file> -> %1: %2")
+                                     .arg(QDir::toNativeSeparators(m_options.exportDir),
+                                          m_downloadsMounted ? QStringLiteral("mounted on AppHttpServer")
+                                                             : QStringLiteral("FAILED"));
     }
 }
 
@@ -685,7 +517,7 @@ HistoryExportManager::~HistoryExportManager()
 
 bool HistoryExportManager::downloadServerListening() const
 {
-    return m_downloadServer && m_downloadServer->isListening();
+    return m_downloadsMounted && AppHttpServer::instance().isListening();
 }
 
 void HistoryExportManager::shutdown()
@@ -698,9 +530,11 @@ void HistoryExportManager::shutdown()
     m_queue.clear();
     m_workerThread.quit();
     m_workerThread.wait();                // a running export stops at its next chunk
-    if (m_downloadServer)
-        m_downloadServer->stop();
-    qInfo().noquote() << "[Export] stopped (export thread and download service).";
+    if (m_downloadsMounted) {
+        AppHttpServer::instance().unmount(QStringLiteral("/exports"));
+        m_downloadsMounted = false;
+    }
+    qInfo().noquote() << "[Export] stopped (export thread; /exports unmounted).";
 }
 
 bool HistoryExportManager::sessionBusy(const QString &sessionId) const

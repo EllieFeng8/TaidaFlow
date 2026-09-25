@@ -8,9 +8,11 @@
 //  * HistoryExportWorker (its own QThread): streams the rows newest first
 //    straight from the month files (own read-only SQLite connections, keyset
 //    chunks) into a QSaveFile, so memory does not grow with the file.
-//  * ExportDownloadServer (its own QThread): QHttpServer on 0.0.0.0:8124 that
-//    only serves GET /exports/<file name> from the export folder (streamed from
-//    the QFile by QHttpServerResponder, never read into memory as a whole).
+//  * Download service (w2-049): the manager mounts the export folder on the
+//    process-wide AppHttpServer singleton (Core/AppHttpServer, own thread) as
+//    GET /exports/<file name> (file name rule isValidExportFileName, streamed from
+//    disk, never read into memory as a whole).  The listener (0.0.0.0:8124) is
+//    started and stopped by Core, not here.
 #include <QByteArray>
 #include <QDateTime>
 #include <QElapsedTimer>
@@ -118,27 +120,6 @@ private:
     SqlManager *m_sql = nullptr;
 };
 
-class ExportDownloadServer : public QObject
-{
-    Q_OBJECT
-public:
-    ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent = nullptr);
-    ~ExportDownloadServer() override;
-    // Binds 0.0.0.0:<port> on the server thread.  On failure it logs and returns
-    // false; the application keeps running.
-    bool start();
-    void stop();
-    bool isListening() const { return m_listening; }
-    quint16 port() const { return m_port; }
-
-private:
-    QString m_exportDir;
-    quint16 m_port;
-    QThread m_thread;
-    QObject *m_impl = nullptr;           // lives on m_thread
-    bool m_listening = false;
-};
-
 class HistoryExportManager : public QObject
 {
     Q_OBJECT
@@ -146,8 +127,9 @@ public:
     struct Options
     {
         QString exportDir;                                   // web exports (spec §3.5)
-        quint16 downloadPort = HistoryExport::kDefaultDownloadPort;
-        bool startDownloadServer = true;
+        quint16 downloadPort = HistoryExport::kDefaultDownloadPort;   // sent to the page with each file
+        // Mount exportDir as /exports on AppHttpServer::instance() (unmounted on shutdown).
+        bool mountDownloads = true;
         int maxFiles = HistoryExport::kMaxExportFiles;
         qint64 maxBytes = HistoryExport::kMaxExportBytes;
         int chunkRows = HistoryExport::kDefaultChunkRows;
@@ -165,6 +147,7 @@ public:
     void shutdown();
 
     QString exportDir() const { return m_options.exportDir; }
+    // /exports is mounted and AppHttpServer::instance() is listening.
     bool downloadServerListening() const;
     int statusPublishCount() const { return m_publishCount; }
 
@@ -210,7 +193,7 @@ private:
     Options m_options;
     QThread m_workerThread;
     HistoryExportWorker *m_worker = nullptr;
-    std::unique_ptr<ExportDownloadServer> m_downloadServer;
+    bool m_downloadsMounted = false;
     QList<Job> m_queue;
     std::unique_ptr<Job> m_running;
     quint64 m_nextJobId = 1;

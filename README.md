@@ -5,7 +5,8 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷�
 `192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
 改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
 `Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)、
-`HistoryExport`(歷史 CSV 匯出佇列 + 下載服務 `0.0.0.0:8124`,見「歷史資料:時間區間與匯出」)。
+`HistoryExport`(歷史 CSV 匯出佇列,見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
+HTTP 伺服器單例,`0.0.0.0:8124` 同時提供**網頁**與 **CSV 下載**,見「網頁與下載(HTTP 8124)」)。
 
 QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBackend`)。
 透過 `integration-pack/wasm-mirror`(pack **1.0.1**,wire protocol 3,**唯讀、由維護方提供**,
@@ -24,12 +25,12 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
 緊急停止迴路),開 `COM2`,並在 `0.0.0.0:502` 開 Modbus server。在非現場的開發機上:
 
 - 一律用 `scripts\run-desktop.ps1` 啟動。它先跑 `scripts\safety_probe.ps1`(對 5 台 ADAM 只做
-  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8123/8124/8125/18125 是否
+  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8124/8125/18125 是否
   已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
-  區網轉發)、18125(內部 mirror)或 8124(CSV 下載服務)已被占用 → 不啟動(exit 4 `BUSY`,
-  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`。
-- desktop 另在 `0.0.0.0:8124` 開 CSV 下載服務、在 `0.0.0.0:8125` 開 mirror 區網轉發(內網、
-  都不做存取控管;下載服務只提供匯出資料夾裡的檔,見下方)。
+  區網轉發)、18125(內部 mirror)或 8124(網頁 + CSV 下載)已被占用 → 不啟動(exit 4 `BUSY`,
+  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`(`-LogFile` 可改)。
+- desktop 另在 `0.0.0.0:8124` 開 HTTP 服務(網頁 + CSV 下載)、在 `0.0.0.0:8125` 開 mirror 區網轉發
+  (內網、都不做存取控管;只提供網頁資料夾的網頁檔與匯出資料夾裡的檔,見下方)。
 - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
   `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`),網頁匯出的 CSV
   寫在 `exports\`。`build/` 已被 `.gitignore` 排除,work tree 保持乾淨。
@@ -83,26 +84,56 @@ WASM 產物:`build\wasm-release\TaidaFlowApp.html / .js / .wasm`、`qtloader.js`
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"   # 先探測再啟動
-python scripts\serve_wasm.py            # 綁 0.0.0.0:8123;本機開 http://127.0.0.1:8123/TaidaFlowApp.html
-python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
+# 瀏覽器開 http://127.0.0.1:8124/TaidaFlowApp.html(區網:http://<desktop 的區網 IP>:8124/TaidaFlowApp.html)
 ```
 
+- 網頁由 **desktop 自己**提供(`AppHttpServer` 單例,與 CSV 下載同一個 `0.0.0.0:8124`),不需要另開
+  網頁伺服器。網頁檔資料夾的決定順序見「網頁與下載(HTTP 8124)」;開發機上 `build\wasm-release`
+  建好就直接用,正式部署用 `scripts\deploy-web.ps1` 複製到 `<exe 資料夾>\web`。
 - `run-desktop.ps1` 設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin,log 寫到
   `build\runtime-logs\`。啟動 log 應含 `[ModbusServer] listening on 0.0.0.0:502 unit=1`、
   `WASM Mirror endpoint: ws://127.0.0.1:18125/mirror`、
-  `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125` 與
-  `[ExportHTTP] download service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
-- `serve_wasm.py`:預設綁 **`0.0.0.0`**(內網其他電腦可開網頁;`--host 127.0.0.1` 改回只給本機);
-  送 `application/wasm`、`Cache-Control: no-store`、COOP/COEP(符合
-  `integration-pack/wasm-mirror/docs/http-server-requirements.md`)。
+  `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125`、
+  `[Web] web page folder (<來源>): <資料夾> -> http://<host>:8124/TaidaFlowApp.html` 與
+  `[Web] HTTP service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
 - 瀏覽器 console:`WASM Mirror ready: true` 即同步完成。
+
+### 網頁與下載(HTTP 8124,w2-049)
+
+desktop 的 Core 只透過 `AppHttpServer::instance()`(`Core/AppHttpServer/`,只依賴 Qt Core/Network/
+HttpServer 的可重用類別,用法見該資料夾的 `README.md`)提供 HTTP,單例跑在自己的執行緒
+(`AppHttpServerThread`),大檔傳送不占 UI 執行緒。`Core::startHttpServer()` 在 `Core::init()` 掛上網頁
+(`/`)後 `start(8124, AnyIPv4)`;`HistoryExportManager` 掛上 `/exports`;`aboutToQuit` 時 `stop()`。
+
+- **網頁檔資料夾**(第一個含 `TaidaFlowApp.html` 的):環境變數 `TAIDAFLOW_WEB_DIR` →
+  `<exe 資料夾>\web` → 開發預設 `<repo>\build\wasm-release`(編譯時寫入,不存在就跳過)。
+  每個候選與結果都記 log(`[Web] candidate ...`、`[Web] web page folder (...)`);都找不到只記
+  warning(`[Web] no web page folder found ...`),`/exports` 下載與其他功能照常。
+- **部署**:`powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1 [-Source build\wasm-release]
+  [-ExeDir build\desktop]` 清空 `<exe 資料夾>\web` 後複製同一次 build 的網頁檔(不含 CMake/Ninja 檔),
+  並為 `.wasm/.js/.html/.svg` 等產生 `.gz`(修改時間與原檔相同)。
+- **行為**(取代舊的 Python 開發伺服器,符合 `integration-pack/wasm-mirror/docs/http-server-requirements.md`):
+  - MIME:`.html` `text/html; charset=utf-8`、`.js/.mjs` `text/javascript; charset=utf-8`、
+    `.wasm` `application/wasm`、`.css`、`.json`、`.svg`、`.png`、`.ico`、`.ttf/.woff2` 等;
+    網頁掛載只送網頁類型的副檔名(開發預設就是 build 資料夾,`CMakeCache.txt` 等一律 404)。
+  - 快取:每個檔帶 `ETag`(大小 + 修改時間)與 `Last-Modified`,`Cache-Control: no-cache`(瀏覽器每次
+    重新驗證);`If-None-Match` / `If-Modified-Since` 相符 → 304;重新建置後 ETag 變 → 200 拿新檔,
+    HTML/JS/WASM 不會新舊混用。
+  - gzip:有 `<檔名>.gz`、不比原檔舊、且 `Accept-Encoding` 含 gzip → 送 `.gz`(`Content-Encoding: gzip`、
+    `Vary: Accept-Encoding`、MIME 仍為原檔;實測 `.wasm` 33,828,575 → `.gz` 12,447,241 bytes,37%)。
+  - `Cross-Origin-Opener-Policy: same-origin`、`Cross-Origin-Embedder-Policy: require-corp`、
+    `Cross-Origin-Resource-Policy: same-origin`(與舊伺服器相同,main 的 multithread 版也可用)。
+  - `/` → 302 `/TaidaFlowApp.html`;不列目錄;支援 `HEAD`;`GET`/`HEAD` 以外 405。
+  - 路徑穿越一律 400/403/404:`..`、`%2e%2e`、`%2f`/`%5c`/反斜線、磁碟代號與 `:`、`//`、結尾 `.`/空白、
+    裝置名(`NUL`、`CON` …)、`.` 開頭的隱藏檔,以及網頁資料夾**底下**的符號連結 / junction(不跟隨)。
+- 下載網址不變:`http://<pageHost>:8124/exports/<檔名>`(main 的 QML / Proxy 不需改);網頁現在也在
+  8124,下載與網頁同源。
 
 ### 區網連線(mirror,合併自 main e4bc327 / w2-042)
 
 | 端點 | 綁定 | 用途 |
 |---|---|---|
-| 網頁(`serve_wasm.py`) | `0.0.0.0:8123` | 區網電腦開 `http://<desktop 的區網 IP>:8123/TaidaFlowApp.html` |
-| CSV 下載服務 | `0.0.0.0:8124` | 網頁匯出檔下載(見「歷史資料:時間區間與匯出」) |
+| 網頁 + CSV 下載(`AppHttpServer`,desktop app) | `0.0.0.0:8124` | 區網電腦開 `http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>` |
 | mirror 區網轉發(`App/lanrelay.h`) | `0.0.0.0:8125` | 網頁連的公開 mirror port;每條連線原樣雙向轉發到 `127.0.0.1:18125` |
 | Mirror server(pack) | `127.0.0.1:18125` | 內部 port,只限本機,區網位址連不到 |
 
@@ -110,7 +141,7 @@ python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
   `127.0.0.1` 並記 warning。所以從哪個位址開網頁,就連回同一個位址的 8125。
 - Mirror `allowedOrigins = {}`(空清單 = 不限制 Origin);內網系統,依 Mango 決定不做存取控管,
   轉發也不做來源限制。
-- 別台電腦要連進來,Windows 防火牆需放行 **8123/8124/8125**(TCP 輸入)。這由**管理員**設定,
+- 別台電腦要連進來,Windows 防火牆需放行 **8124/8125**(TCP 輸入;8123 已不再使用)。這由**管理員**設定,
   本專案的腳本不改防火牆 / 網路設定;首次啟動 Windows 可能跳出防火牆詢問視窗。
 - 轉發是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
   正式開關後,改由 Mirror 直接綁 `0.0.0.0:8125`,並刪除 `App/lanrelay.h` 與 `main.cpp` 中的使用。
@@ -154,8 +185,7 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
 powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1
 # 2. 再起桌面版(simulator 模式探測 + 幫 app 設 TAIDAFLOW_DEVICE_PROFILE=simulator)
 powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator -Label "sim"
-# 3. 網頁版照舊
-python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.html
+# 3. 網頁版:瀏覽器開 http://127.0.0.1:8124/TaidaFlowApp.html(desktop app 提供)
 ```
 
 - **順序一定是模擬器先**。實測(`docs/evidence/wasm-v4-sim/14-bind-order-core-first.txt`):
@@ -201,7 +231,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   用途:無設備的開發機上,後端永遠不會更新 PV,E2E 以它模擬「desktop 端 PV 變化」。它不能寫 SV,
   也不碰 Manager/Modbus。`run-desktop.ps1 -PvFile <檔案>` 會設定環境變數。
 - `scripts\desktop_input.py`(OS SendInput 操作真實 desktop UI)、`scripts\capture-window.ps1`
-  (視窗截圖)、`serve_wasm.py --evidence-dir DIR`(僅此模式注入截圖/console 收集 shim)。
+  (視窗截圖)。
 - `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
   Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
   下次啟動時由 Core 的真實讀取路徑(`Core::loadHistoryRecords` → SqlManager → `historyRecords` → Mirror)
@@ -209,10 +239,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   所以歷史頁 / CSV 匯出只能這樣準備資料。它不走 Core 的寫入路徑(`saveSensorData`)。
 - `scripts\compare_history_csv.py --fixture rows.json A.csv B.csv ...`:檢查匯出 CSV 的 BOM、標頭、
   列數、每格內容與 fixture 一致,且各檔位元組相同。
-- `serve_wasm.py --evidence-dir DIR` 另會把頁面觸發的 Blob 下載(`<a download>`)複製一份存成
-  `DIR\download-<檔名>`,並記錄 `showSaveFilePicker` 的呼叫與結果;網址加 `?evidence-download=anchor`
-  時,在 app 載入前移除 `showOpenFilePicker/showSaveFilePicker`(等同 Firefox/Safari),讓
-  Qt 走它自己的 `<a download>` 後備路徑(內建 browser pane 不支援原生存檔對話框時使用)。
+- 舊的 Python 開發網頁伺服器(8123)與它的 E2E 證據收集模式(頁面截圖 / console / Blob 下載上傳)
+  已隨 w2-049 移除,網頁改由 desktop 的 `AppHttpServer` 提供;`docs/evidence/` 下的歷史證據不變。
 - `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
 
 ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
@@ -265,12 +293,13 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   清理:每產生一個網頁檔後,若 `*.csv` 超過 20 個**或**總量超過 2 GB,依修改時間刪最舊的,直到兩個條件都
   滿足;不刪剛產生的檔,它單獨就超過 2 GB 時保留並記 log;正在被下載而刪不掉的檔記 log 跳過。
   啟動時刪除上次當機留下的暫存檔(`*.csv.XXXXXX`)。
-- **下載服務**(`ExportDownloadServer`,專用執行緒上的 `QHttpServer`):綁 `0.0.0.0:8124`,只有
-  `GET /exports/<檔名>`;檔名必須是 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(不能含 `/ \ .. :`、不能是其他
-  副檔名),且實際路徑必須在匯出資料夾內;回應 `Content-Type: text/csv; charset=utf-8`、
+- **下載**(w2-049 起為 `AppHttpServer` 單例的 `/exports` 掛載:`HistoryExportManager` 建立時掛上、
+  shutdown 時卸下;listener `0.0.0.0:8124` 由 Core 啟停):只有 `GET`/`HEAD /exports/<檔名>`;檔名必須是
+  `<sessionId>_<yyyyMMdd_HHmmss>.csv`(不能含 `/ \ .. :`、不能是其他副檔名),且實際路徑必須在匯出
+  資料夾內(符號連結不跟隨);回應 `Content-Type: text/csv; charset=utf-8`、
   `Content-Disposition: attachment; filename="<檔名>"`、`Access-Control-Allow-Origin: *`、
-  `Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟分段送出(Qt 6.8 文件:
-  非 sequential 裝置一次宣告全長、分段讀取,不整檔讀進記憶體)。其他路徑 404、壞檔名 400。
+  `Cache-Control: no-store`、`Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟
+  分段送出(不整檔讀進記憶體)。不存在 404、壞檔名 400、其他方法 405。
   綁定失敗只記 warning,app 繼續執行(網頁匯出檔仍會寫出)。
 - 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)**已刪除**(main w2-042 自
   `TaidaFlowProxy.h` 移除,已合併進本分支);CSV 一律走上述匯出佇列。`docs/wasm-integration-report.md`
@@ -278,7 +307,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 ## 測試 / 驗證(全部以 exit code 判定)
 
-本 repo 沒有自己的單元測試(維護方專案);整合以下列可重跑檢查驗證:
+QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)與 5b 的歷史/匯出 harness;
+其餘整合以下列可重跑檢查驗證:
 
 ```bat
 :: 0. pack 與 1.0.1 來源逐檔一致、MANIFEST 24/24
@@ -295,17 +325,23 @@ python scripts\check_version_shadow.py build\desktop build\wasm-release
 :: 4. 字型子集涵蓋所有來源字元
 python scripts\make_font_subset.py --check
 :: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror 127.0.0.1:18125 + 區網轉發 0.0.0.0:8125
-::    (同一 app PID)+ 8124 下載服務起來、關閉後 502/8124/8125/18125 無殘留)
+::    (同一 app PID)+ 8124 HTTP 服務起來、網頁 200、關閉後 502/8124/8125/18125 無殘留)
 powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
+::    (w2-049) 接模擬器:先 scripts\run-simulator.ps1,再加 -DeviceProfile simulator [-ProbeLog <檔案>]
 :: 5a. (w2-043) 區網轉發:安全探測 SAFE 後啟動,以區網 IP:8125 與 127.0.0.1:8125 做 WebSocket upgrade
 ::     拿到 101(非白名單 Origin 也不被關閉)、區網 IP:18125 連不到;port 被占用時每 30 秒重查最多 30 分鐘
 powershell -ExecutionPolicy Bypass -File docs\evidence\w2-043\tools\verify-lanrelay.ps1
 :: 5b. (w2-041) 歷史區間 + CSV 匯出的 QTest(編譯真的 SqlManager / HistoryExport / Proxy 原始碼):
-::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)
-python docs\evidence\w2-041\tools\make_bench_db.py
-docs\evidence\w2-041\tools\run-qtest.bat
+::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)。
+::     w2-049 起下載測試改測 AppHttpServer 的 /exports 掛載,harness 在 docs\evidence\w2-049\tools
+::     (w2-041 的原版留作歷史證據,已不能對現行原始碼編譯)
+python -B docs\evidence\w2-041\tools\make_bench_db.py
+docs\evidence\w2-049\tools\run-w2041-qtest.bat
 ::     30 天匯出檔逐列比對(獨立的 Python 實作)
-python docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-041-qtest\work\exports_30d\web-t30d_*.csv" --data build\w2-041-bench\data --from 1786896000 --to 1789487999
+python -B docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-049-w2041-qtest\work\exports_30d\web-t30d_*.csv" --data build\w2-041-bench\data --from 1786896000 --to 1789487999
+:: 5c. (w2-049) AppHttpServer 單例的獨立 QTest(靜態 200/304/gzip/MIME/HEAD/COOP-COEP、穿越攻擊、
+::     下載掛載、自訂路由、綁定失敗、多執行緒註冊、1 GiB 串流記憶體;需約 2 GiB 暫存磁碟空間)
+scripts\run-apphttpserver-tests.bat
 :: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
 python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
 ```

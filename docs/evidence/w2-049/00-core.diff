@@ -1,0 +1,1083 @@
+diff --git a/Core/CMakeLists.txt b/Core/CMakeLists.txt
+index b9f7d03..601fcd8 100644
+--- a/Core/CMakeLists.txt
++++ b/Core/CMakeLists.txt
+@@ -26,9 +26,14 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         SqlManager.cpp
+         RESTManager.h
+         RESTManager.cpp
+-        # w2-041: History CSV export queue/engine + download service (QHttpServer, 0.0.0.0:8124)
++        # w2-041: History CSV export queue/engine (w2-049: its downloads are the /exports mount
++        # of AppHttpServer below)
+         HistoryExport.h
+         HistoryExport.cpp
++        # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
++        # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
++        AppHttpServer/AppHttpServer.h
++        AppHttpServer/AppHttpServer.cpp
+     )
+ endif()
+ 
+@@ -57,6 +62,10 @@ target_link_libraries(Core
+ 
+ # Desktop-only Qt modules of the backend (find_package in the root CMakeLists.txt).
+ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
++    # w2-049: development default of the web page folder (used only when neither
++    # TAIDAFLOW_WEB_DIR nor <exe folder>/web holds TaidaFlowApp.html).
++    get_filename_component(TAIDAFLOW_DEV_WEB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../build/wasm-release" ABSOLUTE)
++    target_compile_definitions(Core PRIVATE TAIDAFLOW_DEV_WEB_DIR="${TAIDAFLOW_DEV_WEB_DIR}")
+     target_link_libraries(Core
+             PRIVATE
+             Qt${QT_VERSION_MAJOR}::Concurrent
+diff --git a/Core/HistoryExport.cpp b/Core/HistoryExport.cpp
+index d1ec169..6d9a58b 100644
+--- a/Core/HistoryExport.cpp
++++ b/Core/HistoryExport.cpp
+@@ -1,5 +1,6 @@
+ #include "HistoryExport.h"
+ 
++#include "AppHttpServer/AppHttpServer.h"
+ #include "SqlManager.h"
+ #include "TaidaFlowProxy.h"
+ 
+@@ -8,8 +9,6 @@
+ #include <QFile>
+ #include <QFileDialog>
+ #include <QFileInfo>
+-#include <QHostAddress>
+-#include <QHttpHeaders>
+ #include <QMetaObject>
+ #include <QRegularExpression>
+ #include <QSaveFile>
+@@ -17,11 +16,7 @@
+ #include <QSqlError>
+ #include <QSqlQuery>
+ #include <QStandardPaths>
+-#include <QTcpServer>
+ #include <QTimer>
+-#include <QtHttpServer/QHttpServer>
+-#include <QtHttpServer/QHttpServerRequest>
+-#include <QtHttpServer/QHttpServerResponder>
+ 
+ #include <algorithm>
+ #include <charconv>
+@@ -447,176 +442,6 @@ void HistoryExportWorker::run(const RunSpec &spec, std::shared_ptr<std::atomic_b
+     emit finished(spec.id, Done, rowsWritten, bytes, QString(), detail);
+ }
+ 
+-// ---------------------------------------------------------------------------
+-// Download server (server thread)
+-// ---------------------------------------------------------------------------
+-
+-namespace {
+-class ExportHttpImpl : public QObject
+-{
+-public:
+-    explicit ExportHttpImpl(const QString &exportDir) : m_exportDir(exportDir) {}
+-
+-    bool listen(quint16 port, QString *error)
+-    {
+-        auto *tcp = new QTcpServer(this);
+-        if (!tcp->listen(QHostAddress::AnyIPv4, port)) {
+-            *error = tcp->errorString();
+-            delete tcp;
+-            return false;
+-        }
+-        m_http = new QHttpServer(this);
+-        m_http->route(QStringLiteral("/exports/<arg>"), QHttpServerRequest::Method::Get, this,
+-                      [this](const QString &name, const QHttpServerRequest &request,
+-                             QHttpServerResponder &responder) { serve(name, request, responder); });
+-        m_http->setMissingHandler(this, [](const QHttpServerRequest &request,
+-                                           QHttpServerResponder &responder) {
+-            qInfo().noquote() << QStringLiteral("[ExportHTTP] %1 %2 from %3 -> 404 (no such route)")
+-                                         .arg(QString::fromLatin1(methodName(request)),
+-                                              request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
+-                                              request.remoteAddress().toString());
+-            responder.write(QByteArrayLiteral("not found\n"), errorHeaders(),
+-                            QHttpServerResponder::StatusCode::NotFound);
+-        });
+-        if (!m_http->bind(tcp)) {
+-            *error = QStringLiteral("QHttpServer::bind failed");
+-            return false;
+-        }
+-        return true;
+-    }
+-
+-private:
+-    static QByteArray methodName(const QHttpServerRequest &request)
+-    {
+-        switch (request.method()) {
+-        case QHttpServerRequest::Method::Get: return "GET";
+-        case QHttpServerRequest::Method::Head: return "HEAD";
+-        case QHttpServerRequest::Method::Post: return "POST";
+-        case QHttpServerRequest::Method::Put: return "PUT";
+-        case QHttpServerRequest::Method::Delete: return "DELETE";
+-        case QHttpServerRequest::Method::Options: return "OPTIONS";
+-        default: return "OTHER";
+-        }
+-    }
+-
+-    static QHttpHeaders errorHeaders()
+-    {
+-        QHttpHeaders headers;
+-        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/plain; charset=utf-8");
+-        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
+-        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
+-        return headers;
+-    }
+-
+-    void reject(const QHttpServerRequest &request, QHttpServerResponder &responder,
+-                QHttpServerResponder::StatusCode code, const QByteArray &body, const QString &why)
+-    {
+-        // One multi-argument arg() call: a "%NN" in the requested URL must not be
+-        // taken as a place marker by a following arg().
+-        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> %3 (%4)")
+-                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
+-                                          request.remoteAddress().toString(),
+-                                          QString::number(int(code)), why);
+-        responder.write(body, errorHeaders(), code);
+-    }
+-
+-    void serve(const QString &name, const QHttpServerRequest &request, QHttpServerResponder &responder)
+-    {
+-        // Only <sessionId>_<yyyyMMdd_HHmmss>.csv directly inside the export
+-        // folder: no separators, no "..", no drive letters, no other types.
+-        if (!isValidExportFileName(name)) {
+-            reject(request, responder, QHttpServerResponder::StatusCode::BadRequest,
+-                   QByteArrayLiteral("bad file name\n"), QStringLiteral("rejected name \"%1\"").arg(name));
+-            return;
+-        }
+-        const QDir dir(m_exportDir);
+-        const QFileInfo info(dir.filePath(name));
+-        if (!info.exists() || !info.isFile()) {
+-            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
+-                   QByteArrayLiteral("not found\n"), QStringLiteral("no file \"%1\"").arg(name));
+-            return;
+-        }
+-        if (info.canonicalPath() != QFileInfo(m_exportDir).canonicalFilePath()) {
+-            reject(request, responder, QHttpServerResponder::StatusCode::Forbidden,
+-                   QByteArrayLiteral("forbidden\n"), QStringLiteral("outside the export folder"));
+-            return;
+-        }
+-        auto *file = new QFile(info.absoluteFilePath());
+-        if (!file->open(QIODevice::ReadOnly)) {
+-            const QString error = file->errorString();
+-            delete file;
+-            reject(request, responder, QHttpServerResponder::StatusCode::NotFound,
+-                   QByteArrayLiteral("not found\n"), QStringLiteral("open failed: %1").arg(error));
+-            return;
+-        }
+-        QHttpHeaders headers;
+-        headers.append(QHttpHeaders::WellKnownHeader::ContentType, "text/csv; charset=utf-8");
+-        headers.append(QHttpHeaders::WellKnownHeader::ContentDisposition,
+-                       QByteArrayLiteral("attachment; filename=\"") + name.toLatin1() + '"');
+-        headers.append(QHttpHeaders::WellKnownHeader::AccessControlAllowOrigin, "*");
+-        headers.append(QHttpHeaders::WellKnownHeader::CacheControl, "no-store");
+-        qInfo().noquote() << QStringLiteral("[ExportHTTP] GET %1 from %2 -> 200, %3 byte(s) streamed from disk")
+-                                     .arg(request.url().toString(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::FullyEncoded),
+-                                          request.remoteAddress().toString(),
+-                                          QString::number(file->size()));
+-        // Qt 6.8: for a non-sequential device the responder sends Content-Length
+-        // and then reads the file in chunks as the socket drains
+-        // (QHttpServerResponder::write(QIODevice*, ...), takes ownership).
+-        responder.write(file, headers, QHttpServerResponder::StatusCode::Ok);
+-    }
+-
+-    QString m_exportDir;
+-    QHttpServer *m_http = nullptr;
+-};
+-} // namespace
+-
+-ExportDownloadServer::ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent)
+-    : QObject(parent), m_exportDir(exportDir), m_port(port)
+-{
+-    m_thread.setObjectName(QStringLiteral("ExportDownloadThread"));
+-}
+-
+-ExportDownloadServer::~ExportDownloadServer()
+-{
+-    stop();
+-}
+-
+-bool ExportDownloadServer::start()
+-{
+-    if (m_impl)
+-        return m_listening;
+-    auto *impl = new ExportHttpImpl(m_exportDir);
+-    impl->moveToThread(&m_thread);
+-    connect(&m_thread, &QThread::finished, impl, &QObject::deleteLater);
+-    m_impl = impl;
+-    m_thread.start();
+-    QString error;
+-    bool ok = false;
+-    QMetaObject::invokeMethod(impl, [impl, this, &ok, &error]() { ok = impl->listen(m_port, &error); },
+-                              Qt::BlockingQueuedConnection);
+-    m_listening = ok;
+-    if (ok) {
+-        qInfo().noquote() << QStringLiteral("[ExportHTTP] download service listening on 0.0.0.0:%1, "
+-                                            "GET /exports/<file> from %2")
+-                                     .arg(m_port).arg(QDir::toNativeSeparators(m_exportDir));
+-    } else {
+-        qWarning().noquote() << QStringLiteral("[ExportHTTP] download service NOT started on 0.0.0.0:%1: %2 "
+-                                               "(web exports are still written; the application keeps running)")
+-                                        .arg(m_port).arg(error);
+-    }
+-    return ok;
+-}
+-
+-void ExportDownloadServer::stop()
+-{
+-    if (!m_impl)
+-        return;
+-    m_thread.quit();
+-    m_thread.wait();
+-    m_impl = nullptr;                     // deleted by deleteLater when the thread finished
+-    m_listening = false;
+-}
+-
+ // ---------------------------------------------------------------------------
+ // Manager (main thread)
+ // ---------------------------------------------------------------------------
+@@ -672,9 +497,16 @@ HistoryExportManager::HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sq
+     qInfo().noquote() << QStringLiteral("[Export] web export folder %1 (max %2 files / %3 bytes)")
+                                  .arg(QDir::toNativeSeparators(m_options.exportDir))
+                                  .arg(m_options.maxFiles).arg(m_options.maxBytes);
+-    if (m_options.startDownloadServer) {
+-        m_downloadServer = std::make_unique<ExportDownloadServer>(m_options.exportDir, m_options.downloadPort);
+-        m_downloadServer->start();
++    if (m_options.mountDownloads) {
++        // Same rules as the former ExportDownloadServer: only <sessionId>_<yyyyMMdd_HHmmss>.csv
++        // directly inside the export folder, attachment, ACAO *, no-store, streamed.
++        m_downloadsMounted = AppHttpServer::instance().mountDownloads(
++                QStringLiteral("/exports"), m_options.exportDir,
++                [](const QString &name) { return isValidExportFileName(name); });
++        qInfo().noquote() << QStringLiteral("[Export] download mount GET /exports/<file> -> %1: %2")
++                                     .arg(QDir::toNativeSeparators(m_options.exportDir),
++                                          m_downloadsMounted ? QStringLiteral("mounted on AppHttpServer")
++                                                             : QStringLiteral("FAILED"));
+     }
+ }
+ 
+@@ -685,7 +517,7 @@ HistoryExportManager::~HistoryExportManager()
+ 
+ bool HistoryExportManager::downloadServerListening() const
+ {
+-    return m_downloadServer && m_downloadServer->isListening();
++    return m_downloadsMounted && AppHttpServer::instance().isListening();
+ }
+ 
+ void HistoryExportManager::shutdown()
+@@ -698,9 +530,11 @@ void HistoryExportManager::shutdown()
+     m_queue.clear();
+     m_workerThread.quit();
+     m_workerThread.wait();                // a running export stops at its next chunk
+-    if (m_downloadServer)
+-        m_downloadServer->stop();
+-    qInfo().noquote() << "[Export] stopped (export thread and download service).";
++    if (m_downloadsMounted) {
++        AppHttpServer::instance().unmount(QStringLiteral("/exports"));
++        m_downloadsMounted = false;
++    }
++    qInfo().noquote() << "[Export] stopped (export thread; /exports unmounted).";
+ }
+ 
+ bool HistoryExportManager::sessionBusy(const QString &sessionId) const
+diff --git a/Core/HistoryExport.h b/Core/HistoryExport.h
+index 80369f9..af7774e 100644
+--- a/Core/HistoryExport.h
++++ b/Core/HistoryExport.h
+@@ -8,9 +8,11 @@
+ //  * HistoryExportWorker (its own QThread): streams the rows newest first
+ //    straight from the month files (own read-only SQLite connections, keyset
+ //    chunks) into a QSaveFile, so memory does not grow with the file.
+-//  * ExportDownloadServer (its own QThread): QHttpServer on 0.0.0.0:8124 that
+-//    only serves GET /exports/<file name> from the export folder (streamed from
+-//    the QFile by QHttpServerResponder, never read into memory as a whole).
++//  * Download service (w2-049): the manager mounts the export folder on the
++//    process-wide AppHttpServer singleton (Core/AppHttpServer, own thread) as
++//    GET /exports/<file name> (file name rule isValidExportFileName, streamed from
++//    disk, never read into memory as a whole).  The listener (0.0.0.0:8124) is
++//    started and stopped by Core, not here.
+ #include <QByteArray>
+ #include <QDateTime>
+ #include <QElapsedTimer>
+@@ -118,27 +120,6 @@ private:
+     SqlManager *m_sql = nullptr;
+ };
+ 
+-class ExportDownloadServer : public QObject
+-{
+-    Q_OBJECT
+-public:
+-    ExportDownloadServer(const QString &exportDir, quint16 port, QObject *parent = nullptr);
+-    ~ExportDownloadServer() override;
+-    // Binds 0.0.0.0:<port> on the server thread.  On failure it logs and returns
+-    // false; the application keeps running.
+-    bool start();
+-    void stop();
+-    bool isListening() const { return m_listening; }
+-    quint16 port() const { return m_port; }
+-
+-private:
+-    QString m_exportDir;
+-    quint16 m_port;
+-    QThread m_thread;
+-    QObject *m_impl = nullptr;           // lives on m_thread
+-    bool m_listening = false;
+-};
+-
+ class HistoryExportManager : public QObject
+ {
+     Q_OBJECT
+@@ -146,8 +127,9 @@ public:
+     struct Options
+     {
+         QString exportDir;                                   // web exports (spec §3.5)
+-        quint16 downloadPort = HistoryExport::kDefaultDownloadPort;
+-        bool startDownloadServer = true;
++        quint16 downloadPort = HistoryExport::kDefaultDownloadPort;   // sent to the page with each file
++        // Mount exportDir as /exports on AppHttpServer::instance() (unmounted on shutdown).
++        bool mountDownloads = true;
+         int maxFiles = HistoryExport::kMaxExportFiles;
+         qint64 maxBytes = HistoryExport::kMaxExportBytes;
+         int chunkRows = HistoryExport::kDefaultChunkRows;
+@@ -165,6 +147,7 @@ public:
+     void shutdown();
+ 
+     QString exportDir() const { return m_options.exportDir; }
++    // /exports is mounted and AppHttpServer::instance() is listening.
+     bool downloadServerListening() const;
+     int statusPublishCount() const { return m_publishCount; }
+ 
+@@ -210,7 +193,7 @@ private:
+     Options m_options;
+     QThread m_workerThread;
+     HistoryExportWorker *m_worker = nullptr;
+-    std::unique_ptr<ExportDownloadServer> m_downloadServer;
++    bool m_downloadsMounted = false;
+     QList<Job> m_queue;
+     std::unique_ptr<Job> m_running;
+     quint64 m_nextJobId = 1;
+diff --git a/Core/core.cpp b/Core/core.cpp
+index c9a85b5..1aace08 100644
+--- a/Core/core.cpp
++++ b/Core/core.cpp
+@@ -1,10 +1,14 @@
+ #include "core.h"
+ 
++#include "AppHttpServer/AppHttpServer.h"
+ #include "HistoryExport.h"
+ #include "Modbus_Server.h"
+ #include "SqlManager.h"
+ 
++#include <QCoreApplication>
+ #include <QDateTime>
++#include <QDir>
++#include <QFileInfo>
+ #include <QJsonArray>
+ #include <QJsonDocument>
+ #include <QJsonObject>
+@@ -96,6 +100,8 @@ Core::~Core()
+         delete m_historyExport;
+         m_historyExport = nullptr;
+     }
++    // w2-049: normally already stopped on aboutToQuit (no-op then).
++    AppHttpServer::instance().stop();
+     if (m_modbusServer) {
+         m_modbusServer->stop();
+         delete m_modbusServer;
+@@ -148,9 +154,11 @@ void Core::init()
+     });
+     // w2-041 (spec §2): History range, relayed from WASM like the page number.
+     connect(m_proxy, &TaidaFlowProxy::historyRangeRequested, this, &Core::onHistoryRangeRequested);
+-    // w2-041 (spec §3): raw CSV export queue/engine + download service
+-    // (0.0.0.0:8124, export folder <working directory>/exports).
++    // w2-041 (spec §3): raw CSV export queue/engine (export folder <working
++    // directory>/exports); it mounts GET /exports/<file> on the AppHttpServer
++    // singleton, which also serves the web page (w2-049, startHttpServer).
+     m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, HistoryExportManager::Options{}, this);
++    startHttpServer();
+     if (!m_manager->saveAlarm(QStringLiteral("100"),
+                               QStringLiteral("設備啟動"),
+                               QStringLiteral("正常"))) {
+@@ -192,6 +200,90 @@ void Core::init()
+     loadAlarmRecords();
+ }
+ 
++namespace {
++constexpr auto kWebDirEnv = "TAIDAFLOW_WEB_DIR";
++const QString kWebPage = QStringLiteral("TaidaFlowApp.html");
++
++// w2-049: folder of the WebAssembly build served at http://<host>:8124/.
++// Order: TAIDAFLOW_WEB_DIR -> <exe folder>/web -> the repository's build/wasm-release
++// (development default, compiled in; only if it exists).  A candidate is used when it
++// holds TaidaFlowApp.html.  Every candidate and the result are logged.
++QString resolveWebDir(QString *source)
++{
++    struct Candidate { QString source; QString dir; };
++    QList<Candidate> candidates;
++    const QString env = qEnvironmentVariable(kWebDirEnv).trimmed();
++    if (env.isEmpty())
++        qInfo().noquote() << QStringLiteral("[Web] %1 is not set").arg(QLatin1String(kWebDirEnv));
++    else
++        candidates.append({QString::fromLatin1(kWebDirEnv), env});
++    candidates.append({QStringLiteral("<exe folder>/web"),
++                       QCoreApplication::applicationDirPath() + QStringLiteral("/web")});
++#ifdef TAIDAFLOW_DEV_WEB_DIR
++    candidates.append({QStringLiteral("development default"), QStringLiteral(TAIDAFLOW_DEV_WEB_DIR)});
++#endif
++    for (const Candidate &c : std::as_const(candidates)) {
++        const QString dir = QDir::cleanPath(QDir(c.dir).absolutePath());
++        const bool hasDir = QFileInfo(dir).isDir();
++        const bool hasPage = hasDir && QFileInfo(dir + QLatin1Char('/') + kWebPage).isFile();
++        qInfo().noquote() << QStringLiteral("[Web] candidate %1: %2 -> %3")
++                                     .arg(c.source, QDir::toNativeSeparators(dir),
++                                          hasPage ? QStringLiteral("has %1, used").arg(kWebPage)
++                                                  : hasDir ? QStringLiteral("no %1, skipped").arg(kWebPage)
++                                                           : QStringLiteral("does not exist, skipped"));
++        if (hasPage) {
++            *source = c.source;
++            return dir;
++        }
++    }
++    return QString();
++}
++} // namespace
++
++void Core::startHttpServer()
++{
++    AppHttpServer &http = AppHttpServer::instance();
++    QString source;
++    const QString webDir = resolveWebDir(&source);
++    if (webDir.isEmpty()) {
++        qWarning().noquote() << QStringLiteral("[Web] no web page folder found (set %1, or deploy with "
++                                               "scripts\\deploy-web.ps1 to <exe folder>\\web) - the web page "
++                                               "is not served; /exports downloads work as before")
++                                        .arg(QLatin1String(kWebDirEnv));
++    } else {
++        // Replaces the former Python development server (COOP/COEP/CORP on, as before),
++        // plus ETag/304 revalidation (Cache-Control: no-cache) and pre-compressed .gz files.
++        AppHttpServer::StaticOptions options;
++        options.indexFile = kWebPage;                  // "/" -> 302 /TaidaFlowApp.html
++        // Web file types only: the development default is the build folder itself, which
++        // also holds CMakeCache.txt, build.ninja, sources of generated code, ...
++        options.fileSuffixes = QStringList{
++            QStringLiteral("html"), QStringLiteral("js"), QStringLiteral("mjs"), QStringLiteral("wasm"),
++            QStringLiteral("css"), QStringLiteral("json"), QStringLiteral("map"), QStringLiteral("svg"),
++            QStringLiteral("png"), QStringLiteral("jpg"), QStringLiteral("ico"), QStringLiteral("ttf"),
++            QStringLiteral("otf"), QStringLiteral("woff"), QStringLiteral("woff2")};
++        if (http.mountStatic(QStringLiteral("/"), webDir, options)) {
++            qInfo().noquote() << QStringLiteral("[Web] web page folder (%1): %2 -> http://<host>:%3/%4")
++                                         .arg(source, QDir::toNativeSeparators(webDir))
++                                         .arg(HistoryExport::kDefaultDownloadPort).arg(kWebPage);
++        }
++    }
++    // One listener for the page and the CSV downloads.  A bind failure is only logged.
++    if (http.start(HistoryExport::kDefaultDownloadPort, QHostAddress::AnyIPv4)) {
++        qInfo().noquote() << QStringLiteral("[Web] HTTP service listening on 0.0.0.0:%1 (web page %2, /exports downloads)")
++                                     .arg(http.port())
++                                     .arg(webDir.isEmpty() ? QStringLiteral("NOT served") : QStringLiteral("served"));
++    } else {
++        qWarning().noquote() << QStringLiteral("[Web] HTTP service NOT started on 0.0.0.0:%1: %2 (web page and "
++                                               "CSV downloads unavailable; the application keeps running)")
++                                        .arg(HistoryExport::kDefaultDownloadPort).arg(http.lastError());
++    }
++    if (QCoreApplication::instance()) {
++        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
++                []() { AppHttpServer::instance().stop(); });
++    }
++}
++
+ void Core::reportIgnoredHmiInputSettings()
+ {
+     // Read-only: the file is not modified here.  Other groups (e.g. [Alarm]
+diff --git a/Core/core.h b/Core/core.h
+index c2c016a..af542d9 100644
+--- a/Core/core.h
++++ b/Core/core.h
+@@ -28,6 +28,8 @@ private:
+     void onHistoryRangeRequested(double fromMs, double toMs);
+     void applyHistoryPage(const SensorHistoryPageResult &result);
+     void loadAlarmRecords();
++    // w2-049: web page + /exports on the AppHttpServer singleton (0.0.0.0:8124).
++    void startHttpServer();
+ 
+     Manager* m_manager = nullptr;
+     ModbusServer* m_modbusServer = nullptr;
+diff --git a/README.md b/README.md
+index 1c9643e..78c8ea8 100644
+--- a/README.md
++++ b/README.md
+@@ -5,7 +5,8 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷
+ `192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
+ 改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
+ `Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)、
+-`HistoryExport`(歷史 CSV 匯出佇列 + 下載服務 `0.0.0.0:8124`,見「歷史資料:時間區間與匯出」)。
++`HistoryExport`(歷史 CSV 匯出佇列,見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
++HTTP 伺服器單例,`0.0.0.0:8124` 同時提供**網頁**與 **CSV 下載**,見「網頁與下載(HTTP 8124)」)。
+ 
+ QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBackend`)。
+ 透過 `integration-pack/wasm-mirror`(pack **1.0.1**,wire protocol 3,**唯讀、由維護方提供**,
+@@ -24,12 +25,12 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
+ 緊急停止迴路),開 `COM2`,並在 `0.0.0.0:502` 開 Modbus server。在非現場的開發機上:
+ 
+ - 一律用 `scripts\run-desktop.ps1` 啟動。它先跑 `scripts\safety_probe.ps1`(對 5 台 ADAM 只做
+-  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8123/8124/8125/18125 是否
++  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8124/8125/18125 是否
+   已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
+-  區網轉發)、18125(內部 mirror)或 8124(CSV 下載服務)已被占用 → 不啟動(exit 4 `BUSY`,
+-  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`。
+-- desktop 另在 `0.0.0.0:8124` 開 CSV 下載服務、在 `0.0.0.0:8125` 開 mirror 區網轉發(內網、
+-  都不做存取控管;下載服務只提供匯出資料夾裡的檔,見下方)。
++  區網轉發)、18125(內部 mirror)或 8124(網頁 + CSV 下載)已被占用 → 不啟動(exit 4 `BUSY`,
++  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`(`-LogFile` 可改)。
++- desktop 另在 `0.0.0.0:8124` 開 HTTP 服務(網頁 + CSV 下載)、在 `0.0.0.0:8125` 開 mirror 區網轉發
++  (內網、都不做存取控管;只提供網頁資料夾的網頁檔與匯出資料夾裡的檔,見下方)。
+ - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
+   `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`),網頁匯出的 CSV
+   寫在 `exports\`。`build/` 已被 `.gitignore` 排除,work tree 保持乾淨。
+@@ -83,26 +84,56 @@ WASM 產物:`build\wasm-release\TaidaFlowApp.html / .js / .wasm`、`qtloader.js`
+ 
+ ```powershell
+ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"   # 先探測再啟動
+-python scripts\serve_wasm.py            # 綁 0.0.0.0:8123;本機開 http://127.0.0.1:8123/TaidaFlowApp.html
+-python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
++# 瀏覽器開 http://127.0.0.1:8124/TaidaFlowApp.html(區網:http://<desktop 的區網 IP>:8124/TaidaFlowApp.html)
+ ```
+ 
++- 網頁由 **desktop 自己**提供(`AppHttpServer` 單例,與 CSV 下載同一個 `0.0.0.0:8124`),不需要另開
++  網頁伺服器。網頁檔資料夾的決定順序見「網頁與下載(HTTP 8124)」;開發機上 `build\wasm-release`
++  建好就直接用,正式部署用 `scripts\deploy-web.ps1` 複製到 `<exe 資料夾>\web`。
+ - `run-desktop.ps1` 設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin,log 寫到
+   `build\runtime-logs\`。啟動 log 應含 `[ModbusServer] listening on 0.0.0.0:502 unit=1`、
+   `WASM Mirror endpoint: ws://127.0.0.1:18125/mirror`、
+-  `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125` 與
+-  `[ExportHTTP] download service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
+-- `serve_wasm.py`:預設綁 **`0.0.0.0`**(內網其他電腦可開網頁;`--host 127.0.0.1` 改回只給本機);
+-  送 `application/wasm`、`Cache-Control: no-store`、COOP/COEP(符合
+-  `integration-pack/wasm-mirror/docs/http-server-requirements.md`)。
++  `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125`、
++  `[Web] web page folder (<來源>): <資料夾> -> http://<host>:8124/TaidaFlowApp.html` 與
++  `[Web] HTTP service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
+ - 瀏覽器 console:`WASM Mirror ready: true` 即同步完成。
+ 
++### 網頁與下載(HTTP 8124,w2-049)
++
++desktop 的 Core 只透過 `AppHttpServer::instance()`(`Core/AppHttpServer/`,只依賴 Qt Core/Network/
++HttpServer 的可重用類別,用法見該資料夾的 `README.md`)提供 HTTP,單例跑在自己的執行緒
++(`AppHttpServerThread`),大檔傳送不占 UI 執行緒。`Core::startHttpServer()` 在 `Core::init()` 掛上網頁
++(`/`)後 `start(8124, AnyIPv4)`;`HistoryExportManager` 掛上 `/exports`;`aboutToQuit` 時 `stop()`。
++
++- **網頁檔資料夾**(第一個含 `TaidaFlowApp.html` 的):環境變數 `TAIDAFLOW_WEB_DIR` →
++  `<exe 資料夾>\web` → 開發預設 `<repo>\build\wasm-release`(編譯時寫入,不存在就跳過)。
++  每個候選與結果都記 log(`[Web] candidate ...`、`[Web] web page folder (...)`);都找不到只記
++  warning(`[Web] no web page folder found ...`),`/exports` 下載與其他功能照常。
++- **部署**:`powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1 [-Source build\wasm-release]
++  [-ExeDir build\desktop]` 清空 `<exe 資料夾>\web` 後複製同一次 build 的網頁檔(不含 CMake/Ninja 檔),
++  並為 `.wasm/.js/.html/.svg` 等產生 `.gz`(修改時間與原檔相同)。
++- **行為**(取代舊的 Python 開發伺服器,符合 `integration-pack/wasm-mirror/docs/http-server-requirements.md`):
++  - MIME:`.html` `text/html; charset=utf-8`、`.js/.mjs` `text/javascript; charset=utf-8`、
++    `.wasm` `application/wasm`、`.css`、`.json`、`.svg`、`.png`、`.ico`、`.ttf/.woff2` 等;
++    網頁掛載只送網頁類型的副檔名(開發預設就是 build 資料夾,`CMakeCache.txt` 等一律 404)。
++  - 快取:每個檔帶 `ETag`(大小 + 修改時間)與 `Last-Modified`,`Cache-Control: no-cache`(瀏覽器每次
++    重新驗證);`If-None-Match` / `If-Modified-Since` 相符 → 304;重新建置後 ETag 變 → 200 拿新檔,
++    HTML/JS/WASM 不會新舊混用。
++  - gzip:有 `<檔名>.gz`、不比原檔舊、且 `Accept-Encoding` 含 gzip → 送 `.gz`(`Content-Encoding: gzip`、
++    `Vary: Accept-Encoding`、MIME 仍為原檔;實測 `.wasm` 33,828,575 → `.gz` 12,447,241 bytes,37%)。
++  - `Cross-Origin-Opener-Policy: same-origin`、`Cross-Origin-Embedder-Policy: require-corp`、
++    `Cross-Origin-Resource-Policy: same-origin`(與舊伺服器相同,main 的 multithread 版也可用)。
++  - `/` → 302 `/TaidaFlowApp.html`;不列目錄;支援 `HEAD`;`GET`/`HEAD` 以外 405。
++  - 路徑穿越一律 400/403/404:`..`、`%2e%2e`、`%2f`/`%5c`/反斜線、磁碟代號與 `:`、`//`、結尾 `.`/空白、
++    裝置名(`NUL`、`CON` …)、`.` 開頭的隱藏檔,以及網頁資料夾**底下**的符號連結 / junction(不跟隨)。
++- 下載網址不變:`http://<pageHost>:8124/exports/<檔名>`(main 的 QML / Proxy 不需改);網頁現在也在
++  8124,下載與網頁同源。
++
+ ### 區網連線(mirror,合併自 main e4bc327 / w2-042)
+ 
+ | 端點 | 綁定 | 用途 |
+ |---|---|---|
+-| 網頁(`serve_wasm.py`) | `0.0.0.0:8123` | 區網電腦開 `http://<desktop 的區網 IP>:8123/TaidaFlowApp.html` |
+-| CSV 下載服務 | `0.0.0.0:8124` | 網頁匯出檔下載(見「歷史資料:時間區間與匯出」) |
++| 網頁 + CSV 下載(`AppHttpServer`,desktop app) | `0.0.0.0:8124` | 區網電腦開 `http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>` |
+ | mirror 區網轉發(`App/lanrelay.h`) | `0.0.0.0:8125` | 網頁連的公開 mirror port;每條連線原樣雙向轉發到 `127.0.0.1:18125` |
+ | Mirror server(pack) | `127.0.0.1:18125` | 內部 port,只限本機,區網位址連不到 |
+ 
+@@ -110,7 +141,7 @@ python scripts\serve_wasm.py --host 127.0.0.1   # 只給本機(舊行為)
+   `127.0.0.1` 並記 warning。所以從哪個位址開網頁,就連回同一個位址的 8125。
+ - Mirror `allowedOrigins = {}`(空清單 = 不限制 Origin);內網系統,依 Mango 決定不做存取控管,
+   轉發也不做來源限制。
+-- 別台電腦要連進來,Windows 防火牆需放行 **8123/8124/8125**(TCP 輸入)。這由**管理員**設定,
++- 別台電腦要連進來,Windows 防火牆需放行 **8124/8125**(TCP 輸入;8123 已不再使用)。這由**管理員**設定,
+   本專案的腳本不改防火牆 / 網路設定;首次啟動 Windows 可能跳出防火牆詢問視窗。
+ - 轉發是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
+   正式開關後,改由 Mirror 直接綁 `0.0.0.0:8125`,並刪除 `App/lanrelay.h` 與 `main.cpp` 中的使用。
+@@ -154,8 +185,7 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
+ powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1
+ # 2. 再起桌面版(simulator 模式探測 + 幫 app 設 TAIDAFLOW_DEVICE_PROFILE=simulator)
+ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator -Label "sim"
+-# 3. 網頁版照舊
+-python scripts\serve_wasm.py            # http://127.0.0.1:8123/TaidaFlowApp.html
++# 3. 網頁版:瀏覽器開 http://127.0.0.1:8124/TaidaFlowApp.html(desktop app 提供)
+ ```
+ 
+ - **順序一定是模擬器先**。實測(`docs/evidence/wasm-v4-sim/14-bind-order-core-first.txt`):
+@@ -201,7 +231,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+   用途:無設備的開發機上,後端永遠不會更新 PV,E2E 以它模擬「desktop 端 PV 變化」。它不能寫 SV,
+   也不碰 Manager/Modbus。`run-desktop.ps1 -PvFile <檔案>` 會設定環境變數。
+ - `scripts\desktop_input.py`(OS SendInput 操作真實 desktop UI)、`scripts\capture-window.ps1`
+-  (視窗截圖)、`serve_wasm.py --evidence-dir DIR`(僅此模式注入截圖/console 收集 shim)。
++  (視窗截圖)。
+ - `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
+   Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
+   下次啟動時由 Core 的真實讀取路徑(`Core::loadHistoryRecords` → SqlManager → `historyRecords` → Mirror)
+@@ -209,10 +239,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+   所以歷史頁 / CSV 匯出只能這樣準備資料。它不走 Core 的寫入路徑(`saveSensorData`)。
+ - `scripts\compare_history_csv.py --fixture rows.json A.csv B.csv ...`:檢查匯出 CSV 的 BOM、標頭、
+   列數、每格內容與 fixture 一致,且各檔位元組相同。
+-- `serve_wasm.py --evidence-dir DIR` 另會把頁面觸發的 Blob 下載(`<a download>`)複製一份存成
+-  `DIR\download-<檔名>`,並記錄 `showSaveFilePicker` 的呼叫與結果;網址加 `?evidence-download=anchor`
+-  時,在 app 載入前移除 `showOpenFilePicker/showSaveFilePicker`(等同 Firefox/Safari),讓
+-  Qt 走它自己的 `<a download>` 後備路徑(內建 browser pane 不支援原生存檔對話框時使用)。
++- 舊的 Python 開發網頁伺服器(8123)與它的 E2E 證據收集模式(頁面截圖 / console / Blob 下載上傳)
++  已隨 w2-049 移除,網頁改由 desktop 的 `AppHttpServer` 提供;`docs/evidence/` 下的歷史證據不變。
+ - `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
+ 
+ ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
+@@ -265,12 +293,13 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+   清理:每產生一個網頁檔後,若 `*.csv` 超過 20 個**或**總量超過 2 GB,依修改時間刪最舊的,直到兩個條件都
+   滿足;不刪剛產生的檔,它單獨就超過 2 GB 時保留並記 log;正在被下載而刪不掉的檔記 log 跳過。
+   啟動時刪除上次當機留下的暫存檔(`*.csv.XXXXXX`)。
+-- **下載服務**(`ExportDownloadServer`,專用執行緒上的 `QHttpServer`):綁 `0.0.0.0:8124`,只有
+-  `GET /exports/<檔名>`;檔名必須是 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(不能含 `/ \ .. :`、不能是其他
+-  副檔名),且實際路徑必須在匯出資料夾內;回應 `Content-Type: text/csv; charset=utf-8`、
++- **下載**(w2-049 起為 `AppHttpServer` 單例的 `/exports` 掛載:`HistoryExportManager` 建立時掛上、
++  shutdown 時卸下;listener `0.0.0.0:8124` 由 Core 啟停):只有 `GET`/`HEAD /exports/<檔名>`;檔名必須是
++  `<sessionId>_<yyyyMMdd_HHmmss>.csv`(不能含 `/ \ .. :`、不能是其他副檔名),且實際路徑必須在匯出
++  資料夾內(符號連結不跟隨);回應 `Content-Type: text/csv; charset=utf-8`、
+   `Content-Disposition: attachment; filename="<檔名>"`、`Access-Control-Allow-Origin: *`、
+-  `Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟分段送出(Qt 6.8 文件:
+-  非 sequential 裝置一次宣告全長、分段讀取,不整檔讀進記憶體)。其他路徑 404、壞檔名 400。
++  `Cache-Control: no-store`、`Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟
++  分段送出(不整檔讀進記憶體)。不存在 404、壞檔名 400、其他方法 405。
+   綁定失敗只記 warning,app 繼續執行(網頁匯出檔仍會寫出)。
+ - 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)**已刪除**(main w2-042 自
+   `TaidaFlowProxy.h` 移除,已合併進本分支);CSV 一律走上述匯出佇列。`docs/wasm-integration-report.md`
+@@ -278,7 +307,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+ 
+ ## 測試 / 驗證(全部以 exit code 判定)
+ 
+-本 repo 沒有自己的單元測試(維護方專案);整合以下列可重跑檢查驗證:
++QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)與 5b 的歷史/匯出 harness;
++其餘整合以下列可重跑檢查驗證:
+ 
+ ```bat
+ :: 0. pack 與 1.0.1 來源逐檔一致、MANIFEST 24/24
+@@ -295,17 +325,23 @@ python scripts\check_version_shadow.py build\desktop build\wasm-release
+ :: 4. 字型子集涵蓋所有來源字元
+ python scripts\make_font_subset.py --check
+ :: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror 127.0.0.1:18125 + 區網轉發 0.0.0.0:8125
+-::    (同一 app PID)+ 8124 下載服務起來、關閉後 502/8124/8125/18125 無殘留)
++::    (同一 app PID)+ 8124 HTTP 服務起來、網頁 200、關閉後 502/8124/8125/18125 無殘留)
+ powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
++::    (w2-049) 接模擬器:先 scripts\run-simulator.ps1,再加 -DeviceProfile simulator [-ProbeLog <檔案>]
+ :: 5a. (w2-043) 區網轉發:安全探測 SAFE 後啟動,以區網 IP:8125 與 127.0.0.1:8125 做 WebSocket upgrade
+ ::     拿到 101(非白名單 Origin 也不被關閉)、區網 IP:18125 連不到;port 被占用時每 30 秒重查最多 30 分鐘
+ powershell -ExecutionPolicy Bypass -File docs\evidence\w2-043\tools\verify-lanrelay.ps1
+ :: 5b. (w2-041) 歷史區間 + CSV 匯出的 QTest(編譯真的 SqlManager / HistoryExport / Proxy 原始碼):
+-::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)
+-python docs\evidence\w2-041\tools\make_bench_db.py
+-docs\evidence\w2-041\tools\run-qtest.bat
++::     先做 30 天、兩個月份檔的測試資料(build\w2-041-bench),再建置並跑 CTest(需 8124 空著)。
++::     w2-049 起下載測試改測 AppHttpServer 的 /exports 掛載,harness 在 docs\evidence\w2-049\tools
++::     (w2-041 的原版留作歷史證據,已不能對現行原始碼編譯)
++python -B docs\evidence\w2-041\tools\make_bench_db.py
++docs\evidence\w2-049\tools\run-w2041-qtest.bat
+ ::     30 天匯出檔逐列比對(獨立的 Python 實作)
+-python docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-041-qtest\work\exports_30d\web-t30d_*.csv" --data build\w2-041-bench\data --from 1786896000 --to 1789487999
++python -B docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-049-w2041-qtest\work\exports_30d\web-t30d_*.csv" --data build\w2-041-bench\data --from 1786896000 --to 1789487999
++:: 5c. (w2-049) AppHttpServer 單例的獨立 QTest(靜態 200/304/gzip/MIME/HEAD/COOP-COEP、穿越攻擊、
++::     下載掛載、自訂路由、綁定失敗、多執行緒註冊、1 GiB 串流記憶體;需約 2 GiB 暫存磁碟空間)
++scripts\run-apphttpserver-tests.bat
+ :: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
+ python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
+ ```
+diff --git a/scripts/check_wasm_backend.py b/scripts/check_wasm_backend.py
+index c236eb3..912a7f2 100644
+--- a/scripts/check_wasm_backend.py
++++ b/scripts/check_wasm_backend.py
+@@ -8,7 +8,8 @@ on WebAssembly) it reports, from Ninja's own build graph and the produced binary
+ 
+   backend_sources   : backend .cpp files (Core/core.cpp, manager.cpp, Modbus_Client.cpp,
+                       Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp,
+-                      RESTManager.cpp, HistoryExport.cpp [w2-041]) that appear in
++                      RESTManager.cpp, HistoryExport.cpp [w2-041],
++                      AppHttpServer/AppHttpServer.cpp [w2-049]) that appear in
+                       `ninja -t commands <target>`
+                       (every compile/link command needed to produce the target)
+   backend_qt_libs   : Qt SerialBus / SerialPort / Sql / HttpServer / Concurrent libraries
+@@ -35,12 +36,14 @@ from pathlib import Path
+ NINJA = r"C:\Qt\Tools\Ninja\ninja.exe"
+ BACKEND_SOURCES = ["core.cpp", "manager.cpp", "Modbus_Client.cpp", "Modbus_Server.cpp",
+                    "Ms300FaultReader.cpp", "SqlManager.cpp", "RESTManager.cpp",
+-                   "HistoryExport.cpp"]
++                   "HistoryExport.cpp", "AppHttpServer.cpp"]
+ BACKEND_MODULES = ["SerialBus", "SerialPort", "Sql", "HttpServer", "Concurrent"]
+ BACKEND_STRINGS = [b"192.168.1.201", b"192.168.1.205", b"COM2", b"TaidaFlowSettings.ini",
+                    b"settings.sqlite", b"device_info.ini", b"[ModbusServer]", b"[MS300]",
+                    b"ModbusClient", b"SqlManager", b"RESTManager", b"QModbusTcpClient",
+-                   b"HistoryExportManager", b"[ExportHTTP]"]
++                   b"HistoryExportManager",
++                   # w2-049: AppHttpServer singleton + Core's web page folder lookup
++                   b"[AppHttpServer]", b"AppHttpServerThread", b"TAIDAFLOW_WEB_DIR"]
+ 
+ 
+ def analyse(build: Path) -> tuple[bool, str]:
+@@ -54,7 +57,8 @@ def analyse(build: Path) -> tuple[bool, str]:
+     commands = out.stdout.splitlines()
+     compiled = []
+     for src in BACKEND_SOURCES:
+-        pat = re.compile(r"[/\\]Core[/\\]" + re.escape(src) + r"(\s|\"|$)")
++        # Core/<file>, or one class folder below Core (Core/AppHttpServer/AppHttpServer.cpp)
++        pat = re.compile(r"[/\\]Core[/\\](?:[A-Za-z0-9_]+[/\\])?" + re.escape(src) + r"(\s|\"|$)")
+         if any(pat.search(c) for c in commands):
+             compiled.append(src)
+     # The final link edge in build.ninja: its LINK_LIBRARIES variable holds the libraries
+diff --git a/scripts/run-desktop.ps1 b/scripts/run-desktop.ps1
+index 0c724fa..71b7b01 100644
+--- a/scripts/run-desktop.ps1
++++ b/scripts/run-desktop.ps1
+@@ -17,7 +17,7 @@
+ #
+ # Safety (taidaflow WASM v4 spec §2):
+ #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
+-#      serial port list, 502/8123/8124/8125/18125 listeners). Any non-zero verdict -> the app is NOT
++#      serial port list, 502/8124/8125/18125 listeners). Any non-zero verdict -> the app is NOT
+ #      started and this script exits 3.
+ #   2. The working directory is ALWAYS build\runtime-cwd: the Core writes
+ #      TaidaFlowSettings.ini, device_info.ini and SQLite files (settings.sqlite, data\)
+diff --git a/scripts/safety_probe.ps1 b/scripts/safety_probe.ps1
+index 245c907..1013d79 100644
+--- a/scripts/safety_probe.ps1
++++ b/scripts/safety_probe.ps1
+@@ -8,8 +8,8 @@
+ # This script only *observes*; it never sends a Modbus frame:
+ #   1. TCP connect (no payload) to 192.168.1.201..205:502 with a 1.5 s timeout, then close.
+ #   2. Lists local serial ports (.NET GetPortNames + registry SERIALCOMM + PnP "(COMx)").
+-#   3. Lists TCP listeners on 502 (Core's Modbus server), 8123 (HTTP), 8124 (Core's CSV
+-#      download service, w2-041), 8125 (public mirror port = the desktop's LAN relay
++#   3. Lists TCP listeners on 502 (Core's Modbus server), 8124 (Core's HTTP service: web
++#      page + CSV downloads, AppHttpServer, w2-049), 8125 (public mirror port = the desktop's LAN relay
+ #      0.0.0.0:8125, App/lanrelay.h) and 18125 (the desktop's internal mirror server,
+ #      127.0.0.1:18125; merged from main e4bc327 / w2-042).
+ # Every run appends a timestamped record to docs/evidence/wasm-v4/safety-probe.log.
+@@ -17,9 +17,10 @@
+ # Exit code: 0 = safe to launch; 3 = UNSAFE (a device answered, COM2 exists, or port 502
+ # already has a listener - e.g. Mango's modbusserver, which must NOT be stopped); the
+ # desktop app must not be started.  A listener on 8125 (LAN relay), 18125 (internal mirror)
+-# or 8124 (export download service) also blocks (exit 4, BUSY), because a stale desktop
+-# instance would make the result ambiguous (and the new instance could not bind it); a
+-# listener on 8123 is only reported (it is the WASM HTTP server started for the E2E test).
++# or 8124 (web page + CSV downloads) also blocks (exit 4, BUSY), because a stale desktop
++# instance would make the result ambiguous (and the new instance could not bind it).
++# (w2-049: the web page is served by the desktop app itself on 8124; port 8123 is no longer
++# used and not checked.)
+ #
+ # Usage: powershell -ExecutionPolicy Bypass -File scripts\safety_probe.ps1 -Reason "before run 1"
+ #
+@@ -115,10 +116,10 @@ if ($allSerial -match '(?i)\bCOM2\b') {
+ 
+ # 3. Local listeners.
+ $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
+-            Where-Object { $_.LocalPort -in 502, 8123, 8124, 8125, 18125 })
++            Where-Object { $_.LocalPort -in 502, 8124, 8125, 18125 })
+ $simListening = @()
+ if ($listen.Count -eq 0) {
+-    $lines.Add("  listeners 502/8123/8124/8125/18125: <none>")
++    $lines.Add("  listeners 502/8124/8125/18125: <none>")
+ } else {
+     foreach ($l in $listen) {
+         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
+@@ -138,8 +139,7 @@ if ($listen.Count -eq 0) {
+         elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
+         elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror LAN relay) already in use -> stale desktop instance, do not launch") }
+         elseif ($l.LocalPort -eq 18125) { $busy = $true; $lines.Add("  port 18125 (internal mirror) already in use -> stale desktop instance, do not launch") }
+-        elseif ($l.LocalPort -eq 8124) { $busy = $true; $lines.Add("  port 8124 (CSV download service) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
+-        else { $lines.Add("  port 8123 = WASM HTTP server (expected during E2E, informational)") }
++        elseif ($l.LocalPort -eq 8124) { $busy = $true; $lines.Add("  port 8124 (web page + CSV downloads) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
+     }
+ }
+ $simMissing = $false
+diff --git a/scripts/serve_wasm.py b/scripts/serve_wasm.py
+deleted file mode 100644
+index 14bc721..0000000
+--- a/scripts/serve_wasm.py
++++ /dev/null
+@@ -1,207 +0,0 @@
+-#!/usr/bin/env python3
+-"""Development static HTTP server for the TaidaFlow WebAssembly build.
+-
+-Serves build/wasm-release (or --dir) on port 8123 as required by the wasm-mirror pack
+-(integration-pack/wasm-mirror/docs/http-server-requirements.md).  w2-041: it binds 0.0.0.0 by
+-default so that other machines on the plant LAN can open the page (internal network, no access
+-control); `--host 127.0.0.1` restores the old local-only binding.
+-  * correct MIME types (.wasm -> application/wasm, .js -> text/javascript)
+-  * Cache-Control: no-store so HTML/JS/WASM from different builds never mix
+-  * Cross-Origin-Opener-Policy: same-origin + Cross-Origin-Embedder-Policy: require-corp
+-    (not needed by wasm_singlethread, but harmless and makes the same server usable
+-    for a wasm_multithread build, which needs cross-origin isolation)
+-The mirror WebSocket is served by the desktop app, not here: the page connects back to the
+-host it was loaded from (location.hostname), i.e. ws://<that host>:8125/mirror. On the desktop,
+-port 8125 is its LAN relay (0.0.0.0:8125, App/lanrelay.h), which forwards to the Mirror server
+-on 127.0.0.1:18125 (internal; temporary until wasm-mirror pack 1.0.2). The Mirror's
+-allowedOrigins is empty (= every Origin is accepted; intranet system, no access control), so
+-the page Origin does not have to be on any list. Other machines additionally need the Windows
+-firewall to allow 8123/8124/8125 (set by the administrator; not done by this script).
+-
+-Usage:  python scripts/serve_wasm.py [--dir build/wasm-release] [--port 8123] [--host 0.0.0.0]
+-Open:   http://127.0.0.1:8123/TaidaFlowApp.html  (this PC)  or  http://<this PC's LAN IP>:8123/...
+-
+-Evidence capture (optional, off by default): with --evidence-dir DIR the server also
+-accepts `PUT /__evidence/<name>.png|.txt|.json|.csv` from the page (same origin) and stores
+-the body in DIR. Used only to save browser-side screenshots/console logs for the E2E report,
+-and a byte copy of every Blob download the page triggers (download-<file name>).
+-"""
+-from __future__ import annotations
+-
+-import argparse
+-import functools
+-import http.server
+-import re
+-import sys
+-from pathlib import Path
+-
+-ROOT = Path(__file__).resolve().parent.parent
+-EVIDENCE_NAME = re.compile(r"^/__evidence/([A-Za-z0-9._-]{1,100}\.(?:png|txt|json|csv))$")
+-
+-
+-# Injected into the HTML *only* in --evidence-dir mode: keeps the WebGL back buffer
+-# readable (preserveDrawingBuffer) so the page can be saved as PNG, and records console
+-# output with timestamps so it can be uploaded as a log. The app itself is untouched.
+-EVIDENCE_SHIM = b"""
+-    <script>/* evidence-capture shim (serve_wasm.py --evidence-dir only) */
+-      (function () {
+-        const orig = HTMLCanvasElement.prototype.getContext;
+-        HTMLCanvasElement.prototype.getContext = function (type, attrs) {
+-          if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl')
+-            attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
+-          return orig.call(this, type, attrs);
+-        };
+-        // Download capture: the page's own download (e.g. QFileDialog::saveFileContent ->
+-        // Blob + <a download>.click()) still goes to the browser unchanged; a copy of the
+-        // Blob bytes is PUT to /__evidence/download-<name> so the report can compare it.
+-        //
+-        // QFileDialog::saveFileContent (Qt 6.8, qwasmlocalfileaccess.cpp) takes one of two
+-        // paths: if the File System Access API exists (hasLocalFilesApi() tests
+-        // window.showOpenFilePicker; true on Chromium) it calls showSaveFilePicker and writes
+-        // through FileSystemWritableFileStream; otherwise (Firefox/Safari, which have neither
+-        // picker) it falls back to downloadDataAsFile = Blob + <a download>.click(). Both paths
+-        // write the same QByteArray. Picker calls and outcomes are logged in __evidencePicker.
+-        // Opening the page with ?evidence-download=anchor removes BOTH pickers BEFORE the app
+-        // loads, i.e. presents the page as Firefox/Safari do, so Qt takes its own fallback
+-        // path; used where the embedded browser cannot show a native save picker.
+-        window.__evidencePicker = [];
+-        if (location.search.indexOf('evidence-download=anchor') >= 0) {
+-          for (const n of ['showSaveFilePicker', 'showOpenFilePicker']) {
+-            delete Window.prototype[n];
+-            delete window[n];
+-          }
+-          window.__evidencePicker.push({ note: 'showSaveFilePicker/showOpenFilePicker removed (evidence-download=anchor)',
+-                                         showOpenFilePicker: typeof window.showOpenFilePicker,
+-                                         showSaveFilePicker: typeof window.showSaveFilePicker });
+-        } else if (typeof window.showSaveFilePicker === 'function') {
+-          const origPicker = window.showSaveFilePicker;
+-          window.showSaveFilePicker = function (opts) {
+-            const rec = { time: new Date().toISOString(), opts: JSON.stringify(opts),
+-                          userActivation: !!(navigator.userActivation && navigator.userActivation.isActive) };
+-            window.__evidencePicker.push(rec);
+-            const p = origPicker.call(window, opts);
+-            p.then(h => { rec.result = 'handle:' + h.name; },
+-                   e => { rec.result = 'rejected:' + e.name + ': ' + e.message; });
+-            return p;
+-          };
+-        }
+-        const blobs = new Map();
+-        const origCreate = URL.createObjectURL.bind(URL);
+-        URL.createObjectURL = function (obj) {
+-          const url = origCreate(obj);
+-          if (obj instanceof Blob) blobs.set(url, obj);
+-          return url;
+-        };
+-        window.__evidenceDownloads = [];
+-        const origClick = HTMLAnchorElement.prototype.click;
+-        HTMLAnchorElement.prototype.click = function () {
+-          const blob = blobs.get(this.href);
+-          if (this.hasAttribute('download') && blob) {
+-            const name = 'download-' + this.download.replace(/[^A-Za-z0-9._-]/g, '_');
+-            const rec = { time: new Date().toISOString(), download: this.download,
+-                          size: blob.size, type: blob.type, evidence: name, status: 'pending' };
+-            window.__evidenceDownloads.push(rec);
+-            fetch('/__evidence/' + name, { method: 'PUT', body: blob })
+-              .then(r => { rec.status = r.status; }, e => { rec.status = String(e); });
+-          }
+-          return origClick.call(this);
+-        };
+-        window.__evidenceLog = [];
+-        for (const level of ['log', 'info', 'warn', 'error', 'debug']) {
+-          const o = console[level].bind(console);
+-          console[level] = function (...args) {
+-            window.__evidenceLog.push(new Date().toISOString() + ' [' + level + '] ' + args.join(' '));
+-            o(...args);
+-          };
+-        }
+-      })();
+-    </script>
+-"""
+-
+-
+-class Handler(http.server.SimpleHTTPRequestHandler):
+-    evidence_dir: Path | None = None
+-
+-    def do_GET(self) -> None:  # noqa: N802
+-        if self.evidence_dir is not None and self.path.split("?")[0].endswith(".html"):
+-            target = Path(self.directory) / self.path.split("?")[0].lstrip("/")
+-            if target.is_file():
+-                body = target.read_bytes().replace(b"</title>", b"</title>" + EVIDENCE_SHIM, 1)
+-                self.send_response(200)
+-                self.send_header("Content-Type", "text/html; charset=utf-8")
+-                self.send_header("Content-Length", str(len(body)))
+-                self.end_headers()
+-                self.wfile.write(body)
+-                return
+-        super().do_GET()
+-
+-    def do_PUT(self) -> None:  # noqa: N802 (http.server naming)
+-        m = EVIDENCE_NAME.match(self.path)
+-        if self.evidence_dir is None or not m:
+-            self.send_error(403, "evidence upload disabled or bad name")
+-            return
+-        length = int(self.headers.get("Content-Length", "0"))
+-        if length <= 0 or length > 20 * 1024 * 1024:
+-            self.send_error(400, "bad length")
+-            return
+-        data = self.rfile.read(length)
+-        self.evidence_dir.mkdir(parents=True, exist_ok=True)
+-        (self.evidence_dir / m.group(1)).write_bytes(data)
+-        self.send_response(201)
+-        self.send_header("Content-Length", "0")
+-        self.end_headers()
+-
+-    extensions_map = {
+-        **http.server.SimpleHTTPRequestHandler.extensions_map,
+-        ".wasm": "application/wasm",
+-        ".js": "text/javascript",
+-        ".mjs": "text/javascript",
+-        ".html": "text/html; charset=utf-8",
+-        ".svg": "image/svg+xml",
+-    }
+-
+-    def end_headers(self) -> None:
+-        self.send_header("Cross-Origin-Opener-Policy", "same-origin")
+-        self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
+-        self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+-        self.send_header("Cache-Control", "no-store")
+-        super().end_headers()
+-
+-
+-def main() -> int:
+-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+-    ap.add_argument("--dir", type=Path, default=ROOT / "build" / "wasm-release")
+-    ap.add_argument("--host", default="0.0.0.0",
+-                    help="bind address (default 0.0.0.0 = all interfaces, LAN; 127.0.0.1 = this PC only)")
+-    ap.add_argument("--port", type=int, default=8123)
+-    ap.add_argument("--evidence-dir", type=Path, default=None,
+-                    help="enable PUT /__evidence/<name> uploads into this directory")
+-    args = ap.parse_args()
+-    if args.evidence_dir is not None:
+-        Handler.evidence_dir = args.evidence_dir.resolve()
+-        print(f"evidence uploads enabled -> {Handler.evidence_dir}", flush=True)
+-
+-    root = args.dir.resolve()
+-    for required in ("TaidaFlowApp.html", "TaidaFlowApp.js", "TaidaFlowApp.wasm", "qtloader.js"):
+-        if not (root / required).is_file():
+-            print(f"missing {root / required} - build first: scripts\\build-wasm.bat", file=sys.stderr)
+-            return 2
+-
+-    handler = functools.partial(Handler, directory=str(root))
+-    with http.server.ThreadingHTTPServer((args.host, args.port), handler) as httpd:
+-        shown = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
+-        if args.host in ("0.0.0.0", ""):
+-            scope = " (all interfaces: also http://<LAN IP>:%d/TaidaFlowApp.html)" % args.port
+-        else:
+-            scope = ""
+-        print(f"serving {root} on {args.host}:{args.port} -> "
+-              f"http://{shown}:{args.port}/TaidaFlowApp.html{scope}", flush=True)
+-        try:
+-            httpd.serve_forever()
+-        except KeyboardInterrupt:
+-            pass
+-    return 0
+-
+-
+-if __name__ == "__main__":
+-    sys.exit(main())
+diff --git a/scripts/verify-desktop-startup.ps1 b/scripts/verify-desktop-startup.ps1
+index 3d7ded7..f291d76 100644
+--- a/scripts/verify-desktop-startup.ps1
++++ b/scripts/verify-desktop-startup.ps1
+@@ -8,11 +8,20 @@
+ # 0.0.0.0:8125 to it (temporary until wasm-mirror pack 1.0.2).
+ # Exit 0 = probe SAFE; log has 'WASM Mirror endpoint: ws://127.0.0.1:18125/mirror',
+ #          'LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125', the Core's Modbus server line
+-#          and the CSV download service line (w2-041); 127.0.0.1:18125 and 0.0.0.0:8125 were
++#          and the HTTP service line '[Web] HTTP service listening on 0.0.0.0:8124' (w2-049:
++#          AppHttpServer, web page + /exports downloads); 127.0.0.1:18125 and 0.0.0.0:8125 were
+ #          listening, both owned by the app's PID; 0.0.0.0:502 and 0.0.0.0:8124 were listening;
+-#          app exited; 502/8124/8125/18125 have no listener after.
++#          GET http://127.0.0.1:8124/TaidaFlowApp.html answered 200 (or 404 when the log says
++#          no web page folder was found); app exited; 502/8124/8125/18125 have no listener after.
+ # Exit 3 = safety probe not SAFE (app not started); 1 = any other check failed.
+-param([string]$ProbeLog = "")
++# -DeviceProfile simulator (w2-049, TEST ONLY): passed to run-desktop.ps1 (start
++#          scripts\run-simulator.ps1 first); the simulator's own 502 listeners on
++#          127.0.0.201..205 are not counted as left behind.
++param(
++    [string]$ProbeLog = "",
++    [ValidateSet('default', 'simulator')]
++    [string]$DeviceProfile = "default"
++)
+ $ErrorActionPreference = 'Stop'
+ $root = Split-Path -Parent $PSScriptRoot
+ $log  = Join-Path $root 'build\runtime-logs\verify-startup.log'
+@@ -21,6 +30,7 @@ $py   = 'C:\Users\TED\AppData\Local\Programs\Python\Python312\python.exe'
+ $runArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'run-desktop.ps1'),
+              '-Label', 'verify-desktop-startup', '-LogFile', $log)
+ if ($ProbeLog -ne "") { $runArgs += @('-ProbeLog', $ProbeLog) }
++if ($DeviceProfile -eq 'simulator') { $runArgs += @('-DeviceProfile', 'simulator') }
+ & powershell @runArgs
+ $rc = $LASTEXITCODE
+ if ($rc -ne 0) { Write-Output "run-desktop.ps1 exit $rc - app not started"; exit $rc }
+@@ -40,13 +50,21 @@ $text = Get-Content $log -Encoding utf8
+ $endpoint = [bool]($text | Select-String -SimpleMatch 'WASM Mirror endpoint: ws://127.0.0.1:18125/mirror')
+ $relay    = [bool]($text | Select-String -SimpleMatch 'LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125')
+ $modbus   = [bool]($text | Select-String -SimpleMatch '[ModbusServer] listening on 0.0.0.0:502')
+-$download = [bool]($text | Select-String -SimpleMatch '[ExportHTTP] download service listening on 0.0.0.0:8124')
++$download = [bool]($text | Select-String -SimpleMatch '[Web] HTTP service listening on 0.0.0.0:8124')
++$webDir   = [bool]($text | Select-String -SimpleMatch '[Web] web page folder (')
++$page = & curl.exe -s -o NUL --max-time 10 -w '%{http_code}' 'http://127.0.0.1:8124/TaidaFlowApp.html'
++$pageOk = if ($webDir) { $page -eq '200' } else { $page -eq '404' }
+ $text | Where-Object { $_ -notmatch 'request was not sent|\[MS300\]' } | Select-Object -First 25
+ & $py (Join-Path $PSScriptRoot 'desktop_input.py') close | Out-Null
+ if (-not $p.WaitForExit(15000)) { Stop-Process -Id $p.Id -Force; Write-Output 'app did not exit on WM_CLOSE (killed)' }
+ Start-Sleep -Seconds 1
+ $left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8124, 8125, 18125 })
+-Write-Output ("app_pid=$($p.Id) endpoint_line=$endpoint relay_line=$relay modbus_server_line=$modbus download_service_line=$download " +
++if ($DeviceProfile -eq 'simulator') {
++    $simPids = @(Get-Process Adam60xxSimulator -ErrorAction SilentlyContinue | ForEach-Object { $_.Id })
++    $left = @($left | Where-Object { -not ($_.LocalPort -eq 502 -and $simPids -contains $_.OwningProcess) })
++}
++Write-Output ("app_pid=$($p.Id) endpoint_line=$endpoint relay_line=$relay modbus_server_line=$modbus http_service_line=$download " +
++              "web_dir_line=$webDir page_status=$page " +
+               "listening_18125_app=$l18125 listening_8125_app=$l8125 listening_502=$l502 listening_8124=$l8124 " +
+               "app_exit_code=$($p.ExitCode) listeners_left=$($left.Count)")
+-if ($endpoint -and $relay -and $modbus -and $download -and $l18125 -and $l8125 -and $l502 -and $l8124 -and $left.Count -eq 0) { exit 0 } else { exit 1 }
++if ($endpoint -and $relay -and $modbus -and $download -and $pageOk -and $l18125 -and $l8125 -and $l502 -and $l8124 -and $left.Count -eq 0) { exit 0 } else { exit 1 }

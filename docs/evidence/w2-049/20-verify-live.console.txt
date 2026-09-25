@@ -1,0 +1,130 @@
+local IPv4: 192.168.0.125, 192.168.158.1, 192.168.83.1
+LAN IPv4 used for the LAN requests: 192.168.0.125
+fixture: D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\web-w2049_20260926_120000.csv (608911 bytes, sha256 A9F01F3A0A20EB6F84B64EF787EA2062E4A7738741B728C7F575A2546B9C2C65)
+run-simulator: SIM_PID=104188 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-049\live\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205 (exit 0)
+=== scenario web (TAIDAFLOW_WEB_DIR unset, <exe folder>\web deployed)
+  PASS 0.0.0.0:8124 listening, owned by the app pid 39508
+  PASS log: TAIDAFLOW_WEB_DIR is not set
+  PASS log: web page folder = <exe folder>/web
+  PASS log: HTTP service listening on 0.0.0.0:8124
+  PASS log: AppHttpServer mounts /exports and /
+deployed TaidaFlowApp.wasm 33828575 bytes, .gz 12447241 bytes
+--- host 127.0.0.1
+  PASS 127.0.0.1 html 200
+  PASS 127.0.0.1 html Content-Type text/html
+  PASS 127.0.0.1 html Cache-Control no-cache
+  PASS 127.0.0.1 html COOP/COEP/CORP
+  PASS 127.0.0.1 html body = deployed file
+  PASS 127.0.0.1 html gzip variant
+  PASS 127.0.0.1 wasm 200 application/wasm
+  PASS 127.0.0.1 wasm identity 33828575 bytes, sha256 equal
+  PASS 127.0.0.1 wasm identity: no Content-Encoding, Vary
+  PASS 127.0.0.1 wasm gzip: Content-Encoding gzip, MIME application/wasm
+  PASS 127.0.0.1 wasm gzip 12447241 bytes = deployed .gz
+  PASS 127.0.0.1 wasm gzip body decompresses to the .wasm (sha256)
+  PASS 127.0.0.1 wasm second request with ETag -> 304, no body
+  PASS 127.0.0.1 wasm gzip second request with its ETag -> 304
+  PASS 127.0.0.1 html If-Modified-Since -> 304
+  PASS 127.0.0.1 HEAD wasm 200, Content-Length 33828575, no body
+  PASS 127.0.0.1 TaidaFlowApp.js 200 text/javascript; charset=utf-8
+  PASS 127.0.0.1 qtloader.js 200 text/javascript; charset=utf-8
+  PASS 127.0.0.1 qtlogo.svg 200 image/svg+xml
+  PASS 127.0.0.1 / -> 302 /TaidaFlowApp.html
+  PASS 127.0.0.1 /exports download 200, body = file
+  PASS 127.0.0.1 /exports headers (attachment, ACAO *, no-store, text/csv)
+  PASS 127.0.0.1 attack /../w2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /%2e%2e/w2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /%2E%2E%2Fw2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /..%5Cw2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /..\w2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /exports/../w2049-secret.txt -> 400
+  PASS 127.0.0.1 attack /exports/..%2Fsecret_20260926_120000.csv -> 400
+  PASS 127.0.0.1 attack /exports/%2e%2e%5Csecret_20260926_120000.csv -> 400
+  PASS 127.0.0.1 attack /exports//secret_20260926_120000.csv -> 400
+  PASS 127.0.0.1 attack /C:%5CWindows%5Cwin.ini -> 400
+  PASS 127.0.0.1 attack /C:/Windows/win.ini -> 400
+  PASS 127.0.0.1 attack /%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 400
+  PASS 127.0.0.1 attack /TaidaFlowApp.html::$DATA -> 400
+  PASS 127.0.0.1 attack /TaidaFlowApp.html. -> 400
+  PASS 127.0.0.1 attack /NUL -> 400
+  PASS 127.0.0.1 attack /exports/w2049-secret.txt -> 400
+  PASS 127.0.0.1 POST /exports -> 405
+  ws://127.0.0.1:8125/mirror upgrade -> HTTP/1.1 101 Switching Protocols (curl exit 28; 28 = kept open until --max-time)
+  PASS 127.0.0.1 mirror WebSocket upgrade 8125 -> 101
+--- host 192.168.0.125
+  PASS 192.168.0.125 html 200
+  PASS 192.168.0.125 html Content-Type text/html
+  PASS 192.168.0.125 html Cache-Control no-cache
+  PASS 192.168.0.125 html COOP/COEP/CORP
+  PASS 192.168.0.125 html body = deployed file
+  PASS 192.168.0.125 html gzip variant
+  PASS 192.168.0.125 wasm 200 application/wasm
+  PASS 192.168.0.125 wasm identity 33828575 bytes, sha256 equal
+  PASS 192.168.0.125 wasm identity: no Content-Encoding, Vary
+  PASS 192.168.0.125 wasm gzip: Content-Encoding gzip, MIME application/wasm
+  PASS 192.168.0.125 wasm gzip 12447241 bytes = deployed .gz
+  PASS 192.168.0.125 wasm gzip body decompresses to the .wasm (sha256)
+  PASS 192.168.0.125 wasm second request with ETag -> 304, no body
+  PASS 192.168.0.125 wasm gzip second request with its ETag -> 304
+  PASS 192.168.0.125 html If-Modified-Since -> 304
+  PASS 192.168.0.125 HEAD wasm 200, Content-Length 33828575, no body
+  PASS 192.168.0.125 TaidaFlowApp.js 200 text/javascript; charset=utf-8
+  PASS 192.168.0.125 qtloader.js 200 text/javascript; charset=utf-8
+  PASS 192.168.0.125 qtlogo.svg 200 image/svg+xml
+  PASS 192.168.0.125 / -> 302 /TaidaFlowApp.html
+  PASS 192.168.0.125 /exports download 200, body = file
+  PASS 192.168.0.125 /exports headers (attachment, ACAO *, no-store, text/csv)
+  PASS 192.168.0.125 attack /../w2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /%2e%2e/w2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /%2E%2E%2Fw2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /..%5Cw2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /..\w2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /exports/../w2049-secret.txt -> 400
+  PASS 192.168.0.125 attack /exports/..%2Fsecret_20260926_120000.csv -> 400
+  PASS 192.168.0.125 attack /exports/%2e%2e%5Csecret_20260926_120000.csv -> 400
+  PASS 192.168.0.125 attack /exports//secret_20260926_120000.csv -> 400
+  PASS 192.168.0.125 attack /C:%5CWindows%5Cwin.ini -> 400
+  PASS 192.168.0.125 attack /C:/Windows/win.ini -> 400
+  PASS 192.168.0.125 attack /%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 400
+  PASS 192.168.0.125 attack /TaidaFlowApp.html::$DATA -> 400
+  PASS 192.168.0.125 attack /TaidaFlowApp.html. -> 400
+  PASS 192.168.0.125 attack /NUL -> 400
+  PASS 192.168.0.125 attack /exports/w2049-secret.txt -> 400
+  PASS 192.168.0.125 POST /exports -> 405
+  ws://192.168.0.125:8125/mirror upgrade -> HTTP/1.1 101 Switching Protocols (curl exit 28; 28 = kept open until --max-time)
+  PASS 192.168.0.125 mirror WebSocket upgrade 8125 -> 101
+  app pid 39508 exit code 0
+  PASS after close: no listener on 8124/8125/18125
+    [Export] stopped (export thread; /exports unmounted).
+    apphttpserver: [AppHttpServer] stopped (was port 8124)
+  PASS log: AppHttpServer stopped on quit
+=== scenario env (TAIDAFLOW_WEB_DIR=D:\repo\codex\qmlTester\taidaflow\build\wasm-release, <exe folder>\web still deployed)
+  PASS log: TAIDAFLOW_WEB_DIR wins over <exe folder>/web
+  PASS env: wasm from build\wasm-release (no .gz there -> identity)
+  PASS env: build file CMakeCache.txt not served (suffix list) -> 404
+  PASS env: build.ninja -> 404
+  app pid 104408 exit code 0
+=== scenario noweb (TAIDAFLOW_WEB_DIR=D:\repo\codex\qmlTester\taidaflow\build\w2-049-no-such-web-dir, <exe folder>\web removed, dev default page renamed for this run)
+  PASS log: env candidate skipped
+  PASS log: <exe folder>/web skipped
+  PASS log: development default skipped
+  PASS log: warning no web page folder found
+  PASS log: HTTP service still listening
+  PASS noweb: page 404
+  PASS noweb: /exports download still 200
+  app pid 85244 exit code 0
+restored build\wasm-release\TaidaFlowApp.html
+simulator pid 104188 closed
+  PASS end: no listener on 502/8124/8125/18125
+fixture files removed; <exe folder>\web was removed by the noweb scenario (re-run scripts\deploy-web.ps1 to deploy again)
+removed large body 03-wasm-identity-127.0.0.1.body (33828575 bytes, sha256 86C351078A171B4CB8D958D009B55C10D97867FB75BB879A8351D24C990AB043)
+removed large body 04-wasm-gzip-127.0.0.1.body (12447241 bytes, sha256 097C5F6B3652A2FD4BF4DC3B185A884BC52E18DBD39DAEB5A6E31E4F01A0367A)
+removed large body 09-TaidaFlowApp.js-127.0.0.1.body (304976 bytes, sha256 4C4F1106D5435EC4DF81F828A1C4E2024D68E9C4D58737808992B3E5DAF531DD)
+removed large body 13-export-127.0.0.1.body (608911 bytes, sha256 A9F01F3A0A20EB6F84B64EF787EA2062E4A7738741B728C7F575A2546B9C2C65)
+removed large body 33-wasm-identity-192.168.0.125.body (33828575 bytes, sha256 86C351078A171B4CB8D958D009B55C10D97867FB75BB879A8351D24C990AB043)
+removed large body 34-wasm-gzip-192.168.0.125.body (12447241 bytes, sha256 097C5F6B3652A2FD4BF4DC3B185A884BC52E18DBD39DAEB5A6E31E4F01A0367A)
+removed large body 39-TaidaFlowApp.js-192.168.0.125.body (304976 bytes, sha256 4C4F1106D5435EC4DF81F828A1C4E2024D68E9C4D58737808992B3E5DAF531DD)
+removed large body 43-export-192.168.0.125.body (608911 bytes, sha256 A9F01F3A0A20EB6F84B64EF787EA2062E4A7738741B728C7F575A2546B9C2C65)
+removed large body 61-env-wasm.body (33828575 bytes, sha256 86C351078A171B4CB8D958D009B55C10D97867FB75BB879A8351D24C990AB043)
+removed large body 65-noweb-export.body (608911 bytes, sha256 A9F01F3A0A20EB6F84B64EF787EA2062E4A7738741B728C7F575A2546B9C2C65)
+RESULT: 0 failed check(s)

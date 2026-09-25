@@ -1,0 +1,18 @@
+ M Core/CMakeLists.txt
+ M Core/HistoryExport.cpp
+ M Core/HistoryExport.h
+ M Core/core.cpp
+ M Core/core.h
+ M README.md
+ M scripts/check_wasm_backend.py
+ M scripts/run-desktop.ps1
+ M scripts/safety_probe.ps1
+ D scripts/serve_wasm.py
+ M scripts/verify-desktop-startup.ps1
+?? Core/AppHttpServer/AppHttpServer.cpp
+?? Core/AppHttpServer/AppHttpServer.h
+?? Core/AppHttpServer/README.md
+?? Core/AppHttpServer/tests/CMakeLists.txt
+?? Core/AppHttpServer/tests/tst_apphttpserver.cpp
+?? scripts/deploy-web.ps1
+?? scripts/run-apphttpserver-tests.bat

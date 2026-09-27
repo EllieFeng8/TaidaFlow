@@ -3,6 +3,7 @@ import QtQuick.Controls
 import TaidaFlowBackend 1.0
 import "components" as Components
 import "components/DateTimeUtil.js" as DateTimeUtil
+import "components/HistoryViewUtil.js" as HistoryViewUtil
 
 // =========================================================
 // 歷史紀錄頁面
@@ -39,10 +40,39 @@ Item {
     // both ends inclusive; 0 .. 8640000000000000 (largest JS Date value, finite
     // so the mirror accepts it) = unbounded (all months). This page no longer
     // sends it (the former show-all button is now "顯示前一周", spec §2 revised
-    // 2026-09-25), but the Core still accepts it and older web pages / other
-    // clients may still request it, so the page must still recognise it.
+    // 2026-09-25) and each client now has its own range (spec §2.1), but the Core
+    // still accepts it, so the page still shows it as "全部" if it ever comes back.
     readonly property double unboundedFromMs: 0
     readonly property double unboundedToMs: 8640000000000000
+
+    // ---- This client's history view (spec §2.1, revised 2026-09-27) -------------
+    // The Core writes Td.historyViews (keyed by clientSessionId); this page reads
+    // only its own entry and copies it into the view* properties below when that
+    // entry's revision changes (applyOwnView). Entries of other clients changing
+    // re-send the whole map but leave everything here untouched, so another
+    // client's filter / paging never changes this screen.
+    // true once our own entry has been shown; false = not loaded yet (the table
+    // shows "載入中" / the pager shows "—").
+    property bool viewLoaded: false
+    // Revision of the entry currently shown; null = none (not loaded, or the Core
+    // removed our entry - then any rebuilt entry is shown, whatever its revision).
+    property var appliedRevision: null
+    property double viewFromMs: 0
+    property double viewToMs: 0
+    property int viewPage: 1
+    property int viewTotalPages: 1
+    property double viewTotalRows: 0
+    // Our current range / page as last requested (or last shown): sent again when
+    // the page is shown. rangeChosen = false until the first time the page is
+    // shown, which picks the current month (HistoryViewUtil.monthRange).
+    property bool rangeChosen: false
+    property double requestFromMs: 0
+    property double requestToMs: 0
+    property int requestPage: 1
+    // Range shown in the status text and used by the export: our shown view once
+    // loaded, else the range we asked for.
+    readonly property double shownFromMs: viewLoaded ? viewFromMs : requestFromMs
+    readonly property double shownToMs: viewLoaded ? viewToMs : requestToMs
 
     // This client's export job (spec §3.2): the entry of historyExportStatus
     // keyed by our own clientSessionId, or null when there is none.
@@ -71,12 +101,9 @@ Item {
                                         : ""
     readonly property bool exportPanelShown: myExport !== null
                                              && (exportActive || exportKey !== dismissedExportKey)
-    readonly property int currentPage: Td.historyCurrentPage
-    readonly property int totalPages: Td.historyTotalPages
-
     readonly property var columnTitles: Td.historyTitle
-    // The Core already pages the requested range (spec §2): this is the current
-    // page (10 rows) exactly as pushed, no local filtering.
+    // The Core already pages our range (spec §2.1): this is the records of our
+    // own entry (10 rows), newest first, no local filtering.
     property var historySourceModel: []
     // Column widths: at least the design widths (time 210, column 1 160, values
     // 146 - wide enough for "yyyy/MM/dd HH:mm:ss" and the longest value text
@@ -113,50 +140,101 @@ Item {
         font.bold: true
     }
 
-    function reloadHistoryData() {
-        var rows = []
-        var records = Td.historyRecords
-        for (var i = 0; i < records.length; ++i)
-            rows.push({ timestampMs: Number(records[i].timestampMs), values: records[i].values })
-        rows.sort(function(a, b) { return b.timestampMs - a.timestampMs })
-        historySourceModel = rows
+    // Show our own entry of Td.historyViews when its revision changed (spec
+    // §2.1). Reads Td directly because it runs from a Connections handler.
+    // "none" (only other clients' entries changed, or still not loaded) leaves
+    // the table, pager, fields and scroll position exactly as they are. "lost"
+    // (the Core removed our entry: 30 idle minutes / 32-entry limit / Core
+    // restart) keeps the screen and only forgets the revision; our next request
+    // (paging, filter, showing the page, transport back) rebuilds the entry.
+    function applyOwnView() {
+        var change = HistoryViewUtil.viewChange(Td.historyViews, Td.clientSessionId, appliedRevision)
+        if (change.kind === "lost") {
+            appliedRevision = null
+            return
+        }
+        if (change.kind !== "apply")
+            return
+
+        var view = change.view
+        var rangeChanged = !viewLoaded || view.fromMs !== viewFromMs || view.toMs !== viewToMs
+        appliedRevision = view.revision
+        viewFromMs = view.fromMs
+        viewToMs = view.toMs
+        viewPage = view.page
+        viewTotalPages = view.totalPages
+        viewTotalRows = view.totalRows
+        viewLoaded = true
+        // What is shown is now our current range / page.
+        rangeChosen = true
+        requestFromMs = view.fromMs
+        requestToMs = view.toMs
+        requestPage = view.page
+        historySourceModel = view.rows
         historyList.positionViewAtBeginning()
+        // Fields follow only a new range (not paging), so text being typed is
+        // not overwritten by a page change.
+        if (rangeChanged)
+            setRangeFields(view.fromMs, view.toMs)
     }
 
-    // Show the range the Core is currently paging (historyRangeFromMs/ToMs) in
-    // the date/time fields as YYYY/MM/DD HH:mm, i.e. the minute of each end
-    // (e.g. "顯示前一周" -> 2026/09/19 00:00 .. 2026/09/25 23:59; the end
-    // 23:59:59.999 shows as 23:59).
-    // Unbounded leaves the fields empty and rangeText() shows "全部": this page
-    // never requests it any more, but the range is shared by all clients and an
-    // older web page or another client may still send the unbounded range.
+    // Our range in the date/time fields as YYYY/MM/DD HH:mm, i.e. the minute of
+    // each end (e.g. "顯示前一周" -> 2026/09/19 00:00 .. 2026/09/25 23:59; the
+    // end 23:59:59.999 shows as 23:59). Unbounded leaves the fields empty and
+    // rangeText() shows "全部" (never requested by this page any more).
     function isUnboundedRange(fromMs, toMs) {
         return fromMs <= unboundedFromMs && toMs >= unboundedToMs
     }
 
-    // Reads Td directly (not the derived bindings) because it runs from
-    // Connections handlers, where derived properties may not be updated yet.
-    function syncRangeFields() {
-        if (isUnboundedRange(Td.historyRangeFromMs, Td.historyRangeToMs)) {
+    function setRangeFields(fromMs, toMs) {
+        if (isUnboundedRange(fromMs, toMs)) {
             startDateField.text = ""
             endDateField.text = ""
             return
         }
-        startDateField.text = DateTimeUtil.formatDateTime(new Date(Td.historyRangeFromMs))
-        endDateField.text = DateTimeUtil.formatDateTime(new Date(Td.historyRangeToMs))
+        startDateField.text = DateTimeUtil.formatDateTime(new Date(fromMs))
+        endDateField.text = DateTimeUtil.formatDateTime(new Date(toMs))
     }
 
     function rangeText() {
-        if (isUnboundedRange(Td.historyRangeFromMs, Td.historyRangeToMs))
+        if (!rangeChosen)
+            return "—"
+        if (isUnboundedRange(shownFromMs, shownToMs))
             return "全部"
-        return DateTimeUtil.formatDateTime(new Date(Td.historyRangeFromMs)) + " – "
-                + DateTimeUtil.formatDateTime(new Date(Td.historyRangeToMs))
+        return DateTimeUtil.formatDateTime(new Date(shownFromMs)) + " – "
+                + DateTimeUtil.formatDateTime(new Date(shownToMs))
     }
 
-    // "篩選": ask the Core for the range (spec §2, revised 2026-09-25). Fields are
-    // YYYY/MM/DD HH:mm in local time, or the date only (start 00:00, end 23:59).
-    // From = the start minute's :00.000, to = the end minute's :59.999, both
-    // inclusive, built with new Date(y, m, d, h, mi, s, ms) (components/DateTimeUtil.js).
+    // The only history request (spec §2.1): our own session id, range and page.
+    // Remembered as our current range / page even while offline (then nothing
+    // is sent; the request is repeated when the transport comes back).
+    function requestView(fromMs, toMs, page) {
+        rangeChosen = true
+        requestFromMs = fromMs
+        requestToMs = toMs
+        requestPage = page
+        if (!Td.transportReady)
+            return
+        Td.historyViewRequested(Td.clientSessionId, fromMs, toMs, page)
+    }
+
+    // Page shown (or transport back while shown): ask for our current range and
+    // page again. The first time, our range is the current month, page 1.
+    function requestOwnView() {
+        if (!rangeChosen) {
+            var month = HistoryViewUtil.monthRange(new Date())
+            requestView(month.fromMs, month.toMs, 1)
+            setRangeFields(month.fromMs, month.toMs)
+            return
+        }
+        requestView(requestFromMs, requestToMs, requestPage)
+    }
+
+    // "篩選": ask the Core for our range, page 1 (spec §2 revised 2026-09-25,
+    // §2.1). Fields are YYYY/MM/DD HH:mm in local time, or the date only (start
+    // 00:00, end 23:59). From = the start minute's :00.000, to = the end
+    // minute's :59.999, both inclusive, built with new Date(y, m, d, h, mi, s, ms)
+    // (components/DateTimeUtil.js).
     function applyFilter() {
         if (!Td.transportReady)
             return
@@ -176,38 +254,35 @@ Item {
         }
 
         filterMessage = ""
-        Td.historyRangeRequested(fromMs, toMs)
-        // Normalize the fields (a date-only entry shows its 00:00 / 23:59). The
-        // Core's write-back of the range (syncRangeFields) shows the same text.
-        startDateField.text = DateTimeUtil.formatDateTime(new Date(fromMs))
-        endDateField.text = DateTimeUtil.formatDateTime(new Date(toMs))
+        requestView(fromMs, toMs, 1)
+        // Normalize the fields (a date-only entry shows its 00:00 / 23:59). Our
+        // entry's new range (applyOwnView) shows the same text.
+        setRangeFields(fromMs, toMs)
     }
 
+    // Previous / next page: the shown page -/+ 1 within the shown range (the
+    // range and page of our own entry, spec §2.1).
     function goToPage(page) {
-        if (page < 1 || page > totalPages || page === currentPage)
+        if (!Td.transportReady || !viewLoaded || page < 1 || page > viewTotalPages || page === viewPage)
             return
 
-        Td.historyCurrentPage = page
+        requestView(viewFromMs, viewToMs, page)
     }
 
     // "顯示前一周" (spec §2, revised 2026-09-25): the last 7 local calendar days
-    // including today, i.e. (today - 6 days) 00:00:00.000 .. today 23:59:59.999.
-    // Same day boundaries as applyFilter(); new Date(y, m, d +/- n) rolls over
-    // month/year ends and stays on local midnight across DST changes (no 24 h
-    // millisecond arithmetic).
+    // including today, i.e. (today - 6 days) 00:00:00.000 .. today 23:59:59.999,
+    // page 1 (HistoryViewUtil.lastWeekRange: new Date(y, m, d +/- n) rolls over
+    // month/year ends and stays on local midnight across DST changes).
     function showLastWeek() {
         if (!Td.transportReady)
             return
 
         filterMessage = ""
-        var now = new Date()
-        var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
-        var endExclusive = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
-        Td.historyRangeRequested(startDate.getTime(), endExclusive.getTime() - 1)
-        // Fields: (today - 6) 00:00 .. today 23:59, also when the Core's range
-        // does not change (then there is no write-back to syncRangeFields()).
-        startDateField.text = DateTimeUtil.formatDateTime(startDate)
-        endDateField.text = DateTimeUtil.formatDateTime(new Date(endExclusive.getTime() - 1))
+        var range = HistoryViewUtil.lastWeekRange(new Date())
+        requestView(range.fromMs, range.toMs, 1)
+        // Fields: (today - 6) 00:00 .. today 23:59 right away (our entry's new
+        // range shows the same text when it arrives).
+        setRangeFields(range.fromMs, range.toMs)
     }
 
     function formatCount(value) {
@@ -215,15 +290,16 @@ Item {
         return text.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
 
-    // "下載 CSV": the Core exports the raw data of the current query range
-    // (spec §3.1); progress comes back through historyExportStatus.
+    // "下載 CSV": the Core exports the raw data of our own current range (spec
+    // §3.1, §2.1: the range shown in the status text); progress comes back
+    // through historyExportStatus.
     function downloadCsv() {
-        if (!Td.transportReady || exportActive)
+        if (!Td.transportReady || exportActive || !rangeChosen)
             return
 
         exportRequestedHere = true
         dismissedExportKey = ""
-        Td.historyExportRequested(Td.clientSessionId, Td.historyRangeFromMs, Td.historyRangeToMs)
+        Td.historyExportRequested(Td.clientSessionId, shownFromMs, shownToMs)
         exportMessage = "已送出匯出要求（區間：" + rangeText() + "）"
         exportMessageTimer.restart()
     }
@@ -300,31 +376,33 @@ Item {
     }
 
     Component.onCompleted: {
-        reloadHistoryData()
-        syncRangeFields()
+        applyOwnView()
+        if (visible)
+            requestOwnView()
     }
 
     // TopNav.qml keeps this page instantiated and switches pages by binding
     // `visible` to root.currentPage, so the page becoming visible is the
-    // moment the history page is shown. Ask the authoritative side to load.
+    // moment the history page is shown. Ask the Core for our own view.
     onVisibleChanged: {
         if (visible)
-            Td.historyRefreshRequested()
+            requestOwnView()
     }
 
     Connections {
         target: Td
-        function onHistoryRecordsChanged() {
-            reloadHistoryData()
-        }
-        function onHistoryRangeFromMsChanged() {
-            syncRangeFields()
-        }
-        function onHistoryRangeToMsChanged() {
-            syncRangeFields()
+        function onHistoryViewsChanged() {
+            historyPage.applyOwnView()
         }
         function onHistoryExportStatusChanged() {
             handleExportStatus()
+        }
+        // WASM: the mirror (re)connected while the page is shown - a request
+        // made while offline was not sent, and after a desktop restart the Core
+        // has no entry for us. The desktop's transportReady never changes.
+        function onTransportReadyChanged() {
+            if (Td.transportReady && historyPage.visible)
+                historyPage.requestOwnView()
         }
     }
 
@@ -709,7 +787,11 @@ Item {
                         height: 46
                         text: historyPage.filterMessage.length > 0
                               ? historyPage.filterMessage
-                              : "區間：" + historyPage.rangeText() + " · 本頁 " + historyPage.historySourceModel.length + " 筆"
+                              : "區間：" + historyPage.rangeText()
+                                + (historyPage.viewLoaded
+                                   ? " · 共 " + historyPage.formatCount(historyPage.viewTotalRows) + " 筆 · 本頁 "
+                                     + historyPage.historySourceModel.length + " 筆"
+                                   : " · 載入中")
                         color: historyPage.filterMessage.length > 0 ? historyPage.dangerColor : historyPage.mutedTextColor
                         font.pixelSize: 14
                         horizontalAlignment: Text.AlignRight
@@ -843,7 +925,8 @@ Item {
             Text {
                 anchors.centerIn: horizontalTable
                 visible: historySourceModel.length === 0 && filterMessage.length === 0
-                text: "此日期區間沒有歷史資料"
+                // Our entry not in historyViews yet (spec §2.1): not loaded, not "no data".
+                text: historyPage.viewLoaded ? "此日期區間沒有歷史資料" : "載入中"
                 color: mutedTextColor
                 font.pixelSize: 18
             }
@@ -872,9 +955,9 @@ Item {
                         id: previousPageButton
                         width: 96
                         height: 34
-                        // historyCurrentPage is a mirrored property: paging is a remote
-                        // write, so it is disabled while the WASM transport is offline.
-                        enabled: currentPage > 1 && Td.transportReady
+                        // Paging is a request to the Core (historyViewRequested, spec
+                        // §2.1), so it is disabled while the WASM transport is offline.
+                        enabled: historyPage.viewLoaded && historyPage.viewPage > 1 && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -894,7 +977,7 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                         }
 
-                        onClicked: goToPage(currentPage - 1)
+                        onClicked: historyPage.goToPage(historyPage.viewPage - 1)
                     }
 
                     // At least the former 110 px, wider when the page numbers need it
@@ -902,7 +985,9 @@ Item {
                     Text {
                         width: Math.max(110, implicitWidth)
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "第 " + currentPage + " / " + totalPages + " 頁"
+                        text: historyPage.viewLoaded
+                              ? "第 " + historyPage.viewPage + " / " + historyPage.viewTotalPages + " 頁"
+                              : "第 — / — 頁"
                         color: "#BFD8EC"
                         font.pixelSize: 14
                         horizontalAlignment: Text.AlignHCenter
@@ -912,7 +997,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage < totalPages && Td.transportReady
+                        enabled: historyPage.viewLoaded && historyPage.viewPage < historyPage.viewTotalPages && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -932,7 +1017,7 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                         }
 
-                        onClicked: goToPage(currentPage + 1)
+                        onClicked: historyPage.goToPage(historyPage.viewPage + 1)
                     }
                 }
             }

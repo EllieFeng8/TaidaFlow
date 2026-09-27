@@ -62,19 +62,27 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(bool leakDetectedPv READ leakDetectedPv WRITE setLeakDetectedPv NOTIFY leakDetectedPvChanged)
 
     // List data is owned by the authoritative side. QML only reads a local copy.
+    // historyTitle (column titles) stays shared by all clients (spec §2.1).
     Q_PROPERTY(QVariantList historyTitle READ historyTitle WRITE setHistoryTitle NOTIFY historyTitleChanged)
-    Q_PROPERTY(QVariantList historyRecords READ historyRecords WRITE setHistoryRecords NOTIFY historyRecordsChanged)
-    Q_PROPERTY(int historyCurrentPage READ historyCurrentPage WRITE setHistoryCurrentPage NOTIFY historyCurrentPageChanged)
-    Q_PROPERTY(int historyTotalPages READ historyTotalPages WRITE setHistoryTotalPages NOTIFY historyTotalPagesChanged)
     Q_PROPERTY(QVariantList alarmRecords READ alarmRecords WRITE setAlarmRecords NOTIFY alarmRecordsChanged)
 
-    // History range query + raw export (docs/taidaflow_history_export_spec.md §2/§3).
-    // Mirrored (Core -> all clients): the range the Core is currently paging, in local-epoch
-    // ms, both ends inclusive; HistoryPage.qml only displays it (requests go through
-    // historyRangeRequested). fromMs = 0 and toMs = 8640000000000000 (the largest JS Date
-    // value) means "all months" (unbounded range, "顯示全部").
-    Q_PROPERTY(double historyRangeFromMs READ historyRangeFromMs WRITE setHistoryRangeFromMs NOTIFY historyRangeFromMsChanged)
-    Q_PROPERTY(double historyRangeToMs READ historyRangeToMs WRITE setHistoryRangeToMs NOTIFY historyRangeToMsChanged)
+    // Per-client history views (docs/taidaflow_history_export_spec.md §2.1, revised 2026-09-27;
+    // replaces the former shared records / page / range properties and their two requests).
+    // Mirrored (Core -> all clients), written only by the Core. Key = the client's
+    // clientSessionId ("desktop", "web-xxxx"); value = map
+    //   { fromMs, toMs,   // this client's range, local-epoch ms, both ends inclusive
+    //     page,           // current page, 1-based
+    //     totalPages,     // >= 1
+    //     totalRows,      // rows in the whole range
+    //     records,        // this page (10 rows), each { timestampMs, values }
+    //                     //   (values: one cell per historyTitle column, in that order)
+    //     revision }      // number; changes whenever this entry's content changes
+    // Each client's QML reads only historyViews[clientSessionId] and redraws only when that
+    // entry's revision changes, so one client filtering / paging never changes another
+    // client's screen. A missing key = not loaded yet: the Core creates the entry on the
+    // client's first historyViewRequested, removes web entries idle for 30 min (never
+    // "desktop") and keeps at most 32; a removed client's next request rebuilds it.
+    Q_PROPERTY(QVariantMap historyViews READ historyViews WRITE setHistoryViews NOTIFY historyViewsChanged)
     // Mirrored (Core -> all clients): export jobs keyed by clientSessionId; each value is a map
     // {state, progress, queuePosition, rowsWritten, totalRows, fileName, url, downloadPort,
     // savedPath, message} (spec §3.2; url is the path "/exports/<file>" and downloadPort the
@@ -83,7 +91,8 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(QVariantMap historyExportStatus READ historyExportStatus WRITE setHistoryExportStatus NOTIFY historyExportStatusChanged)
     // Local only (STORED false, never mirrored): this client's id, "desktop" on the desktop,
     // "web-xxxx" per browser tab (set by main.cpp before the mirror is created, spec §1).
-    // QML sends it with export requests and uses it as the key into historyExportStatus.
+    // QML sends it with history view / export requests and uses it as the key into
+    // historyViews and historyExportStatus.
     Q_PROPERTY(QString clientSessionId READ clientSessionId NOTIFY clientSessionIdChanged STORED false)
     // Local only (STORED false, never mirrored): host name of the page URL (location.hostname),
     // set by the WASM main.cpp before the mirror is created; "" on the desktop. HistoryPage.qml
@@ -140,12 +149,8 @@ public:
     double flowMeterValuePv() const { return m_flowMeterValuePv; }
     bool leakDetectedPv() const { return m_leakDetectedPv; }
     QVariantList historyTitle() const { return m_historyTitle; }
-    QVariantList historyRecords() const { return m_historyRecords; }
-    int historyCurrentPage() const { return m_historyCurrentPage; }
-    int historyTotalPages() const { return m_historyTotalPages; }
     QVariantList alarmRecords() const { return m_alarmRecords; }
-    double historyRangeFromMs() const { return m_historyRangeFromMs; }
-    double historyRangeToMs() const { return m_historyRangeToMs; }
+    QVariantMap historyViews() const { return m_historyViews; }
     QVariantMap historyExportStatus() const { return m_historyExportStatus; }
     QString clientSessionId() const { return m_clientSessionId; }
     QString pageHost() const { return m_pageHost; }
@@ -201,46 +206,18 @@ public:
         m_historyTitle = title;
         emit historyTitleChanged(title);
     }
-    void setHistoryRecords(const QVariantList &records)
-    {
-        m_historyRecords = records;
-        emit historyRecordsChanged(records);
-    }
-    // Page metadata comes from the authoritative side, independently of row count.
-    void setHistoryCurrentPage(int page)
-    {
-        if (page < 1 || m_historyCurrentPage == page)
-            return;
-        m_historyCurrentPage = page;
-        emit historyCurrentPageChanged(page);
-    }
-    void setHistoryTotalPages(int pages)
-    {
-        if (pages < 1 || m_historyTotalPages == pages)
-            return;
-        m_historyTotalPages = pages;
-        emit historyTotalPagesChanged(pages);
-    }
     void setAlarmRecords(const QVariantList &records)
     {
         m_alarmRecords = records;
         emit alarmRecordsChanged(records);
     }
-    // Range bounds are epoch milliseconds: compare exactly (qFuzzyCompare would treat
-    // values ~1.7e12 that differ by a few ms as equal).
-    void setHistoryRangeFromMs(double fromMs)
+    // Written only by the Core, always the whole map (spec §2.1); an unchanged map is not re-sent.
+    void setHistoryViews(const QVariantMap &views)
     {
-        if (m_historyRangeFromMs == fromMs)
+        if (m_historyViews == views)
             return;
-        m_historyRangeFromMs = fromMs;
-        emit historyRangeFromMsChanged(fromMs);
-    }
-    void setHistoryRangeToMs(double toMs)
-    {
-        if (m_historyRangeToMs == toMs)
-            return;
-        m_historyRangeToMs = toMs;
-        emit historyRangeToMsChanged(toMs);
+        m_historyViews = views;
+        emit historyViewsChanged(views);
     }
     void setHistoryExportStatus(const QVariantMap &status)
     {
@@ -307,25 +284,25 @@ signals:
     void flowMeterValuePvChanged(double value);
     void leakDetectedPvChanged(bool value);
     void historyTitleChanged(const QVariantList &title);
-    void historyRecordsChanged(const QVariantList &records);
-    void historyCurrentPageChanged(int page);
-    void historyTotalPagesChanged(int pages);
     void alarmRecordsChanged(const QVariantList &records);
-    void historyRangeFromMsChanged(double fromMs);
-    void historyRangeToMsChanged(double toMs);
+    void historyViewsChanged(const QVariantMap &views);
     void historyExportStatusChanged(const QVariantMap &status);
     void clientSessionIdChanged();
     void pageHostChanged();
     void transportReadyChanged();
     void transportMessageChanged();
 
-    // Request (not a property NOTIFY): emitted by HistoryPage.qml when the history page becomes visible; Desktop: Core listens and loads the history data; WASM: forwarded to the Desktop via the mirror request relay.
-    void historyRefreshRequested();
-
-    // Request (UI -> Core, WASM relayed to the Desktop): HistoryPage.qml "篩選"/"顯示全部" asks the
-    // Core to page this range (epoch ms, both ends inclusive; 0 / 8640000000000000 = all months).
-    // The Core restarts at page 1 and writes back historyRangeFromMs/ToMs (spec §2).
-    void historyRangeRequested(double fromMs, double toMs);
+    // Request (not a property NOTIFY; UI -> Core, WASM relayed to the Desktop by the mirror):
+    // the only history view request (spec §2.1). HistoryPage.qml sends its own sessionId
+    // (= clientSessionId) with its own range and page: when the page is shown (current range
+    // and page; the first time the current month, page 1), on "篩選" / "顯示前一周" (page 1),
+    // on previous / next page (page -/+ 1), and when the WASM transport comes back while the
+    // page is shown. fromMs/toMs are local-epoch ms, both ends inclusive, and are the
+    // client's range: the Core pages exactly this range (it keeps no range of its own that
+    // the request would depend on) and writes the result to historyViews[sessionId]. The
+    // Core still accepts 0 .. 8640000000000000 as "unbounded", although the UI no longer
+    // sends it. One sessionId's requests never make another sessionId's request stale.
+    void historyViewRequested(QString sessionId, double fromMs, double toMs, int page);
     // Request (UI -> Core, WASM relayed): "下載 CSV" asks the Core to export the raw data of the
     // current range for this client (sessionId = clientSessionId); progress comes back through
     // historyExportStatus[sessionId] (spec §3.1).
@@ -367,10 +344,6 @@ private:
 
     void initializeListData()
     {
-        static const QStringList historyDevices{
-            QStringLiteral("循環泵浦 A"), QStringLiteral("循環泵浦 B"),
-            QStringLiteral("主水槽"), QStringLiteral("過濾器"),
-            QStringLiteral("測試設備"), QStringLiteral("加熱器")};
         // Column order is shared by the table and CSV export. Each row has 20 cells.
         const QStringList titles{
             QStringLiteral("時間"), QStringLiteral("設備"),
@@ -398,32 +371,10 @@ private:
             QStringLiteral("壓力超過安全範圍"), QStringLiteral("出口溫度過高"),
             QStringLiteral("加熱溫度偏高"), QStringLiteral("流量低於設定值")};
 
+        // No history rows here: history views are per client and only exist after the
+        // client's historyViewRequested reaches the Core (spec §2.1), so main alone (no
+        // backend) shows an empty history table.
         const QDateTime now = QDateTime::currentDateTime();
-        // Default history range = current month: first day 00:00 .. next month's first day - 1 ms.
-        const QDateTime monthStart(QDate(now.date().year(), now.date().month(), 1), QTime(0, 0));
-        m_historyRangeFromMs = static_cast<double>(monthStart.toMSecsSinceEpoch());
-        m_historyRangeToMs = static_cast<double>(monthStart.addMonths(1).toMSecsSinceEpoch() - 1);
-        const QDateTime historyNow = now.addMSecs(-now.time().msec()).addSecs(-now.time().second());
-        for (int i = 0; i < 36; ++i) {
-            const QDateTime recordTime = historyNow.addSecs(-i * 2 * 60 * 60);
-            const bool leakOn = i == 7 || i == 19;
-            QVariantList values{
-                recordTime.toString(QStringLiteral("yyyy/MM/dd HH:mm")),
-                historyDevices.at(i % historyDevices.size())};
-            for (int sensor = 0; sensor < 4; ++sensor)
-                values.append(24.0 + sensor * 3.0 + ((i * 7 + sensor * 3) % 21) / 10.0);
-            for (int sensor = 0; sensor < 7; ++sensor)
-                values.append(1.2 + sensor * 0.2 + ((i * 3 + sensor) % 11) / 100.0);
-            values.append(18.0 + (i * 7 % 45) / 10.0);
-            for (int motor = 0; motor < 4; ++motor)
-                values.append(leakOn ? 0.0 : 45.0 + (i * 3 + motor * 11) % 46);
-            values.append(leakOn ? 0.0 : 35.0 + (i * 3 % 150) / 10.0);
-            values.append(leakOn ? QStringLiteral("ON") : QStringLiteral("OFF"));
-            m_historyRecords.append(QVariantMap{
-                {QStringLiteral("timestampMs"), recordTime.toMSecsSinceEpoch()},
-                {QStringLiteral("values"), values}});
-        }
-
         for (int i = 0; i < 14; ++i) {
             const QDateTime alarmTime = now.addSecs(-i * 37 * 60);
             const bool active = i == 0 || i == 3 || i == 8;
@@ -494,14 +445,9 @@ private:
     double m_flowMeterValuePv = 0.0;
     bool m_leakDetectedPv = false;
     QVariantList m_historyTitle;
-    QVariantList m_historyRecords;
-    int m_historyCurrentPage = 1;
-    int m_historyTotalPages = 1;
     QVariantList m_alarmRecords;
-    // Default range = current month (spec §2); initializeListData() fills it in. The
-    // authoritative Core overwrites both, and WASM clients receive the Core's values.
-    double m_historyRangeFromMs = 0.0;
-    double m_historyRangeToMs = 0.0;
+    // Per-client history views keyed by clientSessionId (spec §2.1); only the Core writes it.
+    QVariantMap m_historyViews;
     QVariantMap m_historyExportStatus;
     // Desktop default (spec §1); only the WASM composition root replaces it with "web-xxxx".
     QString m_clientSessionId = QStringLiteral("desktop");

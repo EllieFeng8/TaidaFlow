@@ -15,7 +15,7 @@ Item {
     id: control
 
     // The field text; HistoryPage reads it in applyFilter() and writes it in
-    // syncRangeFields().
+    // setRangeFields().
     property alias text: input.text
     // End-of-range field: a date-only value and the picker default use 23:59
     // instead of 00:00.

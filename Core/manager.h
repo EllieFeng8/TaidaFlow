@@ -4,6 +4,7 @@
 #include "Ms300FaultReader.h"
 
 #include <QDateTime>
+#include <QElapsedTimer>
 #include <QHash>
 #include <QJsonObject>
 #include <QObject>
@@ -65,6 +66,11 @@ private:
                         const QString &status,
                         AlarmRow *row);
     bool markAlarmRowResolved(const AlarmRow &row, const QString &detail);
+    // w2-053: restart hand-over, run on each DI's first read after start.
+    // Returns false only when the lookup failed and must be retried on the
+    // next poll (the normal DI alarm logic is skipped until then).
+    bool takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state, bool alarmActive);
+    void resolvePendingRestartRows(quint16 diOffset);
     void pollConfiguredPoints();
     void mirrorClientData(ModbusClient::Device device,
                           QModbusDataUnit::RegisterType registerType,
@@ -108,6 +114,21 @@ private:
     // this run.  When the DI returns to normal that same row is marked
     // resolved; the entry is removed only after the update succeeded.
     QHash<quint16, AlarmRow> m_activeDigitalInputAlarms;
+    // w2-053: rows left 未處理 by an earlier run.  On each DI's first read
+    // after start the newest unresolved 異常 row of that DI (this month and
+    // the month before) is taken over into m_activeDigitalInputAlarms when
+    // the DI is still in alarm; every other such row is resolved.  The check
+    // runs once per DI per start (m_diRestartChecked).  Rows whose resolve
+    // update failed stay in m_restartResolvePending and are retried on the
+    // DI's next poll, like the w2-037 clear path.
+    struct PendingResolve {
+        AlarmRow row;
+        QString detail;
+    };
+    QSet<quint16> m_diRestartChecked;
+    QHash<quint16, int> m_diRestartLookupFailures;
+    QElapsedTimer m_restartLookupFailure;   // started when a lookup failed
+    QHash<quint16, QList<PendingResolve>> m_restartResolvePending;
     // The machine starts in the conservative state.  A true DI0 sample is
     // required before either DO0 (00017) or DO3 (00020) can be energized.
     bool m_di0OutputPermit = false;

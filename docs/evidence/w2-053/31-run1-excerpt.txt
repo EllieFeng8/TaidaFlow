@@ -1,0 +1,116 @@
+# excerpt of build/runtime-logs/w2-053-run1.log (git-ignored full log; line numbers refer to it). Filter: tools/loggrep.py <log> '[Modbus] device profile' '[Alarm][Restart]' '[SQL] Alarm' 'Resolve alarm failed' 'Insert alarm failed' 'alarm-history records' '[Alarm][UI] id=60 ' '[Alarm][UI] id=111 ' '[Alarm][UI] id=113 '
+4: [Modbus] device profile=simulator
+23: [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=110
+33: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+51: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+131: [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 9 id=64(202609 2026-09-24 17:41:14) id=62(202609 2026-09-24 17:41:02) id=42(202609 2026-09-24 16:33:37) id=19(202609 2026-09-24 15:05:56) id=15(202609 2026-09-24 14:58:08) id=10(202609 2026-09-24 14:47:33) id=9(202609 2026-09-24 14:47:30) id=8(202609 2026-09-24 14:47:27) id=7(202609 2026-09-24 14:40:15) (lookup 0.3 ms)
+132: [Alarm][Restart] DI0 resolving id=64 (2026-09-24 17:41:14): the DI reads normal after the restart.
+133: [Alarm][Restart] DI0 resolving id=62 (2026-09-24 17:41:02): the DI reads normal after the restart.
+134: [Alarm][Restart] DI0 resolving id=42 (2026-09-24 16:33:37): the DI reads normal after the restart.
+135: [Alarm][Restart] DI0 resolving id=19 (2026-09-24 15:05:56): the DI reads normal after the restart.
+136: [Alarm][Restart] DI0 resolving id=15 (2026-09-24 14:58:08): the DI reads normal after the restart.
+137: [Alarm][Restart] DI0 resolving id=10 (2026-09-24 14:47:33): the DI reads normal after the restart.
+138: [Alarm][Restart] DI0 resolving id=9 (2026-09-24 14:47:30): the DI reads normal after the restart.
+139: [Alarm][Restart] DI0 resolving id=8 (2026-09-24 14:47:27): the DI reads normal after the restart.
+140: [Alarm][Restart] DI0 resolving id=7 (2026-09-24 14:40:15): the DI reads normal after the restart.
+141: [SQL] Alarm resolved: id=64 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+151: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+152: [SQL] Alarm resolved: id=62 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+162: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+163: [SQL] Alarm resolved: id=42 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+173: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+174: [SQL] Alarm resolved: id=19 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+184: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+185: [SQL] Alarm resolved: id=15 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+195: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+196: [SQL] Alarm resolved: id=10 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+206: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+207: [SQL] Alarm resolved: id=9 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+217: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+218: [SQL] Alarm resolved: id=8 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+228: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+229: [SQL] Alarm resolved: id=7 sensor=DI0 message=相位異常（DI0=0） status=異常 detail=相位異常 解除（重啟後讀值 DI0=1） resolvedAt=2026-09-27 18:38:57
+239: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+241: [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 12 id=56(202609 2026-09-24 17:40:04) id=54(202609 2026-09-24 17:39:52) id=45(202609 2026-09-24 17:09:48) id=40(202609 2026-09-24 16:30:25) id=36(202609 2026-09-24 15:24:55) id=34(202609 2026-09-24 15:22:38) id=33(202609 2026-09-24 15:20:31) id=30(202609 2026-09-24 15:20:00) id=28(202609 2026-09-24 15:19:18) id=26(202609 2026-09-24 15:19:11) id=24(202609 2026-09-24 15:19:02) id=21(202609 2026-09-24 15:16:07) (lookup 0.2 ms)
+242: [Alarm][Restart] DI1 resolving id=56 (2026-09-24 17:40:04): the DI reads normal after the restart.
+243: [Alarm][Restart] DI1 resolving id=54 (2026-09-24 17:39:52): the DI reads normal after the restart.
+244: [Alarm][Restart] DI1 resolving id=45 (2026-09-24 17:09:48): the DI reads normal after the restart.
+245: [Alarm][Restart] DI1 resolving id=40 (2026-09-24 16:30:25): the DI reads normal after the restart.
+246: [Alarm][Restart] DI1 resolving id=36 (2026-09-24 15:24:55): the DI reads normal after the restart.
+247: [Alarm][Restart] DI1 resolving id=34 (2026-09-24 15:22:38): the DI reads normal after the restart.
+248: [Alarm][Restart] DI1 resolving id=33 (2026-09-24 15:20:31): the DI reads normal after the restart.
+249: [Alarm][Restart] DI1 resolving id=30 (2026-09-24 15:20:00): the DI reads normal after the restart.
+250: [Alarm][Restart] DI1 resolving id=28 (2026-09-24 15:19:18): the DI reads normal after the restart.
+251: [Alarm][Restart] DI1 resolving id=26 (2026-09-24 15:19:11): the DI reads normal after the restart.
+252: [Alarm][Restart] DI1 resolving id=24 (2026-09-24 15:19:02): the DI reads normal after the restart.
+253: [Alarm][Restart] DI1 resolving id=21 (2026-09-24 15:16:07): the DI reads normal after the restart.
+254: [SQL] Alarm resolved: id=56 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+264: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+265: [SQL] Alarm resolved: id=54 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+275: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+276: [SQL] Alarm resolved: id=45 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+286: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+287: [SQL] Alarm resolved: id=40 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+297: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+298: [SQL] Alarm resolved: id=36 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+308: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+309: [SQL] Alarm resolved: id=34 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+319: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+320: [SQL] Alarm resolved: id=33 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+330: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+331: [SQL] Alarm resolved: id=30 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+341: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+342: [SQL] Alarm resolved: id=28 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+352: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+353: [SQL] Alarm resolved: id=26 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+363: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+364: [SQL] Alarm resolved: id=24 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+374: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+375: [SQL] Alarm resolved: id=21 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（重啟後讀值 DI1=0） resolvedAt=2026-09-27 18:38:57
+385: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+389: [Alarm][Restart] DI2 first read after start: DI2=1 (alarm active); unresolved 異常 rows from earlier runs in 202609+202608: 14 id=60(202609 2026-09-24 17:40:40) id=58(202609 2026-09-24 17:40:28) id=46(202609 2026-09-24 17:10:10) id=41(202609 2026-09-24 16:30:50) id=38(202609 2026-09-24 15:27:53) id=37(202609 2026-09-24 15:27:44) id=35(202609 2026-09-24 15:22:57) id=32(202609 2026-09-24 15:20:16) id=31(202609 2026-09-24 15:20:05) id=29(202609 2026-09-24 15:19:18) id=27(202609 2026-09-24 15:19:13) id=25(202609 2026-09-24 15:19:04) id=23(202609 2026-09-24 15:18:42) id=22(202609 2026-09-24 15:18:29) (lookup 0.3 ms)
+390: [Alarm][Restart] DI2 still in alarm: took over id=60 (2026-09-24 17:40:40) as the active alarm row; no new row.
+391: [Alarm][Restart] DI2 resolving id=58 (2026-09-24 17:40:28): older duplicate of the taken-over row.
+392: [Alarm][Restart] DI2 resolving id=46 (2026-09-24 17:10:10): older duplicate of the taken-over row.
+393: [Alarm][Restart] DI2 resolving id=41 (2026-09-24 16:30:50): older duplicate of the taken-over row.
+394: [Alarm][Restart] DI2 resolving id=38 (2026-09-24 15:27:53): older duplicate of the taken-over row.
+395: [Alarm][Restart] DI2 resolving id=37 (2026-09-24 15:27:44): older duplicate of the taken-over row.
+396: [Alarm][Restart] DI2 resolving id=35 (2026-09-24 15:22:57): older duplicate of the taken-over row.
+397: [Alarm][Restart] DI2 resolving id=32 (2026-09-24 15:20:16): older duplicate of the taken-over row.
+398: [Alarm][Restart] DI2 resolving id=31 (2026-09-24 15:20:05): older duplicate of the taken-over row.
+399: [Alarm][Restart] DI2 resolving id=29 (2026-09-24 15:19:18): older duplicate of the taken-over row.
+400: [Alarm][Restart] DI2 resolving id=27 (2026-09-24 15:19:13): older duplicate of the taken-over row.
+401: [Alarm][Restart] DI2 resolving id=25 (2026-09-24 15:19:04): older duplicate of the taken-over row.
+402: [Alarm][Restart] DI2 resolving id=23 (2026-09-24 15:18:42): older duplicate of the taken-over row.
+403: [Alarm][Restart] DI2 resolving id=22 (2026-09-24 15:18:29): older duplicate of the taken-over row.
+404: [SQL] Alarm resolved: id=58 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+414: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+415: [SQL] Alarm resolved: id=46 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+425: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+426: [SQL] Alarm resolved: id=41 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+436: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+437: [SQL] Alarm resolved: id=38 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+447: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+448: [SQL] Alarm resolved: id=37 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+458: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+459: [SQL] Alarm resolved: id=35 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+469: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+470: [SQL] Alarm resolved: id=32 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+480: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+481: [SQL] Alarm resolved: id=31 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+491: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+492: [SQL] Alarm resolved: id=29 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+502: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+503: [SQL] Alarm resolved: id=27 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+513: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+514: [SQL] Alarm resolved: id=25 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+524: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+525: [SQL] Alarm resolved: id=23 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+535: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+536: [SQL] Alarm resolved: id=22 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手） resolvedAt=2026-09-27 18:38:57
+546: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+1695: [SQL] Alarm resolved: id=60 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 detail=補水泵 OL 解除（DI2=0） resolvedAt=2026-09-27 18:39:18
+1705: [SQL] Loaded 35 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=35; severity 嚴重=0 警告=35; unknown core status=0).
+2022: [SQL] Alarm inserted: sensor=DI1 message=漏液檢出（DI1=1） status=異常 id=111
+2024: [Alarm][UI] id=111 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+2032: [SQL] Loaded 36 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=1 已解除=35; severity 嚴重=1 警告=35; unknown core status=0).

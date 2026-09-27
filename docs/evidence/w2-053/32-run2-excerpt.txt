@@ -1,0 +1,18 @@
+# excerpt of build/runtime-logs/w2-053-run2.log (git-ignored full log; line numbers refer to it). Filter: tools/loggrep.py <log> '[Modbus] device profile' '[Alarm][Restart]' '[SQL] Alarm' 'Resolve alarm failed' 'Insert alarm failed' 'alarm-history records' '[Alarm][UI] id=60 ' '[Alarm][UI] id=111 ' '[Alarm][UI] id=113 '
+4: [Modbus] device profile=simulator
+23: [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=112
+26: [Alarm][UI] id=111 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+33: [SQL] Loaded 37 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=1 已解除=36; severity 嚴重=1 警告=36; unknown core status=0).
+44: [Alarm][UI] id=111 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+51: [SQL] Loaded 37 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=1 已解除=36; severity 嚴重=1 警告=36; unknown core status=0).
+134: [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+137: [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved 異常 rows from earlier runs in 202609+202608: 1 id=111(202609 2026-09-27 18:39:24) (lookup 0.2 ms)
+138: [Alarm][Restart] DI1 still in alarm: took over id=111 (2026-09-27 18:39:24) as the active alarm row; no new row.
+141: [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+10103: [SQL] Alarm resolved: id=111 sensor=DI1 message=漏液檢出（DI1=1） status=異常 detail=漏液檢出 解除（DI1=0） resolvedAt=2026-09-27 18:42:57
+10106: [Alarm][UI] id=111 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+10113: [SQL] Loaded 37 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=37; severity 嚴重=1 警告=36; unknown core status=0).
+10506: [SQL] Alarm inserted: sensor=DI2 message=補水泵 OL（DI2=1） status=異常 id=113
+10508: [Alarm][UI] id=113 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 -> alarmStatus=未處理 severity=嚴重
+10510: [Alarm][UI] id=111 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+10516: [SQL] Loaded 38 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=1 已解除=37; severity 嚴重=2 警告=36; unknown core status=0).

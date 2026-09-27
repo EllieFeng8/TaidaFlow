@@ -1,0 +1,8 @@
+# excerpt of build/runtime-logs/w2-053-simulator.log (DI changes, git-ignored full log)
+2: [18:38:21] 點位對齊 taidaflow core 分支；ADAM-6224 DI 初始值：DI0 相位正常=1，DI1 漏液檢出=0，DI2 補水泵 OL=0，DI3 備用（Core 未使用）=0
+29: [18:38:36] ADAM-6224 DI2 補水泵 OL = 1：補水泵過載跳脫；Core 應產生「補水泵 OL」警報，補水泵停止
+66: [18:39:17] ADAM-6224 DI2 補水泵 OL = 0：補水泵 OL 解除
+74: [18:39:24] ADAM-6224 DI1 漏液檢出 = 1：漏液；Core 應產生「漏液檢出」警報，流量降為 65% 且系統水量下降
+283: [18:42:56] ADAM-6224 DI1 漏液檢出 = 0：漏液解除
+290: [18:43:05] ADAM-6224 DI2 補水泵 OL = 1：補水泵過載跳脫；Core 應產生「補水泵 OL」警報，補水泵停止
+312: [18:43:27] ADAM-6224 DI2 補水泵 OL = 0：補水泵 OL 解除

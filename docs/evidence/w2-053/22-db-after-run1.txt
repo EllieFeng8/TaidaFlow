@@ -1,0 +1,113 @@
+db=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\data\sensor_202609.sqlite (read-only) rows with id > 0:
+id=1 time=2026-09-24 14:02:10 sensor=100 message=設備啟動 status=正常
+id=2 time=2026-09-24 14:03:32 sensor=100 message=設備啟動 status=正常
+id=3 time=2026-09-24 14:11:09 sensor=100 message=設備啟動 status=正常
+id=4 time=2026-09-24 14:15:34 sensor=100 message=設備啟動 status=正常
+id=5 time=2026-09-24 14:27:14 sensor=100 message=設備啟動 status=正常
+id=6 time=2026-09-24 14:40:14 sensor=100 message=設備啟動 status=正常
+id=7 time=2026-09-24 14:40:15 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=8 time=2026-09-24 14:47:27 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=9 time=2026-09-24 14:47:30 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=10 time=2026-09-24 14:47:33 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=11 time=2026-09-24 14:50:53 sensor=100 message=設備啟動 status=正常
+id=12 time=2026-09-24 14:57:19 sensor=100 message=設備啟動 status=正常
+id=13 time=2026-09-24 14:57:40 sensor=100 message=設備啟動 status=正常
+id=14 time=2026-09-24 14:58:07 sensor=100 message=設備啟動 status=正常
+id=15 time=2026-09-24 14:58:08 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=16 time=2026-09-24 15:05:08 sensor=100 message=設備啟動 status=正常
+id=17 time=2026-09-24 15:05:30 sensor=100 message=設備啟動 status=正常
+id=18 time=2026-09-24 15:05:55 sensor=100 message=設備啟動 status=正常
+id=19 time=2026-09-24 15:05:56 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=20 time=2026-09-24 15:13:41 sensor=100 message=設備啟動 status=正常
+id=21 time=2026-09-24 15:16:07 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=22 time=2026-09-24 15:18:29 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=23 time=2026-09-24 15:18:42 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=24 time=2026-09-24 15:19:02 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=25 time=2026-09-24 15:19:04 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=26 time=2026-09-24 15:19:11 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=27 time=2026-09-24 15:19:13 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=28 time=2026-09-24 15:19:18 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=29 time=2026-09-24 15:19:18 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=30 time=2026-09-24 15:20:00 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=31 time=2026-09-24 15:20:05 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=32 time=2026-09-24 15:20:16 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=33 time=2026-09-24 15:20:31 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=34 time=2026-09-24 15:22:38 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=35 time=2026-09-24 15:22:57 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=36 time=2026-09-24 15:24:55 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=37 time=2026-09-24 15:27:44 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=38 time=2026-09-24 15:27:53 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=39 time=2026-09-24 16:25:33 sensor=100 message=設備啟動 status=正常
+id=40 time=2026-09-24 16:30:25 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=41 time=2026-09-24 16:30:50 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=42 time=2026-09-24 16:33:37 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=43 time=2026-09-24 17:06:33 sensor=100 message=設備啟動 status=正常
+id=44 time=2026-09-24 17:08:01 sensor=100 message=設備啟動 status=正常
+id=45 time=2026-09-24 17:09:48 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=46 time=2026-09-24 17:10:10 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=47 time=2026-09-24 17:13:34 sensor=100 message=設備啟動 status=正常
+id=48 time=2026-09-24 17:13:35 sensor=TT-01 message=輸入值達到設定高限 25.0%（raw=18660，threshold=16384） status=數值異常
+id=49 time=2026-09-24 17:13:35 sensor=TT-02 message=輸入值達到設定高限 25.0%（raw=18945，threshold=16384） status=數值異常
+id=50 time=2026-09-24 17:13:35 sensor=TT-03 message=輸入值達到設定高限 25.0%（raw=22075，threshold=16384） status=數值異常
+id=51 time=2026-09-24 17:13:35 sensor=TT-04 message=輸入值達到設定高限 25.0%（raw=21506，threshold=16384） status=數值異常
+id=52 time=2026-09-24 17:24:51 sensor=100 message=設備啟動 status=正常
+id=53 time=2026-09-24 17:39:02 sensor=100 message=設備啟動 status=正常
+id=54 time=2026-09-24 17:39:52 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=55 time=2026-09-24 17:39:58 sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+id=56 time=2026-09-24 17:40:04 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+id=57 time=2026-09-24 17:40:10 sensor=DI1 message=漏液檢出 解除（DI1=0） status=正常
+id=58 time=2026-09-24 17:40:28 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+id=59 time=2026-09-24 17:40:35 sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+id=60 time=2026-09-24 17:40:40 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:39:18 resolvedDetail=補水泵 OL 解除（DI2=0）
+id=61 time=2026-09-24 17:40:47 sensor=DI2 message=補水泵 OL 解除（DI2=0） status=正常
+id=62 time=2026-09-24 17:41:02 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=63 time=2026-09-24 17:41:08 sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+id=64 time=2026-09-24 17:41:14 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+id=65 time=2026-09-24 17:42:22 sensor=DI0 message=相位異常 解除（DI0=1） status=正常
+id=66 time=2026-09-24 17:50:10 sensor=100 message=設備啟動 status=正常
+id=67 time=2026-09-24 17:50:34 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=17:50:40 resolvedDetail=漏液檢出 解除（DI1=0）
+id=68 time=2026-09-24 17:50:46 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=17:50:53 resolvedDetail=漏液檢出 解除（DI1=0）
+id=69 time=2026-09-24 17:51:12 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=17:51:18 resolvedDetail=補水泵 OL 解除（DI2=0）
+id=70 time=2026-09-24 17:51:24 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=17:51:30 resolvedDetail=補水泵 OL 解除（DI2=0）
+id=71 time=2026-09-24 17:51:39 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=17:51:45 resolvedDetail=相位異常 解除（DI0=1）
+id=72 time=2026-09-24 17:51:51 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=17:51:57 resolvedDetail=相位異常 解除（DI0=1）
+id=73 time=2026-09-24 17:52:34 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=17:52:50 resolvedDetail=漏液檢出 解除（DI1=0）
+id=74 time=2026-09-24 17:53:31 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=17:54:13 resolvedDetail=漏液檢出 解除（DI1=0）
+id=75 time=2026-09-24 18:37:52 sensor=100 message=設備啟動 status=正常
+id=76 time=2026-09-24 21:31:12 sensor=100 message=設備啟動 status=正常
+id=77 time=2026-09-24 21:32:23 sensor=100 message=設備啟動 status=正常
+id=78 time=2026-09-24 21:33:00 sensor=100 message=設備啟動 status=正常
+id=79 time=2026-09-24 21:38:42 sensor=100 message=設備啟動 status=正常
+id=80 time=2026-09-24 21:42:48 sensor=100 message=設備啟動 status=正常
+id=81 time=2026-09-24 21:43:20 sensor=100 message=設備啟動 status=正常
+id=82 time=2026-09-26 02:28:44 sensor=100 message=設備啟動 status=正常
+id=83 time=2026-09-26 02:40:01 sensor=100 message=設備啟動 status=正常
+id=84 time=2026-09-26 02:40:27 sensor=100 message=設備啟動 status=正常
+id=85 time=2026-09-26 02:40:42 sensor=100 message=設備啟動 status=正常
+id=86 time=2026-09-26 02:41:27 sensor=100 message=設備啟動 status=正常
+id=87 time=2026-09-26 02:41:52 sensor=100 message=設備啟動 status=正常
+id=88 time=2026-09-26 02:42:06 sensor=100 message=設備啟動 status=正常
+id=89 time=2026-09-26 02:42:50 sensor=100 message=設備啟動 status=正常
+id=90 time=2026-09-26 02:43:15 sensor=100 message=設備啟動 status=正常
+id=91 time=2026-09-26 02:43:30 sensor=100 message=設備啟動 status=正常
+id=92 time=2026-09-26 02:54:15 sensor=100 message=設備啟動 status=正常
+id=93 time=2026-09-26 02:54:40 sensor=100 message=設備啟動 status=正常
+id=94 time=2026-09-26 02:54:55 sensor=100 message=設備啟動 status=正常
+id=95 time=2026-09-26 02:56:12 sensor=100 message=設備啟動 status=正常
+id=96 time=2026-09-26 02:59:43 sensor=100 message=設備啟動 status=正常
+id=97 time=2026-09-26 03:00:23 sensor=100 message=設備啟動 status=正常
+id=98 time=2026-09-26 03:00:48 sensor=100 message=設備啟動 status=正常
+id=99 time=2026-09-26 03:01:03 sensor=100 message=設備啟動 status=正常
+id=100 time=2026-09-26 03:09:07 sensor=100 message=設備啟動 status=正常
+id=101 time=2026-09-26 03:09:33 sensor=100 message=設備啟動 status=正常
+id=102 time=2026-09-26 03:09:48 sensor=100 message=設備啟動 status=正常
+id=103 time=2026-09-27 17:50:13 sensor=100 message=設備啟動 status=正常
+id=104 time=2026-09-27 17:54:58 sensor=100 message=設備啟動 status=正常
+id=105 time=2026-09-27 17:57:20 sensor=100 message=設備啟動 status=正常
+id=106 time=2026-09-27 17:57:41 sensor=100 message=設備啟動 status=正常
+id=107 time=2026-09-27 18:06:27 sensor=100 message=設備啟動 status=正常
+id=108 time=2026-09-27 18:08:29 sensor=100 message=設備啟動 status=正常
+id=109 time=2026-09-27 18:08:44 sensor=100 message=設備啟動 status=正常
+id=110 time=2026-09-27 18:38:56 sensor=100 message=設備啟動 status=正常
+id=111 time=2026-09-27 18:39:24 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+max_id=111 count=111

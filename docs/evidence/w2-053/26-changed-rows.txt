@@ -1,0 +1,117 @@
+before: 109 rows, after: 114 rows
+unresolved DI 異常 rows in before (35): [7, 8, 9, 10, 15, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 40, 41, 42, 45, 46, 54, 56, 58, 60, 62, 64]
+changed rows (35): [7, 8, 9, 10, 15, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 40, 41, 42, 45, 46, 54, 56, 58, 60, 62, 64]
+  id=7
+    before: time=2026-09-24 14:40:15 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 14:40:15 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=8
+    before: time=2026-09-24 14:47:27 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 14:47:27 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=9
+    before: time=2026-09-24 14:47:30 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 14:47:30 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=10
+    before: time=2026-09-24 14:47:33 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 14:47:33 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=15
+    before: time=2026-09-24 14:58:08 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 14:58:08 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=19
+    before: time=2026-09-24 15:05:56 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 15:05:56 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=21
+    before: time=2026-09-24 15:16:07 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:16:07 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=22
+    before: time=2026-09-24 15:18:29 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:18:29 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=23
+    before: time=2026-09-24 15:18:42 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:18:42 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=24
+    before: time=2026-09-24 15:19:02 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:19:02 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=25
+    before: time=2026-09-24 15:19:04 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:19:04 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=26
+    before: time=2026-09-24 15:19:11 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:19:11 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=27
+    before: time=2026-09-24 15:19:13 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:19:13 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=28
+    before: time=2026-09-24 15:19:18 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:19:18 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=29
+    before: time=2026-09-24 15:19:18 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:19:18 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=30
+    before: time=2026-09-24 15:20:00 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:20:00 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=31
+    before: time=2026-09-24 15:20:05 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:20:05 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=32
+    before: time=2026-09-24 15:20:16 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:20:16 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=33
+    before: time=2026-09-24 15:20:31 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:20:31 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=34
+    before: time=2026-09-24 15:22:38 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:22:38 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=35
+    before: time=2026-09-24 15:22:57 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:22:57 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=36
+    before: time=2026-09-24 15:24:55 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 15:24:55 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=37
+    before: time=2026-09-24 15:27:44 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:27:44 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=38
+    before: time=2026-09-24 15:27:53 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 15:27:53 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=40
+    before: time=2026-09-24 16:30:25 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 16:30:25 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=41
+    before: time=2026-09-24 16:30:50 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 16:30:50 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=42
+    before: time=2026-09-24 16:33:37 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 16:33:37 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=45
+    before: time=2026-09-24 17:09:48 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 17:09:48 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=46
+    before: time=2026-09-24 17:10:10 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 17:10:10 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=54
+    before: time=2026-09-24 17:39:52 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 17:39:52 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=56
+    before: time=2026-09-24 17:40:04 sensor=DI1 message=漏液檢出（DI1=1） status=異常
+    after:  time=2026-09-24 17:40:04 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=漏液檢出 解除（重啟後讀值 DI1=0）
+  id=58
+    before: time=2026-09-24 17:40:28 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 17:40:28 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=1，由 id=60 接手）
+  id=60
+    before: time=2026-09-24 17:40:40 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+    after:  time=2026-09-24 17:40:40 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:39:18 resolvedDetail=補水泵 OL 解除（DI2=0）
+  id=62
+    before: time=2026-09-24 17:41:02 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 17:41:02 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+  id=64
+    before: time=2026-09-24 17:41:14 sensor=DI0 message=相位異常（DI0=0） status=異常
+    after:  time=2026-09-24 17:41:14 sensor=DI0 message=相位異常（DI0=0） status=異常 resolved=true resolvedAt=18:38:57 resolvedDetail=相位異常 解除（重啟後讀值 DI0=1）
+added rows (5):
+  id=110 time=2026-09-27 18:38:56 sensor=100 message=設備啟動 status=正常
+  id=111 time=2026-09-27 18:39:24 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:42:57 resolvedDetail=漏液檢出 解除（DI1=0）
+  id=112 time=2026-09-27 18:40:06 sensor=100 message=設備啟動 status=正常
+  id=113 time=2026-09-27 18:43:06 sensor=DI2 message=補水泵 OL（DI2=1） status=異常 resolved=true resolvedAt=18:43:50 resolvedDetail=補水泵 OL 解除（重啟後讀值 DI2=0）
+  id=114 time=2026-09-27 18:43:49 sensor=100 message=設備啟動 status=正常
+removed rows (0): []
+unresolved DI 異常 rows in after (0): []
+changed == unresolved-before, all resolved, none removed: True

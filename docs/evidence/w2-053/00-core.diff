@@ -1,0 +1,388 @@
+diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index b44cf93..d7a5570 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -2002,6 +2002,98 @@ bool SqlManager::updateAlarmReason(const QDateTime& occurrence, qint64 id, const
+     });
+ }
+ 
++bool SqlManager::findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
++                                      QList<UnresolvedAlarm>* out, QString* errMsg)
++{
++    return runOnThread([this, sensor, status, month, out, errMsg]() {
++        if (!out)
++        {
++            if (errMsg) *errMsg = "output list is null";
++            return false;
++        }
++        out->clear();
++        if (sensor.isEmpty() || !month.isValid())
++        {
++            if (errMsg) *errMsg = "sensor is empty or month is invalid";
++            return false;
++        }
++
++        const QDate first(month.year(), month.month(), 1);
++        const QStringList keys{monthKey(first), monthKey(first.addMonths(-1))};
++        QList<UnresolvedAlarm> rows;
++        for (const QString& key : keys)
++        {
++            // Read-only: never create a month file (openDataDb would).
++            if (!QFileInfo::exists(dataFileForKey(key)))
++            {
++                continue;
++            }
++            QSqlDatabase db = openDataDb(key);
++            if (!db.isValid() || !db.isOpen())
++            {
++                if (errMsg) *errMsg = QStringLiteral("db open failed (%1)").arg(key);
++                out->clear();
++                return false;
++            }
++
++            QSqlQuery query(db);
++            // Cheap pre-filter on the text; the JSON fields are checked below.
++            query.prepare("SELECT id, occurrence_time, reason FROM alarm_history "
++                          "WHERE instr(reason, :sensor) > 0");
++            query.bindValue(":sensor", sensor);
++            if (!query.exec())
++            {
++                const QString error = query.lastError().text();
++                if (error.contains(QLatin1String("no such table"), Qt::CaseInsensitive))
++                {
++                    continue;
++                }
++                if (errMsg) *errMsg = QStringLiteral("%1 (%2)").arg(error, key);
++                out->clear();
++                return false;
++            }
++            while (query.next())
++            {
++                const QString reason = query.value(2).toString();
++                const QJsonDocument doc = QJsonDocument::fromJson(reason.toUtf8());
++                if (!doc.isObject())
++                {
++                    continue;
++                }
++                const QJsonObject obj = doc.object();
++                if (obj.value("sensor").toString() != sensor
++                        || obj.value("status").toString() != status
++                        || obj.value("resolved").toBool(false))
++                {
++                    continue;
++                }
++                UnresolvedAlarm row;
++                row.monthKey = key;
++                row.id = query.value(0).toLongLong();
++                row.occurrenceTime = query.value(1).toLongLong();
++                row.reason = reason;
++                rows.append(row);
++            }
++            if (query.lastError().isValid())
++            {
++                if (errMsg) *errMsg = QStringLiteral("%1 (%2)").arg(query.lastError().text(), key);
++                out->clear();
++                return false;
++            }
++        }
++
++        std::sort(rows.begin(), rows.end(), [](const UnresolvedAlarm& a, const UnresolvedAlarm& b) {
++            if (a.occurrenceTime != b.occurrenceTime)
++                return a.occurrenceTime > b.occurrenceTime;
++            if (a.monthKey != b.monthKey)
++                return a.monthKey > b.monthKey;
++            return a.id > b.id;
++        });
++        *out = rows;
++        return true;
++    });
++}
++
+ bool SqlManager::getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)
+ {
+     return runOnThread([this, from, to, out, errMsg]() {
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index 32c58c6..76794de 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -102,6 +102,24 @@ public:
+                            QString* errMsg = nullptr);
+     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
+ 
++    // w2-053: one alarm_history row found by findUnresolvedAlarms().
++    struct UnresolvedAlarm
++    {
++        QString monthKey;          // yyyyMM of the data file that holds the row
++        qint64 id = -1;            // row id inside that file
++        qint64 occurrenceTime = 0; // alarm_history.occurrence_time (epoch seconds)
++        QString reason;            // reason JSON as stored
++    };
++    // w2-053 (restart hand-over of DI alarms): the alarm_history rows whose
++    // reason JSON has "sensor" == sensor, "status" == status and no
++    // "resolved": true, in the data file of 'month' and in the file of the
++    // month before it.  Read-only: a month file that does not exist (or has
++    // no alarm_history table) is skipped, nothing is created or changed.
++    // Newest first (occurrence_time DESC, then month DESC, then id DESC).
++    // Returns false (out cleared) when a file cannot be opened or read.
++    bool findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
++                              QList<UnresolvedAlarm>* out, QString* errMsg = nullptr);
++
+     // w2-039 History page (newest first).  [from, to] must lie in one calendar
+     // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
+     // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other
+diff --git a/Core/manager.cpp b/Core/manager.cpp
+index 5bfd39d..601470d 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -4,8 +4,10 @@
+ #include "SqlManager.h"
+ #include "TaidaFlowProxy.h"
+ 
++#include <QDate>
+ #include <QDateTime>
+ #include <QDebug>
++#include <QElapsedTimer>
+ #include <QJsonDocument>
+ #include <QJsonObject>
+ #include <QScopedValueRollback>
+@@ -23,6 +25,12 @@ constexpr double kDefaultAiHighAlarmPercent = 90.0;
+ // then every kPump2HzFailureLogEvery polls, so an offline ADAM-6022 does not
+ // flood the log.
+ constexpr int kPump2HzFailureLogEvery = 30;
++// w2-053: a failed restart lookup of a DI is retried on the next polls;
++// after this many failed attempts the normal alarm logic takes over.
++constexpr int kRestartLookupMaxAttempts = 5;
++// After a failed lookup (e.g. a locked month file waits for SQLite's busy
++// timeout), the other DIs of the same poll do not look up again right away.
++constexpr qint64 kRestartLookupDeferMs = 500;
+ 
+ // SVs taken from a device are rounded to 0.01 for display (QML shows the SV
+ // with String()).  For the 12-bit AOs this is loss-free: the rounding error is
+@@ -853,10 +861,18 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
+     // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
+     const bool alarmActive = diOffset == 0 ? !state : state;
+     const QString sensor = QStringLiteral("DI%1").arg(diOffset);
++
++    // w2-053: on this DI's first read after start, rows left 未處理 by an
++    // earlier run are taken over (DI still in alarm) or resolved (DI normal).
++    if (!m_diRestartChecked.contains(diOffset)
++            && !takeOverPreviousRunDigitalInputAlarms(diOffset, state, alarmActive)) {
++        return;     // lookup failed; retried on the next poll
++    }
++    resolvePendingRestartRows(diOffset);
++
+     if (!alarmActive) {
+-        // Only an alarm raised during this run is resolved; a DI that has
+-        // been normal all along changes nothing.  Rows left 未處理 by an
+-        // earlier run are not touched (not known to this run).
++        // Only an alarm raised or taken over during this run is resolved
++        // here; a DI that has been normal all along changes nothing.
+         const auto active = m_activeDigitalInputAlarms.constFind(diOffset);
+         if (active == m_activeDigitalInputAlarms.cend())
+             return;
+@@ -893,6 +909,159 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
+         m_activeDigitalInputAlarms.insert(diOffset, row);
+ }
+ 
++bool Manager::takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state, bool alarmActive)
++{
++    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
++    const int value = state ? 1 : 0;
++    if (!m_sql) {
++        m_diRestartChecked.insert(diOffset);
++        qWarning().noquote()
++                << QStringLiteral("[Alarm][Restart] %1: SqlManager is unavailable; rows of earlier runs are not checked.")
++                           .arg(sensor);
++        return true;
++    }
++
++    if (m_restartLookupFailure.isValid()
++            && m_restartLookupFailure.elapsed() < kRestartLookupDeferMs) {
++        qInfo().noquote()
++                << QStringLiteral("[Alarm][Restart] %1 lookup deferred to the next poll (a lookup failed %2 ms ago); no new %1 row until then.")
++                           .arg(sensor)
++                           .arg(m_restartLookupFailure.elapsed());
++        return false;
++    }
++
++    // Only 異常 rows are DI alarm rows (w2-037 format); the lookup is
++    // read-only and covers this month's and last month's data file.
++    const QDate today = QDate::currentDate();
++    QList<SqlManager::UnresolvedAlarm> found;
++    QString errorMessage;
++    QElapsedTimer timer;
++    timer.start();
++    const bool ok = m_sql->findUnresolvedAlarms(sensor, QStringLiteral("異常"), today,
++                                                &found, &errorMessage);
++    const double lookupMs = timer.nsecsElapsed() / 1.0e6;
++    if (!ok) {
++        m_restartLookupFailure.start();
++        const int failures = ++m_diRestartLookupFailures[diOffset];
++        if (failures < kRestartLookupMaxAttempts) {
++            qWarning().noquote()
++                    << QStringLiteral("[Alarm][Restart] %1 lookup of unresolved rows from earlier runs failed "
++                                      "(attempt %2/%3, %4 ms): %5; retrying on the next poll, no new %1 row until then.")
++                               .arg(sensor)
++                               .arg(failures)
++                               .arg(kRestartLookupMaxAttempts)
++                               .arg(lookupMs, 0, 'f', 1)
++                               .arg(errorMessage);
++            return false;
++        }
++        qWarning().noquote()
++                << QStringLiteral("[Alarm][Restart] %1 lookup failed %2 times (%3); giving up: rows of earlier "
++                                  "runs stay as they are and the normal alarm logic runs.")
++                           .arg(sensor)
++                           .arg(failures)
++                           .arg(errorMessage);
++        m_diRestartChecked.insert(diOffset);
++        return true;
++    }
++    m_restartLookupFailure.invalidate();
++    m_diRestartChecked.insert(diOffset);
++
++    const QString months = QStringLiteral("%1+%2").arg(today.toString(QStringLiteral("yyyyMM")),
++                                                       today.addMonths(-1).toString(QStringLiteral("yyyyMM")));
++    // A row is updated through the file of its occurrence month (see
++    // SqlManager::updateAlarmReason); rows are always inserted there, so a
++    // row found in another file is left alone.
++    QList<AlarmRow> rows;
++    QStringList listed;
++    for (const SqlManager::UnresolvedAlarm &item : std::as_const(found)) {
++        AlarmRow row;
++        row.id = item.id;
++        row.occurrence = QDateTime::fromSecsSinceEpoch(item.occurrenceTime);
++        row.reason = QJsonDocument::fromJson(item.reason.toUtf8()).object();
++        listed.append(QStringLiteral("id=%1(%2 %3)")
++                              .arg(item.id)
++                              .arg(item.monthKey,
++                                   row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss"))));
++        if (row.occurrence.date().toString(QStringLiteral("yyyyMM")) != item.monthKey) {
++            qWarning().noquote()
++                    << QStringLiteral("[Alarm][Restart] %1 row id=%2 in file %3 has occurrence %4 of another month; left as is.")
++                               .arg(sensor)
++                               .arg(item.id)
++                               .arg(item.monthKey,
++                                    row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
++            continue;
++        }
++        rows.append(row);
++    }
++
++    qInfo().noquote()
++            << QStringLiteral("[Alarm][Restart] %1 first read after start: %1=%2 (%3); unresolved 異常 rows "
++                              "from earlier runs in %4: %5%6 (lookup %7 ms)")
++                       .arg(sensor)
++                       .arg(value)
++                       .arg(alarmActive ? QStringLiteral("alarm active") : QStringLiteral("normal"),
++                            months)
++                       .arg(found.size())
++                       .arg(listed.isEmpty() ? QString() : QStringLiteral(" ") + listed.join(QLatin1Char(' ')))
++                       .arg(lookupMs, 0, 'f', 1);
++    if (rows.isEmpty())
++        return true;
++
++    const QString alarmMessage = digitalInputAlarmMessage(diOffset);
++    QList<PendingResolve> &pending = m_restartResolvePending[diOffset];
++    qsizetype firstToResolve = 0;
++    if (alarmActive) {
++        // Same ongoing condition: keep using the newest row, write no new one.
++        const AlarmRow &newest = rows.first();
++        m_activeDigitalInputAlarms.insert(diOffset, newest);
++        firstToResolve = 1;
++        qInfo().noquote()
++                << QStringLiteral("[Alarm][Restart] %1 still in alarm: took over id=%2 (%3) as the active alarm row; no new row.")
++                           .arg(sensor)
++                           .arg(newest.id)
++                           .arg(newest.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
++    }
++    for (qsizetype index = firstToResolve; index < rows.size(); ++index) {
++        const AlarmRow &row = rows.at(index);
++        const QString detail = alarmActive
++                ? QStringLiteral("%1 解除（重啟後讀值 %2=%3，由 id=%4 接手）")
++                          .arg(alarmMessage, sensor)
++                          .arg(value)
++                          .arg(rows.first().id)
++                : QStringLiteral("%1 解除（重啟後讀值 %2=%3）")
++                          .arg(alarmMessage, sensor)
++                          .arg(value);
++        qInfo().noquote()
++                << QStringLiteral("[Alarm][Restart] %1 resolving id=%2 (%3)%4.")
++                           .arg(sensor)
++                           .arg(row.id)
++                           .arg(row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")),
++                                alarmActive ? QStringLiteral(": older duplicate of the taken-over row")
++                                            : QStringLiteral(": the DI reads normal after the restart"));
++        pending.append(PendingResolve{row, detail});
++    }
++    if (pending.isEmpty())
++        m_restartResolvePending.remove(diOffset);
++    return true;
++}
++
++void Manager::resolvePendingRestartRows(quint16 diOffset)
++{
++    const auto it = m_restartResolvePending.find(diOffset);
++    if (it == m_restartResolvePending.end())
++        return;
++
++    QList<PendingResolve> &pending = it.value();
++    while (!pending.isEmpty()) {
++        // markAlarmRowResolved() logs the failure; stop at the first one so a
++        // locked database costs at most one busy wait per DI and poll.
++        if (!markAlarmRowResolved(pending.first().row, pending.first().detail))
++            return;
++        pending.removeFirst();
++    }
++    m_restartResolvePending.erase(it);
++}
++
+ void Manager::setWayValveOpenSv(bool open)
+ {
+     if (isSvWriteSuppressed("wayValveOpenSv"))
+diff --git a/Core/manager.h b/Core/manager.h
+index 7f83339..8e5b5e5 100644
+--- a/Core/manager.h
++++ b/Core/manager.h
+@@ -4,6 +4,7 @@
+ #include "Ms300FaultReader.h"
+ 
+ #include <QDateTime>
++#include <QElapsedTimer>
+ #include <QHash>
+ #include <QJsonObject>
+ #include <QObject>
+@@ -65,6 +66,11 @@ private:
+                         const QString &status,
+                         AlarmRow *row);
+     bool markAlarmRowResolved(const AlarmRow &row, const QString &detail);
++    // w2-053: restart hand-over, run on each DI's first read after start.
++    // Returns false only when the lookup failed and must be retried on the
++    // next poll (the normal DI alarm logic is skipped until then).
++    bool takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state, bool alarmActive);
++    void resolvePendingRestartRows(quint16 diOffset);
+     void pollConfiguredPoints();
+     void mirrorClientData(ModbusClient::Device device,
+                           QModbusDataUnit::RegisterType registerType,
+@@ -108,6 +114,21 @@ private:
+     // this run.  When the DI returns to normal that same row is marked
+     // resolved; the entry is removed only after the update succeeded.
+     QHash<quint16, AlarmRow> m_activeDigitalInputAlarms;
++    // w2-053: rows left 未處理 by an earlier run.  On each DI's first read
++    // after start the newest unresolved 異常 row of that DI (this month and
++    // the month before) is taken over into m_activeDigitalInputAlarms when
++    // the DI is still in alarm; every other such row is resolved.  The check
++    // runs once per DI per start (m_diRestartChecked).  Rows whose resolve
++    // update failed stay in m_restartResolvePending and are retried on the
++    // DI's next poll, like the w2-037 clear path.
++    struct PendingResolve {
++        AlarmRow row;
++        QString detail;
++    };
++    QSet<quint16> m_diRestartChecked;
++    QHash<quint16, int> m_diRestartLookupFailures;
++    QElapsedTimer m_restartLookupFailure;   // started when a lookup failed
++    QHash<quint16, QList<PendingResolve>> m_restartResolvePending;
+     // The machine starts in the conservative state.  A true DI0 sample is
+     // required before either DO0 (00017) or DO3 (00020) can be energized.
+     bool m_di0OutputPermit = false;

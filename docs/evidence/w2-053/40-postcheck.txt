@@ -1,0 +1,3 @@
+﻿postcheck 2026-09-27 18:46:05
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners/connections on 502/8123/8124/8125/18125 (excluding TIME_WAIT): 0

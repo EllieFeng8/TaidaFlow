@@ -1,0 +1,10 @@
+db=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\data\sensor_202609.sqlite (read-only) rows with id > 105:
+id=106 time=2026-09-27 17:57:41 sensor=100 message=設備啟動 status=正常
+id=107 time=2026-09-27 18:06:27 sensor=100 message=設備啟動 status=正常
+id=108 time=2026-09-27 18:08:29 sensor=100 message=設備啟動 status=正常
+id=109 time=2026-09-27 18:08:44 sensor=100 message=設備啟動 status=正常
+id=110 time=2026-09-27 18:38:56 sensor=100 message=設備啟動 status=正常
+id=111 time=2026-09-27 18:39:24 sensor=DI1 message=漏液檢出（DI1=1） status=異常 resolved=true resolvedAt=18:42:57 resolvedDetail=漏液檢出 解除（DI1=0）
+id=112 time=2026-09-27 18:40:06 sensor=100 message=設備啟動 status=正常
+id=113 time=2026-09-27 18:43:06 sensor=DI2 message=補水泵 OL（DI2=1） status=異常
+max_id=113 count=113

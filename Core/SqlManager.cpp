@@ -2002,6 +2002,98 @@ bool SqlManager::updateAlarmReason(const QDateTime& occurrence, qint64 id, const
     });
 }
 
+bool SqlManager::findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
+                                      QList<UnresolvedAlarm>* out, QString* errMsg)
+{
+    return runOnThread([this, sensor, status, month, out, errMsg]() {
+        if (!out)
+        {
+            if (errMsg) *errMsg = "output list is null";
+            return false;
+        }
+        out->clear();
+        if (sensor.isEmpty() || !month.isValid())
+        {
+            if (errMsg) *errMsg = "sensor is empty or month is invalid";
+            return false;
+        }
+
+        const QDate first(month.year(), month.month(), 1);
+        const QStringList keys{monthKey(first), monthKey(first.addMonths(-1))};
+        QList<UnresolvedAlarm> rows;
+        for (const QString& key : keys)
+        {
+            // Read-only: never create a month file (openDataDb would).
+            if (!QFileInfo::exists(dataFileForKey(key)))
+            {
+                continue;
+            }
+            QSqlDatabase db = openDataDb(key);
+            if (!db.isValid() || !db.isOpen())
+            {
+                if (errMsg) *errMsg = QStringLiteral("db open failed (%1)").arg(key);
+                out->clear();
+                return false;
+            }
+
+            QSqlQuery query(db);
+            // Cheap pre-filter on the text; the JSON fields are checked below.
+            query.prepare("SELECT id, occurrence_time, reason FROM alarm_history "
+                          "WHERE instr(reason, :sensor) > 0");
+            query.bindValue(":sensor", sensor);
+            if (!query.exec())
+            {
+                const QString error = query.lastError().text();
+                if (error.contains(QLatin1String("no such table"), Qt::CaseInsensitive))
+                {
+                    continue;
+                }
+                if (errMsg) *errMsg = QStringLiteral("%1 (%2)").arg(error, key);
+                out->clear();
+                return false;
+            }
+            while (query.next())
+            {
+                const QString reason = query.value(2).toString();
+                const QJsonDocument doc = QJsonDocument::fromJson(reason.toUtf8());
+                if (!doc.isObject())
+                {
+                    continue;
+                }
+                const QJsonObject obj = doc.object();
+                if (obj.value("sensor").toString() != sensor
+                        || obj.value("status").toString() != status
+                        || obj.value("resolved").toBool(false))
+                {
+                    continue;
+                }
+                UnresolvedAlarm row;
+                row.monthKey = key;
+                row.id = query.value(0).toLongLong();
+                row.occurrenceTime = query.value(1).toLongLong();
+                row.reason = reason;
+                rows.append(row);
+            }
+            if (query.lastError().isValid())
+            {
+                if (errMsg) *errMsg = QStringLiteral("%1 (%2)").arg(query.lastError().text(), key);
+                out->clear();
+                return false;
+            }
+        }
+
+        std::sort(rows.begin(), rows.end(), [](const UnresolvedAlarm& a, const UnresolvedAlarm& b) {
+            if (a.occurrenceTime != b.occurrenceTime)
+                return a.occurrenceTime > b.occurrenceTime;
+            if (a.monthKey != b.monthKey)
+                return a.monthKey > b.monthKey;
+            return a.id > b.id;
+        });
+        *out = rows;
+        return true;
+    });
+}
+
 bool SqlManager::getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)
 {
     return runOnThread([this, from, to, out, errMsg]() {

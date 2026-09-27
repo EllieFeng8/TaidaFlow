@@ -102,6 +102,24 @@ public:
                            QString* errMsg = nullptr);
     bool getAlarmHistory(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
 
+    // w2-053: one alarm_history row found by findUnresolvedAlarms().
+    struct UnresolvedAlarm
+    {
+        QString monthKey;          // yyyyMM of the data file that holds the row
+        qint64 id = -1;            // row id inside that file
+        qint64 occurrenceTime = 0; // alarm_history.occurrence_time (epoch seconds)
+        QString reason;            // reason JSON as stored
+    };
+    // w2-053 (restart hand-over of DI alarms): the alarm_history rows whose
+    // reason JSON has "sensor" == sensor, "status" == status and no
+    // "resolved": true, in the data file of 'month' and in the file of the
+    // month before it.  Read-only: a month file that does not exist (or has
+    // no alarm_history table) is skipped, nothing is created or changed.
+    // Newest first (occurrence_time DESC, then month DESC, then id DESC).
+    // Returns false (out cleared) when a file cannot be opened or read.
+    bool findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
+                              QList<UnresolvedAlarm>* out, QString* errMsg = nullptr);
+
     // w2-039 History page (newest first).  [from, to] must lie in one calendar
     // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
     // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other

@@ -1,0 +1,14 @@
+﻿[18:38:27.851] w2-053 sim DI0 query: value=1 : initial state
+[18:38:28.240] w2-053 sim DI1 query: value=0 : initial state
+[18:38:28.626] w2-053 sim DI2 query: value=0 : initial state
+[18:38:37.208] w2-053 sim DI2 0 -> 1 (requested 1, UIA TogglePattern, pid 55216) : before run 1 (scenario C: DI2 abnormal at start) (exit 0)
+[18:39:17.782] w2-053 sim DI2 1 -> 0 (requested 0, UIA TogglePattern, pid 55216) : run 1: clear DI2 (taken-over id=60 should resolve) (exit 0)
+[18:39:24.386] w2-053 sim DI1 0 -> 1 (requested 1, UIA TogglePattern, pid 55216) : run 1: raise DI1 (scenario A setup) (exit 0)
+[18:39:42.489] w2-053 app run 1 pid 125776: Process.CloseMainWindow()=True (graceful close request, no input events), exited=True
+[18:39:55.791] w2-053 sim DI1 query: value=1 : before run 2
+[18:42:56.929] w2-053 sim DI1 1 -> 0 (requested 0, UIA TogglePattern, pid 55216) : run 2: clear DI1 (taken-over id=111 should resolve) (exit 0)
+[18:43:06.126] w2-053 sim DI2 0 -> 1 (requested 1, UIA TogglePattern, pid 55216) : run 2: raise DI2 (scenario B setup) (exit 0)
+[18:43:24.657] w2-053 app run 2 pid 50324: Process.CloseMainWindow()=True (graceful close request, no input events), exited=True
+[18:43:27.402] w2-053 sim DI2 1 -> 0 (requested 0, UIA TogglePattern, pid 55216) : app closed: clear DI2 before run 3 (scenario B) (exit 0)
+[18:45:56.611] w2-053 app run 3 pid 122628: Process.CloseMainWindow()=True (graceful close request, no input events), exited=True
+[18:46:05.814] w2-053 simulator pid 55216: Process.CloseMainWindow()=True, exited=True

@@ -4,8 +4,10 @@
 #include "SqlManager.h"
 #include "TaidaFlowProxy.h"
 
+#include <QDate>
 #include <QDateTime>
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QScopedValueRollback>
@@ -23,6 +25,12 @@ constexpr double kDefaultAiHighAlarmPercent = 90.0;
 // then every kPump2HzFailureLogEvery polls, so an offline ADAM-6022 does not
 // flood the log.
 constexpr int kPump2HzFailureLogEvery = 30;
+// w2-053: a failed restart lookup of a DI is retried on the next polls;
+// after this many failed attempts the normal alarm logic takes over.
+constexpr int kRestartLookupMaxAttempts = 5;
+// After a failed lookup (e.g. a locked month file waits for SQLite's busy
+// timeout), the other DIs of the same poll do not look up again right away.
+constexpr qint64 kRestartLookupDeferMs = 500;
 
 // SVs taken from a device are rounded to 0.01 for display (QML shows the SV
 // with String()).  For the 12-bit AOs this is loss-free: the rounding error is
@@ -853,10 +861,18 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
     // DI0 is healthy at 1 and faults at 0. DI1 and DI2 fault at 1.
     const bool alarmActive = diOffset == 0 ? !state : state;
     const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+
+    // w2-053: on this DI's first read after start, rows left 未處理 by an
+    // earlier run are taken over (DI still in alarm) or resolved (DI normal).
+    if (!m_diRestartChecked.contains(diOffset)
+            && !takeOverPreviousRunDigitalInputAlarms(diOffset, state, alarmActive)) {
+        return;     // lookup failed; retried on the next poll
+    }
+    resolvePendingRestartRows(diOffset);
+
     if (!alarmActive) {
-        // Only an alarm raised during this run is resolved; a DI that has
-        // been normal all along changes nothing.  Rows left 未處理 by an
-        // earlier run are not touched (not known to this run).
+        // Only an alarm raised or taken over during this run is resolved
+        // here; a DI that has been normal all along changes nothing.
         const auto active = m_activeDigitalInputAlarms.constFind(diOffset);
         if (active == m_activeDigitalInputAlarms.cend())
             return;
@@ -891,6 +907,159 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
     AlarmRow row;
     if (insertAlarmRow(sensor, message, QStringLiteral("異常"), &row))
         m_activeDigitalInputAlarms.insert(diOffset, row);
+}
+
+bool Manager::takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state, bool alarmActive)
+{
+    const QString sensor = QStringLiteral("DI%1").arg(diOffset);
+    const int value = state ? 1 : 0;
+    if (!m_sql) {
+        m_diRestartChecked.insert(diOffset);
+        qWarning().noquote()
+                << QStringLiteral("[Alarm][Restart] %1: SqlManager is unavailable; rows of earlier runs are not checked.")
+                           .arg(sensor);
+        return true;
+    }
+
+    if (m_restartLookupFailure.isValid()
+            && m_restartLookupFailure.elapsed() < kRestartLookupDeferMs) {
+        qInfo().noquote()
+                << QStringLiteral("[Alarm][Restart] %1 lookup deferred to the next poll (a lookup failed %2 ms ago); no new %1 row until then.")
+                           .arg(sensor)
+                           .arg(m_restartLookupFailure.elapsed());
+        return false;
+    }
+
+    // Only 異常 rows are DI alarm rows (w2-037 format); the lookup is
+    // read-only and covers this month's and last month's data file.
+    const QDate today = QDate::currentDate();
+    QList<SqlManager::UnresolvedAlarm> found;
+    QString errorMessage;
+    QElapsedTimer timer;
+    timer.start();
+    const bool ok = m_sql->findUnresolvedAlarms(sensor, QStringLiteral("異常"), today,
+                                                &found, &errorMessage);
+    const double lookupMs = timer.nsecsElapsed() / 1.0e6;
+    if (!ok) {
+        m_restartLookupFailure.start();
+        const int failures = ++m_diRestartLookupFailures[diOffset];
+        if (failures < kRestartLookupMaxAttempts) {
+            qWarning().noquote()
+                    << QStringLiteral("[Alarm][Restart] %1 lookup of unresolved rows from earlier runs failed "
+                                      "(attempt %2/%3, %4 ms): %5; retrying on the next poll, no new %1 row until then.")
+                               .arg(sensor)
+                               .arg(failures)
+                               .arg(kRestartLookupMaxAttempts)
+                               .arg(lookupMs, 0, 'f', 1)
+                               .arg(errorMessage);
+            return false;
+        }
+        qWarning().noquote()
+                << QStringLiteral("[Alarm][Restart] %1 lookup failed %2 times (%3); giving up: rows of earlier "
+                                  "runs stay as they are and the normal alarm logic runs.")
+                           .arg(sensor)
+                           .arg(failures)
+                           .arg(errorMessage);
+        m_diRestartChecked.insert(diOffset);
+        return true;
+    }
+    m_restartLookupFailure.invalidate();
+    m_diRestartChecked.insert(diOffset);
+
+    const QString months = QStringLiteral("%1+%2").arg(today.toString(QStringLiteral("yyyyMM")),
+                                                       today.addMonths(-1).toString(QStringLiteral("yyyyMM")));
+    // A row is updated through the file of its occurrence month (see
+    // SqlManager::updateAlarmReason); rows are always inserted there, so a
+    // row found in another file is left alone.
+    QList<AlarmRow> rows;
+    QStringList listed;
+    for (const SqlManager::UnresolvedAlarm &item : std::as_const(found)) {
+        AlarmRow row;
+        row.id = item.id;
+        row.occurrence = QDateTime::fromSecsSinceEpoch(item.occurrenceTime);
+        row.reason = QJsonDocument::fromJson(item.reason.toUtf8()).object();
+        listed.append(QStringLiteral("id=%1(%2 %3)")
+                              .arg(item.id)
+                              .arg(item.monthKey,
+                                   row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss"))));
+        if (row.occurrence.date().toString(QStringLiteral("yyyyMM")) != item.monthKey) {
+            qWarning().noquote()
+                    << QStringLiteral("[Alarm][Restart] %1 row id=%2 in file %3 has occurrence %4 of another month; left as is.")
+                               .arg(sensor)
+                               .arg(item.id)
+                               .arg(item.monthKey,
+                                    row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
+            continue;
+        }
+        rows.append(row);
+    }
+
+    qInfo().noquote()
+            << QStringLiteral("[Alarm][Restart] %1 first read after start: %1=%2 (%3); unresolved 異常 rows "
+                              "from earlier runs in %4: %5%6 (lookup %7 ms)")
+                       .arg(sensor)
+                       .arg(value)
+                       .arg(alarmActive ? QStringLiteral("alarm active") : QStringLiteral("normal"),
+                            months)
+                       .arg(found.size())
+                       .arg(listed.isEmpty() ? QString() : QStringLiteral(" ") + listed.join(QLatin1Char(' ')))
+                       .arg(lookupMs, 0, 'f', 1);
+    if (rows.isEmpty())
+        return true;
+
+    const QString alarmMessage = digitalInputAlarmMessage(diOffset);
+    QList<PendingResolve> &pending = m_restartResolvePending[diOffset];
+    qsizetype firstToResolve = 0;
+    if (alarmActive) {
+        // Same ongoing condition: keep using the newest row, write no new one.
+        const AlarmRow &newest = rows.first();
+        m_activeDigitalInputAlarms.insert(diOffset, newest);
+        firstToResolve = 1;
+        qInfo().noquote()
+                << QStringLiteral("[Alarm][Restart] %1 still in alarm: took over id=%2 (%3) as the active alarm row; no new row.")
+                           .arg(sensor)
+                           .arg(newest.id)
+                           .arg(newest.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
+    }
+    for (qsizetype index = firstToResolve; index < rows.size(); ++index) {
+        const AlarmRow &row = rows.at(index);
+        const QString detail = alarmActive
+                ? QStringLiteral("%1 解除（重啟後讀值 %2=%3，由 id=%4 接手）")
+                          .arg(alarmMessage, sensor)
+                          .arg(value)
+                          .arg(rows.first().id)
+                : QStringLiteral("%1 解除（重啟後讀值 %2=%3）")
+                          .arg(alarmMessage, sensor)
+                          .arg(value);
+        qInfo().noquote()
+                << QStringLiteral("[Alarm][Restart] %1 resolving id=%2 (%3)%4.")
+                           .arg(sensor)
+                           .arg(row.id)
+                           .arg(row.occurrence.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")),
+                                alarmActive ? QStringLiteral(": older duplicate of the taken-over row")
+                                            : QStringLiteral(": the DI reads normal after the restart"));
+        pending.append(PendingResolve{row, detail});
+    }
+    if (pending.isEmpty())
+        m_restartResolvePending.remove(diOffset);
+    return true;
+}
+
+void Manager::resolvePendingRestartRows(quint16 diOffset)
+{
+    const auto it = m_restartResolvePending.find(diOffset);
+    if (it == m_restartResolvePending.end())
+        return;
+
+    QList<PendingResolve> &pending = it.value();
+    while (!pending.isEmpty()) {
+        // markAlarmRowResolved() logs the failure; stop at the first one so a
+        // locked database costs at most one busy wait per DI and poll.
+        if (!markAlarmRowResolved(pending.first().row, pending.first().detail))
+            return;
+        pending.removeFirst();
+    }
+    m_restartResolvePending.erase(it);
 }
 
 void Manager::setWayValveOpenSv(bool open)

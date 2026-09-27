@@ -1,0 +1,3 @@
+﻿precheck 2026-09-27 18:37:45
+processes TaidaFlowApp/Adam60xxSimulator: 0
+listeners 502/8123/8124/8125/18125: 0

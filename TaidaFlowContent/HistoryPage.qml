@@ -503,7 +503,7 @@ Item {
                         }
 
                         contentItem: Text {
-                            text: "✕"
+                            text: "×"
                             color: mutedTextColor
                             font.pixelSize: 14
                             horizontalAlignment: Text.AlignHCenter

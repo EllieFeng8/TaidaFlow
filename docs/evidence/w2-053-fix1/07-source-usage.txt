@@ -1,0 +1,4 @@
+﻿
+Core\manager.cpp:1027:                ? QStringLiteral("%1 解除（重啟後讀值 %2=%3，由 id=%4 接手）")
+
+

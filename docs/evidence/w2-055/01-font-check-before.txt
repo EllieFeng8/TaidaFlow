@@ -1,0 +1,4 @@
+> python -B scripts/make_font_subset.py --check   (HEAD 58c6037, before regenerate)
+scanned 182 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+charset changed since last build (1 new chars: ×) -> re-run without --check
+rc=1

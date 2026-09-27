@@ -1,0 +1,3 @@
+﻿scanned 182 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+charset changed since last build (1 new chars: 手) -> re-run without --check
+rc=1

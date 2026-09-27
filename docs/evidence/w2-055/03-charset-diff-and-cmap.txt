@@ -1,0 +1,52 @@
+> python -B docs/evidence/w2-055/tools/check_cmap.py build/w2-055-before App/fonts   (build/w2-055-before = copy of App/fonts at HEAD 58c6037 before regenerate)
+charset.txt: old=513 chars new=513 chars
+added (1): ×
+  + U+00D7 × MULTIPLICATION SIGN
+removed (1): ✕
+  - U+2715 ✕ MULTIPLICATION X
+size TaidaFlowNotoSansTC-Regular.ttf: 193284 -> 193364 bytes (delta +80)
+size TaidaFlowNotoSansTC-Bold.ttf: 193956 -> 194036 bytes (delta +80)
+charset chars NOT in source font NotoSansTC-VF (0):
+expected diff (+× U+00D7 / -✕ U+2715) exactly: True
+w2-048 15 chars still in charset: True
+cmap check (new fonts):
+  U+4E09 三 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E94 五 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4ECA 今 in_charset=yes source=yes Regular=yes Bold=yes
+  U+516D 六 in_charset=yes source=yes Regular=yes Bold=yes
+  U+53EA 只 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5468 周 in_charset=yes source=yes Regular=yes Bold=yes
+  U+56DB 四 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5716 圖 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5E74 年 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6216 或 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6309 按 in_charset=yes source=yes Regular=yes Bold=yes
+  U+64C7 擇 in_charset=yes source=yes Regular=yes Bold=yes
+  U+66C6 曆 in_charset=yes source=yes Regular=yes Bold=yes
+  U+81F3 至 in_charset=yes source=yes Regular=yes Bold=yes
+  U+9418 鐘 in_charset=yes source=yes Regular=yes Bold=yes
+  U+2039 ‹ in_charset=yes source=yes Regular=yes Bold=yes
+  U+203A › in_charset=yes source=yes Regular=yes Bold=yes
+  U+00D7 × in_charset=yes source=yes Regular=yes Bold=yes
+  U+986F 顯 in_charset=yes source=yes Regular=yes Bold=yes
+  U+793A 示 in_charset=yes source=yes Regular=yes Bold=yes
+  U+524D 前 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E00 一 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6642 時 in_charset=yes source=yes Regular=yes Bold=yes
+  U+9593 間 in_charset=yes source=yes Regular=yes Bold=yes
+  U+78BA 確 in_charset=yes source=yes Regular=yes Bold=yes
+  U+5B9A 定 in_charset=yes source=yes Regular=yes Bold=yes
+  U+53D6 取 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6D88 消 in_charset=yes source=yes Regular=yes Bold=yes
+  U+6708 月 in_charset=yes source=yes Regular=yes Bold=yes
+  U+65E5 日 in_charset=yes source=yes Regular=yes Bold=yes
+  U+4E8C 二 in_charset=yes source=yes Regular=yes Bold=yes
+phrase '顯示前一周' fully covered in both styles: True
+phrase '時間' fully covered in both styles: True
+phrase '確定' fully covered in both styles: True
+phrase '取消' fully covered in both styles: True
+phrase '年' fully covered in both styles: True
+phrase '月' fully covered in both styles: True
+phrase '日一二三四五六' fully covered in both styles: True
+rc=0
+exit=0

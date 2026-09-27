@@ -1,0 +1,26 @@
+﻿== git status --short
+ M App/fonts/TaidaFlowNotoSansTC-Bold.ttf
+ M App/fonts/TaidaFlowNotoSansTC-Regular.ttf
+ M App/fonts/charset.txt
+ M Core/SqlManager.cpp
+ M Core/SqlManager.h
+ M Core/manager.cpp
+ M Core/manager.h
+ M docs/evidence/wasm-v4/safety-probe.log
+ M docs/wasm-integration-report.md
+?? docs/evidence/w2-053-fix1/
+?? docs/evidence/w2-053/
+?? docs/evidence/w2-055/
+== git diff --stat
+ App/fonts/TaidaFlowNotoSansTC-Bold.ttf    | Bin 193956 -> 194192 bytes
+ App/fonts/TaidaFlowNotoSansTC-Regular.ttf | Bin 193284 -> 193520 bytes
+ App/fonts/charset.txt                     |   2 +-
+ Core/SqlManager.cpp                       |  92 +++++
+ Core/SqlManager.h                         |  18 +
+ Core/manager.cpp                          | 175 +++++++-
+ Core/manager.h                            |  21 +
+ docs/evidence/wasm-v4/safety-probe.log    |  12 +
+ docs/wasm-integration-report.md           | 652 +++++++++++++++++-------------
+ 9 files changed, 694 insertions(+), 278 deletions(-)
+== __pycache__ dirs under taidaflow (excluding build/):
+none

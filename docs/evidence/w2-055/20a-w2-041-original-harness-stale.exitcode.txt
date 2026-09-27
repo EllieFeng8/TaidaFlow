@@ -1,0 +1,2 @@
+﻿run-qtest.bat (w2-041, harness cleaned first) exit=1
+NOTE: the original w2-041 harness (docs/evidence/w2-041/tools/run-qtest.bat) no longer compiles since w2-049 moved the download server into AppHttpServer (HistoryExportManager::Options::startDownloadServer and ExportDownloadServer were removed). w2-049 and w2-050 run the adapted copy docs/evidence/w2-049/tools/run-w2041-qtest.bat; see 20-w2-041-qtest.log.

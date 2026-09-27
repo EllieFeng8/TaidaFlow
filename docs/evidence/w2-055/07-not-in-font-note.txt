@@ -1,0 +1,15 @@
+w2-055 note: characters used in source that Noto Sans TC does not have
+
+Program check: docs/evidence/w2-055/03-charset-diff-and-cmap.txt, section
+"charset chars NOT in source font NotoSansTC-VF" -> 0 chars at HEAD 58c6037.
+make_font_subset.py (02-font-subset-regenerate.txt and 04-font-check-after.txt) prints no
+"note (not in source font, skipped)" line any more.
+
+U+2715 MULTIPLICATION X (✕) was the only such char in w2-044 / w2-048
+(HistoryPage.qml export panel close button). main 8a95a26 changed that text to U+00D7 "×"
+(TaidaFlowContent/HistoryPage.qml:506, text: "×"). `git grep ✕` at HEAD 58c6037 finds ✕ only in
+docs/evidence/w2-041, w2-044, w2-048 (old evidence; docs/ is not scanned by make_font_subset.py).
+So ✕ left charset.txt and × (in the source font) was added and is in both new TTFs (Regular=yes Bold=yes).
+
+Size change: both TTFs +80 bytes (one glyph, 896 -> 897 glyphs). The old subset had 896 glyphs
+because ✕ was never subsettable, so removing it from charset.txt does not remove a glyph.

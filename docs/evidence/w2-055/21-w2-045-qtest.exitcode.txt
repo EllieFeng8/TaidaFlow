@@ -1,0 +1,1 @@
+﻿run-qtest.bat (w2-045, harness cleaned first) exit=0

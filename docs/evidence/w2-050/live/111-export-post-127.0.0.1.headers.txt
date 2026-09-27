@@ -1,0 +1,9 @@
+HTTP/1.1 405 Not Allowed
+Server: nginx
+Date: Sun, 27 Sep 2026 10:06:45 GMT
+Content-Type: text/html
+Content-Length: 150
+Connection: keep-alive
+Cache-Control: no-store
+Access-Control-Allow-Origin: *
+

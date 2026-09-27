@@ -1,0 +1,579 @@
+nginx processes before the run (never touched): <none>
+local IPv4: 192.168.0.125, 192.168.158.1, 192.168.83.1
+LAN IPv4 used for the LAN requests: 192.168.0.125
+=== deploy the web page (scripts\deploy-web.ps1)
+  deploy-web.ps1  -> exit 0
+    | qtloader.js                     12354 bytes  -> .gz         4014 bytes (32%)
+    | qtlogo.svg                       1686 bytes  -> .gz          901 bytes (53%)
+    | TaidaFlowApp.html                3092 bytes  -> .gz         1218 bytes (39%)
+    | TaidaFlowApp.js                304976 bytes  -> .gz        70016 bytes (23%)
+    | TaidaFlowApp.wasm            33828575 bytes  -> .gz     12447235 bytes (37%)
+    | deployed 5 file(s), 34150683 bytes (+12523384 bytes .gz) from D:\repo\codex\qmlTester\taidaflow\build\wasm-release to D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+    | no symbolic links / junctions in D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+    | the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)
+    | nginx serves them at http://<host>:8123/TaidaFlowApp.html (scripts\nginx-start.ps1)
+  PASS deploy-web.ps1 exit 0
+=== nginx -t (scripts\nginx-start.ps1 -Test)
+  nginx-start.ps1 -Test -> exit 0
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    | config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+    | nginx -t:
+    |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+    |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+  PASS nginx -t: test is successful (exit 0)
+=== link experiment: nginx for Windows and a junction in the web root
+  junction D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\web\linked -> D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\outside (holds secret.js)
+  foreign nginx (started directly by this script, pid 120220) with web root D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\web
+  link-nginx-follows http://127.0.0.1:8123/linked/secret.js -> 200 (24 bytes, 0.003493 s, curl 0) 
+  RESULT: nginx for Windows FOLLOWS the junction (HTTP 200) -> the start/deploy scripts must refuse such folders
+  PASS link experiment recorded (what nginx does with a junction in the web root)
+  8123 listener pid(s) of the foreign nginx: 110804
+=== D3: scripts never touch an nginx they did not start; port 8123 busy -> no start
+  nginx-stop.ps1  -> exit 1
+    | no nginx started by this script is running (runtime D:\repo\codex\qmlTester\taidaflow\build\nginx) - nothing stopped
+    |   other nginx (not started by this script, not touched): pid=110804 C:\tools\nginx\nginx-1.30.5\nginx.exe
+    |   other nginx (not started by this script, not touched): pid=120220 C:\tools\nginx\nginx-1.30.5\nginx.exe
+  PASS nginx-stop.ps1 with only a foreign nginx running -> exit 1, foreign nginx still running and listening
+  nginx-start.ps1  -> exit 4
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    |   listener 0.0.0.0:8123 pid=110804 (nginx)
+    | port 8123 is already in use - nginx NOT started (the owner is not stopped)
+  PASS nginx-start.ps1 while 8123 is held by another nginx -> exit 4, nothing started, other nginx untouched
+=== D6: safety probe with a listener on 8123 (default profile)
+    | === safety probe 2026-09-27T17:54:07.349+08:00 reason="w2-050 D6: 8123 listener is information only" host=LAPTOP-0B3CPPED
+    |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+    |   tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+    |   serial GetPortNames: <none>
+    |   serial SERIALCOMM  : <none>
+    |   serial PnP (COMx)  : <none>
+    |   listener 0.0.0.0:8123 pid=110804 (nginx)
+    |   port 8123 = nginx web front end (scripts\nginx-start.ps1) -> information only, does not block the launch
+    |   verdict: SAFE
+  PASS safety probe: 8123 listener reported as information only, verdict SAFE (exit 0)
+  foreign nginx pid 120220 (started by this script) exited
+  PASS foreign nginx closed (by this script): 8123 free
+  nginx-start.ps1  -> exit 4
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    |   listener 127.0.0.1:8123 pid=119048 (powershell)
+    | port 8123 is already in use - nginx NOT started (the owner is not stopped)
+  PASS nginx-start.ps1 while 8123 is held by another program (a test listener of this script) -> exit 4, no nginx started
+  nginx-start.ps1 -WebRoot D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\web -> exit 5
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    | REFUSED: the web root D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\web is or holds 1 symbolic link(s) / junction(s); nginx for
+    |   Windows has no disable_symlinks and would serve files outside the folder through them:
+    |     D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\web\linked
+    |   remove them (or deploy again with scripts\deploy-web.ps1) - nginx NOT started / reloaded
+  PASS nginx-start.ps1 -WebRoot <folder with a junction> -> exit 5 (refused), no listener, no nginx
+  nginx-start.ps1 -WebRoot D:\repo\codex\qmlTester\taidaflow\build\desktop\web -ExportDir D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exports -> exit 5
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    | REFUSED: the export folder D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exports is or holds 1 symbolic link(s) / junction(s); nginx for
+    |   Windows has no disable_symlinks and would serve files outside the folder through them:
+    |     D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exports\w2050junction_20260101_000000.csv
+    |   remove them by hand (rmdir <junction> removes only the link) - nginx NOT started / reloaded
+  PASS nginx-start.ps1 -ExportDir <folder with a junction> -> exit 5 (refused), no listener
+  deploy-web.ps1 -ExeDir D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exe -> exit 5
+    | REFUSED: D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exe\web is or holds 1 symbolic link(s) / junction(s) - not removed, nothing deployed:
+    |   D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exe\web\linked
+    | remove the link(s) by hand (rmdir <junction> removes only the link), then deploy again
+  PASS deploy-web.ps1 with a junction in the old web folder -> exit 5, nothing removed, junction target intact
+  PASS test junctions removed (link only; target files intact)
+=== fixtures (dev-only)
+  large CSV D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050big_20260101_000000.csv : 1072000033 bytes, sha256 CFE41816BC496AB9846DD6DE56C69231D1ABFA325815AF992A8E1F40B012B889 (mtime 2026-01-01, the oldest file)
+  18 small CSVs w2050fx01..18 (mtime 2026-01-02); export folder now holds 19 csv file(s)
+run-simulator: SIM_PID=55408 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-050\live\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205 (exit 0)
+=== safety probe (simulator profile) before the desktop launch
+    | === safety probe 2026-09-27T17:54:38.868+08:00 reason="w2-050 before launch (explicit)" host=LAPTOP-0B3CPPED profile=simulator
+    |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+    |   tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+    |   tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+    |   serial GetPortNames: <none>
+    |   serial SERIALCOMM  : <none>
+    |   serial PnP (COMx)  : <none>
+    |   listener 127.0.0.205:502 pid=55408 (Adam60xxSimulator)
+    |   port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+    |   listener 127.0.0.204:502 pid=55408 (Adam60xxSimulator)
+    |   port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+    |   listener 127.0.0.203:502 pid=55408 (Adam60xxSimulator)
+    |   port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+    |   listener 127.0.0.202:502 pid=55408 (Adam60xxSimulator)
+    |   port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+    |   listener 127.0.0.201:502 pid=55408 (Adam60xxSimulator)
+    |   port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+    |   simulator endpoints listening: 5/5
+    |   verdict: SAFE
+  PASS safety probe (simulator profile) SAFE before launch (exit 0)
+=== scenario nginx: app with TAIDAFLOW_DOWNLOAD_PORT=8123 (run-desktop.ps1 -DeviceProfile simulator), then nginx-start.ps1
+run-desktop (nginx):   simulator endpoints listening: 5/5 |   verdict: SAFE | PID=119992 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-050\live\app-nginx.log PROFILE=simulator (exit 0)
+  PASS app log: TAIDAFLOW_DOWNLOAD_PORT=8123 -> download links use port 8123
+  PASS app log: export manager uses port 8123 for the links
+  PASS app log: /exports still mounted on AppHttpServer (8124 fallback)
+    [Export] TAIDAFLOW_DOWNLOAD_PORT=8123 - download links use port 8123 (served by another program, e.g. nginx; /exports on AppHttpServer port 8124 stays available as fallback)
+    [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes), download links -> port 8123
+    apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+    [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports: mounted on AppHttpServer
+    [Web] TAIDAFLOW_WEB_DIR is not set
+    [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> has TaidaFlowApp.html, used
+    apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\desktop\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+    [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> http://<host>:8124/TaidaFlowApp.html
+    apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+    [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+  nginx-start.ps1  -> exit 0
+    | nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+    | config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+    | nginx -t:
+    |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+    |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+    | NGINX_PID=120884 WORKERS=116004 PIDFILE=120884
+    | WEBROOT=D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+    | EXPORTDIR=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+    | RUNTIME=D:\repo\codex\qmlTester\taidaflow\build\nginx
+    | URL=http://<this host's IPv4>:8123/TaidaFlowApp.html  downloads: http://<this host's IPv4>:8123/exports/<file>
+    | (start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=8123 so that its download links point here)
+  PASS nginx-start.ps1 -> exit 0
+  PASS 0.0.0.0:8123 listening, owned by our nginx (pids 120884,116004)
+deployed TaidaFlowApp.wasm 33828575 bytes, .gz 12447235 bytes
+--- web page, host 127.0.0.1
+  html-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html -> 200 (3092 bytes, 0.003888 s, curl 0) 
+  PASS 127.0.0.1 html 200 text/html; charset=utf-8
+  PASS 127.0.0.1 html Cache-Control no-cache + ETag + Last-Modified
+  PASS 127.0.0.1 html COOP same-origin / COEP require-corp / CORP same-origin
+  PASS 127.0.0.1 Server header without version (server_tokens off)
+  PASS 127.0.0.1 html body = deployed file
+  html-gzip-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html -> 200 (1218 bytes, 0.002559 s, curl 0) -H Accept-Encoding: gzip
+  PASS 127.0.0.1 html gzip variant = deployed .gz
+  wasm-identity-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm -> 200 (33828575 bytes, 0.556671 s, curl 0) 
+  PASS 127.0.0.1 wasm 200 application/wasm
+  PASS 127.0.0.1 wasm identity 33828575 bytes, sha256 equal, no Content-Encoding
+  PASS 127.0.0.1 wasm Cache-Control no-cache (revalidate) + Vary: Accept-Encoding
+  wasm-gzip-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm -> 200 (12447235 bytes, 0.221684 s, curl 0) -H Accept-Encoding: gzip, deflate, br
+  PASS 127.0.0.1 wasm gzip: Content-Encoding gzip, application/wasm
+  PASS 127.0.0.1 wasm gzip size 12447235 = deployed .gz (sha256 equal), Vary
+  PASS 127.0.0.1 wasm gzip body decompresses to the .wasm
+  wasm-304-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm -> 304 (0 bytes, 0.002180 s, curl 0) -H If-None-Match: \"6ab8e4f7-2042edf\"
+  PASS 127.0.0.1 wasm second request with ETag -> 304
+  wasm-gzip-304-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm -> 304 (0 bytes, 0.002187 s, curl 0) -H Accept-Encoding: gzip -H If-None-Match: \"6ab8e4f7-bdee03\"
+  PASS 127.0.0.1 wasm gzip second request with its ETag -> 304
+  html-ims-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html -> 304 (0 bytes, 0.005605 s, curl 0) -H If-Modified-Since: Sun, 27 Sep 2026 09:39:38 GMT
+  PASS 127.0.0.1 html If-Modified-Since -> 304
+  wasm-head-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm -> 200 (0 bytes, 0.003237 s, curl 0) -I
+  PASS 127.0.0.1 HEAD wasm 200, Content-Length 33828575
+  TaidaFlowApp.js-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.js -> 200 (304976 bytes, 0.005377 s, curl 0) 
+  PASS 127.0.0.1 TaidaFlowApp.js 200 text/javascript; charset=utf-8
+  qtloader.js-127.0.0.1 http://127.0.0.1:8123/qtloader.js -> 200 (12354 bytes, 0.005576 s, curl 0) 
+  PASS 127.0.0.1 qtloader.js 200 text/javascript; charset=utf-8
+  qtlogo.svg-127.0.0.1 http://127.0.0.1:8123/qtlogo.svg -> 200 (1686 bytes, 0.008272 s, curl 0) 
+  PASS 127.0.0.1 qtlogo.svg 200 image/svg+xml
+  root-127.0.0.1 http://127.0.0.1:8123/ -> 302 (138 bytes, 0.005643 s, curl 0) 
+  PASS 127.0.0.1 / -> 302 Location: /TaidaFlowApp.html
+  attack-127.0.0.1 http://127.0.0.1:8123/../w2050-secret.js -> 400 (150 bytes, 0.004082 s, curl 0) 
+  PASS 127.0.0.1 /../w2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/%2e%2e/w2050-secret.js -> 400 (150 bytes, 0.001931 s, curl 0) 
+  PASS 127.0.0.1 /%2e%2e/w2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/%2E%2E%2Fw2050-secret.js -> 400 (150 bytes, 0.001892 s, curl 0) 
+  PASS 127.0.0.1 /%2E%2E%2Fw2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/..%5Cw2050-secret.js -> 400 (150 bytes, 0.001436 s, curl 0) 
+  PASS 127.0.0.1 /..%5Cw2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/..\w2050-secret.js -> 400 (150 bytes, 0.001582 s, curl 0) 
+  PASS 127.0.0.1 /..\w2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/..%252Fw2050-secret.js -> 404 (146 bytes, 0.001203 s, curl 0) 
+  PASS 127.0.0.1 /..%252Fw2050-secret.js -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/exports/../../w2050-secret.js -> 400 (150 bytes, 0.001495 s, curl 0) 
+  PASS 127.0.0.1 /exports/../../w2050-secret.js -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/CMakeCache.txt -> 404 (146 bytes, 0.001577 s, curl 0) 
+  PASS 127.0.0.1 /CMakeCache.txt -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/build.ninja -> 404 (146 bytes, 0.001425 s, curl 0) 
+  PASS 127.0.0.1 /build.ninja -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/../CMakeCache.txt -> 400 (150 bytes, 0.001280 s, curl 0) 
+  PASS 127.0.0.1 /../CMakeCache.txt -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/%2e%2e/build.ninja -> 400 (150 bytes, 0.001495 s, curl 0) 
+  PASS 127.0.0.1 /%2e%2e/build.ninja -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/w2050-notweb.txt -> 404 (146 bytes, 0.001310 s, curl 0) 
+  PASS 127.0.0.1 /w2050-notweb.txt -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/.w2050hidden.js -> 404 (146 bytes, 0.001370 s, curl 0) 
+  PASS 127.0.0.1 /.w2050hidden.js -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.wasm.gz -> 404 (146 bytes, 0.001150 s, curl 0) 
+  PASS 127.0.0.1 /TaidaFlowApp.wasm.gz -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.htm -> 404 (146 bytes, 0.001187 s, curl 0) 
+  PASS 127.0.0.1 /TaidaFlowApp.htm -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html::$DATA -> 400 (150 bytes, 0.001306 s, curl 0) 
+  PASS 127.0.0.1 /TaidaFlowApp.html::$DATA -> 400, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/NUL -> 404 (146 bytes, 0.001273 s, curl 0) 
+  PASS 127.0.0.1 /NUL -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/NUL.js -> 404 (146 bytes, 0.001413 s, curl 0) 
+  PASS 127.0.0.1 /NUL.js -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/con.html -> 404 (146 bytes, 0.001382 s, curl 0) 
+  PASS 127.0.0.1 /con.html -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/QTLOAD~1.JS -> 404 (146 bytes, 0.001267 s, curl 0) 
+  PASS 127.0.0.1 /QTLOAD~1.JS -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/C:%5CWindows%5Cwin.ini -> 404 (146 bytes, 0.001266 s, curl 0) 
+  PASS 127.0.0.1 /C:%5CWindows%5Cwin.ini -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/C:/Windows/win.ini -> 404 (146 bytes, 0.001221 s, curl 0) 
+  PASS 127.0.0.1 /C:/Windows/win.ini -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 404 (146 bytes, 0.001161 s, curl 0) 
+  PASS 127.0.0.1 /%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/web/ -> 404 (146 bytes, 0.001143 s, curl 0) 
+  PASS 127.0.0.1 /web/ -> 404, no secret / path / version in the body
+  attack-127.0.0.1 http://127.0.0.1:8123/nope.js -> 404 (146 bytes, 0.001277 s, curl 0) 
+  PASS 127.0.0.1 /nope.js -> 404, no secret / path / version in the body
+  trailing-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html. -> 200 (3092 bytes, 0.001676 s, curl 0) 
+  PASS 127.0.0.1 /TaidaFlowApp.html. -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html%20 -> 200 (3092 bytes, 0.002126 s, curl 0) 
+  PASS 127.0.0.1 /TaidaFlowApp.html%20 -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-127.0.0.1 http://127.0.0.1:8123/qtloader.js. -> 200 (12354 bytes, 0.002955 s, curl 0) 
+  PASS 127.0.0.1 /qtloader.js. -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-127.0.0.1 http://127.0.0.1:8123/w2050-notweb.txt. -> 404 (146 bytes, 0.001244 s, curl 0) 
+  PASS 127.0.0.1 /w2050-notweb.txt. -> 404 (200 only as the same deployed web file; nothing else reachable)
+  trailing-127.0.0.1 http://127.0.0.1:8123/..%2Fw2050-secret.js. -> 400 (150 bytes, 0.001298 s, curl 0) 
+  PASS 127.0.0.1 /..%2Fw2050-secret.js. -> 400 (200 only as the same deployed web file; nothing else reachable)
+  post-html-127.0.0.1 http://127.0.0.1:8123/TaidaFlowApp.html -> 405 (150 bytes, 0.001375 s, curl 0) -X POST
+  PASS 127.0.0.1 POST /TaidaFlowApp.html -> 405
+--- web page, host 192.168.0.125
+  html-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html -> 200 (3092 bytes, 0.002322 s, curl 0) 
+  PASS 192.168.0.125 html 200 text/html; charset=utf-8
+  PASS 192.168.0.125 html Cache-Control no-cache + ETag + Last-Modified
+  PASS 192.168.0.125 html COOP same-origin / COEP require-corp / CORP same-origin
+  PASS 192.168.0.125 Server header without version (server_tokens off)
+  PASS 192.168.0.125 html body = deployed file
+  html-gzip-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html -> 200 (1218 bytes, 0.001795 s, curl 0) -H Accept-Encoding: gzip
+  PASS 192.168.0.125 html gzip variant = deployed .gz
+  wasm-identity-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm -> 200 (33828575 bytes, 0.375506 s, curl 0) 
+  PASS 192.168.0.125 wasm 200 application/wasm
+  PASS 192.168.0.125 wasm identity 33828575 bytes, sha256 equal, no Content-Encoding
+  PASS 192.168.0.125 wasm Cache-Control no-cache (revalidate) + Vary: Accept-Encoding
+  wasm-gzip-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm -> 200 (12447235 bytes, 0.138634 s, curl 0) -H Accept-Encoding: gzip, deflate, br
+  PASS 192.168.0.125 wasm gzip: Content-Encoding gzip, application/wasm
+  PASS 192.168.0.125 wasm gzip size 12447235 = deployed .gz (sha256 equal), Vary
+  PASS 192.168.0.125 wasm gzip body decompresses to the .wasm
+  wasm-304-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm -> 304 (0 bytes, 0.005174 s, curl 0) -H If-None-Match: \"6ab8e4f7-2042edf\"
+  PASS 192.168.0.125 wasm second request with ETag -> 304
+  wasm-gzip-304-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm -> 304 (0 bytes, 0.003831 s, curl 0) -H Accept-Encoding: gzip -H If-None-Match: \"6ab8e4f7-bdee03\"
+  PASS 192.168.0.125 wasm gzip second request with its ETag -> 304
+  html-ims-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html -> 304 (0 bytes, 0.002247 s, curl 0) -H If-Modified-Since: Sun, 27 Sep 2026 09:39:38 GMT
+  PASS 192.168.0.125 html If-Modified-Since -> 304
+  wasm-head-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm -> 200 (0 bytes, 0.002222 s, curl 0) -I
+  PASS 192.168.0.125 HEAD wasm 200, Content-Length 33828575
+  TaidaFlowApp.js-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.js -> 200 (304976 bytes, 0.006174 s, curl 0) 
+  PASS 192.168.0.125 TaidaFlowApp.js 200 text/javascript; charset=utf-8
+  qtloader.js-192.168.0.125 http://192.168.0.125:8123/qtloader.js -> 200 (12354 bytes, 0.003472 s, curl 0) 
+  PASS 192.168.0.125 qtloader.js 200 text/javascript; charset=utf-8
+  qtlogo.svg-192.168.0.125 http://192.168.0.125:8123/qtlogo.svg -> 200 (1686 bytes, 0.003284 s, curl 0) 
+  PASS 192.168.0.125 qtlogo.svg 200 image/svg+xml
+  root-192.168.0.125 http://192.168.0.125:8123/ -> 302 (138 bytes, 0.001869 s, curl 0) 
+  PASS 192.168.0.125 / -> 302 Location: /TaidaFlowApp.html
+  attack-192.168.0.125 http://192.168.0.125:8123/../w2050-secret.js -> 400 (150 bytes, 0.005355 s, curl 0) 
+  PASS 192.168.0.125 /../w2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/%2e%2e/w2050-secret.js -> 400 (150 bytes, 0.003371 s, curl 0) 
+  PASS 192.168.0.125 /%2e%2e/w2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/%2E%2E%2Fw2050-secret.js -> 400 (150 bytes, 0.003338 s, curl 0) 
+  PASS 192.168.0.125 /%2E%2E%2Fw2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/..%5Cw2050-secret.js -> 400 (150 bytes, 0.003479 s, curl 0) 
+  PASS 192.168.0.125 /..%5Cw2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/..\w2050-secret.js -> 400 (150 bytes, 0.008325 s, curl 0) 
+  PASS 192.168.0.125 /..\w2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/..%252Fw2050-secret.js -> 404 (146 bytes, 0.002258 s, curl 0) 
+  PASS 192.168.0.125 /..%252Fw2050-secret.js -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/exports/../../w2050-secret.js -> 400 (150 bytes, 0.005104 s, curl 0) 
+  PASS 192.168.0.125 /exports/../../w2050-secret.js -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/CMakeCache.txt -> 404 (146 bytes, 0.009039 s, curl 0) 
+  PASS 192.168.0.125 /CMakeCache.txt -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/build.ninja -> 404 (146 bytes, 0.002283 s, curl 0) 
+  PASS 192.168.0.125 /build.ninja -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/../CMakeCache.txt -> 400 (150 bytes, 0.005489 s, curl 0) 
+  PASS 192.168.0.125 /../CMakeCache.txt -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/%2e%2e/build.ninja -> 400 (150 bytes, 0.001764 s, curl 0) 
+  PASS 192.168.0.125 /%2e%2e/build.ninja -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/w2050-notweb.txt -> 404 (146 bytes, 0.003773 s, curl 0) 
+  PASS 192.168.0.125 /w2050-notweb.txt -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/.w2050hidden.js -> 404 (146 bytes, 0.008342 s, curl 0) 
+  PASS 192.168.0.125 /.w2050hidden.js -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.wasm.gz -> 404 (146 bytes, 0.011880 s, curl 0) 
+  PASS 192.168.0.125 /TaidaFlowApp.wasm.gz -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.htm -> 404 (146 bytes, 0.003935 s, curl 0) 
+  PASS 192.168.0.125 /TaidaFlowApp.htm -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html::$DATA -> 400 (150 bytes, 0.002101 s, curl 0) 
+  PASS 192.168.0.125 /TaidaFlowApp.html::$DATA -> 400, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/NUL -> 404 (146 bytes, 0.005759 s, curl 0) 
+  PASS 192.168.0.125 /NUL -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/NUL.js -> 404 (146 bytes, 0.005322 s, curl 0) 
+  PASS 192.168.0.125 /NUL.js -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/con.html -> 404 (146 bytes, 0.005612 s, curl 0) 
+  PASS 192.168.0.125 /con.html -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/QTLOAD~1.JS -> 404 (146 bytes, 0.002512 s, curl 0) 
+  PASS 192.168.0.125 /QTLOAD~1.JS -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/C:%5CWindows%5Cwin.ini -> 404 (146 bytes, 0.003758 s, curl 0) 
+  PASS 192.168.0.125 /C:%5CWindows%5Cwin.ini -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/C:/Windows/win.ini -> 404 (146 bytes, 0.010906 s, curl 0) 
+  PASS 192.168.0.125 /C:/Windows/win.ini -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 404 (146 bytes, 0.007431 s, curl 0) 
+  PASS 192.168.0.125 /%5C%5C127.0.0.1%5Cc$%5CWindows%5Cwin.ini -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/web/ -> 404 (146 bytes, 0.003507 s, curl 0) 
+  PASS 192.168.0.125 /web/ -> 404, no secret / path / version in the body
+  attack-192.168.0.125 http://192.168.0.125:8123/nope.js -> 404 (146 bytes, 0.001407 s, curl 0) 
+  PASS 192.168.0.125 /nope.js -> 404, no secret / path / version in the body
+  trailing-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html. -> 200 (3092 bytes, 0.005857 s, curl 0) 
+  PASS 192.168.0.125 /TaidaFlowApp.html. -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html%20 -> 200 (3092 bytes, 0.002311 s, curl 0) 
+  PASS 192.168.0.125 /TaidaFlowApp.html%20 -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-192.168.0.125 http://192.168.0.125:8123/qtloader.js. -> 200 (12354 bytes, 0.002920 s, curl 0) 
+  PASS 192.168.0.125 /qtloader.js. -> 200 (200 only as the same deployed web file; nothing else reachable)
+  trailing-192.168.0.125 http://192.168.0.125:8123/w2050-notweb.txt. -> 404 (146 bytes, 0.001259 s, curl 0) 
+  PASS 192.168.0.125 /w2050-notweb.txt. -> 404 (200 only as the same deployed web file; nothing else reachable)
+  trailing-192.168.0.125 http://192.168.0.125:8123/..%2Fw2050-secret.js. -> 400 (150 bytes, 0.001498 s, curl 0) 
+  PASS 192.168.0.125 /..%2Fw2050-secret.js. -> 400 (200 only as the same deployed web file; nothing else reachable)
+  post-html-192.168.0.125 http://192.168.0.125:8123/TaidaFlowApp.html -> 405 (150 bytes, 0.012184 s, curl 0) -X POST
+  PASS 192.168.0.125 POST /TaidaFlowApp.html -> 405
+--- reload with -WebRoot build\wasm-release (a build folder with CMakeCache.txt / build.ninja)
+  nginx-web.ps1 -Action reload -WebRoot D:\repo\codex\qmlTester\taidaflow\build\wasm-release -> exit 0
+    | config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\wasm-release, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+    | nginx -t:
+    |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+    |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+    | reloaded (master pid 120884, web root D:\repo\codex\qmlTester\taidaflow\build\wasm-release, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+  PASS nginx-web.ps1 -Action reload -WebRoot build\wasm-release -> exit 0
+  buildfolder http://192.168.0.125:8123/CMakeCache.txt -> 404 (146 bytes, 0.004317 s, curl 0) 
+  PASS wasm-release root: /CMakeCache.txt -> 404
+  buildfolder http://192.168.0.125:8123/build.ninja -> 404 (146 bytes, 0.001753 s, curl 0) 
+  PASS wasm-release root: /build.ninja -> 404
+  buildfolder http://192.168.0.125:8123/cmake_install.cmake -> 404 (146 bytes, 0.004072 s, curl 0) 
+  PASS wasm-release root: /cmake_install.cmake -> 404
+  buildfolder http://192.168.0.125:8123/CMakeFiles/ -> 404 (146 bytes, 0.005438 s, curl 0) 
+  PASS wasm-release root: /CMakeFiles/ -> 404
+  buildfolder http://192.168.0.125:8123/TaidaFlowApp_autogen/ -> 404 (146 bytes, 0.002392 s, curl 0) 
+  PASS wasm-release root: /TaidaFlowApp_autogen/ -> 404
+  buildfolder-wasm http://192.168.0.125:8123/TaidaFlowApp.wasm -> 200 (33828575 bytes, 0.658048 s, curl 0) -H Accept-Encoding: gzip
+  PASS wasm-release root: TaidaFlowApp.wasm 200 (no .gz there -> identity)
+  nginx-web.ps1 -Action reload -WebRoot D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> exit 0
+    | config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+    | nginx -t:
+    |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+    |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+    | reloaded (master pid 120884, web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+  PASS reload back to <exe folder>\web -> exit 0
+--- /exports, host 127.0.0.1
+  export-fixture-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_20260102_000001.csv -> 200 (2211 bytes, 0.003947 s, curl 0) 
+  PASS 127.0.0.1 /exports/w2050fx01_20260102_000001.csv 200, body = file
+  PASS 127.0.0.1 /exports headers: text/csv; charset=utf-8, attachment, no-store, ACAO *
+  PASS 127.0.0.1 /exports Accept-Ranges: bytes, ETag, Last-Modified, no Content-Encoding
+  export-gzip-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_20260102_000001.csv -> 200 (2211 bytes, 0.001624 s, curl 0) -H Accept-Encoding: gzip
+  PASS 127.0.0.1 /exports with Accept-Encoding: gzip -> identity (no gzip on /exports)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/ -> 404 (146 bytes, 0.001332 s, curl 0) 
+  PASS 127.0.0.1 /exports/ -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports -> 404 (146 bytes, 0.001177 s, curl 0) 
+  PASS 127.0.0.1 /exports -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/foo.csv -> 404 (146 bytes, 0.001439 s, curl 0) 
+  PASS 127.0.0.1 /exports/foo.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_20260102_000001.txt -> 404 (146 bytes, 0.001278 s, curl 0) 
+  PASS 127.0.0.1 /exports/w2050fx01_20260102_000001.txt -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_20260102_000001.csv.gz -> 404 (146 bytes, 0.001159 s, curl 0) 
+  PASS 127.0.0.1 /exports/w2050fx01_20260102_000001.csv.gz -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/../w2050-secret.txt -> 404 (146 bytes, 0.001543 s, curl 0) 
+  PASS 127.0.0.1 /exports/../w2050-secret.txt -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/..%2Fw2050-secret.txt -> 404 (146 bytes, 0.016530 s, curl 0) 
+  PASS 127.0.0.1 /exports/..%2Fw2050-secret.txt -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/%2e%2e%5Cw2050secret_20260101_000000.csv -> 404 (146 bytes, 0.001216 s, curl 0) 
+  PASS 127.0.0.1 /exports/%2e%2e%5Cw2050secret_20260101_000000.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/..%5Cw2050secret_20260101_000000.csv -> 404 (146 bytes, 0.001156 s, curl 0) 
+  PASS 127.0.0.1 /exports/..%5Cw2050secret_20260101_000000.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/sub/w2050fx01_20260102_000001.csv -> 404 (146 bytes, 0.001211 s, curl 0) 
+  PASS 127.0.0.1 /exports/sub/w2050fx01_20260102_000001.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_20260102_000001.csv -> 404 (146 bytes, 0.001224 s, curl 0) 
+  PASS 127.0.0.1 /exports/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_20260102_000001.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_2026010_000001.csv -> 404 (146 bytes, 0.001453 s, curl 0) 
+  PASS 127.0.0.1 /exports/w2050fx01_2026010_000001.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/w%2050_20260102_000001.csv -> 404 (146 bytes, 0.001393 s, curl 0) 
+  PASS 127.0.0.1 /exports/w%2050_20260102_000001.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/nothere_20260102_000001.csv -> 404 (146 bytes, 0.032450 s, curl 0) 
+  PASS 127.0.0.1 /exports/nothere_20260102_000001.csv -> 404 (not served)
+  export-bad-127.0.0.1 http://127.0.0.1:8123/exports/W2050FX01_20260102_000001.CSV -> 404 (146 bytes, 0.007648 s, curl 0) 
+  PASS 127.0.0.1 /exports/W2050FX01_20260102_000001.CSV -> 404 (not served)
+  export-post-127.0.0.1 http://127.0.0.1:8123/exports/w2050fx01_20260102_000001.csv -> 405 (150 bytes, 0.002639 s, curl 0) -X POST
+  PASS 127.0.0.1 POST /exports/<file> -> 405
+--- /exports, host 192.168.0.125
+  export-fixture-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_20260102_000001.csv -> 200 (2211 bytes, 0.006861 s, curl 0) 
+  PASS 192.168.0.125 /exports/w2050fx01_20260102_000001.csv 200, body = file
+  PASS 192.168.0.125 /exports headers: text/csv; charset=utf-8, attachment, no-store, ACAO *
+  PASS 192.168.0.125 /exports Accept-Ranges: bytes, ETag, Last-Modified, no Content-Encoding
+  export-gzip-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_20260102_000001.csv -> 200 (2211 bytes, 0.006848 s, curl 0) -H Accept-Encoding: gzip
+  PASS 192.168.0.125 /exports with Accept-Encoding: gzip -> identity (no gzip on /exports)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/ -> 404 (146 bytes, 0.001685 s, curl 0) 
+  PASS 192.168.0.125 /exports/ -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports -> 404 (146 bytes, 0.001476 s, curl 0) 
+  PASS 192.168.0.125 /exports -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/foo.csv -> 404 (146 bytes, 0.001378 s, curl 0) 
+  PASS 192.168.0.125 /exports/foo.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_20260102_000001.txt -> 404 (146 bytes, 0.001383 s, curl 0) 
+  PASS 192.168.0.125 /exports/w2050fx01_20260102_000001.txt -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_20260102_000001.csv.gz -> 404 (146 bytes, 0.001336 s, curl 0) 
+  PASS 192.168.0.125 /exports/w2050fx01_20260102_000001.csv.gz -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/../w2050-secret.txt -> 404 (146 bytes, 0.001386 s, curl 0) 
+  PASS 192.168.0.125 /exports/../w2050-secret.txt -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/..%2Fw2050-secret.txt -> 404 (146 bytes, 0.001346 s, curl 0) 
+  PASS 192.168.0.125 /exports/..%2Fw2050-secret.txt -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/%2e%2e%5Cw2050secret_20260101_000000.csv -> 404 (146 bytes, 0.001378 s, curl 0) 
+  PASS 192.168.0.125 /exports/%2e%2e%5Cw2050secret_20260101_000000.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/..%5Cw2050secret_20260101_000000.csv -> 404 (146 bytes, 0.001314 s, curl 0) 
+  PASS 192.168.0.125 /exports/..%5Cw2050secret_20260101_000000.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/sub/w2050fx01_20260102_000001.csv -> 404 (146 bytes, 0.001257 s, curl 0) 
+  PASS 192.168.0.125 /exports/sub/w2050fx01_20260102_000001.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_20260102_000001.csv -> 404 (146 bytes, 0.001265 s, curl 0) 
+  PASS 192.168.0.125 /exports/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_20260102_000001.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_2026010_000001.csv -> 404 (146 bytes, 0.001186 s, curl 0) 
+  PASS 192.168.0.125 /exports/w2050fx01_2026010_000001.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/w%2050_20260102_000001.csv -> 404 (146 bytes, 0.014637 s, curl 0) 
+  PASS 192.168.0.125 /exports/w%2050_20260102_000001.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/nothere_20260102_000001.csv -> 404 (146 bytes, 0.001318 s, curl 0) 
+  PASS 192.168.0.125 /exports/nothere_20260102_000001.csv -> 404 (not served)
+  export-bad-192.168.0.125 http://192.168.0.125:8123/exports/W2050FX01_20260102_000001.CSV -> 404 (146 bytes, 0.001394 s, curl 0) 
+  PASS 192.168.0.125 /exports/W2050FX01_20260102_000001.CSV -> 404 (not served)
+  export-post-192.168.0.125 http://192.168.0.125:8123/exports/w2050fx01_20260102_000001.csv -> 405 (150 bytes, 0.001861 s, curl 0) -X POST
+  PASS 192.168.0.125 POST /exports/<file> -> 405
+--- junction in the export folder (created after nginx started)
+  export-junction-nginx http://192.168.0.125:8123/exports/w2050junction_20260101_000000.csv -> 404 (146 bytes, 0.001609 s, curl 0) 
+  PASS junction named like an export file, via nginx 8123 -> 404 (directory never served)
+  export-junction-nginx-slash http://192.168.0.125:8123/exports/w2050junction_20260101_000000.csv/w2050junction_20260101_000000.csv -> 404 (146 bytes, 0.001197 s, curl 0) 
+  PASS file below the junction via nginx -> 404
+  export-junction-app http://192.168.0.125:8124/exports/w2050junction_20260101_000000.csv -> 403 (10 bytes, 0.023147 s, curl 0) 
+  PASS same junction via the app's 8124 fallback -> 403
+  nginx-web.ps1 -Action reload -> exit 5
+    | REFUSED: the export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports is or holds 1 symbolic link(s) / junction(s); nginx for
+    |   Windows has no disable_symlinks and would serve files outside the folder through them:
+    |     D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050junction_20260101_000000.csv
+    |   remove them by hand (rmdir <junction> removes only the link) - nginx NOT started / reloaded
+  PASS nginx-web.ps1 -Action reload with a junction in the export folder -> exit 5 (refused, running config kept)
+=== D7 (e): history export over the Proxy Mirror (like the web page), download from nginx
+    | 17:55:25.107 contractHash=fd39899103d98eba5d12df31bcf5c85e5258db080624d494dd4dcaf65326df34
+    | 17:55:25.157 connected to ws://192.168.0.125:8125/mirror (origin http://192.168.0.125:8123)
+    | 17:55:25.159 welcome, connectionSessionId=44e1e8af-54ca-4104-bf0a-e95e65b77ec7
+    | 17:55:25.159 sent historyExportRequested("w2050nginx", 1788192000000, 1790502925068) = 2026-09-01T00:00:00 .. 2026-09-27T17:55:25
+    | 17:55:25.162 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_175525.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+    | 17:55:25.163 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_175525.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":3938,"url":""}
+    | 17:55:25.175 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_175525.csv","message":"匯出完成,共 3938 筆","progress":100,"queuePosition":0,"rowsWritten":3938,"savedPath":"","state":"done","totalRows":3938,"url":"/exports/w2050nginx_20260927_175525.csv"}
+    | 17:55:25.175 RESULT state=done fileName=w2050nginx_20260927_175525.csv url=/exports/w2050nginx_20260927_175525.csv downloadPort=8123
+  mirror export (nginx, session w2050nginx via ws://192.168.0.125:8125): exit 0, state done, file w2050nginx_20260927_175525.csv, url /exports/w2050nginx_20260927_175525.csv, downloadPort 8123
+  PASS historyExportStatus: state done, downloadPort = 8123, url = /exports/w2050nginx_20260927_175525.csv
+  d7e-download-lan-8123 http://192.168.0.125:8123/exports/w2050nginx_20260927_175525.csv -> 200 (618013 bytes, 0.011293 s, curl 0) 
+  PASS curl http://192.168.0.125:8123/exports/w2050nginx_20260927_175525.csv -> 200, sha256 = file in the export folder (1B057E252727D5810B6A8A267B71340BE3E2A59C242F32DB2FC4B0A1EED5CD81)
+  PASS the response comes from nginx (Server: nginx, attachment)
+  app log lines with w2050nginx_20260927_175525.csv and [AppHttpServer]/[ExportHTTP]: 0
+    [Export] #1 queued: session w2050nginx, web (export folder), range 1788192000 .. 1790502925 s, file D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050nginx_20260927_175525.csv
+    [Export] #1 done: session w2050nginx, 13.0 ms; 3938 row(s), 618013 byte(s), 1 month file(s), count 1.1 ms, total 11.7 ms, 2 chunk(s) of <= 2000 rows, longest chunk read 4.10 ms; cleanup: removed 0 [], failed 0 [], left 20 file(s) / 1072661444 byte(s); 618013 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050nginx_20260927_175525.csv
+  PASS app log has NO [AppHttpServer]/[ExportHTTP] entry for the nginx download (it did not go through Qt)
+  d7e-download-8124-fallback http://127.0.0.1:8124/exports/w2050nginx_20260927_175525.csv -> 200 (618013 bytes, 0.014452 s, curl 0) 
+  PASS 8124 fallback (AppHttpServer /exports) still serves the same file
+    apphttpserver: [AppHttpServer] GET /exports/w2050nginx_20260927_175525.csv from 127.0.0.1 -> 200, 618013 byte(s) streamed from disk
+  PASS positive control: the 8124 request IS logged by AppHttpServer
+  d7e-range-8124 http://127.0.0.1:8124/exports/w2050nginx_20260927_175525.csv -> 200 (618013 bytes, 0.017323 s, curl 0) -r 0-9
+  8124 fallback with Range 0-9 -> 200 (618013 bytes; the fallback does not support Range)
+=== D5/D8: large file w2050big_20260101_000000.csv (1072000033 bytes) via http://192.168.0.125:8123
+  full-download: curl exit 0, -w '200 1072000033 89695564', 46 samples; nginx pids 120884,112500: WS 22.6 MB -> peak 22.6 MB, private 5.9 MB -> peak 5.9 MB; app pid 119992: WS 200.0 MB -> peak 203.4 MB, private 217.5 MB -> peak 225.5 MB
+  PASS full download 200, 1072000033 bytes, sha256 = original
+  PASS nginx memory did not grow with the file (WS +0.0 MB, private +0.0 MB, file 1,022 MB)
+  PASS app memory did not grow (WS +3.4 MB, private +8.0 MB)
+  PASS large file: Accept-Ranges: bytes, ETag "69554880-3fe56c21", Last-Modified Wed, 31 Dec 2025 16:00:00 GMT
+  d8a-range-first-mib http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 206 (1048576 bytes, 0.012826 s, curl 0) -r 0-1048575
+  PASS D8(a) -r 0-1048575 -> 206, Content-Range: bytes 0-1048575/1072000033, body = first MiB
+  d8a-range-middle http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 206 (65536 bytes, 0.001969 s, curl 0) -r 536000016-536065551
+  PASS range in the middle of the file -> 206 with the right bytes
+  d8a-range-suffix http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 206 (100 bytes, 0.001908 s, curl 0) -r -100
+  PASS suffix range -100 -> 206, last 100 bytes
+  d8-range-unsatisfiable http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 416 (190 bytes, 0.001486 s, curl 0) -r 1072000033-
+  PASS range beyond the end -> 416
+  d8-multi-range http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 200 (1072000033 bytes, 11.733046 s, curl 0) -r 0-9,100-109
+  PASS max_ranges 1: two ranges -> 200 with the whole file (no multipart/byteranges)
+  d8c-if-range-current http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 206 (1024 bytes, 0.001742 s, curl 0) -r 0-1023 -H If-Range: \"69554880-3fe56c21\"
+  PASS If-Range with the current ETag -> 206
+  d8c-if-range-stale http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 200 (1072000033 bytes, 11.898838 s, curl 0) -r 0-1023 -H If-Range: \"5f000000-1234\"
+  PASS D8(c) If-Range with an old ETag -> 200 with the whole file (sha256 = original)
+  d8b-interrupted: curl exit 28, -w '200 239239168', 14 samples; nginx pids 120884,112500: WS 22.5 MB -> peak 22.6 MB, private 5.7 MB -> peak 5.8 MB; app pid 119992: WS 199.7 MB -> peak 202.8 MB, private 217.3 MB -> peak 225.2 MB
+  PASS D8(b) download interrupted (curl exit 28 = timeout) after 239239168 of 1072000033 bytes
+  d8b-resume: curl exit 0, -w '206 832760865', 37 samples; nginx pids 120884,112500: WS 22.5 MB -> peak 22.6 MB, private 5.7 MB -> peak 5.8 MB; app pid 119992: WS 199.7 MB -> peak 207.8 MB, private 217.3 MB -> peak 225.4 MB
+  resume response: HTTP/1.1 206 Partial Content; Content-Range: bytes 239239168-1072000032/1072000033
+  PASS resume with curl -C - -> 206, Content-Range: bytes 239239168-1072000032/1072000033
+  PASS resumed file 1072000033 bytes, sha256 = original (CFE41816BC496AB9846DD6DE56C69231D1ABFA325815AF992A8E1F40B012B889)
+  PASS D8(d) nginx memory flat while interrupted + resumed (WS +0.1 / +0.1 MB, private +0.1 MB)
+=== D7 (d): export cleanup (20 files) while nginx is sending the oldest file
+  export folder before: 20 csv file(s)
+  slow download running (curl pid 117332), 128593920 bytes so far
+    | 17:56:31.214 contractHash=fd39899103d98eba5d12df31bcf5c85e5258db080624d494dd4dcaf65326df34
+    | 17:56:31.244 connected to ws://192.168.0.125:8125/mirror (origin http://192.168.0.125:8123)
+    | 17:56:31.246 welcome, connectionSessionId=d24a60e8-797f-42b4-96d5-4e35803c0024
+    | 17:56:31.247 sent historyExportRequested("w2050clean", 1788192000000, 1790502991148) = 2026-09-01T00:00:00 .. 2026-09-27T17:56:31
+    | 17:56:31.249 STATUS {"downloadPort":8123,"fileName":"w2050clean_20260927_175631.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+    | 17:56:31.250 STATUS {"downloadPort":8123,"fileName":"w2050clean_20260927_175631.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":4004,"url":""}
+    | 17:56:31.259 STATUS {"downloadPort":8123,"fileName":"w2050clean_20260927_175631.csv","message":"匯出完成,共 4004 筆","progress":100,"queuePosition":0,"rowsWritten":4004,"savedPath":"","state":"done","totalRows":4004,"url":"/exports/w2050clean_20260927_175631.csv"}
+    | 17:56:31.259 RESULT state=done fileName=w2050clean_20260927_175631.csv url=/exports/w2050clean_20260927_175631.csv downloadPort=8123
+  mirror export (cleanup, session w2050clean via ws://192.168.0.125:8125): exit 0, state done, file w2050clean_20260927_175631.csv, url /exports/w2050clean_20260927_175631.csv, downloadPort 8123
+  PASS second export done (21 files -> cleanup of the oldest)
+    [Export] #1 done: session w2050nginx, 13.0 ms; 3938 row(s), 618013 byte(s), 1 month file(s), count 1.1 ms, total 11.7 ms, 2 chunk(s) of <= 2000 rows, longest chunk read 4.10 ms; cleanup: removed 0 [], failed 0 [], left 20 file(s) / 1072661444 byte(s); 618013 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050nginx_20260927_175525.csv
+    [Export] #2 done: session w2050clean, 10.7 ms; 4004 row(s), 628375 byte(s), 1 month file(s), count 1.4 ms, total 9.1 ms, 3 chunk(s) of <= 2000 rows, longest chunk read 2.75 ms; cleanup: removed 1 [w2050big_20260101_000000.csv], failed 0 [], left 20 file(s) / 1289786 byte(s); 628375 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050clean_20260927_175631.csv
+  after the cleanup: w2050big_20260101_000000.csv exists = False; export folder 20 csv file(s); download still running = True
+  d7d-new-request-after-cleanup http://192.168.0.125:8123/exports/w2050big_20260101_000000.csv -> 404 (146 bytes, 0.361436 s, curl 0) -r 0-9
+  a NEW request for w2050big_20260101_000000.csv after the cleanup -> 404
+  running download finished: curl exit 0, -w '200 1072000033', 1072000033 bytes, sha256 CFE41816BC496AB9846DD6DE56C69231D1ABFA325815AF992A8E1F40B012B889 (original CFE41816BC496AB9846DD6DE56C69231D1ABFA325815AF992A8E1F40B012B889)
+  RESULT (Windows, nginx 1.30.5): the cleanup's QFile::remove of the file being sent SUCCEEDED (nginx opens files with FILE_SHARE_DELETE); the transfer in progress completed with the full, correct file; a new request gets 404
+  PASS cleanup outcome recorded and consistent with the folder (removed -> gone; failed -> logged and kept)
+  PASS the download that was running during the cleanup completed with the correct file
+  ws://127.0.0.1:8125/mirror upgrade -> HTTP/1.1 101 Switching Protocols (curl exit 28; 28 = kept open until --max-time)
+  PASS 127.0.0.1 mirror WebSocket upgrade 8125 -> 101
+  ws://192.168.0.125:8125/mirror upgrade -> HTTP/1.1 101 Switching Protocols (curl exit 28; 28 = kept open until --max-time)
+  PASS 192.168.0.125 mirror WebSocket upgrade 8125 -> 101
+=== nginx-stop.ps1
+  nginx-stop.ps1  -> exit 0
+    | stopping nginx master pid 120884 (workers 112500) with nginx -s quit
+    | stopped: pids 120884,112500 exited; listeners of these pids on 8123: 0
+  PASS nginx-stop.ps1 exit 0: no listener on 8123, our nginx pids (120884,112500) gone
+  PASS no nginx.exe left that this run started
+  app pid 119992 exit code 0
+=== scenario default: TAIDAFLOW_DOWNLOAD_PORT not set
+run-desktop (default):   simulator endpoints listening: 5/5 |   verdict: SAFE | PID=118080 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-050\live\app-default.log PROFILE=simulator (exit 0)
+  PASS app log: not set -> port 8124
+    | 17:57:25.029 contractHash=fd39899103d98eba5d12df31bcf5c85e5258db080624d494dd4dcaf65326df34
+    | 17:57:28.008 connected to ws://127.0.0.1:8125/mirror (origin http://127.0.0.1:8123)
+    | 17:57:28.025 welcome, connectionSessionId=e8379d0d-679b-45e7-a673-49e438b0934f
+    | 17:57:28.027 sent historyExportRequested("w2050default", 1788192000000, 1790503044833) = 2026-09-01T00:00:00 .. 2026-09-27T17:57:24
+    | 17:57:28.031 STATUS {"downloadPort":8124,"fileName":"w2050default_20260927_175728.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+    | 17:57:28.033 STATUS {"downloadPort":8124,"fileName":"w2050default_20260927_175728.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":4045,"url":""}
+    | 17:57:28.046 STATUS {"downloadPort":8124,"fileName":"w2050default_20260927_175728.csv","message":"匯出完成,共 4045 筆","progress":100,"queuePosition":0,"rowsWritten":4045,"savedPath":"","state":"done","totalRows":4045,"url":"/exports/w2050default_20260927_175728.csv"}
+    | 17:57:28.046 RESULT state=done fileName=w2050default_20260927_175728.csv url=/exports/w2050default_20260927_175728.csv downloadPort=8124
+  mirror export (default, session w2050default via ws://127.0.0.1:8125): exit 0, state done, file w2050default_20260927_175728.csv, url /exports/w2050default_20260927_175728.csv, downloadPort 8124
+  PASS historyExportStatus downloadPort = 8124 without the variable
+  default-download-8124 http://127.0.0.1:8124/exports/w2050default_20260927_175728.csv -> 200 (634812 bytes, 0.012472 s, curl 0) 
+  PASS download from the app on 8124 as before
+  app pid 118080 exit code 0
+=== scenario invalid: TAIDAFLOW_DOWNLOAD_PORT=abc
+run-desktop (invalid):   simulator endpoints listening: 5/5 |   verdict: SAFE | PID=123812 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-050\live\app-invalid.log PROFILE=simulator (exit 0)
+  PASS app log: invalid value -> warning, port 8124
+    | 17:57:45.466 contractHash=fd39899103d98eba5d12df31bcf5c85e5258db080624d494dd4dcaf65326df34
+    | 17:57:45.571 connected to ws://127.0.0.1:8125/mirror (origin http://127.0.0.1:8123)
+    | 17:57:45.574 welcome, connectionSessionId=bd8b2c98-1f70-4205-8971-02c5e44eabef
+    | 17:57:45.574 sent historyExportRequested("w2050invalid", 1788192000000, 1790503065382) = 2026-09-01T00:00:00 .. 2026-09-27T17:57:45
+    | 17:57:45.578 STATUS {"downloadPort":8124,"fileName":"w2050invalid_20260927_175745.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+    | 17:57:45.579 STATUS {"downloadPort":8124,"fileName":"w2050invalid_20260927_175745.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":4049,"url":""}
+    | 17:57:45.591 STATUS {"downloadPort":8124,"fileName":"w2050invalid_20260927_175745.csv","message":"匯出完成,共 4049 筆","progress":100,"queuePosition":0,"rowsWritten":4049,"savedPath":"","state":"done","totalRows":4049,"url":"/exports/w2050invalid_20260927_175745.csv"}
+    | 17:57:45.592 RESULT state=done fileName=w2050invalid_20260927_175745.csv url=/exports/w2050invalid_20260927_175745.csv downloadPort=8124
+  mirror export (invalid, session w2050invalid via ws://127.0.0.1:8125): exit 0, state done, file w2050invalid_20260927_175745.csv, url /exports/w2050invalid_20260927_175745.csv, downloadPort 8124
+  PASS historyExportStatus downloadPort = 8124 with an invalid value
+  app pid 123812 exit code 0
+simulator pid 55408 closed
+  PASS end: no listener on 502/8123/8124/8125/18125
+fixtures removed; export folder now: 0 csv file(s)
+removed large body 004-wasm-identity-127.0.0.1.body (33828575 bytes, sha256 E44EBE1E3C6BD547BCE0744FF9526D28EFF136538942C0B3D7DDC4BFE5C4F75A)
+removed large body 005-wasm-gzip-127.0.0.1.body (12447235 bytes, sha256 5CD5820DAD6B56F74D64010DC95F258316F40801837C0CE1347DF6EF5255FFE8)
+removed large body 010-TaidaFlowApp.js-127.0.0.1.body (304976 bytes, sha256 4C4F1106D5435EC4DF81F828A1C4E2024D68E9C4D58737808992B3E5DAF531DD)
+removed large body 047-wasm-identity-192.168.0.125.body (33828575 bytes, sha256 E44EBE1E3C6BD547BCE0744FF9526D28EFF136538942C0B3D7DDC4BFE5C4F75A)
+removed large body 048-wasm-gzip-192.168.0.125.body (12447235 bytes, sha256 5CD5820DAD6B56F74D64010DC95F258316F40801837C0CE1347DF6EF5255FFE8)
+removed large body 053-TaidaFlowApp.js-192.168.0.125.body (304976 bytes, sha256 4C4F1106D5435EC4DF81F828A1C4E2024D68E9C4D58737808992B3E5DAF531DD)
+removed large body 093-buildfolder-wasm.body (33828575 bytes, sha256 E44EBE1E3C6BD547BCE0744FF9526D28EFF136538942C0B3D7DDC4BFE5C4F75A)
+removed large body 133-d7e-download-lan-8123.body (618013 bytes, sha256 1B057E252727D5810B6A8A267B71340BE3E2A59C242F32DB2FC4B0A1EED5CD81)
+removed large body 134-d7e-download-8124-fallback.body (618013 bytes, sha256 1B057E252727D5810B6A8A267B71340BE3E2A59C242F32DB2FC4B0A1EED5CD81)
+removed large body 135-d7e-range-8124.body (618013 bytes, sha256 1B057E252727D5810B6A8A267B71340BE3E2A59C242F32DB2FC4B0A1EED5CD81)
+removed large body 136-d8a-range-first-mib.body (1048576 bytes, sha256 BC6F10DAD895767D4ADEF62C4C1FE6D127ADA8083444F47A463F2496AA73DC86)
+removed large body 144-default-download-8124.body (634812 bytes, sha256 A760DDBF4EB44B605DBFD6A10DBADF651E1A55147B392D0FA23C86BDFCC2048A)
+RESULT: 0 failed check(s)

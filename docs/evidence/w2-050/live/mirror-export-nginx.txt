@@ -1,0 +1,8 @@
+18:06:46.140 contractHash=fd39899103d98eba5d12df31bcf5c85e5258db080624d494dd4dcaf65326df34
+18:06:46.176 connected to ws://192.168.0.125:8125/mirror (origin http://192.168.0.125:8123)
+18:06:46.178 welcome, connectionSessionId=eb77230b-2ec7-49dc-b4a8-15d795e772ef
+18:06:46.179 sent historyExportRequested("w2050nginx", 1788192000000, 1790503606101) = 2026-09-01T00:00:00 .. 2026-09-27T18:06:46
+18:06:46.181 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_180646.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+18:06:46.182 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_180646.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":4068,"url":""}
+18:06:46.191 STATUS {"downloadPort":8123,"fileName":"w2050nginx_20260927_180646.csv","message":"匯出完成,共 4068 筆","progress":100,"queuePosition":0,"rowsWritten":4068,"savedPath":"","state":"done","totalRows":4068,"url":"/exports/w2050nginx_20260927_180646.csv"}
+18:06:46.192 RESULT state=done fileName=w2050nginx_20260927_180646.csv url=/exports/w2050nginx_20260927_180646.csv downloadPort=8123

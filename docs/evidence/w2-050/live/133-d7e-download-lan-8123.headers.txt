@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Sun, 27 Sep 2026 10:06:46 GMT
+Content-Type: text/csv; charset=utf-8
+Content-Length: 638423
+Last-Modified: Sun, 27 Sep 2026 10:06:46 GMT
+Connection: keep-alive
+ETag: "6ab8eab6-9bdd7"
+Content-Disposition: attachment; filename="w2050nginx_20260927_180646.csv"
+Cache-Control: no-store
+Access-Control-Allow-Origin: *
+Accept-Ranges: bytes
+

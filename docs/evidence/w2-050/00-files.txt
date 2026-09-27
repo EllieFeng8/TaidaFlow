@@ -1,0 +1,36 @@
+ M Core/HistoryExport.cpp
+ M Core/HistoryExport.h
+ M Core/core.cpp
+ M README.md
+ M scripts/deploy-web.ps1
+ M scripts/safety_probe.ps1
+?? deploy/nginx/taidaflow.conf
+?? docs/evidence/w2-050/00-diff.txt
+?? docs/evidence/w2-050/00-files.txt
+?? docs/evidence/w2-050/01-nginx-download-verify.txt
+?? docs/evidence/w2-050/20-build-desktop-fresh.exitcode.txt
+?? docs/evidence/w2-050/20-build-desktop-fresh.log
+?? docs/evidence/w2-050/21-build-wasm-release-fresh.exitcode.txt
+?? docs/evidence/w2-050/21-build-wasm-release-fresh.log
+?? docs/evidence/w2-050/22-build-mirror-client.log
+?? docs/evidence/w2-050/23-checks.txt
+?? docs/evidence/w2-050/24-qtest-w2041.exitcode.txt
+?? docs/evidence/w2-050/24-qtest-w2041.log
+?? docs/evidence/w2-050/24b-verify-export-csv.exitcode.txt
+?? docs/evidence/w2-050/24b-verify-export-csv.txt
+?? docs/evidence/w2-050/25-qtest-w2045.exitcode.txt
+?? docs/evidence/w2-050/25-qtest-w2045.log
+?? docs/evidence/w2-050/30-verify-nginx.console.txt
+?? docs/evidence/w2-050/30-verify-nginx.exitcode.txt
+?? docs/evidence/w2-050/30-verify-nginx.stderr.txt
+?? docs/evidence/w2-050/safety-probe.log
+?? docs/evidence/w2-050/tools/build-mirror-client.bat
+?? docs/evidence/w2-050/tools/disable-symlinks-probe.conf
+?? docs/evidence/w2-050/tools/make_big_csv.py
+?? docs/evidence/w2-050/tools/mirror-export-client/CMakeLists.txt
+?? docs/evidence/w2-050/tools/mirror-export-client/main.cpp
+?? docs/evidence/w2-050/tools/verify-nginx.ps1
+?? scripts/nginx-start.ps1
+?? scripts/nginx-stop.ps1
+?? scripts/nginx-web.ps1
+?? docs/evidence/w2-050/live/ (316 files: summary.txt, app/nginx logs, request headers/bodies)

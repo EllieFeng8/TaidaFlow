@@ -1,0 +1,4 @@
+REFUSED: the export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports is or holds 1 symbolic link(s) / junction(s); nginx for
+  Windows has no disable_symlinks and would serve files outside the folder through them:
+    D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports\w2050junction_20260101_000000.csv
+  remove them by hand (rmdir <junction> removes only the link) - nginx NOT started / reloaded

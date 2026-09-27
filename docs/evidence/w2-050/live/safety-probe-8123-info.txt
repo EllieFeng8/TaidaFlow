@@ -1,0 +1,13 @@
+=== safety probe 2026-09-27T18:05:49.711+08:00 reason="w2-050 D6: 8123 listener is information only" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 0.0.0.0:8123 pid=126000 (nginx)
+  port 8123 = nginx web front end (scripts\nginx-start.ps1) -> information only, does not block the launch
+  verdict: SAFE

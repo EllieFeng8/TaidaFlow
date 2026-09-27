@@ -1,0 +1,26 @@
+2026/09/27 17:29:00 [warn] 95728#87416: duplicate MIME type "text/html" in D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf:69
+2026/09/27 17:29:00 [emerg] 95728#87416: "proxy_busy_buffers_size" must be less than the size of all "proxy_buffers" minus one buffer in D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf:136
+2026/09/27 17:29:14 [emerg] 106256#106476: "proxy_busy_buffers_size" must be less than the size of all "proxy_buffers" minus one buffer in D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf:136
+2026/09/27 17:29:32 [error] 92860#100136: *4 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /exports/x_20260927_120000.csv HTTP/1.1", upstream: "http://127.0.0.1:8124/exports/x_20260927_120000.csv", host: "127.0.0.1:8123"
+2026/09/27 17:29:43 [notice] 18000#106300: signal process started
+2026/09/27 17:37:46 [notice] 48024#100928: signal process started
+2026/09/27 17:38:04 [notice] 105216#97640: signal process started
+2026/09/27 17:50:26 [notice] 110516#120116: signal process started
+2026/09/27 17:50:29 [notice] 107752#106820: signal process started
+2026/09/27 17:50:31 [error] 116928#110300: *102 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "127.0.0.1:8123"
+2026/09/27 17:50:31 [error] 116928#110300: *120 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 17:51:33 [error] 116928#110300: *137 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/w2050big_20260101_000000.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/w2050big_20260101_000000.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 17:52:06 [notice] 44336#73620: signal process started
+2026/09/27 17:53:14 [notice] 110348#117496: signal process started
+2026/09/27 17:55:16 [notice] 113476#94020: signal process started
+2026/09/27 17:55:21 [notice] 111248#112284: signal process started
+2026/09/27 17:55:23 [error] 112500#122824: *108 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "127.0.0.1:8123"
+2026/09/27 17:55:24 [error] 112500#122824: *126 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 17:56:32 [error] 112500#122824: *143 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/w2050big_20260101_000000.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/w2050big_20260101_000000.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 17:57:05 [notice] 116224#114336: signal process started
+2026/09/27 18:06:40 [notice] 106584#101576: signal process started
+2026/09/27 18:06:43 [notice] 113160#124332: signal process started
+2026/09/27 18:06:44 [error] 124348#106408: *108 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "127.0.0.1:8123"
+2026/09/27 18:06:45 [error] 124348#106408: *126 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/nothere_20260102_000001.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/nothere_20260102_000001.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 18:07:46 [error] 124348#106408: *143 CreateFile() "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports/w2050big_20260101_000000.csv" failed (2: The system cannot find the file specified), client: 192.168.0.125, server: _, request: "GET /exports/w2050big_20260101_000000.csv HTTP/1.1", host: "192.168.0.125:8123"
+2026/09/27 18:08:16 [notice] 111692#30936: signal process started

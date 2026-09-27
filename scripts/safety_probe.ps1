@@ -8,7 +8,8 @@
 # This script only *observes*; it never sends a Modbus frame:
 #   1. TCP connect (no payload) to 192.168.1.201..205:502 with a 1.5 s timeout, then close.
 #   2. Lists local serial ports (.NET GetPortNames + registry SERIALCOMM + PnP "(COMx)").
-#   3. Lists TCP listeners on 502 (Core's Modbus server), 8124 (Core's HTTP service: web
+#   3. Lists TCP listeners on 502 (Core's Modbus server), 8123 (nginx web front end, information
+#      only - never blocks), 8124 (Core's HTTP service: web
 #      page + CSV downloads, AppHttpServer, w2-049), 8125 (public mirror port = the desktop's LAN relay
 #      0.0.0.0:8125, App/lanrelay.h) and 18125 (the desktop's internal mirror server,
 #      127.0.0.1:18125; merged from main e4bc327 / w2-042).
@@ -19,8 +20,11 @@
 # desktop app must not be started.  A listener on 8125 (LAN relay), 18125 (internal mirror)
 # or 8124 (web page + CSV downloads) also blocks (exit 4, BUSY), because a stale desktop
 # instance would make the result ambiguous (and the new instance could not bind it).
-# (w2-049: the web page is served by the desktop app itself on 8124; port 8123 is no longer
-# used and not checked.)
+# Port 8123 (w2-050) = the optional nginx web front end (scripts/nginx-start.ps1): it only serves
+# static files (the deployed web page and the CSV files of the export folder), it never talks to
+# the plant and the app does not bind 8123. Its listeners are therefore listed for INFORMATION ONLY and never change
+# the verdict (nginx may run before, during or after the desktop app; it is not stopped).
+# (w2-049: the desktop app itself serves the web page on 8124.)
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\safety_probe.ps1 -Reason "before run 1"
 #
@@ -116,10 +120,10 @@ if ($allSerial -match '(?i)\bCOM2\b') {
 
 # 3. Local listeners.
 $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
-            Where-Object { $_.LocalPort -in 502, 8124, 8125, 18125 })
+            Where-Object { $_.LocalPort -in 502, 8123, 8124, 8125, 18125 })
 $simListening = @()
 if ($listen.Count -eq 0) {
-    $lines.Add("  listeners 502/8124/8125/18125: <none>")
+    $lines.Add("  listeners 502/8123/8124/8125/18125: <none>")
 } else {
     foreach ($l in $listen) {
         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
@@ -139,6 +143,7 @@ if ($listen.Count -eq 0) {
         elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
         elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror LAN relay) already in use -> stale desktop instance, do not launch") }
         elseif ($l.LocalPort -eq 18125) { $busy = $true; $lines.Add("  port 18125 (internal mirror) already in use -> stale desktop instance, do not launch") }
+        elseif ($l.LocalPort -eq 8123) { $lines.Add("  port 8123 = nginx web front end (scripts\nginx-start.ps1) -> information only, does not block the launch") }
         elseif ($l.LocalPort -eq 8124) { $busy = $true; $lines.Add("  port 8124 (web page + CSV downloads) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
     }
 }

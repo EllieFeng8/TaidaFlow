@@ -12,9 +12,17 @@
 #      time as its file (a .gz older than its file is never served);
 #   3. the old content of <exe folder>\web is removed first, so HTML/JS/WASM of different builds
 #      never mix.
+#   4. (w2-050) symbolic links / junctions (reparse points): the old web folder is NOT removed when
+#      it is a link or holds one (Remove-Item could follow it), and after copying the new web folder
+#      is scanned again; nginx for Windows (scripts\nginx-start.ps1, port 8123) has no
+#      disable_symlinks and would serve files outside the folder through a link.
+# The same folder is served by nginx on 8123 (scripts\nginx-start.ps1) - run scripts\nginx-web.ps1
+# -Action reload (or stop + start) after deploying while nginx runs; ETag revalidation picks up the
+# new files anyway.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1
 #            [-Source build\wasm-release] [-ExeDir build\desktop] [-NoGzip]
-# Exit 0 = deployed; 2 = source incomplete / exe folder missing.
+# Exit 0 = deployed; 2 = source incomplete / exe folder missing; 5 = symbolic link / junction found
+# (old folder not removed, or the new folder holds one - do not serve it).
 param(
     [string]$Source = "",
     [string]$ExeDir = "",
@@ -38,8 +46,34 @@ if (-not (Test-Path $ExeDir -PathType Container)) {
     exit 2
 }
 
+# Symbolic links / junctions anywhere below (or at) a folder; links are not followed.
+function Find-ReparsePoints([string]$dir) {
+    $found = New-Object System.Collections.Generic.List[string]
+    $top = New-Object System.IO.DirectoryInfo $dir
+    if ($top.Attributes -band [System.IO.FileAttributes]::ReparsePoint) { $found.Add($top.FullName); return ,$found }
+    $stack = New-Object System.Collections.Generic.Stack[System.IO.DirectoryInfo]
+    $stack.Push($top)
+    while ($stack.Count -gt 0) {
+        $d = $stack.Pop()
+        foreach ($e in $d.EnumerateFileSystemInfos()) {
+            if ($e.Attributes -band [System.IO.FileAttributes]::ReparsePoint) { $found.Add($e.FullName) }
+            elseif ($e -is [System.IO.DirectoryInfo]) { $stack.Push($e) }
+        }
+    }
+    return ,$found
+}
+
 $web = Join-Path $ExeDir 'web'
-if (Test-Path $web) { Remove-Item -LiteralPath $web -Recurse -Force }
+if (Test-Path $web) {
+    $links = Find-ReparsePoints $web
+    if ($links.Count -gt 0) {
+        Write-Output "REFUSED: $web is or holds $($links.Count) symbolic link(s) / junction(s) - not removed, nothing deployed:"
+        $links | ForEach-Object { Write-Output "  $_" }
+        Write-Output "remove the link(s) by hand (rmdir <junction> removes only the link), then deploy again"
+        exit 5
+    }
+    Remove-Item -LiteralPath $web -Recurse -Force
+}
 New-Item -ItemType Directory -Force $web | Out-Null
 
 $copyTypes = '.html', '.js', '.mjs', '.wasm', '.css', '.json', '.svg', '.png', '.ico'
@@ -69,6 +103,14 @@ foreach ($f in $files) {
     }
     Write-Output $line
 }
+$links = Find-ReparsePoints $web
+if ($links.Count -gt 0) {
+    Write-Output "REFUSED: the deployed folder $web holds $($links.Count) symbolic link(s) / junction(s) - do not serve it:"
+    $links | ForEach-Object { Write-Output "  $_" }
+    exit 5
+}
 Write-Output ("deployed {0} file(s), {1} bytes (+{2} bytes .gz) from {3} to {4}" -f $files.Count, $total, $totalGz, $Source, $web)
+Write-Output "no symbolic links / junctions in $web"
 Write-Output "the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)"
+Write-Output "nginx serves them at http://<host>:8123/TaidaFlowApp.html (scripts\nginx-start.ps1)"
 exit 0

@@ -1,0 +1,3 @@
+no nginx started by this script is running (runtime D:\repo\codex\qmlTester\taidaflow\build\nginx) - nothing stopped
+  other nginx (not started by this script, not touched): pid=104444 C:\tools\nginx\nginx-1.30.5\nginx.exe
+  other nginx (not started by this script, not touched): pid=126000 C:\tools\nginx\nginx-1.30.5\nginx.exe

@@ -1,0 +1,15 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Sun, 27 Sep 2026 10:06:38 GMT
+Content-Type: text/javascript; charset=utf-8
+Content-Length: 12354
+Last-Modified: Sun, 27 Sep 2026 10:02:26 GMT
+Connection: keep-alive
+Vary: Accept-Encoding
+ETag: "6ab8e9b2-3042"
+Cache-Control: no-cache
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
+Accept-Ranges: bytes
+

@@ -1,0 +1,13 @@
+HTTP/1.1 206 Partial Content
+Server: nginx
+Date: Sun, 27 Sep 2026 10:07:03 GMT
+Content-Type: text/csv; charset=utf-8
+Content-Length: 100
+Last-Modified: Wed, 31 Dec 2025 16:00:00 GMT
+Connection: keep-alive
+ETag: "69554880-3fe56c21"
+Content-Disposition: attachment; filename="w2050big_20260101_000000.csv"
+Cache-Control: no-store
+Access-Control-Allow-Origin: *
+Content-Range: bytes 1071999933-1072000032/1072000033
+

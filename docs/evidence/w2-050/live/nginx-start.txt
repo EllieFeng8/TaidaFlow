@@ -1,0 +1,11 @@
+nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from C:\tools\nginx (newest version))
+config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+nginx -t:
+  | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+  | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+NGINX_PID=106576 WORKERS=113960 PIDFILE=106576
+WEBROOT=D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+EXPORTDIR=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+RUNTIME=D:\repo\codex\qmlTester\taidaflow\build\nginx
+URL=http://<this host's IPv4>:8123/TaidaFlowApp.html  downloads: http://<this host's IPv4>:8123/exports/<file>
+(start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=8123 so that its download links point here)

@@ -1,0 +1,3 @@
+REFUSED: D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exe\web is or holds 1 symbolic link(s) / junction(s) - not removed, nothing deployed:
+  D:\repo\codex\qmlTester\taidaflow\build\w2-050-junction\exe\web\linked
+remove the link(s) by hand (rmdir <junction> removes only the link), then deploy again

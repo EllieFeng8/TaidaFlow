@@ -28,7 +28,8 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
   TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8124/8125/18125 是否
   已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
   區網轉發)、18125(內部 mirror)或 8124(網頁 + CSV 下載)已被占用 → 不啟動(exit 4 `BUSY`,
-  不會關掉別人的程式)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`(`-LogFile` 可改)。
+  不會關掉別人的程式)。8123(nginx 網頁前端,w2-050)只列出、**僅供參考,不阻擋啟動**(nginx 只送
+  靜態檔,不碰設備;app 也不綁 8123)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`(`-LogFile` 可改)。
 - desktop 另在 `0.0.0.0:8124` 開 HTTP 服務(網頁 + CSV 下載)、在 `0.0.0.0:8125` 開 mirror 區網轉發
   (內網、都不做存取控管;只提供網頁資料夾的網頁檔與匯出資料夾裡的檔,見下方)。
 - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
@@ -126,14 +127,98 @@ HttpServer 的可重用類別,用法見該資料夾的 `README.md`)提供 HTTP,�
   - `/` → 302 `/TaidaFlowApp.html`;不列目錄;支援 `HEAD`;`GET`/`HEAD` 以外 405。
   - 路徑穿越一律 400/403/404:`..`、`%2e%2e`、`%2f`/`%5c`/反斜線、磁碟代號與 `:`、`//`、結尾 `.`/空白、
     裝置名(`NUL`、`CON` …)、`.` 開頭的隱藏檔,以及網頁資料夾**底下**的符號連結 / junction(不跟隨)。
-- 下載網址不變:`http://<pageHost>:8124/exports/<檔名>`(main 的 QML / Proxy 不需改);網頁現在也在
-  8124,下載與網頁同源。
+- 下載網址:`http://<pageHost>:<downloadPort>/exports/<檔名>`(main 的 QML / Proxy 不需改)。
+  `downloadPort` 預設 8124(本服務);app 以 `TAIDAFLOW_DOWNLOAD_PORT=8123` 啟動時改由 nginx 送檔,
+  見下一節。8124 的 `/exports` 一直保留,作為備援。
+
+### nginx 網頁前端與下載(8123,w2-050)
+
+nginx 是**另一個程式**,取代舊的 `serve_wasm.py` 做網頁前端:從部署好的網頁資料夾送網頁,並**直接從
+app 的匯出資料夾**送歷史 CSV(下載不經過 Qt、支援續傳)。app 內建的 8124 照常運作,兩個網址都能用:
+
+- `http://<IP>:8123/TaidaFlowApp.html`(nginx)
+- `http://<IP>:8124/TaidaFlowApp.html`(desktop app 內建 `AppHttpServer`)
+
+**安裝 nginx**(一次,repo 外):從 <https://nginx.org/en/download.html> 取 **Stable** 版 Windows zip
+與 `.asc`,以 <https://nginx.org/keys/> 的金鑰用 gpg 驗簽(Git for Windows 內附
+`C:\Program Files\Git\usr\bin\gpg.exe`,`gpg --verify nginx-<版本>.zip.asc nginx-<版本>.zip` 要是
+`Good signature`),解壓到 `C:\tools\nginx\nginx-<版本>\`。目前用 **1.30.5**(SHA-256
+`e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35`,2,776,622 bytes,
+簽章者 Sergey Kandaurov `D6786CE303D9A9022998DC6CC8464D549AF75C0A`;證據 `docs/evidence/w2-050/01-*`)。
+
+**部署與啟動**:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1        # build\wasm-release -> <exe>\web + .gz
+# app 以 8123 當下載連結的 port(不設就維持 8124);run-desktop.ps1 會把環境變數帶給 app
+$env:TAIDAFLOW_DOWNLOAD_PORT = '8123'
+powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "with nginx"
+powershell -ExecutionPolicy Bypass -File scripts\nginx-start.ps1        # 0.0.0.0:8123
+# ...
+powershell -ExecutionPolicy Bypass -File scripts\nginx-stop.ps1         # nginx -s quit(只停自己起的)
+```
+
+- 設定檔 `deploy/nginx/taidaflow.conf` 是**樣板**;`scripts\nginx-web.ps1`(`nginx-start.ps1` /
+  `nginx-stop.ps1` 是它的 `-Action start|stop` 捷徑,另有 `reload`、`test`、`status`)把
+  `@TAIDAFLOW_WEB_ROOT@`(預設 `<exe 資料夾>\web`,`-WebRoot` 覆寫)與 `@TAIDAFLOW_EXPORT_DIR@`
+  (= app 工作目錄 `\exports`,預設 `build\runtime-cwd\exports`,`-ExportDir` 覆寫)填入後寫到 runtime
+  資料夾(預設 `build\nginx\`:`conf\`、`logs\`、`temp\`、狀態檔 `taidaflow-nginx.json`),先
+  `nginx -t`,通過才以 `nginx -p <runtime>/ -c <runtime>/conf/taidaflow.conf` 啟動。nginx 本體的資料夾
+  不被寫入。
+- 找 nginx.exe:`-Nginx <exe 或資料夾>` → 環境變數 `TAIDAFLOW_NGINX` → `C:\tools\nginx\nginx-*\`
+  最新版。
+- 腳本規則與 exit code:0 完成;1 沒有本腳本起的 nginx 在跑(stop/reload/status);2 找不到 nginx /
+  網頁資料夾 / `TaidaFlowApp.html`,或路徑含設定檔不能用的字元;3 `nginx -t` 失敗(不啟動);4 8123 已被
+  占用(不啟動,也不關掉占用者)或已在跑;5 網頁資料夾或匯出資料夾是/含有符號連結、junction;6 起來但
+  時限內沒 listen(已停掉);7 停止失敗。**停止只針對本腳本起的那個 nginx**(狀態檔的 pid + 映像檔路徑 +
+  啟動時間 + `logs\nginx.pid` 都要相符),用 `nginx -s quit`(時限內沒結束才 `-s stop`);別的 nginx 一律不動。
+- 網頁規則與 app 的 8124 相同:MIME(`.wasm` = `application/wasm`、`.html` / `.js` 帶
+  `charset=utf-8`)、只送網頁檔副檔名(`html js mjs wasm css json map svg png jpg ico ttf otf woff
+  woff2`,其他如 `CMakeCache.txt`、`build.ninja`、`.gz` 本身 → 404)、`.` 開頭 404、不列目錄、
+  `/` → 302 `/TaidaFlowApp.html`、`etag on` + `Cache-Control: no-cache`(HTML 與其他檔都每次重新
+  驗證,新 build 一定拿到新版)、`gzip_static on` 送 `deploy-web.ps1` 產生的 `.gz`(`Vary:
+  Accept-Encoding`)、COOP `same-origin` / COEP `require-corp` / CORP `same-origin`、
+  `server_tokens off`(錯誤頁只有 `nginx`,不含版本與路徑)。路徑穿越由 nginx 先正規化(`..`、`%2e`、
+  `\`)再比對,離開根目錄 → 400。
+- **Windows 版 nginx 沒有 `disable_symlinks`**(nginx.org 文件:只在有 `openat()`/`fstatat()` 的系統;
+  1.30.5 `nginx -t` 回 `unknown directive`),會跟隨網頁資料夾裡的 junction(實測見
+  `docs/evidence/w2-050/live/`)。所以 `nginx-start.ps1` / `reload` 會掃描網頁資料夾與匯出資料夾,有
+  reparse point(符號連結、junction)就拒絕(exit 5);`deploy-web.ps1` 也不會刪除含連結的舊網頁資料夾
+  (避免 `Remove-Item` 跟著刪到目標),複製後再掃一次。nginx 執行中才建立的連結掃不到:`/exports` 內名稱
+  像匯出檔的**資料夾**(junction)一律 404;檔案符號連結需要系統管理員權限才能建立,不在防護範圍。
+- nginx 在 Windows **不是服務**,開機不會自己起來;本專案不註冊服務。需要開機自動啟動時的選項(未做):
+  工作排程器「開機時 / 登入時」執行 `nginx-start.ps1`;以 WinSW / NSSM 之類的服務包裝器註冊成服務;
+  或由啟動 desktop app 的同一個登入腳本一起啟動。
+- Windows 首次有程式 listen `0.0.0.0` 時可能跳出防火牆詢問視窗;腳本不改防火牆。
+
+**下載(`/exports/`,nginx 直送)**:
+
+- 只送 `^/exports/[A-Za-z0-9_-]{1,40}_\d{8}_\d{6}\.csv$`(與 Core 的 `isValidExportFileName` 相同),
+  其他(子資料夾、別的副檔名、`..`、編碼過的斜線、太長的 sessionId …)一律 404。回應
+  `Content-Type: text/csv; charset=utf-8`、`Content-Disposition: attachment; filename="<檔名>"`、
+  `Cache-Control: no-store`、`Access-Control-Allow-Origin: *`,從磁碟串流(nginx 與 app 記憶體不隨檔案
+  大小成長,實測見證據)。
+- Core:`TAIDAFLOW_DOWNLOAD_PORT=<1..65535>` → `historyExportStatus` 的 `downloadPort`(網頁連結
+  `http://<pageHost>:8123/exports/<檔名>`);不設 → 8124(原樣);不是合法 port → 記 warning、用 8124。
+  log:`[Export] TAIDAFLOW_DOWNLOAD_PORT=8123 - download links use port 8123 (...)` 與
+  `[Export] web export folder ... download links -> port 8123`。
+- **續傳(HTTP Range)**:`Accept-Ranges: bytes`、`ETag`、`Last-Modified`;`Range` → 206 +
+  `Content-Range`;`If-Range` 與目前 ETag 相符才 206,不符(檔案換了)→ 200 整檔;`/exports` 不開 gzip、
+  不經 proxy,也沒有其他會改內容的 filter。`max_ranges 1`:一次只允許一個區段(續傳只需要一段);多區段
+  要求改回 200 整檔,不產生 multipart 回應(避免用大量小區段放大負載)。
+  - 續傳的前提是檔案**還在**匯出資料夾:清理規則(超過 20 個或 2 GB 刪最舊的)可能已把它刪掉,之後的
+    續傳 / 重新下載會 404。
+  - **8124(`AppHttpServer` 備援)不支援續傳**:`Range` 被忽略,一律 200 整檔。
+- 清理遇到 nginx 正在送的檔:Core 照舊用 `QFile::remove`,刪不掉就記 log 跳過、下次再刪。Windows 上
+  nginx 1.30.5 開檔時允許刪除(`FILE_SHARE_DELETE`),實測刪除**成功**,傳送中的下載仍完整送完(同一個
+  SHA-256),之後的新要求 404(`docs/evidence/w2-050/live/summary.txt` 的 D7 (d) 段)。
 
 ### 區網連線(mirror,合併自 main e4bc327 / w2-042)
 
 | 端點 | 綁定 | 用途 |
 |---|---|---|
-| 網頁 + CSV 下載(`AppHttpServer`,desktop app) | `0.0.0.0:8124` | 區網電腦開 `http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>` |
+| nginx 網頁前端(`scripts\nginx-start.ps1`,另一個程式) | `0.0.0.0:8123` | 網頁 `http://<IP>:8123/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>` 由 nginx 直接從匯出資料夾送(支援續傳) |
+| 網頁 + CSV 下載(`AppHttpServer`,desktop app) | `0.0.0.0:8124` | 區網電腦開 `http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>`(備援,不支援續傳) |
 | mirror 區網轉發(`App/lanrelay.h`) | `0.0.0.0:8125` | 網頁連的公開 mirror port;每條連線原樣雙向轉發到 `127.0.0.1:18125` |
 | Mirror server(pack) | `127.0.0.1:18125` | 內部 port,只限本機,區網位址連不到 |
 
@@ -141,7 +226,7 @@ HttpServer 的可重用類別,用法見該資料夾的 `README.md`)提供 HTTP,�
   `127.0.0.1` 並記 warning。所以從哪個位址開網頁,就連回同一個位址的 8125。
 - Mirror `allowedOrigins = {}`(空清單 = 不限制 Origin);內網系統,依 Mango 決定不做存取控管,
   轉發也不做來源限制。
-- 別台電腦要連進來,Windows 防火牆需放行 **8124/8125**(TCP 輸入;8123 已不再使用)。這由**管理員**設定,
+- 別台電腦要連進來,Windows 防火牆需放行 **8123/8124/8125**(TCP 輸入;8123 = nginx,只在有跑 nginx 時需要)。這由**管理員**設定,
   本專案的腳本不改防火牆 / 網路設定;首次啟動 Windows 可能跳出防火牆詢問視窗。
 - 轉發是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
   正式開關後,改由 Mirror 直接綁 `0.0.0.0:8125`,並刪除 `App/lanrelay.h` 與 `main.cpp` 中的使用。
@@ -241,6 +326,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   列數、每格內容與 fixture 一致,且各檔位元組相同。
 - 舊的 Python 開發網頁伺服器(8123)與它的 E2E 證據收集模式(頁面截圖 / console / Blob 下載上傳)
   已隨 w2-049 移除,網頁改由 desktop 的 `AppHttpServer` 提供;`docs/evidence/` 下的歷史證據不變。
+  8123 自 w2-050 起改給 nginx 網頁前端(見「nginx 網頁前端與下載」)。
 - `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
 
 ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
@@ -284,7 +370,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   `state = cancelled`(「已取消儲存」)。
 - **網頁**:寫到 **`<desktop 工作目錄>\exports\`**(正式執行即 `build\runtime-cwd\exports\`;與 `data\`、
   `settings.sqlite` 同一個基準,重開 app 後連結仍有效)。完成時 `url = "/exports/<檔名>"`、
-  `downloadPort = 8124`。Core 不知道網頁用哪個主機名稱,所以只送路徑 + port;下載連結由網頁組成
+  `downloadPort = 8124`(w2-050 起可由 `TAIDAFLOW_DOWNLOAD_PORT` 設定,用 nginx 時設 8123,見「nginx
+  網頁前端與下載」)。Core 不知道網頁用哪個主機名稱,所以只送路徑 + port;下載連結由網頁組成
   (`HistoryPage.qml` 的 `exportDownloadUrl()`):`url` 以 `/` 開頭 → `"http://" + Td.pageHost + ":" +
   downloadPort + url`(downloadPort 缺少時用 8124),例如 `http://192.168.0.125:8124/exports/<檔名>`;
   已是 `http...` 的完整網址則原樣使用。`Td.pageHost` 是 Proxy 的 **`STORED false`** 本機屬性(不進 Mirror
@@ -301,6 +388,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   `Cache-Control: no-store`、`Content-Length`;檔案以 `QHttpServerResponder::write(QIODevice*)` 從磁碟
   分段送出(不整檔讀進記憶體)。不存在 404、壞檔名 400、其他方法 405。
   綁定失敗只記 warning,app 繼續執行(網頁匯出檔仍會寫出)。
+  用 nginx 時(`TAIDAFLOW_DOWNLOAD_PORT=8123`)下載改由 nginx 直接從匯出資料夾送(支援 Range 續傳),
+  8124 的掛載保留作備援(不支援 Range)。
 - 舊的 `Td.saveHistoryCsv()`(Q_INVOKABLE,前端組 10 筆 CSV)**已刪除**(main w2-042 自
   `TaidaFlowProxy.h` 移除,已合併進本分支);CSV 一律走上述匯出佇列。`docs/wasm-integration-report.md`
   中關於它的段落是歷史紀錄。
@@ -342,6 +431,14 @@ python -B docs\evidence\w2-041\tools\verify_export_csv.py "build\w2-049-w2041-qt
 :: 5c. (w2-049) AppHttpServer 單例的獨立 QTest(靜態 200/304/gzip/MIME/HEAD/COOP-COEP、穿越攻擊、
 ::     下載掛載、自訂路由、綁定失敗、多執行緒註冊、1 GiB 串流記憶體;需約 2 GiB 暫存磁碟空間)
 scripts\run-apphttpserver-tests.bat
+:: 5d. (w2-050) nginx 網頁前端 + nginx 直送下載:部署 → 連結實驗(junction)與腳本規則(別人的 nginx 不動、
+::     8123 被占用不啟動、含連結的資料夾拒絕)→ 模擬器 → 安全探測 SAFE → app(TAIDAFLOW_DOWNLOAD_PORT=8123)
+::     → nginx-start → 127.0.0.1 與區網 IP 對 8123 的網頁 / 穿越 / /exports 檢查 → 經 Mirror 要求匯出
+::     (與網頁相同流程,工具 build\w2-050-mirror-client)→ nginx 下載 SHA-256 相同、app log 無該筆請求 →
+::     1 GB 檔的 Range / 中斷續傳 / If-Range / 記憶體 → 傳送中清理 → nginx-stop;再以未設 / 無效的
+::     TAIDAFLOW_DOWNLOAD_PORT 啟動確認 downloadPort = 8124。需先建 mirror client 工具。
+docs\evidence\w2-050\tools\build-mirror-client.bat
+powershell -ExecutionPolicy Bypass -File docs\evidence\w2-050\tools\verify-nginx.ps1
 :: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
 python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
 ```

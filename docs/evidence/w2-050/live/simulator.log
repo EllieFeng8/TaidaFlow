@@ -1,0 +1,176 @@
+[18:06:07] 已套用本機回送端點；Core 端點也需改成相同設定。
+[18:06:07] 點位對齊 taidaflow core 分支；ADAM-6224 DI 初始值：DI0 相位正常=1，DI1 漏液檢出=0，DI2 補水泵 OL=0，DI3 備用（Core 未使用）=0
+[18:06:07] 完整設備模擬器已就緒。請啟動全部 ADAM Server。
+[18:06:07] ADAM-6256: Listening
+[AdamDeviceServer] ADAM-6256 listening on 127.0.0.201:502 unit=1
+[18:06:07] ADAM-6217 A: Listening
+[AdamDeviceServer] ADAM-6217 A listening on 127.0.0.202:502 unit=1
+[18:06:07] ADAM-6217 B: Listening
+[AdamDeviceServer] ADAM-6217 B listening on 127.0.0.203:502 unit=1
+[18:06:07] ADAM-6224: Listening
+[AdamDeviceServer] ADAM-6224 listening on 127.0.0.204:502 unit=1
+[18:06:07] ADAM-6022: Listening
+[AdamDeviceServer] ADAM-6022 listening on 127.0.0.205:502 unit=1
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=7.37 PT05=6.19 MV1Feedback=9.45 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=11.72 PT05=9.85 MV1Feedback=14.43 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=14.29 PT05=12.01 MV1Feedback=17.06 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=15.81 PT05=13.28 MV1Feedback=18.45 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=16.71 PT05=14.03 MV1Feedback=19.18 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.24 PT05=14.48 MV1Feedback=19.57 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.55 PT05=14.74 MV1Feedback=19.77 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.73 PT05=14.90 MV1Feedback=19.88 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.84 PT05=14.99 MV1Feedback=19.94 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.91 PT05=15.04 MV1Feedback=19.97 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.95 PT05=15.07 MV1Feedback=19.98 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.97 PT05=15.09 MV1Feedback=19.99 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.98 PT05=15.10 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.99 PT05=15.11 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=17.99 PT05=15.11 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[Process] DO0=0 pumpRunning=0 frequencyHz=40.0 flow=0.00 PT01=18.00 PT05=15.12 MV1Feedback=20.00 DO1=0 DO2=0 DO3=0 makeupRunning=0 DO4=0 DI0=1 DI1=0 DI2=0 DI3=0 water=80.0
+[AdamDeviceServer] ADAM-6256 stopped
+[AdamDeviceServer] ADAM-6217 A stopped
+[AdamDeviceServer] ADAM-6217 B stopped
+[AdamDeviceServer] ADAM-6224 stopped
+[AdamDeviceServer] ADAM-6022 stopped

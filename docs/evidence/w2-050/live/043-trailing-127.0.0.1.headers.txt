@@ -1,0 +1,7 @@
+HTTP/1.1 400 Bad Request
+Server: nginx
+Date: Sun, 27 Sep 2026 10:06:38 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 150
+Connection: close
+

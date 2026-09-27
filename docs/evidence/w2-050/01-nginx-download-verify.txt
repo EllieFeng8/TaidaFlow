@@ -1,0 +1,104 @@
+# w2-050 D1: nginx download verification (2026-09-27T17:21:48+08:00)
+# sources: https://nginx.org/download/nginx-1.30.5.zip(.asc), https://nginx.org/keys/{arut,pluknet,sb,thresh,nginx_signing}.key
+# download page: Stable version = nginx/Windows-1.30.5 (Mainline 1.31.6 not used)
+# separate keyring GNUPGHOME=C:/tools/nginx/_download/gnupg (user keyring untouched)
+$ gpg --import keys/*.key
+gpg: keybox '/c/tools/nginx/_download/gnupg/pubring.kbx' created
+gpg: key 007C8D7C15D87369: 6 signatures not checked due to missing keys
+gpg: /c/tools/nginx/_download/gnupg/trustdb.gpg: trustdb created
+gpg: key 007C8D7C15D87369: public key "Roman Arutyunyan <r.arutyunyan@f5.com>" imported
+gpg: key 2FD21310B49F6B46: 4 signatures not checked due to missing keys
+gpg: key 2FD21310B49F6B46: public key "nginx signing key <signing-key-2@nginx.com>" imported
+gpg: key ABF5BD827BD9BF62: 6 signatures not checked due to missing keys
+gpg: key ABF5BD827BD9BF62: public key "nginx signing key <signing-key@nginx.com>" imported
+gpg: key BCDCD8A38D88A2B3: 3 signatures not checked due to missing keys
+gpg: key BCDCD8A38D88A2B3: public key "nginx signing key <signing-key-3@nginx.com>" imported
+gpg: key C8464D549AF75C0A: public key "Sergey Kandaurov <s.kandaurov@f5.com>" imported
+gpg: key A64FD5B17ADB39A8: 2 signatures not checked due to missing keys
+gpg: key A64FD5B17ADB39A8: public key "Sergey Budnevitch <sb@waeme.net>" imported
+gpg: key A0EA981B66B0D967: 6 signatures not checked due to missing keys
+gpg: key A0EA981B66B0D967: public key "Konstantin Pavlov <thresh@nginx.com>" imported
+gpg: Total number processed: 7
+gpg:               imported: 7
+gpg: no ultimately trusted keys found
+import exit=0
+$ gpg --list-keys --with-fingerprint
+/c/tools/nginx/_download/gnupg/pubring.kbx
+------------------------------------------
+pub   rsa4096 2024-04-11 [SC]
+      4338 7825 DDB1 BB97 EC36  BA5D 007C 8D7C 15D8 7369
+uid           [ unknown] Roman Arutyunyan <r.arutyunyan@f5.com>
+uid           [ unknown] Roman Arutyunyan <arut@nginx.com>
+sub   rsa4096 2024-04-11 [E]
+
+pub   rsa4096 2024-05-29 [SC]
+      8540 A6F1 8833 A80E 9C16  53A4 2FD2 1310 B49F 6B46
+uid           [ unknown] nginx signing key <signing-key-2@nginx.com>
+
+pub   rsa2048 2011-08-19 [SC] [expires: 2027-05-24]
+      573B FD6B 3D8F BC64 1079  A6AB ABF5 BD82 7BD9 BF62
+uid           [ unknown] nginx signing key <signing-key@nginx.com>
+
+pub   rsa4096 2024-05-29 [SC]
+      9E9B E90E ACBC DE69 FE9B  204C BCDC D8A3 8D88 A2B3
+uid           [ unknown] nginx signing key <signing-key-3@nginx.com>
+
+pub   rsa4096 2022-05-18 [SC]
+      D678 6CE3 03D9 A902 2998  DC6C C846 4D54 9AF7 5C0A
+uid           [ unknown] Sergey Kandaurov <s.kandaurov@f5.com>
+uid           [ unknown] Sergey Kandaurov <pluknet@nginx.com>
+sub   rsa4096 2022-05-18 [E]
+
+pub   rsa2048 2011-08-12 [SC] [expired: 2016-08-10]
+      7338 9730 69ED 3F44 3F4D  37DF A64F D5B1 7ADB 39A8
+uid           [ expired] Sergey Budnevitch <sb@waeme.net>
+uid           [ expired] Sergey Budnevitch <sb@nginx.com>
+
+pub   rsa3072 2018-05-07 [SC] [expires: 2027-05-17]
+      13C8 2A63 B603 5761 56E3  0A4E A0EA 981B 66B0 D967
+uid           [ unknown] Konstantin Pavlov <thresh@nginx.com>
+uid           [ unknown] Konstantin Pavlov <k.pavlov@f5.com>
+sub   rsa3072 2018-05-07 [E] [expires: 2027-05-17]
+
+$ gpg --verify nginx-1.30.5.zip.asc nginx-1.30.5.zip
+[GNUPG:] NEWSIG s.kandaurov@f5.com
+gpg: Signature made Tue Sep 15 21:42:40 2026    
+gpg:                using RSA key D6786CE303D9A9022998DC6CC8464D549AF75C0A
+gpg:                issuer "s.kandaurov@f5.com"
+[GNUPG:] KEY_CONSIDERED D6786CE303D9A9022998DC6CC8464D549AF75C0A 0
+[GNUPG:] SIG_ID l0gYhqLxI+3uBJXZSRzYT18TVMU 2026-09-15 1789479760
+[GNUPG:] GOODSIG C8464D549AF75C0A Sergey Kandaurov <s.kandaurov@f5.com>
+gpg: Good signature from "Sergey Kandaurov <s.kandaurov@f5.com>" [unknown]
+gpg:                 aka "Sergey Kandaurov <pluknet@nginx.com>" [unknown]
+[GNUPG:] VALIDSIG D6786CE303D9A9022998DC6CC8464D549AF75C0A 2026-09-15 1789479760 0 4 0 1 8 00 D6786CE303D9A9022998DC6CC8464D549AF75C0A
+[GNUPG:] TRUST_UNDEFINED 0 pgp s.kandaurov@f5.com
+gpg: WARNING: The key's User ID is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: D678 6CE3 03D9 A902 2998  DC6C C846 4D54 9AF7 5C0A
+verify exit=0
+$ sha256sum / size
+e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35 */c/tools/nginx/_download/nginx-1.30.5.zip
+2dcc8346503b55ee8d192bc4dcf26e26832fc1caac192c000c7dd80502f4f204 */c/tools/nginx/_download/nginx-1.30.5.zip.asc
+373eb96344f805f7c7c42733aaeca6adde289f00135ff2c167d301c43925b382 */c/tools/nginx/_download/keys/arut.key
+55385da31d198fa6a5012d40ae98ecb272a6c4e8fffffba94719ffd3e87de37a */c/tools/nginx/_download/keys/nginx_signing.key
+9a70c136946c1d18d5355c41516f1bdc95d4321938919e69065533e2aeb51e0e */c/tools/nginx/_download/keys/pluknet.key
+2629c020c081e3453523761bc6ee52903b173ea42f5faca342d545b4fc368224 */c/tools/nginx/_download/keys/sb.key
+5783ebb6b7d3a3d67abd1aa71ec961f0116a88149ea688ed08f898a218bf06d5 */c/tools/nginx/_download/keys/thresh.key
+/c/tools/nginx/_download/nginx-1.30.5.zip 2776622 bytes
+
+$ C:/tools/nginx/nginx-1.30.5/nginx.exe -V   (after unzip to C:/tools/nginx/nginx-1.30.5/)
+nginx version: nginx/1.30.5
+built by cl 19.44.35211 for x86
+built with OpenSSL 3.5.8 25 Aug 2026
+TLS SNI support enabled
+configure arguments: --with-cc=cl --builddir=objs.msvc8 --with-debug --prefix= --conf-path=conf/nginx.conf --pid-path=logs/nginx.pid --http-log-path=logs/access.log --error-log-path=logs/error.log --sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-temp-path=temp/fastcgi_temp --http-scgi-temp-path=temp/scgi_temp --http-uwsgi-temp-path=temp/uwsgi_temp --with-cc-opt=-DFD_SETSIZE=1024 --with-pcre=objs.msvc8/lib/pcre2-10.48 --with-zlib=objs.msvc8/lib/zlib-1.3.2 --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_stub_status_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_slice_module --with-mail --with-stream --with-stream_realip_module --with-stream_ssl_preread_module --with-openssl=objs.msvc8/lib/openssl-3.5.8 --with-openssl-opt='no-asm no-tests no-makedepend -D_WIN32_WINNT=0x0501' --with-http_ssl_module --with-mail_ssl_module --with-stream_ssl_module
+exit=0
+total 8
+drwxr-xr-x 1 TED 197609 0 Sep 27 17:21 .
+drwxr-xr-x 1 TED 197609 0 Sep 27 17:21 ..
+drwxr-xr-x 1 TED 197609 0 Sep 27 17:21 _download
+drwxr-xr-x 1 TED 197609 0 Sep 27 17:21 nginx-1.30.5
+$ C:/tools/nginx/nginx-1.30.5/nginx.exe -p <scratch>/ -c docs/evidence/w2-050/tools/disable-symlinks-probe.conf -t
+nginx: [emerg] unknown directive "disable_symlinks" in D:/repo/codex/qmlTester/taidaflow/docs/evidence/w2-050/tools/disable-symlinks-probe.conf:7
+nginx: configuration file D:/repo/codex/qmlTester/taidaflow/docs/evidence/w2-050/tools/disable-symlinks-probe.conf test failed
+exit=1

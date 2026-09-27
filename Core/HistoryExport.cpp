@@ -164,6 +164,32 @@ void appendCsvRow(QByteArray &out, qint64 sequence, qint64 epochSec, const doubl
     out += "\r\n";
 }
 
+quint16 downloadPortFromEnvironment()
+{
+    const QString value = qEnvironmentVariable(kDownloadPortEnv).trimmed();
+    if (value.isEmpty()) {
+        qInfo().noquote() << QStringLiteral("[Export] %1 is not set - download links use port %2 (AppHttpServer)")
+                                     .arg(QLatin1String(kDownloadPortEnv)).arg(kDefaultDownloadPort);
+        return kDefaultDownloadPort;
+    }
+    bool ok = false;
+    const uint port = value.toUInt(&ok);
+    if (!ok || port == 0 || port > 65535) {
+        qWarning().noquote() << QStringLiteral("[Export] %1=\"%2\" is not a port (1..65535) - ignored, download "
+                                               "links use port %3 (AppHttpServer)")
+                                        .arg(QLatin1String(kDownloadPortEnv), value).arg(kDefaultDownloadPort);
+        return kDefaultDownloadPort;
+    }
+    qInfo().noquote() << QStringLiteral("[Export] %1=%2 - download links use port %2%3")
+                                 .arg(QLatin1String(kDownloadPortEnv)).arg(port)
+                                 .arg(port == kDefaultDownloadPort
+                                              ? QStringLiteral(" (AppHttpServer)")
+                                              : QStringLiteral(" (served by another program, e.g. nginx; /exports on "
+                                                               "AppHttpServer port %1 stays available as fallback)")
+                                                        .arg(kDefaultDownloadPort));
+    return quint16(port);
+}
+
 bool isValidSessionId(const QString &sessionId)
 {
     return sessionIdPattern().match(sessionId).hasMatch();
@@ -494,9 +520,9 @@ HistoryExportManager::HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sq
                 &HistoryExportManager::shutdown);
     }
 
-    qInfo().noquote() << QStringLiteral("[Export] web export folder %1 (max %2 files / %3 bytes)")
+    qInfo().noquote() << QStringLiteral("[Export] web export folder %1 (max %2 files / %3 bytes), download links -> port %4")
                                  .arg(QDir::toNativeSeparators(m_options.exportDir))
-                                 .arg(m_options.maxFiles).arg(m_options.maxBytes);
+                                 .arg(m_options.maxFiles).arg(m_options.maxBytes).arg(m_options.downloadPort);
     if (m_options.mountDownloads) {
         // Same rules as the former ExportDownloadServer: only <sessionId>_<yyyyMMdd_HHmmss>.csv
         // directly inside the export folder, attachment, ACAO *, no-store, streamed.

@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+content-type: text/csv; charset=utf-8
+content-disposition: attachment; filename="w2050default_20260927_180833.csv"
+access-control-allow-origin: *
+cache-control: no-store
+content-length: 653338
+

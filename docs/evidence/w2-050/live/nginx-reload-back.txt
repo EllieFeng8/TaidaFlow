@@ -1,0 +1,5 @@
+config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)
+nginx -t:
+  | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+  | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+reloaded (master pid 106576, web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports)

@@ -157,7 +157,11 @@ void Core::init()
     // w2-041 (spec §3): raw CSV export queue/engine (export folder <working
     // directory>/exports); it mounts GET /exports/<file> on the AppHttpServer
     // singleton, which also serves the web page (w2-049, startHttpServer).
-    m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, HistoryExportManager::Options{}, this);
+    // w2-050: the port of the download links comes from TAIDAFLOW_DOWNLOAD_PORT (default 8124;
+    // 8123 when nginx serves the export folder).
+    HistoryExportManager::Options exportOptions;
+    exportOptions.downloadPort = HistoryExport::downloadPortFromEnvironment();
+    m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, exportOptions, this);
     startHttpServer();
     if (!m_manager->saveAlarm(QStringLiteral("100"),
                               QStringLiteral("設備啟動"),

@@ -1,0 +1,11 @@
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+Server: WasmMirrorProxy
+Access-Control-Allow-Credentials: false
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Headers: content-type
+Access-Control-Allow-Origin: http://127.0.0.1:8123
+Date: Sun, 27 Sep 2026 10:08:08 GMT
+

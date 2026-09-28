@@ -19,6 +19,7 @@ qt6_add_qml_module(TaidaFlowContent
         "components/HistoryViewUtil.js"
         "components/InterfaceBox.qml"
         "components/MotorIcon.qml"
+        "components/NumberFormat.js"
         "components/ValueTag.qml"
     RESOURCES
         "assets/center.png"

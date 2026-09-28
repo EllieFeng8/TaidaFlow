@@ -17,6 +17,7 @@
 |---|---|
 | 2026-09-24 | 初版(w2-027~w2-030):core dc91f01 + pack 1.0.1 整合、斷線鎖定、網頁 CSV 下載、接模擬器 |
 | 2026-09-27 | 依現況更新(w2-054):網頁改由 desktop 內建 HTTP 服務與 nginx 提供、區網連線、歷史區間查詢與匯出、字型子集流程、建議逐條標狀態。過時段落移到「歷史紀錄」小節 |
+| 2026-09-28 | w2-060:REST API(`RESTManager`)啟用,`127.0.0.1:18080`,區網經 nginx 80 的 `/api/`(§2.7);移除測試專用 PV 注入與 pack 1.0.0 的 zip 備份 |
 
 ---
 
@@ -25,6 +26,8 @@
 `core` 分支同一份程式可編成桌面版(authoritative,含全部後端)與網頁版(WebAssembly replica,只有
 UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步屬性,修改會互相看到。
 
+- **REST API 已啟用**(w2-060,Mango 2026-09-28):原後端的 `RESTManager` 由 Core 啟動,只綁 `127.0.0.1:18080`
+  (`TAIDAFLOW_REST_PORT`),區網經 nginx `http://<IP>/api/...`;GET 查詢 + PUT 改設定,**內網不做存取控管**(§2.7)。
 - **後端只在桌面版**:Modbus、MS300、REST、SQLite、歷史匯出、HTTP 服務只編進桌面版
   (`scripts/check_wasm_backend.py` 檢查網頁版的後端來源、Qt 模組、字串皆為 0)。網頁版無法直接連任何設備。
 - **網頁由桌面自己提供**:desktop 內建 `AppHttpServer` 在 `0.0.0.0:8124` 送網頁與 CSV 下載;
@@ -64,7 +67,8 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
 
 | Port | 綁定 | 由誰提供 | 用途 |
 |---|---|---|---|
-| 80 | `0.0.0.0:80` | nginx(另一個程式,`scripts/nginx-start.ps1` 或正式機 `start-taidaflow -UseNginx`,選用;`-Port` 可改,例如舊的 8123) | 網頁 `http://<IP>/`(→ 302 `/TaidaFlowApp.html`);`/exports/<檔名>` 由 nginx 直接從匯出資料夾送,支援 HTTP Range 續傳 |
+| 80 | `0.0.0.0:80` | nginx(另一個程式,`scripts/nginx-start.ps1` 或正式機 `start-taidaflow -UseNginx`,選用;`-Port` 可改,例如舊的 8123) | 網頁 `http://<IP>/`(→ 302 `/TaidaFlowApp.html`);`/exports/<檔名>` 由 nginx 直接從匯出資料夾送,支援 HTTP Range 續傳;`/api/...` 轉給 REST(18080) |
+| 18080 | `127.0.0.1:18080` | desktop `RESTManager`(w2-060,`TAIDAFLOW_REST_PORT` 可改) | REST API 內部 port,只限本機;區網經 nginx `/api/`(§2.7) |
 | 8124 | `0.0.0.0:8124` | desktop 內建 `AppHttpServer`(`Core/AppHttpServer/`) | 網頁 `http://<IP>:8124/TaidaFlowApp.html`;`/exports/<檔名>` 下載(備援,不支援 Range) |
 | 8125 | `0.0.0.0:8125` | desktop `App/lanrelay.h` | 網頁連的公開 mirror port,每條連線原樣轉發到 18125 |
 | 18125 | `127.0.0.1:18125` | desktop Mirror server(pack) | 內部 port,只限本機 |
@@ -83,7 +87,7 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
 **步驟 0:安全確認(每次啟動 desktop 前)**。一律用 `scripts/run-desktop.ps1` 啟動,它先跑
 `scripts/safety_probe.ps1`:對 `192.168.1.201~205:502` 只做 TCP connect(1.5 秒逾時、不送 Modbus)、
 列本機序列埠、檢查 listener。任一設備可達、出現 COM2、502 已被占用 → 不啟動(exit 3);
-8124 / 8125 / 18125 已被占用 → 不啟動(exit 4 `BUSY`,不關掉占用者);80 與 8123(nginx)只列出供參考,不阻擋
+8124 / 8125 / 18125 / REST port(18080)已被占用 → 不啟動(exit 4 `BUSY`,不關掉占用者);80 與 8123(nginx)只列出供參考,不阻擋
 (nginx 只送靜態檔,app 不綁這兩個 port)。desktop 的工作目錄固定為 `build\runtime-cwd\`。
 
 **步驟 1:建置**(依序,不可並行)
@@ -184,7 +188,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | DV-1 | QML import 改為 `TaidaFlowBackend 1.0`(Td 移出 `Core` URI,避免與 `qt_add_qml_module(URI Core)` 撞名) | 沿用(main c7b7b9b 起 main 也相同) |
 | DV-2 | 離線橫幅與控制項停用(TopNav、Main、MotorIcon、HistoryPage) | 沿用;橫幅已改為推開內容(c7b7b9b) |
 | DV-3 | 中文字型子集(`App/embeddedfonts.*`、`App/fonts/`、`scripts/make_font_subset.py`) | 沿用,流程見 §2.4 |
-| DV-4 | `App/e2epvdriver.h`(測試專用 PV 注入,只編進桌面版,需環境變數才啟用) | 沿用 |
+| DV-4 | 測試專用 PV 注入(只編進桌面版,需環境變數才啟用) | **已移除**(w2-060;無設備時改用 Adam60xxSimulator,§4.6) |
 | DV-5 | `scripts/` 建置、驗證、安全探測工具 | 沿用並擴充(deploy-web、nginx-*、run-apphttpserver-tests 等) |
 | DV-6 | `.gitattributes`(保護 pack 位元組不被換行轉換) | 沿用 |
 | DV-7 | README 轉 UTF-8 並補完整說明 | 沿用 |
@@ -195,6 +199,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | DV-12 | `App/lanrelay.h`:`0.0.0.0:8125` → `127.0.0.1:18125` 轉發(main e4bc327 / w2-042) | 暫時做法,等 pack 1.0.2(建議 19) |
 | DV-13 | `Core/AppHttpServer/`:可重用的 HTTP 單例,送網頁與下載(w2-049,5576b9e) | 取代舊的 Python 開發伺服器 |
 | DV-14 | `deploy/nginx/taidaflow.conf` + `scripts/nginx-*.ps1`、`TAIDAFLOW_DOWNLOAD_PORT`(w2-050,b1ffaca) | nginx 為選用的網頁前端 |
+| DV-15 | REST API 啟用:`Core::startRestServer()`、`RESTManager::start()` 加綁定位址參數、nginx `/api/`、`TAIDAFLOW_REST_PORT`(w2-060) | §2.7 |
 
 ### 2.6 歷史紀錄:2026-09-24 初版整合歷程與步驟
 
@@ -220,6 +225,33 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
   2026-09-27 w2-050 起 8123 改給 nginx。
 - 步驟 6 QML 離線鎖定;步驟 7 中文字型子集(當時 490 字、中文 385 字,共 370 KB;現況見 §2.4)。
 
+### 2.7 REST API(w2-060,現況)
+
+- 原後端開發者的 `Core/RESTManager.{h,cpp}`(QHttpServer)已編譯多時但 Core 從未建立;w2-060 起 `Core::init()` 在
+  `startHttpServer()` 後呼叫 `startRestServer()`:`RESTManager::start(port, QHostAddress::LocalHost)`,port = `TAIDAFLOW_REST_PORT`
+  (預設 18080)。綁定失敗只記 `[REST] REST API NOT started ...`,app 照常;`aboutToQuit` 時刪除(關閉 listener)。
+- RESTManager 的改動只有一處:`start()` 多一個綁定位址參數(預設 `QHostAddress::Any` = 原行為);route 與回應不變。
+- nginx `location ^~ /api/` → `proxy_pass http://127.0.0.1:18080`(HTTP/1.1、方法/body/query 原樣、連線 5 s、讀取 120 s、
+  body 上限 1 MB、`Cache-Control: no-store`);`location = /api/` → REST 的 `/`(狀態)。CORS 標頭由 RESTManager 自己加(含 OPTIONS 預檢)。
+- 開放範圍(Mango 決定):全部,讀 + 改設定,**內網不做存取控管**。
+
+| 方法 | 路徑 | 用途 | 參數 | 會改到什麼 |
+|---|---|---|---|---|
+| GET | `/api/`(REST `/`) | 狀態 | — | — |
+| GET / PUT | `/api/settings/sensors` | 感測器 key/名稱 | PUT body `[{"key","name"}]`(合併) | PUT:`settings.sqlite` `sensor_config`(app 其他地方不讀) |
+| GET / PUT | `/api/settings/frequency` | `read_frequency` | PUT body `{"read_frequency":n}`,n > 0 | PUT:`settings.sqlite` `app_settings`(沒有程式使用) |
+| GET / PUT | `/api/modbus/mode` | `network` / `standalone` | PUT body `{"mode":...}` | PUT:RESTManager 記憶體(signal 未連接,不影響 Modbus) |
+| GET | `/api/sensor/range`、`/api/holding/range` | 區間所有列(不分頁) | `from`、`to` epoch 秒 | — |
+| GET | `/api/sensor/rangeDateTime`、`/api/holding/rangeDateTime` | 同上 | `from`、`to` ISO 8601 | — |
+| GET | `/api/sensor/rangeDateTimePage`、`/api/holding/rangeDateTimePage` | 分頁 | 同上 + `page`、`pageSize`(<= 1000) | — |
+| GET | `/api/sensor/last`、`/api/holding/last` | 本月最新一列(無 → 404) | — | — |
+| GET | `/api/device/sn` | 序號 | — | `device_info.ini` 不存在時建立(`sn000000`) |
+
+完整說明(回應格式、錯誤碼、PUT 範例)見 `README.md`「REST API」與 `docs/DEPLOY_AND_STARTUP.md` §1.11;
+`python -B scripts\check_rest_routes.py` 確認 log 的 route 表與 `RESTManager.cpp` 一致。
+已知限制(原程式行為,未改):RESTManager 在主執行緒執行,每個查詢 blocking 等 SqlManager 執行緒;不分頁的
+range 路由在大區間時會讓 UI 停住並占大量記憶體(建議 26);`holding_register` 目前沒有資料(Manager 不寫)。
+
 ---
 
 ## 3. 驗證結果
@@ -240,6 +272,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | 歷史區間 + 匯出 QTest | `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(w2-041 harness 的 w2-049 改版)、`docs\evidence\w2-045\tools\run-qtest.bat` |
 | AppHttpServer QTest | `scripts\run-apphttpserver-tests.bat` |
 | nginx 前端與直送下載 | `docs\evidence\w2-050\tools\verify-nginx.ps1` |
+| REST route 表一致 | `python -B scripts\check_rest_routes.py` |
+| REST API(經 nginx,app + nginx 執行中) | `python -B docs\evidence\w2-060\tools\rest_api_check.py --hosts 127.0.0.1,<區網 IP> --settings-db build\runtime-cwd\settings.sqlite` |
 
 最近一次實跑(2026-09-27,w2-055 / w2-053):desktop 與 wasm-release fresh 建置 exit 0(`TaidaFlowApp.wasm`
 33,828,731 bytes)、`check_wasm_backend` 0、`check_version_shadow` 0/0、w2-041 QTest 9/9、w2-045 QTest 8/8
@@ -365,7 +399,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
    月份檔時量到單次輪詢 5.5~7.4 秒(`docs/evidence/w2-053/10b-w2-053-qtest.utf8.log`)。w2-045 已讓歷史頁
    查詢拆成短步驟、匯出用自己的唯讀連線分段讀,但外部工具(例如對 live 資料庫的長查詢)仍會造成停頓。
 5. **80(nginx)/8124/8125 對區網開放且不做存取控管**(Mango 決定,內網系統);任何能連到這三個 port 的人都能看畫面、
-   送指令(含解除急停,建議 1)與下載匯出檔。
+   送指令(含解除急停,建議 1)與下載匯出檔,並經 80 的 `/api/` 讀歷史資料、用 PUT 改 REST 設定(w2-060)。
 
 ---
 
@@ -405,7 +439,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 ### 低(維護整潔)
 
 15. **不要修改 `integration-pack/wasm-mirror/` 裡的檔案**;升級時整包替換並跑 `verify_pack.py`。——**仍建議(持續遵守)**,現況仍是 1.0.1 原封不動。
-16. **刪除 `integration-pack/wasm-mirror-1.0.0.zip`**。——**仍建議**(檔案仍在)。
+16. **刪除 pack 1.0.0 的 zip 備份**(`integration-pack/` 下的舊版壓縮檔,目前用 1.0.1)。——**已完成**(w2-060)。
 17. **`.gitignore` 不要再排除 `CMakePresets.json`**。——**仍建議**(`.gitignore` 仍有 `/CMakePresets.json`)。
 18. **`main` 和 `core` 的分岔要找時間合併**。——**已完成(改為固定流程)**:UI 在 main、後端在 core,core 定期
     合併 main(31417f4、dbfe092、6585485、58c6037);每次合併後要重產字型子集(建議 23)。
@@ -421,7 +455,16 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 22. **nginx 不是 Windows 服務**:需要開機自動啟動時,擇一以工作排程器、服務包裝器(WinSW / NSSM)或
     desktop 的登入腳本啟動 `nginx-start.ps1`;本專案未做。——**仍建議(由維護方決定)**。
 23. **合併 main 後一律跑 `make_font_subset.py --check`**(w2-044 就是合併後出現缺字「排□中」);可加入合併檢查清單。——**仍建議**。
-24. **若網路不再是可信內網,重新評估 80/8124/8125 的存取控管**(來源限制、防火牆範圍、急停權限)。——**仍建議**。
+24. **若網路不再是可信內網,重新評估 80/8124/8125 的存取控管**(來源限制、防火牆範圍、急停權限;含 80 的 REST `/api/`)。——**仍建議**。
+
+### 新增(2026-09-28)
+
+25. **RESTManager(原後端的 REST API)啟用與開放範圍**。——**已啟用**(w2-060):`127.0.0.1:18080` + nginx `/api/`,
+    GET + PUT 全部開放、內網不做存取控管(Mango 2026-09-28 決定,§2.7)。
+26. **REST 查詢不要卡住 UI**:不分頁的 `/api/sensor/range`、`/api/holding/range`、`rangeDateTime` 會一次讀完整個區間
+    (主執行緒 blocking 等 SqlManager);建議限制區間 / 筆數,或把 RESTManager 移到自己的執行緒。——**仍建議**。
+27. **REST 的 PUT 目前沒有實際作用對象**:`read_frequency`、`sensor_config` 沒有程式讀取,`modbusModeChanged` 沒有連接;
+    若要讓它們生效需另案定義行為。——**仍建議(由維護方決定)**。
 
 ---
 
@@ -458,6 +501,7 @@ scripts\build-wasm.bat wasm-release           :: 網頁版(桌面版建完再建
 | 離線橫幅推開內容 | `TaidaFlowContent/TopNav.qml` 的 `offlineBanner`(`height: visible ? 64 : 0`)與註解;`git log -- TaidaFlowContent/TopNav.qml` |
 | Modbus server `AnyIPv4`、重連 3 秒 | `Core/Modbus_Server.h`(`start` 預設參數)、`git grep -n kReconnectDelayMs -- Core/Modbus_Client.cpp` |
 | 示範資料、setter 無比較 | `Core/TaidaFlowProxy.h`(建構子 `initializeListData()`、`setMotorRunningSv`) |
-| pack 版本、1.0.0 zip、`.gitignore` | `integration-pack/wasm-mirror/VERSION.txt`、`ls integration-pack`、`git grep -n CMakePresets -- .gitignore` |
+| pack 版本、舊版 zip 已刪、`.gitignore` | `integration-pack/wasm-mirror/VERSION.txt`、`ls integration-pack`(只剩 `wasm-mirror/`)、`git grep -n CMakePresets -- .gitignore` |
+| REST API(w2-060) | `git grep -n "startRestServer\|kRestRoutes\|TAIDAFLOW_REST_PORT" -- Core/core.cpp`、`deploy/nginx/taidaflow.conf` 的 `location ^~ /api/`、`python -B scripts\check_rest_routes.py` |
 | 字型數字 | `python -B scripts\make_font_subset.py --check`、`docs/evidence/w2-055/` |
 | 舊伺服器檔名只剩歷史紀錄 | `git grep -n "serve_[w]asm" -- docs/wasm-integration-report.md`(只在 §2.6;正規式寫法避免本列自己被找到) |

@@ -1,0 +1,17 @@
+[Modbus] device profile=simulator
+Device SN: "sn000000"
+Running on http://127.0.0.1: 18080 /
+[REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; TAIDAFLOW_REST_PORT=(not set, default))
+[REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+[REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+[REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+[REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+[REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+[REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+[REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+[REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+[REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+[REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+[REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+[REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+[REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)

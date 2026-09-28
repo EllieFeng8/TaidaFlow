@@ -1,0 +1,6 @@
+built in 11 s
+sensor_202607.sqlite: rows=102 min=-5 max=1783656099 size=53248 journal=delete
+sensor_202608.sqlite: rows=1296000 min=1786896000 max=1788191999 size=299409408 journal=delete
+sensor_202609.sqlite: rows=1296003 min=1788192000 max=1789487999 size=299409408 journal=delete
+30-day range: 1786896000 .. 1789487999 s = 1786896000000 .. 1789487999999 ms
+exit=0

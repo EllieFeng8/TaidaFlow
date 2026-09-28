@@ -553,7 +553,7 @@ QString RESTManager::loadDeviceSn()
     return sn;
 }
 
-bool RESTManager::start(quint16 port)
+bool RESTManager::start(quint16 port, const QHostAddress& address)
 {
     if (!m_sql)
     {
@@ -569,7 +569,7 @@ bool RESTManager::start(quint16 port)
     {
         m_tcpServer = std::make_unique<QTcpServer>(this);
     }
-    if (!m_tcpServer->listen(QHostAddress::Any, port))
+    if (!m_tcpServer->listen(address, port))
     {
         qWarning() << "HTTP server listen failed on port" << port;
         return false;

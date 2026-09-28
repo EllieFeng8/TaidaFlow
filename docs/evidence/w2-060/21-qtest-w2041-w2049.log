@@ -1,0 +1,203 @@
+'vswhere.exe' 不是內部或外部命令、可執行的程式或批次檔。
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (3.2s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest
+[1/8] Running qmlimportscanner for tst_w2041_export
+[2/8] Automatic MOC and UIC for target tst_w2041_export
+[3/8] Building CXX object CMakeFiles\tst_w2041_export.dir\tst_w2041_export_autogen\mocs_compilation.cpp.obj
+[4/8] Building CXX object CMakeFiles\tst_w2041_export.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[5/8] Building CXX object CMakeFiles\tst_w2041_export.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[6/8] Building CXX object CMakeFiles\tst_w2041_export.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[7/8] Building CXX object CMakeFiles\tst_w2041_export.dir\tst_w2041_export.cpp.obj
+[8/8] Linking CXX executable tst_w2041_export.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2041_export
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\tst_w2041_export.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest
+1: Test timeout computed to be: 1800
+1: ********* Start testing of TestW2041Export *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2041Export::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/settings_schema.sql"
+1: QINFO  : TestW2041Export::initTestCase() bench data D:/repo/codex/qmlTester/taidaflow/build/w2-041-bench/data work D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/work 30-day range 1786896000 .. 1789487999 s
+1: PASS   : TestW2041Export::initTestCase()
+1: PASS   : TestW2041Export::formatting()
+1: QWARN  : TestW2041Export::rangePagingAcrossMonths() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::rangePagingAcrossMonths() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 1: 10 row(s) 1789487999 .. 1789487991; count 100.24 ms (0 cached) + page 0.56 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 2: 10 row(s) 1789487990 .. 1789487981; count 0.67 ms (2 cached) + page 0.62 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 129600: 10 row(s) 1788192011 .. 1788192003; count 0.47 ms (2 cached) + page 0.53 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 129601: 10 row(s) 1788192002 .. 1788191993; count 0.69 ms (2 cached) + page 0.79 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 129602: 10 row(s) 1788191992 .. 1788191983; count 0.63 ms (2 cached) + page 0.56 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 259200: 10 row(s) 1786896012 .. 1786896003; count 0.43 ms (2 cached) + page 0.47 ms
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() 30-day page 259201: 3 row(s) 1786896002 .. 1786896000; count 0.52 ms (2 cached) + page 0.36 ms
+1: QWARN  : TestW2041Export::rangePagingAcrossMonths() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() all months: 2592103 row(s) in 3 files; last page 259211 = 3 row(s) ending at 1783656000 (July)
+1: QWARN  : TestW2041Export::rangePagingAcrossMonths() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QINFO  : TestW2041Export::rangePagingAcrossMonths() count cache: uncached 93.74 ms, all cached 0.77 ms (3 hits), after a write 0.94 ms (2 hits), total 2592103 -> 2592104
+1: PASS   : TestW2041Export::rangePagingAcrossMonths()
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d (max 20 files / 2147483648 bytes), download links -> port 8124
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() IDLE (no export, 6 s): main-thread max tick gap 15.10 ms; 6 blocking saves max 14.70 ms avg 9.08 ms; 2/3 History range pages answered, max round trip 14.93 ms; max private 11.2 MB, max working set 26.8 MB
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #1 queued: session web-t30d, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t30d_20260928_180201.csv
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #1 running: session web-t30d (0 still queued)
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #1 2592003 row(s) to write
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-049-w2041-qtest/data_schema.sql"
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #1 done: session web-t30d, 5534.4 ms; 2592003 row(s), 437517180 byte(s), 2 month file(s), count 60.4 ms, total 5531.8 ms, 1298 chunk(s) of <= 2000 rows, longest chunk read 10.07 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 437517180 byte(s); 437517180 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t30d_20260928_180201.csv
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] the download service is not running; the file is only on disk.
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() status publications for web-t30d: 14 total, 10 progress-only; min interval 507 ms, min step 9 point(s)
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() EXPORT 30 days: 2592003 rows, 437517180 bytes (417.2 MB) in 5543 ms (467614 rows/s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t30d_20260928_180201.csv
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() BUSY (during export): main-thread max tick gap 15.87 ms; 5 blocking saves max 15.64 ms avg 8.16 ms; 2/2 History range pages answered, max round trip 13.55 ms; max private 18.3 MB, max working set 33.9 MB
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() memory before export: private 11.2 MB, working set 26.8 MB; max during: private +7.1 MB, working set +7.0 MB; file 417.2 MB
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #2 queued: session web-t1d, web (export folder), range 1788969600 .. 1789055999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t1d_20260928_180207.csv
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #2 running: session web-t1d (0 still queued)
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #2 86400 row(s) to write
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] #2 done: session web-t1d, 194.1 ms; 86400 row(s), 14437059 byte(s), 1 month file(s), count 3.7 ms, total 191.4 ms, 44 chunk(s) of <= 2000 rows, longest chunk read 7.03 ms; cleanup: removed 0 [], failed 0 [], left 2 file(s) / 451954239 byte(s); 14437059 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t1d_20260928_180207.csv
+1: QWARN  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] the download service is not running; the file is only on disk.
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() EXPORT 1 day: 86400 rows, 13.8 MB; max private +0.5 MB, working set +2.1 MB (30 days: +7.1 / +7.0 MB)
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() VERIFY_CSV D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t30d_20260928_180201.csv 1786896000 1789487999
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() VERIFY_CSV_1DAY D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_30d\web-t1d_20260928_180207.csv 1788969600 1789055999
+1: QINFO  : TestW2041Export::export30DaysCorrectMemoryMainThread() [Export] stopped (export thread; /exports unmounted).
+1: PASS   : TestW2041Export::export30DaysCorrectMemoryMainThread()
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_queue (max 20 files / 2147483648 bytes), download links -> port 8124
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #1 queued: session web-aaaa, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_queue\web-aaaa_20260928_180207.csv
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #1 running: session web-aaaa (0 still queued)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #2 queued: session web-bbbb, web (export folder), range 1786896000 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_queue\web-bbbb_20260928_180207.csv
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #3 queued: session web-cccc, web (export folder), range 1789142400 .. 1789228799 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_queue\web-cccc_20260928_180207.csv
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #4 queued: session desktop, desktop save-as, range 1789142400 .. 1789228799 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\desktop_target\chosen by user.csv
+1: QINFO  : TestW2041Export::queueOrderAndCancel() queue after 4 requests: aaaa running(0), bbbb queued(1), cccc queued(2), desktop queued(3)
+1: QWARN  : TestW2041Export::queueOrderAndCancel() [Export] request from "web-aaaa" rejected: this session already has an export queued or running
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #2 cancelled while queued (position 1): session web-bbbb
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #1 2592003 row(s) to write
+1: QINFO  : TestW2041Export::queueOrderAndCancel() while web-aaaa runs, unfinished file(s) in the export folder: QList(web-aaaa_20260928_180207.csv.Jadupb)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #1 cancel requested while running: session web-aaaa
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #1 cancelled: session web-aaaa, 629.2 ms; cancelled after 252000 row(s); partial file discarded; 41606964 byte(s) -> (no file)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #3 running: session web-cccc (1 still queued)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #3 86400 row(s) to write
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #3 done: session web-cccc, 201.0 ms; 86400 row(s), 14437027 byte(s), 1 month file(s), count 3.1 ms, total 187.5 ms, 44 chunk(s) of <= 2000 rows, longest chunk read 5.20 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 14437027 byte(s); 14437027 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_queue\web-cccc_20260928_180207.csv
+1: QWARN  : TestW2041Export::queueOrderAndCancel() [Export] the download service is not running; the file is only on disk.
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #4 running: session desktop (0 still queued)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #4 86400 row(s) to write
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] #4 done: session desktop, 201.6 ms; 86400 row(s), 14437027 byte(s), 1 month file(s), count 3.7 ms, total 186.3 ms, 44 chunk(s) of <= 2000 rows, longest chunk read 4.54 ms; 14437027 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\desktop_target\chosen by user.csv
+1: QINFO  : TestW2041Export::queueOrderAndCancel() finish order: web-bbbb=cancelled, web-aaaa=cancelled, web-cccc=done, desktop=done
+1: QINFO  : TestW2041Export::queueOrderAndCancel() export folder after the run: QList(web-cccc_20260928_180207.csv)
+1: QINFO  : TestW2041Export::queueOrderAndCancel() [Export] stopped (export thread; /exports unmounted).
+1: PASS   : TestW2041Export::queueOrderAndCancel()
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_21 (max 20 files / 2147483648 bytes), download links -> port 8124
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] #1 queued: session web-new1, web (export folder), range 1789484400 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_21\web-new1_20260928_180208.csv
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] #1 running: session web-new1 (0 still queued)
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] #1 3601 row(s) to write
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] #1 done: session web-new1, 21.7 ms; 3601 row(s), 597723 byte(s), 1 month file(s), count 1.2 ms, total 10.6 ms, 2 chunk(s) of <= 2000 rows, longest chunk read 3.97 ms; cleanup: removed 1 [web-old00_20260901_000000.csv], failed 0 [], left 20 file(s) / 617179 byte(s); 597723 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_21\web-new1_20260928_180208.csv
+1: QWARN  : TestW2041Export::cleanupMoreThan20Files() [Export] the download service is not running; the file is only on disk.
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() 21-file case, left: 20 files; oldest two now: QList(web-new1_20260928_180208.csv, web-old01_20260901_000001.csv)
+1: QINFO  : TestW2041Export::cleanupMoreThan20Files() [Export] stopped (export thread; /exports unmounted).
+1: PASS   : TestW2041Export::cleanupMoreThan20Files()
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_2gb (max 20 files / 2147483648 bytes), download links -> port 8124
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] #1 queued: session web-new2, web (export folder), range 1789484400 .. 1789487999 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_2gb\web-new2_20260928_180208.csv
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] #1 running: session web-new2 (0 still queued)
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] #1 3601 row(s) to write
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] #1 done: session web-new2, 25.5 ms; 3601 row(s), 597723 byte(s), 1 month file(s), count 0.9 ms, total 10.0 ms, 2 chunk(s) of <= 2000 rows, longest chunk read 4.07 ms; cleanup: removed 1 [web-big1_20260920_000001.csv], failed 0 [], left 3 file(s) / 1678319323 byte(s); 597723 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_2gb\web-new2_20260928_180208.csv
+1: QWARN  : TestW2041Export::cleanupOver2GB() [Export] the download service is not running; the file is only on disk.
+1: QINFO  : TestW2041Export::cleanupOver2GB() >2 GB case (3 x 800 MB + new): left QList(web-big2_20260920_000002.csv, web-big3_20260920_000003.csv, web-new2_20260928_180208.csv) 1678319323 bytes
+1: QINFO  : TestW2041Export::cleanupOver2GB() oversize case: removed QList(web-old_20260920_000001.csv) keptOversize true left 1 2252341248
+1: QINFO  : TestW2041Export::cleanupOver2GB() [Export] stopped (export thread; /exports unmounted).
+1: PASS   : TestW2041Export::cleanupOver2GB()
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_http (max 20 files / 2147483648 bytes), download links -> port 8124
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_http
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_http: mounted on AppHttpServer
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports; routes: 
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] #1 queued: session web-http, web (export folder), range 1789315200 .. 1789401599 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_http\web-http_20260928_180208.csv
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] #1 running: session web-http (0 still queued)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] #1 86400 row(s) to write
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] #1 done: session web-http, 201.2 ms; 86400 row(s), 14436634 byte(s), 1 month file(s), count 3.8 ms, total 190.4 ms, 44 chunk(s) of <= 2000 rows, longest chunk read 4.93 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 14436634 byte(s); 14436634 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-049-w2041-qtest\work\exports_http\web-http_20260928_180208.csv
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/web-http_20260928_180208.csv from 127.0.0.1 -> 200, 14436634 byte(s) streamed from disk
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/web-http_20260928_180208.csv -> 200 
+1:  HTTP/1.1 200 OK?
+1: content-type: text/csv; charset=utf-8?
+1: content-disposition: attachment; filename="web-http_20260928_180208.csv"?
+1: access-control-allow-origin: *?
+1: cache-control: no-store?
+1: content-length: 14436634
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/../secret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/../secret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/..%2Fsecret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret_20260924_000000.csv")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/..%2Fsecret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/..%2Fsecret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret_20260924_000000.csv")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/%2e%2e%2fsecret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/../secret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/%2E%2E/secret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/..%5Csecret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret_20260924_000000.csv")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/..%5Csecret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/..%5Csecret_20260924_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret_20260924_000000.csv")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/..\secret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/.. from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/%2e%2e -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/C:%5Cwindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected path segment "C:%5Cwindows%5Cwin.ini")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/C:%5Cwindows%5Cwin.ini -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports//secret_20260924_000000.csv from 127.0.0.1 -> 400 (empty path segment)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports//secret_20260924_000000.csv -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /secret_20260924_000000.csv from 127.0.0.1 -> 404 (no mount or route)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /secret_20260924_000000.csv -> 404 not found
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/ from 127.0.0.1 -> 404 (no file name)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/ -> 404 not found
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/web-http_20260924_000000.csv.abc123 from 127.0.0.1 -> 400 (rejected name "web-http_20260924_000000.csv.abc123")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/web-http_20260924_000000.csv.abc123 -> 400 bad request
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/nothere_20260101_000000.csv from 127.0.0.1 -> 404 (no file "nothere_20260101_000000.csv")
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() GET /exports/nothere_20260101_000000.csv -> 404 not found
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] POST /exports/web-http_20260928_180208.csv from 127.0.0.1 -> 405 (only GET and HEAD)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() POST /exports/web-http_20260928_180208.csv -> 405 method not allowed
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] stopped (was port 8124)
+1: QWARN  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] NOT listening on 0.0.0.0:8124: The bound address is already in use (the application keeps running)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() start on 8124 while another listener holds it -> false The bound address is already in use
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports; routes: 
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/web-http_20260928_180208.csv from 127.0.0.1 -> 200, 14436634 byte(s) streamed from disk
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] unmounted /exports
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() [Export] stopped (export thread; /exports unmounted).
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] GET /exports/web-http_20260928_180208.csv from 127.0.0.1 -> 404 (no mount or route)
+1: QINFO  : TestW2041Export::downloadServiceAndTraversal() apphttpserver: [AppHttpServer] stopped (was port 8124)
+1: PASS   : TestW2041Export::downloadServiceAndTraversal()
+1: PASS   : TestW2041Export::cleanupTestCase()
+1: Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 22797ms
+1: ********* Finished testing of TestW2041Export *********
+1/1 Test #1: tst_w2041_export .................   Passed   23.16 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  23.17 sec
+exit=0

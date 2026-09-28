@@ -14,6 +14,7 @@
    (`run-desktop.ps1` 等,會先做安全探測)。兩套不可混用,差異見 [§6](#6-開發機腳本與正式機腳本的差異不可混用)。
 3. **網址**:網頁 `http://<電腦的 IP>/`(nginx,port 80);備援 `http://<電腦的 IP>:8124/TaidaFlowApp.html`
    (app 自己提供)。網頁要能連 `8125` 才會同步(見 [§4](#4-port-表與每個程式的用途))。
+   REST API:`http://<電腦的 IP>/api/...`(nginx 轉給 app 的 `127.0.0.1:18080`,**可以改設定、不做存取控管**,見 [§1.11](#111-rest-api))。
 
 ---
 
@@ -49,9 +50,10 @@
    | 檔案 / 資料夾 | 內容 |
    |---|---|
    | `TaidaFlowSettings.ini` | 設定(`[Alarm] aiHighAlarmPercent` 等) |
-   | `settings.sqlite` | 感測器名稱、讀取頻率等設定 |
+   | `settings.sqlite` | 感測器名稱、讀取頻率等設定(REST API 的 PUT 會改這裡,見 §1.11) |
+   | `device_info.ini` | 設備序號(`[device] sn`;REST API 啟動時沒有就建立,內容 `sn000000`) |
    | `data\sensor_YYYYMM.sqlite` | 歷史資料與警報,每月一個檔 |
-   | `exports\` | 網頁匯出的 CSV(超過 20 個或 2 GB 時自動刪最舊的) |
+   | `exports\` | 網頁匯出的 CSV(超過 20 個或 2 GB 時自動刪最舊的;啟動腳本的 nginx 也會先建立) |
    | `logs\` | `launcher.log`(啟動/停止紀錄)與每次啟動一個 `taidaflow-<日期-時間>.log` |
    | `nginx\` | nginx 的設定(`conf\taidaflow.conf`,自動產生)、log、暫存 |
    | `taidaflow-app.json` | 執行中的 app 身分(停止時用;停止後刪除) |
@@ -63,8 +65,9 @@
 
 **雙擊 `C:\TaidaFlow\start-taidaflow.bat`。**
 
-- 它會:檢查是否已在執行 / port 被占用 → 啟動 nginx(port 80)→ 啟動 `TaidaFlowApp.exe`
-  → 確認 8124、8125 在聽 → 顯示網址與結果碼,按任意鍵關閉這個黑色視窗(app 會繼續執行)。
+- 它會:檢查是否已在執行 / port 被占用(502、8124、8125、18125、18080、80)→ 啟動 nginx(port 80,`/api/` 轉給 18080)
+  → 啟動 `TaidaFlowApp.exe` → 確認 8124、8125 在聽(18080 沒在聽只記警告)
+  → 顯示網址與結果碼,按任意鍵關閉這個黑色視窗(app 會繼續執行)。
 - 結果碼:`0` 成功;`4` 已經在執行或 port 被占用(**什麼都沒啟動**,也不會關掉別的程式);
   `6` app 沒起來(看 `logs\` 裡最新的 log);`8` app 已啟動但 nginx 沒起來(網頁改用 `:8124`);
   `2` 打包資料夾不完整或資料夾不能寫。
@@ -86,7 +89,7 @@ set "DATA=C:\TaidaFlowData"
 mkdir "%DATA%" 2>nul
 cd /d "%DATA%"
 set TAIDAFLOW_DEVICE_PROFILE=
-set TAIDAFLOW_E2E_PV_FILE=
+set TAIDAFLOW_REST_PORT=18080
 set QT_PLUGIN_PATH=
 set QML_IMPORT_PATH=
 set QML2_IMPORT_PATH=
@@ -97,7 +100,9 @@ start "" "%TF%\TaidaFlowApp.exe"
 - `cd /d "%DATA%"`:**工作目錄**就是資料夾,app 的設定、資料庫、匯出都寫在這裡。
 - `set TAIDAFLOW_DEVICE_PROFILE=`(等號後面空白)= 清除測試用的模擬器設定,正式機**一定**要清掉。
 - `TAIDAFLOW_DOWNLOAD_PORT=80`:網頁上的 CSV 下載連結走 nginx(port 80);不設就走 app 的 8124。
-- 確認:`netstat -ano | findstr LISTENING | findstr ":8124 :8125 :502"` 要看到這三個 port。
+- `TAIDAFLOW_REST_PORT=18080`:REST API 的內部 port(只綁 127.0.0.1;不設也是 18080)。要與 nginx 設定檔的
+  `@TAIDAFLOW_REST_PORT@` 相同。
+- 確認:`netstat -ano | findstr LISTENING | findstr ":8124 :8125 :502 :18080"` 要看到這四個 port(18080 是 `127.0.0.1:18080`)。
 
 **(b) nginx 第一次:準備設定檔**(之後不用再做)
 
@@ -107,13 +112,14 @@ copy "%TF%\deploy\nginx\taidaflow.conf" "%DATA%\nginx\conf\taidaflow.conf"
 notepad "%DATA%\nginx\conf\taidaflow.conf"
 ```
 
-在記事本用「取代」(Ctrl+H)換掉三個記號,路徑一律用**正斜線 `/`**,存檔:
+在記事本用「取代」(Ctrl+H)換掉四個記號,路徑一律用**正斜線 `/`**,存檔:
 
 | 記號 | 換成(以本節路徑為例) |
 |---|---|
 | `@TAIDAFLOW_WEB_ROOT@` | `C:/TaidaFlow/web` |
 | `@TAIDAFLOW_EXPORT_DIR@` | `C:/TaidaFlowData/exports` |
 | `@TAIDAFLOW_NGINX_PORT@` | `80` |
+| `@TAIDAFLOW_REST_PORT@` | `18080` |
 
 (用過一次 `start-taidaflow.bat` 的話,這個檔已經自動產生在同一個位置,可以直接用。)
 
@@ -128,7 +134,8 @@ curl -I http://127.0.0.1/
 
 - 第 1 行 `-t`:檢查設定,要看到 `syntax is ok` 與 `test is successful`。
 - 第 2 行:啟動(會多一個最小化的 nginx 視窗,不要關它;關掉它 nginx 就停了)。
-- 第 3 行:要看到 `HTTP/1.1 302` 與 `Location: /TaidaFlowApp.html`。
+- 第 3 行:要看到 `HTTP/1.1 302` 與 `Location: /TaidaFlowApp.html`。app 也在執行時,`curl http://127.0.0.1/api/`
+  要回 `{"status":"ok"}`(REST API 經 nginx)。
 - 第 4 行:**正常停止**(`-s quit`,等傳送中的下載送完)。`-p` 必須與啟動時相同。
   設定改過或網頁更新後可用 `-s reload` 重新載入。
 
@@ -215,6 +222,7 @@ app 有操作畫面,所以採「**使用者登入時**」由工作排程器執�
 | **502** | 外部 HMI 讀寫 Modbus | 只給 HMI 的 IP |
 | 8124 | 備援網址 `:8124`(app 自己的網頁與下載) | 可選;只用 port 80 時可以不開 |
 | 18125 | 內部用(只綁 127.0.0.1) | **不要開** |
+| 18080 | REST API 內部 port(只綁 127.0.0.1;區網用 80 的 `/api/`) | **不要開** |
 
 管理員在「以系統管理員身分執行」的 cmd 中執行(範例,IP 請依現場修改):
 
@@ -235,8 +243,41 @@ netsh advfirewall firewall add rule name="TaidaFlow web fallback (8124)" dir=in 
 | `http://<IP>/TaidaFlowApp.html` | 同上 |
 | `http://<IP>:8124/TaidaFlowApp.html` | app 自己(備援;nginx 沒跑時也能用) |
 | `http://<IP>/exports/<檔名>.csv` | 匯出 CSV 下載(nginx,支援續傳);`:8124/exports/...` 為備援(不支援續傳) |
+| `http://<IP>/api/...` | REST API(nginx 轉給 app 的 `127.0.0.1:18080`,見 §1.11) |
 
 `<IP>` 用 `ipconfig` 查本機的 IPv4。`start-taidaflow.bat` 結束時也會列出所有網址。
+
+### 1.11 REST API
+
+app 內建的 REST API(原後端的 `RESTManager`,w2-060 起啟用)只在本機 `127.0.0.1:18080` 聽;區網的電腦一律經
+nginx:`http://<IP>/api/...`。**內網不做存取控管**:任何連得到 port 80 的人都能讀歷史資料,並用 PUT 改下表標「會改」的設定
+(正式上線前請再確認,§7)。回應都是 JSON,帶 `Access-Control-Allow-Origin: *`(每個 `/api/...` 都有 `OPTIONS` 預檢)。
+app 沒在執行時 nginx 回 `502`。
+
+| 方法 | 網址 | 用途 | 參數 | 會改到什麼 |
+|---|---|---|---|---|
+| GET | `/api/` | 狀態 `{"status":"ok"}` | — | 不改 |
+| GET | `/api/settings/sensors` | 感測器 key/名稱對照 | — | 不改 |
+| PUT | `/api/settings/sensors` | 改感測器名稱 | body `[{"key":"s1","name":"..."}]`,沒列出的保留 | **會改** `settings.sqlite`(`sensor_config`;目前畫面不讀它) |
+| GET | `/api/settings/frequency` | `{"read_frequency":1000}` | — | 不改 |
+| PUT | `/api/settings/frequency` | 改讀取頻率設定值 | body `{"read_frequency":n}`,n > 0 | **會改** `settings.sqlite`(`app_settings`;目前沒有程式使用這個值,實際讀取週期不變) |
+| GET | `/api/modbus/mode` | `{"mode":"network"}` | — | 不改 |
+| PUT | `/api/modbus/mode` | 設定模式 | body `{"mode":"network"}` 或 `"standalone"` | **會改** app 記憶體中的值(不影響 Modbus 連線;重啟後回 `network`) |
+| GET | `/api/sensor/range` | 感測器歷史列(舊到新,**不分頁**) | `from`、`to`:epoch 秒 | 不改 |
+| GET | `/api/sensor/rangeDateTime` | 同上 | `from`、`to`:`2026-09-28T10:00:00`(本機時間;`Z` 結尾 = UTC) | 不改 |
+| GET | `/api/sensor/rangeDateTimePage` | 分頁版 | 同上 + `page`(預設 1)、`pageSize`(預設 200,最多 1000) | 不改 |
+| GET | `/api/sensor/last` | 本月最新一列(沒有 → 404) | — | 不改 |
+| GET | `/api/holding/range`、`/api/holding/rangeDateTime`、`/api/holding/rangeDateTimePage`、`/api/holding/last` | holding register 的同上查詢(目前 app 不存 holding register,回空陣列 / 404) | 同 sensor | 不改 |
+| GET | `/api/device/sn` | `{"sn":"sn000000"}` | — | `device_info.ini` 不存在時建立 |
+
+範例(cmd):`curl http://127.0.0.1/api/settings/frequency`、
+`curl -X PUT -H "Content-Type: application/json" -d "{\"read_frequency\":1000}" http://127.0.0.1/api/settings/frequency`。
+
+**注意**:`/api/sensor/range`、`rangeDateTime` 一次回傳整個區間(每秒一列,一個月約 260 萬列),大區間會讓 app 畫面
+停住很久;大量資料請用 `rangeDateTimePage`。
+
+內部 port 要改(例如 18080 被別的程式占用):`start-taidaflow.ps1 -RestPort <port>`(同時設給
+app 與 nginx;開機自動啟動的排程引數也要加);手動做法時 `TAIDAFLOW_REST_PORT` 與 nginx 設定檔的 `@TAIDAFLOW_REST_PORT@` 要一樣。
 
 ---
 
@@ -340,7 +381,7 @@ set "PATH=C:\Qt\6.8.3\msvc2022_64\bin;%PATH%"
 **0. 先確認沒有人在用這些 port**(有輸出 = 有程式在用,先查清楚,不要關別人的程式):
 
 ```bat
-netstat -ano | findstr LISTENING | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 "
+netstat -ano | findstr LISTENING | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " /C:":18080 "
 ```
 
 **1. 模擬器**(一定要**先**開模擬器,再開 app)
@@ -388,7 +429,7 @@ notepad "%REPO%\taidaflow\build\nginx-manual\conf\taidaflow.conf"
 
 取代:`@TAIDAFLOW_WEB_ROOT@` → `D:/repo/codex/qmlTester/taidaflow/build/desktop/web`、
 `@TAIDAFLOW_EXPORT_DIR@` → `D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/exports`、
-`@TAIDAFLOW_NGINX_PORT@` → `80`。然後:
+`@TAIDAFLOW_NGINX_PORT@` → `80`、`@TAIDAFLOW_REST_PORT@` → `18080`。然後:
 
 ```bat
 set "NGX=C:\tools\nginx\nginx-1.30.5\nginx.exe"
@@ -405,6 +446,8 @@ start "TaidaFlow nginx" /min "%NGX%" -p "D:/repo/codex/qmlTester/taidaflow/build
 curl -I http://127.0.0.1/
 curl -I http://127.0.0.1/TaidaFlowApp.html
 curl -I http://127.0.0.1:8124/TaidaFlowApp.html
+curl http://127.0.0.1/api/
+curl http://127.0.0.1/api/settings/frequency
 ```
 
 **5. 關閉**(順序:nginx → app → 模擬器)
@@ -413,7 +456,7 @@ curl -I http://127.0.0.1:8124/TaidaFlowApp.html
 "%NGX%" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf -s quit
 taskkill /IM TaidaFlowApp.exe
 taskkill /IM Adam60xxSimulator.exe
-netstat -ano | findstr LISTENING | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 "
+netstat -ano | findstr LISTENING | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " /C:":18080 "
 ```
 
 程式收尾需要幾秒,等 5 秒左右再執行最後一行;最後一行沒有輸出 = 全部關乾淨。`taskkill` 不加 `/F`
@@ -457,11 +500,12 @@ DLL 相依檢查:`powershell -ExecutionPolicy Bypass -File scripts\check-package
 
 | port / 位址 | 程式 | 用途 | 區網要開嗎 |
 |---|---|---|---|
-| `0.0.0.0:80` | nginx(另一個程式,`start-taidaflow` 或 `nginx-start.ps1` 啟動) | 網頁 `http://<IP>/`、CSV 下載 `/exports/`(續傳) | 要(看網頁的人) |
+| `0.0.0.0:80` | nginx(另一個程式,`start-taidaflow` 或 `nginx-start.ps1` 啟動) | 網頁 `http://<IP>/`、CSV 下載 `/exports/`(續傳)、REST API `/api/`(轉給 18080) | 要(看網頁、用 REST 的人) |
 | `0.0.0.0:502` | TaidaFlowApp(Modbus TCP 伺服器) | 外部 HMI 讀寫 | 只給 HMI |
 | `0.0.0.0:8124` | TaidaFlowApp(內建 HTTP) | 網頁與 CSV 下載的備援 `:8124` | 可選 |
 | `0.0.0.0:8125` | TaidaFlowApp(區網轉發) | 網頁 ↔ 桌面同步(WebSocket `/mirror`) | 要 |
 | `127.0.0.1:18125` | TaidaFlowApp(mirror 伺服器) | 內部,8125 轉到這裡 | 不要 |
+| `127.0.0.1:18080` | TaidaFlowApp(REST API,`RESTManager`) | 內部,nginx 的 `/api/` 轉到這裡(`TAIDAFLOW_REST_PORT` 可改) | 不要 |
 | 連出 `192.168.1.201~205:502` | TaidaFlowApp(Modbus 用戶端) | 5 台 ADAM(正式機);測試機設模擬器時改 `127.0.0.201~205` | — |
 | `COM2` | TaidaFlowApp | MS300 變頻器(Modbus RTU) | — |
 | `127.0.0.201~205:502` | Adam60xxSimulator(只在測試機) | 模擬 5 台 ADAM | — |
@@ -505,6 +549,9 @@ DLL 相依檢查:`powershell -ExecutionPolicy Bypass -File scripts\check-package
 
 nginx 沒起來時 app 仍會啟動,網頁改用 `http://<IP>:8124/TaidaFlowApp.html`,下載連結也改走 8124。
 
+**`http://<IP>/api/...` 回 502**:app 沒在執行,或 REST API 沒起來(app log 有 `[REST] REST API NOT started`,
+通常是 18080 被別的程式占用;改用 `start-taidaflow.ps1 -RestPort <port>`,見 §1.11)。
+
 **`start-taidaflow` 結果碼 6**:app 沒起來或 8124/8125 沒在聽。看 `logs\taidaflow-<時間>.log`(預設只記警告與錯誤;
 要完整紀錄把 `-AppLog full` 加到啟動參數,注意 log 大約每小時 15 MB)。
 
@@ -523,7 +570,8 @@ nginx 沒起來時 app 仍會啟動,網頁改用 `http://<IP>:8124/TaidaFlowApp.
 | 啟動 | `run-desktop.ps1`:**先跑安全探測**,只要 192.168.1.201~205 連得到、有 COM2、或 502 被占用就**拒絕**啟動(刻意的開發機保護) | `start-taidaflow.bat/.ps1`:**不做安全探測**(現場本來就要連真設備),只檢查重複執行與 port |
 | Qt | 從 `C:\Qt\6.8.3\msvc2022_64\bin`(腳本加到 PATH) | 打包資料夾自帶;PATH 中含 Qt 的資料夾會被移除 |
 | 工作目錄 | 固定 `build\runtime-cwd` | `-DataDir`(預設 `<安裝資料夾>\runtime`) |
-| 設備 | 可用 `-DeviceProfile simulator` 改連模擬器 | **一律清除** `TAIDAFLOW_DEVICE_PROFILE` 與 `TAIDAFLOW_E2E_PV_FILE`(不能進測試模式) |
+| 設備 | 可用 `-DeviceProfile simulator` 改連模擬器 | **一律清除** `TAIDAFLOW_DEVICE_PROFILE`(不能進測試模式) |
+| REST API | `TAIDAFLOW_REST_PORT` 照環境(預設 18080),nginx `-RestPort` | `-RestPort`(預設 18080)同時設給 app 與 nginx |
 | nginx | `nginx-start.ps1`,runtime `build\nginx` | `start-taidaflow -UseNginx`,runtime `<資料夾>\nginx` |
 | log | `build\runtime-logs\`(完整) | `<資料夾>\logs\`(預設只記警告與錯誤,保留 30 天) |
 
@@ -540,7 +588,8 @@ nginx 沒起來時 app 仍會啟動,網頁改用 `http://<IP>:8124/TaidaFlowApp.
 4. **開機自動啟動**:是否註冊登入排程;現場電腦是否設定 Windows 自動登入(帳號與安全性)。
 5. **app log 模式**:預設 `quiet`(只記警告/錯誤)+ 保留 30 天,或 `full`(約 15 MB/小時)。
 6. **防火牆範圍**:80/8125 開給哪些網段;8124 是否也開;502 只開給 HMI 的 IP。
-7. **存取控管**:80/8124/8125 目前不做登入或來源限制(內網決定),任何連得到的人都能操作(含急停);正式上線前再確認。
+7. **存取控管**:80(含 REST API `/api/` 的 PUT 改設定)/8124/8125 目前不做登入或來源限制(內網決定,Mango 2026-09-28 對 REST
+   也確認開放全部),任何連得到的人都能操作(含急停);正式上線前再確認。
 8. **現場電腦設定**:關閉睡眠、Windows Update 自動重新開機時段、螢幕保護等(由 IT 決定)。
 9. **設備位址**:ADAM 位址固定 `192.168.1.201~205`(程式內),現場網段必須一致;是否要做成可設定(需改 Core)。
 10. **備份**:備份頻率與存放位置(§1.8)。

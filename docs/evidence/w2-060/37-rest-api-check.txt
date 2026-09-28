@@ -1,0 +1,85 @@
+=== w2-060 REST API check 2026-09-28T18:15:14
+hosts ['127.0.0.1', '192.168.0.125'], nginx port 80, REST port 18080, settings db (test data) D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\settings.sqlite
+--- GET routes via nginx http://127.0.0.1
+[PASS] GET http://127.0.0.1/api/ - 200 application/json ACAO=* Cache-Control=no-store 30 ms; JSON {"status": "ok"} (status route '/' (nginx maps /api/ -> /))
+[PASS] GET http://127.0.0.1/api/settings/sensors - 200 application/json ACAO=* Cache-Control=no-store 31 ms; JSON array, 20 item(s), 728 bytes; first {"key": "s1", "name": "inletWaterTemp"}
+[PASS] GET http://127.0.0.1/api/settings/frequency - 200 application/json ACAO=* Cache-Control=no-store 30 ms; JSON {"read_frequency": 1000}
+[PASS] GET http://127.0.0.1/api/modbus/mode - 200 application/json ACAO=* Cache-Control=no-store 15 ms; JSON {"mode": "network"}
+[PASS] GET http://127.0.0.1/api/sensor/range?from=1790586914&to=1790590514 - 200 application/json ACAO=* Cache-Control=no-store 25 ms; JSON array, 213 item(s), 84988 bytes; first {"s1": 18743, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19038, "s20": 0, "s2 (last hour, epoch seconds)
+[PASS] GET http://127.0.0.1/api/holding/range?from=1790586914&to=1790590514 - 200 application/json ACAO=* Cache-Control=no-store 22 ms; JSON array, 0 item(s), 2 bytes (last hour, epoch seconds)
+[PASS] GET http://127.0.0.1/api/device/sn - 200 application/json ACAO=* Cache-Control=no-store 3 ms; JSON {"sn": "sn000000"}
+[PASS] GET http://127.0.0.1/api/sensor/last - 200 application/json ACAO=* Cache-Control=no-store 28 ms; JSON {"s1": 18737, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19031, "s20": 0, "s21": "", "s22": "", "s23": "", "s24": "",
+[PASS] GET http://127.0.0.1/api/holding/last - 404 application/json ACAO=* Cache-Control=no-store 16 ms; JSON {"error": "no data", "ok": false}
+[PASS] GET http://127.0.0.1/api/sensor/rangeDateTime?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14 - 200 application/json ACAO=* Cache-Control=no-store 24 ms; JSON array, 213 item(s), 84988 bytes; first {"s1": 18743, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19038, "s20": 0, "s2 (last hour, ISO local time)
+[PASS] GET http://127.0.0.1/api/sensor/rangeDateTimePage?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14&page=1&pageSize=5 - 200 application/json ACAO=* Cache-Control=no-store 23 ms; JSON object {"hasNextPage": true, "hasPreviousPage": false, "page": 1, "pageSize": 5, "totalCount": 213, "totalPages": 43}, items 5, 2104 bytes
+[PASS] GET http://127.0.0.1/api/holding/rangeDateTime?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14 - 200 application/json ACAO=* Cache-Control=no-store 30 ms; JSON array, 0 item(s), 2 bytes
+[PASS] GET http://127.0.0.1/api/holding/rangeDateTimePage?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14&page=1&pageSize=5 - 200 application/json ACAO=* Cache-Control=no-store 16 ms; JSON object {"hasNextPage": false, "hasPreviousPage": false, "page": 1, "pageSize": 5, "totalCount": 0, "totalPages": 0}, items 0, 108 bytes
+[PASS] GET http://127.0.0.1/api/sensor/range?from=abc -> 400 JSON error - 400 JSON {"error": "invalid from/to", "ok": false}
+[PASS] GET http://127.0.0.1/api/does-not-exist -> 404 (no such route) - 404
+--- GET routes via nginx http://192.168.0.125
+[PASS] GET http://192.168.0.125/api/ - 200 application/json ACAO=* Cache-Control=no-store 17 ms; JSON {"status": "ok"} (status route '/' (nginx maps /api/ -> /))
+[PASS] GET http://192.168.0.125/api/settings/sensors - 200 application/json ACAO=* Cache-Control=no-store 6 ms; JSON array, 20 item(s), 728 bytes; first {"key": "s1", "name": "inletWaterTemp"}
+[PASS] GET http://192.168.0.125/api/settings/frequency - 200 application/json ACAO=* Cache-Control=no-store 26 ms; JSON {"read_frequency": 1000}
+[PASS] GET http://192.168.0.125/api/modbus/mode - 200 application/json ACAO=* Cache-Control=no-store 4 ms; JSON {"mode": "network"}
+[PASS] GET http://192.168.0.125/api/sensor/range?from=1790586914&to=1790590514 - 200 application/json ACAO=* Cache-Control=no-store 48 ms; JSON array, 213 item(s), 84988 bytes; first {"s1": 18743, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19038, "s20": 0, "s2 (last hour, epoch seconds)
+[PASS] GET http://192.168.0.125/api/holding/range?from=1790586914&to=1790590514 - 200 application/json ACAO=* Cache-Control=no-store 27 ms; JSON array, 0 item(s), 2 bytes (last hour, epoch seconds)
+[PASS] GET http://192.168.0.125/api/device/sn - 200 application/json ACAO=* Cache-Control=no-store 5 ms; JSON {"sn": "sn000000"}
+[PASS] GET http://192.168.0.125/api/sensor/last - 200 application/json ACAO=* Cache-Control=no-store 42 ms; JSON {"s1": 18737, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19031, "s20": 0, "s21": "", "s22": "", "s23": "", "s24": "",
+[PASS] GET http://192.168.0.125/api/holding/last - 404 application/json ACAO=* Cache-Control=no-store 6 ms; JSON {"error": "no data", "ok": false}
+[PASS] GET http://192.168.0.125/api/sensor/rangeDateTime?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14 - 200 application/json ACAO=* Cache-Control=no-store 25 ms; JSON array, 213 item(s), 84988 bytes; first {"s1": 18743, "s10": 944, "s11": 897, "s12": 0, "s13": 13107, "s14": 19669, "s15": 26214, "s16": 32776, "s17": 0, "s18": 0, "s19": 0, "s2": 19038, "s20": 0, "s2 (last hour, ISO local time)
+[PASS] GET http://192.168.0.125/api/sensor/rangeDateTimePage?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14&page=1&pageSize=5 - 200 application/json ACAO=* Cache-Control=no-store 11 ms; JSON object {"hasNextPage": true, "hasPreviousPage": false, "page": 1, "pageSize": 5, "totalCount": 213, "totalPages": 43}, items 5, 2104 bytes
+[PASS] GET http://192.168.0.125/api/holding/rangeDateTime?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14 - 200 application/json ACAO=* Cache-Control=no-store 9 ms; JSON array, 0 item(s), 2 bytes
+[PASS] GET http://192.168.0.125/api/holding/rangeDateTimePage?from=2026-09-28T17:15:14&to=2026-09-28T18:15:14&page=1&pageSize=5 - 200 application/json ACAO=* Cache-Control=no-store 10 ms; JSON object {"hasNextPage": false, "hasPreviousPage": false, "page": 1, "pageSize": 5, "totalCount": 0, "totalPages": 0}, items 0, 108 bytes
+[PASS] GET http://192.168.0.125/api/sensor/range?from=abc -> 400 JSON error - 400 JSON {"error": "invalid from/to", "ok": false}
+[PASS] GET http://192.168.0.125/api/does-not-exist -> 404 (no such route) - 404
+--- OPTIONS preflight (CORS) via nginx
+[PASS] OPTIONS http://127.0.0.1/api/settings/sensors - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/settings/frequency - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/modbus/mode - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/sensor/range - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/holding/range - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/device/sn - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/sensor/last - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/holding/last - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/sensor/rangeDateTime - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/sensor/rangeDateTimePage - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/holding/rangeDateTime - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://127.0.0.1/api/holding/rangeDateTimePage - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/settings/sensors - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/settings/frequency - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/modbus/mode - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/sensor/range - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/holding/range - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/device/sn - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/sensor/last - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/holding/last - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/sensor/rangeDateTime - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/sensor/rangeDateTimePage - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/holding/rangeDateTime - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+[PASS] OPTIONS http://192.168.0.125/api/holding/rangeDateTimePage - 200 ACAO=* ACAM=GET, POST, PUT, OPTIONS ACAH=Content-Type
+--- PUT /api/settings/frequency (write via http://192.168.0.125, read via http://127.0.0.1; db D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\settings.sqlite)
+  before: GET {'read_frequency': 1000} ; sqlite app_settings.read_frequency = [('1000',)]
+[PASS] PUT read_frequency=2345 - 200 JSON {"ok": true, "read_frequency": 2345}
+[PASS] read back test value (GET + test settings.sqlite) - GET {'read_frequency': 2345}, sqlite [('2345',)]
+[PASS] PUT invalid read_frequency -> 400 - 400 JSON {"error": "read_frequency missing or invalid", "ok": false}
+[PASS] PUT restore read_frequency=1000 - 200 JSON {"ok": true, "read_frequency": 1000}
+[PASS] restored (GET + sqlite equal to before) - GET {'read_frequency': 1000}, sqlite [('1000',)]
+--- PUT /api/settings/sensors
+  before: 20 entries, s1=[{'key': 's1', 'name': 'inletWaterTemp'}]; sqlite rows 20
+[PASS] PUT sensors [{s1: w2060-test-s1}] - 200 JSON {"ok": true}
+[PASS] read back: s1 renamed, other keys unchanged (merge), test settings.sqlite has it - 20 entries, sqlite s1 [('w2060-test-s1',)]
+[PASS] PUT sensors invalid body -> 400 - 400 JSON {"error": "invalid json array", "ok": false}
+[PASS] PUT restore original sensor list - 200 JSON {"ok": true}
+[PASS] restored (GET + sqlite equal to before) - 20 entries, sqlite rows 20
+--- PUT /api/modbus/mode (RESTManager in-memory value; no Core consumer)
+  before: {'mode': 'network'}
+[PASS] PUT mode=standalone - 200 JSON {"mode": "standalone", "ok": true}
+[PASS] read back test mode - {'mode': 'standalone'}
+[PASS] PUT mode=auto -> 400 - 400 JSON {"error": "mode must be 'network' or 'standalone'", "ok": false}
+[PASS] PUT restore mode=network - 200 JSON {"mode": "network", "ok": true}
+[PASS] restored - {'mode': 'network'}
+--- internal REST port
+[PASS] http://127.0.0.1:18080/ (loopback, direct) -> 200 - 200 JSON {"status": "ok"}
+[PASS] 192.168.0.125:18080 (LAN address, direct) refused - only reachable through nginx - ConnectionRefusedError: [WinError 10061] 無法連線，因為目標電腦拒絕連線。
+=== 0 check(s) failed
+exit=0

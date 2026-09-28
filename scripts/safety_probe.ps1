@@ -12,14 +12,16 @@
 #      by default since w2-057, 8123 before; information only - never blocks), 8124 (Core's HTTP service: web
 #      page + CSV downloads, AppHttpServer, w2-049), 8125 (public mirror port = the desktop's LAN relay
 #      0.0.0.0:8125, App/lanrelay.h) and 18125 (the desktop's internal mirror server,
-#      127.0.0.1:18125; merged from main e4bc327 / w2-042).
+#      127.0.0.1:18125; merged from main e4bc327 / w2-042) and the REST port (w2-060: the app's
+#      RESTManager on 127.0.0.1, TAIDAFLOW_REST_PORT or 18080; the LAN reaches it via nginx /api/).
 # Every run appends a timestamped record to docs/evidence/wasm-v4/safety-probe.log.
 #
 # Exit code: 0 = safe to launch; 3 = UNSAFE (a device answered, COM2 exists, or port 502
 # already has a listener - e.g. Mango's modbusserver, which must NOT be stopped); the
-# desktop app must not be started.  A listener on 8125 (LAN relay), 18125 (internal mirror)
-# or 8124 (web page + CSV downloads) also blocks (exit 4, BUSY), because a stale desktop
-# instance would make the result ambiguous (and the new instance could not bind it).
+# desktop app must not be started.  A listener on 8125 (LAN relay), 18125 (internal mirror),
+# 8124 (web page + CSV downloads) or the REST port (w2-060, default 18080) also blocks (exit 4,
+# BUSY), because a stale desktop instance would make the result ambiguous (and the new instance
+# could not bind it). The owner is never stopped.
 # Ports 80 (w2-057 default) and 8123 (w2-050, or nginx-start.ps1 -Port 8123) = the optional nginx
 # web front end (scripts/nginx-start.ps1): it only serves static files (the deployed web page and the
 # CSV files of the export folder), it never talks to the plant and the app binds neither port. Their listeners are therefore listed for INFORMATION ONLY and never change
@@ -49,6 +51,13 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $simulator = ($DeviceProfile -eq 'simulator')
 $simulatorHosts = @(201..205 | ForEach-Object { "127.0.0.$_" })
+# w2-060: the app's REST port (RESTManager, 127.0.0.1) = TAIDAFLOW_REST_PORT (1..65535) or 18080,
+# the same rule as the app (Core::startRestServer).
+$restPort = 18080
+if ($env:TAIDAFLOW_REST_PORT) {
+    $rp = 0
+    if ([int]::TryParse($env:TAIDAFLOW_REST_PORT.Trim(), [ref]$rp) -and $rp -ge 1 -and $rp -le 65535) { $restPort = $rp }
+}
 if ($LogFile -eq "") {
     if ($simulator) { $LogFile = Join-Path $root 'docs\evidence\wasm-v4-sim\safety-probe.log' }
     else { $LogFile = Join-Path $root 'docs\evidence\wasm-v4\safety-probe.log' }
@@ -120,10 +129,10 @@ if ($allSerial -match '(?i)\bCOM2\b') {
 
 # 3. Local listeners.
 $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
-            Where-Object { $_.LocalPort -in 80, 502, 8123, 8124, 8125, 18125 })
+            Where-Object { $_.LocalPort -in @(80, 502, 8123, 8124, 8125, 18125, $restPort) })
 $simListening = @()
 if ($listen.Count -eq 0) {
-    $lines.Add("  listeners 80/502/8123/8124/8125/18125: <none>")
+    $lines.Add("  listeners 80/502/8123/8124/8125/18125/$restPort(REST): <none>")
 } else {
     foreach ($l in $listen) {
         $pname = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
@@ -143,6 +152,7 @@ if ($listen.Count -eq 0) {
         elseif ($l.LocalPort -eq 502) { $unsafe = $true; $lines.Add("  port 502 already in use -> conflict, do not launch (do NOT stop the owner)") }
         elseif ($l.LocalPort -eq 8125) { $busy = $true; $lines.Add("  port 8125 (mirror LAN relay) already in use -> stale desktop instance, do not launch") }
         elseif ($l.LocalPort -eq 18125) { $busy = $true; $lines.Add("  port 18125 (internal mirror) already in use -> stale desktop instance, do not launch") }
+        elseif ($l.LocalPort -eq $restPort) { $busy = $true; $lines.Add("  port $restPort (REST API, RESTManager 127.0.0.1) already in use -> another instance/program, do not launch (do NOT stop the owner)") }
         elseif ($l.LocalPort -eq 8123 -or $l.LocalPort -eq 80) {
             $who = if ($l.OwningProcess -eq 4) { ' (pid 4 = Windows HTTP.sys, not nginx)' } else { '' }
             $lines.Add("  port $($l.LocalPort) = nginx web front end (scripts\nginx-start.ps1)$who -> information only, does not block the launch")

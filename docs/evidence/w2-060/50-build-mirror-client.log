@@ -1,0 +1,27 @@
+'vswhere.exe' 不是內部或外部命令、可執行的程式或批次檔。
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (3.3s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-050-mirror-client
+[1/5] Automatic MOC for target mirror_export_client
+[2/5] Building CXX object CMakeFiles\mirror_export_client.dir\D_\repo\codex\qmlTester\taidaflow\integration-pack\wasm-mirror\src\infrastructure\proxy_mirror\proxymirror.cpp.obj
+[3/5] Building CXX object CMakeFiles\mirror_export_client.dir\mirror_export_client_autogen\mocs_compilation.cpp.obj
+[4/5] Building CXX object CMakeFiles\mirror_export_client.dir\main.cpp.obj
+[5/5] Linking CXX executable mirror_export_client.exe
+exit=0

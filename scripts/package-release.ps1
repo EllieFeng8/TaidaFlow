@@ -221,7 +221,8 @@ $gitDate = (& git -C $root log -1 --format=%cI).Trim()
     "MSVC runtime : app-local DLLs from $crtDir",
     "web page     : $WebSource (TaidaFlowApp.wasm $((Get-Item (Join-Path $WebSource 'TaidaFlowApp.wasm')).LastWriteTime.ToString('s')))",
     "nginx        : $(if ($IncludeNginx) { "included ($NginxDir)" } else { 'not included (use C:\tools\nginx or -Nginx)' })",
-    "start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md"))
+    "start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md",
+    "REST API     : http://<IP>/api/... through nginx -> 127.0.0.1:18080 (w2-060; start-taidaflow.ps1 -RestPort / TAIDAFLOW_REST_PORT)"))
 $manifest = New-Object System.Collections.Generic.List[string]
 $manifest.Add("# path<TAB>bytes<TAB>SHA-256 (relative to the package folder; MANIFEST.txt itself not listed)")
 $files = @(Get-ChildItem -LiteralPath $pkg -Recurse -File | Where-Object { $_.Name -ne 'MANIFEST.txt' } | Sort-Object FullName)

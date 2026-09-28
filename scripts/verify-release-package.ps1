@@ -8,6 +8,9 @@
 #   3. every Qt / MSVC runtime DLL loaded by the app comes from the package folder (load test);
 #   4. http://<host>[:port]/ -> 302 /TaidaFlowApp.html, page 200, .wasm with gzip, the same on 8124,
 #      WebSocket upgrade 101 on 8125 (/mirror), for 127.0.0.1 and the LAN IPv4;
+#      REST API (w2-060) through nginx: GET /api/ (status) and /api/settings/frequency 200 JSON,
+#      OPTIONS preflight 200 with Access-Control-Allow-Origin; the internal REST port (-RestPort,
+#      default 18080) listens on 127.0.0.1 only and cannot be reached on the LAN address;
 #   5. (with a mirror client, dev-only tool) a history CSV export requested like the web page does:
 #      downloadPort must equal the nginx port; the link the web page builds (HistoryPage.qml
 #      exportDownloadUrl, evaluated with node) is fetched: 200 + same SHA-256 as the file,
@@ -30,6 +33,7 @@ param(
     [ValidateSet('ps1', 'bat')][string]$Mode = 'ps1',
     [string]$DataDir = "",
     [int]$Port = 80,
+    [int]$RestPort = 18080,
     [string]$Evidence = "",
     [string]$SeedDb = "",
     [string]$MirrorClient = "build\w2-057-mirror-client\mirror_export_client.exe",
@@ -97,7 +101,7 @@ $probeOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path
 $probeRc = $LASTEXITCODE
 $probeOut | ForEach-Object { Note "  probe | $_" }
 if ($probeRc -ne 0) { Note "safety probe NOT SAFE (exit $probeRc) - nothing started"; Save; exit 3 }
-$busy = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125) })
+$busy = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125, $RestPort) })
 if ($busy.Count -or @(Get-Process TaidaFlowApp -ErrorAction SilentlyContinue).Count) { Note "ports busy / app running - nothing started"; Save; exit 3 }
 
 # --- 1. data folder (fresh) + optional fixture -----------------------------------------------------
@@ -126,7 +130,7 @@ if ($Mode -eq 'bat') {
     $cmdLine = '/c ""' + (Join-Path $Package 'start-taidaflow.bat') + '" > "' + $startOut + '" 2>&1"'
 } else {
     $cmdLine = '/c ""' + "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" + '" -NoProfile -ExecutionPolicy Bypass -File "' +
-               (Join-Path $Package 'start-taidaflow.ps1') + '" -DataDir "' + $DataDir + '" -UseNginx -Port ' + $Port + ' > "' + $startOut + '" 2>&1"'
+               (Join-Path $Package 'start-taidaflow.ps1') + '" -DataDir "' + $DataDir + '" -UseNginx -Port ' + $Port + ' -RestPort ' + $RestPort + ' > "' + $startOut + '" 2>&1"'
 }
 Note "start: cmd.exe $cmdLine"
 # ShellExecute (no handle inheritance): the app must not inherit this script's output pipe.
@@ -145,12 +149,14 @@ try { $state = Get-Content -Raw (Join-Path $DataDir 'taidaflow-app.json') | Conv
 $app = if ($state) { Get-Process -Id ([int]$state.pid) -ErrorAction SilentlyContinue } else { $null }
 Check 'TaidaFlowApp running (state file pid)' ([bool]$app) $(if ($state) { "pid $($state.pid)" } else { 'no state file' })
 if ($app) {
-    $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125) })
+    $listen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125, $RestPort) })
     foreach ($l in $listen) {
         $n = try { (Get-Process -Id $l.OwningProcess).ProcessName } catch { '?' }
         Note ("  listener {0}:{1} pid {2} ({3})" -f $l.LocalAddress, $l.LocalPort, $l.OwningProcess, $n)
     }
     foreach ($pp in 502, 8124, 8125, 18125) { Check "app listens on $pp" (@($listen | Where-Object { $_.LocalPort -eq $pp -and $_.OwningProcess -eq $app.Id }).Count -gt 0) '' }
+    $restListen = @($listen | Where-Object { $_.LocalPort -eq $RestPort -and $_.OwningProcess -eq $app.Id })
+    Check "app listens on $RestPort (REST API) on 127.0.0.1 only" ($restListen.Count -gt 0 -and @($restListen | Where-Object { $_.LocalAddress -ne '127.0.0.1' }).Count -eq 0) (($restListen | ForEach-Object { "$($_.LocalAddress):$($_.LocalPort)" }) -join ', ')
     $nginxListen = @($listen | Where-Object { $_.LocalPort -eq $Port -and ((Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).ProcessName -eq 'nginx') })
     Check "nginx listens on $Port" ($nginxListen.Count -gt 0) ''
 
@@ -184,6 +190,22 @@ if ($app) {
                      '-H', 'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==', '-H', "Origin: $base", "http://${h}:8125/mirror")
         $wsStatus = ($ws.out | Where-Object { $_ -match '^HTTP/' } | Select-Object -First 1)
         Check "ws://${h}:8125/mirror upgrade -> 101" ("$wsStatus" -match ' 101') "$wsStatus (curl exit $($ws.rc): 28 = closed by --max-time after the upgrade)"
+        # w2-060: REST API through nginx
+        $api = Invoke-Curl @('-D', '-', '--max-time', '20', "$base/api/")
+        $apiStatus = ($api.out | Where-Object { $_ -match '^HTTP/' } | Select-Object -Last 1)
+        Check "$base/api/ (REST status via nginx) -> 200 {`"status`":...}" ("$apiStatus" -match ' 200' -and (($api.out -join "`n") -match '"status"')) "$apiStatus $(($api.out | Select-Object -Last 1))"
+        $api = Invoke-Curl @('-D', '-', '--max-time', '20', "$base/api/settings/frequency")
+        $apiStatus = ($api.out | Where-Object { $_ -match '^HTTP/' } | Select-Object -Last 1)
+        $acao = ($api.out | Where-Object { $_ -match '^Access-Control-Allow-Origin:' } | Select-Object -Last 1)
+        Check "$base/api/settings/frequency -> 200 read_frequency, CORS header" ("$apiStatus" -match ' 200' -and (($api.out -join "`n") -match '"read_frequency"') -and "$acao" -match '\*') "$apiStatus $(($api.out | Select-Object -Last 1)) $acao"
+        $pre2 = Invoke-Curl @('-X', 'OPTIONS', '-D', '-', '-o', 'NUL', '--max-time', '20', '-H', 'Origin: http://example.invalid', '-H', 'Access-Control-Request-Method: PUT', '-H', 'Access-Control-Request-Headers: Content-Type', "$base/api/settings/frequency")
+        $preStatus = ($pre2.out | Where-Object { $_ -match '^HTTP/' } | Select-Object -Last 1)
+        $preMethods = ($pre2.out | Where-Object { $_ -match '^Access-Control-Allow-Methods:' } | Select-Object -Last 1)
+        Check "OPTIONS $base/api/settings/frequency (preflight) -> 200, Allow-Methods has PUT" ("$preStatus" -match ' 200' -and "$preMethods" -match 'PUT') "$preStatus $preMethods"
+        if ($h -ne '127.0.0.1') {
+            $direct = Invoke-Curl @('-o', 'NUL', '-w', '%{http_code}', '--connect-timeout', '3', '--max-time', '5', "http://${h}:$RestPort/")
+            Check "internal REST port not reachable on the LAN address (http://${h}:$RestPort/)" ($direct.rc -ne 0) "curl exit $($direct.rc) (7 = connection refused), http_code $($direct.out -join '')"
+        }
     }
 
     # --- 5. export via the mirror + download links -----------------------------------------------------
@@ -278,8 +300,8 @@ Check 'stop exit code 0' ("$stopRc" -eq '0') "exit $stopRc"
 Start-Sleep -Seconds 1
 $leftProc = @(Get-Process TaidaFlowApp, nginx -ErrorAction SilentlyContinue | Where-Object { -not ($pre | Where-Object Id -eq $_.Id) })
 Check 'no TaidaFlowApp / nginx started by this check left' ($leftProc.Count -eq 0) (($leftProc | ForEach-Object { "$($_.ProcessName) $($_.Id)" }) -join ', ')
-$leftListen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125) })
-Check "no listener left on $Port/502/8124/8125/18125" ($leftListen.Count -eq 0) (($leftListen | ForEach-Object { "$($_.LocalAddress):$($_.LocalPort) pid $($_.OwningProcess)" }) -join ', ')
+$leftListen = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in @($Port, 502, 8124, 8125, 18125, $RestPort) })
+Check "no listener left on $Port/502/8124/8125/18125/$RestPort" ($leftListen.Count -eq 0) (($leftListen | ForEach-Object { "$($_.LocalAddress):$($_.LocalPort) pid $($_.OwningProcess)" }) -join ', ')
 
 if ($Mode -eq 'bat' -and $leftProc.Count -eq 0 -and (Test-Path $DataDir)) {
     # Test data of the bat run (<package>\runtime) must not stay in the package folder.

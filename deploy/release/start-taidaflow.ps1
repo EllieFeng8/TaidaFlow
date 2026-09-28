@@ -5,6 +5,8 @@
 #  TaidaFlowApp.exe connects to the five ADAM modules at 192.168.1.201..205:502 and WRITES
 #  DO/AO (pumps, valves, VFD, emergency-stop circuit), opens COM2 (MS300 inverter, Modbus RTU)
 #  and runs a Modbus TCP server on 0.0.0.0:502 for the external HMI.
+#  Its REST API (w2-060, 127.0.0.1:<RestPort>, on the LAN http://<IP>/api/... through nginx) can
+#  change settings (PUT) - no access control (intranet).
 #  Unlike the development script scripts\run-desktop.ps1 it does NOT run the development
 #  safety probe (scripts\safety_probe.ps1 refuses exactly the plant situation on purpose).
 #  Never run this on a development PC that can reach 192.168.1.201..205; there use
@@ -14,7 +16,7 @@
 # Usage (from the installation folder, e.g. C:\TaidaFlow\TaidaFlow-<date>-<hash>):
 #   powershell -NoProfile -ExecutionPolicy Bypass -File start-taidaflow.ps1
 #       [-DataDir <folder>] [-LogDir <folder>] [-UseNginx [-Port 80]] [-Nginx <nginx.exe or folder>]
-#       [-AppLog quiet|full] [-KeepLogDays 30] [-StartTimeoutSec 60]
+#       [-RestPort 18080] [-AppLog quiet|full] [-KeepLogDays 30] [-StartTimeoutSec 60]
 #
 #   -DataDir     : working directory of the app (default <installation folder>\runtime).
 #                  The app writes TaidaFlowSettings.ini, settings.sqlite, data\sensor_YYYYMM.sqlite
@@ -29,6 +31,8 @@
 #                  Only used with -UseNginx. nginx: <installation folder>\nginx\nginx.exe when
 #                  the package contains it, otherwise -Nginx / TAIDAFLOW_NGINX / C:\tools\nginx.
 #                  nginx runtime folder (config, logs, pid): <DataDir>\nginx.
+#   -RestPort    : internal port of the app's REST API (RESTManager, 127.0.0.1 only; default 18080).
+#                  The app gets it as TAIDAFLOW_REST_PORT, nginx proxies http://<IP>/api/ to it.
 #   -AppLog      : quiet (default) = only warnings and errors of the app go to the log (the app
 #                  logs every Modbus read at info level: measured about 15 MB per hour);
 #                  full = everything (for troubleshooting, watch the disk).
@@ -37,20 +41,20 @@
 # What it does:
 #   1. Refuses to start (exit 4, nothing started, nothing stopped) when a TaidaFlowApp process is
 #      already running or a port is already in use: 502 (Modbus server), 8124 (web + downloads),
-#      8125 (web mirror relay), 18125 (internal mirror) and, with -UseNginx, the nginx port (80).
+#      8125 (web mirror relay), 18125 (internal mirror), the REST port (18080) and, with -UseNginx,
+#      the nginx port (80).
 #      For every busy port the owner is listed (pid 4 "System" = Windows HTTP.sys, e.g. IIS / WinRM /
 #      a URL reservation; see DEPLOY.md). Programs of other people are never stopped.
-#      Programs of other people are never stopped.
-#   2. Cleans the environment of the app: TAIDAFLOW_DEVICE_PROFILE and TAIDAFLOW_E2E_PV_FILE
-#      (test modes) are ALWAYS removed, TAIDAFLOW_WEB_DIR is removed (the page is always
+#   2. Cleans the environment of the app: TAIDAFLOW_DEVICE_PROFILE (test mode) is ALWAYS removed,
+#      TAIDAFLOW_REST_PORT is set to -RestPort, TAIDAFLOW_WEB_DIR is removed (the page is always
 #      <installation folder>\web), Qt variables (QT_PLUGIN_PATH, QML_IMPORT_PATH, ...) are removed
 #      and PATH = installation folder + the system PATH without any folder holding Qt6Core.dll.
 #      The Qt DLLs, plugins and QML modules come from the installation folder only.
 #   3. (-UseNginx) starts nginx through scripts\nginx-web.ps1 (web root <installation folder>\web,
-#      export folder <DataDir>\exports). If nginx cannot start, the app is still started, with
+#      export folder <DataDir>\exports, /api/ -> 127.0.0.1:<RestPort>). If nginx cannot start, the app is still started, with
 #      download links on 8124, and the script ends with exit 8.
 #   4. Starts TaidaFlowApp.exe in <DataDir>, stderr -> <LogDir>\taidaflow-<time>.log, and waits
-#      until the app listens on 8124 and 8125 (502 and 18125 are reported too).
+#      until the app listens on 8124 and 8125 (502, 18125 and the REST port are reported too).
 #   5. Writes <DataDir>\taidaflow-app.json (pid, image, start time) for stop-taidaflow.ps1.
 #
 # Exit codes: 0 started; 2 package incomplete / folder not usable; 4 refused (already running or
@@ -63,6 +67,8 @@ param(
     [ValidateRange(1, 65535)]
     [int]$Port = 80,
     [string]$Nginx = "",
+    [ValidateRange(1, 65535)]
+    [int]$RestPort = 18080,
     [ValidateSet('quiet', 'full')]
     [string]$AppLog = 'quiet',
     [int]$KeepLogDays = 30,
@@ -127,9 +133,10 @@ foreach ($p in $running) {
     Log "REFUSED: TaidaFlowApp is already running (pid $($p.Id), $path) - close it first (stop-taidaflow.ps1); it is not stopped by this script"
     $refuse = $true
 }
-$ports = @(502, 8124, 8125, 18125)
+if (@(502, 8124, 8125, 18125) -contains $RestPort) { Log "ERROR: -RestPort $RestPort is another port of the app - choose another REST port"; exit 2 }
+$ports = @(502, 8124, 8125, 18125, $RestPort)
 if ($UseNginx) {
-    if (@(502, 8124, 8125, 18125) -contains $Port) { Log "ERROR: -Port $Port is used by the app itself - choose another nginx port"; exit 2 }
+    if (@(502, 8124, 8125, 18125, $RestPort) -contains $Port) { Log "ERROR: -Port $Port is used by the app itself - choose another nginx port"; exit 2 }
     $ports += $Port
 }
 $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $ports -contains $_.LocalPort })
@@ -152,7 +159,7 @@ if ($KeepLogDays -gt 0) {
 }
 
 # --- environment of the app -------------------------------------------------------------
-foreach ($v in 'TAIDAFLOW_DEVICE_PROFILE', 'TAIDAFLOW_E2E_PV_FILE', 'TAIDAFLOW_WEB_DIR', 'TAIDAFLOW_DOWNLOAD_PORT',
+foreach ($v in 'TAIDAFLOW_DEVICE_PROFILE', 'TAIDAFLOW_WEB_DIR', 'TAIDAFLOW_DOWNLOAD_PORT', 'TAIDAFLOW_REST_PORT',
                'QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH', 'QML_IMPORT_PATH', 'QML2_IMPORT_PATH',
                'QT_DEBUG_PLUGINS', 'QT_LOGGING_CONF', 'QT_QPA_PLATFORM') {
     if (Test-Path "Env:\$v") {
@@ -171,6 +178,8 @@ foreach ($entry in ($env:PATH -split ';')) {
 }
 $env:PATH = $install + ';' + ($kept -join ';')
 $env:QT_FORCE_STDERR_LOGGING = '1'
+$env:TAIDAFLOW_REST_PORT = "$RestPort"
+Log "TAIDAFLOW_REST_PORT=$RestPort (REST API on 127.0.0.1:$RestPort)"
 if ($AppLog -eq 'quiet') {
     $rules = Join-Path $install 'logging\quiet.ini'
     if (Test-Path $rules -PathType Leaf) { $env:QT_LOGGING_CONF = $rules }
@@ -191,7 +200,7 @@ function Invoke-NginxWeb([string[]]$more) {
 }
 if ($UseNginx) {
     $nginxArgs = @('-Action', 'start', '-Port', "$Port", '-WebRoot', $webRoot, '-ExportDir', (Join-Path $DataDir 'exports'),
-                   '-RuntimeDir', $nginxRuntime)
+                   '-RuntimeDir', $nginxRuntime, '-RestPort', "$RestPort")
     $nginxExe = ''
     if ($Nginx -ne '') { $nginxExe = Full $Nginx }
     elseif (Test-Path (Join-Path $install 'nginx\nginx.exe') -PathType Leaf) { $nginxExe = Join-Path $install 'nginx\nginx.exe' }
@@ -227,6 +236,7 @@ $state = [ordered]@{
     pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks; startTime = $p.StartTime.ToString('o')
     dataDir = $DataDir; logDir = $LogDir; appLog = $appLogFile; useNginx = [bool]$UseNginx; nginxStarted = $nginxOk
     nginxRuntime = $nginxRuntime; nginxPort = $(if ($UseNginx) { $Port } else { 0 }); downloadPort = $downloadPort
+    restPort = $RestPort
 }
 [System.IO.File]::WriteAllText($stateFile, ($state | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
 Log "TaidaFlowApp started: pid $($p.Id), log $appLogFile"
@@ -237,7 +247,7 @@ $have = @()
 do {
     Start-Sleep -Milliseconds 500
     $have = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
-              Where-Object { $_.OwningProcess -eq $p.Id -and (@(502, 8124, 8125, 18125) -contains $_.LocalPort) } |
+              Where-Object { $_.OwningProcess -eq $p.Id -and (@(502, 8124, 8125, 18125, $RestPort) -contains $_.LocalPort) } |
               ForEach-Object { [int]$_.LocalPort } | Sort-Object -Unique)
     $missing = @($need | Where-Object { $have -notcontains $_ })
 } while ($missing.Count -gt 0 -and -not $p.HasExited -and ((Get-Date) - $t0).TotalSeconds -lt $StartTimeoutSec)
@@ -252,19 +262,21 @@ if ($p.HasExited) {
     }
     exit 6
 }
-foreach ($pp in 502, 8124, 8125, 18125) {
+foreach ($pp in 502, 8124, 8125, 18125, $RestPort) {
     $what = @{ 502 = 'Modbus server (external HMI)'; 8124 = 'web page + CSV downloads'; 8125 = 'web mirror relay (LAN)'; 18125 = 'internal mirror (127.0.0.1)' }[$pp]
+    if ($pp -eq $RestPort) { $what = 'REST API (127.0.0.1; LAN via nginx /api/)' }
     Log ("  port {0,-5} {1,-30} {2}" -f $pp, $what, $(if ($have -contains $pp) { 'listening' } else { 'NOT listening' }))
 }
 if ($missing.Count -gt 0) {
     Log "ERROR: after $StartTimeoutSec s the app does not listen on $($missing -join ', ') - the app is left running (desktop HMI); see $appLogFile"
     exit 6
 }
+if ($have -notcontains $RestPort) { Log "WARNING: the REST API does not listen on 127.0.0.1:$RestPort (see [REST] in $appLogFile); the app runs without it" }
 $ips = @(try { Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop | Where-Object { $_.IPAddress -notlike '169.254.*' -and $_.IPAddress -ne '127.0.0.1' } | ForEach-Object { $_.IPAddress } } catch { })
 foreach ($ip in @($ips) + @('127.0.0.1')) {
     if ($nginxOk) {
         $base = if ($Port -eq 80) { "http://${ip}" } else { "http://${ip}:$Port" }
-        Log "web page: $base/  (nginx -> /TaidaFlowApp.html; also http://${ip}:8124/TaidaFlowApp.html)"
+        Log "web page: $base/  (nginx -> /TaidaFlowApp.html; also http://${ip}:8124/TaidaFlowApp.html)  REST API: $base/api/"
     }
     else { Log "web page: http://${ip}:8124/TaidaFlowApp.html" }
 }

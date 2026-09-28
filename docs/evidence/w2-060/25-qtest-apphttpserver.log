@@ -1,0 +1,277 @@
+'vswhere.exe' 不是內部或外部命令、可執行的程式或批次檔。
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest
+[1/5] Automatic MOC and UIC for target tst_apphttpserver
+[2/5] Building CXX object CMakeFiles\tst_apphttpserver.dir\tst_apphttpserver_autogen\mocs_compilation.cpp.obj
+[3/5] Building CXX object CMakeFiles\tst_apphttpserver.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[4/5] Building CXX object CMakeFiles\tst_apphttpserver.dir\tst_apphttpserver.cpp.obj
+[5/5] Linking CXX executable tst_apphttpserver.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_apphttpserver
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\tst_apphttpserver.exe "-maxwarnings" "0"
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest
+1: Environment variables: 
+1:  QT_FORCE_STDERR_LOGGING=1
+1: Environment variable modifications: 
+1:  PATH=path_list_prepend:C:/Qt/6.8.3/msvc2022_64/bin
+1: Test timeout computed to be: 900
+1: ********* Start testing of TestAppHttpServer *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QINFO  : TestAppHttpServer::initTestCase() apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\web (index "index.html", COOP/COEP on, CORP on, gzip variants on)
+1: QINFO  : TestAppHttpServer::initTestCase() apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\downloads
+1: QINFO  : TestAppHttpServer::initTestCase() apphttpserver: [AppHttpServer] listening on 127.0.0.1:58733 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+1: QINFO  : TestAppHttpServer::initTestCase() listening on port 58733 mounts QList("/exports", "/")
+1: PASS   : TestAppHttpServer::initTestCase()
+1: QINFO  : TestAppHttpServer::mimeTypes(html) apphttpserver: [AppHttpServer] GET /app.html from 127.0.0.1 -> 200 (text/html; charset=utf-8, 34 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(html)
+1: QINFO  : TestAppHttpServer::mimeTypes(js) apphttpserver: [AppHttpServer] GET /app.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(js)
+1: QINFO  : TestAppHttpServer::mimeTypes(mjs) apphttpserver: [AppHttpServer] GET /mod.mjs from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(mjs)
+1: QINFO  : TestAppHttpServer::mimeTypes(wasm) apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 57938 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(wasm)
+1: QINFO  : TestAppHttpServer::mimeTypes(css) apphttpserver: [AppHttpServer] GET /style.css from 127.0.0.1 -> 200 (text/css; charset=utf-8, 7 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(css)
+1: QINFO  : TestAppHttpServer::mimeTypes(json) apphttpserver: [AppHttpServer] GET /data.json from 127.0.0.1 -> 200 (application/json, 8 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(json)
+1: QINFO  : TestAppHttpServer::mimeTypes(png) apphttpserver: [AppHttpServer] GET /img.png from 127.0.0.1 -> 200 (image/png, 8 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(png)
+1: QINFO  : TestAppHttpServer::mimeTypes(svg) apphttpserver: [AppHttpServer] GET /icon.svg from 127.0.0.1 -> 200 (image/svg+xml, 42 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(svg)
+1: QINFO  : TestAppHttpServer::mimeTypes(ico) apphttpserver: [AppHttpServer] GET /favicon.ico from 127.0.0.1 -> 200 (image/x-icon, 4 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(ico)
+1: QINFO  : TestAppHttpServer::mimeTypes(ttf) apphttpserver: [AppHttpServer] GET /font.ttf from 127.0.0.1 -> 200 (font/ttf, 4 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(ttf)
+1: QINFO  : TestAppHttpServer::mimeTypes(woff2) apphttpserver: [AppHttpServer] GET /font.woff2 from 127.0.0.1 -> 200 (font/woff2, 4 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(woff2)
+1: QINFO  : TestAppHttpServer::mimeTypes(no suffix) apphttpserver: [AppHttpServer] GET /noext from 127.0.0.1 -> 200 (application/octet-stream, 3 byte(s) streamed)
+1: PASS   : TestAppHttpServer::mimeTypes(no suffix)
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 6 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::conditionalRequests() first: 200 ETag "6-1a0e770590f" Last-Modified Mon, 28 Sep 2026 09:54:54 GMT
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 304 ("6-1a0e770590f")
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 304 ("6-1a0e770590f")
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 304 ("6-1a0e770590f")
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 6 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] HEAD /cond.js from 127.0.0.1 -> 304 ("6-1a0e770590f")
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 304 ("6-1a0e770590f")
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 6 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 6 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 17 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::conditionalRequests() after rebuild with the old ETag: 200 new ETag "11-1a0e779872c"
+1: QINFO  : TestAppHttpServer::conditionalRequests() apphttpserver: [AppHttpServer] GET /cond.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 17 byte(s) streamed)
+1: PASS   : TestAppHttpServer::conditionalRequests()
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 463 byte(s) streamed, gzip)
+1: QINFO  : TestAppHttpServer::gzipVariant() gzip: 200 gzip length 463 (plain 57938 gz 463 )
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 57938 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 57938 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 463 byte(s) streamed, gzip)
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 304 ("1cf-1a0e74295dd-gz")
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /app.wasm from 127.0.0.1 -> 200 (application/wasm, 57938 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::gzipVariant() apphttpserver: [AppHttpServer] GET /stale.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 7 byte(s) streamed, stale .gz ignored)
+1: PASS   : TestAppHttpServer::gzipVariant()
+1: QINFO  : TestAppHttpServer::headRequests() apphttpserver: [AppHttpServer] HEAD /app.wasm from 127.0.0.1 -> 200 (57938 byte(s))
+1: QINFO  : TestAppHttpServer::headRequests() apphttpserver: [AppHttpServer] HEAD /app.wasm from 127.0.0.1 -> 200 (463 byte(s), gzip)
+1: QINFO  : TestAppHttpServer::headRequests() apphttpserver: [AppHttpServer] HEAD /missing.js from 127.0.0.1 -> 404 (no such file)
+1: PASS   : TestAppHttpServer::headRequests()
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET / from 127.0.0.1 -> 302 /index.html
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /sub/ from 127.0.0.1 -> 302 /sub/index.html
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /sub from 127.0.0.1 -> 302 /sub/index.html
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /empty/ from 127.0.0.1 -> 404 (directory (no listing))
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /app.js/ from 127.0.0.1 -> 404 (file requested as a folder)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] static /site -> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\web (index "app.html", COOP/COEP off, CORP off, gzip variants on)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/ from 127.0.0.1 -> 200 (text/html; charset=utf-8, 34 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/app.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/style.css from 127.0.0.1 -> 200 (text/css; charset=utf-8, 7 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] static /site -> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\web (index "app.html", COOP/COEP off, CORP off, gzip variants on)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/app.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/ from 127.0.0.1 -> 200 (text/html; charset=utf-8, 34 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/style.css from 127.0.0.1 -> 404 (file type not served by this mount)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/noext from 127.0.0.1 -> 404 (file type not served by this mount)
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] unmounted /site
+1: QINFO  : TestAppHttpServer::defaultPageAndNoListing() apphttpserver: [AppHttpServer] GET /site/app.js from 127.0.0.1 -> 404 (no such file)
+1: PASS   : TestAppHttpServer::defaultPageAndNoListing()
+1: QINFO  : TestAppHttpServer::traversalRejected() mklink /J: 0 ?w??? D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\web\escape ???s?? <<===>> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\outside
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /../secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /%2e%2e/secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /%2E%2E/secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /..%2Fsecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /%2e%2e%2fsecret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /..%2Fsecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /..%2Fsecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /..%2Fsecret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /..%2Fsecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%2Fsecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /..%5Csecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /..%5Csecret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /..%5Csecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /..%5Csecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /..\secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /..%5Csecret.txt from 127.0.0.1 -> 400 (rejected path segment "..%5Csecret.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /sub/../../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /sub/../../secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /sub/../../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /sub/../../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /sub/%2e%2e/%2e%2e/secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /sub/../../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /./index.html from 127.0.0.1 -> 400 (rejected path segment ".")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /./index.html -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /./index.html from 127.0.0.1 -> 400 (rejected path segment ".")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET  from 127.0.0.1 -> 400 (path does not start with '/')
+1: QINFO  : TestAppHttpServer::traversalRejected() GET //secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD  from 127.0.0.1 -> 400 (path does not start with '/')
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /C:%5CWindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected path segment "C:%5CWindows%5Cwin.ini")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /C:%5CWindows%5Cwin.ini -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /C:%5CWindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected path segment "C:%5CWindows%5Cwin.ini")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /C:/Windows/win.ini from 127.0.0.1 -> 400 (rejected path segment "C:")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /C:/Windows/win.ini -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /C:/Windows/win.ini from 127.0.0.1 -> 400 (rejected path segment "C:")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /%5C%5C127.0.0.1%5Cc$%5Cwindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected path segment "%5C%5C127.0.0.1%5Cc$%5Cwindows%5Cwin.ini")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /%5C%5C127.0.0.1%5Cc$%5Cwindows%5Cwin.ini -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /%5C%5C127.0.0.1%5Cc$%5Cwindows%5Cwin.ini from 127.0.0.1 -> 400 (rejected path segment "%5C%5C127.0.0.1%5Cc$%5Cwindows%5Cwin.ini")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /index.html%00.txt from 127.0.0.1 -> 400 (rejected path segment "index.html%00.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /index.html%00.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /index.html%00.txt from 127.0.0.1 -> 400 (rejected path segment "index.html%00.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /index.html. from 127.0.0.1 -> 400 (rejected path segment "index.html.")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /index.html. -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /index.html. from 127.0.0.1 -> 400 (rejected path segment "index.html.")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /index.html%20 from 127.0.0.1 -> 400 (rejected path segment "index.html%20")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /index.html%20 -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /index.html%20 from 127.0.0.1 -> 400 (rejected path segment "index.html%20")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /index.html::$DATA from 127.0.0.1 -> 400 (rejected path segment "index.html::$DATA")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /index.html::$DATA -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /index.html::$DATA from 127.0.0.1 -> 400 (rejected path segment "index.html::$DATA")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /NUL from 127.0.0.1 -> 400 (rejected path segment "NUL")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /NUL -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /NUL from 127.0.0.1 -> 400 (rejected path segment "NUL")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /con.txt from 127.0.0.1 -> 400 (rejected path segment "con.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /con.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /con.txt from 127.0.0.1 -> 400 (rejected path segment "con.txt")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /.hidden from 127.0.0.1 -> 404 (hidden name)
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /.hidden -> 404 not found
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /.hidden from 127.0.0.1 -> 404 (hidden name)
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /.hidden from 127.0.0.1 -> 404 (hidden name)
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /%2ehidden -> 404 not found
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /.hidden from 127.0.0.1 -> 404 (hidden name)
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /escape/secret.txt from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /escape/secret.txt -> 403 forbidden
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /escape/secret.txt from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /escape/ from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /escape/ -> 403 forbidden
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /escape/ from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /escape from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /escape -> 403 forbidden
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /escape from 127.0.0.1 -> 403 (link below the mount (not followed))
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /exports/../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /exports/../secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /exports/../secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] GET /exports/../outside/secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::traversalRejected() GET /exports/%2e%2e/outside/secret.txt -> 400 bad request
+1: QINFO  : TestAppHttpServer::traversalRejected() apphttpserver: [AppHttpServer] HEAD /exports/../outside/secret.txt from 127.0.0.1 -> 400 (rejected path segment "..")
+1: PASS   : TestAppHttpServer::traversalRejected()
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 200, 21 byte(s) streamed from disk
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] HEAD /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 200 (21 byte(s))
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/notes.txt from 127.0.0.1 -> 400 (rejected name "notes.txt")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/notes.txt -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/web-abc_20260926_101010.csv.tmp from 127.0.0.1 -> 400 (rejected name "web-abc_20260926_101010.csv.tmp")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/web-abc_20260926_101010.csv.tmp -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/nothere_20260101_000000.csv from 127.0.0.1 -> 404 (no file "nothere_20260101_000000.csv")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/nothere_20260101_000000.csv -> 404
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/ from 127.0.0.1 -> 404 (no file name)
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/ -> 404
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports from 127.0.0.1 -> 404 (no file name)
+1: QINFO  : TestAppHttpServer::downloads() GET /exports -> 404
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/sub/web-sub_20260926_101010.csv from 127.0.0.1 -> 400 (sub folders are not served)
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/sub/web-sub_20260926_101010.csv -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/../outside/web-x_20260101_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/../outside/web-x_20260101_000000.csv -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/..%5Coutside%5Cweb-x_20260101_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%5Coutside%5Cweb-x_20260101_000000.csv")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/..%5Coutside%5Cweb-x_20260101_000000.csv -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/..%2Foutside%2Fweb-x_20260101_000000.csv from 127.0.0.1 -> 400 (rejected path segment "..%2Foutside%2Fweb-x_20260101_000000.csv")
+1: QINFO  : TestAppHttpServer::downloads() GET /exports/%2e%2e%2foutside%2fweb-x_20260101_000000.csv -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports//web-abc_20260926_101010.csv from 127.0.0.1 -> 400 (empty path segment)
+1: QINFO  : TestAppHttpServer::downloads() GET /exports//web-abc_20260926_101010.csv -> 400
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/web-lnk_20260926_101010.csv from 127.0.0.1 -> 403 (link in the download folder (not followed))
+1: QINFO  : TestAppHttpServer::downloads() file symlink to outside -> 403
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] POST /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 405 (only GET and HEAD)
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] PUT /index.html from 127.0.0.1 -> 405 (only GET and HEAD)
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] DELETE /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 405 (only GET and HEAD)
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] unmounted /exports
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 404 (no such file)
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\apphttpserver-qtest\work\downloads
+1: QINFO  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] GET /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 200, 21 byte(s) streamed from disk
+1: QWARN  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] mountDownloads refused: prefix "/x", folder "D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest/work/downloads", validator missing
+1: QWARN  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] mountStatic refused: prefix "relative", folder "D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest/work/web"
+1: QWARN  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] mountStatic refused: prefix "/a/../b", folder "D:/repo/codex/qmlTester/taidaflow/build/apphttpserver-qtest/work/web"
+1: QWARN  : TestAppHttpServer::downloads() apphttpserver: [AppHttpServer] mountStatic refused: prefix "/ok", folder ""
+1: PASS   : TestAppHttpServer::downloads()
+1: QINFO  : TestAppHttpServer::customRoutes() apphttpserver: [AppHttpServer] route GET /api/ping
+1: QINFO  : TestAppHttpServer::customRoutes() apphttpserver: [AppHttpServer] GET /api/ping?q=42 from 127.0.0.1 -> route /api/ping
+1: QINFO  : TestAppHttpServer::customRoutes() route: 200 {
+1:     "pong": true,
+1:     "q": "42"
+1: }
+1:  handler thread AppHttpServerThread
+1: QINFO  : TestAppHttpServer::customRoutes() apphttpserver: [AppHttpServer] HEAD /api/ping from 127.0.0.1 -> 405 (route answers GET only)
+1: QINFO  : TestAppHttpServer::customRoutes() apphttpserver: [AppHttpServer] POST /api/ping from 127.0.0.1 -> 405 (only GET and HEAD)
+1: QINFO  : TestAppHttpServer::customRoutes() apphttpserver: [AppHttpServer] GET /api/ping from 127.0.0.1 -> 200 (application/octet-stream, 20 byte(s) streamed)
+1: PASS   : TestAppHttpServer::customRoutes()
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] stopped (was port 58733)
+1: QWARN  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] NOT listening on 0.0.0.0:58864: The bound address is already in use (the application keeps running)
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() start on busy port 58864 -> false The bound address is already in use
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] listening on 0.0.0.0:58864 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] GET /app.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] GET /exports/web-abc_20260926_101010.csv from 127.0.0.1 -> 200, 21 byte(s) streamed from disk
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] stopped (was port 58864)
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] listening on 127.0.0.1:58867 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+1: QINFO  : TestAppHttpServer::bindFailureAndRestart() apphttpserver: [AppHttpServer] GET /app.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 20 byte(s) streamed)
+1: PASS   : TestAppHttpServer::bindFailureAndRestart()
+1: QINFO  : TestAppHttpServer::threadSafeRegistration() while registering from 9 threads: 200 requests served correctly, 0 bad
+1: PASS   : TestAppHttpServer::threadSafeRegistration()
+1: QINFO  : TestAppHttpServer::largeFileStreamingMemory() apphttpserver: [AppHttpServer] GET /exports/web-big_20260926_000000.csv from 127.0.0.1 -> 200, 1073741824 byte(s) streamed from disk
+1: QINFO  : TestAppHttpServer::largeFileStreamingMemory() download 1 GiB: status 200, 1073741824 of 1073741824 bytes in 12443 ms (82 MB/s); private memory before 5.5 MB, peak 10.0 MB (+4.5 MB)
+1: QINFO  : TestAppHttpServer::largeFileStreamingMemory() apphttpserver: [AppHttpServer] GET /big.bin from 127.0.0.1 -> 200 (application/octet-stream, 1073741824 byte(s) streamed)
+1: QINFO  : TestAppHttpServer::largeFileStreamingMemory() static 1 GiB with a 3 s reader stall: status 200, 1073741824 bytes; private before 5.7 MB, peak during the stall 8.0 MB (+2.3 MB), overall peak +4.4 MB
+1: PASS   : TestAppHttpServer::largeFileStreamingMemory()
+1: QINFO  : TestAppHttpServer::cleanupTestCase() apphttpserver: [AppHttpServer] stopped (was port 61656)
+1: PASS   : TestAppHttpServer::cleanupTestCase()
+1: Totals: 24 passed, 0 failed, 0 skipped, 0 blacklisted, 44793ms
+1: ********* Finished testing of TestAppHttpServer *********
+1/1 Test #1: tst_apphttpserver ................   Passed   45.20 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  45.21 sec
+exit=0

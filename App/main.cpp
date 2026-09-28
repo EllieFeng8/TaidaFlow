@@ -16,7 +16,6 @@
 #if !defined(Q_OS_WASM)
 // Desktop-only authoritative Core (Modbus/MS300/REST/SQLite). Never part of WASM.
 #include "core.h"
-#include "e2epvdriver.h"
 #endif
 
 #if defined(Q_OS_WASM)
@@ -96,16 +95,6 @@ int main(int argc, char *argv[])
     // "Core", so the Td singleton lives in its own URI "TaidaFlowBackend"; QML
     // imports `TaidaFlowBackend 1.0`.
     qmlRegisterSingletonInstance<TaidaFlowProxy>("TaidaFlowBackend", 1, 0, "Td", Td);
-
-#if !defined(Q_OS_WASM)
-    // (core only) DEV/E2E only: inactive unless TAIDAFLOW_E2E_PV_FILE is set
-    // (see e2epvdriver.h).
-    std::unique_ptr<E2ePvDriver> e2ePvDriver;
-    if (qEnvironmentVariableIsSet("TAIDAFLOW_E2E_PV_FILE")) {
-        e2ePvDriver = std::make_unique<E2ePvDriver>(
-            Td, qEnvironmentVariable("TAIDAFLOW_E2E_PV_FILE"));
-    }
-#endif
 
     WasmMirrorConfig mirrorConfig;
 #if defined(Q_OS_WASM)

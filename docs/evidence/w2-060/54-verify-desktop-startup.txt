@@ -1,0 +1,40 @@
+=== safety probe 2026-09-28T18:17:57.389+08:00 reason="before launch: verify-desktop-startup (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 80/502/8123/8124/8125/18125/18080(REST): <none>
+  verdict: SAFE
+PID=34104 CWD=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\verify-startup.log
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=default
+[Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1
+[Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1
+[Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+[Export] TAIDAFLOW_DOWNLOAD_PORT is not set - download links use port 8124 (AppHttpServer)
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes), download links -> port 8124
+apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+[Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports: mounted on AppHttpServer
+[Web] TAIDAFLOW_WEB_DIR is not set
+[Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> has TaidaFlowApp.html, used
+apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\desktop\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+[Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> http://<host>:8124/TaidaFlowApp.html
+apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+[Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+Device SN: "sn000000"
+Running on http://127.0.0.1: 18080 /
+[REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; TAIDAFLOW_REST_PORT=(not set, default))
+[REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+app_pid=34104 endpoint_line=True relay_line=True modbus_server_line=True http_service_line=True web_dir_line=True page_status=200 rest_line=True rest_status=200 listening_rest_app=True listening_18125_app=True listening_8125_app=True listening_502=True listening_8124=True app_exit_code=0 listeners_left=0
+waited=True exit=0

@@ -1,0 +1,8 @@
+﻿# REST port (/api/ -> 127.0.0.1): 18080
+#                                          RESTManager on 127.0.0.1:<REST port> (default 18080,
+#   18080   -> the app's internal REST port on 127.0.0.1 (default 18080, or
+        # ^~ : the web-file regular expression location below is never tried for /api/ (a route
+        location ^~ /api/ {
+            proxy_pass             http://127.0.0.1:18080;
+        location = /api/ {
+            proxy_pass             http://127.0.0.1:18080/;

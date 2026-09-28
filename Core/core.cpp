@@ -4,12 +4,14 @@
 #include "HistoryExport.h"
 #include "HistoryViews.h"
 #include "Modbus_Server.h"
+#include "RESTManager.h"
 #include "SqlManager.h"
 
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
+#include <QHostAddress>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -95,6 +97,8 @@ Core::~Core()
     // SqlManager side only captures its own 'this' and values.
     if (m_sqlManager)
         disconnect(m_sqlManager, nullptr, this, nullptr);
+    // w2-060: normally already stopped on aboutToQuit (no-op then).
+    stopRestServer();
     if (m_historyViews) {
         delete m_historyViews;
         m_historyViews = nullptr;
@@ -159,6 +163,7 @@ void Core::init()
     exportOptions.downloadPort = HistoryExport::downloadPortFromEnvironment();
     m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, exportOptions, this);
     startHttpServer();
+    startRestServer();
     if (!m_manager->saveAlarm(QStringLiteral("100"),
                               QStringLiteral("設備啟動"),
                               QStringLiteral("正常"))) {
@@ -281,6 +286,99 @@ void Core::startHttpServer()
         connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
                 []() { AppHttpServer::instance().stop(); });
     }
+}
+
+namespace {
+// w2-060 (Mango 2026-09-28): the REST API of RESTManager (original backend code) is enabled.
+// It listens on the loopback address only; the LAN reaches it through nginx on port 80
+// (deploy/nginx/taidaflow.conf: location /api/ -> proxy_pass http://127.0.0.1:<port>).
+// The port is TAIDAFLOW_REST_PORT (1..65535), default 18080 (free on the development PC and
+// not used by any other TaidaFlow service: 80 nginx, 502 Modbus server, 8124 AppHttpServer,
+// 8125 LAN relay, 18125 internal mirror). No access control (intranet, Mango's decision).
+constexpr auto kRestPortEnv = "TAIDAFLOW_REST_PORT";
+constexpr quint16 kDefaultRestPort = 18080;
+
+// The routes RESTManager::setupRoutes() registers, logged at start-up.  scripts/check_rest_routes.py
+// compares this table with the m_httpServer.route(...) calls in RESTManager.cpp (exit 1 when they
+// differ), so the log and the documentation cannot silently drift from the code.
+struct RestRoute { const char *methods; const char *path; const char *purpose; };
+constexpr RestRoute kRestRoutes[] = {
+    {"GET",             "/",                               "status {\"status\": \"ok\"} (via nginx: /api/)"},
+    {"GET,PUT,OPTIONS", "/api/settings/sensors",           "sensor key/name map (settings.sqlite sensor_config)"},
+    {"GET,PUT,OPTIONS", "/api/settings/frequency",         "read_frequency (settings.sqlite app_settings)"},
+    {"GET,PUT,OPTIONS", "/api/modbus/mode",                "mode network|standalone (in memory only)"},
+    {"GET,OPTIONS",     "/api/sensor/range",               "sensor rows, from/to epoch seconds"},
+    {"GET,OPTIONS",     "/api/holding/range",              "holding register rows, from/to epoch seconds"},
+    {"GET,OPTIONS",     "/api/device/sn",                  "device serial number (device_info.ini)"},
+    {"GET,OPTIONS",     "/api/sensor/last",                "newest sensor row of the current month"},
+    {"GET,OPTIONS",     "/api/holding/last",               "newest holding register row of the current month"},
+    {"GET,OPTIONS",     "/api/sensor/rangeDateTime",       "sensor rows, from/to ISO date-time"},
+    {"GET,OPTIONS",     "/api/sensor/rangeDateTimePage",   "sensor rows paged (page, pageSize <= 1000)"},
+    {"GET,OPTIONS",     "/api/holding/rangeDateTime",      "holding register rows, from/to ISO date-time"},
+    {"GET,OPTIONS",     "/api/holding/rangeDateTimePage",  "holding register rows paged (page, pageSize <= 1000)"},
+};
+
+quint16 restPortFromEnvironment()
+{
+    const QString text = qEnvironmentVariable(kRestPortEnv).trimmed();
+    if (text.isEmpty())
+        return kDefaultRestPort;
+    bool ok = false;
+    const uint value = text.toUInt(&ok);
+    if (!ok || value < 1 || value > 65535) {
+        qWarning().noquote() << QStringLiteral("[REST] %1=\"%2\" is not a port (1..65535) - using %3")
+                                        .arg(QLatin1String(kRestPortEnv), text).arg(kDefaultRestPort);
+        return kDefaultRestPort;
+    }
+    return static_cast<quint16>(value);
+}
+} // namespace
+
+void Core::startRestServer()
+{
+    if (m_rest || !m_sqlManager)
+        return;
+    const quint16 port = restPortFromEnvironment();
+    const QHostAddress address(QHostAddress::LocalHost);
+    m_rest = new RESTManager(m_sqlManager, this);
+    // RESTManager::start() reads (and creates, when missing) device_info.ini in the working
+    // directory, registers the routes and listens.  A failure is only logged; the application
+    // keeps running without the REST API.
+    if (!m_rest->start(port, address)) {
+        qWarning().noquote() << QStringLiteral("[REST] REST API NOT started on %1:%2 (port in use or not "
+                                               "allowed?) - http://<host>/api/ answers 502 from nginx; the "
+                                               "application keeps running")
+                                        .arg(address.toString()).arg(port);
+        delete m_rest;
+        m_rest = nullptr;
+        return;
+    }
+    qInfo().noquote() << QStringLiteral("[REST] REST API listening on %1:%2 (loopback only; LAN: "
+                                        "http://<host>/api/... through nginx; %3=%4)")
+                                 .arg(address.toString()).arg(port)
+                                 .arg(QLatin1String(kRestPortEnv),
+                                      qEnvironmentVariableIsSet(kRestPortEnv) ? qEnvironmentVariable(kRestPortEnv)
+                                                                             : QStringLiteral("(not set, default)"));
+    for (const RestRoute &r : kRestRoutes) {
+        qInfo().noquote() << QStringLiteral("[REST] route %1 %2 - %3")
+                                     .arg(QLatin1String(r.methods), -16)
+                                     .arg(QLatin1String(r.path), QLatin1String(r.purpose));
+    }
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
+                [this]() { stopRestServer(); });
+    }
+}
+
+void Core::stopRestServer()
+{
+    if (!m_rest)
+        return;
+    // Deleting RESTManager closes its listening socket (QTcpServer) and the QHttpServer with
+    // its open connections.
+    delete m_rest;
+    m_rest = nullptr;
+    qInfo().noquote() << QStringLiteral("[REST] REST API stopped");
 }
 
 void Core::reportIgnoredHmiInputSettings()

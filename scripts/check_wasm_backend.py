@@ -43,7 +43,9 @@ BACKEND_STRINGS = [b"192.168.1.201", b"192.168.1.205", b"COM2", b"TaidaFlowSetti
                    b"ModbusClient", b"SqlManager", b"RESTManager", b"QModbusTcpClient",
                    b"HistoryExportManager",
                    # w2-049: AppHttpServer singleton + Core's web page folder lookup
-                   b"[AppHttpServer]", b"AppHttpServerThread", b"TAIDAFLOW_WEB_DIR"]
+                   b"[AppHttpServer]", b"AppHttpServerThread", b"TAIDAFLOW_WEB_DIR",
+                   # w2-060: REST API enabled in Core (Core::startRestServer)
+                   b"TAIDAFLOW_REST_PORT", b"[REST] REST API"]
 
 
 def analyse(build: Path) -> tuple[bool, str]:

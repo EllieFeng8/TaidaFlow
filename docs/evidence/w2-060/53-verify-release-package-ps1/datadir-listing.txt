@@ -1,0 +1,26 @@
+data\
+exports\
+logs\
+nginx\
+device_info.ini (23 bytes)
+settings.sqlite (20480 bytes)
+taidaflow-app.json (753 bytes)
+TaidaFlowSettings.ini (32 bytes)
+data\sensor_202609.sqlite (7290880 bytes)
+exports\w2057verify_20260928_181719.csv (36312 bytes)
+logs\launcher.log (4313 bytes)
+logs\taidaflow-20260928-181703.log (27318 bytes)
+logs\taidaflow-20260928-181703.log.stdout (0 bytes)
+nginx\conf\
+nginx\logs\
+nginx\temp\
+nginx\taidaflow-nginx.json (664 bytes)
+nginx\conf\taidaflow.conf (12690 bytes)
+nginx\logs\access.log (0 bytes)
+nginx\logs\error.log (0 bytes)
+nginx\logs\nginx.pid (8 bytes)
+nginx\temp\client_body_temp\
+nginx\temp\fastcgi_temp\
+nginx\temp\proxy_temp\
+nginx\temp\scgi_temp\
+nginx\temp\uwsgi_temp\

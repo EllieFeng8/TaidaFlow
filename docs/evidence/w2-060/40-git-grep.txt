@@ -1,0 +1,15 @@
+$ git grep -n -I -E "e2epvdriver|E2ePvDriver|TAIDAFLOW_E2E_PV_FILE|PvFile" -- . ":!docs/evidence"
+App/e2epvdriver.h:4:// DEV / E2E ONLY - desktop build, inactive unless TAIDAFLOW_E2E_PV_FILE is set.
+App/e2epvdriver.h:30:class E2ePvDriver final : public QObject
+App/e2epvdriver.h:33:    E2ePvDriver(QObject *target, const QString &filePath, QObject *parent = nullptr)
+rc=0
+$ git grep -n "wasm-mirror-1.0.0" -- . ":!docs/evidence"
+rc=1
+$ ls integration-pack App/e2epvdriver.h
+App/e2epvdriver.h
+
+integration-pack:
+wasm-mirror
+wasm-mirror-1.0.0.zip
+$ git grep -n -i "config\.json|TAIDAFLOW_DATA_DIR" -- . :!docs/evidence
+rc=1

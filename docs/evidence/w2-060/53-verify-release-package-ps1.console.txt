@@ -1,0 +1,146 @@
+=== verify-release-package 2026-09-28T18:16:46.8242380+08:00 mode=ps1
+package : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty
+data    : D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data
+nginx port: 80
+  probe | === safety probe 2026-09-28T18:16:47.187+08:00 reason="w2-057 verify-release-package (ps1) before launch" host=LAPTOP-0B3CPPED
+  probe |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  probe |   tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  probe |   serial GetPortNames: <none>
+  probe |   serial SERIALCOMM  : <none>
+  probe |   serial PnP (COMx)  : <none>
+  probe |   listeners 80/502/8123/8124/8125/18125/18080(REST): <none>
+  probe |   verdict: SAFE
+TEST FIXTURE: copied D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\data\sensor_202609.sqlite -> D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\data\ (history rows for the export check)
+PATH for the start: C:\Windows\System32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0
+[PASS] no Qt6Core.dll on the PATH used for the start
+start: cmd.exe /c ""C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty\start-taidaflow.ps1" -DataDir "D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data" -UseNginx -Port 80 -RestPort 18080 > "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-060\53-verify-release-package-ps1\start.console.txt" 2>&1"
+  start | 2026-09-28 18:16:58 [start] === TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ===
+  start | 2026-09-28 18:16:58 [start] installation: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty
+  start | 2026-09-28 18:16:58 [start] data folder : D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data
+  start | 2026-09-28 18:16:58 [start] log folder  : D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\logs
+  start | 2026-09-28 18:16:59 [start] ports free: 502, 8124, 8125, 18125, 18080, 80
+  start | 2026-09-28 18:16:59 [start] TAIDAFLOW_REST_PORT=18080 (REST API on 127.0.0.1:18080)
+  start | 2026-09-28 18:16:59 [start] app log mode: quiet (QT_LOGGING_CONF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty\logging\quiet.ini)
+  start | 2026-09-28 18:16:59 [start] starting nginx (scripts\nginx-web.ps1 -Action start, runtime D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\nginx)
+  start | 2026-09-28 18:17:03 [start]   nginx | nginx: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty\nginx\nginx.exe (from -Nginx)
+  start | 2026-09-28 18:17:03 [start]   nginx | export folder created: D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\exports (the app creates the same folder at start-up)
+  start | 2026-09-28 18:17:03 [start]   nginx | config: D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty\web, export folder D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\exports, port 80, /api/ -> 127.0.0.1:18080)
+  start | 2026-09-28 18:17:03 [start]   nginx | nginx -t:
+  start | 2026-09-28 18:17:03 [start]   nginx |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/nginx/conf/taidaflow.conf syntax is ok
+  start | 2026-09-28 18:17:03 [start]   nginx |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/nginx/conf/taidaflow.conf test is successful
+  start | 2026-09-28 18:17:03 [start]   nginx | NGINX_PID=125512 WORKERS=107912 PIDFILE=125512
+  start | 2026-09-28 18:17:03 [start]   nginx | WEBROOT=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-772c00d-dirty\web
+  start | 2026-09-28 18:17:03 [start]   nginx | EXPORTDIR=D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\exports
+  start | 2026-09-28 18:17:03 [start]   nginx | RUNTIME=D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\nginx
+  start | 2026-09-28 18:17:03 [start]   nginx | URL=http://<this host's IPv4>:80/  (-> /TaidaFlowApp.html)  downloads: http://<this host's IPv4>:80/exports/<file>
+  start | 2026-09-28 18:17:03 [start]   nginx | (start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=80 so that its download links point here)
+  start | 2026-09-28 18:17:03 [start]   nginx | REST=http://<this host's IPv4>:80/api/...  -> 127.0.0.1:18080 (the app's RESTManager; the app uses TAIDAFLOW_REST_PORT, default 18080)
+  start | 2026-09-28 18:17:03 [start] nginx started (0.0.0.0:80)
+  start | 2026-09-28 18:17:03 [start] TAIDAFLOW_DOWNLOAD_PORT=80
+  start | 2026-09-28 18:17:03 [start] TaidaFlowApp started: pid 66980, log D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\logs\taidaflow-20260928-181703.log
+  start | 2026-09-28 18:17:05 [start]   port 502   Modbus server (external HMI)   listening
+  start | 2026-09-28 18:17:05 [start]   port 8124  web page + CSV downloads       listening
+  start | 2026-09-28 18:17:05 [start]   port 8125  web mirror relay (LAN)         listening
+  start | 2026-09-28 18:17:05 [start]   port 18125 internal mirror (127.0.0.1)    listening
+  start | 2026-09-28 18:17:05 [start]   port 18080 REST API (127.0.0.1; LAN via nginx /api/) listening
+  start | 2026-09-28 18:17:05 [start] web page: http://192.168.83.1/  (nginx -> /TaidaFlowApp.html; also http://192.168.83.1:8124/TaidaFlowApp.html)  REST API: http://192.168.83.1/api/
+  start | 2026-09-28 18:17:05 [start] web page: http://192.168.158.1/  (nginx -> /TaidaFlowApp.html; also http://192.168.158.1:8124/TaidaFlowApp.html)  REST API: http://192.168.158.1/api/
+  start | 2026-09-28 18:17:05 [start] web page: http://192.168.0.125/  (nginx -> /TaidaFlowApp.html; also http://192.168.0.125:8124/TaidaFlowApp.html)  REST API: http://192.168.0.125/api/
+  start | 2026-09-28 18:17:05 [start] web page: http://127.0.0.1/  (nginx -> /TaidaFlowApp.html; also http://127.0.0.1:8124/TaidaFlowApp.html)  REST API: http://127.0.0.1/api/
+  start | 2026-09-28 18:17:05 [start] started (exit 0)
+[PASS] start exit code 0 - exit 0
+[PASS] TaidaFlowApp running (state file pid) - pid 66980
+  listener 127.0.0.1:18125 pid 66980 (TaidaFlowApp)
+  listener 127.0.0.1:18080 pid 66980 (TaidaFlowApp)
+  listener 0.0.0.0:8125 pid 66980 (TaidaFlowApp)
+  listener 0.0.0.0:8124 pid 66980 (TaidaFlowApp)
+  listener 0.0.0.0:502 pid 66980 (TaidaFlowApp)
+  listener 0.0.0.0:80 pid 107912 (nginx)
+[PASS] app listens on 502
+[PASS] app listens on 8124
+[PASS] app listens on 8125
+[PASS] app listens on 18125
+[PASS] app listens on 18080 (REST API) on 127.0.0.1 only - 127.0.0.1:18080
+[PASS] nginx listens on 80
+[PASS] Qt / MSVC runtime DLLs all loaded from the package - 47 module(s) from the package, 0 Qt/MSVC module(s) outside: 
+  modules outside the package and outside C:\Windows: none
+  Qt modules loaded: Qt6Sql.dll, Qt6SerialBus.dll, Qt6Qml.dll, Qt6Widgets.dll, Qt6SerialPort.dll, Qt6HttpServer.dll, Qt6WebSockets.dll, Qt6Gui.dll, Qt6Network.dll, Qt6Core.dll, platforms\qwindows.dll, styles\qmodernwindowsstyle.dll, sqldrivers\qsqlite.dll, qml\QtQuick\qtquick2plugin.dll, Qt6Quick.dll, Qt6QmlMeta.dll, Qt6QmlModels.dll, Qt6OpenGL.dll, Qt6QmlWorkerScript.dll, qml\QtQuick\Controls\qtquickcontrols2plugin.dll, Qt6QuickControls2.dll, Qt6QuickTemplates2.dll, qml\QtQuick\Controls\Universal\qtquickcontrols2universalstyleplugin.dll, Qt6QuickControls2Universal.dll, qml\QtQuick\Controls\Basic\qtquickcontrols2basicstyleplugin.dll, Qt6QuickControls2Basic.dll, qml\QtQuick\Templates\qtquicktemplates2plugin.dll, qml\QtQuick\Controls\impl\qtquickcontrols2implplugin.dll, Qt6QuickControls2Impl.dll, qml\QtQuick\Controls\Universal\impl\qtquickcontrols2universalstyleimplplugin.dll, Qt6QuickControls2UniversalStyleImpl.dll, Qt6Svg.dll
+hosts checked: 127.0.0.1, 192.168.0.125
+[PASS] http://127.0.0.1/ -> 302 /TaidaFlowApp.html - HTTP/1.1 302 Moved Temporarily, Location: /TaidaFlowApp.html
+[PASS] http://127.0.0.1/TaidaFlowApp.html -> 200 text/html - HTTP/1.1 200 OK, text/html; charset=utf-8, COOP same-origin, COEP require-corp
+[PASS] http://127.0.0.1/TaidaFlowApp.wasm (gzip) -> 200 application/wasm, Content-Encoding gzip - HTTP/1.1 200 OK, application/wasm, Content-Encoding gzip, Content-Length 12531009
+[PASS] http://127.0.0.1:8124/TaidaFlowApp.html -> 200 (app) - HTTP/1.1 200 OK
+[PASS] ws://127.0.0.1:8125/mirror upgrade -> 101 - HTTP/1.1 101 Switching Protocols (curl exit 28: 28 = closed by --max-time after the upgrade)
+[PASS] http://127.0.0.1/api/ (REST status via nginx) -> 200 {"status":...} - HTTP/1.1 200 OK {"status":"ok"}
+[PASS] http://127.0.0.1/api/settings/frequency -> 200 read_frequency, CORS header - HTTP/1.1 200 OK {"read_frequency":1000} access-control-allow-origin: *
+[PASS] OPTIONS http://127.0.0.1/api/settings/frequency (preflight) -> 200, Allow-Methods has PUT - HTTP/1.1 200 OK access-control-allow-methods: GET, POST, PUT, OPTIONS
+[PASS] http://192.168.0.125/ -> 302 /TaidaFlowApp.html - HTTP/1.1 302 Moved Temporarily, Location: /TaidaFlowApp.html
+[PASS] http://192.168.0.125/TaidaFlowApp.html -> 200 text/html - HTTP/1.1 200 OK, text/html; charset=utf-8, COOP same-origin, COEP require-corp
+[PASS] http://192.168.0.125/TaidaFlowApp.wasm (gzip) -> 200 application/wasm, Content-Encoding gzip - HTTP/1.1 200 OK, application/wasm, Content-Encoding gzip, Content-Length 12531009
+[PASS] http://192.168.0.125:8124/TaidaFlowApp.html -> 200 (app) - HTTP/1.1 200 OK
+[PASS] ws://192.168.0.125:8125/mirror upgrade -> 101 - HTTP/1.1 101 Switching Protocols (curl exit 28: 28 = closed by --max-time after the upgrade)
+[PASS] http://192.168.0.125/api/ (REST status via nginx) -> 200 {"status":...} - HTTP/1.1 200 OK {"status":"ok"}
+[PASS] http://192.168.0.125/api/settings/frequency -> 200 read_frequency, CORS header - HTTP/1.1 200 OK {"read_frequency":1000} access-control-allow-origin: *
+[PASS] OPTIONS http://192.168.0.125/api/settings/frequency (preflight) -> 200, Allow-Methods has PUT - HTTP/1.1 200 OK access-control-allow-methods: GET, POST, PUT, OPTIONS
+[PASS] internal REST port not reachable on the LAN address (http://192.168.0.125:18080/) - curl exit 7 (7 = connection refused), http_code 000
+  mirror client exit 0 : 18:17:19.218 RESULT state=done fileName=w2057verify_20260928_181719.csv url=/exports/w2057verify_20260928_181719.csv downloadPort=80
+[PASS] history export via the mirror done, downloadPort = 80 - 18:17:19.218 RESULT state=done fileName=w2057verify_20260928_181719.csv url=/exports/w2057verify_20260928_181719.csv downloadPort=80
+  export file: D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\exports\w2057verify_20260928_181719.csv (36312 bytes, SHA-256 E5BDA35819D36774E57E25EA5D2BFD483983C0ACB4AA873D54377FA14EAA2723)
+[PASS] web page link for host 127.0.0.1 - http://127.0.0.1:80/exports/w2057verify_20260928_181719.csv (HistoryPage.qml exportDownloadUrl via node)
+[PASS] GET http://127.0.0.1:80/exports/w2057verify_20260928_181719.csv -> 200, same SHA-256 as the file - HTTP/1.1 200 OK, server Server: nginx
+[PASS] Range bytes=0-99 on http://127.0.0.1:80/exports/w2057verify_20260928_181719.csv -> 206 - HTTP/1.1 206 Partial Content, Content-Range bytes 0-99/36312
+[PASS] same file without :80 (http://127.0.0.1/exports/w2057verify_20260928_181719.csv) -> 200 - HTTP/1.1 200 OK
+[PASS] web page link for host 192.168.0.125 - http://192.168.0.125:80/exports/w2057verify_20260928_181719.csv (HistoryPage.qml exportDownloadUrl via node)
+[PASS] GET http://192.168.0.125:80/exports/w2057verify_20260928_181719.csv -> 200, same SHA-256 as the file - HTTP/1.1 200 OK, server Server: nginx
+[PASS] Range bytes=0-99 on http://192.168.0.125:80/exports/w2057verify_20260928_181719.csv -> 206 - HTTP/1.1 206 Partial Content, Content-Range bytes 0-99/36312
+[PASS] same file without :80 (http://192.168.0.125/exports/w2057verify_20260928_181719.csv) -> 200 - HTTP/1.1 200 OK
+[PASS] fallback http://127.0.0.1:8124/exports/w2057verify_20260928_181719.csv -> 200 - HTTP/1.1 200 OK
+[PASS] app log: no QML module / plugin / library load error - 378 line(s), 27318 bytes
+  app.log | Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/settings_schema.sql"
+  app.log | Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/data_schema.sql"
+  app.log | Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/data_schema.sql"
+  app.log | [MS300] Referenced serial device does not exist.
+  app.log | [MS300] 系統找不到指定的檔案。
+  app.log | [MS300] Connection request failed: 系統找不到指定的檔案。
+  app.log | Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-057-verify-data/data_schema.sql"
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+  app.log | ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+  app.log | ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+[PASS] data folder has TaidaFlowSettings.ini
+[PASS] data folder has settings.sqlite
+[PASS] data folder has data
+[PASS] data folder has exports
+[PASS] data folder has logs
+  stop | 2026-09-28 18:17:20 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data) ===
+  stop | 2026-09-28 18:17:20 [stop]  stopping nginx (runtime D:\repo\codex\qmlTester\taidaflow\build\w2-057-verify-data\nginx)
+  stop | 2026-09-28 18:17:23 [stop]    nginx | stopping nginx master pid 125512 (workers 107912) with nginx -s quit
+  stop | 2026-09-28 18:17:23 [stop]    nginx | stopped: pids 125512,107912 exited; listeners of these pids on 80: 0
+  stop | 2026-09-28 18:17:23 [stop]  nginx stopped
+  stop | 2026-09-28 18:17:23 [stop]  closing TaidaFlowApp pid 66980 (WM_CLOSE to its window, like closing it by hand)
+  stop | 2026-09-28 18:17:23 [stop]  TaidaFlowApp pid 66980 exited (exit code 0)
+  stop | 2026-09-28 18:17:24 [stop]  listeners of pid 66980 left: 0
+  stop | 2026-09-28 18:17:24 [stop]  stopped (exit 0)
+[PASS] stop exit code 0 - exit 0
+[PASS] no TaidaFlowApp / nginx started by this check left
+[PASS] no listener left on 80/502/8124/8125/18125/18080
+=== 0 check(s) failed
+waited=True exit=0

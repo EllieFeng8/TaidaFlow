@@ -1,0 +1,3 @@
+﻿=== precheck 2026-09-28T18:14:26.3784628+08:00
+listeners 80/502/8124/8125/18080/18125: 
+runtime-cwd: data, exports, device_info.ini, settings.sqlite, TaidaFlowSettings.ini, TaidaFlowSettings.ini.w2-030-before-rerun.bak, TaidaFlowSettings.ini.w2-036-before.bak, TaidaFlowSettings.ini.w2-037-before.bak, TaidaFlowSettings.ini.w2-039-before.bak

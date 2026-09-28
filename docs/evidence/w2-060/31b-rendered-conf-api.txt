@@ -1,0 +1,20 @@
+﻿5: # REST port (/api/ -> 127.0.0.1): 18080
+15: #                                          RESTManager on 127.0.0.1:<REST port> (default 18080,
+28: #   18080   -> the app's internal REST port on 127.0.0.1 (default 18080, or
+101:     keepalive_timeout  65;
+164:                 add_header  Cache-Control "no-store" always;
+177:         # ^~ : the web-file regular expression location below is never tried for /api/ (a route
+179:         location ^~ /api/ {
+180:             proxy_pass             http://127.0.0.1:18080;
+181:             proxy_http_version     1.1;
+185:             proxy_connect_timeout  5s;
+186:             proxy_send_timeout     60s;
+189:             proxy_read_timeout     120s;
+190:             client_max_body_size   1m;
+191:             add_header             Cache-Control "no-store" always;
+194:         location = /api/ {
+195:             proxy_pass             http://127.0.0.1:18080/;
+196:             proxy_http_version     1.1;
+200:             proxy_connect_timeout  5s;
+201:             proxy_read_timeout     30s;
+202:             add_header             Cache-Control "no-store" always;

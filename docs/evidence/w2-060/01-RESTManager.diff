@@ -1,0 +1,36 @@
+diff --git a/Core/RESTManager.cpp b/Core/RESTManager.cpp
+index cdcf0e2..432b55c 100644
+--- a/Core/RESTManager.cpp
++++ b/Core/RESTManager.cpp
+@@ -553,7 +553,7 @@ QString RESTManager::loadDeviceSn()
+     return sn;
+ }
+ 
+-bool RESTManager::start(quint16 port)
++bool RESTManager::start(quint16 port, const QHostAddress& address)
+ {
+     if (!m_sql)
+     {
+@@ -569,7 +569,7 @@ bool RESTManager::start(quint16 port)
+     {
+         m_tcpServer = std::make_unique<QTcpServer>(this);
+     }
+-    if (!m_tcpServer->listen(QHostAddress::Any, port))
++    if (!m_tcpServer->listen(address, port))
+     {
+         qWarning() << "HTTP server listen failed on port" << port;
+         return false;
+diff --git a/Core/RESTManager.h b/Core/RESTManager.h
+index de4b62b..e28804c 100644
+--- a/Core/RESTManager.h
++++ b/Core/RESTManager.h
+@@ -14,7 +14,8 @@ class RESTManager : public QObject
+ public:
+     explicit RESTManager(SqlManager* sql, QObject* parent = nullptr);
+ 
+-    bool start(quint16 port);
++    // w2-060: 'address' added (default QHostAddress::Any = the previous behaviour).
++    bool start(quint16 port, const QHostAddress& address = QHostAddress(QHostAddress::Any));
+ 
+     void setDeviceState(const QString& state)
+     {

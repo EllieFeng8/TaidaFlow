@@ -14,7 +14,8 @@ class RESTManager : public QObject
 public:
     explicit RESTManager(SqlManager* sql, QObject* parent = nullptr);
 
-    bool start(quint16 port);
+    // w2-060: 'address' added (default QHostAddress::Any = the previous behaviour).
+    bool start(quint16 port, const QHostAddress& address = QHostAddress(QHostAddress::Any));
 
     void setDeviceState(const QString& state)
     {

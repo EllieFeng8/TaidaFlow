@@ -8,6 +8,7 @@ class ModbusServer;
 class SqlManager;
 class HistoryExportManager;
 class HistoryViewService;
+class RESTManager;
 
 class Core : public QObject
 {
@@ -27,6 +28,10 @@ private:
     void loadAlarmRecords();
     // w2-049: web page + /exports on the AppHttpServer singleton (0.0.0.0:8124).
     void startHttpServer();
+    // w2-060: REST API (RESTManager) on 127.0.0.1:<TAIDAFLOW_REST_PORT, default 18080>;
+    // reached from the LAN only through nginx (http://<host>/api/...).
+    void startRestServer();
+    void stopRestServer();
 
     Manager* m_manager = nullptr;
     ModbusServer* m_modbusServer = nullptr;
@@ -35,5 +40,6 @@ private:
     // historyViews[sessionId]); replaces the shared page / range loading of w2-039/w2-041.
     HistoryViewService* m_historyViews = nullptr;
     HistoryExportManager* m_historyExport = nullptr;   // raw CSV export + download service
+    RESTManager* m_rest = nullptr;                      // w2-060: REST API (loopback only)
 
 };

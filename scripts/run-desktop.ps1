@@ -1,41 +1,38 @@
 # Launch the TaidaFlow desktop build (authoritative Core + mirror server) SAFELY.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 [-Label <text>]
-#            [-Exe <path>] [-LogFile <path>] [-PvFile <path>] [-Wait]
+#            [-Exe <path>] [-LogFile <path>] [-Wait]
 #   -Label   : free text recorded with the safety probe (e.g. "E2E run 1")
 #   -Exe     : default build\desktop\TaidaFlowApp.exe
 #   -LogFile : stderr log (default build\runtime-logs\desktop-<time>.log; stdout -> .stdout)
-#   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
 #   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)
 #   -Wait    : block until the app exits and return its exit code
 #   -DeviceProfile simulator : TEST ONLY. Runs the probe in simulator mode (502 may only be
 #              held by Adam60xxSimulator.exe on 127.0.0.201..205) and starts the app with
 #              TAIDAFLOW_DEVICE_PROFILE=simulator (ADAM sessions -> 127.0.0.201..205:502).
-#              Not combinable with -PvFile. Default probe log: docs\evidence\wasm-v4-sim\.
+#              Default probe log: docs\evidence\wasm-v4-sim\.
 #              Without it (default) TAIDAFLOW_DEVICE_PROFILE is removed from the app's
 #              environment, so the app always uses the plant addresses the probe checked.
 #
 # Safety (taidaflow WASM v4 spec §2):
 #   1. scripts\safety_probe.ps1 runs first (TCP-connect probe of 192.168.1.201..205:502,
-#      serial port list, 502/8124/8125/18125 listeners). Any non-zero verdict -> the app is NOT
+#      serial port list, 502/8124/8125/18125 and REST port (w2-060, TAIDAFLOW_REST_PORT or 18080)
+#      listeners). Any non-zero verdict -> the app is NOT
 #      started and this script exits 3.
 #   2. The working directory is ALWAYS build\runtime-cwd: the Core writes
 #      TaidaFlowSettings.ini, device_info.ini and SQLite files (settings.sqlite, data\)
 #      into the current directory; build\ is git-ignored, so the work tree stays clean.
+#   The environment (TAIDAFLOW_DOWNLOAD_PORT, TAIDAFLOW_REST_PORT, ...) is passed to the app as it is.
 param(
     [string]$Label = "manual",
     [string]$Exe = "",
     [string]$LogFile = "",
-    [string]$PvFile = "",
     [string]$ProbeLog = "",
     [switch]$Wait,
     [ValidateSet('default', 'simulator')]
     [string]$DeviceProfile = "default"
 )
 $ErrorActionPreference = 'Stop'
-if ($DeviceProfile -eq 'simulator' -and $PvFile -ne "") {
-    Write-Output '-PvFile (dev-only PV driver) cannot be combined with -DeviceProfile simulator'; exit 2
-}
 $root = Split-Path -Parent $PSScriptRoot
 if ($Exe -eq "") { $Exe = Join-Path $root 'build\desktop\TaidaFlowApp.exe' }
 if (-not [System.IO.Path]::IsPathRooted($Exe)) { $Exe = Join-Path $root $Exe }
@@ -68,12 +65,6 @@ New-Item -ItemType Directory -Force (Split-Path -Parent $LogFile) | Out-Null
 
 $env:PATH = "C:\Qt\6.8.3\msvc2022_64\bin;" + $env:PATH
 $env:QT_FORCE_STDERR_LOGGING = '1'
-if ($PvFile -ne "") {
-    if (-not (Test-Path $PvFile)) { Set-Content -Path $PvFile -Value '#' -Encoding ascii }
-    $env:TAIDAFLOW_E2E_PV_FILE = (Resolve-Path $PvFile).Path
-} else {
-    Remove-Item Env:\TAIDAFLOW_E2E_PV_FILE -ErrorAction SilentlyContinue
-}
 if ($DeviceProfile -eq 'simulator') {
     $env:TAIDAFLOW_DEVICE_PROFILE = 'simulator'
 } else {

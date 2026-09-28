@@ -7,7 +7,8 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷�
 含真實後端 `Core/`:`core.cpp`、`manager.cpp`、`Modbus_Client`(5 台 ADAM,預設
 `192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
 改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
-`Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)、
+`Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`(REST API,w2-060 起啟用:`127.0.0.1:18080`,
+區網經 nginx `http://<IP>/api/...`,見「REST API」)、`SqlManager`(SQLite)、
 `HistoryViews`(各連線端獨立的歷史檢視)與 `HistoryExport`(歷史 CSV 匯出佇列,兩者見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
 HTTP 伺服器單例,`0.0.0.0:8124` 同時提供**網頁**與 **CSV 下載**,見「網頁與下載(HTTP 8124)」)。
 
@@ -28,13 +29,14 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
 緊急停止迴路),開 `COM2`,並在 `0.0.0.0:502` 開 Modbus server。在非現場的開發機上:
 
 - 一律用 `scripts\run-desktop.ps1` 啟動。它先跑 `scripts\safety_probe.ps1`(對 5 台 ADAM 只做
-  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8124/8125/18125 是否
-  已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
-  區網轉發)、18125(內部 mirror)或 8124(網頁 + CSV 下載)已被占用 → 不啟動(exit 4 `BUSY`,
+  TCP connect、1.5 秒逾時、**不送任何 Modbus**;列出本機序列埠;檢查 502/8124/8125/18125 與 REST port
+  (18080 或 `TAIDAFLOW_REST_PORT`)是否已有人 listen),任一裝置可達、出現 `COM2` 或 502 已被占用 → **不啟動**(exit 3);8125(mirror
+  區網轉發)、18125(內部 mirror)、8124(網頁 + CSV 下載)或 REST port 已被占用 → 不啟動(exit 4 `BUSY`,
   不會關掉別人的程式)。80 與 8123(nginx 網頁前端:w2-057 起預設 80,之前是 8123)只列出、**僅供參考,不阻擋啟動**(nginx 只送
   靜態檔,不碰設備;app 也不綁這兩個 port;占用者是 pid 4 時註明為 Windows HTTP.sys)。每次探測都附加寫入 `docs/evidence/wasm-v4/safety-probe.log`(`-LogFile` 可改)。
 - desktop 另在 `0.0.0.0:8124` 開 HTTP 服務(網頁 + CSV 下載)、在 `0.0.0.0:8125` 開 mirror 區網轉發
-  (內網、都不做存取控管;只提供網頁資料夾的網頁檔與匯出資料夾裡的檔,見下方)。
+  (內網、都不做存取控管;只提供網頁資料夾的網頁檔與匯出資料夾裡的檔,見下方),並在 `127.0.0.1:18080`
+  開 REST API(只限本機;區網經 nginx 的 `/api/`,可用 PUT 改設定,不做存取控管,見「REST API」)。
 - 工作目錄固定為 `build\runtime-cwd\`:Core 會在「目前工作目錄」寫 `TaidaFlowSettings.ini`、
   `settings.sqlite`、`data\sensor_YYYYMM.sqlite`(及 REST 用的 `device_info.ini`),網頁匯出的 CSV
   寫在 `exports\`。`build/` 已被 `.gitignore` 排除,work tree 保持乾淨。
@@ -181,7 +183,8 @@ powershell -ExecutionPolicy Bypass -File scripts\nginx-stop.ps1         # nginx 
 - 設定檔 `deploy/nginx/taidaflow.conf` 是**樣板**;`scripts\nginx-web.ps1`(`nginx-start.ps1` /
   `nginx-stop.ps1` 是它的 `-Action start|stop` 捷徑,另有 `reload`、`test`、`status`)把
   `@TAIDAFLOW_WEB_ROOT@`(預設 `<exe 資料夾>\web`,`-WebRoot` 覆寫)與 `@TAIDAFLOW_EXPORT_DIR@`
-  (= app 工作目錄 `\exports`,預設 `build\runtime-cwd\exports`,`-ExportDir` 覆寫)填入後寫到 runtime
+  (= app 工作目錄 `\exports`,預設 `build\runtime-cwd\exports`,`-ExportDir` 覆寫)、`@TAIDAFLOW_NGINX_PORT@`(`-Port`)與
+  `@TAIDAFLOW_REST_PORT@`(w2-060,`/api/` 轉送的 REST 內部 port,`-RestPort` 或 `TAIDAFLOW_REST_PORT`,預設 18080)填入後寫到 runtime
   資料夾(預設 `build\nginx\`:`conf\`、`logs\`、`temp\`、狀態檔 `taidaflow-nginx.json`),先
   `nginx -t`,通過才以 `nginx -p <runtime>/ -c <runtime>/conf/taidaflow.conf` 啟動。nginx 本體的資料夾
   不被寫入。
@@ -233,11 +236,64 @@ powershell -ExecutionPolicy Bypass -File scripts\nginx-stop.ps1         # nginx 
   nginx 1.30.5 開檔時允許刪除(`FILE_SHARE_DELETE`),實測刪除**成功**,傳送中的下載仍完整送完(同一個
   SHA-256),之後的新要求 404(`docs/evidence/w2-050/live/summary.txt` 的 D7 (d) 段)。
 
+### REST API(`RESTManager`,w2-060)
+
+原後端開發者的 `Core/RESTManager.{h,cpp}`(QHttpServer)自 w2-060(Mango 2026-09-28)起由 `Core::init()` 建立並啟動
+(`Core::startRestServer()`,在 `startHttpServer()` 之後)。
+
+- **位址**:只綁 `127.0.0.1:18080`(內部 port,區網位址連不到);區網一律經 nginx:`http://<IP>/api/...`
+  (`deploy/nginx/taidaflow.conf` 的 `location ^~ /api/` 原樣轉給 `http://127.0.0.1:18080`,方法、body、query、
+  標頭都保留;`http://<IP>/api/` 本身轉到 REST 的狀態 route `/`)。port 用環境變數 `TAIDAFLOW_REST_PORT`
+  (1..65535,不合法 → warning、用 18080)改;nginx 端用 `nginx-web.ps1 -RestPort`(或同一個環境變數),正式機
+  `start-taidaflow.ps1 -RestPort` / `.bat` 的 `REST_PORT` 兩邊一起帶。18080 選擇理由:開發機上未被占用、不在
+  Windows 保留範圍(`netsh int ipv4 show excludedportrange protocol=tcp` 只有 2869、50000-50059),也不與
+  80/502/8124/8125/18125 衝突。
+- **log**:`[REST] REST API listening on 127.0.0.1:18080 (...)` 與每個 route 一行 `[REST] route GET,PUT,OPTIONS /api/...`
+  (表格在 `Core/core.cpp` 的 `kRestRoutes`,`python -B scripts\check_rest_routes.py` 比對它與 `RESTManager.cpp`
+  實際註冊的 route,不一致 exit 1);RESTManager 自己另印 `Device SN: ...` 與 `Running on http://127.0.0.1: 18080 /`。
+  綁定失敗(port 被占用)只記 `[REST] REST API NOT started on 127.0.0.1:18080 ...`,app 照常執行,nginx 的 `/api/` 回 502。
+  關閉:`aboutToQuit` 時刪除 RESTManager(listener 關閉,log `[REST] REST API stopped`)。
+- **工作目錄的檔案**:RESTManager 啟動時(與每次 `GET /api/device/sn`)讀工作目錄的 `device_info.ini`
+  (`[device] sn`);**不存在就建立**並寫入 `sn=sn000000`。工作目錄不能寫時 QSettings 只是寫不進去,仍回
+  `sn000000`,不會崩潰。其餘資料來自 `SqlManager`(`settings.sqlite`、`data\sensor_YYYYMM.sqlite`)。
+- **存取控管**:**沒有**(內網,Mango 決定)。任何連得到 nginx(port 80)的人都能讀歷史資料並用 PUT 改下表標「會改」的設定。
+  CORS 由 RESTManager 自己加(`Access-Control-Allow-Origin: *`、`Allow-Methods: GET, POST, PUT, OPTIONS`、
+  `Allow-Headers: Content-Type`),nginx 原樣轉送;nginx 另加 `Cache-Control: no-store`。
+
+| 方法 | 路徑(經 nginx) | 用途 / 回應 | 參數 | 會改到什麼 |
+|---|---|---|---|---|
+| GET | `/api/`(REST 的 `/`) | 狀態 `{"status":"ok"}` | — | 不改 |
+| GET | `/api/settings/sensors` | 感測器 key/名稱對照 `[{"key":"s1","name":"inletWaterTemp"},...]` | — | 不改 |
+| PUT | `/api/settings/sensors` | 改名稱,回 `{"ok":true}` | body JSON 陣列 `[{"key":"s1","name":"..."}]`;沒列出的 key 保留原值 | `settings.sqlite` 的 `sensor_config`(整表刪除後寫回合併結果);目前 app 其他地方**不讀**這張表 |
+| GET | `/api/settings/frequency` | `{"read_frequency":1000}` | — | 不改 |
+| PUT | `/api/settings/frequency` | 回 `{"ok":true,"read_frequency":n}` | body `{"read_frequency": n}`(n > 0) | `settings.sqlite` 的 `app_settings.read_frequency`;目前**沒有程式讀它**(Modbus 讀取週期不變) |
+| GET | `/api/modbus/mode` | `{"mode":"network"}` | — | 不改 |
+| PUT | `/api/modbus/mode` | 回 `{"ok":true,"mode":...}` | body `{"mode":"network"\|"standalone"}` | 只改 RESTManager 記憶體內的值並發 `modbusModeChanged`;Core **沒有接**這個 signal,不影響 Modbus;重啟後回 `network` |
+| GET | `/api/sensor/range` | `sensor_data` 列 `[{"ts":..,"s1":..,...,"s40":..}]`(舊到新,可跨月) | `from`、`to`:epoch 秒(也接受 `123+60` / `123-60`) | 不改 |
+| GET | `/api/holding/range` | `holding_register` 列(`h1..h100`) | 同上 | 不改 |
+| GET | `/api/device/sn` | `{"sn":"sn000000"}` | — | `device_info.ini` 不存在時建立 |
+| GET | `/api/sensor/last` | 本月最新一列;沒有 → 404 `{"ok":false,"error":"no data"}` | — | 本月資料檔不存在時建立(SqlManager 開檔) |
+| GET | `/api/holding/last` | 同上(holding) | — | 同上 |
+| GET | `/api/sensor/rangeDateTime` | 同 `/api/sensor/range` | `from`、`to`:ISO 8601(`2026-09-28T10:00:00` = 本機時間,結尾 `Z` = UTC)或 epoch 秒 | 不改 |
+| GET | `/api/sensor/rangeDateTimePage` | `{"page","pageSize","totalCount","totalPages","hasPreviousPage","hasNextPage","items":[...]}` | 同上 + `page`(預設 1)、`pageSize`(預設 200,最多 1000) | 不改 |
+| GET | `/api/holding/rangeDateTime` | 同 `/api/holding/range` | 同 `sensor/rangeDateTime` | 不改 |
+| GET | `/api/holding/rangeDateTimePage` | 分頁版 | 同 `sensor/rangeDateTimePage` | 不改 |
+
+- 每個 `/api/...` 路徑都有 `OPTIONS`(CORS 預檢,200 + 上述標頭);`/api/settings/frequency` 的 OPTIONS 被註冊兩次(原程式),
+  第一個生效,行為相同。錯誤:參數/JSON 不合法 400 `{"ok":false,"error":"..."}`、SQL 失敗 500、沒有的路徑 404。
+- 目前 Manager 存檔時**不寫** `holding_register`,holding 類 route 回空陣列 / 404 `no data`(原樣)。
+- **注意**:RESTManager 在**主執行緒**(UI)執行,每個查詢以 blocking 方式等 SqlManager 執行緒;`/api/sensor/range` 與
+  `/api/holding/range`、`rangeDateTime` 會一次回傳整個區間的所有列(不分頁),大區間(例如幾個月,每月約 260 萬列)
+  會讓 UI 停住很久並佔大量記憶體。大量資料請用 `...Page` 版本(每頁最多 1000 列)。這是原程式行為,本輪沒有改。
+- 實測(simulator profile、經 `127.0.0.1` 與區網 IP 的 nginx 80、PUT 寫入後讀回再寫回原值、區網直連 18080 被拒):
+  `docs/evidence/w2-060/`(工具 `docs\evidence\w2-060\tools\rest_api_check.py`)。
+
 ### 區網連線(mirror,合併自 main e4bc327 / w2-042)
 
 | 端點 | 綁定 | 用途 |
 |---|---|---|
-| nginx 網頁前端(`scripts\nginx-start.ps1` / 正式機 `start-taidaflow`,另一個程式) | `0.0.0.0:80`(`-Port` 可改,例如 8123) | 網頁 `http://<IP>/`;匯出檔 `/exports/<檔名>` 由 nginx 直接從匯出資料夾送(支援續傳) |
+| nginx 網頁前端(`scripts\nginx-start.ps1` / 正式機 `start-taidaflow`,另一個程式) | `0.0.0.0:80`(`-Port` 可改,例如 8123) | 網頁 `http://<IP>/`;匯出檔 `/exports/<檔名>` 由 nginx 直接從匯出資料夾送(支援續傳);REST API `/api/...` 轉給 `127.0.0.1:18080` |
+| REST API(`RESTManager`,desktop app) | `127.0.0.1:18080`(`TAIDAFLOW_REST_PORT`) | 內部 port,只限本機;區網經 nginx `http://<IP>/api/...`(見「REST API」) |
 | 網頁 + CSV 下載(`AppHttpServer`,desktop app) | `0.0.0.0:8124` | 區網電腦開 `http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`;匯出檔 `/exports/<檔名>`(備援,不支援續傳) |
 | mirror 區網轉發(`App/lanrelay.h`) | `0.0.0.0:8125` | 網頁連的公開 mirror port;每條連線原樣雙向轉發到 `127.0.0.1:18125` |
 | Mirror server(pack) | `127.0.0.1:18125` | 內部 port,只限本機,區網位址連不到 |
@@ -246,7 +302,8 @@ powershell -ExecutionPolicy Bypass -File scripts\nginx-stop.ps1         # nginx 
   `127.0.0.1` 並記 warning。所以從哪個位址開網頁,就連回同一個位址的 8125。
 - Mirror `allowedOrigins = {}`(空清單 = 不限制 Origin);內網系統,依 Mango 決定不做存取控管,
   轉發也不做來源限制。
-- 別台電腦要連進來,Windows 防火牆需放行 **80/8125**(TCP 輸入;80 = nginx 網頁與下載,8125 = 網頁同步;8124 只在要用備援網址 `:8124` 時開),
+- 別台電腦要連進來,Windows 防火牆需放行 **80/8125**(TCP 輸入;80 = nginx 網頁、下載與 REST `/api/`,8125 = 網頁同步;8124 只在要用備援網址 `:8124` 時開;
+  18080 **不要開**,它只綁 127.0.0.1),
   外部 HMI 另需 **502**(建議只開給 HMI 的 IP;`netsh` 範例見 `docs/DEPLOY_AND_STARTUP.md` §1.9)。這由**管理員**設定,
   本專案的腳本不改防火牆 / 網路設定;首次啟動 Windows 可能跳出防火牆詢問視窗。
 - 轉發是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
@@ -290,14 +347,16 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
 - **DLL 相依檢查**:`scripts\check-package-deps.ps1 -Package <資料夾>`(`dumpbin /dependents`,每個 exe/dll 的匯入都要在打包資料夾或
   System32 找到;Qt 安裝目錄不算)。
 - **正式機腳本**(`deploy\release\`,在打包資料夾最上層):`start-taidaflow.ps1/.bat`(**不做開發機安全探測**;`-DataDir`、
-  `-LogDir`、`-UseNginx`、`-Port`(預設 80)、`-AppLog quiet|full`;一律移除 `TAIDAFLOW_DEVICE_PROFILE` / `TAIDAFLOW_E2E_PV_FILE`;PATH
-  去掉含 `Qt6Core.dll` 的資料夾;單一執行個體與 502/8124/8125/18125/nginx port 占用檢查(列出占用者,含 pid 4 = HTTP.sys),
-  不關別人的程式;`-UseNginx` 時 `TAIDAFLOW_DOWNLOAD_PORT` = nginx 的 port;確認 8124/8125 在聽)、`stop-taidaflow.ps1/.bat`
+  `-LogDir`、`-UseNginx`、`-Port`(預設 80)、`-RestPort`(w2-060,預設 18080,設成 app 的 `TAIDAFLOW_REST_PORT` 並帶給 nginx 的 `/api/`)、
+  `-AppLog quiet|full`;一律移除 `TAIDAFLOW_DEVICE_PROFILE`;PATH
+  去掉含 `Qt6Core.dll` 的資料夾;單一執行個體與 502/8124/8125/18125/REST port/nginx port 占用檢查(列出占用者,含 pid 4 = HTTP.sys),
+  不關別人的程式;`-UseNginx` 時 `TAIDAFLOW_DOWNLOAD_PORT` = nginx 的 port;確認 8124/8125 在聽,REST port 沒在聽只記 WARNING)、`stop-taidaflow.ps1/.bat`
   (先停自己起的 nginx,再以 WM_CLOSE 正常關 app;逾時只報告,`-Force` 才強制)、`register-autostart.ps1` /
   `unregister-autostart.ps1`(工作排程器「使用者登入時」;**先 `-WhatIf`**,本專案只做過乾跑)、`taidaflow-site.example.bat`。
 - **開發機上驗證打包資料夾**:`powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<...>
   [-Mode ps1|bat] [-SeedDb <sensor_yyyyMM.sqlite>]`:先 `safety_probe.ps1`(SAFE 才繼續)→ 以不含 Qt 的 PATH 啟動 → 載入的 Qt/MSVC DLL
-  都來自打包資料夾 → curl 檢查 `http://<127.0.0.1 與區網 IP>/`(302)、頁面 200、`.wasm` gzip、8124、8125 WebSocket 101 →
+  都來自打包資料夾 → curl 檢查 `http://<127.0.0.1 與區網 IP>/`(302)、頁面 200、`.wasm` gzip、8124、8125 WebSocket 101、
+  REST(w2-060:`/api/` 與 `/api/settings/frequency` 200 + CORS、OPTIONS 預檢 200、18080 只綁 127.0.0.1 且區網 IP 直連被拒)→
   (dev-only mirror client `build\w2-057-mirror-client`)匯出 → `downloadPort` = nginx port、網頁 `exportDownloadUrl` 組出的連結
   200 + SHA-256 相同、Range 206 → app log 無 QML/plugin 載入錯誤 → 停止後無殘留。不操作畫面。
 - **開發機腳本與正式機腳本不可混用**:開發機一律用 `scripts\run-desktop.ps1`(安全探測);正式機腳本沒有保護。
@@ -335,7 +394,6 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile 
   port 502 的 listener **只**接受「程序映像檔是 `Adam60xxSimulator.exe` 且位址在
   `127.0.0.201~205`」,其他(別的程式、別的位址、IPv6)一律 UNSAFE(exit 3)。紀錄預設寫到
   `docs/evidence/wasm-v4-sim/safety-probe.log`。預設模式(不帶 `-DeviceProfile`)行為與輸出不變。
-- `-DeviceProfile simulator` 不能與 `-PvFile`(dev-only PV 注入)並用。
 - 已知點位落差(不是切換造成,之後另案處理):模擬器 ADAM-6224 DI0 是「漏液」且預設 0,
   Core 把 DI0 當「相位正常」→ 啟動後立即 `[Safety Interlock] ... DI0 is false`,泵浦啟動會被擋;
   Core 補水泵寫 6256 coil 19,模擬器製程只把 coil 16 當泵浦。
@@ -364,10 +422,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 ## 開發用工具(dev-only)
 
-- `App/e2epvdriver.h`:**只在 desktop 編入、只有設定 `TAIDAFLOW_E2E_PV_FILE` 才建立**。每 200 ms
-  讀 `名稱=值` 行,經 setter 寫入 authoritative `Td` 名稱以 `Pv` 結尾的屬性(double 或 bool)。
-  用途:無設備的開發機上,後端永遠不會更新 PV,E2E 以它模擬「desktop 端 PV 變化」。它不能寫 SV,
-  也不碰 Manager/Modbus。`run-desktop.ps1 -PvFile <檔案>` 會設定環境變數。
+- w2-060 已移除測試專用的 PV 注入(舊的 `App/main.cpp` E2E 區塊與 `run-desktop.ps1` 的對應參數);無設備時改用
+  Adam60xxSimulator(見「接 Adam60xxSimulator」)。`docs/evidence/` 下的歷史證據不變。
 - `scripts\desktop_input.py`(OS SendInput / WM_CLOSE):`verify-desktop-startup.ps1` 以它的 `close`
   正常關閉 app。
 - w2-059 已移除 UI 截圖比對與舊 CSV 驗證工具(`capture-window.ps1`、`image_diff.py`、`build-baseline.bat`、
@@ -484,7 +540,8 @@ python scripts\check_version_shadow.py build\desktop build\wasm-release
 :: 4. 字型子集涵蓋所有來源字元
 python scripts\make_font_subset.py --check
 :: 5. desktop 啟動(含安全探測、runtime-cwd、後端 + mirror 127.0.0.1:18125 + 區網轉發 0.0.0.0:8125
-::    (同一 app PID)+ 8124 HTTP 服務起來、網頁 200、關閉後 502/8124/8125/18125 無殘留)
+::    (同一 app PID)+ 8124 HTTP 服務起來、網頁 200、REST 127.0.0.1:18080 起來且 GET / 200(w2-060)、
+::    關閉後 502/8124/8125/18125/18080 無殘留)
 powershell -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1
 ::    (w2-049) 接模擬器:先 scripts\run-simulator.ps1,再加 -DeviceProfile simulator [-ProbeLog <檔案>]
 :: 5a. (w2-043) 區網轉發:安全探測 SAFE 後啟動,以區網 IP:8125 與 127.0.0.1:8125 做 WebSocket upgrade
@@ -531,6 +588,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-package-deps.p
 powershell -NoProfile -ExecutionPolicy Bypass -File dist\TaidaFlow-<日期>-<雜湊>\register-autostart.ps1 -WhatIf -UseNginx
 docs\evidence\w2-050\tools\build-mirror-client.bat
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<日期>-<雜湊> -SeedDb build\runtime-cwd\data\sensor_202609.sqlite -FromMs 1790577423000 -ToMs 1790581023000
+:: 5g. (w2-060) REST API:log 的 route 表與 RESTManager 實際註冊的一致(不用啟動 app);
+::     app(simulator profile)+ nginx 執行中:每個 GET route 經 127.0.0.1 與區網 IP 的 nginx 80、OPTIONS 預檢、
+::     PUT 三項寫測試值 → 讀回 → 寫回原值(只接受 build\ 下的 settings.sqlite,寫入在該檔驗證)、區網 IP 直連 18080 被拒
+python -B scripts\check_rest_routes.py
+python -B docs\evidence\w2-060\tools\rest_api_check.py --hosts 127.0.0.1,<區網 IP> --settings-db build\runtime-cwd\settings.sqlite
 ```
 
 E2E 證據(雙向同步 double/bool、唯讀 PV 單向、斷線離線提示與控制項停用、重連恢復、

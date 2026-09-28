@@ -1,0 +1,12 @@
+﻿running before cleanup: 0
+deleted build\apphttpserver-qtest (3678826 bytes)
+deleted build\w2-041-bench (598876160 bytes)
+deleted build\w2-045-qtest (606695081 bytes)
+deleted build\w2-049-w2041-qtest (504468055 bytes)
+deleted build\w2-050-mirror-client (3708027 bytes)
+deleted build\w2-052-qtest (1211053686 bytes)
+deleted build\w2-053-qtest (7722712 bytes)
+deleted build\w2-057-verify-data (7399888 bytes)
+deleted dist\TaidaFlow-20260928-772c00d (older package)
+build now: desktop, nginx, nginx-manual, package-logs, runtime-cwd, runtime-logs, sim-cwd, wasm-release
+dist now: TaidaFlow-20260928-772c00d-dirty

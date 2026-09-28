@@ -1,0 +1,8 @@
+﻿app 86264 (started by this task) closed via WM_CLOSE: exited=True exit code=
+after app stop, nginx still up: GET http://127.0.0.1/api/ -> 502 (expected 502)
+app log shutdown lines: [REST] REST API stopped
+stopping nginx master pid 107960 (workers 95048) with nginx -s quit
+stopped: pids 107960,95048 exited; listeners of these pids on 80: 0
+simulator 75072 (started by this task) closed via WM_CLOSE: exited=True
+left processes: 
+left listeners 80/502/8124/8125/18080/18125: 

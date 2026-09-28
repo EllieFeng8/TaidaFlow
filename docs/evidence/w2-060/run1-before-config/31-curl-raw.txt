@@ -1,0 +1,31 @@
+### curl -i OPTIONS preflight via LAN IP
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 28 Sep 2026 09:46:12 GMT
+Content-Type: application/x-empty
+Content-Length: 0
+Connection: keep-alive
+access-control-allow-origin: *
+access-control-allow-methods: GET, POST, PUT, OPTIONS
+access-control-allow-headers: Content-Type
+access-control-allow-credentials: false
+Cache-Control: no-store
+
+
+### curl -i GET via LAN IP
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 28 Sep 2026 09:46:13 GMT
+Content-Type: application/json
+Content-Length: 507
+Connection: keep-alive
+access-control-allow-origin: *
+access-control-allow-methods: GET, POST, PUT, OPTIONS
+access-control-allow-headers: Content-Type
+access-control-allow-credentials: false
+Cache-Control: no-store
+
+{"hasNextPage":true,"hasPreviousPage":false,"items":[{"s1":13107,"s10":98,"s11":105,"s12":10,"s13":6554,"s14":13107,"s15":19660,"s16":26214,"s17":"","s18":"","s19":"","s2":14418,"s20":"","s21":"","s22":"","s23":"","s24":"","s25":"","s26":"","s27":"","s28":"","s29":"","s3":15728,"s30":"","s31":"","s32":"","s33":"","s34":"","s35":"","s36":"","s37":"","s38":"","s39":"","s4":17039,"s40":"","s5":66,"s6":72,"s7":79,"s8":85,"s9":92,"ts":1790227687}],"page":1,"pageSize":1,"totalCount":73746,"totalPages":73746}
+### curl direct LAN IP:18080
+curl: (7) Failed to connect to 192.168.0.125:18080 after 2037 ms: Could not connect to server
+curl exit=7

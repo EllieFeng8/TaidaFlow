@@ -1,0 +1,7 @@
+﻿app 130044 closed via WM_CLOSE: exited=True
+after app stop, nginx still up: GET /api/ -> 502
+stopping nginx master pid 124076 (workers 113272) with nginx -s quit
+stopped: pids 124076,113272 exited; listeners of these pids on 80: 0
+simulator 95500 closed via WM_CLOSE: exited=True
+left processes: 
+left listeners: 

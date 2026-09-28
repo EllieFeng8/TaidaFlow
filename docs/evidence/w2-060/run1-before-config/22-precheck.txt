@@ -1,0 +1,2 @@
+﻿=== precheck 2026-09-28T17:43:04.3107816+08:00
+runtime-cwd: data, exports, settings.sqlite, TaidaFlowSettings.ini, TaidaFlowSettings.ini.w2-030-before-rerun.bak, TaidaFlowSettings.ini.w2-036-before.bak, TaidaFlowSettings.ini.w2-037-before.bak, TaidaFlowSettings.ini.w2-039-before.bak

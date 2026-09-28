@@ -1,0 +1,6 @@
+{
+    "dataDir": "C:\\TaidaFlowData",
+    "useNginx": true,
+    "nginxPort": 80,
+    "restPort": 18080
+}

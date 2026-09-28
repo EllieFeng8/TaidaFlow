@@ -19,7 +19,7 @@
 #include <QMutex>
 #include <atomic>
 
-// w2-039: result of one History-page load (one COUNT + one newest-first page),
+// w2-039/w2-041: result of one History-page load (COUNT + one newest-first page),
 // produced on the SqlManager thread and delivered queued to the requester.
 struct SensorHistoryPageResult
 {
@@ -53,7 +53,7 @@ struct SensorHistoryPageResult
     QString pageMethod;
     QHash<QString, qint64> snapshotRowids;
     // w2-052: the session key of requestSensorHistoryRangePage(sessionKey, ...); empty for
-    // the requests without a session (requestSensorHistoryPage and the w2-041 overload).
+    // the requests without a session (the w2-041 overload).
     QString sessionKey;
 };
 Q_DECLARE_METATYPE(SensorHistoryPageResult)
@@ -124,32 +124,17 @@ public:
     bool findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
                               QList<UnresolvedAlarm>* out, QString* errMsg = nullptr);
 
-    // w2-039 History page (newest first).  [from, to] must lie in one calendar
-    // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
-    // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other
-    // public functions when called from another thread.
-    bool querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
-                                   QJsonArray* out, QString* errMsg = nullptr);
-
-    // w2-039 asynchronous History load: returns immediately (never blocks the
-    // caller).  On the SqlManager thread it runs one COUNT for [from, to] and
-    // one querySensorRangeDescPaged(), then emits sensorHistoryPageReady().
-    // Connect to it with a queued connection.  A request whose id is lower
-    // than the newest requested id when it starts is not executed and is
-    // reported with superseded = true.
-    void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
-                                  int page, int pageSize);
-
-    // w2-041 History range (spec §2): like requestSensorHistoryPage(), but
-    // [from, to] (epoch seconds, both inclusive) may span any number of months,
+    // w2-041 History range (spec §2): asynchronous History load; [from, to]
+    // (epoch seconds, both inclusive) may span any number of months,
     // including the "unbounded" range.  Only month files that exist in the data
     // directory are visited (newest month first); totalRows is the sum of the
     // per-month COUNTs and the page is taken newest first across months
     // (ORDER BY timestamp DESC, rowid DESC inside each month).  Per-month COUNTs
     // are cached and reused while the month file is unchanged (same size and
     // same SQLite file change counter).  Returns immediately; the result comes
-    // through sensorHistoryPageReady() and shares the request-id sequence
-    // (superseded handling) with requestSensorHistoryPage().
+    // through sensorHistoryPageReady() (connect with a queued connection); a
+    // request whose id is lower than the newest id requested through this
+    // overload is dropped with superseded = true.
     //
     // w2-045: the work runs as a chain of short queued steps (about 6 ms of
     // work each), so the blocking calls of other threads (the main thread's

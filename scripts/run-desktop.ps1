@@ -3,7 +3,7 @@
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 [-Label <text>]
 #            [-Exe <path>] [-LogFile <path>] [-PvFile <path>] [-Wait]
 #   -Label   : free text recorded with the safety probe (e.g. "E2E run 1")
-#   -Exe     : default build\desktop\TaidaFlowApp.exe (baseline: build\baseline-desktop\...)
+#   -Exe     : default build\desktop\TaidaFlowApp.exe
 #   -LogFile : stderr log (default build\runtime-logs\desktop-<time>.log; stdout -> .stdout)
 #   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
 #   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)

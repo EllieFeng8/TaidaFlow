@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """E2E helper: drive the real TaidaFlow desktop UI with OS mouse/keyboard input (Windows).
 
-Coordinates are relative to the top-left of the TaidaFlowApp window rectangle, i.e. the
-same frame as screenshots taken with scripts/capture-window.ps1.
+Coordinates are relative to the top-left of the TaidaFlowApp window rectangle.
+Still used by scripts/verify-desktop-startup.ps1 ("close" = WM_CLOSE, graceful shutdown).
 
   python scripts/desktop_input.py info
   python scripts/desktop_input.py click X Y

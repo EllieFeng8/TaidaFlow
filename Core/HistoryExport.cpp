@@ -802,7 +802,6 @@ void HistoryExportManager::setEntry(const QString &sessionId, const QVariantMap 
         if (oldest != sessionId && !sessionBusy(oldest))
             m_status.remove(oldest);
     }
-    ++m_publishCount;
     if (m_proxy)
         m_proxy->setHistoryExportStatus(m_status);
 }

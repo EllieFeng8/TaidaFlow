@@ -1,0 +1,64 @@
+﻿process using build/dist: PID 91520 tail.exe: "C:\Program Files\Git\usr\bin\tail.exe" -n +1 -f /d/repo/codex/qmlTester/taidaflow/build/w2-045-run_bench.console.txt
+
+Path                                 MB           Bytes Modified         Action      
+----                                 --           ----- --------         ------      
+build\apphttpserver-qtest            3.5        3697803 2026-09-26 03:02 DELETE      
+build\desktop                        127.2    133404764 2026-09-28 15:57 KEEP        
+build\desktop-export                 0.0           1408 2026-09-24 14:06 DELETE      
+build\nginx                          0.1          66015 2026-09-28 15:28 KEEP        
+build\nginx-manual                   0.0           9931 2026-09-28 16:06 DELETE      
+build\pack-tests                     7.1        7476102 2026-09-24 11:50 DELETE      
+build\package-logs                   0.1         147402 2026-09-28 16:01 DELETE      
+build\pm-w2-057-rerun                0.0          51846 2026-09-28 16:19 DELETE      
+build\runtime-cwd                    7.5        7879368 2026-09-28 16:05 KEEP        
+build\runtime-logs                   277.0    290425958 2026-09-28 16:05 KEEP        
+build\sim-cwd                        0.0              0 2026-09-24 14:39 KEEP        
+build\w2-039-bench                   571.1    598859776 2026-09-24 18:27 DELETE      
+build\w2-039-qtest                   2.2        2311527 2026-09-24 18:49 DELETE      
+build\w2-041-bench                   571.2    598921216 2026-09-24 19:25 DELETE      
+build\w2-041-qtest                   478.0    501223492 2026-09-27 18:18 DELETE      
+build\w2-044-before                  0.4         371869 2026-09-25 17:30 DELETE      
+build\w2-045-bench                   6,839.4 7171643298 2026-09-25 17:53 DELETE      
+build\w2-045-old                     0.1          64194 2026-09-25 18:10 DELETE      
+build\w2-045-qtest                   581.3    609493460 2026-09-28 11:40 DELETE      
+build\w2-048-before                  0.4         382537 2026-09-25 22:59 DELETE      
+build\w2-049-w2041-qtest             481.2    504541173 2026-09-28 11:40 DELETE      
+build\w2-050-downloads               0.0              0 2026-09-27 18:08 DELETE      
+build\w2-050-mirror-client           3.6        3758930 2026-09-27 18:05 DELETE      
+build\w2-052-before                  0.1         130279 2026-09-27 19:18 DELETE      
+build\w2-052-mirror-client           3.9        4099302 2026-09-28 11:26 DELETE      
+build\w2-052-qtest                   1,155.2 1211293696 2026-09-28 11:39 DELETE      
+build\w2-053-fix1-before             0.4         388746 2026-09-27 19:02 DELETE      
+build\w2-053-qtest                   7.6        8009589 2026-09-28 11:41 DELETE      
+build\w2-055-before                  0.4         388587 2026-09-27 18:12 DELETE      
+build\w2-057-manual                  0.1          62523 2026-09-28 16:12 DELETE      
+build\w2-057-mirror-client           3.5        3708023 2026-09-28 15:47 DELETE      
+build\w2-057-nginx-a                 0.0          10151 2026-09-28 16:20 DELETE      
+build\w2-057-verify-data             7.3        7665811 2026-09-28 16:19 DELETE      
+build\wasm-release                   57.5      60312258 2026-09-28 16:11 KEEP        
+build\apphttpserver-qtest-run.log    3.4        3611087 2026-09-26 02:21 DELETE      
+build\e2e-pv.txt                     0.0             17 2026-09-24 11:57 DELETE      
+build\w2-045-incr-build.log          0.0           4042 2026-09-25 17:52 DELETE      
+build\w2-045-pm-rerun-raw.txt        0.1          58055 2026-09-25 18:57 DELETE      
+build\w2-045-pm-rerun-summary.txt    0.0          27412 2026-09-25 18:57 DELETE      
+build\w2-045-qtest-run1.log          0.0          22371 2026-09-25 18:03 DELETE      
+build\w2-045-qtest-run2.log          0.0          26946 2026-09-25 18:06 DELETE      
+build\w2-045-qtest-run3.log          0.0          28305 2026-09-25 18:10 DELETE      
+build\w2-045-run_bench.console.txt   0.0          51340 2026-09-25 18:18 DELETE      
+build\w2-045-run_bench2.console.txt  0.0          28387 2026-09-25 18:39 DELETE      
+build\w2-049-desktop-incremental.log 0.0           4869 2026-09-26 02:14 DELETE      
+build\w2-049-w2041-qtest-run.log     0.0          26839 2026-09-26 02:15 DELETE      
+build\w2-049-w2045-qtest-run.log     0.0          27670 2026-09-26 02:16 DELETE      
+build\w2-052-incr-build.log          0.0           8790 2026-09-27 19:21 DELETE      
+build\w2-052-mirror-build.log        0.0           1942 2026-09-27 19:30 DELETE      
+build\w2-052-qtest-try1.log          0.1          97428 2026-09-27 19:28 DELETE      
+build\w2-053-incr-build.log          0.0           4059 2026-09-27 18:25 DELETE      
+build\w2-053-qtest-try.log           0.0          46172 2026-09-27 18:29 DELETE      
+build\w2-053-qtest-try2.log          0.0          44906 2026-09-27 18:30 DELETE      
+build\w2-057-build-mirror-client.bat 0.0            469 2026-09-28 15:47 DELETE      
+dist\TaidaFlow-20260928-c714aee      149.3    156597594 2026-09-28 16:16 KEEP(newest)
+
+
+
+TOTAL build+dist bytes=11891519734 (11.07 GB); marked DELETE bytes=11242833777 (10.47 GB); after deletion ~0.60 GB
+exit=0

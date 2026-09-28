@@ -1,0 +1,29 @@
+﻿process using build/dist: PID 91520 tail.exe: "C:\Program Files\Git\usr\bin\tail.exe" -n +1 -f /d/repo/codex/qmlTester/taidaflow/build/w2-045-run_bench.console.txt
+
+Path                            MB           Bytes Modified         Action      
+----                            --           ----- --------         ------      
+build\apphttpserver-qtest       3.5        3678831 2026-09-28 16:39 DELETE      
+build\desktop                   82.3      86250055 2026-09-28 16:31 KEEP        
+build\nginx                     0.1          66015 2026-09-28 15:28 KEEP        
+build\runtime-cwd               7.5        7879368 2026-09-28 16:05 KEEP        
+build\runtime-logs              277.0    290425958 2026-09-28 16:05 KEEP        
+build\sim-cwd                   0.0              0 2026-09-24 14:39 KEEP        
+build\w2-041-bench              571.1    598876160 2026-09-28 16:35 DELETE      
+build\w2-045-qtest              578.6    606696455 2026-09-28 16:36 DELETE      
+build\w2-049-w2041-qtest        481.1    504468222 2026-09-28 16:35 DELETE      
+build\w2-052-qtest              1,155.0 1211053852 2026-09-28 16:37 DELETE      
+build\w2-053-qtest              7.4        7722710 2026-09-28 16:39 DELETE      
+build\wasm-release              57.5      60269908 2026-09-28 16:34 KEEP        
+dist\TaidaFlow-20260928-c714aee 149.3    156597594 2026-09-28 16:16 KEEP(newest)
+
+
+
+TOTAL build+dist bytes=3533985128 (3.29 GB); marked DELETE bytes=2932496230 (2.73 GB); after deletion ~0.56 GB
+deleted build\apphttpserver-qtest
+deleted build\w2-041-bench
+deleted build\w2-045-qtest
+deleted build\w2-049-w2041-qtest
+deleted build\w2-052-qtest
+deleted build\w2-053-qtest
+delete failures=0
+exit=0

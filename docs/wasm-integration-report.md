@@ -240,7 +240,6 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | 歷史區間 + 匯出 QTest | `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(w2-041 harness 的 w2-049 改版)、`docs\evidence\w2-045\tools\run-qtest.bat` |
 | AppHttpServer QTest | `scripts\run-apphttpserver-tests.bat` |
 | nginx 前端與直送下載 | `docs\evidence\w2-050\tools\verify-nginx.ps1` |
-| 桌面外觀 | `scripts\image_diff.py`(基準 dc91f01) |
 
 最近一次實跑(2026-09-27,w2-055 / w2-053):desktop 與 wasm-release fresh 建置 exit 0(`TaidaFlowApp.wasm`
 33,828,731 bytes)、`check_wasm_backend` 0、`check_version_shadow` 0/0、w2-041 QTest 9/9、w2-045 QTest 8/8

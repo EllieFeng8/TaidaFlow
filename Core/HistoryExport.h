@@ -155,7 +155,6 @@ public:
     QString exportDir() const { return m_options.exportDir; }
     // /exports is mounted and AppHttpServer::instance() is listening.
     bool downloadServerListening() const;
-    int statusPublishCount() const { return m_publishCount; }
 
 signals:
     void jobFinished(const QString &sessionId, const QString &state);
@@ -209,5 +208,4 @@ private:
     QStringList m_finishedOrder;       // finished session ids, oldest first (pruning)
     QElapsedTimer m_lastPublishClock;
     int m_lastPublishedProgress = 0;
-    int m_publishCount = 0;
 };

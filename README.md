@@ -50,7 +50,7 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
 | CMake / Ninja | `C:\Qt\Tools\CMake_64\bin\cmake.exe`、`C:\Qt\Tools\Ninja\ninja.exe` |
 | MSVC | VS 18 Community `vcvars64.bat` |
 | Emscripten | emsdk **3.1.56**(Qt 6.8 對應版)於 `C:\tools\emsdk` |
-| Python 3 | 開發腳本用;字型子集需 `fonttools`,截圖比對需 `Pillow` |
+| Python 3 | 開發腳本用;字型子集需 `fonttools` |
 
 所有建置輸出都在 `build/` 下(已被 `.gitignore` 排除)。
 注意:本分支 `.gitignore` 排除了 `/CMakePresets.json`,提交時需 `git add -f CMakePresets.json`。
@@ -101,6 +101,23 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
   `[Web] web page folder (<來源>): <資料夾> -> http://<host>:8124/TaidaFlowApp.html` 與
   `[Web] HTTP service listening on 0.0.0.0:8124`(8124 被占用時只記 warning,app 照常執行)。
 - 瀏覽器 console:`WASM Mirror ready: true` 即同步完成。
+
+### 網頁載入畫面(w2-058)
+
+- 樣板:`App/wasm/TaidaFlowApp.shell.html`(純 HTML/CSS,重現 CubeLoader 旋轉發光立方體 + 「TAIDAFLOW」
+  與繁中狀態文字;不引用任何外部 CSS/JS/字型)。`onLoaded` 後整個載入頁隱藏,由 App 自己的畫面接手;
+  載入失敗、瀏覽器不支援 WebAssembly、JavaScript 關閉與程式結束時停在載入頁顯示繁中訊息(紅字)。
+- 套用:Qt 6.8 沒有自訂 HTML shell 的 CMake 參數,它在 CMake configure 時從自己的 `wasm_shell.html`
+  產生 `build\<wasm preset>\TaidaFlowApp.html`。`App/CMakeLists.txt` 在同一次 configure、Qt 產生之後
+  立刻呼叫 `App/wasm/apply_wasm_shell.cmake`,以 Qt 產生的頁面取 `@APPNAME@`/`@APPEXPORTNAME@`/
+  `@PRELOAD@` 的值填入樣板並覆蓋;configure log 會印 `[wasm-shell] ...`(值與 SHA-256)。只影響 WASM,
+  桌面版不變。`qtlogo.svg` 仍由 Qt 複製、仍會被 deploy-web 部署,新頁面不再使用(留著無影響)。
+- 修改:改樣板 → `scripts\build-wasm.bat`(樣板是 configure 相依,改了會自動重跑 configure)→
+  `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(nginx 執行中另跑
+  `scripts\nginx-web.ps1 -Action reload`,或靠 ETag 重新驗證)。靜態檢查(不開瀏覽器):
+  `python -B docs\evidence\w2-058\check_shell_page.py build\wasm-release\TaidaFlowApp.html`。
+- main 分支的 wasm 建置仍用 Qt 預設頁;要一致需把 `App/wasm/` 與 `App/CMakeLists.txt` 的 w2-058 區塊
+  一起帶到 main(main → core 合併時這兩處只在 core,不會被覆蓋,除非 main 也改了同一段)。
 
 ### 網頁與下載(HTTP 8124,w2-049)
 
@@ -351,19 +368,15 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   讀 `名稱=值` 行,經 setter 寫入 authoritative `Td` 名稱以 `Pv` 結尾的屬性(double 或 bool)。
   用途:無設備的開發機上,後端永遠不會更新 PV,E2E 以它模擬「desktop 端 PV 變化」。它不能寫 SV,
   也不碰 Manager/Modbus。`run-desktop.ps1 -PvFile <檔案>` 會設定環境變數。
-- `scripts\desktop_input.py`(OS SendInput 操作真實 desktop UI)、`scripts\capture-window.ps1`
-  (視窗截圖)。
-- `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
-  Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
-  啟動後進入歷史頁時由 Core 的真實讀取路徑(`historyViewRequested` → `HistoryViewService` → SqlManager →
-  `historyViews[<clientSessionId>]` → Mirror)載入;同時輸出畫面應顯示的值(`--out rows.json`)。無設備時 Core 永遠不會寫 sensor 列,
-  所以歷史頁 / CSV 匯出只能這樣準備資料。它不走 Core 的寫入路徑(`saveSensorData`)。
-- `scripts\compare_history_csv.py --fixture rows.json A.csv B.csv ...`:檢查匯出 CSV 的 BOM、標頭、
-  列數、每格內容與 fixture 一致,且各檔位元組相同。
+- `scripts\desktop_input.py`(OS SendInput / WM_CLOSE):`verify-desktop-startup.ps1` 以它的 `close`
+  正常關閉 app。
+- w2-059 已移除 UI 截圖比對與舊 CSV 驗證工具(`capture-window.ps1`、`image_diff.py`、`build-baseline.bat`、
+  `seed_history_sqlite.py`、`compare_history_csv.py`、`verify_device_profile.ps1`):不再做 UI 自動化測試,
+  歷史頁 / 匯出改由 5b / 5e 的 QTest 與 `docs\evidence\w2-041\tools\verify_export_csv.py` 驗證;
+  `docs/evidence/` 下的歷史證據不變。
 - 舊的 Python 開發網頁伺服器(8123)與它的 E2E 證據收集模式(頁面截圖 / console / Blob 下載上傳)
   已隨 w2-049 移除,網頁改由 desktop 的 `AppHttpServer` 提供;`docs/evidence/` 下的歷史證據不變。
   8123 自 w2-050 起改給 nginx 網頁前端;w2-057 起 nginx 預設改用 port 80(見「nginx 網頁前端與下載」)。
-- `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
 
 ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
 
@@ -518,8 +531,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-package-deps.p
 powershell -NoProfile -ExecutionPolicy Bypass -File dist\TaidaFlow-<日期>-<雜湊>\register-autostart.ps1 -WhatIf -UseNginx
 docs\evidence\w2-050\tools\build-mirror-client.bat
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<日期>-<雜湊> -SeedDb build\runtime-cwd\data\sensor_202609.sqlite -FromMs 1790577423000 -ToMs 1790581023000
-:: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
-python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
 ```
 
 E2E 證據(雙向同步 double/bool、唯讀 PV 單向、斷線離線提示與控制項停用、重連恢復、

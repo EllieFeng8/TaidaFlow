@@ -1,0 +1,16 @@
+﻿process using build/dist: PID 91520 tail.exe: "C:\Program Files\Git\usr\bin\tail.exe" -n +1 -f /d/repo/codex/qmlTester/taidaflow/build/w2-045-run_bench.console.txt
+
+Path                            MB        Bytes Modified         Action      
+----                            --        ----- --------         ------      
+build\desktop                   82.3   86250055 2026-09-28 16:31 KEEP        
+build\nginx                     0.1       66015 2026-09-28 15:28 KEEP        
+build\runtime-cwd               7.5     7879368 2026-09-28 16:05 KEEP        
+build\runtime-logs              277.0 290425958 2026-09-28 16:05 KEEP        
+build\sim-cwd                   0.0           0 2026-09-24 14:39 KEEP        
+build\wasm-release              57.5   60269908 2026-09-28 16:34 KEEP        
+dist\TaidaFlow-20260928-c714aee 149.3 156597594 2026-09-28 16:16 KEEP(newest)
+
+
+
+TOTAL build+dist bytes=601488898 (0.56 GB); marked DELETE bytes= (0.00 GB); after deletion ~0.56 GB
+exit=0

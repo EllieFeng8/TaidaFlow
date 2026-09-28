@@ -1,0 +1,11 @@
+$ git grep -n -E "requestSensorHistoryPage|querySensorRangeDescPaged|statusPublishCount|m_publishCount" -- ":!docs/evidence"
+exit=1
+$ git grep -n -E "build-baseline|capture-window|image_diff|seed_history_sqlite|compare_history_csv|verify_device_profile" -- ":!docs/evidence"
+README.md:356:- w2-059 已移除 UI 截圖比對與舊 CSV 驗證工具(`capture-window.ps1`、`image_diff.py`、`build-baseline.bat`、
+README.md:357:  `seed_history_sqlite.py`、`compare_history_csv.py`、`verify_device_profile.ps1`):不再做 UI 自動化測試,
+exit=0 (only the README removal note is expected)
+$ git grep -l -E "requestSensorHistoryPage|querySensorRangeDescPaged" -- docs/evidence
+docs/evidence/w2-039/00-core.diff
+docs/evidence/w2-039/tools/qtest/tst_w2039_history.cpp
+docs/evidence/w2-041/00-core.diff
+docs/evidence/w2-045/00-core.diff

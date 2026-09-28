@@ -1,0 +1,816 @@
+diff --git a/Core/HistoryExport.cpp b/Core/HistoryExport.cpp
+index c49f6b6..2345238 100644
+--- a/Core/HistoryExport.cpp
++++ b/Core/HistoryExport.cpp
+@@ -802,7 +802,6 @@ void HistoryExportManager::setEntry(const QString &sessionId, const QVariantMap
+         if (oldest != sessionId && !sessionBusy(oldest))
+             m_status.remove(oldest);
+     }
+-    ++m_publishCount;
+     if (m_proxy)
+         m_proxy->setHistoryExportStatus(m_status);
+ }
+diff --git a/Core/HistoryExport.h b/Core/HistoryExport.h
+index 97f6083..31e41d3 100644
+--- a/Core/HistoryExport.h
++++ b/Core/HistoryExport.h
+@@ -155,7 +155,6 @@ public:
+     QString exportDir() const { return m_options.exportDir; }
+     // /exports is mounted and AppHttpServer::instance() is listening.
+     bool downloadServerListening() const;
+-    int statusPublishCount() const { return m_publishCount; }
+ 
+ signals:
+     void jobFinished(const QString &sessionId, const QString &state);
+@@ -209,5 +208,4 @@ private:
+     QStringList m_finishedOrder;       // finished session ids, oldest first (pruning)
+     QElapsedTimer m_lastPublishClock;
+     int m_lastPublishedProgress = 0;
+-    int m_publishCount = 0;
+ };
+diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index 1f38bbb..311ed9d 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -848,148 +848,6 @@ bool SqlManager::countSensorRange(qint64 from, qint64 to, qint64* total, QString
+     });
+ }
+ 
+-bool SqlManager::querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
+-                                           QJsonArray* out, QString* errMsg)
+-{
+-    return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
+-        if (!out)
+-        {
+-            if (errMsg) *errMsg = "output array is null";
+-            return false;
+-        }
+-        *out = QJsonArray();
+-        if (to < from)
+-        {
+-            if (errMsg) *errMsg = "to < from";
+-            return false;
+-        }
+-        if (page <= 0 || pageSize <= 0)
+-        {
+-            if (errMsg) *errMsg = "page and pageSize must be positive";
+-            return false;
+-        }
+-
+-        const QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
+-        const QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
+-        if (startDate.year() != endDate.year() || startDate.month() != endDate.month())
+-        {
+-            if (errMsg) *errMsg = "from and to must be in the same month";
+-            return false;
+-        }
+-
+-        const QString key = monthKey(startDate);
+-        if (!QFileInfo::exists(dataFileForKey(key)))
+-        {
+-            return true;
+-        }
+-
+-        QSqlDatabase db = openDataDb(key);
+-        if (!db.isValid() || !db.isOpen())
+-        {
+-            if (errMsg) *errMsg = "db open failed";
+-            return false;
+-        }
+-        if (!ensureDataSchema(db))
+-        {
+-            if (errMsg) *errMsg = "ensure schema failed";
+-            return false;
+-        }
+-
+-        QStringList columns;
+-        columns << "timestamp";
+-        for (int i = 0; i < kSensorCount; ++i)
+-        {
+-            columns << QString("s%1").arg(i + 1);
+-        }
+-
+-        // Walks idx_sensor_data_ts backwards from the newest row; rowid breaks
+-        // ties between equal timestamps so that pages never overlap.
+-        QSqlQuery query(db);
+-        query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to "
+-                              "ORDER BY timestamp DESC, rowid DESC LIMIT :limit OFFSET :offset")
+-                          .arg(columns.join(", ")));
+-        query.bindValue(":from", from);
+-        query.bindValue(":to", to);
+-        query.bindValue(":limit", pageSize);
+-        query.bindValue(":offset", static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize));
+-        if (!query.exec())
+-        {
+-            if (errMsg) *errMsg = query.lastError().text();
+-            return false;
+-        }
+-
+-        while (query.next())
+-        {
+-            QJsonObject obj;
+-            obj.insert("ts", query.value(0).toLongLong());
+-            for (int i = 0; i < kSensorCount; ++i)
+-            {
+-                obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
+-            }
+-            out->append(obj);
+-        }
+-        return true;
+-    });
+-}
+-
+-void SqlManager::requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
+-                                          int page, int pageSize)
+-{
+-    // Remember the newest id first, so that an older request still waiting in
+-    // the queue is skipped instead of executed.
+-    quint64 latest = m_latestHistoryRequestId.load();
+-    while (latest < requestId
+-           && !m_latestHistoryRequestId.compare_exchange_weak(latest, requestId))
+-    {
+-    }
+-
+-    // Queued, never blocking: the work runs later on the SqlManager thread and
+-    // the result goes back through the sensorHistoryPageReady signal.  'this'
+-    // is the context object, so nothing runs once SqlManager is destroyed.
+-    QMetaObject::invokeMethod(this, [this, requestId, from, to, page, pageSize]() {
+-        SensorHistoryPageResult result;
+-        result.requestId = requestId;
+-        result.page = page;
+-        result.pageSize = pageSize;
+-
+-        if (requestId < m_latestHistoryRequestId.load())
+-        {
+-            result.superseded = true;
+-            emit sensorHistoryPageReady(result);
+-            return;
+-        }
+-
+-        QElapsedTimer timer;
+-        timer.start();
+-        QString err;
+-        result.countOk = countSensorRange(from, to, &result.totalRows, &err);   // runs inline on this thread
+-        result.countMs = timer.nsecsElapsed() / 1.0e6;
+-        if (!result.countOk)
+-        {
+-            result.errorMessage = err;
+-            emit sensorHistoryPageReady(result);
+-            return;
+-        }
+-
+-        timer.restart();
+-        const qint64 offset = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
+-        if (result.totalRows > 0 && page > 0 && offset < result.totalRows)
+-        {
+-            result.ok = querySensorRangeDescPaged(from, to, page, pageSize, &result.samples, &err);
+-            if (!result.ok)
+-                result.errorMessage = err;
+-        }
+-        else
+-        {
+-            result.ok = page > 0;      // empty month or page past the end: no page query
+-            if (!result.ok)
+-                result.errorMessage = "page must be positive";
+-        }
+-        result.pageMs = timer.nsecsElapsed() / 1.0e6;
+-        emit sensorHistoryPageReady(result);
+-    }, Qt::QueuedConnection);
+-}
+-
+ // ---------------------------------------------------------------------------
+ // w2-041: History range across months + export file list.
+ // ---------------------------------------------------------------------------
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index 3c96238..ebebe5c 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -19,7 +19,7 @@
+ #include <QMutex>
+ #include <atomic>
+ 
+-// w2-039: result of one History-page load (one COUNT + one newest-first page),
++// w2-039/w2-041: result of one History-page load (COUNT + one newest-first page),
+ // produced on the SqlManager thread and delivered queued to the requester.
+ struct SensorHistoryPageResult
+ {
+@@ -53,7 +53,7 @@ struct SensorHistoryPageResult
+     QString pageMethod;
+     QHash<QString, qint64> snapshotRowids;
+     // w2-052: the session key of requestSensorHistoryRangePage(sessionKey, ...); empty for
+-    // the requests without a session (requestSensorHistoryPage and the w2-041 overload).
++    // the requests without a session (the w2-041 overload).
+     QString sessionKey;
+ };
+ Q_DECLARE_METATYPE(SensorHistoryPageResult)
+@@ -124,32 +124,17 @@ public:
+     bool findUnresolvedAlarms(const QString& sensor, const QString& status, const QDate& month,
+                               QList<UnresolvedAlarm>* out, QString* errMsg = nullptr);
+ 
+-    // w2-039 History page (newest first).  [from, to] must lie in one calendar
+-    // month (one data file); no COUNT is done here.  Rows: ORDER BY timestamp
+-    // DESC LIMIT pageSize OFFSET (page-1)*pageSize.  Blocking like the other
+-    // public functions when called from another thread.
+-    bool querySensorRangeDescPaged(qint64 from, qint64 to, int page, int pageSize,
+-                                   QJsonArray* out, QString* errMsg = nullptr);
+-
+-    // w2-039 asynchronous History load: returns immediately (never blocks the
+-    // caller).  On the SqlManager thread it runs one COUNT for [from, to] and
+-    // one querySensorRangeDescPaged(), then emits sensorHistoryPageReady().
+-    // Connect to it with a queued connection.  A request whose id is lower
+-    // than the newest requested id when it starts is not executed and is
+-    // reported with superseded = true.
+-    void requestSensorHistoryPage(quint64 requestId, qint64 from, qint64 to,
+-                                  int page, int pageSize);
+-
+-    // w2-041 History range (spec §2): like requestSensorHistoryPage(), but
+-    // [from, to] (epoch seconds, both inclusive) may span any number of months,
++    // w2-041 History range (spec §2): asynchronous History load; [from, to]
++    // (epoch seconds, both inclusive) may span any number of months,
+     // including the "unbounded" range.  Only month files that exist in the data
+     // directory are visited (newest month first); totalRows is the sum of the
+     // per-month COUNTs and the page is taken newest first across months
+     // (ORDER BY timestamp DESC, rowid DESC inside each month).  Per-month COUNTs
+     // are cached and reused while the month file is unchanged (same size and
+     // same SQLite file change counter).  Returns immediately; the result comes
+-    // through sensorHistoryPageReady() and shares the request-id sequence
+-    // (superseded handling) with requestSensorHistoryPage().
++    // through sensorHistoryPageReady() (connect with a queued connection); a
++    // request whose id is lower than the newest id requested through this
++    // overload is dropped with superseded = true.
+     //
+     // w2-045: the work runs as a chain of short queued steps (about 6 ms of
+     // work each), so the blocking calls of other threads (the main thread's
+diff --git a/README.md b/README.md
+index 00aa6e0..5fd6702 100644
+--- a/README.md
++++ b/README.md
+@@ -50,7 +50,7 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
+ | CMake / Ninja | `C:\Qt\Tools\CMake_64\bin\cmake.exe`、`C:\Qt\Tools\Ninja\ninja.exe` |
+ | MSVC | VS 18 Community `vcvars64.bat` |
+ | Emscripten | emsdk **3.1.56**(Qt 6.8 對應版)於 `C:\tools\emsdk` |
+-| Python 3 | 開發腳本用;字型子集需 `fonttools`,截圖比對需 `Pillow` |
++| Python 3 | 開發腳本用;字型子集需 `fonttools` |
+ 
+ 所有建置輸出都在 `build/` 下(已被 `.gitignore` 排除)。
+ 注意:本分支 `.gitignore` 排除了 `/CMakePresets.json`,提交時需 `git add -f CMakePresets.json`。
+@@ -351,19 +351,15 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+   讀 `名稱=值` 行,經 setter 寫入 authoritative `Td` 名稱以 `Pv` 結尾的屬性(double 或 bool)。
+   用途:無設備的開發機上,後端永遠不會更新 PV,E2E 以它模擬「desktop 端 PV 變化」。它不能寫 SV,
+   也不碰 Manager/Modbus。`run-desktop.ps1 -PvFile <檔案>` 會設定環境變數。
+-- `scripts\desktop_input.py`(OS SendInput 操作真實 desktop UI)、`scripts\capture-window.ps1`
+-  (視窗截圖)。
+-- `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
+-  Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
+-  啟動後進入歷史頁時由 Core 的真實讀取路徑(`historyViewRequested` → `HistoryViewService` → SqlManager →
+-  `historyViews[<clientSessionId>]` → Mirror)載入;同時輸出畫面應顯示的值(`--out rows.json`)。無設備時 Core 永遠不會寫 sensor 列,
+-  所以歷史頁 / CSV 匯出只能這樣準備資料。它不走 Core 的寫入路徑(`saveSensorData`)。
+-- `scripts\compare_history_csv.py --fixture rows.json A.csv B.csv ...`:檢查匯出 CSV 的 BOM、標頭、
+-  列數、每格內容與 fixture 一致,且各檔位元組相同。
++- `scripts\desktop_input.py`(OS SendInput / WM_CLOSE):`verify-desktop-startup.ps1` 以它的 `close`
++  正常關閉 app。
++- w2-059 已移除 UI 截圖比對與舊 CSV 驗證工具(`capture-window.ps1`、`image_diff.py`、`build-baseline.bat`、
++  `seed_history_sqlite.py`、`compare_history_csv.py`、`verify_device_profile.ps1`):不再做 UI 自動化測試,
++  歷史頁 / 匯出改由 5b / 5e 的 QTest 與 `docs\evidence\w2-041\tools\verify_export_csv.py` 驗證;
++  `docs/evidence/` 下的歷史證據不變。
+ - 舊的 Python 開發網頁伺服器(8123)與它的 E2E 證據收集模式(頁面截圖 / console / Blob 下載上傳)
+   已隨 w2-049 移除,網頁改由 desktop 的 `AppHttpServer` 提供;`docs/evidence/` 下的歷史證據不變。
+   8123 自 w2-050 起改給 nginx 網頁前端;w2-057 起 nginx 預設改用 port 80(見「nginx 網頁前端與下載」)。
+-- `desktop_input.py --title <視窗標題> click|key|type ...`:操作其他頂層視窗(例如 CSV 匯出的存檔對話框)。
+ 
+ ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
+ 
+@@ -518,8 +514,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-package-deps.p
+ powershell -NoProfile -ExecutionPolicy Bypass -File dist\TaidaFlow-<日期>-<雜湊>\register-autostart.ps1 -WhatIf -UseNginx
+ docs\evidence\w2-050\tools\build-mirror-client.bat
+ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<日期>-<雜湊> -SeedDb build\runtime-cwd\data\sensor_202609.sqlite -FromMs 1790577423000 -ToMs 1790581023000
+-:: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
+-python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
+ ```
+ 
+ E2E 證據(雙向同步 double/bool、唯讀 PV 單向、斷線離線提示與控制項停用、重連恢復、
+diff --git a/docs/wasm-integration-report.md b/docs/wasm-integration-report.md
+index eafca55..e494834 100644
+--- a/docs/wasm-integration-report.md
++++ b/docs/wasm-integration-report.md
+@@ -240,7 +240,6 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
+ | 歷史區間 + 匯出 QTest | `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(w2-041 harness 的 w2-049 改版)、`docs\evidence\w2-045\tools\run-qtest.bat` |
+ | AppHttpServer QTest | `scripts\run-apphttpserver-tests.bat` |
+ | nginx 前端與直送下載 | `docs\evidence\w2-050\tools\verify-nginx.ps1` |
+-| 桌面外觀 | `scripts\image_diff.py`(基準 dc91f01) |
+ 
+ 最近一次實跑(2026-09-27,w2-055 / w2-053):desktop 與 wasm-release fresh 建置 exit 0(`TaidaFlowApp.wasm`
+ 33,828,731 bytes)、`check_wasm_backend` 0、`check_version_shadow` 0/0、w2-041 QTest 9/9、w2-045 QTest 8/8
+diff --git a/scripts/build-baseline.bat b/scripts/build-baseline.bat
+deleted file mode 100644
+index 51b479a..0000000
+--- a/scripts/build-baseline.bat
++++ /dev/null
+@@ -1,27 +0,0 @@
+-@echo off
+-rem Build the UNMODIFIED desktop app of a given commit (default dc91f01, core branch HEAD
+-rem before the WASM v4 integration) as the pixel-regression baseline.
+-rem   scripts\build-baseline.bat [commit]
+-rem Source is exported with `git archive` into build\baseline-src (the work tree is not
+-rem touched); binary goes to build\baseline-desktop. Exit code 0 = success.
+-setlocal
+-set "ROOT=%~dp0.."
+-set "COMMIT=%~1"
+-if "%COMMIT%"=="" set "COMMIT=dc91f01"
+-set "CMAKE=C:\Qt\Tools\CMake_64\bin\cmake.exe"
+-
+-call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1
+-set VSLANG=1033
+-
+-pushd "%ROOT%" || exit /b 1
+-if exist "build\baseline-src" rmdir /s /q "build\baseline-src"
+-if exist "build\baseline-desktop" rmdir /s /q "build\baseline-desktop"
+-mkdir "build\baseline-src" || (popd & exit /b 1)
+-git archive --format=tar -o "build\baseline-%COMMIT%.tar" %COMMIT% || (popd & exit /b 1)
+-tar -xf "build\baseline-%COMMIT%.tar" -C "build\baseline-src" || (popd & exit /b 1)
+-"%CMAKE%" -S "build\baseline-src" -B "build\baseline-desktop" -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+-    -DCMAKE_MAKE_PROGRAM=C:/Qt/Tools/Ninja/ninja.exe ^
+-    -DCMAKE_TOOLCHAIN_FILE=C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake || (popd & exit /b 1)
+-"%CMAKE%" --build "build\baseline-desktop" --target TaidaFlowApp || (popd & exit /b 1)
+-popd
+-exit /b 0
+diff --git a/scripts/capture-window.ps1 b/scripts/capture-window.ps1
+deleted file mode 100644
+index 0dd9949..0000000
+--- a/scripts/capture-window.ps1
++++ /dev/null
+@@ -1,35 +0,0 @@
+-﻿# Evidence helper: save a PNG of a top-level window (PrintWindow, works when occluded).
+-# Usage: powershell -ExecutionPolicy Bypass -File scripts\capture-window.ps1 -ProcessName TaidaFlowApp -Out docs\evidence\wasm-v4\x.png
+-param(
+-    [Parameter(Mandatory = $true)][string]$ProcessName,
+-    [Parameter(Mandatory = $true)][string]$Out
+-)
+-$ErrorActionPreference = 'Stop'
+-Add-Type -AssemblyName System.Drawing
+-Add-Type @"
+-using System;
+-using System.Runtime.InteropServices;
+-public static class TfWin {
+-    [StructLayout(LayoutKind.Sequential)] public struct RECT { public int L, T, R, B; }
+-    [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
+-    [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h, IntPtr hdc, uint flags);
+-    [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
+-}
+-"@
+-[void][TfWin]::SetProcessDPIAware()
+-$p = Get-Process -Name $ProcessName | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
+-if (-not $p) { Write-Error "no window for $ProcessName"; exit 2 }
+-$r = New-Object TfWin+RECT
+-[void][TfWin]::GetWindowRect($p.MainWindowHandle, [ref]$r)
+-$w = $r.R - $r.L; $h = $r.B - $r.T
+-$bmp = New-Object System.Drawing.Bitmap $w, $h
+-$g = [System.Drawing.Graphics]::FromImage($bmp)
+-$hdc = $g.GetHdc()
+-$ok = [TfWin]::PrintWindow($p.MainWindowHandle, $hdc, 2)   # PW_RENDERFULLCONTENT
+-$g.ReleaseHdc($hdc); $g.Dispose()
+-$dir = Split-Path -Parent $Out
+-if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
+-$bmp.Save($Out, [System.Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
+-if (-not $ok) { Write-Error "PrintWindow failed"; exit 3 }
+-Write-Output "saved $Out (${w}x${h})"
+-exit 0
+diff --git a/scripts/compare_history_csv.py b/scripts/compare_history_csv.py
+deleted file mode 100644
+index e3ff8a2..0000000
+--- a/scripts/compare_history_csv.py
++++ /dev/null
+@@ -1,83 +0,0 @@
+-#!/usr/bin/env python3
+-"""Verify exported History CSV files (desktop export and/or browser downloads).
+-
+-For every CSV given:
+-  * starts with the UTF-8 BOM (EF BB BF) and decodes as UTF-8;
+-  * header row = "序號" + the 17 Core history titles (Core::loadHistoryRecords);
+-  * row count / every cell equals the History page content expected from the fixture JSON
+-    written by scripts/seed_history_sqlite.py (rows newest first, as HistoryPage.qml sorts
+-    them; numbers formatted with cellText() -> toFixed(2), missing value -> "—");
+-  * lines are CRLF separated (HistoryPage.qml joins with "\\r\\n").
+-Finally all files must be byte-identical (same SHA-256).
+-
+-Usage: python scripts/compare_history_csv.py --fixture rows.json A.csv [B.csv ...]
+-Exit 0 only when every check passes.
+-"""
+-from __future__ import annotations
+-
+-import argparse
+-import csv
+-import hashlib
+-import io
+-import json
+-import sys
+-from pathlib import Path
+-
+-TITLES = ["序號", "時間",
+-          "TT-01 (°C)", "TT-02 (°C)", "TT-03 (°C)", "TT-04 (°C)",
+-          "PT-01 (bar)", "PT-02 (bar)", "PT-03 (bar)", "PT-04 (bar)",
+-          "PT-05 (bar)", "PT-06 (bar)", "PT-07 (bar)", "FM-01 (L/min)",
+-          "M1 (%)", "M2 (%)", "M3 (%)", "M4 (%)"]
+-
+-
+-def main() -> int:
+-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+-    ap.add_argument("--fixture", type=Path, required=True)
+-    ap.add_argument("csv", type=Path, nargs="+")
+-    args = ap.parse_args()
+-
+-    fixture = json.loads(args.fixture.read_text(encoding="utf-8"))
+-    expected_rows = [[str(i + 1)] + r["expected_cells"]
+-                     for i, r in enumerate(reversed(fixture["rows"]))]
+-    ok = True
+-    hashes = {}
+-    for path in args.csv:
+-        data = path.read_bytes()
+-        hashes[path] = hashlib.sha256(data).hexdigest()
+-        problems = []
+-        if not data.startswith(b"\xef\xbb\xbf"):
+-            problems.append("no UTF-8 BOM")
+-        text = data[3:].decode("utf-8")
+-        if "\r\n" not in text or text.replace("\r\n", "").count("\n"):
+-            problems.append("line separator is not CRLF")
+-        rows = list(csv.reader(io.StringIO(text, newline="")))
+-        if not rows or rows[0] != TITLES:
+-            problems.append(f"header mismatch: {rows[0] if rows else None}")
+-        body = rows[1:]
+-        if len(body) != len(expected_rows):
+-            problems.append(f"row count {len(body)} != expected {len(expected_rows)}")
+-        for n, (got, exp) in enumerate(zip(body, expected_rows), start=1):
+-            if got != exp:
+-                problems.append(f"row {n}: {got} != {exp}")
+-        cjk = sorted({ch for ch in text if "一" <= ch <= "鿿"})
+-        print(f"== {path}")
+-        print(f"   bytes={len(data)} sha256={hashes[path]}")
+-        print(f"   bom={data[:3].hex()} header_cols={len(rows[0]) if rows else 0} data_rows={len(body)} "
+-              f"cjk_chars={''.join(cjk)} em_dash_cells={sum(c == chr(0x2014) for r in body for c in r)}")
+-        if problems:
+-            ok = False
+-            for p in problems:
+-                print(f"   FAIL {p}")
+-        else:
+-            print("   header/rows/cells match fixture: OK")
+-    distinct = set(hashes.values())
+-    print(f"distinct_sha256={len(distinct)} files={len(hashes)}")
+-    if len(distinct) != 1:
+-        ok = False
+-        print("FAIL files are not byte-identical")
+-    print("RESULT", "PASS" if ok else "FAIL")
+-    return 0 if ok else 1
+-
+-
+-if __name__ == "__main__":
+-    sys.exit(main())
+diff --git a/scripts/desktop_input.py b/scripts/desktop_input.py
+index 49bc683..3ed9fbc 100644
+--- a/scripts/desktop_input.py
++++ b/scripts/desktop_input.py
+@@ -1,8 +1,8 @@
+ #!/usr/bin/env python3
+ """E2E helper: drive the real TaidaFlow desktop UI with OS mouse/keyboard input (Windows).
+ 
+-Coordinates are relative to the top-left of the TaidaFlowApp window rectangle, i.e. the
+-same frame as screenshots taken with scripts/capture-window.ps1.
++Coordinates are relative to the top-left of the TaidaFlowApp window rectangle.
++Still used by scripts/verify-desktop-startup.ps1 ("close" = WM_CLOSE, graceful shutdown).
+ 
+   python scripts/desktop_input.py info
+   python scripts/desktop_input.py click X Y
+diff --git a/scripts/image_diff.py b/scripts/image_diff.py
+deleted file mode 100644
+index 040d3e8..0000000
+--- a/scripts/image_diff.py
++++ /dev/null
+@@ -1,55 +0,0 @@
+-#!/usr/bin/env python3
+-"""Pixel-compare two screenshots (desktop "no regression" check for the font change).
+-
+-  python scripts/image_diff.py BEFORE.png AFTER.png [--mask x0,y0,x1,y1 ...]
+-                               [--tolerance N] [--out diff.png]
+-
+-Pixels inside --mask rectangles (e.g. the live clock, the OS title bar whose Mica
+-backdrop follows the wallpaper) are ignored. A pixel counts as changed when any colour
+-channel differs by more than --tolerance (default 0). Prints counts and the bounding box;
+-exit code 0 only when no pixel is changed. Requires Pillow.
+-"""
+-from __future__ import annotations
+-
+-import argparse
+-import sys
+-
+-from PIL import Image, ImageChops, ImageDraw
+-
+-
+-def main() -> int:
+-    ap = argparse.ArgumentParser()
+-    ap.add_argument("before")
+-    ap.add_argument("after")
+-    ap.add_argument("--mask", action="append", default=[], help="x0,y0,x1,y1 region to ignore")
+-    ap.add_argument("--tolerance", type=int, default=0, help="max per-channel difference ignored")
+-    ap.add_argument("--out", help="write a diff visualisation PNG")
+-    args = ap.parse_args()
+-
+-    a = Image.open(args.before).convert("RGB")
+-    b = Image.open(args.after).convert("RGB")
+-    if a.size != b.size:
+-        print(f"size mismatch {a.size} vs {b.size}")
+-        return 2
+-    for m in args.mask:
+-        box = tuple(int(v) for v in m.split(","))
+-        for img in (a, b):
+-            ImageDraw.Draw(img).rectangle(box, fill=(0, 0, 0))
+-    r, g, bl = ImageChops.difference(a, b).split()
+-    peak = ImageChops.lighter(ImageChops.lighter(r, g), bl)          # per-pixel max channel diff
+-    hist = peak.histogram()
+-    any_diff = sum(hist[1:])
+-    changed = sum(hist[args.tolerance + 1:])
+-    max_diff = max((v for v in range(256) if hist[v]), default=0)
+-    mask_img = peak.point(lambda v: 255 if v > args.tolerance else 0)
+-    total = a.size[0] * a.size[1]
+-    print(f"size={a.size[0]}x{a.size[1]} masks={len(args.mask)} tolerance={args.tolerance} "
+-          f"pixels_any_diff={any_diff} max_channel_diff={max_diff} "
+-          f"changed_pixels={changed} ({changed / total:.6%}) bbox={mask_img.getbbox()}")
+-    if args.out:
+-        mask_img.save(args.out)
+-    return 0 if changed == 0 else 1
+-
+-
+-if __name__ == "__main__":
+-    sys.exit(main())
+diff --git a/scripts/run-desktop.ps1 b/scripts/run-desktop.ps1
+index 71b7b01..ea83cdf 100644
+--- a/scripts/run-desktop.ps1
++++ b/scripts/run-desktop.ps1
+@@ -3,7 +3,7 @@
+ # Usage: powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 [-Label <text>]
+ #            [-Exe <path>] [-LogFile <path>] [-PvFile <path>] [-Wait]
+ #   -Label   : free text recorded with the safety probe (e.g. "E2E run 1")
+-#   -Exe     : default build\desktop\TaidaFlowApp.exe (baseline: build\baseline-desktop\...)
++#   -Exe     : default build\desktop\TaidaFlowApp.exe
+ #   -LogFile : stderr log (default build\runtime-logs\desktop-<time>.log; stdout -> .stdout)
+ #   -PvFile  : enable the dev-only E2E PV driver (App/e2epvdriver.h) with this file
+ #   -ProbeLog: safety-probe log file (default docs\evidence\wasm-v4\safety-probe.log)
+diff --git a/scripts/seed_history_sqlite.py b/scripts/seed_history_sqlite.py
+deleted file mode 100644
+index cfd2ca2..0000000
+--- a/scripts/seed_history_sqlite.py
++++ /dev/null
+@@ -1,121 +0,0 @@
+-#!/usr/bin/env python3
+-"""TEST FIXTURE (dev/E2E only): put known sensor rows into the desktop Core's own SQLite file.
+-
+-Why: on this bench no ADAM module is reachable, so Manager::saveServerInputData() never runs
+-and the History page is empty. To exercise the History page / CSV export with real data the
+-rows are written *into the Core's database file* while the app is NOT running; the desktop
+-Core then loads them at start-up through its normal read path
+-(Core::loadHistoryRecords -> SqlManager::countSensorRange / queryRangeJsonPaged ->
+-TaidaFlowProxy.historyRecords -> Mirror -> WASM). No product code is touched or compiled.
+-
+-What is NOT exercised: the Core's own *insert* path (Manager -> SqlManager::saveSensorData);
+-this script inserts with Python's sqlite3 into the table the Core created (schema checked).
+-
+-Safety guards:
+-  * the database must be build/runtime-cwd/data/sensor_<yyyyMM>.sqlite of THIS repo;
+-  * it must already exist (created by the Core itself on a previous launch: the start-up
+-    alarm insert creates it), so the schema is the Core's, not ours;
+-  * refuses to run while TaidaFlowApp.exe is running.
+-
+-Usage:
+-  python scripts/seed_history_sqlite.py [--rows 8] [--step-min 5] [--out rows.json]
+-Writes the inserted raw rows plus the values the History page is expected to show
+-(same scaling as Core::loadHistoryRecords, formatted like HistoryPage.qml cellText) to --out.
+-Exit 0 on success.
+-"""
+-from __future__ import annotations
+-
+-import argparse
+-import datetime as dt
+-import json
+-import sqlite3
+-import subprocess
+-import sys
+-from pathlib import Path
+-
+-ROOT = Path(__file__).resolve().parent.parent
+-RUNTIME_DATA = ROOT / "build" / "runtime-cwd" / "data"
+-ADC_FULL_SCALE = 65535.0
+-
+-# Engineering values chosen per row; raw register = round(value * 65535 / span).
+-# Column layout of Core::loadHistoryRecords: s1..s4 TT (x100/65535), s5..s11 PT
+-# (x1000/65535), s12 FM (raw), s13..s16 M1..M4 (x100/65535).
+-
+-
+-def app_running() -> bool:
+-    out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq TaidaFlowApp.exe", "/NH"],
+-                         capture_output=True, text=True).stdout
+-    return "TaidaFlowApp.exe" in out
+-
+-
+-def cell_text(value: float | None) -> str:
+-    # HistoryPage.qml cellText(): null -> "—", number -> toFixed(2)
+-    return "—" if value is None else f"{value:.2f}"
+-
+-
+-def main() -> int:
+-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+-    ap.add_argument("--rows", type=int, default=8)
+-    ap.add_argument("--step-min", type=int, default=5)
+-    ap.add_argument("--out", type=Path, default=None)
+-    args = ap.parse_args()
+-
+-    if app_running():
+-        print("TaidaFlowApp.exe is running - close it first", file=sys.stderr)
+-        return 2
+-    now = dt.datetime.now().replace(microsecond=0)
+-    db_path = RUNTIME_DATA / f"sensor_{now:%Y%m}.sqlite"
+-    if not db_path.is_file():
+-        print(f"missing {db_path}: launch the desktop app once (scripts/run-desktop.ps1) so the Core "
+-              "creates its own database, then close it", file=sys.stderr)
+-        return 2
+-
+-    con = sqlite3.connect(db_path)
+-    cols = [r[1] for r in con.execute("PRAGMA table_info(sensor_data)")]
+-    if cols[:17] != ["timestamp"] + [f"s{i}" for i in range(1, 17)]:
+-        print(f"unexpected sensor_data schema: {cols[:17]}", file=sys.stderr)
+-        return 3
+-    if con.execute("SELECT COUNT(1) FROM sensor_data").fetchone()[0] != 0:
+-        print("sensor_data is not empty - refusing to mix fixture rows with existing data", file=sys.stderr)
+-        return 3
+-
+-    rows = []
+-    for k in range(args.rows):
+-        ts = int((now - dt.timedelta(minutes=args.step_min * (args.rows - 1 - k))).timestamp())
+-        tt = [20.0 + k * 0.5 + j * 2.0 for j in range(4)]            # degC
+-        pt = [1.0 + k * 0.05 + j * 0.1 for j in range(7)]            # bar
+-        fm = None if k == 3 else 10.0 + k * 1.25                      # L/min, one NULL cell
+-        mv = [10.0 * (j + 1) + k for j in range(4)]                   # %
+-        raw = ([round(v * ADC_FULL_SCALE / 100.0) for v in tt]
+-               + [round(v * ADC_FULL_SCALE / 1000.0) for v in pt]
+-               + [fm]
+-               + [round(v * ADC_FULL_SCALE / 100.0) for v in mv])
+-        shown = ([r * 100.0 / ADC_FULL_SCALE for r in raw[0:4]]
+-                 + [r * 1000.0 / ADC_FULL_SCALE for r in raw[4:11]]
+-                 + [raw[11]]
+-                 + [r * 100.0 / ADC_FULL_SCALE for r in raw[12:16]])
+-        con.execute("INSERT INTO sensor_data (timestamp, " + ", ".join(f"s{i}" for i in range(1, 17))
+-                    + ") VALUES (" + ", ".join("?" * 17) + ")", [ts] + raw)
+-        rows.append({
+-            "timestamp": ts,
+-            "time": dt.datetime.fromtimestamp(ts).strftime("%Y/%m/%d %H:%M:%S"),
+-            "raw": raw,
+-            "expected_cells": [dt.datetime.fromtimestamp(ts).strftime("%Y/%m/%d %H:%M:%S")]
+-                              + [cell_text(v) for v in shown],
+-        })
+-    con.commit()
+-    con.close()
+-
+-    print(f"inserted {len(rows)} fixture row(s) into {db_path}")
+-    for r in rows:
+-        print(" ", r["time"], ",".join(r["expected_cells"][1:]))
+-    if args.out:
+-        args.out.parent.mkdir(parents=True, exist_ok=True)
+-        args.out.write_text(json.dumps({"db": str(db_path), "rows": rows}, ensure_ascii=False, indent=1),
+-                            encoding="utf-8")
+-        print(f"wrote {args.out}")
+-    return 0
+-
+-
+-if __name__ == "__main__":
+-    sys.exit(main())
+diff --git a/scripts/verify_device_profile.ps1 b/scripts/verify_device_profile.ps1
+deleted file mode 100644
+index 09ed395..0000000
+--- a/scripts/verify_device_profile.ps1
++++ /dev/null
+@@ -1,128 +0,0 @@
+-# w2-029 D1/D4: start the desktop app once per TAIDAFLOW_DEVICE_PROFILE case and check the
+-# Core's startup log (and, for the simulator case, the real TCP connections).
+-#
+-# Usage: powershell -ExecutionPolicy Bypass -File scripts\verify_device_profile.ps1
+-#            [-Cases default,bogus,simulator] [-ProbeLog <path>] [-WaitSec 10]
+-#   default   : variable NOT set  -> "[Modbus] device profile=default", five 192.168.1.20x:502
+-#               lines, no 127.0.0.20x anywhere in the log, no "Unknown TAIDAFLOW_DEVICE_PROFILE"
+-#   bogus     : variable = "bogus" -> the Unknown... warning + profile=default + 192.168.1.20x
+-#   simulator : variable = "simulator" (simulator started first with run-simulator.ps1)
+-#               -> profile=simulator + five 127.0.0.20x lines, no 192.168.1. in the log,
+-#               five ESTABLISHED app -> 127.0.0.201..205:502 owned by the simulator, and at
+-#               least one [Modbus][Read] with raw != 0
+-# Safety: before EVERY launch scripts\safety_probe.ps1 runs (default mode for default/bogus,
+-# -DeviceProfile simulator for simulator); any non-zero verdict -> app not started, exit 3.
+-# The app always runs in build\runtime-cwd; it is closed with WM_CLOSE (desktop_input.py);
+-# the simulator started here is closed again. Logs: build\runtime-logs\profile-<case>.log.
+-# Exit 0 = all cases passed; 1 = a check failed; 2 = precondition; 3 = probe not SAFE.
+-param(
+-    [string[]]$Cases = @('default', 'bogus', 'simulator'),
+-    [string]$ProbeLog = "",
+-    [int]$WaitSec = 10
+-)
+-$ErrorActionPreference = 'Stop'
+-$root = Split-Path -Parent $PSScriptRoot
+-$exe = Join-Path $root 'build\desktop\TaidaFlowApp.exe'
+-$py = 'C:\Users\TED\AppData\Local\Programs\Python\Python312\python.exe'
+-if ($ProbeLog -eq "") { $ProbeLog = Join-Path $root 'docs\evidence\wasm-v4-sim\safety-probe.log' }
+-if (-not (Test-Path $exe)) { Write-Output "not built: $exe"; exit 2 }
+-if (Get-Process TaidaFlowApp, Adam60xxSimulator -ErrorAction SilentlyContinue) {
+-    Write-Output 'TaidaFlowApp or Adam60xxSimulator already running - nothing touched'; exit 2
+-}
+-$cwd = Join-Path $root 'build\runtime-cwd'
+-New-Item -ItemType Directory -Force $cwd, (Join-Path $root 'build\runtime-logs') | Out-Null
+-$env:PATH = "C:\Qt\6.8.3\msvc2022_64\bin;" + $env:PATH
+-$env:QT_FORCE_STDERR_LOGGING = '1'
+-Remove-Item Env:\TAIDAFLOW_E2E_PV_FILE -ErrorAction SilentlyContinue
+-
+-$simHosts = @(201..205 | ForEach-Object { "127.0.0.$_" })
+-$plantHosts = @(201..205 | ForEach-Object { "192.168.1.$_" })
+-$fail = $false
+-$report = New-Object System.Collections.Generic.List[string]
+-function Check([string]$case, [string]$what, [bool]$ok) {
+-    $script:report.Add(("  [{0}] {1,-4} {2}" -f $case, $(if ($ok) { 'OK' } else { 'FAIL' }), $what))
+-    if (-not $ok) { $script:fail = $true }
+-}
+-
+-foreach ($case in $Cases) {
+-    $sim = $null
+-    try {
+-        if ($case -eq 'simulator') {
+-            $simTxt = Join-Path $root 'build\runtime-logs\profile-simulator-run-simulator.txt'
+-            $rs = Start-Process powershell -PassThru -WindowStyle Hidden -RedirectStandardOutput $simTxt -ArgumentList @(
+-                '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'run-simulator.ps1'),
+-                '-LogFile', 'build\runtime-logs\profile-simulator-sim.log')
+-            $null = $rs.Handle; $rs.WaitForExit()
+-            $simOut = (Get-Content $simTxt) -join ' '
+-            if ($rs.ExitCode -ne 0) { $report.Add("  [$case] run-simulator.ps1 exit $($rs.ExitCode): $simOut"); $fail = $true; continue }
+-            $sim = Get-Process -Id ([int]([regex]::Match($simOut, 'SIM_PID=(\d+)').Groups[1].Value))
+-        }
+-        $probeArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $PSScriptRoot 'safety_probe.ps1'),
+-                       '-Reason', "w2-029 verify_device_profile case=$case", '-LogFile', $ProbeLog)
+-        if ($case -eq 'simulator') { $probeArgs += @('-DeviceProfile', 'simulator') }
+-        $probeOut = & powershell @probeArgs
+-        $probeRc = $LASTEXITCODE
+-        $report.Add("  [$case] probe exit=$probeRc " + (($probeOut | Where-Object { $_ -match 'verdict' }) -join ''))
+-        if ($probeRc -ne 0) { Write-Output ($report -join "`n"); Write-Output 'probe not SAFE - app NOT started'; exit 3 }
+-
+-        switch ($case) {
+-            'default'   { Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue }
+-            'bogus'     { $env:TAIDAFLOW_DEVICE_PROFILE = 'bogus' }
+-            'simulator' { $env:TAIDAFLOW_DEVICE_PROFILE = 'simulator' }
+-        }
+-        $log = Join-Path $root "build\runtime-logs\profile-$case.log"
+-        $p = Start-Process -FilePath $exe -WorkingDirectory $cwd -PassThru -RedirectStandardError $log -RedirectStandardOutput "$log.stdout"
+-        $null = $p.Handle
+-        Start-Sleep -Seconds $WaitSec
+-        $conns = @(Get-NetTCPConnection -OwningProcess $p.Id -ErrorAction SilentlyContinue |
+-                   Where-Object { $_.RemotePort -eq 502 -and $_.State -eq 'Established' })
+-        $simOwned = @()
+-        if ($sim) {
+-            $simOwned = @(Get-NetTCPConnection -OwningProcess $sim.Id -State Established -ErrorAction SilentlyContinue |
+-                          Where-Object { $_.LocalPort -eq 502 } | ForEach-Object { $_.LocalAddress } | Sort-Object -Unique)
+-        }
+-        & $py (Join-Path $PSScriptRoot 'desktop_input.py') close | Out-Null
+-        if (-not $p.WaitForExit(15000)) { Stop-Process -Id $p.Id -Force; $report.Add("  [$case] app did not exit on WM_CLOSE (killed)"); $fail = $true }
+-        Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue
+-
+-        $t = @(Get-Content $log -Encoding utf8)
+-        $prof = @($t | Where-Object { $_ -match '^\[Modbus\] device profile=' })
+-        $addr = @($t | Where-Object { $_ -match '^\[Modbus\] device .+ -> ' })
+-        $report.Add("  [$case] log $log ($($t.Count) lines):")
+-        ($prof + $addr) | ForEach-Object { $report.Add("      $_") }
+-        $warn = @($t | Where-Object { $_ -match 'Unknown TAIDAFLOW_DEVICE_PROFILE' })
+-        $warn | ForEach-Object { $report.Add("      $_") }
+-        $expectHosts = if ($case -eq 'simulator') { $simHosts } else { $plantHosts }
+-        $expectProf = if ($case -eq 'simulator') { 'simulator' } else { 'default' }
+-        Check $case "profile line = $expectProf" ($prof.Count -eq 1 -and $prof[0] -eq "[Modbus] device profile=$expectProf")
+-        Check $case "five address lines = $($expectHosts[0])..205:502 unit=1" (
+-            $addr.Count -eq 5 -and @($expectHosts | Where-Object { $h = $_; -not ($addr | Where-Object { $_ -like "* -> ${h}:502 unit=1" }) }).Count -eq 0)
+-        Check $case "Unknown-profile warning present = $($case -eq 'bogus')" (($warn.Count -gt 0) -eq ($case -eq 'bogus'))
+-        if ($case -eq 'simulator') {
+-            Check $case 'no 192.168.1. anywhere in the log' (@($t | Where-Object { $_ -match '192\.168\.1\.' }).Count -eq 0)
+-            $remotes = @($conns | ForEach-Object { $_.RemoteAddress } | Sort-Object -Unique)
+-            $report.Add("      app ESTABLISHED -> " + ($remotes -join ', ') + " ; simulator-owned server ends: " + ($simOwned -join ', '))
+-            Check $case 'app connected to exactly 127.0.0.201..205:502' (($remotes -join ',') -eq ($simHosts -join ','))
+-            Check $case 'those five connections terminate in the simulator process' ((($simOwned) -join ',') -eq ($simHosts -join ','))
+-            $nonzero = @($t | Where-Object { $_ -match '^\[Modbus\]\[Read\] .* raw=([1-9]\d*) ' })
+-            $report.Add("      [Modbus][Read] lines=$(@($t | Where-Object { $_.Contains('[Modbus][Read]') }).Count) with raw!=0: $($nonzero.Count); e.g. " + ($nonzero | Select-Object -First 1))
+-            Check $case '[Modbus][Read] with non-zero raw value' ($nonzero.Count -gt 0)
+-        } else {
+-            Check $case 'no 127.0.0.20x in the log' (@($t | Where-Object { $_ -match '127\.0\.0\.20\d' }).Count -eq 0)
+-            Check $case 'no ESTABLISHED Modbus connection (192.168.1.x unreachable)' ($conns.Count -eq 0)
+-        }
+-    } finally {
+-        Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue
+-        if ($sim -and -not $sim.HasExited) {
+-            $null = $sim.CloseMainWindow()
+-            if (-not $sim.WaitForExit(8000)) { Stop-Process -Id $sim.Id -Force }
+-        }
+-    }
+-    Start-Sleep -Seconds 1
+-    $left = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8125 })
+-    Check $case 'no 502/8125 listener left after close' ($left.Count -eq 0)
+-}
+-$report | ForEach-Object { Write-Output $_ }
+-Write-Output ("verify_device_profile exit={0}" -f $(if ($fail) { 1 } else { 0 }))
+-if ($fail) { exit 1 }
+-exit 0

@@ -1,0 +1,5 @@
+charset.txt of HEAD e425e5d: 513 chars; regenerated: 521 chars
+added (8): ✓刪它將文讓０２   code points: U+2713 U+522A U+5B83 U+5C07 U+6587 U+8B93 U+FF10 U+FF12
+removed (0): 
+sources (git grep HEAD): U+522A U+5B83 U+5C07 U+8B93 = App/appconfig.cpp config error dialog (main ec48140); U+2713 U+6587 U+FF10 U+FF12 = App/tests/tst_applog.cpp test strings (main 0bba589; the scanner reads every .cpp/.h/.qml/.js under App, Core, TaidaFlow, TaidaFlowContent, Dependencies - not .html)
+TaidaFlowNotoSansTC-Regular.ttf 193,520 -> 195,004 bytes; TaidaFlowNotoSansTC-Bold.ttf 194,192 -> 195,684 bytes; 904 glyphs each, missing=0

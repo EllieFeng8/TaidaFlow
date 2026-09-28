@@ -1,0 +1,13 @@
+launcher-2026-07-31.log                               52 bytes
+launcher-2026-09-28.log                             6532 bytes
+launcher.log                                          55 bytes
+my notes.txt                                          42 bytes
+nginx-access-2026-08-14.log                           31 bytes
+nginx-access-2026-09-28.log                          486 bytes
+nginx-error.log                                       63 bytes
+taidaflow-2026-07-31.log                              42 bytes
+taidaflow-2026-09-22-full.log                         42 bytes
+taidaflow-2026-09-28-full.log                      59532 bytes
+taidaflow-2026-09-28.log                            3312 bytes
+taidaflow-20260801-101010.log                         50 bytes
+taidaflow-20260801-101010.log.stdout                  50 bytes

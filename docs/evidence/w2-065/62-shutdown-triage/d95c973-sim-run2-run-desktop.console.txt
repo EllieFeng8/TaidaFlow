@@ -1,0 +1,17 @@
+=== safety probe 2026-09-28T23:49:36.339+08:00 reason="before launch: w2-065 shutdown triage (D:\repo\codex\qmlTester\taidaflow\build\w2-065-d95c973\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json
+  config note: unknown key "log" ignored
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=48336 -> accepted
+  device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=48336 -> accepted
+  device 127.0.0.203:502 [effective devices.adam6217b (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=48336 -> accepted
+  device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=48336 -> accepted
+  device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=48336 -> accepted
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 15020=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SAFE
+PID=148708 CONFIG=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json DATADIR=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\triage-sim-sim-run2.stderr.log

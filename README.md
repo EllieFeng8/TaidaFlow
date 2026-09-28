@@ -96,8 +96,15 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
 - **網頁怎麼知道同步用哪個 port**(規格 §3):程式啟動時把 `runtime.json`(`{"mirrorPublicPort":<port>,"version":1}`)寫進網頁資料夾,
   nginx 與 8124 都當靜態檔送出(`Cache-Control: no-store`)。`nginx.enabled` 為 true 時 port = `nginx.port`(網頁經 nginx 的
   `/mirror` 同步,正式機防火牆只開 80),否則 = `mirror.publicPort`(8125 的區網轉發)。網頁讀不到時退回 8125。
-- `run-desktop.ps1` 設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin、`TAIDAFLOW_CONFIG=<設定檔>`,log 寫到
-  `build\runtime-logs\`。啟動 log 應含 `[Config] ...`(每一項設定的值與來源)、`[Config] Core ...`(後端用的值)、
+- **log**(w2-064 / w2-065,規格 §2 `log`;詳見 `docs/DEPLOY_AND_STARTUP.md` §13):程式自己寫檔到 config.json 的 `log.dir`
+  (相對於 `dataDir`,預設 `C:\TaidaFlowData\logs`;開發設定 = `build\runtime-cwd\logs`):`taidaflow-YYYY-MM-DD.log`
+  (warning 以上,保留 60 天)與 `taidaflow-YYYY-MM-DD-full.log`(全部,保留 7 天),換日換檔並清理,只刪符合這兩種檔名的檔;
+  config.json 讀不到時寫到 config.json 旁的 `logs\`。正式機啟動 / 停止腳本在同一資料夾寫 `launcher-YYYY-MM-DD.log`,
+  nginx 寫 `nginx-access-YYYY-MM-DD.log` 與 `nginx-error.log`;`start-taidaflow` 啟動時依 `log.quiet.keepDays` 清理
+  launcher / nginx access log。舊版的 `taidaflow-yyyyMMdd-HHmmss.log` 不刪。測試:`App/tests` 的 `tst_applog`、
+  `docs\evidence\w2-065\tools\test-config-reader.ps1`(腳本端的 log 資料夾與清理)。
+- `run-desktop.ps1`(開發用)設 `QT_FORCE_STDERR_LOGGING=1`、PATH 加 Qt bin、`TAIDAFLOW_CONFIG=<設定檔>`,另把程式輸出存到
+  `build\runtime-logs\`(程式自己的 log 檔照樣寫到 `build\runtime-cwd\logs`)。啟動 log 應含 `[Config] ...`(每一項設定的值與來源)、`[Config] Core ...`(後端用的值)、
   `[ModbusServer] listening on 0.0.0.0:502 unit=1`、`WASM Mirror endpoint: ws://127.0.0.1:18125/mirror`、
   `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125`、`[Web] runtime.json written: ... = {"mirrorPublicPort":80,"version":1} (...)`、
   `[Web] web page folder (<來源>): <資料夾> -> http://<host>:8124/TaidaFlowApp.html` 與
@@ -339,7 +346,7 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
   --no-translations --skip-plugin-types qmltooling,canbus --exclude-plugins qsqlmimer,qsqlodbc,qsqlpsql`,`--qmldir`
   指向 `TaidaFlowContent`、`TaidaFlow`、`Dependencies`)帶入的 Qt DLL / plugins / `qml\`;**MSVC 執行環境採 app-local**
   (`Microsoft.VC145.CRT` 的 DLL,免安裝 vc_redist);`web\`(同 `deploy-web.ps1 -NoConfig`,含 `.gz` 與預設的 `runtime.json`);
-  `deploy\release\` 的正式機腳本、`logging\quiet.ini`、`scripts\install-nginx-config.ps1` + `scripts\taidaflow-config.ps1`
+  `deploy\release\` 的正式機腳本(w2-065 起沒有 `logging\quiet.ini`)、`scripts\install-nginx-config.ps1` + `scripts\taidaflow-config.ps1`
   + `deploy\nginx\taidaflow.conf`、**`nginx\`**(nginx for Windows 1.30.5:`nginx.exe`、`docs\` 授權檔、`conf\` 但**不含**
   `nginx.conf`、`SOURCE.txt`)、`DEPLOY.md`、`VERSION.txt`、`MANIFEST.txt`(每檔大小與 SHA-256)。
   **不含** `config.json`(正式機第一次啟動時建立,更新不會覆蓋)、`nginx.conf`、資料庫、ini、log、`.py`、`__pycache__`、`.lib/.pdb`
@@ -353,8 +360,10 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
     config.json;nginx(`nginx.enabled`):以 `install-nginx-config.ps1 -IfChanged` 確認 `nginx\conf\nginx.conf` 是這個安裝資料夾
     / 這份 config.json 產生的(不是就重產並對執行中的 nginx `-s reload`),沒在跑就以 `start nginx` 的方式啟動,已在跑就不動;
     nginx 不能用時 app 以 `nginx.enabled=false` 啟動(exit 8);確認 `http.port`、`mirror.publicPort` 在聽。
-    `-DataDir`、`-UseNginx` / `-NoNginx`、`-Port`、`-RestPort`、`-Nginx` 是**單次覆寫**(寫成 `<資料資料夾>\config.effective.json`
-    交給 app,config.json 本身不改)。log 保留 / `-AppLog` 照舊(之後由 w2-064/w2-065 改)。
+    `-DataDir`、`-LogDir`、`-UseNginx` / `-NoNginx`、`-Port`、`-RestPort`、`-Nginx` 是**單次覆寫**(寫成 `<資料資料夾>\config.effective.json`
+    交給 app,config.json 本身不改)。w2-065:不再轉存程式輸出、不設 `QT_LOGGING_CONF`(`-AppLog`、`-KeepLogDays` 移除);
+    app 以沒有主控台視窗的方式啟動;nginx 位置 = config.json `nginx.exe`(相對於 config.json 所在資料夾);
+    `launcher-YYYY-MM-DD.log` 寫在 `log.dir`,啟動時清理過期的 launcher / nginx access log。
   - `stop-taidaflow.ps1/.bat`:以 WM_CLOSE 正常關 app(逾時只報告,`-Force` 才強制);**不停 nginx**(`nginx -s quit`)。
   - `register-autostart.ps1` / `unregister-autostart.ps1`(工作排程器「使用者登入時」,排程只帶 start-taidaflow.ps1,設定都讀
     config.json;**先 `-WhatIf`**,本專案只做過乾跑)。
@@ -365,6 +374,8 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
   B 改 config.json 的 dataDir、`install-nginx-config.ps1`、啟動(nginx `start nginx` + app)、curl 檢查網頁 / `runtime.json` no-store /
   `/mirror` 101 / REST / 匯出下載與 Range、DLL 來源、log、停止(nginx 保持執行,再 `nginx -s quit`)→ C 整個資料夾搬到另一處,啟動時
   自動重產 nginx.conf → D 壞掉的 config.json:腳本與程式都 exit 2 且不覆寫 → E 還原成出貨狀態。不操作畫面。
+  w2-065 另檢查:`<資料資料夾>\logs` 有當天的 quiet / full / launcher 檔(full 有 info、quiet 只有 warning 以上)、
+  nginx access log 以日期命名、壞 JSON 時備援 log 在打包資料夾的 `logs\`。
 - **開發機腳本與正式機腳本不可混用**:開發機一律用 `scripts\run-desktop.ps1`(安全探測);正式機腳本沒有保護。
 
 ## 接 Adam60xxSimulator(測試用設備位址切換)
@@ -554,7 +565,11 @@ docs\evidence\w2-045\tools\run-qtest.bat
 :: 5c. (w2-049) AppHttpServer 單例的獨立 QTest(靜態 200/304/gzip/MIME/HEAD/COOP-COEP、穿越攻擊、
 ::     下載掛載、自訂路由、綁定失敗、多執行緒註冊、1 GiB 串流記憶體、w2-062 單檔 Cache-Control;需約 2 GiB 暫存磁碟空間)
 scripts\run-apphttpserver-tests.bat
-:: 5d. (w2-062) config.json 讀取器與 /runtime.json 的 QTest(App/tests,見 App\tests\README.md)
+:: 5d. (w2-062/w2-064) config.json 讀取器、/runtime.json 與程式 log 檔的 QTest(App/tests:tst_appconfig、
+::     tst_runtimeinfo、tst_applog,見 App\tests\README.md;建置 + CTest 的一行指令:)
+docs\evidence\w2-065\tools\run-app-tests.bat
+:: 5d2. (w2-065) 腳本的 config.json 讀取器(含 nginx.exe / log.* 鍵、log 資料夾解析、launcher / nginx access log 清理規則)
+PS docs\evidence\w2-065\tools\test-config-reader.ps1
 :: 5e. (w2-052) 各連線端獨立的歷史檢視 QTest(編譯真的 HistoryViews / SqlManager / HistoryExport / Proxy):
 ::     tst_w2052_views(多端交錯請求 = 單端結果、互不作廢、revision 只變自己的、閒置移除、上限 32、
 ::     不限區間、非法輸入)與 tst_w2052_rangepage(w2-045 正確性測試改走每端 API + 各端錨點)。

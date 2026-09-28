@@ -1,4 +1,4 @@
-# TaidaFlow - register automatic start at user logon (Windows Task Scheduler).   (w2-057, w2-062)
+# TaidaFlow - register automatic start at user logon (Windows Task Scheduler).   (w2-057, w2-062, w2-065)
 #
 # FIELD machine only. Registers ONE scheduled task that runs start-taidaflow.ps1 (this folder) when
 # the given user logs on. Run it once, as that user (or as an administrator for another user), on
@@ -36,6 +36,10 @@
 # w2-062: the data folder, nginx and every port come from config.json at EACH start (edit config.json,
 #   the task stays as it is). The task passes no setting of its own; -Config only when the file is not
 #   <this folder>\config.json. A missing config.json is created now with the defaults (not with -WhatIf).
+# w2-065: logs. The app writes its own log files into config.json log.dir (default C:\TaidaFlowData\logs),
+#   start-taidaflow.ps1 its launcher-YYYY-MM-DD.log into the same folder. -LogDir is passed to
+#   start-taidaflow.ps1 as its one-time override of log.dir at EVERY start (app, nginx and launcher logs
+#   then all go there); normally leave it out and set log.dir in config.json instead.
 #
 # Exit codes: 0 registered (or -WhatIf printed); 2 wrong parameter / start script missing /
 # config.json unusable; 3 registration failed; 4 a task with this name already exists (use -Replace).
@@ -94,9 +98,10 @@ try { $existing = Get-ScheduledTask -TaskName $TaskName -TaskPath '\' -ErrorActi
 
 Say "config.json       : $configPath$(if ($cfg.Created) { ' (CREATED now with the default values)' } elseif (-not $cfg.Exists) { ' (missing - start-taidaflow.ps1 creates it with the defaults)' })"
 foreach ($n in $cfg.Notes) { Say "  config: $n" }
-Say ("  settings used at each start: data folder {0}, nginx {1} (port {2}, {3}), devices {4}" -f $DataDir,
+Say ("  settings used at each start: data folder {0}, log folder {5}, nginx {1} (port {2}, {3}), devices {4}" -f $DataDir,
      $(if ($cfg.Values['nginx.enabled']) { 'on' } else { 'off' }), $cfg.Values['nginx.port'], $cfg.Values['nginx.exe'],
-     ((@('adam6256', 'adam6217a', 'adam6217b', 'adam6224', 'adam6022') | ForEach-Object { $cfg.Values["devices.$_.host"] }) -join ', '))
+     ((@('adam6256', 'adam6217a', 'adam6217b', 'adam6224', 'adam6022') | ForEach-Object { $cfg.Values["devices.$_.host"] }) -join ', '),
+     $(if ($LogDir -ne "") { "$LogDir (-LogDir, overrides log.dir)" } else { "$(Resolve-TaidaFlowLogDir $cfg) (config.json log.dir = $($cfg.Values['log.dir']))" }))
 Say "scheduled task definition (registered only without -WhatIf):"
 Say "  name              : \$TaskName"
 Say "  description       : $description"

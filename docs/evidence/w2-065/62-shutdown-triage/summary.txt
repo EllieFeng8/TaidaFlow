@@ -1,0 +1,11 @@
+simulator pid 140160
+sim run 1: run-desktop (redirected stderr, console, QT_FORCE_STDERR_LOGGING=1), 15 s, WM_CLOSE sent True, exited True, exit code -1073741819 (0xC0000005)
+sim run 2: run-desktop (redirected stderr, console, QT_FORCE_STDERR_LOGGING=1), 15 s, WM_CLOSE sent True, exited True, exit code -1073741819 (0xC0000005)
+simulator pid 140160 closed
+simulator pid 33268
+run 1 : app not started (config unusable: the default configuration of D:\repo\codex\qmlTester\taidaflow\build\w2-065-d95c973\build\desktop\TaidaFlowApp.exe has no nginx.exe, log.dir, log.quiet.keepDays, log.full.keepDays - TaidaFlowApp.exe is older than these scripts (use the exe of the same package / build))
+simulator pid 33268 closed
+simulator pid 48336
+d95c973 (pre-merge, no applog) sim run 1: run-desktop (redirected stderr, console, QT_FORCE_STDERR_LOGGING=1), exe , 15 s, WM_CLOSE sent True, exited True, exit code -1073741819 (0xC0000005)
+d95c973 (pre-merge, no applog) sim run 2: run-desktop (redirected stderr, console, QT_FORCE_STDERR_LOGGING=1), exe , 15 s, WM_CLOSE sent True, exited True, exit code -1073741819 (0xC0000005)
+simulator pid 48336 closed

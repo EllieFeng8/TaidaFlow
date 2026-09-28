@@ -1,0 +1,16 @@
+﻿=== safety probe 2026-09-28T23:28:36.950+08:00 reason="verify-release-package (bat) before launch" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\config.json (does not exist - app defaults)
+  config note: config.json D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\config.json does not exist - the default values are used (the application creates the file at its first start)
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 [effective devices.adam6256 (default)] -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 [effective devices.adam6217a (default)] -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 [effective devices.adam6217b (default)] -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 [effective devices.adam6224 (default)] -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 [effective devices.adam6022 (default)] -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, default) not present
+  service ports: 502=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SAFE

@@ -1,4 +1,4 @@
-# Live check of a TaidaFlow field package on the DEVELOPMENT PC (w2-057, w2-062). Not for the plant.
+# Live check of a TaidaFlow field package on the DEVELOPMENT PC (w2-057, w2-062, w2-065). Not for the plant.
 #
 # Runs the package the way the plant PC would (start-taidaflow.ps1 or .bat from the package folder,
 # PATH WITHOUT any Qt folder, NO config.json in the package), then checks with curl and logs - no UI:
@@ -11,7 +11,10 @@
 #      folder is created. The default dataDir is C:\TaidaFlowData - on this development PC the check
 #      replaces it for this start only with the one-time override -DataDir (default
 #      build\verify-release-data). App ports up, page + runtime.json (no-store, mirrorPublicPort =
-#      mirror.publicPort because nginx is off) on http.port, WebSocket 101 on mirror.publicPort. Stop.
+#      mirror.publicPort because nginx is off) on http.port, WebSocket 101 on mirror.publicPort.
+#      w2-065 logs: <data>\logs (log.dir default "logs" relative to dataDir) holds the app's own
+#      taidaflow-<today>.log (only warning/critical/fatal lines) and taidaflow-<today>-full.log (with info
+#      lines) and launcher-<today>.log of the start script; no taidaflow-yyyyMMdd-HHmmss.log is written. Stop.
 #   B. CONFIGURED SITE (nginx on, Mango A6/A7): the check edits config.json like the plant engineer
 #      does (only "dataDir" = <data>), runs scripts\install-nginx-config.ps1 (writes nginx\conf\nginx.conf
 #      with the web root relative to the nginx folder, nginx -t passes), then the start script without
@@ -23,6 +26,9 @@
 #      mirror client a history CSV export through nginx /mirror: downloadPort = nginx.port, the page's
 #      link (HistoryPage.qml exportDownloadUrl via node) 200 + same SHA-256, Range 206. Stop: the app
 #      is closed, nginx keeps running (checked), then "nginx -s quit" from nginx\ (as documented).
+#      w2-065: nginx writes <data>\logs\nginx-access-<today>.log (the requests of this check) and
+#      nginx-error.log, not nginx\logs\access.log; the app's full log has no load error; stop writes to
+#      launcher-<today>.log.
 #   C. MOVED INSTALLATION (Mango A9, only -Mode ps1): the whole package folder (with config.json and
 #      nginx.conf of B) is copied to build\verify-release-moved\<name>; its start script must detect
 #      that nginx.conf belongs to another folder, regenerate it (nginx -t passes), start nginx from the
@@ -31,8 +37,9 @@
 #   D. config.json that is not valid JSON: start script exit 2 and TaidaFlowApp.exe itself exit 2
 #      (QT_QPA_PLATFORM=offscreen with the plugin of the Qt installation - the package ships only
 #      qwindows - and TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS), file unchanged, nothing
-#      listening.
-#   E. the package is left as shipped (no config.json, no nginx.conf / logs / temp) and nothing of ours
+#      listening. w2-065: the app logs the failure in the fallback folder <package>\logs (folder of
+#      config.json): taidaflow-<today>-full.log / .log with the JSON error and the exit-code-2 line.
+#   E. the package is left as shipped (no config.json, no nginx.conf / nginx logs / temp, no logs\) and nothing of ours
 #      runs.
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1
@@ -118,13 +125,20 @@ function Stop-Cmd([string]$folder, [string]$extra) {
     if ($Mode -eq 'bat') { return '"' + (Join-Path $folder 'stop-taidaflow.bat') + '" ' + $extra }
     return '"' + $ps + '" -NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $folder 'stop-taidaflow.ps1') + '" ' + $extra
 }
-# nginx.exe of a folder: running instances, "nginx -s quit" in its folder (like the documentation).
+# nginx.exe of a package folder = its config.json nginx.exe (w2-065; relative = to the folder of config.json,
+# default nginx\nginx.exe); a missing or broken config.json -> the app's default. Running instances,
+# "nginx -s quit" in its folder (like the documentation).
+function Get-NginxExeOf([string]$folder) {
+    $c = Get-TaidaFlowConfig -Path (Join-Path $folder 'config.json') -Exe (Join-Path $folder 'TaidaFlowApp.exe')
+    if ($c.Error) { $c = Get-TaidaFlowConfig -Path (Join-Path $folder 'no-such-config.json') -Exe (Join-Path $folder 'TaidaFlowApp.exe') }
+    return (Resolve-TaidaFlowNginxExe $c)
+}
 function Get-NginxOf([string]$folder) {
-    $exe = Join-Path $folder 'nginx\nginx.exe'
+    $exe = Get-NginxExeOf $folder
     return @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $exe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } })
 }
 function Stop-NginxOf([string]$folder, [string]$what) {
-    $nDir = Join-Path $folder 'nginx'
+    $nDir = Split-Path -Parent (Get-NginxExeOf $folder)
     $procs = Get-NginxOf $folder
     if (-not $procs.Count) { return }
     $procs | ForEach-Object { $null = $_.Handle }
@@ -144,6 +158,33 @@ trap {
     }
     Save
     exit 1
+}
+# w2-065: the log files of one start in the log folder (config.json log.dir resolved against dataDir).
+function Test-LogFolder([string]$logDir, [string]$phase, [switch]$Launcher) {
+    $today = (Get-Date).ToString('yyyy-MM-dd')
+    $quiet = Join-Path $logDir "taidaflow-$today.log"; $full = Join-Path $logDir "taidaflow-$today-full.log"
+    $listing = @(Get-ChildItem -LiteralPath $logDir -File -ErrorAction SilentlyContinue | ForEach-Object { "$($_.Name) ($($_.Length) bytes)" })
+    Note "  $phase log folder $logDir : $($listing -join ', ')"
+    $fullText = if (Test-Path -LiteralPath $full) { @(Get-Content -LiteralPath $full -Encoding UTF8) } else { @() }
+    $quietText = if (Test-Path -LiteralPath $quiet) { @(Get-Content -LiteralPath $quiet -Encoding UTF8) } else { $null }
+    $infoLines = @($fullText | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[info\] ' }).Count
+    Check "$phase app log (full) taidaflow-$today-full.log written by the app, with [info] lines" ($infoLines -gt 0) "$($fullText.Count) line(s), $infoLines info"
+    Check "$phase full log has this start's config.json lines ([Config] ... log.dir (resolved) = $logDir)" (@($fullText | Where-Object { $_.Contains('log.dir (resolved) = ' + $logDir) }).Count -gt 0) ''
+    $quietBad = @()
+    if ($null -ne $quietText) { $quietBad = @($quietText | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2} ' -and $_ -notmatch '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(warning|critical|fatal)\] ' }) }
+    $quietDetail = if ($null -ne $quietText) { "$($quietText.Count) line(s)" } else { 'missing' }
+    if ($quietBad.Count) { $quietDetail += ' - ' + (($quietBad | Select-Object -First 3) -join ' | ') }
+    Check "$phase app log (quiet) taidaflow-$today.log exists, only warning / critical / fatal lines" ($null -ne $quietText -and $quietBad.Count -eq 0) $quietDetail
+    $legacy = @(Get-ChildItem -LiteralPath $logDir -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^taidaflow-\d{8}-\d{6}\.log(\.stdout)?$' })
+    Check "$phase no taidaflow-yyyyMMdd-HHmmss.log (the start script no longer redirects the app's output)" ($legacy.Count -eq 0) (($legacy | ForEach-Object { $_.Name }) -join ', ')
+    if ($Launcher) {
+        $ll = Join-Path $logDir "launcher-$today.log"
+        $lt = if (Test-Path -LiteralPath $ll) { (Get-Content -LiteralPath $ll -Encoding UTF8) -join "`n" } else { '' }
+        Check "$phase launcher-$today.log in the log folder with the start lines" ($lt -match '\[start\] === TaidaFlow FIELD start' -and $lt -match '\[start\] started \(exit 0\)') ''
+        Check "$phase no launcher.log, no QT_LOGGING_CONF any more" (-not (Test-Path -LiteralPath (Join-Path $logDir 'launcher.log')) -and $lt -notmatch 'QT_LOGGING_CONF=') ''
+        Copy-Item -LiteralPath $ll -Destination (Join-Path $Evidence ($phase.TrimEnd('.') + '-' + (Split-Path -Leaf $ll))) -Force -ErrorAction SilentlyContinue
+    }
+    foreach ($x in $quiet, $full) { if (Test-Path -LiteralPath $x) { Copy-Item -LiteralPath $x -Destination (Join-Path $Evidence ($phase.TrimEnd('.') + '-' + (Split-Path -Leaf $x))) -Force } }
 }
 function Get-State { try { return (Get-Content -Raw (Join-Path $DataDir 'taidaflow-app.json') | ConvertFrom-Json) } catch { return $null } }
 function Test-AppPorts($cfgV, $app, [string]$phase) {
@@ -212,9 +253,12 @@ foreach ($want in 'nginx\nginx.exe', 'nginx\docs\LICENSE', 'nginx\conf\mime.type
     Check "package has $want" (Test-Path (Join-Path $Package $want) -PathType Leaf) ''
 }
 Check 'package has no nginx\conf\nginx.conf (written on the plant PC)' (-not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf'))) ''
+Check 'package has no logging\quiet.ini and no logs\ (w2-065: the app writes its own log files)' (-not (Test-Path (Join-Path $Package 'logging')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
 Test-NoMachinePaths $Package '0.'
 $defaults = Get-TaidaFlowConfig -Path $pkgConfig -Exe $pkgExe
 $dv = $defaults.Values
+Check 'default config.json: nginx.exe nginx\nginx.exe = the bundled nginx of the package (w2-065 D3)' ((Resolve-TaidaFlowNginxExe $defaults) -eq (Join-Path $Package 'nginx\nginx.exe') -and $defaults.Sources['nginx.exe'] -eq 'default') "$($dv['nginx.exe']) -> $(Resolve-TaidaFlowNginxExe $defaults)"
+Check 'default config.json: log.dir logs, quiet on 60 days, full on 7 days (TaidaFlowApp.exe --write-default-config)' ($dv['log.dir'] -eq 'logs' -and $dv['log.quiet.enabled'] -eq $true -and [int]$dv['log.quiet.keepDays'] -eq 60 -and $dv['log.full.enabled'] -eq $true -and [int]$dv['log.full.keepDays'] -eq 7) ''
 $allPorts = @('modbusServer.port', 'http.port', 'mirror.publicPort', 'mirror.internalPort', 'rest.port', 'nginx.port') | ForEach-Object { [int]$dv[$_] }
 $probeOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\safety_probe.ps1') -Reason "verify-release-package ($Mode) before launch" -LogFile (Join-Path $Evidence 'safety-probe.log') -Config $pkgConfig -Exe $pkgExe
 $probeRc = $LASTEXITCODE
@@ -258,8 +302,12 @@ if ($app) {
     Check "A. http://127.0.0.1:$($dv['http.port'])/TaidaFlowApp.html -> 200" ($r.status -match ' 200') $r.status
     Test-Ws "http://127.0.0.1:$($dv['mirror.publicPort'])/mirror" "http://127.0.0.1:$($dv['http.port'])" 'A.'
 }
+Check 'A. state file names the log folder <data>\logs (config.json log.dir relative to dataDir)' ($state -and [string]$state.logDir -eq (Join-Path $DataDir 'logs')) $(if ($state) { [string]$state.logDir } else { '' })
+Test-LogFolder (Join-Path $DataDir 'logs') 'A.' -Launcher
 $rc = Invoke-Cmd (Stop-Cmd $Package ('-DataDir "' + $DataDir + '"')) (Join-Path $Evidence 'A-stop.console.txt')
 Check 'A. stop exit code 0' ("$rc" -eq '0') "exit $rc"
+$llA = Join-Path $DataDir ("logs\launcher-" + (Get-Date).ToString('yyyy-MM-dd') + '.log')
+Check 'A. stop wrote to launcher-<today>.log' ((Test-Path -LiteralPath $llA) -and ((Get-Content -LiteralPath $llA) -join "`n") -match '\[stop\]\s+stopped \(exit 0\)') ''
 Wait-NoListeners $allPorts 'A.'
 
 # --- B. configured site, nginx on --------------------------------------------------------------------------
@@ -392,6 +440,18 @@ if ($app) {
             Check "B. fallback http://127.0.0.1:$httpPort$url -> 200" ($rApp.status -match ' 200') $rApp.status
         }
     } else { Note "  (no mirror client at $client - export check skipped)" }
+    # w2-065: nginx logs in the log folder (config.json log.dir), access log named by date
+    $bLogDir = Join-Path $DataDir 'logs'
+    $acc = Join-Path $bLogDir ("nginx-access-" + (Get-Date).ToString('yyyy-MM-dd') + '.log')
+    Start-Sleep -Seconds 1
+    $accText = if (Test-Path -LiteralPath $acc) { @(Get-Content -LiteralPath $acc) } else { @() }
+    Check "B. nginx access log $(Split-Path -Leaf $acc) in the log folder with the requests of this check" (@($accText | Where-Object { $_ -match '"(GET|HEAD) /TaidaFlowApp\.html HTTP/1\.1" 200 ' }).Count -gt 0 -and @($accText | Where-Object { $_ -match '"GET /runtime\.json HTTP/1\.1" 200 ' }).Count -gt 0) "$($accText.Count) line(s)"
+    if (Test-Path -LiteralPath $acc) { Copy-Item -LiteralPath $acc -Destination (Join-Path $Evidence 'B-nginx-access.log') -Force }
+    Check 'B. nginx-error.log in the log folder (fixed name)' (Test-Path -LiteralPath (Join-Path $bLogDir 'nginx-error.log') -PathType Leaf) ''
+    $ngxAccess = @(Get-ChildItem -LiteralPath (Join-Path $Package 'nginx\logs') -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^access' })
+    Check 'B. no access log in nginx\logs (only nginx.pid / its start-up messages stay there)' ($ngxAccess.Count -eq 0) (($ngxAccess | ForEach-Object { $_.Name }) -join ', ')
+    Check 'B. state file: app log = <data>\logs\taidaflow-<today>-full.log' ([string]$state.appLog -eq (Join-Path $bLogDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '-full.log'))) ([string]$state.appLog)
+    Test-LogFolder $bLogDir 'B.' -Launcher
     $appLog = [string]$state.appLog
     $logText = if (Test-Path $appLog) { Get-Content -LiteralPath $appLog } else { @() }
     Copy-Item -LiteralPath $appLog -Destination (Join-Path $Evidence 'B-app.log') -ErrorAction SilentlyContinue
@@ -478,16 +538,25 @@ $appText = if (Test-Path $appErr) { (Get-Content -LiteralPath $appErr) -join ' |
 Check 'D. broken config.json: TaidaFlowApp.exe exit 2, no listener' ($exited -and $ap.ExitCode -eq 2 -and $listenWhile.Count -eq 0) "exit $($ap.ExitCode), listeners $($listenWhile.Count)"
 Check 'D. broken config.json unchanged after the app (not overwritten with defaults)' ((Get-Sha $pkgConfig) -eq $shaBroken) ''
 Check 'D. app log names the JSON error with line/column' ($appText -match 'JSON syntax error' -and $appText -match 'line \d+, column \d+') ''
+# w2-065 (w2-064 A2): the failure is also in the fallback log folder beside config.json.
+$fbDir = Join-Path $Package 'logs'
+$fbFull = Join-Path $fbDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '-full.log')
+$fbQuiet = Join-Path $fbDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '.log')
+$fbText = if (Test-Path -LiteralPath $fbFull) { (Get-Content -LiteralPath $fbFull -Encoding UTF8) -join "`n" } else { '' }
+$fbQText = if (Test-Path -LiteralPath $fbQuiet) { (Get-Content -LiteralPath $fbQuiet -Encoding UTF8) -join "`n" } else { '' }
+Check 'D. fallback log <package>\logs\taidaflow-<today>-full.log: JSON error with line/column and the exit-code-2 line' ($fbText -match 'JSON syntax error' -and $fbText -match '\[critical\] \[Config\] config file .* cannot be used: .*\(line \d+, column \d+\) - the program exits with code 2') $fbFull
+Check 'D. fallback quiet log taidaflow-<today>.log has the critical line, no [info]' ($fbQText -match '\[critical\] \[Config\]' -and $fbQText -notmatch '\[info\]') $fbQuiet
+foreach ($x in $fbFull, $fbQuiet) { if (Test-Path -LiteralPath $x) { Copy-Item -LiteralPath $x -Destination (Join-Path $Evidence ('D-fallback-' + (Split-Path -Leaf $x))) -Force } }
 
 # --- E. leave the package as shipped ---------------------------------------------------------------------------
 $script:running = $null
 Remove-Item -LiteralPath $pkgConfig -Force
 foreach ($x in @(Get-ChildItem -LiteralPath (Join-Path $Package 'nginx\conf') -File | Where-Object { $_.Name -like 'nginx.conf*' })) { Remove-Item -LiteralPath $x.FullName -Force }
-foreach ($d in 'nginx\logs', 'nginx\temp') { $p = Join-Path $Package $d; if (Test-Path $p) { Remove-Item -LiteralPath $p -Recurse -Force } }
+foreach ($d in 'nginx\logs', 'nginx\temp', 'logs') { $p = Join-Path $Package $d; if (Test-Path $p) { Remove-Item -LiteralPath $p -Recurse -Force } }
 $webRt = Join-Path $Package 'web\runtime.json'
 [System.IO.File]::WriteAllText($webRt, (Get-TaidaFlowRuntimeJson (Get-TaidaFlowPagePort $defaults)), (New-Object System.Text.UTF8Encoding($false)))
-Note "package restored: config.json, nginx\conf\nginx.conf*, nginx\logs, nginx\temp removed; web\runtime.json = the default one"
-Check 'E. package without config.json / nginx.conf again' (-not (Test-Path $pkgConfig) -and -not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf'))) ''
+Note "package restored: config.json, nginx\conf\nginx.conf*, nginx\logs, nginx\temp, logs\ (fallback log of D) removed; web\runtime.json = the default one"
+Check 'E. package without config.json / nginx.conf / logs\ again' (-not (Test-Path $pkgConfig) -and -not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
 Test-NoMachinePaths $Package 'E.'
 $leftProc = @(Get-Process TaidaFlowApp, nginx -ErrorAction SilentlyContinue | Where-Object { -not ($pre | Where-Object Id -eq $_.Id) })
 Check 'E. no TaidaFlowApp / nginx of this check left' ($leftProc.Count -eq 0) (($leftProc | ForEach-Object { "$($_.ProcessName) $($_.Id)" }) -join ', ')

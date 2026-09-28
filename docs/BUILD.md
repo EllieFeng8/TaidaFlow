@@ -564,13 +564,18 @@ build\desktop\nginx\
 ├─ nginx.exe            從 TAIDAFLOW_NGINX_DIR 複製
 ├─ conf\mime.types      從 TAIDAFLOW_NGINX_DIR\conf 複製
 ├─ conf\nginx.conf      產生(TaidaFlow 的完整設定)
-├─ logs\、temp\         建立(nginx 自己的 log 與暫存)
+├─ logs\、temp\         建立(nginx.pid、nginx 讀設定前的訊息;暫存)
 ```
+
+  nginx 的請求紀錄 `nginx-access-<日期>.log` 與錯誤紀錄 `nginx-error.log` 寫到設定檔的 log 資料夾(`log.dir`,
+  config.dev.json = `build\runtime-cwd\logs`,與程式自己的 log 同一個資料夾;w2-065,DEPLOY_AND_STARTUP.md §13)。
 
 - `conf\nginx.conf` 由 `scripts\install-nginx-config.ps1 -Build` 產生——與正式機一次性安裝步驟**同一支產生程式**
   (模板 `deploy\nginx\taidaflow.conf`)。值來自快取變數 `TAIDAFLOW_NGINX_CONFIG` 指定的設定檔
   (預設 `deploy\dev\config.dev.json`):監聽 `nginx.port`、網頁根目錄 `build\desktop\web`(寫成相對於 nginx 資料夾的
-  `../web`)、`/exports` = `<dataDir>\exports`、`/api/` → `127.0.0.1:<rest.port>`、`/mirror` → `127.0.0.1:<mirror.internalPort>`。
+  `../web`)、`/exports` = `<dataDir>\exports`、`/api/` → `127.0.0.1:<rest.port>`、`/mirror` → `127.0.0.1:<mirror.internalPort>`、
+  log 資料夾 = `log.dir`(相對於 `dataDir`)。建置時程式還沒連結,拿不到程式的預設值,所以這些鍵(含 w2-065 的 `log.dir`)
+  **必須寫在設定檔裡**(兩份開發設定都有);缺少時建置失敗並說明是哪個鍵。
   產生後在該資料夾執行 `nginx -t`(失敗時建置失敗)。模板、產生程式或設定檔有改,下次建置會自動重新產生
   (建置輸出直接取代,不留 `.prev-<時間>` 備份;正式機的 `install-nginx-config.ps1` 才會留備份)。
 - 兩個 CMake 快取變數(configure 時用 `-D` 指定,或在 Qt Creator 的 CMake 設定改):
@@ -719,10 +724,21 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 | 改過 UI / C++ 中文字串後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字 → 照 §2.5 (B) 重新產生 → 重建 wasm |
 | 改過 REST 相關程式後 | `PS scripts\check-rest-routes.ps1` | exit 0(log 的 route 表與實際註冊一致) |
 | 改過 `Core/AppHttpServer/` 後(或定期) | `scripts\run-apphttpserver-tests.bat` | CTest `100% tests passed`,exit 0(需約 2 GiB 暫存磁碟空間;輸出 `build\apphttpserver-qtest`) |
-| 改過 `App/appconfig.*`、`App/runtimeinfo.*` 後 | 建置並執行 `App/tests`(CTest,見 `App/tests/README.md`) | `100% tests passed` |
+| 改過 `App/appconfig.*`、`App/runtimeinfo.*`、`App/applog.*` 後 | 建置並執行 `App/tests`(CTest:`tst_appconfig`、`tst_runtimeinfo`、`tst_applog`,見 `App/tests/README.md` 與下方指令) | `100% tests passed`(3 個測試) |
+| 改過 `scripts\taidaflow-config.ps1`(腳本的 config.json 讀取器、log 資料夾與清理)後 | `PS docs\evidence\w2-065\tools\test-config-reader.ps1` | `=== 0 check(s) failed`,exit 0(只用 `build\desktop\TaidaFlowApp.exe --write-default-config`,不啟動程式) |
 | 改過 pack 或升級 Qt 後 | `scripts\run-pack-tests.bat` | exit 0(pack 自帶的 native tests;輸出 `build\pack-tests`) |
 | 改過 SqlManager / HistoryExport / HistoryViews / Proxy 後 | `docs\evidence\w2-062\tools\make-bench-db.bat`(C++ 測試資料產生器)→ `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(需 8124 空著)、`docs\evidence\w2-045\tools\run-qtest.bat` 與 `docs\evidence\w2-052\tools\run-qtest.bat` | 各自 exit 0(資料量大,需要較長時間) |
 
+- `App/tests` 的建置與執行(桌面版 kit;輸出放 `build\` 底下,例如 `build\app-tests`):
+  ```bat
+  call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
+  C:\Qt\Tools\CMake_64\bin\cmake.exe -S App\tests -B build\app-tests -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=C:/Qt/Tools/Ninja/ninja.exe -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64
+  C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\app-tests
+  C:\Qt\Tools\CMake_64\bin\ctest.exe --test-dir build\app-tests --output-on-failure
+  ```
+  `tst_applog` 測程式自己寫 log 的 `App/applog.{h,cpp}`(w2-064):quiet / full 兩個檔與層級過濾、每行格式、換日(含時間調回去)、
+  保留天數邊界、只刪符合命名的檔、寫入失敗不結束程式、多執行緒、config.json 讀不到時寫到備援資料夾;用可設定的時鐘測日期,
+  檔案、刪除、執行緒都是真的。
 - 檢查腳本的參數可以換成其他建置資料夾(例如 Qt Creator 的),桌面版與網頁版各給一個。
 - 需要啟動 app 的整合檢查(`verify-desktop-startup.ps1`、nginx、REST、打包驗證)見 README「測試 / 驗證」。
 
@@ -838,8 +854,16 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
   改自己的 port 或 nginx 位置:複製一份 `config.dev.json` 到 `build\` 底下改,再用 `-Config` 指定(不要改到別人的設定)。
 - **腳本不重複定義預設值**:`scripts\taidaflow-config.ps1`(所有腳本共用的讀取器)缺檔時呼叫
   `TaidaFlowApp.exe --write-default-config` 產生;檔案缺某些鍵時,也從同一個程式取得預設值。驗證規則(型別、範圍)與
-  `App/appconfig.cpp` 相同。唯一例外是 `nginx.exe`(只有腳本用;程式的讀取器之後由 main 分支補上):檔案沒有時用
-  `nginx\nginx.exe`(相對於 config.json 所在資料夾)。
+  `App/appconfig.cpp` 相同。w2-065 起 `nginx.exe` 與 `log.*` 也是程式的鍵(w2-064),腳本不再有自己的備援值:
+  `nginx.exe` 相對於 config.json 所在資料夾解析,`log.dir` 相對於 `dataDir` 解析,與程式一致;程式太舊(預設檔沒有這些鍵)時
+  腳本直接說明並停止。
+- **log**(w2-064 `App/applog.{h,cpp}`,只有桌面版;網頁版不寫檔):程式從 `main()` 第一行起收集訊息,讀完 config.json 後寫到
+  `log.dir`(預設 `logs`,相對於 `dataDir`;開發設定 = `build\runtime-cwd\logs`):`taidaflow-<日期>.log`(warning 以上,保留
+  `log.quiet.keepDays` 60 天)與 `taidaflow-<日期>-full.log`(全部,保留 `log.full.keepDays` 7 天),換日時換檔並清理;
+  config.json 讀不到時寫到 config.json 旁的 `logs\`。訊息仍同時送到除錯輸出 / stderr(Qt Creator 看得到)。
+  不要用 `QT_LOGGING_RULES` / `QT_LOGGING_CONF` 過濾(會在寫檔前就濾掉,full 檔會少 info)。正式機啟動腳本另寫
+  `launcher-<日期>.log`,nginx 寫 `nginx-access-<日期>.log` / `nginx-error.log`,都在同一個資料夾
+  (DEPLOY_AND_STARTUP.md §13)。`run-desktop.ps1` 仍把程式的 stderr 另存到 `build\runtime-logs\`(開發用)。
 - **環境變數**:`TAIDAFLOW_REST_PORT` 已移除(REST port 改由 `rest.port`);`TAIDAFLOW_DOWNLOAD_PORT` 仍可臨時覆寫下載連結的
   port(程式 log 會記「environment override」);`TAIDAFLOW_DEVICE_PROFILE=simulator` 只給測試用。
 - **打包**:`package-release.ps1` 不附 config.json(正式機第一次啟動時建立,之後更新版本不會覆蓋);打包資料夾的
@@ -852,6 +876,16 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 ---
 
 ## 11. 驗證紀錄與沒有驗證到的部分
+
+2026-09-28(w2-065)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-065/`:
+
+| 項目 | 結果 |
+|---|---|
+| §2.5 字型 | 合併 main 後 `make-font-subset.ps1 --check` exit 1(8 個新字:`App/appconfig.cpp` 的設定檔錯誤對話框 4 字、`App/tests/tst_applog.cpp` 的測試字串 4 字)→ 重新產生 → `--check` exit 0;Regular 193,520 → 195,004 bytes、Bold 194,192 → 195,684 bytes |
+| §4.1 / §5.1 全新建置 | `build-desktop.bat fresh`、`build-wasm.bat wasm-release fresh`(依序)各 exit 0;`build\desktop\nginx\conf\nginx.conf` 的 log 寫到 `build\runtime-cwd\logs`,`nginx -t` 通過 |
+| §7 檢查 | `check-wasm-backend`、`check-version-shadow`、`check-rest-routes`、`verify-pack`、`make-font-subset --check` 各 exit 0;`App/tests` CTest 3/3(`tst_appconfig` 61、`tst_runtimeinfo` 26、`tst_applog` 28);`test-config-reader.ps1` 0 failed |
+| 打包 | `package-release.ps1` exit 0(不再含 `logging\quiet.ini`);`verify-release-package.ps1` ps1 與 bat 兩種模式 0 failed(含:當天 quiet / full / launcher log、nginx access log 以日期命名、壞 JSON 時備援 log 在打包資料夾 `logs\`) |
+| nginx 變數 log 路徑 | nginx 1.30.5 for Windows:`access_log` 路徑含變數(`map $time_iso8601`)`nginx -t` 通過、實際寫出 `nginx-access-<今天>.log`(本機時間的日期) |
 
 2026-09-28(w2-063)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-063/`:
 

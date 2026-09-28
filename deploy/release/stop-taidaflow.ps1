@@ -1,4 +1,4 @@
-# TaidaFlow - FIELD (production machine) stop script.                (w2-057, w2-062)
+# TaidaFlow - FIELD (production machine) stop script.                (w2-057, w2-062, w2-065)
 # Counterpart of start-taidaflow.ps1 (same installation folder, same config.json).
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File stop-taidaflow.ps1
@@ -6,6 +6,10 @@
 #   w2-062: the data folder is config.json dataDir (default <installation folder>\config.json, or
 #   -Config); its taidaflow-app.json identifies the app. config.json is only read, never created.
 #   -DataDir : only when start-taidaflow.ps1 was started with the same one-time -DataDir.
+#   -LogDir  : folder of the launcher log (launcher-YYYY-MM-DD.log). Normally not needed: the folder is
+#              taken from <DataDir>\taidaflow-app.json (written by start-taidaflow.ps1, so a one-time
+#              -LogDir of the start is followed), else config.json log.dir resolved against dataDir
+#              (w2-065: the same folder as the app's own log files, default C:\TaidaFlowData\logs).
 #
 # What it does:
 #   * nginx is NOT stopped (w2-062, Mango A6: nginx is independent of the app; stop it by hand with
@@ -39,9 +43,10 @@ function Full([string]$p) {
     return [System.IO.Path]::GetFullPath($p).TrimEnd('\')
 }
 $configNote = ''
+$cfg = $null
+. (Join-Path $install 'scripts\taidaflow-config.ps1')
 if ($DataDir -eq "") {
     # config.json dataDir (the defaults of TaidaFlowApp.exe for keys missing in the file).
-    . (Join-Path $install 'scripts\taidaflow-config.ps1')
     $configPath = if ($Config -ne "") { Full $Config } else { Join-Path $install 'config.json' }
     $cfg = Get-TaidaFlowConfig -Path $configPath -Exe (Join-Path $install 'TaidaFlowApp.exe')
     if ($cfg.Error) { [Console]::Out.WriteLine("ERROR: $($cfg.Error) - pass -DataDir <data folder>"); exit 2 }
@@ -49,26 +54,41 @@ if ($DataDir -eq "") {
     $configNote = " from $configPath dataDir ($($cfg.Sources['dataDir']))"
 }
 $DataDir = Full $DataDir
-if ($LogDir -eq "") { $LogDir = Join-Path $DataDir 'logs' }
-$LogDir = Full $LogDir
 $stateFile = Join-Path $DataDir 'taidaflow-app.json'
+$state = $null
+$stateNote = ''
+if (Test-Path $stateFile -PathType Leaf) {
+    try { $state = Get-Content -Raw -LiteralPath $stateFile | ConvertFrom-Json } catch { $stateNote = "state file unreadable: $stateFile"; $state = $null }
+}
+# Log folder (w2-065): -LogDir, else the one start-taidaflow.ps1 used (state file), else config.json log.dir.
+$logDirNote = ''
+if ($LogDir -ne "") { $LogDir = Full $LogDir; $logDirNote = '-LogDir' }
+elseif ($state -and $state.PSObject.Properties['logDir'] -and $state.logDir) { $LogDir = [string]$state.logDir; $logDirNote = 'taidaflow-app.json' }
+else {
+    if (-not $cfg) {
+        $configPath = if ($Config -ne "") { Full $Config } else { Join-Path $install 'config.json' }
+        $cfg = Get-TaidaFlowConfig -Path $configPath -Exe (Join-Path $install 'TaidaFlowApp.exe')
+        if (-not $cfg.Error) { Set-TaidaFlowConfigValue $cfg 'dataDir' $DataDir }
+    }
+    if (-not $cfg.Error) { $LogDir = Resolve-TaidaFlowLogDir $cfg; $logDirNote = "config.json log.dir = $($cfg.Values['log.dir'])" }
+}
 
-$script:launcherLog = $null
-if (Test-Path $LogDir -PathType Container) { $script:launcherLog = Join-Path $LogDir 'launcher.log' }
+# launcher-YYYY-MM-DD.log (the date of each line), next to the app's own log files.
+$script:launcherDir = $null
+if ($LogDir -and (Test-Path -LiteralPath $LogDir -PathType Container)) { $script:launcherDir = $LogDir }
 function Log([string]$m) {
     $line = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss') + ' [stop]  ' + $m
     [Console]::Out.WriteLine($line)
-    if ($script:launcherLog) {
-        try { [System.IO.File]::AppendAllText($script:launcherLog, $line + "`r`n", (New-Object System.Text.UTF8Encoding($false))) } catch { }
+    if ($script:launcherDir) {
+        $file = Join-Path $script:launcherDir ('launcher-' + (Get-Date).ToString('yyyy-MM-dd') + '.log')
+        try { [System.IO.File]::AppendAllText($file, $line + "`r`n", (New-Object System.Text.UTF8Encoding($false))) } catch { }
     }
 }
 function SamePath([string]$a, [string]$b) { return [string]::Equals($a, $b, [System.StringComparison]::OrdinalIgnoreCase) }
 
 Log "=== TaidaFlow stop (data folder $DataDir$configNote) ==="
-$state = $null
-if (Test-Path $stateFile -PathType Leaf) {
-    try { $state = Get-Content -Raw -LiteralPath $stateFile | ConvertFrom-Json } catch { Log "state file unreadable: $stateFile"; $state = $null }
-}
+if ($stateNote) { Log $stateNote }
+if ($script:launcherDir) { Log "log folder: $LogDir ($logDirNote)" } else { Log "log folder unknown or missing ($LogDir) - this stop is only shown on the screen" }
 # --- nginx: NOT stopped (w2-062, Mango A6) -------------------------------------------------------
 # nginx is independent of the app (started with "start nginx" in its folder, by hand or by
 # start-taidaflow.ps1). Stop it by hand when needed:  cd <nginx folder>  then  nginx -s quit

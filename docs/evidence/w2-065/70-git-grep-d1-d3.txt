@@ -1,0 +1,39 @@
+$ git grep -n -I -E "TaidaFlowNginxExeFallback|script default|quiet\.ini|QT_LOGGING_CONF|KeepLogDays|-AppLog" -- scripts deploy
+deploy/release/start-taidaflow.ps1:33:# QT_LOGGING_CONF / QT_LOGGING_RULES: they would remove the info lines from the full file). Files of
+deploy/release/start-taidaflow.ps1:65:#      QT_LOGGING_CONF, QT_LOGGING_RULES, QT_FORCE_STDERR_LOGGING, ...);
+deploy/release/start-taidaflow.ps1:132:# QT_LOGGING_CONF / QT_LOGGING_RULES would filter messages BEFORE the app's log writer sees them (the
+deploy/release/start-taidaflow.ps1:138:               'QT_DEBUG_PLUGINS', 'QT_LOGGING_CONF', 'QT_LOGGING_RULES', 'QT_FORCE_STDERR_LOGGING', 'QT_ASSUME_STDERR_HAS_CONSOLE',
+scripts/package-release.ps1:14:#                                        (w2-065: no logging\quiet.ini any more - the app writes its own
+scripts/verify-release-package.ps1:184:        Check "$phase no launcher.log, no QT_LOGGING_CONF any more" (-not (Test-Path -LiteralPath (Join-Path $logDir 'launcher.log')) -and $lt -notmatch 'QT_LOGGING_CONF=') ''
+scripts/verify-release-package.ps1:256:Check 'package has no logging\quiet.ini and no logs\ (w2-065: the app writes its own log files)' (-not (Test-Path (Join-Path $Package 'logging')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
+(exit 0)
+
+$ git grep -n -I -i "tools.nginx" -- scripts deploy
+scripts/package-release.ps1:25:#                                        nginx.exe), else the newest C:\tools\nginx\nginx-<version> (the build PC's
+scripts/package-release.ps1:128:    $nginxFrom = 'newest C:\tools\nginx\nginx-<version>'
+scripts/package-release.ps1:130:    foreach ($d in @(Get-ChildItem 'C:\tools\nginx' -Directory -Filter 'nginx-*' -ErrorAction SilentlyContinue)) {
+(exit 0)
+
+$ git grep -n -I -E "Resolve-TaidaFlowNginxExe|Resolve-TaidaFlowLogDir" -- scripts deploy
+deploy/release/register-autostart.ps1:104:     $(if ($LogDir -ne "") { "$LogDir (-LogDir, overrides log.dir)" } else { "$(Resolve-TaidaFlowLogDir $cfg) (config.json log.dir = $($cfg.Values['log.dir']))" }))
+deploy/release/start-taidaflow.ps1:173:$LogDir = Resolve-TaidaFlowLogDir $cfg
+deploy/release/start-taidaflow.ps1:227:$cfgNginxExe = Resolve-TaidaFlowNginxExe $cfg
+deploy/release/start-taidaflow.ps1:281:    $nginxExe = Resolve-TaidaFlowNginxExe $cfg
+deploy/release/stop-taidaflow.ps1:73:    if (-not $cfg.Error) { $LogDir = Resolve-TaidaFlowLogDir $cfg; $logDirNote = "config.json log.dir = $($cfg.Values['log.dir'])" }
+scripts/install-nginx-config.ps1:110:    $nginxExe = if ($Nginx -ne "") { $x = Full $Nginx; if (Test-Path $x -PathType Container) { Join-Path $x 'nginx.exe' } else { $x } } else { Resolve-TaidaFlowNginxExe $cfg }
+scripts/install-nginx-config.ps1:122:$logDir = Resolve-TaidaFlowLogDir $cfg
+scripts/nginx-web.ps1:130:        $candidate = Resolve-TaidaFlowNginxExe $script:cfg
+scripts/nginx-web.ps1:233:    $script:logDir = Resolve-TaidaFlowLogDir $script:cfg
+scripts/package-release.ps1:121:            $cand = Split-Path -Parent (Resolve-TaidaFlowNginxExe $dc)
+scripts/package-release.ps1:123:            else { Say "note: nginx.exe of $devConfig ($(Resolve-TaidaFlowNginxExe $dc)) is not a complete nginx folder (nginx.exe, docs\LICENSE, conf\mime.types)" }
+scripts/taidaflow-config.ps1:17:#               (AppConfig::resolvedNginxExe); Resolve-TaidaFlowNginxExe. -Nginx of a script overrides it.
+scripts/taidaflow-config.ps1:19:#               it is (AppConfig::resolvedLogDir); Resolve-TaidaFlowLogDir. The app writes its own
+scripts/taidaflow-config.ps1:42:#   Resolve-TaidaFlowNginxExe $cfg                    full path of nginx.exe (relative = to the config folder)
+scripts/taidaflow-config.ps1:43:#   Resolve-TaidaFlowLogDir $cfg                      full path of log.dir (relative = to the resolved dataDir)
+scripts/taidaflow-config.ps1:321:        $value = if ($keys[$i] -eq 'dataDir') { $cfg.DataDir } elseif ($keys[$i] -eq 'nginx.exe') { Resolve-TaidaFlowNginxExe $cfg } else { $cfg.Values[$keys[$i]] }
+scripts/taidaflow-config.ps1:331:function Resolve-TaidaFlowNginxExe($cfg) {
+scripts/taidaflow-config.ps1:340:function Resolve-TaidaFlowLogDir($cfg) {
+scripts/taidaflow-config.ps1:435:    $lines.Add("  nginx.exe (resolved) = $(Resolve-TaidaFlowNginxExe $cfg)")
+scripts/taidaflow-config.ps1:436:    $lines.Add("  log.dir (resolved) = $(Resolve-TaidaFlowLogDir $cfg)")
+scripts/verify-release-package.ps1:134:    return (Resolve-TaidaFlowNginxExe $c)
+scripts/verify-release-package.ps1:260:Check 'default config.json: nginx.exe nginx\nginx.exe = the bundled nginx of the package (w2-065 D3)' ((Resolve-TaidaFlowNginxExe $defaults) -eq (Join-Path $Package 'nginx\nginx.exe') -and $defaults.Sources['nginx.exe'] -eq 'default') "$($dv['nginx.exe']) -> $(Resolve-TaidaFlowNginxExe $defaults)"

@@ -1,0 +1,601 @@
+2026-09-28 23:44:10.609 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json)
+2026-09-28 23:44:10.610 [warning] [Config] "log.full.keepDays" = "seven" is invalid (expected an integer 1..2147483647) - using the default 7
+2026-09-28 23:44:10.610 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-09-28 23:44:10.610 [info] [Config]   version = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   dataDir = "data" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6256.host = "127.0.0.201" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217a.host = "127.0.0.202" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217b.host = "127.0.0.203" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6224.host = "127.0.0.204" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6022.host = "127.0.0.205" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   modbusServer.bind = "0.0.0.0" (file)
+2026-09-28 23:44:10.610 [info] [Config]   modbusServer.port = 15020 (file)
+2026-09-28 23:44:10.610 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-09-28 23:44:10.610 [info] [Config]   http.bind = "0.0.0.0" (file)
+2026-09-28 23:44:10.610 [info] [Config]   http.port = 8124 (file)
+2026-09-28 23:44:10.610 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-09-28 23:44:10.610 [info] [Config]   rest.port = 18080 (file)
+2026-09-28 23:44:10.610 [info] [Config]   mirror.internalPort = 18125 (file)
+2026-09-28 23:44:10.610 [info] [Config]   mirror.publicBind = "0.0.0.0" (file)
+2026-09-28 23:44:10.610 [info] [Config]   mirror.publicPort = 8125 (file)
+2026-09-28 23:44:10.610 [info] [Config]   nginx.enabled = true (file)
+2026-09-28 23:44:10.610 [info] [Config]   nginx.port = 80 (file)
+2026-09-28 23:44:10.610 [info] [Config]   nginx.exe = "nginx\\nginx.exe" (file)
+2026-09-28 23:44:10.610 [info] [Config]   log.dir = "logs" (file)
+2026-09-28 23:44:10.610 [info] [Config]   log.quiet.enabled = true (file)
+2026-09-28 23:44:10.610 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-09-28 23:44:10.610 [info] [Config]   log.full.enabled = true (file)
+2026-09-28 23:44:10.610 [info] [Config]   log.full.keepDays = 7 (default)
+2026-09-28 23:44:10.610 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data
+2026-09-28 23:44:10.610 [info] [Config]   nginx.exe (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx\nginx.exe
+2026-09-28 23:44:10.610 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs
+2026-09-28 23:44:10.610 [info] [Config]   downloadPort = 80 (derived: nginx.enabled ? nginx.port : http.port)
+2026-09-28 23:44:10.610 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data
+2026-09-28 23:44:10.610 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs for 2026-09-28: 12 file(s) examined, 2 expired log file(s) deleted: taidaflow-2026-07-30.log, taidaflow-2026-09-21-full.log (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-09-28 23:44:10.612 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-09-28 23:44:10.616 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-28 23:44:10.616 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-09-28 23:44:10.620 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/settings_schema.sql"
+2026-09-28 23:44:10.632 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 127.0.0.201:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:44:10.633 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 127.0.0.202:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:44:10.633 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 127.0.0.203:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:44:10.633 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 127.0.0.204:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:44:10.633 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 127.0.0.205:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:44:10.633 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-09-28 23:44:10.633 [info] [Modbus] device profile=default
+2026-09-28 23:44:10.633 [info] [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:44:10.633 [info] [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:44:10.633 [info] [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:44:10.633 [info] [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:44:10.633 [info] [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:44:10.633 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-09-28 23:44:10.636 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-09-28 23:44:10.636 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-09-28 23:44:10.636 [info] [Config] Core download links -> port 80 (file; nginx.enabled true file, nginx.port 80 file, http.port 8124 file)
+2026-09-28 23:44:10.641 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\exports (max 20 files / 2147483648 bytes), download links -> port 80
+2026-09-28 23:44:10.641 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\exports
+2026-09-28 23:44:10.641 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\exports: mounted on AppHttpServer
+2026-09-28 23:44:10.641 [info] [Config] Core HTTP service (http) -> 0.0.0.0:8124 (bind file, port file)
+2026-09-28 23:44:10.641 [info] [Web] TAIDAFLOW_WEB_DIR is not set
+2026-09-28 23:44:10.641 [info] [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> has TaidaFlowApp.html, used
+2026-09-28 23:44:10.641 [info] [Web] runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web\runtime.json = {"mirrorPublicPort":80,"version":1} (nginx.enabled true -> nginx.port file, /mirror proxied by nginx)
+2026-09-28 23:44:10.641 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-09-28 23:44:10.641 [info] [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> http://<host>:8124/TaidaFlowApp.html
+2026-09-28 23:44:10.648 [info] apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-09-28 23:44:10.648 [info] [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+2026-09-28 23:44:10.648 [info] [Config] Core REST API (rest) -> 127.0.0.1:18080 (bind file, port file)
+2026-09-28 23:44:10.651 [info] Device SN: "sn000000"
+2026-09-28 23:44:10.652 [info] Running on http://127.0.0.1: 18080 /
+2026-09-28 23:44:10.652 [info] [REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-09-28 23:44:10.652 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-28 23:44:10.652 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-28 23:44:10.652 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-28 23:44:10.652 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+2026-09-28 23:44:10.652 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)
+2026-09-28 23:44:10.652 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:10.667 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=1
+2026-09-28 23:44:10.667 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:10.668 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:44:10.668 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-28 23:44:10.745 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-09-28 23:44:10.745 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:10.745 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:10.746 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:10.746 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:10.746 [info] [Config] Core Modbus server (modbusServer) -> 0.0.0.0:15020 unit 1 (bind file, port file, unitId file)
+2026-09-28 23:44:10.746 [info] [ModbusServer] listening on 0.0.0.0:15020 unit=1
+2026-09-28 23:44:10.746 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:10.747 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:44:10.747 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-28 23:44:10.747 [info] WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+2026-09-28 23:44:10.747 [info] LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+2026-09-28 23:44:11.217 [info] ADAM-6256 (127.0.0.201) connected 
+2026-09-28 23:44:11.217 [info] ADAM-6217 A (127.0.0.202) connected 
+2026-09-28 23:44:11.217 [info] ADAM-6217 B (127.0.0.203) connected 
+2026-09-28 23:44:11.218 [info] ADAM-6224 (127.0.0.204) connected 
+2026-09-28 23:44:11.218 [info] ADAM-6022 (127.0.0.205) connected 
+2026-09-28 23:44:11.733 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:11.733 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:11.733 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:11.733 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:11.733 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=984
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=9 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=937
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=10 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=890
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13075
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19620
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26150
+2026-09-28 23:44:11.777 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:11.777 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32695
+2026-09-28 23:44:11.777 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=984 value=15.015
+2026-09-28 23:44:11.777 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=937 value=14.298
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=890 value=13.581
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13075 value=19.951
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19620 value=29.938
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26150 value=39.902
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32695 value=49.889
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:11.778 [info] [SV sync] motorRunningSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.778 [info] [SV sync] emergencyStopSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.778 [info] [SV sync] motorRunningSv <- false from ADAM-6256 DO3 (coil 19) = 0 (was false)
+2026-09-28 23:44:11.778 [info] [SV sync] wayValveOpenSv <- false from ADAM-6256 DO4 (coil 20) = 0 (was false)
+2026-09-28 23:44:11.778 [info] [SV sync] emergencyStopSv <- true from ADAM-6256 DO2 (coil 18) = 0, active-low (was false)
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18301
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18541
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21177
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=20697
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=4 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1171
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=5 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1124
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=6 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1078
+2026-09-28 23:44:11.778 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:11.778 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1031
+2026-09-28 23:44:11.779 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:11.781 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18301 value=27.926
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18541 value=28.292
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21177 value=32.314
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=20697 value=31.582
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1171 value=17.868
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1124 value=17.151
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1078 value=16.449
+2026-09-28 23:44:11.781 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1031 value=15.732
+2026-09-28 23:44:11.781 [info] [ModbusServer][Local update] type=2 offset=10 count=1
+2026-09-28 23:44:11.782 [info] [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+2026-09-28 23:44:11.782 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:11.782 [info] [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.1 ms)
+2026-09-28 23:44:11.782 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:11.782 [info] [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+2026-09-28 23:44:11.782 [info] [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+2026-09-28 23:44:11.782 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:11.782 [info] [SV sync] m1ValueSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.782 [info] [SV sync] m1ValueSv <- 20.00 % from ADAM-6224 HR0 raw=819 (was 0.00)
+2026-09-28 23:44:11.782 [info] [SV sync] m2ValueSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.782 [info] [SV sync] m2ValueSv <- 30.01 % from ADAM-6224 HR1 raw=1229 (was 0.00)
+2026-09-28 23:44:11.782 [info] [SV sync] m3ValueSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.782 [info] [SV sync] m3ValueSv <- 40.00 % from ADAM-6224 HR2 raw=1638 (was 0.00)
+2026-09-28 23:44:11.782 [info] [SV sync] m4ValueSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.782 [info] [SV sync] m4ValueSv <- 50.01 % from ADAM-6224 HR3 raw=2048 (was 0.00)
+2026-09-28 23:44:11.782 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:11.782 [info] [SV sync] pump2HzSv changed by the startup device sync; Modbus write suppressed.
+2026-09-28 23:44:11.782 [info] [SV sync] pump2HzSv <- 40.00 Hz from ADAM-6022 HR10 raw=2730 (was 0.00)
+2026-09-28 23:44:11.782 [info] [SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=7, Modbus write requests since start=0.
+2026-09-28 23:44:12.736 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:12.736 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:12.736 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:12.736 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:12.736 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=986
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=9 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=939
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=10 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=892
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13088
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19640
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26175
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32727
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=986 value=15.045
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=939 value=14.328
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=892 value=13.611
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13088 value=19.971
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19640 value=29.969
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26175 value=39.940
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32727 value=49.938
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:12.753 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18360
+2026-09-28 23:44:12.753 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18607
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21323
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=20829
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=4 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1174
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=5 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1127
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=6 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1080
+2026-09-28 23:44:12.754 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:12.754 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1033
+2026-09-28 23:44:12.754 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:12.756 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18360 value=28.016
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18607 value=28.392
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21323 value=32.537
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=20829 value=31.783
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1174 value=17.914
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1127 value=17.197
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1080 value=16.480
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1033 value=15.763
+2026-09-28 23:44:12.757 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:12.757 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:12.757 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:12.757 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:13.740 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:13.740 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:13.740 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:13.740 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:13.740 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=988
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=9 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=941
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=10 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=894
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13097
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19653
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26194
+2026-09-28 23:44:13.756 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:13.756 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32750
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=988 value=15.076
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=941 value=14.359
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=894 value=13.642
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13097 value=19.985
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19653 value=29.989
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26194 value=39.969
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32750 value=49.973
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:13.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18422
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18677
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21480
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=20970
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=4 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1176
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=5 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1129
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=6 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1082
+2026-09-28 23:44:13.757 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:13.757 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1035
+2026-09-28 23:44:13.757 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:13.760 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18422 value=28.110
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18677 value=28.499
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21480 value=32.776
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=20970 value=31.998
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1176 value=17.945
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1129 value=17.227
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1082 value=16.510
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1035 value=15.793
+2026-09-28 23:44:13.760 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:13.760 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:13.760 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:13.760 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:14.741 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:14.741 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:14.741 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:14.741 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:14.741 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:14.757 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:14.757 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=989
+2026-09-28 23:44:14.757 [info] [ModbusServer][Local update] type=3 offset=9 count=1
+2026-09-28 23:44:14.757 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=942
+2026-09-28 23:44:14.757 [info] [ModbusServer][Local update] type=3 offset=10 count=1
+2026-09-28 23:44:14.757 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=895
+2026-09-28 23:44:14.757 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:14.757 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:14.757 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13102
+2026-09-28 23:44:14.757 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:14.758 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19660
+2026-09-28 23:44:14.758 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:14.758 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26203
+2026-09-28 23:44:14.758 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:14.758 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32762
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=989 value=15.091
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=942 value=14.374
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=895 value=13.657
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13102 value=19.992
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19660 value=29.999
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26203 value=39.983
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32762 value=49.992
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:14.758 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:14.758 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18475
+2026-09-28 23:44:14.758 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:14.758 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18736
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21611
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21088
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=4 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1178
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=5 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1131
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=6 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1084
+2026-09-28 23:44:14.759 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:14.759 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1036
+2026-09-28 23:44:14.759 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:14.761 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18475 value=28.191
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18736 value=28.589
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21611 value=32.976
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21088 value=32.178
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1178 value=17.975
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1131 value=17.258
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1084 value=16.541
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1036 value=15.808
+2026-09-28 23:44:14.762 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:14.762 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:14.762 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:14.762 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:15.745 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:15.745 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:15.745 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:15.745 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:15.745 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:15.761 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:15.761 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=990
+2026-09-28 23:44:15.761 [info] [ModbusServer][Local update] type=3 offset=9 count=1
+2026-09-28 23:44:15.761 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=943
+2026-09-28 23:44:15.761 [info] [ModbusServer][Local update] type=3 offset=10 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13104
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19664
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26208
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32768
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=990 value=15.106
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=943 value=14.389
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13104 value=19.995
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19664 value=30.005
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26208 value=39.991
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32768 value=50.001
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18518
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18785
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21720
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21187
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=4 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1131
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1084
+2026-09-28 23:44:15.762 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:15.762 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1037
+2026-09-28 23:44:15.762 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:15.765 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18518 value=28.257
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18785 value=28.664
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21720 value=33.143
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21187 value=32.329
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1131 value=17.258
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1084 value=16.541
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1037 value=15.824
+2026-09-28 23:44:15.766 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:15.766 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:15.766 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:15.766 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:16.732 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:16.732 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:16.732 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:16.733 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:16.733 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=990
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=943
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:16.749 [info] [ModbusServer][Local update] type=3 offset=12 count=1
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13106
+2026-09-28 23:44:16.749 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19666
+2026-09-28 23:44:16.749 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26211
+2026-09-28 23:44:16.749 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:16.749 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32772
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=990 value=15.106
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=943 value=14.389
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13106 value=19.998
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19666 value=30.008
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26211 value=39.995
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32772 value=50.007
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:16.749 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:16.750 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:16.750 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18555
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18826
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21812
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21269
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=5 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+2026-09-28 23:44:16.750 [info] [ModbusServer][Local update] type=3 offset=6 count=1
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+2026-09-28 23:44:16.750 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1037
+2026-09-28 23:44:16.750 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:16.753 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18555 value=28.313
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18826 value=28.727
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21812 value=33.283
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21269 value=32.454
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1037 value=15.824
+2026-09-28 23:44:16.753 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:16.753 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:16.753 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:16.753 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:17.738 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:17.738 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:17.738 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:17.738 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:44:17.738 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:17.755 [info] [ModbusServer][Local update] type=3 offset=8 count=1
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=943
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13106
+2026-09-28 23:44:17.755 [info] [ModbusServer][Local update] type=3 offset=13 count=1
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19667
+2026-09-28 23:44:17.755 [info] [ModbusServer][Local update] type=3 offset=14 count=1
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26212
+2026-09-28 23:44:17.755 [info] [ModbusServer][Local update] type=3 offset=15 count=1
+2026-09-28 23:44:17.755 [info] [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32774
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=943 value=14.389
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13106 value=19.998
+2026-09-28 23:44:17.755 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19667 value=30.010
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26212 value=39.997
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32774 value=50.010
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+2026-09-28 23:44:17.756 [info] [ModbusServer][Local update] type=3 offset=0 count=1
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18586
+2026-09-28 23:44:17.756 [info] [ModbusServer][Local update] type=3 offset=1 count=1
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18861
+2026-09-28 23:44:17.756 [info] [ModbusServer][Local update] type=3 offset=2 count=1
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21889
+2026-09-28 23:44:17.756 [info] [ModbusServer][Local update] type=3 offset=3 count=1
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21338
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+2026-09-28 23:44:17.756 [info] [ModbusServer][Local update] type=3 offset=7 count=1
+2026-09-28 23:44:17.756 [info] [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+2026-09-28 23:44:17.756 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:17.759 [info] [SQL] Saved Server Input Registers 0..19 to sensor_data.
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18586 value=28.360
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18861 value=28.780
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21889 value=33.400
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21338 value=32.560
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+2026-09-28 23:44:17.759 [info] [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+2026-09-28 23:44:17.759 [info] [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+2026-09-28 23:44:17.759 [info] [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+2026-09-28 23:44:17.759 [info] [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+2026-09-28 23:44:17.993 [info] apphttpserver: [AppHttpServer] unmounted /exports
+2026-09-28 23:44:17.993 [info] [Export] stopped (export thread; /exports unmounted).
+2026-09-28 23:44:17.994 [info] apphttpserver: [AppHttpServer] stopped (was port 8124)
+2026-09-28 23:44:17.995 [info] [REST] REST API stopped

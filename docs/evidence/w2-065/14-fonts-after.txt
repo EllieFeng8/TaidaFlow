@@ -1,0 +1,9 @@
+﻿
+Name                            Length SHA256                                                          
+----                            ------ ------                                                          
+charset.txt                       1373 E1BE4732153A5578DE15F07B5D3C88175AF3BD31CD355E61A430FBF76E70C337
+TaidaFlowNotoSansTC-Bold.ttf    195684 22C3CEFC17C76E67C29F53BDF6AEA2F4FEF50D5EA1985FECAA06A3C6401F7FFF
+TaidaFlowNotoSansTC-Regular.ttf 195004 E14B360E8F407CAC49301F99CEB227F9CA9B7102F76D40FCFAF5B35DBEF77C4F
+
+
+

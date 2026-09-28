@@ -1,0 +1,1 @@
+ERROR: config.json D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\config.json is not valid JSON (傳入了無效的物件，必須有 ':' 或 '}'。 (878): {) - fix it or delete it to recreate the defaults (a Windows path needs \\ in JSON, e.g. "C:\\TaidaFlowData") - nothing started (exit 2)

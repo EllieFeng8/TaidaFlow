@@ -1,0 +1,69 @@
+﻿[PASS] TaidaFlowApp.exe --write-default-config exit 0 - wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\ref\config.json
+[PASS] --write-default-config on an existing file: exit 3, not overwritten - D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\ref\config.json already exists - not overwritten
+[PASS] missing file: defaults, Exists=false, no error
+[PASS] missing file: not created by the reader
+[PASS] nginx.exe default nginx\nginx.exe from the app (source default, no script fallback), resolved against the config folder
+[PASS] log defaults from the app: dir logs, quiet on 60, full on 7 (source default), no warning
+[PASS] log.dir default resolved against dataDir (C:\TaidaFlowData\logs) - C:\TaidaFlowData\logs
+[PASS] -Create: file written by the app, identical to the reference default file
+[PASS] created default file read back: every key from the file, no warning (log.* and nginx.exe known to the reader) - config.json did not exist - created with the defaults by TaidaFlowApp.exe --write-default-config: wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\create\config.json
+[PASS] partial file: given values from the file, the rest defaults
+[PASS] relative dataDir resolved against the config folder
+[PASS] unknown key noted
+[PASS] invalid devices.ms300.baudRate -> default 9600 + warning - 9600
+[PASS] invalid devices.ms300.serialPort -> default COM2 + warning - COM2
+[PASS] invalid version -> default 1 + warning - 1
+[PASS] invalid rest.port -> default 18080 + warning - 18080
+[PASS] invalid modbusServer.bind -> default 0.0.0.0 + warning - 0.0.0.0
+[PASS] invalid devices.adam6256.host -> default 192.168.1.201 + warning - 192.168.1.201
+[PASS] invalid devices.ms300.stopBits -> default 1 + warning - 1
+[PASS] invalid devices.ms300.unitId -> default 1 + warning - 1
+[PASS] invalid nginx.enabled -> default True + warning - True
+[PASS] invalid nginx.port -> default 80 + warning - 80
+[PASS] invalid devices.ms300.dataBits -> default 8 + warning - 8
+[PASS] invalid devices.adam6256.unitId -> default 1 + warning - 1
+[PASS] invalid mirror.publicPort -> default 8125 + warning - 8125
+[PASS] invalid devices.ms300.parity -> default none + warning - none
+[PASS] valid values normalised (trim, 1502.0 -> 1502, EVEN -> even, IPv6)
+[PASS] group that is not an object: its values default + one warning
+[PASS] UTF-8 BOM accepted
+[PASS] broken JSON: Error set, file unchanged - config.json D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\badjson\config.json is not valid JSON (Invalid object passed in, ':' or '}' expected. (27): {) - fix it or delete it to recreate the defaults (a Windows path needs \\ in JSON, e.g. "C:\\TaidaFlowData")
+[PASS] top level not an object: Error
+[PASS] empty file: Error
+[PASS] nginx.exe absolute from the file
+[PASS] effective file: complete, dataDir / nginx.exe as full paths, same values when read back
+[PASS] override validated (70000 rejected) - override rest.port = 70000 is invalid (expected a port number 1..65535)
+[PASS] runtime.json body = TaidaFlowRuntime::buildRuntimeJson
+[PASS] page port / download port: nginx off -> mirror.publicPort / http.port
+[PASS] page port / download port: nginx on -> nginx.port
+[PASS] log values from the file (365.0 -> 365, keepDays 1 accepted, enabled false)
+[PASS] relative log.dir resolved against the resolved dataDir (like AppConfig::resolvedLogDir) - D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\logvalid\data\logs\app
+[PASS] log.dir ..\logs -> <config>\data\logs - D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\logup\data\logs
+[PASS] absolute log.dir used as it is - E:\plant logs\taidaflow
+[PASS] invalid log.quiet.keepDays -> default 60 + warning - 60
+[PASS] invalid log.quiet.enabled -> default True + warning - True
+[PASS] invalid log.dir -> default logs + warning - logs
+[PASS] invalid log.full.enabled -> default True + warning - True
+[PASS] invalid log.full.keepDays -> default 7 + warning - 7
+[PASS] log.quiet.keepDays -5 -> default 60 + warning (expected an integer 1..2147483647)
+[PASS] log.quiet.keepDays 1.5 -> default 60 + warning (expected an integer 1..2147483647)
+[PASS] log.quiet.keepDays 1e12 -> default 60 + warning (expected an integer 1..2147483647)
+[PASS] log.quiet.keepDays null -> default 60 + warning (expected an integer 1..2147483647)
+[PASS] log.quiet.keepDays true -> default 60 + warning (expected an integer 1..2147483647)
+[PASS] log group that is not an object: defaults + one warning
+[PASS] config.json without log / nginx.exe (older file): defaults, only "is missing" notes, no warning
+[PASS] effective file keeps a log.dir override (absolute) and log.* values
+[PASS] effective file with a -DataDir override: relative log.dir follows the new dataDir (same folder as the app) - D:\repo\codex\qmlTester\taidaflow\build\w2-065-config-reader-test\logrel\d2\logs
+[PASS] override log.quiet.keepDays 0 rejected - override log.quiet.keepDays = 0 is invalid (expected an integer 1..2147483647)
+[PASS] Format-TaidaFlowConfig prints nginx.exe (resolved) and log.dir (resolved)
+[PASS] keepDays 60 on 2026-09-28: launcher 2026-07-31 .. 2026-10-01 kept (60 days incl. today + 3 future days), older deleted - deleted 11, kept 63, oldest launcher-2026-07-31.log
+[PASS] keepDays 7: nginx-access 2026-09-22 .. 2026-10-01 kept - oldest nginx-access-2026-09-22.log, kept 10
+[PASS] keepDays 1: only today (and future dates) kept - oldest nginx-access-2026-09-28.log, kept 4
+[PASS] retention: every other name kept (old launcher.log, legacy taidaflow-yyyyMMdd-HHmmss.log, app logs, case variants, invalid dates, .bak, notes, sub-folder, folder named like a log) - 15/15
+[PASS] nginx.conf: error_log "<log folder>/nginx-error.log" warn
+[PASS] nginx.conf: access_log "<log folder>/nginx-access-$taidaflow_log_date.log" + map $time_iso8601
+[PASS] nginx.conf: no logs/access.log / logs/error.log any more, no @TOKEN@ left
+[PASS] Get-TaidaFlowNginxConf without LogDir refused - Get-TaidaFlowNginxConf: LogDir missing
+[PASS] relative path helper: ../web
+=== 0 check(s) failed
+exit 0

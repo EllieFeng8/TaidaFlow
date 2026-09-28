@@ -1,0 +1,6 @@
+check-wasm-backend     exit 0   last line: check_wasm_backend exit=0
+check-version-shadow   exit 0   last line:   <version> -> C:/tools/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/version (167 objects)
+check-rest-routes      exit 0   last line: check_rest_routes exit=0
+verify-pack            exit 0   last line: verify_pack exit=0
+make-font-subset       exit 0   last line: chars: total=522 cjk=414 total_font_bytes=390688
+=== 0 check(s) failed

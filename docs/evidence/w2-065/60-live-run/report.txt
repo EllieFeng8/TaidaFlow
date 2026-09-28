@@ -1,0 +1,128 @@
+=== w2-065 live run 2026-09-28T23:44:00.2495661+08:00
+package: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty
+[PASS] run config: dataDir data, modbusServer.port 15020, devices 127.0.0.201..205, nginx.exe nginx\nginx.exe (file), log.full.keepDays invalid -> 7 - WARNING: "log.full.keepDays" = seven is invalid (expected an integer 1..2147483647) - using the default 7
+[PASS] nginx.exe resolved against the folder of config.json (like AppConfig::resolvedNginxExe) - D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx\nginx.exe
+[PASS] log.dir resolved against dataDir (like AppConfig::resolvedLogDir) - D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs
+pre-seeded log folder D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs :
+  launcher.log : kept (old launcher log name)
+  taidaflow-20260801-101010.log : kept (old start script)
+  taidaflow-20260801-101010.log.stdout : kept (old start script)
+  my notes.txt : kept (not ours)
+  nginx-error.log : kept (fixed name, appended by nginx)
+  launcher-2026-07-30.log : deleted by start-taidaflow (60 days: oldest kept is today-59)
+  launcher-2026-07-31.log : kept (boundary, 60th day)
+  nginx-access-2026-07-30.log : deleted by start-taidaflow
+  nginx-access-2026-08-14.log : kept
+  taidaflow-2026-07-30.log : deleted by the app (quiet 60 days)
+  taidaflow-2026-07-31.log : kept by the app
+  taidaflow-2026-09-21-full.log : deleted by the app (full 7 days)
+  taidaflow-2026-09-22-full.log : kept by the app
+  sim | SIM_PID=91308 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+  probe | === safety probe 2026-09-28T23:44:03.988+08:00 reason="w2-065 live run (package start script, simulator config)" host=LAPTOP-0B3CPPED
+  probe |   config: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json
+  probe |   config note: WARNING: "log.full.keepDays" = seven is invalid (expected an integer 1..2147483647) - using the default 7
+  probe |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  probe |   device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91308 -> accepted
+  probe |   device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91308 -> accepted
+  probe |   device 127.0.0.203:502 [effective devices.adam6217b (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91308 -> accepted
+  probe |   device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91308 -> accepted
+  probe |   device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91308 -> accepted
+  probe |   serial GetPortNames: <none>
+  probe |   serial SERIALCOMM  : <none>
+  probe |   serial PnP (COMx)  : <none>
+  probe |   COM2 (devices.ms300.serialPort, file) not present
+  probe |   service ports: 15020=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  probe |   listeners on the service ports: <none>
+  probe |   verdict: SAFE
+[PASS] safety probe verdict SAFE (exit 0) - exit 0
+  | 2026-09-28 23:44:07 [start] === TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ===
+  | 2026-09-28 23:44:07 [start] installation: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty
+  | 2026-09-28 23:44:07 [start] config.json : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json
+  | 2026-09-28 23:44:07 [start]   config: WARNING: "log.full.keepDays" = seven is invalid (expected an integer 1..2147483647) - using the default 7
+  | 2026-09-28 23:44:07 [start] data folder : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data
+  | 2026-09-28 23:44:07 [start] log folder  : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs (config.json log.dir = logs, file; relative = to the data folder)
+  | 2026-09-28 23:44:07 [start] devices: adam6256 127.0.0.201:502, adam6217a 127.0.0.202:502, adam6217b 127.0.0.203:502, adam6224 127.0.0.204:502, adam6022 127.0.0.205:502; MS300 COM2 9600
+  | 2026-09-28 23:44:07 [start] ports free: 15020 Modbus server (modbusServer.port, 0.0.0.0), 8124 web page + CSV downloads (http.port), 8125 web mirror relay (mirror.publicPort), 18125 internal mirror, 127.0.0.1 (mirror.internalPort), 18080 REST API, 127.0.0.1 (rest.port), 80 nginx (nginx.port)
+  | 2026-09-28 23:44:07 [start] clean-up launcher log: launcher-YYYY-MM-DD.log older than 60 day(s) (log.quiet.keepDays, file): 1 deleted, 2 kept (launcher-2026-07-30.log)
+  | 2026-09-28 23:44:07 [start] clean-up nginx access log: nginx-access-YYYY-MM-DD.log older than 60 day(s) (log.quiet.keepDays, file): 1 deleted, 1 kept (nginx-access-2026-07-30.log)
+  | 2026-09-28 23:44:07 [start] note: 2 log file(s) of the older start script (taidaflow-yyyyMMdd-HHmmss.log) are kept - never deleted automatically; delete them by hand when no longer needed
+  | 2026-09-28 23:44:07 [start] app log files (written by the app): D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs\taidaflow-YYYY-MM-DD.log (warnings/errors) on, keep 60 day(s); taidaflow-YYYY-MM-DD-full.log (every message) on, keep 7 day(s)
+  | 2026-09-28 23:44:07 [start] TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json
+  | 2026-09-28 23:44:07 [start] nginx: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx\nginx.exe (config.json nginx.exe = nginx\nginx.exe, file; relative = to the folder of config.json)
+  | 2026-09-28 23:44:09 [start]   nginx.conf | config.json: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json
+  | 2026-09-28 23:44:09 [start]   nginx.conf |   config: WARNING: "log.full.keepDays" = seven is invalid (expected an integer 1..2147483647) - using the default 7
+  | 2026-09-28 23:44:09 [start]   nginx.conf | nginx      : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx
+  | 2026-09-28 23:44:09 [start]   nginx.conf | web root   : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web
+  | 2026-09-28 23:44:09 [start]   nginx.conf | exports    : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data)
+  | 2026-09-28 23:44:09 [start]   nginx.conf | log folder : D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs (config.json log.dir = logs, file; nginx-error.log, nginx-access-YYYY-MM-DD.log)
+  | 2026-09-28 23:44:09 [start]   nginx.conf | ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+  | 2026-09-28 23:44:09 [start]   nginx.conf | export folder created: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\exports (the app creates the same folder at start-up)
+  | 2026-09-28 23:44:09 [start]   nginx.conf | written: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx\conf\nginx.conf
+  | 2026-09-28 23:44:09 [start]   nginx.conf | NGINX_CONF=written
+  | 2026-09-28 23:44:09 [start]   nginx.conf |   runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web\runtime.json = {"mirrorPublicPort":80,"version":1}
+  | 2026-09-28 23:44:09 [start]   nginx.conf |   nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx/conf/nginx.conf syntax is ok
+  | 2026-09-28 23:44:09 [start]   nginx.conf |   nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx/conf/nginx.conf test is successful
+  | 2026-09-28 23:44:09 [start]   nginx.conf | nginx is not running: start-taidaflow.ps1 starts it, or by hand:   cd "D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx"   start nginx
+  | 2026-09-28 23:44:09 [start] nginx.conf regenerated for this installation / config.json (see above)
+  | 2026-09-28 23:44:09 [start] starting nginx like 'cd D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\nginx' + 'start nginx' (no arguments)
+  | 2026-09-28 23:44:10 [start] nginx listening on 0.0.0.0:80 (pid 121136); logs: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs\nginx-access-YYYY-MM-DD.log, nginx-error.log
+  | 2026-09-28 23:44:10 [start] TaidaFlowApp started: pid 148472 (no console window); its log files: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs\taidaflow-2026-09-28-full.log, D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs\taidaflow-2026-09-28.log
+  | 2026-09-28 23:44:11 [start] app stderr during start-up: 0 line(s)
+  | 2026-09-28 23:44:11 [start] app stdout during start-up: 0 line(s)
+  | 2026-09-28 23:44:11 [start]   port 15020 Modbus server (modbusServer.port, 0.0.0.0)         listening
+  | 2026-09-28 23:44:11 [start]   port 8124  web page + CSV downloads (http.port)               listening
+  | 2026-09-28 23:44:11 [start]   port 8125  web mirror relay (mirror.publicPort)               listening
+  | 2026-09-28 23:44:11 [start]   port 18125 internal mirror, 127.0.0.1 (mirror.internalPort)   listening
+  | 2026-09-28 23:44:11 [start]   port 18080 REST API, 127.0.0.1 (rest.port)                    listening
+  | 2026-09-28 23:44:11 [start] web page: http://192.168.83.1/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.83.1:8124/TaidaFlowApp.html)
+  | 2026-09-28 23:44:11 [start] web page: http://192.168.158.1/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.158.1:8124/TaidaFlowApp.html)
+  | 2026-09-28 23:44:11 [start] web page: http://192.168.0.125/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.0.125:8124/TaidaFlowApp.html)
+  | 2026-09-28 23:44:11 [start] web page: http://127.0.0.1/  (nginx: page, /mirror, /exports, /api/; fallback http://127.0.0.1:8124/TaidaFlowApp.html)
+  | 2026-09-28 23:44:11 [start] started (exit 0)
+[PASS] start-taidaflow.ps1 -Config <run config>: exit 0 - exit 0
+[PASS] TaidaFlowApp running (state file), log folder in the state file - pid 148472, logDir D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs
+[PASS] nginx of build\w2-065-run\nginx started (config.json nginx.exe relative to the config folder) - 121136, 143128
+[PASS] GET http://127.0.0.1/ through nginx -> 302 - 302
+[PASS] GET http://127.0.0.1/TaidaFlowApp.html through nginx -> 200 - 200
+[PASS] GET http://127.0.0.1/runtime.json through nginx -> 200 - 200
+[PASS] GET http://127.0.0.1/api/ through nginx -> 200 - 200
+[PASS] GET http://127.0.0.1/w2-065-missing.txt through nginx -> 404 - 404
+[PASS] launcher-2026-09-28.log in the log folder: start lines, 'started (exit 0)'
+[PASS] launcher log: nginx.exe from config.json (relative, file)
+[PASS] launcher log: clean-up of launcher / nginx access logs (1 expired each deleted), note about the old start script files
+[PASS] launcher log: what the app wrote to stderr / stdout during start-up is reported (line counts) - app stderr during start-up: 0 line(s); app stdout during start-up: 0 line(s)
+[PASS] launcher log: no QT_LOGGING_CONF, no taidaflow-<time>.log redirection
+[PASS] full log taidaflow-2026-09-28-full.log has [info] lines - 536 line(s), 504 info
+[PASS] full log: the invalid log.full.keepDays warning, log.dir (resolved), AppLog clean-up / log folder lines
+[PASS] quiet log taidaflow-2026-09-28.log: only warning / critical / fatal, with the log.full.keepDays warning - warning 32
+[PASS] nginx-access-2026-09-28.log (named by date) in the log folder with the requests above - 5 line(s)
+[PASS] nginx-error.log in the log folder, the pre-seeded content still there (never deleted)
+[PASS] nginx\logs holds no access.log (only nginx.pid / its start-up messages) - error.log, nginx.pid
+[PASS] retention: launcher.log -> kept (old launcher log name) - present
+[PASS] retention: taidaflow-20260801-101010.log -> kept (old start script) - present
+[PASS] retention: taidaflow-20260801-101010.log.stdout -> kept (old start script) - present
+[PASS] retention: my notes.txt -> kept (not ours) - present
+[PASS] retention: nginx-error.log -> kept (fixed name, appended by nginx) - present
+[PASS] retention: launcher-2026-07-30.log -> deleted by start-taidaflow (60 days: oldest kept is today-59) - gone
+[PASS] retention: launcher-2026-07-31.log -> kept (boundary, 60th day) - present
+[PASS] retention: nginx-access-2026-07-30.log -> deleted by start-taidaflow - gone
+[PASS] retention: nginx-access-2026-08-14.log -> kept - present
+[PASS] retention: taidaflow-2026-07-30.log -> deleted by the app (quiet 60 days) - gone
+[PASS] retention: taidaflow-2026-07-31.log -> kept by the app - present
+[PASS] retention: taidaflow-2026-09-21-full.log -> deleted by the app (full 7 days) - gone
+[PASS] retention: taidaflow-2026-09-22-full.log -> kept by the app - present
+  | 2026-09-28 23:44:17 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data from D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\config.json dataDir (file)) ===
+  | 2026-09-28 23:44:17 [stop]  log folder: D:\repo\codex\qmlTester\taidaflow\build\w2-065-run\data\logs (taidaflow-app.json)
+  | 2026-09-28 23:44:17 [stop]  nginx keeps running (pid 121136, 143128; stop it with: cd <nginx folder> ; nginx -s quit)
+  | 2026-09-28 23:44:17 [stop]  closing TaidaFlowApp pid 148472 (WM_CLOSE to its window, like closing it by hand)
+  | 2026-09-28 23:44:21 [stop]  TaidaFlowApp pid 148472 exited (exit code -1073741819)
+  | 2026-09-28 23:44:21 [stop]  listeners of pid 148472 left: 0
+  | 2026-09-28 23:44:21 [stop]  stopped (exit 0)
+[PASS] stop-taidaflow.ps1 -Config <run config>: exit 0 - exit 0
+[PASS] stop wrote to launcher-2026-09-28.log (log folder from taidaflow-app.json)
+app exit code after WM_CLOSE (stop-taidaflow): -1073741819 (information: the app's own shutdown, not part of the log changes)
+[PASS] nginx -s quit (from build\w2-065-run\nginx) stopped it - exit 0
+simulator pid 91308 closed
+[PASS] nothing left listening on 80 / 502 / 15020 / 8124 / 8125 / 18125 / 18080
+[PASS] no TaidaFlowApp / nginx / Adam60xxSimulator left
+=== 0 check(s) failed

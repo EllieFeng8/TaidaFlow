@@ -3,7 +3,7 @@
 > 給操作人員與現場安裝人員看。不需要會 PowerShell:每個動作都寫明「開哪個檔、怎麼開」,
 > 也有**完全不用腳本**的手動部署(§5)。
 > 這份文件在打包時會複製成打包資料夾裡的 `DEPLOY.md`(內容相同)。
-> 來源:`taidaflow/docs/DEPLOY_AND_STARTUP.md`(w2-057 起,w2-062 改為 config.json 與隨包 nginx)。
+> 來源:`taidaflow/docs/DEPLOY_AND_STARTUP.md`(w2-057 起,w2-062 改為 config.json 與隨包 nginx,w2-065 改為程式自己寫 log,§13)。
 > 文中的 `<安裝資料夾>` 是放打包資料夾的地方(建議 `C:\TaidaFlow`),`<資料資料夾>` 是 config.json 的 `dataDir`
 > (預設 `C:\TaidaFlowData`),`<repo>` 是開發機上的原始碼資料夾。
 
@@ -20,6 +20,9 @@
    正式機防火牆**只開 80 與 502**(§7)。
 5. **正式機用打包資料夾裡的檔**(`start-taidaflow.bat` 等);**開發機用 repo 的 `scripts\`**
    (`run-desktop.ps1` 等,會先做安全探測)。兩套不可混用(§11)。部署與執行都**不需要 Python**,也不需要安裝 Qt 或 VC++ 執行環境。
+
+出問題時先看 **log 資料夾**(預設 `C:\TaidaFlowData\logs`,config.json 的 `log.dir`):程式自己寫的
+`taidaflow-<日期>.log`(警告與錯誤)與 `taidaflow-<日期>-full.log`(全部訊息),以及啟動 / 停止腳本的 `launcher-<日期>.log`(§13)。
 
 ---
 
@@ -40,7 +43,6 @@
 | `scripts\install-nginx-config.ps1` | 產生 `nginx\conf\nginx.conf`(一次性步驟,§2) |
 | `scripts\taidaflow-config.ps1` | 腳本共用的 config.json 讀取器 |
 | `deploy\nginx\taidaflow.conf` | nginx 設定樣板 |
-| `logging\quiet.ini` | 精簡 log 模式的規則 |
 | `DEPLOY.md` | 本文件 |
 | `VERSION.txt`、`MANIFEST.txt` | 版本資訊;每個檔的大小與 SHA-256 |
 
@@ -96,7 +98,7 @@
 | `device_info.ini` | 設備序號(`[device] sn`;沒有時建立,內容 `sn000000`) |
 | `data\sensor_YYYYMM.sqlite` | 歷史資料與警報,每月一個檔 |
 | `exports\` | 網頁匯出的 CSV(超過 20 個或 2 GB 時自動刪最舊的) |
-| `logs\` | `launcher.log`(啟動 / 停止紀錄)與每次啟動一個 `taidaflow-<日期-時間>.log` |
+| `logs\` | log 資料夾(config.json `log.dir`,預設 `logs` = 資料資料夾裡的 `logs\`):程式自己寫的 `taidaflow-<日期>.log`、`taidaflow-<日期>-full.log`,啟動 / 停止腳本的 `launcher-<日期>.log`,nginx 的 `nginx-access-<日期>.log`、`nginx-error.log`(§13) |
 | `taidaflow-app.json` | 執行中的 TaidaFlow 身分(停止時用;停止後刪除) |
 | `config.effective.json` | 只有啟動時用了單次覆寫參數(§3.1)才有:當次實際使用的完整設定 |
 
@@ -113,19 +115,23 @@
 1. 讀 `config.json`(沒有就用預設值建立);格式錯誤 → 不啟動(結果碼 2)。
 2. 檢查 TaidaFlow 是否已在執行、config.json 裡的 port 是否被別的程式占用(502、8124、8125、18125、18080,nginx 啟用時還有 80;
    80 若是 `nginx\` 的 nginx 本身在聽就沒問題)。
-3. nginx(`nginx.enabled` 為 true 時):確認 `nginx\conf\nginx.conf` 是**這個安裝資料夾與這份 config.json** 產生的
+3. 刪除 log 資料夾裡過期的 `launcher-<日期>.log` 與 `nginx-access-<日期>.log`(超過 `log.quiet.keepDays` 天,預設 60;
+   只刪完全符合這兩種檔名的檔,§13)。
+4. nginx(`nginx.enabled` 為 true 時):確認 `nginx\conf\nginx.conf` 是**這個安裝資料夾與這份 config.json** 產生的
    ——不存在、資料夾搬過、config.json 改過 → 自動重新產生(舊檔留成 `nginx.conf.prev-<時間>`),nginx 執行中就 `nginx -s reload`;
    nginx 沒執行就以 `start nginx` 的方式啟動,已執行就不動它。nginx 起不來時 TaidaFlow 仍會啟動,網頁改走 app 自己的
    `:8124` / `:8125`(結果碼 8)。
-4. 啟動 `TaidaFlowApp.exe`(工作目錄 = 資料資料夾),等 8124、8125 開始聽,顯示網址與結果碼,按任意鍵關閉這個黑色視窗
-   (TaidaFlow 會繼續執行)。
+5. 啟動 `TaidaFlowApp.exe`(工作目錄 = 資料資料夾;**沒有黑色的主控台視窗**,程式自己寫 log 檔),等 8124、8125 開始聽,
+   顯示網址與結果碼,按任意鍵關閉這個黑色視窗(TaidaFlow 會繼續執行;關掉這個視窗也不會關掉 TaidaFlow)。
 
-結果碼:`0` 成功;`4` 已經在執行或 port 被占用(**什麼都沒啟動**,也不會關掉別的程式);`6` app 沒起來(看 `logs\` 最新的 log);
-`8` app 已啟動但 nginx 沒起來;`2` 打包資料夾不完整、資料夾不能寫或 config.json 有誤。
+結果碼:`0` 成功;`4` 已經在執行或 port 被占用(**什麼都沒啟動**,也不會關掉別的程式);`6` app 沒起來(`launcher-<日期>.log`
+會抄錄程式 log 的最後幾行;完整內容看 `taidaflow-<日期>-full.log`,§13);`8` app 已啟動但 nginx 沒起來;
+`2` 打包資料夾不完整、資料夾不能寫或 config.json 有誤。
 
 單次覆寫(只影響這一次,config.json 不改;寫成 `<資料資料夾>\config.effective.json` 交給程式):在 cmd 執行
-`C:\TaidaFlow\start-taidaflow.bat -DataDir D:\Test`,可用的有 `-DataDir`、`-UseNginx` / `-NoNginx`、`-Port <nginx port>`、
-`-RestPort <port>`、`-Nginx <nginx.exe>`、`-AppLog full`(完整 log,約每小時 15 MB)、`-Config <另一個 config.json>`。
+`C:\TaidaFlow\start-taidaflow.bat -DataDir D:\Test`,可用的有 `-DataDir`、`-LogDir <log 資料夾>`(程式、nginx、腳本的 log
+都改寫到那裡)、`-UseNginx` / `-NoNginx`、`-Port <nginx port>`、`-RestPort <port>`、`-Nginx <nginx.exe>`、`-Config <另一個 config.json>`。
+(舊版的 `-AppLog quiet|full` 與 `-KeepLogDays` 已移除:quiet 與 full 兩種 log 由程式同時寫,保留天數在 config.json 的 `log`,§13。)
 
 不要直接雙擊 `TaidaFlowApp.exe`:程式可以跑(會讀旁邊的 config.json),但不會做重複執行 / port 檢查,也不會帶起 nginx;
 手動做法見 §5。
@@ -157,7 +163,7 @@ tasklist /fi "imagename eq nginx.exe"   :: 看有沒有在執行(一個 master +
 
 ### 3.4 什麼時候要重新產生 nginx 設定
 
-改了 config.json 的 `nginx.port`、`rest.port`、`mirror.internalPort`、`dataDir`,搬了安裝資料夾,或更新成新的打包版本之後:
+改了 config.json 的 `nginx.port`、`rest.port`、`mirror.internalPort`、`dataDir`、`log.dir`、`nginx.exe`,搬了安裝資料夾,或更新成新的打包版本之後:
 
 ```bat
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\install-nginx-config.ps1
@@ -166,7 +172,7 @@ nginx -s reload
 ```
 
 忘了也沒關係:`start-taidaflow.bat` 每次啟動都會比對 `nginx.conf` 檔頭記錄的安裝資料夾、config.json 路徑與內容(SHA-256),
-不符就自動重新產生並 reload(`logs\launcher.log` 有 `nginx.conf | ...` 的紀錄)。
+不符就自動重新產生並 reload(`logs\launcher-<日期>.log` 有 `nginx.conf | ...` 的紀錄)。
 
 ### 3.5 登入時自動啟動
 
@@ -252,7 +258,8 @@ set "PATH=%QT%\bin;%PATH%"
   xcopy /e /i "C:\tools\nginx\nginx-1.30.5\docs" "%OUT%\nginx\docs"
   copy "C:\tools\nginx\nginx-1.30.5\conf\mime.types" "%OUT%\nginx\conf\"
   ```
-- 啟動 / 停止腳本(選用):`deploy\release\*.bat`、`*.ps1`、`deploy\release\logging\`、`scripts\install-nginx-config.ps1`、
+  (`nginx\logs` 仍要有:nginx 在這裡放 `nginx.pid` 與它讀設定檔之前的訊息;請求紀錄與錯誤紀錄寫到 config.json 的 log 資料夾,§13。)
+- 啟動 / 停止腳本(選用):`deploy\release\*.bat`、`*.ps1`、`scripts\install-nginx-config.ps1`、
   `scripts\taidaflow-config.ps1`、`deploy\nginx\taidaflow.conf` 照打包的位置複製(手動部署可以不用它們)。
 
 把 `%OUT%` 整個複製到正式機的 `C:\TaidaFlow`。
@@ -281,12 +288,13 @@ copy C:\TaidaFlow\deploy\nginx\taidaflow.conf C:\TaidaFlow\nginx\conf\nginx.conf
 notepad C:\TaidaFlow\nginx\conf\nginx.conf
 ```
 
-在記事本用「取代」(Ctrl+H)換掉五個記號,路徑一律用**正斜線 `/`**:
+在記事本用「取代」(Ctrl+H)換掉六個記號,路徑一律用**正斜線 `/`**:
 
 | 記號 | 換成 | 預設值的例子 |
 |---|---|---|
 | `@TAIDAFLOW_WEB_ROOT@` | 網頁資料夾**相對於 nginx 資料夾**的路徑(nginx 以自己的資料夾為基準解讀相對路徑,整個安裝資料夾搬家也有效) | `../web` |
 | `@TAIDAFLOW_EXPORT_DIR@` | `<資料資料夾>\exports` 的完整路徑 | `C:/TaidaFlowData/exports` |
+| `@TAIDAFLOW_LOG_DIR@` | log 資料夾的完整路徑(config.json 的 `log.dir`,相對路徑以資料資料夾為準;出現兩次)。這個資料夾要先存在(`mkdir`),nginx 不會自己建 | `C:/TaidaFlowData/logs` |
 | `@TAIDAFLOW_NGINX_PORT@` | config.json 的 `nginx.port` | `80` |
 | `@TAIDAFLOW_REST_PORT@` | config.json 的 `rest.port`(出現兩次) | `18080` |
 | `@TAIDAFLOW_MIRROR_PORT@` | config.json 的 `mirror.internalPort` | `18125` |
@@ -295,14 +303,19 @@ notepad C:\TaidaFlow\nginx\conf\nginx.conf
 
 ```nginx
 worker_processes  1;
-error_log  logs/error.log warn;
+error_log  "<log 資料夾>/nginx-error.log" warn;
 pid        logs/nginx.pid;
 events {
     worker_connections  1024;
 }
 http {
     server_tokens  off;
-    access_log     logs/access.log;
+    map $time_iso8601 $taidaflow_log_date {
+        "~^(?<taidaflow_ymd>[0-9]{4}-[0-9]{2}-[0-9]{2})T"  $taidaflow_ymd;
+        default                                              "unknown-date";
+    }
+    access_log           "<log 資料夾>/nginx-access-$taidaflow_log_date.log";
+    open_log_file_cache  max=4 inactive=60s valid=60s min_uses=1;
     client_body_temp_path  temp/client_body_temp;
     proxy_temp_path        temp/proxy_temp;
     fastcgi_temp_path      temp/fastcgi_temp;
@@ -431,9 +444,10 @@ http {
 }
 ```
 
-檢查與啟動:
+檢查與啟動(log 資料夾不存在時 `nginx -t` 會因為開不了 `nginx-error.log` 而失敗,所以先建立):
 
 ```bat
+mkdir C:\TaidaFlowData\logs
 cd /d C:\TaidaFlow\nginx
 nginx -t
 start nginx
@@ -452,8 +466,8 @@ start "" "C:\TaidaFlow\TaidaFlowApp.exe"
 
 - 程式讀旁邊的 `config.json`,自己切換到 `dataDir`。一般使用者的環境沒有 `TAIDAFLOW_DEVICE_PROFILE`;若曾設定過,
   先 `set TAIDAFLOW_DEVICE_PROFILE=`(等號後面空白)清掉——正式機**一定**不能有這個測試用變數。
-- 要留完整 log:
-  `set QT_FORCE_STDERR_LOGGING=1` 後改用 `start "" /b cmd /c ""C:\TaidaFlow\TaidaFlowApp.exe" 2> "C:\TaidaFlowData\logs\manual.log""`。
+- log:程式自己寫到 config.json 的 log 資料夾(預設 `C:\TaidaFlowData\logs`,§13),不需要轉存輸出。
+  不要設定 `QT_LOGGING_CONF` / `QT_LOGGING_RULES`(會讓 full log 少掉 info 訊息)。
 - 確認:`netstat -ano | findstr LISTENING | findstr ":502 :8124 :8125 :18125 :18080"`。
 - 停止:按視窗右上角的 X,或 `taskkill /IM TaidaFlowApp.exe`(**不要加 `/F`**:不加等於請視窗關閉,程式正常收尾)。
 
@@ -508,8 +522,10 @@ UTF-8 文字檔,JSON 格式。
 | `mirror.publicBind` / `publicPort` | `0.0.0.0` / `8125` | app 內建的同步轉發(nginx 沒開時網頁連這裡) |
 | `nginx.enabled` | `true` | `start-taidaflow` 是否帶起 nginx;也決定網頁的下載連結與同步 port:true → `nginx.port`,false → `http.port` / `mirror.publicPort` |
 | `nginx.port` | `80` | nginx 監聽的 port |
-| `nginx.exe` | `nginx\\nginx.exe`(沒寫時) | nginx 程式位置,只有腳本使用。相對路徑以 config.json 所在資料夾為準(= 隨包的 `<安裝資料夾>\nginx\nginx.exe`);也可寫絕對路徑(例如另外安裝的 nginx) |
-| `log`(區段) | — | 由 w2-064 新增,下一版文件補齊 |
+| `nginx.exe` | `nginx\\nginx.exe` | nginx 程式位置(程式啟動 log 印出解析後的路徑;腳本用它找 nginx,`-Nginx` 可單次覆寫)。相對路徑以 **config.json 所在資料夾**為準(= 隨包的 `<安裝資料夾>\nginx\nginx.exe`);也可寫絕對路徑(例如另外安裝的 nginx) |
+| `log.dir` | `logs` | log 資料夾。相對路徑以 **`dataDir`** 為準(預設 = `C:\TaidaFlowData\logs`);不存在時自動建立。程式的 log、腳本的 `launcher-<日期>.log`、nginx 的 log 都寫在這裡(§13) |
+| `log.quiet.enabled` / `log.quiet.keepDays` | `true` / `60` | 精簡 log `taidaflow-<日期>.log`(只有 warning / critical / fatal)是否寫、保留幾天(1 以上;含今天)。腳本也用這個天數清理 `launcher-<日期>.log` 與 `nginx-access-<日期>.log` |
+| `log.full.enabled` / `log.full.keepDays` | `true` / `7` | 完整 log `taidaflow-<日期>-full.log`(全部訊息,約每小時 15 MB、一天約 360 MB)是否寫、保留幾天(1 以上;含今天) |
 
 規則:
 
@@ -518,7 +534,10 @@ UTF-8 文字檔,JSON 格式。
 - **JSON 格式錯誤**(少逗號、多逗號、引號不成對……)→ 程式顯示錯誤視窗(檔案、第幾行第幾欄、錯誤內容、
   「請修正 config.json 或刪除它讓程式重建預設值」)並結束(exit 2),**不覆寫**;`start-taidaflow` 也會拒絕啟動(結果碼 2)。
 - Windows 路徑的反斜線在 JSON 要寫兩個(`"C:\\TaidaFlowData"`),或改用正斜線(`"C:/TaidaFlowData"`)。
-- 程式啟動 log(`-AppLog full` 時可見)列出每一項的實際值與來源(file / default / environment)。
+- 程式的完整 log(`taidaflow-<日期>-full.log`,§13)在每次啟動時列出每一項的實際值與來源(file / default / environment),
+  以及解析後的 `dataDir`、`nginx.exe`、`log.dir`。缺少或錯誤的值另有 info / warning 行(warning 也會進精簡 log)。
+- config.json **讀不到**(JSON 格式錯誤、路徑是資料夾……)時,程式還不知道 `dataDir` 與 `log.dir`,這時的 log 寫到
+  **`<config.json 所在資料夾>\logs`**(正式機 = `<安裝資料夾>\logs`),錯誤視窗與 `start-taidaflow` 的訊息會指出檔名(§13)。
 - 不放在 config.json、固定在程式裡的值(決定事項):Modbus TCP 逾時 1000 ms / 重試 2 / 重連間隔 3000 ms;MS300 逾時 1000 ms /
   重試 1 / 輪詢 1000 ms。
 
@@ -540,11 +559,13 @@ UTF-8 文字檔,JSON 格式。
   "http": { "bind": "0.0.0.0", "port": 8124 },
   "rest": { "bind": "127.0.0.1", "port": 18080 },
   "mirror": { "internalPort": 18125, "publicBind": "0.0.0.0", "publicPort": 8125 },
-  "nginx": { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" }
+  "nginx": { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" },
+  "log": { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": true, "keepDays": 7 } }
 }
 ```
 
-(程式自己建立的檔案每個值一行、兩格縮排,內容相同;`nginx.exe` 目前不在程式建立的檔案裡,沒寫時就是 `nginx\\nginx.exe`。)
+(程式自己建立的檔案每個值一行、兩格縮排,內容相同。舊版建立、沒有 `nginx.exe` 或 `log` 的 config.json 照樣可以用:
+缺少的鍵用上表預設值,log 只記一行 info,不會回寫檔案。)
 
 ---
 
@@ -709,8 +730,8 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 
 ## 10. 常見問題
 
-**port 80 被占用(`start-taidaflow` 結果碼 4 / `install-nginx-config` 結果碼 4 / nginx 的 `error.log` 有 `bind() ... failed`)**:
-畫面與 `logs\launcher.log` 會列出占用者(port、pid、程式路徑),不會關掉它。
+**port 80 被占用(`start-taidaflow` 結果碼 4 / `install-nginx-config` 結果碼 4 / log 資料夾的 `nginx-error.log` 有 `bind() ... failed`)**:
+畫面與 `logs\launcher-<日期>.log` 會列出占用者(port、pid、程式路徑),不會關掉它。
 - 占用者是 **pid 4「System」**:Windows 的 HTTP.sys(IIS 的 World Wide Web 發佈服務、SQL Server Reporting Services、
   網頁部署代理程式、URL 保留等)。`netsh http show servicestate` 看是誰;由管理員停用那個服務,或改用別的 port
   (config.json 的 `nginx.port`,例如 8080 → 網址 `http://<IP>:8080/`,防火牆也要改開那個 port),改完做 §3.4。
@@ -738,8 +759,15 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 **`start-taidaflow` 結果碼 2 且說 config.json is not valid JSON**:照訊息的行列修正(常見:少了逗號、多了最後一個逗號、路徑的
 反斜線只寫一個),或刪掉 config.json 讓程式重建預設值(會失去現場的修改)。
 
-**`start-taidaflow` 結果碼 6**:app 沒起來或 8124/8125 沒在聽。看 `logs\taidaflow-<時間>.log`(預設只記警告與錯誤;
-要完整紀錄加 `-AppLog full`,log 約每小時 15 MB)。
+**`start-taidaflow` 結果碼 6**:app 沒起來或 8124/8125 沒在聽。`launcher-<日期>.log` 抄了程式 log 的最後幾行;完整內容看
+log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀不到時,看 `<安裝資料夾>\logs`,§13)。
+
+**log 資料夾裡沒有今天的 `taidaflow-<日期>.log`**:程式寫不進 log 資料夾(沒有權限、磁碟滿、`log.dir` 寫錯)。程式照常執行,
+會每 60 秒與換日時重試;full 與 quiet 其中一個打得開時,另一個的錯誤會寫在打得開的那個檔。檢查 config.json 的 `log.dir`
+與資料夾權限。
+
+**找不到舊的 `taidaflow-20260928-093000.log` 這種檔名的 log**:那是舊版啟動腳本(每次啟動一個檔)的紀錄,新版不再產生,
+舊檔也**不會**被自動刪除(§13);不需要時可以手動刪。
 
 **`http://<IP>/api/...` 回 502**:TaidaFlow 沒在執行,或 REST API 沒起來(app log 有 `[REST] REST API NOT started`,
 通常是 `rest.port` 被別的程式占用;改 config.json 的 `rest.port` 後做 §3.4)。
@@ -771,7 +799,7 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 | 工作目錄 | config.dev.json 的 `dataDir` = `build\runtime-cwd` | config.json 的 `dataDir`(預設 `C:\TaidaFlowData`) |
 | 設備 | 可用 `-DeviceProfile simulator` 或 `config.simulator.json` 改連模擬器 | **一律清除** `TAIDAFLOW_DEVICE_PROFILE`(不能進測試模式) |
 | nginx | `build\desktop\nginx` 的 `start nginx`,或 `nginx-start.ps1`(`build\nginx` 前綴) | `<安裝資料夾>\nginx` 的 `start nginx`(`start-taidaflow` 會帶起) |
-| log | `build\runtime-logs\`(完整) | `<資料資料夾>\logs\`(預設只記警告與錯誤,保留 30 天) |
+| log | 程式自己寫到 config.dev.json 的 log 資料夾(`build\runtime-cwd\logs`);`run-desktop.ps1` 另外把輸出存到 `build\runtime-logs\`(開發用) | 程式自己寫到 config.json 的 `log.dir`(預設 `<資料資料夾>\logs\`):quiet 保留 60 天、full 保留 7 天;`launcher-<日期>.log`、nginx log 在同一個資料夾(§13) |
 
 在正式機跑開發機腳本:安全探測一定判定不安全,app 不會啟動。在開發機跑正式機腳本:**沒有保護**,
 若開發機連得到設備位址就會控制真設備——開發機請只用 `scripts\` 的腳本(或 §9.2 的手動步驟)。
@@ -792,6 +820,73 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 6. **開機自動啟動與自動登入**:登入時由工作排程器啟動;Windows 自動登入由現場自行設定,本專案的腳本不處理。**已決定。**
 7. **防火牆**:只開 80(nginx:網頁、同步、下載、REST)與 502(Modbus,不限來源)。**已決定。**
 8. **存取控管**:80(含 REST API 的 PUT)與 502 不做登入或來源限制(內網)。任何連得到的人都能操作(含急停)。**已決定。**
-9. **app log**:規劃為 quiet 保留 60 天 + full 保留 7 天、兩者都開、檔名帶日期;由 w2-064 / w2-065 實作(本版仍是
-   `-AppLog quiet|full` 與保留 30 天)。**已決定,實作中。**
+9. **log**:程式自己寫檔(不再由啟動腳本轉存輸出);quiet(警告與錯誤)保留 60 天 + full(全部訊息)保留 7 天,兩者預設都開、
+   檔名帶日期、換日時清理;log 資料夾預設也在 config.json(`log.dir`,預設 `C:\TaidaFlowData\logs`);config.json 讀不到時也要有
+   log(寫到 config.json 旁的 `logs\`);不刪減原本的 log 訊息、舊版的 log 檔不刪。**已決定,已實作(w2-064、w2-065,§13)。**
 10. **現場電腦設定**(睡眠、Windows Update 自動重開機時段、螢幕保護)與**備份**的頻率與位置(§3.6):由 IT / 現場決定。
+
+---
+
+## 13. log(紀錄檔)
+
+TaidaFlow 的 log **由程式自己寫檔**(w2-064),啟動腳本不再把程式的輸出轉存成檔案(w2-065)。所有 log 都在同一個
+**log 資料夾**:config.json 的 `log.dir`,相對路徑以 `dataDir` 為準,預設 `logs` → **`C:\TaidaFlowData\logs`**;不存在時程式與腳本會建立。
+
+### 13.1 檔案一覽
+
+| 檔名 | 誰寫 | 內容 | 保留(預設) | 誰清理 |
+|---|---|---|---|---|
+| `taidaflow-YYYY-MM-DD.log` | 程式 | 精簡(quiet):只有 warning / critical / fatal | `log.quiet.keepDays` = 60 天 | 程式 |
+| `taidaflow-YYYY-MM-DD-full.log` | 程式 | 完整(full):全部訊息(debug / info 以上),約每小時 15 MB、一天約 360 MB | `log.full.keepDays` = 7 天(約 2.5 GB) | 程式 |
+| `launcher-YYYY-MM-DD.log` | `start-taidaflow` / `stop-taidaflow` | 每次啟動 / 停止的步驟、使用的設定、port 檢查、nginx、結果碼;程式在啟動過程中結束時,抄錄它最後的 log 行 | `log.quiet.keepDays` = 60 天 | `start-taidaflow` |
+| `nginx-access-YYYY-MM-DD.log` | nginx | 每個 HTTP 請求一行(網頁、`/runtime.json`、`/api/`、`/exports/` 下載、`/mirror` 連線) | `log.quiet.keepDays` = 60 天 | `start-taidaflow` |
+| `nginx-error.log` | nginx | nginx 的警告與錯誤(`warn` 以上,量很少) | 不清理(一個固定檔名) | —(需要時手動刪) |
+
+- 日期 `YYYY-MM-DD` 是本機時間的日期。quiet 與 full **預設同時寫**,各自可在 config.json 用 `enabled: false` 關掉;
+  關掉的那種仍會依它自己的 `keepDays` 清掉過期的舊檔。今天的 quiet 檔在啟動時就會建立(即使還沒有警告,是空檔)。
+- 每一行的格式:`2026-09-28 14:03:05.007 [info] [Config] ...`(時間到毫秒、層級、訊息;UTF-8、CRLF 換行)。
+  原本程式印出的訊息內容**一字不刪**,只是在前面加上時間與層級。
+- 程式仍同時把訊息送到除錯輸出(開發時在 Qt Creator 看得到)。
+- `nginx\logs\`(nginx 資料夾裡)只剩 `nginx.pid` 與 nginx 讀到設定檔之前的訊息(例如 `nginx -t`、`nginx -s reload` 本身的錯誤),不會變大。
+
+### 13.2 保留天數與清理規則
+
+- 「保留 N 天」= 含今天在內的 N 天:`keepDays` 60 → 2026-09-28 時保留 2026-07-31 ~ 2026-09-28 的檔;7 → 保留 09-22 起;1 → 只留今天。
+  日期比今天晚的檔(例如曾把系統時間調回去)不刪。
+- 程式在**啟動時**與**換日時**(跨過午夜,或系統日期被調整)清理自己的 `taidaflow-*.log`,換日時也換到新日期的檔。
+- `start-taidaflow` 在**每次啟動時**清理 `launcher-*.log` 與 `nginx-access-*.log`(天數 = `log.quiet.keepDays`)。
+- **只刪檔名完全符合上面格式的檔**(大小寫、數字、合法日期都要符合)。log 資料夾裡的其他檔——舊版啟動腳本的
+  `taidaflow-yyyyMMdd-HHmmss.log` / `.stdout`、舊版的 `launcher.log`、`nginx-error.log`、自己放的筆記、子資料夾——**一律不動**
+  (Mango:不要刪掉原本的資料內容)。舊版的檔不需要時請手動刪除。
+- 刪不掉的檔(唯讀、被別的程式開著)記一行 warning,下次清理再試,不會影響程式執行。
+
+### 13.3 寫不進去的時候
+
+- log 資料夾不能寫(沒有權限、磁碟滿、`log.dir` 寫錯):**程式照常執行**,每次出問題只在 stderr 記一次警告,每 60 秒與換日時重試;
+  quiet / full 其中一個還能寫時,另一個的錯誤會寫在能寫的那個檔。
+- **config.json 讀不到**(JSON 格式錯誤、路徑是資料夾……):程式還不知道 `dataDir` / `log.dir`,就寫到
+  **`<config.json 所在資料夾>\logs`**(正式機 = `<安裝資料夾>\logs`,同樣的檔名與保留天數),錯誤視窗最後一行寫出 log 檔的位置,
+  程式以結果碼 2 結束,config.json 不會被改。`start-taidaflow` 自己先檢查 config.json,格式錯誤時根本不啟動程式(結果碼 2,
+  訊息在畫面上);只有直接執行 `TaidaFlowApp.exe` 時才會產生這個備援 log。
+- 程式在啟動過程中就結束(結果碼 6):`start-taidaflow` 把程式寫到 stderr / stdout 的內容(通常沒有)與 log 檔最後幾行抄進 `launcher-<日期>.log`。
+
+### 13.4 nginx 的 log 與長時間不重啟
+
+- `nginx-access-<日期>.log` 的檔名由**每個請求當下的日期**決定:過了午夜,下一個請求就寫進新日期的檔,**不需要重啟或 reload nginx**。
+- 但**清理**只在 `start-taidaflow` 啟動時做:TaidaFlow / nginx 連續好幾個月不重啟時,舊的 `nginx-access-*.log` 會一直留著。
+  一般使用量(網頁載入與下載,同步走一條長連線)一天通常只有幾十 KB ~ 數 MB,影響不大;需要時可以:
+  - 定期(例如每月)重新啟動一次 TaidaFlow(`stop-taidaflow` → `start-taidaflow`),啟動時就會清理;或
+  - 手動刪除過期的 `nginx-access-<日期>.log`(nginx 執行中也可以刪不是今天的檔);或
+  - 需要自動清理時,由現場 IT 另設排程(本專案的腳本不註冊排程)。
+- `nginx-error.log` 不會自動清理;只記 `warn` 以上,正常情況下很小。要清空:停止 nginx(`nginx -s quit`)後刪除,再 `start nginx`。
+
+### 13.5 啟動腳本的變更(w2-065)
+
+- 移除:把程式輸出轉存成 `taidaflow-<日期-時間>.log`、`logging\quiet.ini` 與 `QT_LOGGING_CONF`(它會在程式寫檔之前就把 info 訊息濾掉,
+  full log 就會沒有 info)、`-AppLog quiet|full`、`-KeepLogDays`、以修改時間刪除舊 app log 的清理。
+- `start-taidaflow` 會清除環境變數 `QT_LOGGING_CONF`、`QT_LOGGING_RULES`、`QT_FORCE_STDERR_LOGGING`、`QT_ASSUME_STDERR_HAS_CONSOLE`,
+  讓程式自己決定每種 log 寫什麼。
+- 程式以**沒有主控台視窗**的方式啟動(舊版會多一個黑色視窗,關掉它會連帶結束程式)。
+- `launcher.log` 改為 `launcher-<日期>.log`,與程式的 log 放在同一個 log 資料夾;舊的 `launcher.log` 保留不動。
+- `-LogDir <資料夾>`:單次覆寫 `log.dir`,程式、nginx、腳本的 log 都寫到那裡(寫在 `config.effective.json` 交給程式與 nginx 設定產生器;
+  `stop-taidaflow` 由 `taidaflow-app.json` 得知這個資料夾)。平常請改 config.json 的 `log.dir`。

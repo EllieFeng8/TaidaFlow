@@ -1,0 +1,36 @@
+2026-09-28 23:44:10.610 [warning] [Config] "log.full.keepDays" = "seven" is invalid (expected an integer 1..2147483647) - using the default 7
+2026-09-28 23:44:10.620 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/settings_schema.sql"
+2026-09-28 23:44:10.652 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:10.667 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:10.745 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:10.745 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:10.746 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:10.746 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:11.733 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:11.733 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:11.733 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:11.779 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:12.736 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:12.736 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:12.736 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:12.754 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:13.740 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:13.740 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:13.740 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:13.757 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:14.741 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:14.741 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:14.741 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:14.759 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:15.745 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:15.745 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:15.745 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:15.762 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:16.732 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:16.732 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:16.733 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:16.750 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"
+2026-09-28 23:44:17.738 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:44:17.738 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:44:17.738 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:44:17.756 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-065-run/data/data_schema.sql"

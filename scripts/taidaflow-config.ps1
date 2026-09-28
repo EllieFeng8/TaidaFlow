@@ -10,13 +10,15 @@
 #     same way (Get-TaidaFlowDefaultConfig) - no default value is repeated in any script.
 # The validation rules below are the ones of AppConfig (type and range per key): a value the app
 # would reject (-> default + warning) is rejected here the same way, so scripts and app agree.
-# One key is read by the scripts only: "nginx": {"exe": "<path of nginx.exe>"} (Mango A7: the
-# package bundles nginx in <installation folder>\nginx). Missing -> "nginx\nginx.exe" (source
-# "script default"). A relative path is resolved against the folder of config.json (= the
-# installation folder), an absolute one (e.g. a site-installed C:\tools\nginx\nginx.exe) is used as
-# it is; Resolve-TaidaFlowNginxExe. The -Nginx parameter of the scripts still overrides it. (The app's
-# config reader gets this key in a separate main-branch task, w2-064; until then the app logs it as
-# an unknown key and ignores it.)
+# w2-065: "nginx": {"exe": ...} and "log": {...} are keys of the app (w2-064, App/appconfig.cpp);
+# their defaults come from --write-default-config like every other key (the w2-062 script fallback
+# "nginx\nginx.exe" is removed). Paths are resolved exactly like the app does:
+#   nginx.exe : relative -> folder of config.json (= installation folder), absolute as it is
+#               (AppConfig::resolvedNginxExe); Resolve-TaidaFlowNginxExe. -Nginx of a script overrides it.
+#   log.dir   : relative -> the resolved dataDir (default "logs" -> C:\TaidaFlowData\logs), absolute as
+#               it is (AppConfig::resolvedLogDir); Resolve-TaidaFlowLogDir. The app writes its own
+#               taidaflow-YYYY-MM-DD.log / -full.log there; the scripts add launcher-YYYY-MM-DD.log and
+#               the generated nginx.conf writes nginx-access-YYYY-MM-DD.log / nginx-error.log there.
 #
 # Functions
 #   Resolve-TaidaFlowConfigPath <root> [<explicit>]   which config.json a script uses:
@@ -38,12 +40,13 @@
 #   Get-TaidaFlowDownloadPort $cfg                    nginx.enabled ? nginx.port : http.port
 #   Get-TaidaFlowPagePort $cfg                        nginx.enabled ? nginx.port : mirror.publicPort (runtime.json)
 #   Resolve-TaidaFlowNginxExe $cfg                    full path of nginx.exe (relative = to the config folder)
+#   Resolve-TaidaFlowLogDir $cfg                      full path of log.dir (relative = to the resolved dataDir)
+#   Remove-TaidaFlowExpiredDatedFiles <dir> <prefix> <suffix> <keepDays>
+#                                                     deletes <prefix>YYYY-MM-DD<suffix> files older than
+#                                                     keepDays days (today included); nothing else
 #   Get-TaidaFlowNginxConf <template> <values>        the complete TaidaFlow nginx configuration text
 
 $script:TaidaFlowDefaultCache = @{}
-# nginx.exe when config.json has no "nginx": {"exe": ...} (and the app's defaults do not define it):
-# the nginx bundled in the package, relative to the folder of config.json.
-$script:TaidaFlowNginxExeFallback = 'nginx\nginx.exe'
 
 function Get-TaidaFlowKeyKind([string]$key) {
     switch -Regex ($key) {
@@ -61,6 +64,10 @@ function Get-TaidaFlowKeyKind([string]$key) {
         '\.(bind|publicBind)$'                   { return @{ kind = 'address' } }
         '^nginx\.enabled$'                       { return @{ kind = 'bool' } }
         '^nginx\.exe$'                           { return @{ kind = 'text' } }
+        # w2-064 log keys (App/appconfig.cpp: Text, Bool, Integer 1..INT_MAX)
+        '^log\.dir$'                             { return @{ kind = 'text' } }
+        '^log\.(quiet|full)\.enabled$'           { return @{ kind = 'bool' } }
+        '^log\.(quiet|full)\.keepDays$'          { return @{ kind = 'int'; min = 1; max = 2147483647 } }
     }
     return @{ kind = 'unknown' }
 }
@@ -178,16 +185,10 @@ function Get-TaidaFlowDefaultConfig([string]$Exe) {
         }
     }
     Add-Flat $obj ''
-    # nginx.exe (Mango A3: nginx is installed on site): read by the scripts only. Until the app's
-    # default file has the key (main task w2-064), the scripts use this fallback.
-    $scriptOnly = @{}
-    if (-not $values.ContainsKey('nginx.exe')) {
-        $at = $keys.IndexOf('nginx.port')
-        if ($at -lt 0) { $keys.Add('nginx.exe') } else { $keys.Insert($at + 1, 'nginx.exe') }
-        $values['nginx.exe'] = $script:TaidaFlowNginxExeFallback
-        $scriptOnly['nginx.exe'] = $true
-    }
-    $result = [pscustomobject]@{ Keys = $keys.ToArray(); Values = $values; ScriptOnly = $scriptOnly }
+    # w2-065: the scripts need these keys; they are app keys since w2-064 (no script fallback any more).
+    $missing = @('nginx.exe', 'log.dir', 'log.quiet.keepDays', 'log.full.keepDays') | Where-Object { -not $values.ContainsKey($_) }
+    if ($missing) { throw "the default configuration of $full has no $($missing -join ', ') - TaidaFlowApp.exe is older than these scripts (use the exe of the same package / build)" }
+    $result = [pscustomobject]@{ Keys = $keys.ToArray(); Values = $values }
     $script:TaidaFlowDefaultCache[$full] = $result
     return $result
 }
@@ -210,7 +211,7 @@ function Get-TaidaFlowConfig {
     $cfg.Keys = $defaults.Keys
     foreach ($k in $defaults.Keys) {
         $cfg.Values[$k] = $defaults.Values[$k]
-        $cfg.Sources[$k] = if ($defaults.ScriptOnly.ContainsKey($k)) { 'script default' } else { 'default' }
+        $cfg.Sources[$k] = 'default'
     }
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
         $cfg.Notes.Add("config.json $Path does not exist - the default values are used (the application creates the file at its first start)")
@@ -335,6 +336,37 @@ function Resolve-TaidaFlowNginxExe($cfg) {
     return $full
 }
 
+# log.dir resolved like AppConfig::resolvedLogDir(): relative to the resolved dataDir, absolute as it is.
+function Resolve-TaidaFlowLogDir($cfg) {
+    $p = [string]$cfg.Values['log.dir']
+    if (-not [System.IO.Path]::IsPathRooted($p)) { $p = Join-Path $cfg.DataDir $p }
+    return [System.IO.Path]::GetFullPath($p).TrimEnd('\')
+}
+
+# Deletes the files <Prefix>YYYY-MM-DD<Suffix> directly in $Dir (no sub-folders, no links) whose date is
+# older than $KeepDays days, today included - the retention rule of the app's own log files
+# (App/applog.cpp: kept = date >= today - (keepDays - 1); dates after today are kept). The name must
+# match completely (case-sensitive, ASCII digits, a valid date); every other file is left alone.
+# Returns @{ Deleted = [string[]]; Failed = [string[]]; Kept = <n matching files kept> }.
+function Remove-TaidaFlowExpiredDatedFiles([string]$Dir, [string]$Prefix, [string]$Suffix, [int]$KeepDays, [datetime]$Today = (Get-Date)) {
+    $result = @{ Deleted = New-Object System.Collections.Generic.List[string]; Failed = New-Object System.Collections.Generic.List[string]; Kept = 0 }
+    if ($KeepDays -lt 1 -or -not (Test-Path -LiteralPath $Dir -PathType Container)) { return $result }
+    $re = New-Object System.Text.RegularExpressions.Regex ('^' + [regex]::Escape($Prefix) + '([0-9]{4})-([0-9]{2})-([0-9]{2})' + [regex]::Escape($Suffix) + '$')
+    $oldest = $Today.Date.AddDays(-($KeepDays - 1))
+    foreach ($f in @(Get-ChildItem -LiteralPath $Dir -File -Force -ErrorAction SilentlyContinue)) {
+        if ($f.Attributes -band [System.IO.FileAttributes]::ReparsePoint) { continue }
+        $m = $re.Match($f.Name)
+        if (-not $m.Success) { continue }
+        $date = [datetime]::MinValue
+        if (-not [datetime]::TryParseExact("$($m.Groups[1].Value)-$($m.Groups[2].Value)-$($m.Groups[3].Value)", 'yyyy-MM-dd',
+                [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::None, [ref]$date)) { continue }
+        if ($date -ge $oldest) { $result.Kept++; continue }
+        try { Remove-Item -LiteralPath $f.FullName -Force -ErrorAction Stop -WhatIf:$false; $result.Deleted.Add($f.Name) }
+        catch { $result.Failed.Add("$($f.Name): $($_.Exception.Message)") }
+    }
+    return $result
+}
+
 # Path of $to relative to the folder $from ("..\web"), or $to itself when they are on different drives.
 function Get-TaidaFlowRelativePath([string]$from, [string]$to) {
     $a = [System.IO.Path]::GetFullPath($from).TrimEnd('\').Split('\')
@@ -349,16 +381,19 @@ function Get-TaidaFlowRelativePath([string]$from, [string]$to) {
     return ($parts -join '\')
 }
 
-# The complete TaidaFlow nginx configuration: the template deploy\nginx\taidaflow.conf with its five
-# @TOKENS@ replaced. $values: WebRoot, ExportDir (folders, written with forward slashes), Port,
+# The complete TaidaFlow nginx configuration: the template deploy\nginx\taidaflow.conf with its six
+# @TOKENS@ replaced. $values: WebRoot, ExportDir, LogDir (folders, written with forward slashes), Port,
 # RestPort, MirrorPort, optional Prefix (the nginx folder = prefix of "start nginx"): then the web
 # root is written relative to it (Mango A9: nginx resolves a relative "root" against its prefix, so
-# moving the whole installation folder keeps the page working). Throws when a token is missing.
+# moving the whole installation folder keeps the page working). LogDir (w2-065) = log.dir resolved
+# (absolute): nginx-error.log and nginx-access-YYYY-MM-DD.log. Throws when a token is missing.
 function Get-TaidaFlowNginxConf([string]$template, $values) {
     $text = [System.IO.File]::ReadAllText($template)
     $webRoot = if ($values.Prefix) { Get-TaidaFlowRelativePath $values.Prefix $values.WebRoot } else { $values.WebRoot }
+    if (-not $values.LogDir) { throw "Get-TaidaFlowNginxConf: LogDir missing" }
     $map = [ordered]@{
         '@TAIDAFLOW_WEB_ROOT@' = ($webRoot -replace '\\', '/'); '@TAIDAFLOW_EXPORT_DIR@' = ($values.ExportDir -replace '\\', '/')
+        '@TAIDAFLOW_LOG_DIR@' = ($values.LogDir -replace '\\', '/')
         '@TAIDAFLOW_NGINX_PORT@' = "$($values.Port)"; '@TAIDAFLOW_REST_PORT@' = "$($values.RestPort)"; '@TAIDAFLOW_MIRROR_PORT@' = "$($values.MirrorPort)"
     }
     foreach ($k in $map.Keys) {
@@ -397,5 +432,7 @@ function Format-TaidaFlowConfig($cfg) {
     $lines = New-Object System.Collections.Generic.List[string]
     foreach ($k in $cfg.Keys) { $lines.Add(("  {0} = {1} ({2})" -f $k, (ConvertTo-TaidaFlowJsonValue $cfg.Values[$k]), $cfg.Sources[$k])) }
     $lines.Add("  dataDir (resolved) = $($cfg.DataDir)")
+    $lines.Add("  nginx.exe (resolved) = $(Resolve-TaidaFlowNginxExe $cfg)")
+    $lines.Add("  log.dir (resolved) = $(Resolve-TaidaFlowLogDir $cfg)")
     return $lines.ToArray()
 }

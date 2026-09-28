@@ -1,0 +1,990 @@
+2026-09-28 23:28:49.918 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\config.effective.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\config.effective.json)
+2026-09-28 23:28:49.918 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-09-28 23:28:49.918 [info] [Config]   version = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   dataDir = "D:\\repo\\codex\\qmlTester\\taidaflow\\build\\verify-release-data" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6256.host = "192.168.1.201" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217a.host = "192.168.1.202" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217b.host = "192.168.1.203" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6224.host = "192.168.1.204" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6022.host = "192.168.1.205" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-09-28 23:28:49.918 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-09-28 23:28:49.919 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-09-28 23:28:49.919 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-09-28 23:28:49.919 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-09-28 23:28:49.919 [info] [Config]   modbusServer.bind = "0.0.0.0" (file)
+2026-09-28 23:28:49.919 [info] [Config]   modbusServer.port = 502 (file)
+2026-09-28 23:28:49.919 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-09-28 23:28:49.919 [info] [Config]   http.bind = "0.0.0.0" (file)
+2026-09-28 23:28:49.919 [info] [Config]   http.port = 8124 (file)
+2026-09-28 23:28:49.919 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-09-28 23:28:49.919 [info] [Config]   rest.port = 18080 (file)
+2026-09-28 23:28:49.919 [info] [Config]   mirror.internalPort = 18125 (file)
+2026-09-28 23:28:49.919 [info] [Config]   mirror.publicBind = "0.0.0.0" (file)
+2026-09-28 23:28:49.919 [info] [Config]   mirror.publicPort = 8125 (file)
+2026-09-28 23:28:49.919 [info] [Config]   nginx.enabled = false (file)
+2026-09-28 23:28:49.919 [info] [Config]   nginx.port = 80 (file)
+2026-09-28 23:28:49.919 [info] [Config]   nginx.exe = "D:\\repo\\codex\\qmlTester\\taidaflow\\dist\\TaidaFlow-20260928-e425e5d-dirty\\nginx\\nginx.exe" (file)
+2026-09-28 23:28:49.919 [info] [Config]   log.dir = "logs" (file)
+2026-09-28 23:28:49.919 [info] [Config]   log.quiet.enabled = true (file)
+2026-09-28 23:28:49.919 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-09-28 23:28:49.919 [info] [Config]   log.full.enabled = true (file)
+2026-09-28 23:28:49.919 [info] [Config]   log.full.keepDays = 7 (file)
+2026-09-28 23:28:49.919 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 23:28:49.919 [info] [Config]   nginx.exe (resolved) = D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\nginx\nginx.exe
+2026-09-28 23:28:49.919 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs
+2026-09-28 23:28:49.919 [info] [Config]   downloadPort = 8124 (derived: nginx.enabled ? nginx.port : http.port)
+2026-09-28 23:28:49.919 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 23:28:49.919 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs for 2026-09-28: 1 file(s) examined, 0 expired log file(s) deleted (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-09-28 23:28:49.926 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-09-28 23:28:49.930 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-28 23:28:49.931 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-09-28 23:28:49.934 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/settings_schema.sql"
+2026-09-28 23:28:49.951 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 192.168.1.201:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:28:49.951 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 192.168.1.202:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:28:49.951 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 192.168.1.203:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:28:49.951 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 192.168.1.204:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:28:49.951 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 192.168.1.205:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:28:49.951 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-09-28 23:28:49.951 [info] [Modbus] device profile=default
+2026-09-28 23:28:49.951 [info] [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:28:49.951 [info] [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:28:49.951 [info] [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:28:49.951 [info] [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:28:49.951 [info] [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:28:49.951 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-09-28 23:28:49.954 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-09-28 23:28:49.954 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-09-28 23:28:49.954 [info] [Config] Core download links -> port 8124 (file; nginx.enabled false file, nginx.port 80 file, http.port 8124 file)
+2026-09-28 23:28:49.958 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports (max 20 files / 2147483648 bytes), download links -> port 8124
+2026-09-28 23:28:49.958 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports
+2026-09-28 23:28:49.958 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports: mounted on AppHttpServer
+2026-09-28 23:28:49.958 [info] [Config] Core HTTP service (http) -> 0.0.0.0:8124 (bind file, port file)
+2026-09-28 23:28:49.958 [info] [Web] TAIDAFLOW_WEB_DIR is not set
+2026-09-28 23:28:49.958 [info] [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> has TaidaFlowApp.html, used
+2026-09-28 23:28:49.960 [info] [Web] runtime.json written: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web\runtime.json = {"mirrorPublicPort":8125,"version":1} (nginx.enabled false -> mirror.publicPort file (LanRelay))
+2026-09-28 23:28:49.960 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-09-28 23:28:49.960 [info] [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> http://<host>:8124/TaidaFlowApp.html
+2026-09-28 23:28:49.968 [info] apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-09-28 23:28:49.968 [info] [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+2026-09-28 23:28:49.969 [info] [Config] Core REST API (rest) -> 127.0.0.1:18080 (bind file, port file)
+2026-09-28 23:28:49.972 [info] Device SN: "sn000000"
+2026-09-28 23:28:49.973 [info] Running on http://127.0.0.1: 18080 /
+2026-09-28 23:28:49.973 [info] [REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-09-28 23:28:49.973 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-28 23:28:49.973 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-28 23:28:49.973 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-28 23:28:49.973 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+2026-09-28 23:28:49.973 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)
+2026-09-28 23:28:49.974 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:28:49.988 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=1
+2026-09-28 23:28:49.989 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:28:49.989 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:28:49.989 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-28 23:28:49.992 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-09-28 23:28:49.992 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:49.992 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:49.992 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:49.992 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:49.992 [info] [Config] Core Modbus server (modbusServer) -> 0.0.0.0:502 unit 1 (bind file, port file, unitId file)
+2026-09-28 23:28:49.992 [info] [ModbusServer] listening on 0.0.0.0:502 unit=1
+2026-09-28 23:28:49.992 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:28:49.992 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:28:49.992 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-28 23:28:49.993 [info] WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+2026-09-28 23:28:49.993 [info] LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:50.991 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:50.991 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:50.991 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:50.991 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:50.991 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-09-28 23:28:51.980 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:51.980 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:51.980 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:51.980 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:51.980 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:51.980 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:52.069 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 127.0.0.1 -> 200 (application/json, 37 byte(s) streamed)
+2026-09-28 23:28:52.105 [info] apphttpserver: [AppHttpServer] GET /TaidaFlowApp.html from 127.0.0.1 -> 200 (text/html; charset=utf-8, 21871 byte(s) streamed)
+2026-09-28 23:28:52.133 [info] LAN relay: accepted 127.0.0.1:61864 -> 127.0.0.1:18125
+2026-09-28 23:28:52.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.980 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:52.981 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:52.981 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:52.982 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:52.982 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:52.982 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:53.982 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.982 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.982 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:53.983 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:53.983 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:53.983 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:53.983 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:53.983 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.983 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:28:54.984 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:54.984 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:28:54.984 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:28:54.984 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:28:54.984 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:28:55.137 [info] LAN relay: closed 127.0.0.1:61864
+2026-09-28 23:28:55.963 [info] apphttpserver: [AppHttpServer] unmounted /exports
+2026-09-28 23:28:55.963 [info] [Export] stopped (export thread; /exports unmounted).
+2026-09-28 23:28:55.964 [info] apphttpserver: [AppHttpServer] stopped (was port 8124)
+2026-09-28 23:28:55.965 [info] [REST] REST API stopped
+2026-09-28 23:29:03.744 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\config.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\config.json)
+2026-09-28 23:29:03.744 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-09-28 23:29:03.744 [info] [Config]   version = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   dataDir = "D:\\repo\\codex\\qmlTester\\taidaflow\\build\\verify-release-data" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6256.host = "192.168.1.201" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217a.host = "192.168.1.202" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217b.host = "192.168.1.203" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6224.host = "192.168.1.204" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6022.host = "192.168.1.205" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   modbusServer.bind = "0.0.0.0" (file)
+2026-09-28 23:29:03.744 [info] [Config]   modbusServer.port = 502 (file)
+2026-09-28 23:29:03.744 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-09-28 23:29:03.744 [info] [Config]   http.bind = "0.0.0.0" (file)
+2026-09-28 23:29:03.744 [info] [Config]   http.port = 8124 (file)
+2026-09-28 23:29:03.744 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-09-28 23:29:03.744 [info] [Config]   rest.port = 18080 (file)
+2026-09-28 23:29:03.744 [info] [Config]   mirror.internalPort = 18125 (file)
+2026-09-28 23:29:03.744 [info] [Config]   mirror.publicBind = "0.0.0.0" (file)
+2026-09-28 23:29:03.744 [info] [Config]   mirror.publicPort = 8125 (file)
+2026-09-28 23:29:03.744 [info] [Config]   nginx.enabled = true (file)
+2026-09-28 23:29:03.744 [info] [Config]   nginx.port = 80 (file)
+2026-09-28 23:29:03.744 [info] [Config]   nginx.exe = "nginx\\nginx.exe" (file)
+2026-09-28 23:29:03.744 [info] [Config]   log.dir = "logs" (file)
+2026-09-28 23:29:03.744 [info] [Config]   log.quiet.enabled = true (file)
+2026-09-28 23:29:03.744 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-09-28 23:29:03.744 [info] [Config]   log.full.enabled = true (file)
+2026-09-28 23:29:03.744 [info] [Config]   log.full.keepDays = 7 (file)
+2026-09-28 23:29:03.744 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 23:29:03.744 [info] [Config]   nginx.exe (resolved) = D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\nginx\nginx.exe
+2026-09-28 23:29:03.744 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs
+2026-09-28 23:29:03.744 [info] [Config]   downloadPort = 80 (derived: nginx.enabled ? nginx.port : http.port)
+2026-09-28 23:29:03.744 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 23:29:03.744 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs for 2026-09-28: 4 file(s) examined, 0 expired log file(s) deleted (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-09-28 23:29:03.745 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-09-28 23:29:03.749 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-28 23:29:03.750 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-09-28 23:29:03.753 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/settings_schema.sql"
+2026-09-28 23:29:03.753 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 192.168.1.201:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:29:03.753 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 192.168.1.202:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:29:03.754 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 192.168.1.203:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:29:03.754 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 192.168.1.204:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:29:03.754 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 192.168.1.205:502 unit 1 (host file, port file, unitId file)
+2026-09-28 23:29:03.754 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-09-28 23:29:03.754 [info] [Modbus] device profile=default
+2026-09-28 23:29:03.754 [info] [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:29:03.754 [info] [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:29:03.754 [info] [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:29:03.754 [info] [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:29:03.754 [info] [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1 timeout=1000ms retries=2
+2026-09-28 23:29:03.754 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-09-28 23:29:03.767 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-09-28 23:29:03.768 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-09-28 23:29:03.768 [info] [Config] Core download links -> port 80 (file; nginx.enabled true file, nginx.port 80 file, http.port 8124 file)
+2026-09-28 23:29:03.770 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports (max 20 files / 2147483648 bytes), download links -> port 80
+2026-09-28 23:29:03.770 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports
+2026-09-28 23:29:03.770 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports: mounted on AppHttpServer
+2026-09-28 23:29:03.770 [info] [Config] Core HTTP service (http) -> 0.0.0.0:8124 (bind file, port file)
+2026-09-28 23:29:03.770 [info] [Web] TAIDAFLOW_WEB_DIR is not set
+2026-09-28 23:29:03.770 [info] [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> has TaidaFlowApp.html, used
+2026-09-28 23:29:03.770 [info] [Web] runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web\runtime.json = {"mirrorPublicPort":80,"version":1} (nginx.enabled true -> nginx.port file, /mirror proxied by nginx)
+2026-09-28 23:29:03.770 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-09-28 23:29:03.770 [info] [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-e425e5d-dirty\web -> http://<host>:8124/TaidaFlowApp.html
+2026-09-28 23:29:03.777 [info] apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-09-28 23:29:03.777 [info] [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+2026-09-28 23:29:03.777 [info] [Config] Core REST API (rest) -> 127.0.0.1:18080 (bind file, port file)
+2026-09-28 23:29:03.777 [info] Device SN: "sn000000"
+2026-09-28 23:29:03.778 [info] Running on http://127.0.0.1: 18080 /
+2026-09-28 23:29:03.778 [info] [REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-09-28 23:29:03.778 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-28 23:29:03.778 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-28 23:29:03.778 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-28 23:29:03.778 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+2026-09-28 23:29:03.778 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)
+2026-09-28 23:29:03.778 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:29:03.783 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=135
+2026-09-28 23:29:03.783 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=135 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=134 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=133 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=132 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=131 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=130 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=129 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [Alarm][UI] id=128 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.784 [info] [SQL] Loaded 54 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=54; severity 嚴重=8 警告=46; unknown core status=0).
+2026-09-28 23:29:03.787 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-09-28 23:29:03.787 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:03.787 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:03.787 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:03.787 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:03.787 [info] [Config] Core Modbus server (modbusServer) -> 0.0.0.0:502 unit 1 (bind file, port file, unitId file)
+2026-09-28 23:29:03.787 [info] [ModbusServer] listening on 0.0.0.0:502 unit=1
+2026-09-28 23:29:03.788 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/data_schema.sql"
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=135 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=134 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=133 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=132 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=131 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=130 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=129 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.788 [info] [Alarm][UI] id=128 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-28 23:29:03.789 [info] [SQL] Loaded 54 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=54; severity 嚴重=8 警告=46; unknown core status=0).
+2026-09-28 23:29:03.789 [info] WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+2026-09-28 23:29:03.789 [info] LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:04.781 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:04.781 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:04.781 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:04.781 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:04.781 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-09-28 23:29:05.785 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:05.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:05.785 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:05.785 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:05.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:05.785 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:06.787 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:06.787 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:06.787 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:06.787 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:06.787 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:07.777 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:07.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:07.778 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:07.778 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:07.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:07.778 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:08.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:08.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:08.778 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:08.778 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:08.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:08.778 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:09.703 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 127.0.0.1 -> 200 (application/json, 35 byte(s) streamed)
+2026-09-28 23:29:09.783 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.783 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.783 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.783 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.783 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:09.784 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:09.784 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:09.784 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:09.784 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:09.784 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:10.784 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:10.784 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:10.784 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:10.784 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:10.784 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:11.784 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:11.784 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:11.785 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:11.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:11.785 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:12.763 [info] LAN relay: accepted 127.0.0.1:61213 -> 127.0.0.1:18125
+2026-09-28 23:29:12.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:12.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:12.785 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:12.785 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:12.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:12.785 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:13.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:13.789 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:13.789 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:13.789 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:13.789 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:13.789 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:14.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:14.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:14.778 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:14.778 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:14.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:14.778 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:15.765 [info] LAN relay: closed 127.0.0.1:61213
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:15.779 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:15.779 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:15.779 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:15.779 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:15.779 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:15.840 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/settings_schema.sql"
+2026-09-28 23:29:16.216 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 192.168.0.125 -> 200 (application/json, 35 byte(s) streamed)
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:16.782 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:16.782 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:16.782 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:16.782 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:16.782 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:17.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:17.785 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:17.785 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:17.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:17.785 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:18.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.787 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:18.788 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:18.788 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:18.788 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:18.788 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:18.788 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:19.276 [info] LAN relay: accepted 192.168.0.125:61229 -> 127.0.0.1:18125
+2026-09-28 23:29:19.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:19.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:19.778 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:19.778 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:19.778 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:19.778 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:20.777 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:20.777 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:20.777 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:20.777 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:20.777 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:21.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.781 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:21.782 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:21.782 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:21.782 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:21.782 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:21.782 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:21.782 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:21.782 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:21.782 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:21.782 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:22.290 [info] LAN relay: closed 192.168.0.125:61229
+2026-09-28 23:29:22.350 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/verify-release-data/settings_schema.sql"
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:22.784 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:22.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:22.785 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:22.785 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:22.785 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:22.785 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:23.788 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:23.789 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:23.789 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:23.789 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:23.789 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:23.789 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.778 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:24.779 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:24.779 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:24.779 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:24.779 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:24.779 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:25.780 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:25.781 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:25.781 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:25.781 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:25.781 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:26.598 [info] [Export] #1 queued: session w2062verify, web (export folder), range 1790605767 .. 1790609366 s, file D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports\w2062verify_20260928_232926.csv
+2026-09-28 23:29:26.598 [info] [Export] #1 running: session w2062verify (0 still queued)
+2026-09-28 23:29:26.599 [info] [Export] #1 0 row(s) to write
+2026-09-28 23:29:26.610 [info] [Export] #1 done: session w2062verify, 11.9 ms; 0 row(s), 228 byte(s), 1 month file(s), count 0.9 ms, total 11.4 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 228 byte(s); 228 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports\w2062verify_20260928_232926.csv
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.782 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:26.783 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:26.783 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:26.783 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:26.783 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:26.783 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:26.783 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:26.783 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:26.783 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:26.783 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。
+2026-09-28 23:29:27.079 [info] apphttpserver: [AppHttpServer] GET /exports/w2062verify_20260928_232926.csv from 127.0.0.1 -> 200, 228 byte(s) streamed from disk
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 A (192.168.1.202) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6217 B (192.168.1.203) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6256 (192.168.1.201) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6022 (192.168.1.205) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [warning] ADAM-6224 (192.168.1.204) Device is not connected; request was not sent.
+2026-09-28 23:29:27.786 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:27.786 [warning] [MS300] Referenced serial device does not exist.
+2026-09-28 23:29:27.786 [warning] [MS300] 系統找不到指定的檔案。
+2026-09-28 23:29:27.786 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-28 23:29:27.787 [warning] [MS300] Connection request failed: 系統找不到指定的檔案。

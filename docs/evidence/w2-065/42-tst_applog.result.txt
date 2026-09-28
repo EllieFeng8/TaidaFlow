@@ -1,0 +1,2034 @@
+********* Start testing of tst_AppLog *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : tst_AppLog::initTestCase()
+PASS   : tst_AppLog::fileNames()
+PASS   : tst_AppLog::formatLine()
+PASS   : tst_AppLog::bothFilesAndLevelFilter()
+PASS   : tst_AppLog::timestampAndCategory()
+PASS   : tst_AppLog::createsMissingFolder()
+PASS   : tst_AppLog::dateChangeForward()
+PASS   : tst_AppLog::dateChangeBackward()
+PASS   : tst_AppLog::appendsSameDay()
+PASS   : tst_AppLog::retentionBoundaries(defaults 60/7)
+PASS   : tst_AppLog::retentionBoundaries(1/1 today only)
+PASS   : tst_AppLog::retentionBoundaries(7/60)
+PASS   : tst_AppLog::onlyMatchingFilesDeleted()
+PASS   : tst_AppLog::cleanupOnStartAndDateChange()
+PASS   : tst_AppLog::disabledModes()
+PASS   : tst_AppLog::writeFailureInvalidPath()
+PASS   : tst_AppLog::writeFailureReadOnlyFile()
+PASS   : tst_AppLog::writeFailureInvalidCharacters()
+PASS   : tst_AppLog::multithreadedWriter()
+QINFO  : tst_AppLog::handlerBuffersAndWrites() [Config] early info before install
+QINFO  : tst_AppLog::handlerBuffersAndWrites() taidaflow.applogtest: category message
+QDEBUG : tst_AppLog::handlerBuffersAndWrites() debug message
+QINFO  : tst_AppLog::handlerBuffersAndWrites() after shutdown - not in the file
+PASS   : tst_AppLog::handlerBuffersAndWrites()
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 0 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 1 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 2 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 3 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 0 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 0 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 0 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 4 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 1 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 1 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 1 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 5 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 2 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 2 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 2 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 6 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 3 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 3 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 3 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 7 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 4 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 4 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 5 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 4 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 5 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 6 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 5 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 8 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 6 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 6 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 7 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 8 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 9 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 7 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 7 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 9 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 10 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 8 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 8 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 9 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 10 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 9 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 11 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 12 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 10 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 11 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 10 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 13 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 14 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 15 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 16 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 17 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 18 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 11 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 12 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 11 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 19 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 20 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 21 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 12 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 12 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 13 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 22 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 13 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 13 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 14 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 14 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 15 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 15 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 14 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 16 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 23 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 16 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 15 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 17 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 24 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 17 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 16 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 18 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 25 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 18 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 17 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 19 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 26 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 19 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 18 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 20 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 19 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 20 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 27 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 21 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 20 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 21 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 28 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 22 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 21 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 22 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 29 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 23 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 22 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 23 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 30 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 24 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 23 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 24 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 31 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 25 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 24 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 25 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 32 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 26 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 25 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 26 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 33 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 27 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 26 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 27 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 34 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 28 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 27 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 28 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 35 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 29 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 28 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 29 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 36 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 30 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 29 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 30 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 37 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 30 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 31 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 31 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 38 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 31 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 32 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 32 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 33 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 39 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 32 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 33 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 34 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 40 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 33 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 34 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 35 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 41 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 34 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 35 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 36 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 42 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 37 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 43 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 38 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 44 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 39 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 36 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 35 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 45 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 40 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 37 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 36 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 46 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 41 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 38 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 37 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 47 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 42 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 39 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 38 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 48 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 43 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 40 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 39 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 49 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 44 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 41 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 40 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 50 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 45 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 42 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 41 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 51 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 46 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 43 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 42 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 52 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 47 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 44 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 43 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 53 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 48 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 45 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 44 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 54 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 49 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 46 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 45 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 55 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 56 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 47 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 46 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 50 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 57 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 48 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 47 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 51 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 58 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 49 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 48 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 52 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 59 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 50 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 49 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 53 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 60 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 51 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 50 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 54 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 61 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 52 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 51 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 55 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 62 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 53 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 52 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 56 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 63 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 54 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 53 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 57 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 64 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 55 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 56 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 58 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 65 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 54 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 57 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 59 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 66 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 55 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 58 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 60 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 67 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 56 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 59 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 61 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 68 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 57 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 58 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 59 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 60 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 61 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 69 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 60 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 62 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 62 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 70 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 71 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 72 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 63 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 61 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 63 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 73 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 64 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 62 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 64 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 74 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 65 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 63 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 65 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 75 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 66 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 66 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 67 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 76 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 64 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 67 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 68 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 77 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 65 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 68 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 69 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 78 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 66 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 69 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 70 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 79 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 67 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 70 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 71 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 80 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 68 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 71 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 72 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 81 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 69 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 72 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 73 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 82 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 70 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 73 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 74 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 83 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 71 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 74 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 75 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 75 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 76 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 72 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 84 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 76 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 77 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 73 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 85 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 77 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 78 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 74 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 86 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 78 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 79 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 75 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 87 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 79 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 80 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 76 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 88 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 80 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 81 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 77 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 89 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 81 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 82 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 78 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 90 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 82 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 83 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 79 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 91 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 83 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 84 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 80 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 92 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 84 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 85 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 81 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 93 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 85 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 86 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 82 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 94 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 86 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 87 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 83 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 95 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 87 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 88 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 84 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 96 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 88 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 89 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 85 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 97 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 89 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 90 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 86 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 98 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 90 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 91 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 87 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 2 line 99 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 91 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 92 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 88 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 93 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 92 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 89 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 94 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 93 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 90 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 95 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 94 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 91 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 96 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 95 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 92 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 97 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 96 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 93 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 98 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 97 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 94 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 0 line 99 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 98 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 95 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 1 line 99 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 96 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 97 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 98 payload-payload-payload
+QINFO  : tst_AppLog::handlerMultithreaded() taidaflow.applogtest: handler thread 3 line 99 payload-payload-payload
+PASS   : tst_AppLog::handlerMultithreaded()
+QINFO  : tst_AppLog::cleanupTiming() clean-up timing: 154 files examined, 67 deleted, 9 ms (result.elapsedMs 9)
+PASS   : tst_AppLog::cleanupTiming()
+PASS   : tst_AppLog::describe()
+QINFO  : tst_AppLog::configFailureWritesFallbackLog(JSON syntax error) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-IkeLYN\install\config.json (TAIDAFLOW_CONFIG=C:/Users/TED/AppData/Local/Temp/tst_applog-IkeLYN/install/config.json)
+QWARN  : tst_AppLog::configFailureWritesFallbackLog(JSON syntax error) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-IkeLYN\install\config.json cannot be used: JSON syntax error: object is missing after a comma (line 3, column 35) - the file is left unchanged and the program exits (fix config.json or delete it to recreate the defaults)
+QCRITICAL: tst_AppLog::configFailureWritesFallbackLog(JSON syntax error) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-IkeLYN\install\config.json cannot be used: JSON syntax error: object is missing after a comma (line 3, column 35) - the program exits with code 2; log files (fallback folder beside config.json): C:\Users\TED\AppData\Local\Temp\tst_applog-IkeLYN\install\logs\taidaflow-2026-09-28-full.log, C:\Users\TED\AppData\Local\Temp\tst_applog-IkeLYN\install\logs\taidaflow-2026-09-28.log
+PASS   : tst_AppLog::configFailureWritesFallbackLog(JSON syntax error)
+QINFO  : tst_AppLog::configFailureWritesFallbackLog(config.json is a folder) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-hlxQuW\install\config.json (TAIDAFLOW_CONFIG=C:/Users/TED/AppData/Local/Temp/tst_applog-hlxQuW/install/config.json)
+QWARN  : tst_AppLog::configFailureWritesFallbackLog(config.json is a folder) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-hlxQuW\install\config.json cannot be used: the path is a folder, not a file - the file is left unchanged and the program exits (fix config.json or delete it to recreate the defaults)
+QCRITICAL: tst_AppLog::configFailureWritesFallbackLog(config.json is a folder) [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-hlxQuW\install\config.json cannot be used: the path is a folder, not a file - the program exits with code 2; log files (fallback folder beside config.json): C:\Users\TED\AppData\Local\Temp\tst_applog-hlxQuW\install\logs\taidaflow-2026-09-28-full.log, C:\Users\TED\AppData\Local\Temp\tst_applog-hlxQuW\install\logs\taidaflow-2026-09-28.log
+PASS   : tst_AppLog::configFailureWritesFallbackLog(config.json is a folder)
+QINFO  : tst_AppLog::configFailureFallbackUnwritable() [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-ViFvGM\install\config.json (TAIDAFLOW_CONFIG=C:/Users/TED/AppData/Local/Temp/tst_applog-ViFvGM/install/config.json)
+QWARN  : tst_AppLog::configFailureFallbackUnwritable() [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-ViFvGM\install\config.json cannot be used: JSON syntax error: unterminated object (line 1, column 13) - the file is left unchanged and the program exits (fix config.json or delete it to recreate the defaults)
+QCRITICAL: tst_AppLog::configFailureFallbackUnwritable() [Config] config file C:\Users\TED\AppData\Local\Temp\tst_applog-ViFvGM\install\config.json cannot be used: JSON syntax error: unterminated object (line 1, column 13) - the program exits with code 2; the log files could not be written in the fallback folder C:\Users\TED\AppData\Local\Temp\tst_applog-ViFvGM\install\logs (see the warnings above) - this message is on stderr only
+PASS   : tst_AppLog::configFailureFallbackUnwritable()
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 0
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 2
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 3
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 4
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 5
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 6
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 7
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 8
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 9
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 10
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 11
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 12
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 13
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 14
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 15
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 16
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 17
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 18
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 19
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 20
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 21
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 22
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 23
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 24
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 25
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 26
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 27
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 28
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 29
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 30
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 31
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 32
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 33
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 34
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 35
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 36
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 37
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 38
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 39
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 40
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 41
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 42
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 43
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 44
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 45
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 46
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 47
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 48
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 49
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 50
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 51
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 52
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 53
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 54
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 55
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 56
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 57
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 58
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 59
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 60
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 61
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 62
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 63
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 64
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 65
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 66
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 67
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 68
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 69
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 70
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 71
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 72
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 73
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 74
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 75
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 76
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 77
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 78
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 79
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 80
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 81
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 82
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 83
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 84
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 85
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 86
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 87
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 88
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 89
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 90
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 91
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 92
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 93
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 94
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 95
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 96
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 97
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 98
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 99
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 100
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 101
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 102
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 103
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 104
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 105
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 106
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 107
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 108
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 109
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 110
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 111
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 112
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 113
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 114
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 115
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 116
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 117
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 118
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 119
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 120
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 121
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 122
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 123
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 124
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 125
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 126
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 127
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 128
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 129
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 130
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 131
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 132
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 133
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 134
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 135
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 136
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 137
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 138
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 139
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 140
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 141
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 142
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 143
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 144
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 145
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 146
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 147
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 148
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 149
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 150
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 151
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 152
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 153
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 154
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 155
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 156
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 157
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 158
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 159
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 160
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 161
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 162
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 163
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 164
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 165
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 166
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 167
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 168
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 169
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 170
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 171
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 172
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 173
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 174
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 175
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 176
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 177
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 178
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 179
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 180
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 181
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 182
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 183
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 184
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 185
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 186
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 187
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 188
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 189
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 190
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 191
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 192
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 193
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 194
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 195
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 196
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 197
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 198
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 199
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 200
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 201
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 202
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 203
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 204
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 205
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 206
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 207
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 208
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 209
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 210
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 211
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 212
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 213
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 214
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 215
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 216
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 217
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 218
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 219
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 220
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 221
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 222
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 223
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 224
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 225
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 226
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 227
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 228
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 229
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 230
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 231
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 232
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 233
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 234
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 235
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 236
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 237
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 238
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 239
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 240
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 241
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 242
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 243
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 244
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 245
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 246
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 247
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 248
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 249
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 250
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 251
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 252
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 253
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 254
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 255
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 256
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 257
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 258
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 259
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 260
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 261
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 262
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 263
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 264
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 265
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 266
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 267
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 268
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 269
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 270
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 271
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 272
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 273
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 274
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 275
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 276
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 277
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 278
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 279
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 280
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 281
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 282
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 283
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 284
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 285
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 286
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 287
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 288
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 289
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 290
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 291
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 292
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 293
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 294
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 295
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 296
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 297
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 298
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 299
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 300
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 301
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 302
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 303
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 304
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 305
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 306
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 307
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 308
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 309
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 310
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 311
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 312
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 313
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 314
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 315
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 316
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 317
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 318
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 319
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 320
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 321
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 322
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 323
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 324
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 325
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 326
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 327
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 328
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 329
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 330
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 331
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 332
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 333
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 334
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 335
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 336
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 337
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 338
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 339
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 340
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 341
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 342
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 343
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 344
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 345
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 346
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 347
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 348
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 349
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 350
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 351
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 352
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 353
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 354
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 355
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 356
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 357
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 358
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 359
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 360
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 361
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 362
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 363
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 364
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 365
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 366
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 367
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 368
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 369
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 370
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 371
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 372
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 373
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 374
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 375
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 376
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 377
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 378
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 379
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 380
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 381
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 382
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 383
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 384
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 385
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 386
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 387
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 388
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 389
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 390
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 391
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 392
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 393
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 394
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 395
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 396
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 397
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 398
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 399
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 400
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 401
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 402
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 403
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 404
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 405
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 406
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 407
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 408
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 409
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 410
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 411
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 412
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 413
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 414
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 415
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 416
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 417
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 418
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 419
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 420
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 421
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 422
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 423
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 424
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 425
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 426
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 427
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 428
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 429
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 430
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 431
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 432
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 433
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 434
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 435
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 436
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 437
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 438
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 439
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 440
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 441
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 442
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 443
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 444
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 445
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 446
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 447
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 448
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 449
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 450
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 451
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 452
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 453
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 454
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 455
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 456
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 457
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 458
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 459
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 460
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 461
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 462
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 463
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 464
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 465
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 466
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 467
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 468
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 469
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 470
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 471
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 472
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 473
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 474
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 475
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 476
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 477
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 478
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 479
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 480
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 481
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 482
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 483
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 484
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 485
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 486
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 487
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 488
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 489
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 490
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 491
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 492
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 493
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 494
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 495
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 496
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 497
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 498
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 499
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 500
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 501
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 502
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 503
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 504
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 505
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 506
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 507
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 508
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 509
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 510
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 511
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 512
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 513
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 514
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 515
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 516
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 517
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 518
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 519
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 520
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 521
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 522
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 523
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 524
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 525
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 526
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 527
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 528
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 529
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 530
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 531
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 532
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 533
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 534
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 535
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 536
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 537
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 538
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 539
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 540
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 541
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 542
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 543
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 544
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 545
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 546
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 547
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 548
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 549
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 550
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 551
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 552
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 553
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 554
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 555
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 556
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 557
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 558
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 559
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 560
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 561
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 562
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 563
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 564
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 565
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 566
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 567
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 568
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 569
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 570
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 571
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 572
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 573
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 574
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 575
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 576
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 577
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 578
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 579
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 580
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 581
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 582
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 583
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 584
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 585
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 586
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 587
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 588
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 589
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 590
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 591
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 592
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 593
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 594
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 595
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 596
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 597
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 598
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 599
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 600
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 601
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 602
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 603
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 604
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 605
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 606
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 607
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 608
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 609
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 610
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 611
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 612
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 613
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 614
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 615
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 616
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 617
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 618
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 619
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 620
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 621
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 622
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 623
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 624
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 625
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 626
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 627
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 628
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 629
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 630
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 631
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 632
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 633
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 634
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 635
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 636
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 637
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 638
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 639
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 640
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 641
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 642
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 643
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 644
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 645
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 646
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 647
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 648
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 649
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 650
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 651
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 652
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 653
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 654
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 655
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 656
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 657
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 658
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 659
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 660
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 661
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 662
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 663
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 664
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 665
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 666
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 667
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 668
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 669
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 670
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 671
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 672
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 673
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 674
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 675
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 676
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 677
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 678
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 679
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 680
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 681
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 682
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 683
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 684
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 685
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 686
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 687
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 688
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 689
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 690
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 691
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 692
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 693
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 694
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 695
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 696
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 697
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 698
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 699
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 700
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 701
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 702
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 703
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 704
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 705
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 706
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 707
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 708
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 709
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 710
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 711
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 712
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 713
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 714
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 715
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 716
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 717
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 718
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 719
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 720
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 721
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 722
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 723
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 724
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 725
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 726
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 727
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 728
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 729
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 730
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 731
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 732
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 733
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 734
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 735
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 736
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 737
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 738
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 739
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 740
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 741
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 742
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 743
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 744
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 745
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 746
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 747
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 748
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 749
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 750
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 751
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 752
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 753
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 754
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 755
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 756
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 757
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 758
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 759
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 760
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 761
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 762
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 763
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 764
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 765
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 766
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 767
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 768
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 769
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 770
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 771
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 772
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 773
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 774
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 775
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 776
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 777
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 778
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 779
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 780
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 781
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 782
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 783
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 784
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 785
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 786
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 787
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 788
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 789
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 790
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 791
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 792
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 793
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 794
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 795
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 796
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 797
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 798
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 799
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 800
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 801
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 802
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 803
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 804
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 805
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 806
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 807
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 808
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 809
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 810
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 811
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 812
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 813
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 814
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 815
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 816
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 817
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 818
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 819
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 820
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 821
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 822
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 823
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 824
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 825
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 826
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 827
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 828
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 829
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 830
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 831
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 832
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 833
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 834
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 835
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 836
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 837
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 838
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 839
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 840
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 841
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 842
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 843
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 844
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 845
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 846
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 847
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 848
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 849
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 850
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 851
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 852
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 853
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 854
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 855
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 856
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 857
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 858
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 859
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 860
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 861
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 862
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 863
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 864
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 865
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 866
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 867
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 868
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 869
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 870
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 871
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 872
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 873
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 874
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 875
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 876
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 877
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 878
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 879
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 880
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 881
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 882
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 883
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 884
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 885
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 886
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 887
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 888
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 889
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 890
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 891
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 892
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 893
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 894
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 895
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 896
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 897
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 898
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 899
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 900
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 901
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 902
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 903
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 904
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 905
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 906
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 907
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 908
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 909
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 910
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 911
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 912
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 913
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 914
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 915
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 916
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 917
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 918
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 919
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 920
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 921
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 922
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 923
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 924
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 925
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 926
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 927
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 928
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 929
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 930
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 931
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 932
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 933
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 934
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 935
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 936
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 937
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 938
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 939
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 940
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 941
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 942
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 943
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 944
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 945
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 946
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 947
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 948
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 949
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 950
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 951
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 952
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 953
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 954
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 955
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 956
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 957
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 958
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 959
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 960
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 961
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 962
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 963
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 964
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 965
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 966
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 967
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 968
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 969
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 970
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 971
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 972
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 973
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 974
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 975
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 976
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 977
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 978
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 979
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 980
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 981
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 982
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 983
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 984
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 985
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 986
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 987
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 988
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 989
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 990
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 991
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 992
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 993
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 994
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 995
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 996
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 997
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 998
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 999
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1000
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1001
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1002
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1003
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1004
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1005
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1006
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1007
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1008
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1009
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1010
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1011
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1012
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1013
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1014
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1015
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1016
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1017
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1018
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1019
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1020
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1021
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1022
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1023
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1024
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1025
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1026
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1027
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1028
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1029
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1030
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1031
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1032
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1033
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1034
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1035
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1036
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1037
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1038
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1039
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1040
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1041
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1042
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1043
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1044
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1045
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1046
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1047
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1048
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1049
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1050
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1051
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1052
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1053
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1054
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1055
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1056
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1057
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1058
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1059
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1060
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1061
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1062
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1063
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1064
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1065
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1066
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1067
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1068
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1069
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1070
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1071
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1072
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1073
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1074
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1075
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1076
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1077
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1078
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1079
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1080
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1081
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1082
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1083
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1084
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1085
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1086
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1087
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1088
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1089
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1090
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1091
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1092
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1093
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1094
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1095
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1096
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1097
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1098
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1099
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1100
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1101
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1102
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1103
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1104
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1105
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1106
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1107
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1108
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1109
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1110
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1111
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1112
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1113
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1114
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1115
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1116
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1117
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1118
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1119
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1120
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1121
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1122
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1123
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1124
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1125
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1126
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1127
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1128
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1129
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1130
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1131
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1132
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1133
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1134
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1135
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1136
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1137
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1138
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1139
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1140
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1141
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1142
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1143
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1144
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1145
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1146
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1147
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1148
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1149
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1150
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1151
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1152
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1153
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1154
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1155
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1156
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1157
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1158
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1159
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1160
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1161
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1162
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1163
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1164
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1165
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1166
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1167
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1168
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1169
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1170
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1171
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1172
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1173
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1174
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1175
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1176
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1177
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1178
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1179
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1180
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1181
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1182
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1183
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1184
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1185
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1186
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1187
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1188
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1189
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1190
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1191
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1192
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1193
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1194
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1195
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1196
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1197
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1198
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1199
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1200
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1201
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1202
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1203
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1204
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1205
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1206
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1207
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1208
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1209
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1210
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1211
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1212
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1213
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1214
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1215
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1216
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1217
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1218
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1219
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1220
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1221
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1222
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1223
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1224
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1225
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1226
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1227
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1228
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1229
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1230
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1231
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1232
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1233
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1234
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1235
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1236
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1237
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1238
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1239
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1240
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1241
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1242
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1243
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1244
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1245
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1246
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1247
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1248
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1249
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1250
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1251
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1252
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1253
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1254
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1255
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1256
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1257
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1258
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1259
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1260
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1261
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1262
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1263
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1264
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1265
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1266
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1267
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1268
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1269
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1270
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1271
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1272
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1273
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1274
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1275
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1276
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1277
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1278
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1279
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1280
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1281
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1282
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1283
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1284
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1285
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1286
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1287
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1288
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1289
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1290
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1291
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1292
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1293
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1294
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1295
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1296
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1297
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1298
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1299
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1300
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1301
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1302
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1303
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1304
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1305
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1306
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1307
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1308
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1309
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1310
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1311
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1312
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1313
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1314
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1315
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1316
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1317
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1318
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1319
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1320
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1321
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1322
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1323
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1324
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1325
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1326
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1327
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1328
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1329
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1330
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1331
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1332
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1333
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1334
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1335
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1336
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1337
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1338
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1339
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1340
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1341
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1342
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1343
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1344
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1345
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1346
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1347
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1348
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1349
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1350
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1351
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1352
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1353
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1354
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1355
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1356
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1357
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1358
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1359
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1360
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1361
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1362
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1363
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1364
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1365
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1366
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1367
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1368
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1369
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1370
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1371
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1372
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1373
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1374
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1375
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1376
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1377
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1378
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1379
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1380
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1381
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1382
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1383
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1384
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1385
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1386
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1387
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1388
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1389
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1390
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1391
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1392
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1393
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1394
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1395
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1396
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1397
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1398
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1399
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1400
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1401
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1402
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1403
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1404
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1405
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1406
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1407
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1408
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1409
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1410
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1411
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1412
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1413
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1414
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1415
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1416
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1417
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1418
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1419
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1420
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1421
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1422
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1423
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1424
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1425
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1426
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1427
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1428
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1429
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1430
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1431
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1432
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1433
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1434
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1435
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1436
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1437
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1438
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1439
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1440
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1441
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1442
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1443
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1444
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1445
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1446
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1447
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1448
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1449
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1450
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1451
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1452
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1453
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1454
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1455
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1456
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1457
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1458
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1459
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1460
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1461
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1462
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1463
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1464
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1465
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1466
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1467
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1468
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1469
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1470
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1471
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1472
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1473
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1474
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1475
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1476
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1477
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1478
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1479
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1480
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1481
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1482
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1483
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1484
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1485
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1486
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1487
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1488
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1489
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1490
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1491
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1492
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1493
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1494
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1495
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1496
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1497
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1498
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1499
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1500
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1501
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1502
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1503
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1504
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1505
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1506
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1507
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1508
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1509
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1510
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1511
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1512
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1513
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1514
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1515
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1516
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1517
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1518
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1519
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1520
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1521
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1522
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1523
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1524
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1525
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1526
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1527
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1528
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1529
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1530
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1531
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1532
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1533
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1534
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1535
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1536
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1537
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1538
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1539
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1540
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1541
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1542
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1543
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1544
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1545
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1546
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1547
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1548
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1549
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1550
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1551
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1552
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1553
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1554
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1555
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1556
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1557
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1558
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1559
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1560
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1561
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1562
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1563
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1564
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1565
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1566
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1567
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1568
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1569
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1570
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1571
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1572
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1573
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1574
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1575
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1576
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1577
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1578
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1579
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1580
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1581
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1582
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1583
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1584
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1585
+QDEBUG : tst_AppLog::bufferLimit() taidaflow.applogtest: buffered 1586
+WARNING: tst_AppLog::bufferLimit() Maximum amount of warnings exceeded. Use -maxwarnings to override.
+PASS   : tst_AppLog::bufferLimit()
+PASS   : tst_AppLog::cleanupTestCase()
+Totals: 28 passed, 0 failed, 0 skipped, 0 blacklisted, 572ms
+********* Finished testing of tst_AppLog *********

@@ -58,5 +58,16 @@
     "enabled": true,
     "port": 80,
     "exe": "C:\\tools\\nginx\\nginx-1.30.5\\nginx.exe"
+  },
+  "log": {
+    "dir": "logs",
+    "quiet": {
+      "enabled": true,
+      "keepDays": 60
+    },
+    "full": {
+      "enabled": true,
+      "keepDays": 7
+    }
   }
 }

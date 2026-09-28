@@ -12,15 +12,19 @@
 #     /exports/<file>      <config.json dataDir>\exports        (CSV downloads with Range)
 #     /api/                127.0.0.1:<rest.port>                (REST API)
 #     /mirror              127.0.0.1:<mirror.internalPort>      (WebSocket, live synchronisation)
+#     log folder           config.json log.dir resolved against dataDir (default <dataDir>\logs; w2-065):
+#                          nginx-error.log and nginx-access-YYYY-MM-DD.log, beside the app's own log
+#                          files; created when missing
 #     nginx folder         folder of config.json nginx.exe (default nginx\nginx.exe = the bundled one;
 #                          relative = to the folder of config.json)
-# All paths in the file are absolute; nginx keeps its own logs\ and temp\ in the nginx folder.
+# The web root is written relative to the nginx folder, the other paths absolute; nginx keeps
+# logs\nginx.pid (and the messages of its own start-up) and temp\ in the nginx folder.
 # An existing nginx.conf that was not written by this script is kept as nginx.conf.orig-<timestamp>
 # (never deleted); an older TaidaFlow one is kept as nginx.conf.prev-<timestamp> (with -Build, the
 # desktop build's own output, it is replaced without a backup). Then "nginx -t" checks the result (default prefix =
 # the nginx folder). config.json is only read (created with the defaults when missing, like
 # start-taidaflow.ps1 does), never changed.
-# Run it again after config.json (ports, dataDir, nginx.exe) or the installation folder changed, and
+# Run it again after config.json (ports, dataDir, log.dir, nginx.exe) or the installation folder changed, and
 # after copying a new package over the installation folder; then "nginx -s reload" (or restart nginx).
 #
 # Checks (nothing is stopped or changed outside the nginx conf folder):
@@ -42,7 +46,9 @@
 #                 nginx -t runs only when <NginxDir>\nginx.exe exists)
 #   -Build      : (Mango A8) called by the desktop build (CMakeLists.txt, target taidaflow_nginx_conf) to
 #                 write <build dir>\nginx\conf\nginx.conf: config.json is never created, a missing web
-#                 folder / export folder is only noted, runtime.json and the port check are skipped.
+#                 folder / export folder is only noted, runtime.json and the port check are skipped;
+#                 the keys it needs must be in that file (no app defaults yet): dataDir, nginx.*,
+#                 rest.port, mirror.*Port and (w2-065) log.dir.
 # Exit codes: 0 written and nginx -t passed (or skipped: no nginx.exe in -NginxDir); 2 missing file /
 # folder, config.json unusable; 3 nginx -t failed (the file stays written - fix and run again); 4
 # written and tested, but nginx.port is used by another program; 5 link / junction found (nothing written).
@@ -81,7 +87,7 @@ if ($Build) {
     } catch { Say "config file for the build is not valid JSON: $configPath ($(($_.Exception.Message -split "`r?`n")[0]))"; exit 2 }
     $cfg = [pscustomobject]@{ Path = $configPath; Exists = $true; Created = $false; Error = ''; Values = @{}; Sources = @{}
                               Notes = (New-Object System.Collections.Generic.List[string]); DataDir = ''; BaseDir = (Split-Path -Parent $configPath) }
-    foreach ($k in 'dataDir', 'nginx.enabled', 'nginx.port', 'rest.port', 'mirror.internalPort', 'mirror.publicPort') {
+    foreach ($k in 'dataDir', 'nginx.enabled', 'nginx.port', 'rest.port', 'mirror.internalPort', 'mirror.publicPort', 'log.dir') {
         $o = $rootObj
         foreach ($seg in $k.Split('.')) { $prop = if ($o) { $o.PSObject.Properties[$seg] } else { $null }; $o = if ($prop) { $prop.Value } else { $null } }
         $t = Test-TaidaFlowValue $k $o
@@ -113,9 +119,11 @@ $confDir = Join-Path $nginxDir 'conf'
 $confFile = Join-Path $confDir 'nginx.conf'
 $web = Join-Path $InstallDir 'web'
 $exports = Join-Path $cfg.DataDir 'exports'
+$logDir = Resolve-TaidaFlowLogDir $cfg
 Say "nginx      : $nginxDir$(if (-not $haveExe) { ' (no nginx.exe there - nginx -t skipped)' })"
 Say "web root   : $web"
 Say "exports    : $exports (config.json dataDir $($cfg.DataDir))"
+Say "log folder : $logDir (config.json log.dir = $($v['log.dir']), $($cfg.Sources['log.dir']); nginx-error.log, nginx-access-YYYY-MM-DD.log)"
 Say ("ports      : listen {0} (nginx.port), /api/ -> 127.0.0.1:{1} (rest.port), /mirror -> 127.0.0.1:{2} (mirror.internalPort)" -f $v['nginx.port'], $v['rest.port'], $v['mirror.internalPort'])
 if (-not $v['nginx.enabled']) { Say "NOTE: config.json nginx.enabled is false - the file is written, but start-taidaflow.ps1 will not start nginx and the app points pages at its own ports" }
 if (-not (Test-Path (Join-Path $web 'TaidaFlowApp.html') -PathType Leaf)) {
@@ -140,6 +148,12 @@ function Find-ReparsePoints([string]$dir) {
     return ,$found
 }
 if (-not $Build -and -not (Test-Path $exports -PathType Container)) { New-Item -ItemType Directory -Force $exports | Out-Null; Say "export folder created: $exports (the app creates the same folder at start-up)" }
+if ($logDir -match '[\$"''{};#]' -or $logDir -match '[\x00-\x1f]') { Say "log folder path contains a character that cannot be used in the nginx configuration: $logDir"; exit 2 }
+# nginx does not create folders: without it nginx -t / start fail on nginx-error.log (w2-065).
+if (-not (Test-Path -LiteralPath $logDir -PathType Container)) {
+    try { New-Item -ItemType Directory -Force $logDir | Out-Null; Say "log folder created: $logDir (the app writes its own log files there too)" }
+    catch { Say "log folder cannot be created: $logDir - $($_.Exception.Message)"; exit 2 }
+}
 foreach ($pair in @(@('web root', $web), @('export folder', $exports))) {
     if ($pair[1] -match '[\$"''{};#]' -or $pair[1] -match '[\x00-\x1f]') { Say "$($pair[0]) path contains a character that cannot be used in the nginx configuration: $($pair[1])"; exit 2 }
     if (-not (Test-Path $pair[1] -PathType Container)) { continue }
@@ -155,10 +169,10 @@ foreach ($pair in @(@('web root', $web), @('export folder', $exports))) {
 # --- write conf\nginx.conf -------------------------------------------------------------------------
 # Header (Mango A9): generator version, the config.json used (path, last write time, SHA-256) and the
 # installation folder. Deterministic - no time stamp of the run - so "-IfChanged" can compare.
-$generatorVersion = 'install-nginx-config.ps1 v1 (w2-062)'
+$generatorVersion = 'install-nginx-config.ps1 v2 (w2-065: logs in log.dir)'
 $marker = '# TAIDAFLOW NGINX CONFIGURATION'
 try {
-    $body = Get-TaidaFlowNginxConf $template @{ WebRoot = $web; ExportDir = $exports; Port = [int]$v['nginx.port']; RestPort = [int]$v['rest.port']
+    $body = Get-TaidaFlowNginxConf $template @{ WebRoot = $web; ExportDir = $exports; LogDir = $logDir; Port = [int]$v['nginx.port']; RestPort = [int]$v['rest.port']
                                                 MirrorPort = [int]$v['mirror.internalPort']; Prefix = $nginxDir }
 } catch { Say $_.Exception.Message; exit 2 }
 $cfgItem = Get-Item -LiteralPath $configPath
@@ -172,6 +186,7 @@ $header = "$marker - GENERATED by $by from deploy\nginx\taidaflow.conf - run the
           "# nginx folder   : $nginxDir (prefix: start with  cd <nginx folder>  +  start nginx ; nginx -s reload ; nginx -s quit)`n" +
           "# web root       : $web (written relative to the nginx folder)`n" +
           "# export folder  : $exports`n" +
+          "# log folder     : $logDir (config.json log.dir: nginx-error.log, nginx-access-YYYY-MM-DD.log)`n" +
           "# ports          : listen $($v['nginx.port'])   /api/ -> 127.0.0.1:$($v['rest.port'])   /mirror -> 127.0.0.1:$($v['mirror.internalPort'])`n"
 $text = $header + $body
 New-Item -ItemType Directory -Force $confDir, (Join-Path $nginxDir 'logs'), (Join-Path $nginxDir 'temp') | Out-Null

@@ -1,0 +1,21 @@
+=== w2-065 nginx probe 2026-09-28T23:06:56.2524868+08:00
+nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe
+nginx -v: nginx version: nginx/1.30.5
+listeners on 18097 before: 0
+nginx -t exit 0
+  | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-065-nginx-probe/conf/probe.conf syntax is ok
+  | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-065-nginx-probe/conf/probe.conf test is successful
+started nginx master pid 128076
+GET /index.html -> 200
+GET /missing.html -> 404
+GET /index.html?x=1 -> 200
+today (local): 2026-09-28
+applogs\nginx-access-2026-09-28.log (95 bytes)
+applogs\nginx-error.log (0 bytes)
+  access | 127.0.0.1 - - [28/Sep/2026:23:06:59 +0800] "GET /index.html HTTP/1.1" 200 3 "-" "curl/8.21.0"
+  access | 127.0.0.1 - - [28/Sep/2026:23:06:59 +0800] "GET /missing.html HTTP/1.1" 404 153 "-" "curl/8.21.0"
+  access | 127.0.0.1 - - [28/Sep/2026:23:06:59 +0800] "GET /index.html?x=1 HTTP/1.1" 200 3 "-" "curl/8.21.0"
+logs\error.log (0 bytes)
+logs\nginx.pid (8 bytes)
+nginx -s quit exit 0 
+nginx processes of C:\tools\nginx\nginx-1.30.5\nginx.exe left: 0

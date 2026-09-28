@@ -1,0 +1,3 @@
+tst_appconfig exit 0 : Totals: 61 passed, 0 failed, 0 skipped, 0 blacklisted, 126ms
+tst_runtimeinfo exit 0 : Totals: 26 passed, 0 failed, 0 skipped, 0 blacklisted, 5999ms
+tst_applog exit 0 : Totals: 28 passed, 0 failed, 0 skipped, 0 blacklisted, 572ms

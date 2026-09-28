@@ -1,0 +1,29 @@
+﻿-- [qml-scan] QML import scan limited to the project folders (App;Core;Dependencies;Generated;TaidaFlow;TaidaFlowContent;cmake;deploy;docs;integration-pack;scripts); build*/dist/hidden folders left out: 45 import(s) (Qt's whole-folder scan: 59)
+-- [wasm-shell] D:/repo/codex/qmlTester/taidaflow/build/wasm-release/TaidaFlowApp.html <- D:/repo/codex/qmlTester/taidaflow/App/wasm/TaidaFlowApp.shell.html
+-- [wasm-shell] APPNAME=TaidaFlowApp APPEXPORTNAME=TaidaFlowApp_entry PRELOAD='' (from Qt-generated page) sha256=d50525ad24b71974ba04fc8e9aefbdf2635b516977e677311f8c90d58b93c487
+[565/568] Building CXX object CMakeFiles/TaidaFlowApp.dir/App/embeddedfonts.cpp.o
+--- sizes (bytes)
+TaidaFlowApp.exe  3,571,200  2026-09-29T01:32:05
+TaidaFlowApp.wasm  33,843,042  2026-09-29T01:35:15
+TaidaFlowApp.html  21,871  2026-09-29T01:32:27
+TaidaFlowApp.js  304,976  2026-09-29T01:35:15
+qtloader.js  12,354  2026-09-29T01:32:27
+qtlogo.svg  1,686  2026-09-29T01:32:27
+--- embedded_fonts.qrc (wasm-release)
+<RCC>
+  <qresource prefix="/fonts">
+    <file alias="TaidaFlowNotoSansTC-Regular.ttf">D:/repo/codex/qmlTester/taidaflow/App/fonts/TaidaFlowNotoSansTC-Regular.ttf</file>
+    <file alias="TaidaFlowNotoSansTC-Bold.ttf">D:/repo/codex/qmlTester/taidaflow/App/fonts/TaidaFlowNotoSansTC-Bold.ttf</file>
+  </qresource>
+</RCC>
+
+--- rcc outputs for embedded_fonts (timestamps vs App\fonts)
+build\wasm-release\App\.qt\rcc\embedded_fonts.qrc  326  2026-09-29T01:32:25
+build\wasm-release\App\.qt\rcc\qrc_embedded_fonts.cpp  1,898,437  2026-09-29T01:32:52
+build\wasm-release\CMakeFiles\TaidaFlowApp.dir\App\.qt\rcc\qrc_embedded_fonts.cpp.o  384,912  2026-09-29T01:32:59
+build\desktop\App\.qt\rcc\embedded_fonts.qrc  326  2026-09-29T01:31:33
+build\desktop\App\.qt\rcc\qrc_embedded_fonts.cpp  1,898,437  2026-09-29T01:31:57
+build\desktop\CMakeFiles\TaidaFlowApp.dir\App\.qt\rcc\qrc_embedded_fonts.cpp.obj  389,420  2026-09-29T01:32:03
+App\fonts\charset.txt  1,346  2026-09-29T01:30:37
+App\fonts\TaidaFlowNotoSansTC-Bold.ttf  192,136  2026-09-29T01:30:37
+App\fonts\TaidaFlowNotoSansTC-Regular.ttf  191,452  2026-09-29T01:30:32

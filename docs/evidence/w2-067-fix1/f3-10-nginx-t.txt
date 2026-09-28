@@ -1,0 +1,3 @@
+nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+EXIT=0 

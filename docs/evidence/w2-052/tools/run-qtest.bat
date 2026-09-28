@@ -2,7 +2,7 @@
 rem w2-052: configure, build and run the per-client History view QTests (Release, MSVC 2022 x64):
 rem tst_w2052_views (HistoryViewService + SqlManager + Proxy) and tst_w2052_rangepage (the w2-045
 rem correctness test through the per-session SqlManager API).  No network port is used.
-rem Needs the w2-041 bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
+rem Needs the w2-041 bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
 setlocal
 set TF=%~dp0..\..\..\..
 call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1

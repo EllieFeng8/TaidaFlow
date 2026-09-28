@@ -1,0 +1,8 @@
+﻿cleanup check 2026-09-29T01:40:20
+TaidaFlowApp/nginx/Adam60xxSimulator processes: 0
+compiler processes: 0
+listeners on 80/502/8124/8125/18080/18125: 0
+__pycache__ outside build: 0
+build\w2-067-fix1-*: 0
+dist: TaidaFlow-20260929-534b658-dirty
+git HEAD: 534b658

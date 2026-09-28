@@ -303,7 +303,10 @@ cd /d C:\tools\emsdk
    ```bat
    powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-font-subset.ps1 --check
    ```
-   exit 0 = 現有字型涵蓋所有字;exit 1 = 有新字(或缺字),要重新產生。`make-font-subset.ps1` 會先找 `py -3`,再找 PATH 上的
+   exit 0 = 現有字型與原始碼用到的字完全一致;exit 1 = 字元清單變了,要重新產生。字元清單變了有兩種:有新字(或缺字),
+   或是**字元被移除**(原始碼不再用到某些字,例如刪掉一段中文註解)。後者的訊息是
+   `charset changed since last build (0 new chars: )`——雖然是 0 個新字、網頁也不會缺字,**仍是 exit 1**,照步驟 3 重新產生即可
+   (子集會少掉那些字形,檔案變小)。`make-font-subset.ps1` 會先找 `py -3`,再找 PATH 上的
    `python`(跳過 Windows 市集的 `python.exe` 別名),以 `-B` 執行(不留 `__pycache__`);找不到可用的 Python 3 時清楚說明並 exit 9。
 3. 重新產生:
    ```bat
@@ -501,8 +504,8 @@ CMake 結構:
 
 ## 4. 桌面版編譯
 
-輸出:`build\desktop\TaidaFlowApp.exe`(參考機 3,426,304 bytes;專案的 QML 模組靜態連結進 exe)。
-參考機完整編譯約 40 秒(578 個 Ninja 步驟)。
+輸出:`build\desktop\TaidaFlowApp.exe`(約 3.6 MB;參考機 2026-09-29 實測 3,571,200 bytes;專案的 QML 模組與網頁版字型子集
+靜態連結進 exe,所以改程式或重新產生字型後大小會有幾 KB 的差異)。參考機完整編譯約 40 秒(582 個 Ninja 步驟)。
 
 ### 4.1 用腳本
 
@@ -606,11 +609,13 @@ build\desktop\nginx\
 
 輸出(`build\wasm-release\`,網頁只需要這 5 個檔;其他 CMake / Ninja 檔不要部署):
 
+大小會隨程式與字型子集改變(每次差幾 KB);下表是量級與參考機 2026-09-29 的實測值,用來判斷「差不多」而不是要一模一樣。
+
 | 檔案 | 參考機大小(bytes) |
 |---|---|
-| `TaidaFlowApp.html`(TaidaFlow 載入頁,§5.5) | 12,155 |
-| `TaidaFlowApp.js` | 304,976 |
-| `TaidaFlowApp.wasm` | 33,847,174(約 34 MB;`deploy-web.ps1` 產生的 `.gz` 約 12.4 MB)。w2-062 起 QML 匯入掃描只看專案資料夾(§3、§9),repo 裡有沒有 `dist\`、`build\` 大小都一樣(w2-062 實測:工作目錄與不含 `dist\`/`build\` 的乾淨複本都是 33,847,174,只差 rcc 時間戳記的 69 個 byte);w2-062 之前參考機曾因掃到 `dist\` 而多連結 Windows 原生樣式模組 |
+| `TaidaFlowApp.html`(TaidaFlow 載入頁,§5.5;含載入後的轉場動畫) | 約 22 KB(實測 21,871) |
+| `TaidaFlowApp.js` | 約 300 KB(實測 304,976) |
+| `TaidaFlowApp.wasm` | 約 34 MB(實測 33,843,042;`deploy-web.ps1` 產生的 `.gz` 約 12 MB)。w2-062 起 QML 匯入掃描只看專案資料夾(§3、§9),repo 裡有沒有 `dist\`、`build\` 大小都一樣(w2-062 當時實測:工作目錄與不含 `dist\`/`build\` 的乾淨複本都是 33,847,174,只差 rcc 時間戳記的 69 個 byte);w2-062 之前參考機曾因掃到 `dist\` 而多連結 Windows 原生樣式模組。若大了好幾 MB,先看 configure log 的 `[qml-scan]` 是否仍是 45 個匯入 |
 | `qtloader.js` | 12,354 |
 | `qtlogo.svg`(新載入頁不用,留著無影響) | 1,686 |
 
@@ -721,7 +726,7 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 | clone 後 / 更新 pack 後 | `PS scripts\verify-pack.ps1`(與來源比對:`-Source <pack 來源資料夾>`) | `MANIFEST` 24/24、exit 0 |
 | 每次兩邊都建完 | `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release` | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
 | 每次兩邊都建完 | `PS scripts\check-version-shadow.ps1 build\desktop build\wasm-release` | 兩行都是 `version_shadow_hits=0`,exit 0 |
-| 改過 UI / C++ 中文字串後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字 → 照 §2.5 (B) 重新產生 → 重建 wasm |
+| 改過 UI / C++ 中文字串或中文註解後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字,或字元被移除(訊息 `0 new chars` 也算)→ 照 §2.5 (B) 重新產生 → 重建 wasm |
 | 改過 REST 相關程式後 | `PS scripts\check-rest-routes.ps1` | exit 0(log 的 route 表與實際註冊一致) |
 | 改過 `Core/AppHttpServer/` 後(或定期) | `scripts\run-apphttpserver-tests.bat` | CTest `100% tests passed`,exit 0(需約 2 GiB 暫存磁碟空間;輸出 `build\apphttpserver-qtest`) |
 | 改過 `App/appconfig.*`、`App/runtimeinfo.*`、`App/applog.*` 後 | 建置並執行 `App/tests`(CTest:`tst_appconfig`、`tst_runtimeinfo`、`tst_applog`,見 `App/tests/README.md` 與下方指令) | `100% tests passed`(3 個測試) |
@@ -753,7 +758,9 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
   (特別注意 `App/CMakeLists.txt` 的 w2-058 區塊、`Core/TaidaFlowProxy.h`、根 `CMakeLists.txt` 的平台判斷)。
 - **合併後必做**(依序,全部 exit 0 才算合併完成):
   1. 字型:UI 常帶新的中文字。有 Python + fonttools 的人跑 `PS scripts\make-font-subset.ps1 --check`;exit 1 → 照 §2.5 (B)
-     重新產生 → 把 `App/fonts/` 的三個檔一起提交。沒有 Python 的人:把網頁版有方框的情況回報給有工具的人處理。
+     重新產生 → 把 `App/fonts/` 的三個檔一起提交。**字元被移除也是 exit 1**(訊息 `charset changed since last build (0 new chars: )`,
+     例如刪了一段中文註解):不會缺字,但一樣重新產生即可,讓 `--check` 回到 exit 0。沒有 Python 的人:把網頁版有方框的情況
+     回報給有工具的人處理。
   2. **fresh 建置**:`scripts\build-desktop.bat fresh`,再 `scripts\build-wasm.bat wasm-release fresh`
      (QDS 產生的 CMake / qmldir / 新 QML 檔與 configure 時套用的載入頁,都需要重新 configure 才會完全反映)。
   3. `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release`
@@ -876,6 +883,15 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 ---
 
 ## 11. 驗證紀錄與沒有驗證到的部分
+
+2026-09-29(w2-067-fix1)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-067-fix1/`:
+
+| 項目 | 結果 |
+|---|---|
+| §2.5 字型 | w2-067 刪掉 `Core/core.cpp` 一段中文註解後 `make-font-subset.ps1 --check` exit 1,訊息 `charset changed since last build (0 new chars: )`:**0 個新字、9 個字被移除**(執會構物發緒觸這釋),不缺字但仍是 exit 1 → 重新產生 → `--check` exit 0;`charset.txt` 1,373 → 1,346 bytes、Regular 195,004 → 191,452 bytes、Bold 195,684 → 192,136 bytes |
+| §4.1 / §5.1 全新建置 | `build-desktop.bat fresh`(582 步,約 40 秒)、`build-wasm.bat wasm-release fresh`(568 步,約 3 分鐘)依序各 exit 0;exe 3,571,200、`TaidaFlowApp.wasm` 33,843,042、`TaidaFlowApp.html` 21,871 bytes;`[qml-scan] ... 45 import(s)`;`build\desktop\nginx` 的 `nginx -t` 通過 |
+| §7 檢查 | `check-wasm-backend`、`check-version-shadow`、`check-rest-routes`(GET 13 / PUT 3)、`verify-pack`(24/24)、`make-font-subset --check` 各 exit 0 |
+| 打包 | `package-release.ps1` exit 0;`check-package-deps.ps1` missing imports 0;`verify-release-package.ps1` ps1 與 bat 兩種模式各 `0 check(s) failed` |
 
 2026-09-28(w2-065)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-065/`:
 

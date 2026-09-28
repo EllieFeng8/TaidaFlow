@@ -1,7 +1,7 @@
 @echo off
 rem w2-049: configure, build and run the w2-041 export/range QTest harness, adapted to the
 rem AppHttpServer singleton (download test = /exports mount), Release, MSVC 2022 x64.
-rem Needs the bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
+rem Needs the bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
 rem Port 8124 must be free (the download test starts AppHttpServer on it); the script refuses otherwise.
 setlocal
 set TF=%~dp0..\..\..\..

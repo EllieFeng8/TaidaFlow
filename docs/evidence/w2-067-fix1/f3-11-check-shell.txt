@@ -1,0 +1,46 @@
+PASS  no @NAME@ placeholder left found: 
+PASS  tag <html> paired open=1 close=1
+PASS  tag <head> paired open=1 close=1
+PASS  tag <body> paired open=1 close=1
+PASS  tag <div> paired open=21 close=21
+PASS  tag <p> paired open=2 close=2
+PASS  tag <h1> paired open=1 close=1
+PASS  tag <script> paired open=3 close=3
+PASS  tag <style> paired open=2 close=2
+PASS  tag <noscript> paired open=2 close=2
+PASS  tag <title> paired open=1 close=1
+PASS  tags properly nested left open=0
+PASS  CSS braces balanced open=76 close=76
+PASS  one inline script count=1
+PASS  inline JS: node --check exit=0
+PASS  contains: tf-leaving 
+PASS  contains: tf-entering 
+PASS  contains: tf-flash 
+PASS  contains: tf-spin 
+PASS  contains: @keyframes tf-exit-loader 
+PASS  contains: @keyframes tf-exit-zoom 
+PASS  contains: @keyframes tf-exit-spin 
+PASS  contains: @keyframes tf-exit-flash 
+PASS  contains: @keyframes tf-screen-enter 
+PASS  contains: @keyframes tf-fade-in 
+PASS  contains: SETTLE_MS = 250 
+PASS  contains: RAF_GUARD_MS = 1000 
+PASS  contains: FINISH_GUARD_MS = 1500 
+PASS  contains: 'animationend', 'animationcancel' 
+PASS  contains: requestAnimationFrame 
+PASS  contains: cancelTransition(); 
+PASS  contains: removeProperty('will-change') 
+PASS  contains: pointer-events: none 
+PASS  contains: beginTransition(); 
+PASS  contains: 準備完成 
+PASS  reduced-motion: loader 200 ms fade 
+PASS  reduced-motion: screen 200 ms fade 
+PASS  reduced-motion: descendant animations off 
+PASS  onLoaded no longer hides the loader directly 
+PASS  no filter on #screen #screen { width: 100%; height: 100%; } | #screen.tf-entering {
+        animation: tf-screen-enter 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 200ms both;
+      } | #screen.tf-entering { animation: tf-fade-in 200ms ease-out both; }
+PASS  no external resources src/href: TaidaFlowApp.js,qtloader.js
+PASS  no url(...) / @import in CSS 
+RESULT: all checks passed
+EXIT=0 

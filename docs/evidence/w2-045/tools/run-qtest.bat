@@ -1,7 +1,7 @@
 @echo off
 rem w2-045: configure, build and run the History step/keyset QTest harness (Release, MSVC 2022 x64)
 rem and build the D3 measurement program w2045_bench.exe (run by run_bench.py, not by CTest).
-rem Needs the w2-041 bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
+rem Needs the w2-041 bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
 setlocal
 set TF=%~dp0..\..\..\..
 call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1

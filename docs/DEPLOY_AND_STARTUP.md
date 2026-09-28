@@ -118,7 +118,9 @@
 3. 刪除 log 資料夾裡過期的 `launcher-<日期>.log` 與 `nginx-access-<日期>.log`(超過 `log.quiet.keepDays` 天,預設 60;
    只刪完全符合這兩種檔名的檔,§13)。
 4. nginx(`nginx.enabled` 為 true 時):確認 `nginx\conf\nginx.conf` 是**這個安裝資料夾與這份 config.json** 產生的
-   ——不存在、資料夾搬過、config.json 改過 → 自動重新產生(舊檔留成 `nginx.conf.prev-<時間>`),nginx 執行中就 `nginx -s reload`;
+   ——不存在、資料夾搬過、config.json 改過 → 自動重新產生,舊檔不刪、改名保留:自動產生的舊檔留成 `nginx.conf.prev-<時間>`;
+   不是自動產生的(例如照 §5.4 **手寫**的 `nginx.conf`,檔頭沒有自動產生的記錄)留成 `nginx.conf.orig-<時間>`。
+   nginx 執行中就 `nginx -s reload`;
    nginx 沒執行就以 `start nginx` 的方式啟動,已執行就不動它。nginx 起不來時 TaidaFlow 仍會啟動,網頁改走 app 自己的
    `:8124` / `:8125`(結果碼 8)。
 5. 啟動 `TaidaFlowApp.exe`(工作目錄 = 資料資料夾;**沒有黑色的主控台視窗**,程式自己寫 log 檔),等 8124、8125 開始聽,
@@ -160,6 +162,7 @@ tasklist /fi "imagename eq nginx.exe"   :: 看有沒有在執行(一個 master +
 ```
 
 一定要**先 `cd` 到 nginx 資料夾**:nginx 用目前資料夾找 `conf\nginx.conf`、`logs\`、`temp\`。
+`cd` 之後打 `nginx -t` 仍出現「不是內部或外部命令」時,改打 `.\nginx.exe -t`、`.\nginx.exe -s quit`(§10 最後幾則)。
 
 ### 3.4 什麼時候要重新產生 nginx 設定
 
@@ -259,8 +262,14 @@ set "PATH=%QT%\bin;%PATH%"
   copy "C:\tools\nginx\nginx-1.30.5\conf\mime.types" "%OUT%\nginx\conf\"
   ```
   (`nginx\logs` 仍要有:nginx 在這裡放 `nginx.pid` 與它讀設定檔之前的訊息;請求紀錄與錯誤紀錄寫到 config.json 的 log 資料夾,§13。)
+- **nginx 設定樣板(必要)**:§5.4 的第一步就是從這個樣板複製 `nginx.conf`,所以一定要複製
+  (不複製時只能照 §5.4 下方的完整範例自己打一份):
+  ```bat
+  mkdir "%OUT%\deploy\nginx"
+  copy "%SRC%\deploy\nginx\taidaflow.conf" "%OUT%\deploy\nginx\"
+  ```
 - 啟動 / 停止腳本(選用):`deploy\release\*.bat`、`*.ps1`、`scripts\install-nginx-config.ps1`、
-  `scripts\taidaflow-config.ps1`、`deploy\nginx\taidaflow.conf` 照打包的位置複製(手動部署可以不用它們)。
+  `scripts\taidaflow-config.ps1` 照打包的位置複製(手動部署可以不用它們;上一項的 `taidaflow.conf` 則不能省)。
 
 把 `%OUT%` 整個複製到正式機的 `C:\TaidaFlow`。
 
@@ -281,7 +290,7 @@ notepad C:\TaidaFlow\config.json
 
 ### 5.4 手動寫 nginx.conf
 
-複製樣板再取代記號(或直接照下方完整範例打一份):
+複製樣板再取代記號(樣板是 §5.1 複製的 `deploy\nginx\taidaflow.conf`;沒有它時直接照下方完整範例打一份):
 
 ```bat
 copy C:\TaidaFlow\deploy\nginx\taidaflow.conf C:\TaidaFlow\nginx\conf\nginx.conf
@@ -663,6 +672,16 @@ start "" "<模擬器資料夾>\Adam60xxSimulator.exe" --autostart
 **1b. 安全探測(建議,這一步是 .ps1)**:`powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\safety_probe.ps1" -DeviceProfile simulator -Reason "manual"`
 → 要看到 `verdict: SAFE`(exit 0)才繼續。
 
+**1c. 部署網頁(一定要在開 app 之前)**:
+
+```bat
+powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\deploy-web.ps1"
+```
+
+把 `build\wasm-release` 的網頁檔複製到 `build\desktop\web\`(BUILD.md §4.5 也是「先部署網頁」)。順序不能反:app 啟動時才決定
+網頁資料夾,若這時 `build\desktop\web` 還不存在(例如剛做完 fresh 建置),app 會改用 `build\wasm-release` 當網頁資料夾、
+把 `runtime.json` 寫進建置輸出,而且在 app 重新啟動前 8124 都送那裡的檔。
+
 **2. TaidaFlowApp**:
 
 ```bat
@@ -674,10 +693,9 @@ start "" "%REPO%\build\desktop\TaidaFlowApp.exe"
   `set "TAIDAFLOW_CONFIG=%REPO%\deploy\dev\config.simulator.json"`,位址直接就是模擬器)。
 - 程式切換到 config.dev.json 的 `dataDir` = `build\runtime-cwd`(已被 git 忽略)。
 
-**3. nginx**:桌面版建置已產生 `build\desktop\nginx\`(含 `conf\nginx.conf`,BUILD.md §4.5),先部署網頁再啟動:
+**3. nginx**:桌面版建置已產生 `build\desktop\nginx\`(含 `conf\nginx.conf`,BUILD.md §4.5);網頁已在步驟 1c 部署:
 
 ```bat
-powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\deploy-web.ps1"
 cd /d "%REPO%\build\desktop\nginx"
 start nginx
 ```
@@ -701,10 +719,10 @@ taskkill /IM Adam60xxSimulator.exe
 | 手動步驟 | 腳本(repo 的 `scripts\`) |
 |---|---|
 | 1. 模擬器 | `powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1` |
+| 1c. 網頁部署(開 app 之前) | `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(同時寫 `web\runtime.json`) |
 | 1b + 2. 探測 + app | `powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator -Label "sim"`(`-Config` 換設定檔,預設 `deploy\dev\config.dev.json`;先安全探測,SAFE 才啟動) |
 | 3. nginx | `build\desktop\nginx` 的 `start nginx`,或 `powershell -ExecutionPolicy Bypass -File scripts\nginx-start.ps1`(開發用、獨立的 `build\nginx` 前綴;兩者擇一) |
 | 5. 關 nginx | `nginx -s quit`(在 `build\desktop\nginx`),或 `scripts\nginx-stop.ps1`(只停自己起的) |
-| 網頁部署 | `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(同時寫 `web\runtime.json`) |
 
 ### 9.4 打包與在開發機上驗證打包資料夾(開發人員)
 

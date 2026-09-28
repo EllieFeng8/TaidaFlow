@@ -1,0 +1,18 @@
+﻿
+Name                            Length LastWriteTime        
+----                            ------ -------------        
+charset.txt                       1373 2026/9/28 下午 11:17:02
+TaidaFlowNotoSansTC-Bold.ttf    195684 2026/9/28 下午 11:17:02
+TaidaFlowNotoSansTC-Regular.ttf 195004 2026/9/28 下午 11:16:57
+
+
+
+
+Hash                                                             Path                                                                       
+----                                                             ----                                                                       
+E1BE4732153A5578DE15F07B5D3C88175AF3BD31CD355E61A430FBF76E70C337 D:\repo\codex\qmlTester\taidaflow\App\fonts\charset.txt                    
+22C3CEFC17C76E67C29F53BDF6AEA2F4FEF50D5EA1985FECAA06A3C6401F7FFF D:\repo\codex\qmlTester\taidaflow\App\fonts\TaidaFlowNotoSansTC-Bold.ttf   
+E14B360E8F407CAC49301F99CEB227F9CA9B7102F76D40FCFAF5B35DBEF77C4F D:\repo\codex\qmlTester\taidaflow\App\fonts\TaidaFlowNotoSansTC-Regular.ttf
+
+
+

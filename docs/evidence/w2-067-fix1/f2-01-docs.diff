@@ -1,0 +1,208 @@
+﻿diff --git a/docs/BUILD.md b/docs/BUILD.md
+index 0eddf65..a91d0ae 100644
+--- a/docs/BUILD.md
++++ b/docs/BUILD.md
+@@ -303,7 +303,10 @@ cd /d C:\tools\emsdk
+    ```bat
+    powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-font-subset.ps1 --check
+    ```
+-   exit 0 = 現有字型涵蓋所有字;exit 1 = 有新字(或缺字),要重新產生。`make-font-subset.ps1` 會先找 `py -3`,再找 PATH 上的
++   exit 0 = 現有字型與原始碼用到的字完全一致;exit 1 = 字元清單變了,要重新產生。字元清單變了有兩種:有新字(或缺字),
++   或是**字元被移除**(原始碼不再用到某些字,例如刪掉一段中文註解)。後者的訊息是
++   `charset changed since last build (0 new chars: )`——雖然是 0 個新字、網頁也不會缺字,**仍是 exit 1**,照步驟 3 重新產生即可
++   (子集會少掉那些字形,檔案變小)。`make-font-subset.ps1` 會先找 `py -3`,再找 PATH 上的
+    `python`(跳過 Windows 市集的 `python.exe` 別名),以 `-B` 執行(不留 `__pycache__`);找不到可用的 Python 3 時清楚說明並 exit 9。
+ 3. 重新產生:
+    ```bat
+@@ -501,8 +504,8 @@ CMake 結構:
+ 
+ ## 4. 桌面版編譯
+ 
+-輸出:`build\desktop\TaidaFlowApp.exe`(參考機 3,426,304 bytes;專案的 QML 模組靜態連結進 exe)。
+-參考機完整編譯約 40 秒(578 個 Ninja 步驟)。
++輸出:`build\desktop\TaidaFlowApp.exe`(約 3.6 MB;參考機 2026-09-29 實測 3,571,200 bytes;專案的 QML 模組與網頁版字型子集
++靜態連結進 exe,所以改程式或重新產生字型後大小會有幾 KB 的差異)。參考機完整編譯約 40 秒(582 個 Ninja 步驟)。
+ 
+ ### 4.1 用腳本
+ 
+@@ -606,11 +609,13 @@ build\desktop\nginx\
+ 
+ 輸出(`build\wasm-release\`,網頁只需要這 5 個檔;其他 CMake / Ninja 檔不要部署):
+ 
++大小會隨程式與字型子集改變(每次差幾 KB);下表是量級與參考機 2026-09-29 的實測值,用來判斷「差不多」而不是要一模一樣。
++
+ | 檔案 | 參考機大小(bytes) |
+ |---|---|
+-| `TaidaFlowApp.html`(TaidaFlow 載入頁,§5.5) | 12,155 |
+-| `TaidaFlowApp.js` | 304,976 |
+-| `TaidaFlowApp.wasm` | 33,847,174(約 34 MB;`deploy-web.ps1` 產生的 `.gz` 約 12.4 MB)。w2-062 起 QML 匯入掃描只看專案資料夾(§3、§9),repo 裡有沒有 `dist\`、`build\` 大小都一樣(w2-062 實測:工作目錄與不含 `dist\`/`build\` 的乾淨複本都是 33,847,174,只差 rcc 時間戳記的 69 個 byte);w2-062 之前參考機曾因掃到 `dist\` 而多連結 Windows 原生樣式模組 |
++| `TaidaFlowApp.html`(TaidaFlow 載入頁,§5.5;含載入後的轉場動畫) | 約 22 KB(實測 21,871) |
++| `TaidaFlowApp.js` | 約 300 KB(實測 304,976) |
++| `TaidaFlowApp.wasm` | 約 34 MB(實測 33,843,042;`deploy-web.ps1` 產生的 `.gz` 約 12 MB)。w2-062 起 QML 匯入掃描只看專案資料夾(§3、§9),repo 裡有沒有 `dist\`、`build\` 大小都一樣(w2-062 當時實測:工作目錄與不含 `dist\`/`build\` 的乾淨複本都是 33,847,174,只差 rcc 時間戳記的 69 個 byte);w2-062 之前參考機曾因掃到 `dist\` 而多連結 Windows 原生樣式模組。若大了好幾 MB,先看 configure log 的 `[qml-scan]` 是否仍是 45 個匯入 |
+ | `qtloader.js` | 12,354 |
+ | `qtlogo.svg`(新載入頁不用,留著無影響) | 1,686 |
+ 
+@@ -721,7 +726,7 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
+ | clone 後 / 更新 pack 後 | `PS scripts\verify-pack.ps1`(與來源比對:`-Source <pack 來源資料夾>`) | `MANIFEST` 24/24、exit 0 |
+ | 每次兩邊都建完 | `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release` | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
+ | 每次兩邊都建完 | `PS scripts\check-version-shadow.ps1 build\desktop build\wasm-release` | 兩行都是 `version_shadow_hits=0`,exit 0 |
+-| 改過 UI / C++ 中文字串後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字 → 照 §2.5 (B) 重新產生 → 重建 wasm |
++| 改過 UI / C++ 中文字串或中文註解後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字,或字元被移除(訊息 `0 new chars` 也算)→ 照 §2.5 (B) 重新產生 → 重建 wasm |
+ | 改過 REST 相關程式後 | `PS scripts\check-rest-routes.ps1` | exit 0(log 的 route 表與實際註冊一致) |
+ | 改過 `Core/AppHttpServer/` 後(或定期) | `scripts\run-apphttpserver-tests.bat` | CTest `100% tests passed`,exit 0(需約 2 GiB 暫存磁碟空間;輸出 `build\apphttpserver-qtest`) |
+ | 改過 `App/appconfig.*`、`App/runtimeinfo.*`、`App/applog.*` 後 | 建置並執行 `App/tests`(CTest:`tst_appconfig`、`tst_runtimeinfo`、`tst_applog`,見 `App/tests/README.md` 與下方指令) | `100% tests passed`(3 個測試) |
+@@ -753,7 +758,9 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
+   (特別注意 `App/CMakeLists.txt` 的 w2-058 區塊、`Core/TaidaFlowProxy.h`、根 `CMakeLists.txt` 的平台判斷)。
+ - **合併後必做**(依序,全部 exit 0 才算合併完成):
+   1. 字型:UI 常帶新的中文字。有 Python + fonttools 的人跑 `PS scripts\make-font-subset.ps1 --check`;exit 1 → 照 §2.5 (B)
+-     重新產生 → 把 `App/fonts/` 的三個檔一起提交。沒有 Python 的人:把網頁版有方框的情況回報給有工具的人處理。
++     重新產生 → 把 `App/fonts/` 的三個檔一起提交。**字元被移除也是 exit 1**(訊息 `charset changed since last build (0 new chars: )`,
++     例如刪了一段中文註解):不會缺字,但一樣重新產生即可,讓 `--check` 回到 exit 0。沒有 Python 的人:把網頁版有方框的情況
++     回報給有工具的人處理。
+   2. **fresh 建置**:`scripts\build-desktop.bat fresh`,再 `scripts\build-wasm.bat wasm-release fresh`
+      (QDS 產生的 CMake / qmldir / 新 QML 檔與 configure 時套用的載入頁,都需要重新 configure 才會完全反映)。
+   3. `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release`
+@@ -877,6 +884,15 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
+ 
+ ## 11. 驗證紀錄與沒有驗證到的部分
+ 
++2026-09-29(w2-067-fix1)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-067-fix1/`:
++
++| 項目 | 結果 |
++|---|---|
++| §2.5 字型 | w2-067 刪掉 `Core/core.cpp` 一段中文註解後 `make-font-subset.ps1 --check` exit 1,訊息 `charset changed since last build (0 new chars: )`:**0 個新字、9 個字被移除**(執會構物發緒觸這釋),不缺字但仍是 exit 1 → 重新產生 → `--check` exit 0;`charset.txt` 1,373 → 1,346 bytes、Regular 195,004 → 191,452 bytes、Bold 195,684 → 192,136 bytes |
++| §4.1 / §5.1 全新建置 | `build-desktop.bat fresh`(582 步,約 40 秒)、`build-wasm.bat wasm-release fresh`(568 步,約 3 分鐘)依序各 exit 0;exe 3,571,200、`TaidaFlowApp.wasm` 33,843,042、`TaidaFlowApp.html` 21,871 bytes;`[qml-scan] ... 45 import(s)`;`build\desktop\nginx` 的 `nginx -t` 通過 |
++| §7 檢查 | `check-wasm-backend`、`check-version-shadow`、`check-rest-routes`(GET 13 / PUT 3)、`verify-pack`(24/24)、`make-font-subset --check` 各 exit 0 |
++| 打包 | `package-release.ps1` exit 0;`check-package-deps.ps1` missing imports 0;`verify-release-package.ps1` ps1 與 bat 兩種模式各 `0 check(s) failed` |
++
+ 2026-09-28(w2-065)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-065/`:
+ 
+ | 項目 | 結果 |
+diff --git a/docs/DEPLOY_AND_STARTUP.md b/docs/DEPLOY_AND_STARTUP.md
+index fcd4f3d..e72f50c 100644
+--- a/docs/DEPLOY_AND_STARTUP.md
++++ b/docs/DEPLOY_AND_STARTUP.md
+@@ -118,7 +118,9 @@
+ 3. 刪除 log 資料夾裡過期的 `launcher-<日期>.log` 與 `nginx-access-<日期>.log`(超過 `log.quiet.keepDays` 天,預設 60;
+    只刪完全符合這兩種檔名的檔,§13)。
+ 4. nginx(`nginx.enabled` 為 true 時):確認 `nginx\conf\nginx.conf` 是**這個安裝資料夾與這份 config.json** 產生的
+-   ——不存在、資料夾搬過、config.json 改過 → 自動重新產生(舊檔留成 `nginx.conf.prev-<時間>`),nginx 執行中就 `nginx -s reload`;
++   ——不存在、資料夾搬過、config.json 改過 → 自動重新產生,舊檔不刪、改名保留:自動產生的舊檔留成 `nginx.conf.prev-<時間>`;
++   不是自動產生的(例如照 §5.4 **手寫**的 `nginx.conf`,檔頭沒有自動產生的記錄)留成 `nginx.conf.orig-<時間>`。
++   nginx 執行中就 `nginx -s reload`;
+    nginx 沒執行就以 `start nginx` 的方式啟動,已執行就不動它。nginx 起不來時 TaidaFlow 仍會啟動,網頁改走 app 自己的
+    `:8124` / `:8125`(結果碼 8)。
+ 5. 啟動 `TaidaFlowApp.exe`(工作目錄 = 資料資料夾;**沒有黑色的主控台視窗**,程式自己寫 log 檔),等 8124、8125 開始聽,
+@@ -160,6 +162,7 @@ tasklist /fi "imagename eq nginx.exe"   :: 看有沒有在執行(一個 master +
+ ```
+ 
+ 一定要**先 `cd` 到 nginx 資料夾**:nginx 用目前資料夾找 `conf\nginx.conf`、`logs\`、`temp\`。
++`cd` 之後打 `nginx -t` 仍出現「不是內部或外部命令」時,改打 `.\nginx.exe -t`、`.\nginx.exe -s quit`(§10 最後幾則)。
+ 
+ ### 3.4 什麼時候要重新產生 nginx 設定
+ 
+@@ -259,8 +262,14 @@ set "PATH=%QT%\bin;%PATH%"
+   copy "C:\tools\nginx\nginx-1.30.5\conf\mime.types" "%OUT%\nginx\conf\"
+   ```
+   (`nginx\logs` 仍要有:nginx 在這裡放 `nginx.pid` 與它讀設定檔之前的訊息;請求紀錄與錯誤紀錄寫到 config.json 的 log 資料夾,§13。)
++- **nginx 設定樣板(必要)**:§5.4 的第一步就是從這個樣板複製 `nginx.conf`,所以一定要複製
++  (不複製時只能照 §5.4 下方的完整範例自己打一份):
++  ```bat
++  mkdir "%OUT%\deploy\nginx"
++  copy "%SRC%\deploy\nginx\taidaflow.conf" "%OUT%\deploy\nginx\"
++  ```
+ - 啟動 / 停止腳本(選用):`deploy\release\*.bat`、`*.ps1`、`scripts\install-nginx-config.ps1`、
+-  `scripts\taidaflow-config.ps1`、`deploy\nginx\taidaflow.conf` 照打包的位置複製(手動部署可以不用它們)。
++  `scripts\taidaflow-config.ps1` 照打包的位置複製(手動部署可以不用它們;上一項的 `taidaflow.conf` 則不能省)。
+ 
+ 把 `%OUT%` 整個複製到正式機的 `C:\TaidaFlow`。
+ 
+@@ -281,7 +290,7 @@ notepad C:\TaidaFlow\config.json
+ 
+ ### 5.4 手動寫 nginx.conf
+ 
+-複製樣板再取代記號(或直接照下方完整範例打一份):
++複製樣板再取代記號(樣板是 §5.1 複製的 `deploy\nginx\taidaflow.conf`;沒有它時直接照下方完整範例打一份):
+ 
+ ```bat
+ copy C:\TaidaFlow\deploy\nginx\taidaflow.conf C:\TaidaFlow\nginx\conf\nginx.conf
+@@ -663,6 +672,16 @@ start "" "<模擬器資料夾>\Adam60xxSimulator.exe" --autostart
+ **1b. 安全探測(建議,這一步是 .ps1)**:`powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\safety_probe.ps1" -DeviceProfile simulator -Reason "manual"`
+ → 要看到 `verdict: SAFE`(exit 0)才繼續。
+ 
++**1c. 部署網頁(一定要在開 app 之前)**:
++
++```bat
++powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\deploy-web.ps1"
++```
++
++把 `build\wasm-release` 的網頁檔複製到 `build\desktop\web\`(BUILD.md §4.5 也是「先部署網頁」)。順序不能反:app 啟動時才決定
++網頁資料夾,若這時 `build\desktop\web` 還不存在(例如剛做完 fresh 建置),app 會改用 `build\wasm-release` 當網頁資料夾、
++把 `runtime.json` 寫進建置輸出,而且在 app 重新啟動前 8124 都送那裡的檔。
++
+ **2. TaidaFlowApp**:
+ 
+ ```bat
+@@ -674,10 +693,9 @@ start "" "%REPO%\build\desktop\TaidaFlowApp.exe"
+   `set "TAIDAFLOW_CONFIG=%REPO%\deploy\dev\config.simulator.json"`,位址直接就是模擬器)。
+ - 程式切換到 config.dev.json 的 `dataDir` = `build\runtime-cwd`(已被 git 忽略)。
+ 
+-**3. nginx**:桌面版建置已產生 `build\desktop\nginx\`(含 `conf\nginx.conf`,BUILD.md §4.5),先部署網頁再啟動:
++**3. nginx**:桌面版建置已產生 `build\desktop\nginx\`(含 `conf\nginx.conf`,BUILD.md §4.5);網頁已在步驟 1c 部署:
+ 
+ ```bat
+-powershell -ExecutionPolicy Bypass -File "%REPO%\scripts\deploy-web.ps1"
+ cd /d "%REPO%\build\desktop\nginx"
+ start nginx
+ ```
+@@ -701,10 +719,10 @@ taskkill /IM Adam60xxSimulator.exe
+ | 手動步驟 | 腳本(repo 的 `scripts\`) |
+ |---|---|
+ | 1. 模擬器 | `powershell -ExecutionPolicy Bypass -File scripts\run-simulator.ps1` |
++| 1c. 網頁部署(開 app 之前) | `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(同時寫 `web\runtime.json`) |
+ | 1b + 2. 探測 + app | `powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile simulator -Label "sim"`(`-Config` 換設定檔,預設 `deploy\dev\config.dev.json`;先安全探測,SAFE 才啟動) |
+ | 3. nginx | `build\desktop\nginx` 的 `start nginx`,或 `powershell -ExecutionPolicy Bypass -File scripts\nginx-start.ps1`(開發用、獨立的 `build\nginx` 前綴;兩者擇一) |
+ | 5. 關 nginx | `nginx -s quit`(在 `build\desktop\nginx`),或 `scripts\nginx-stop.ps1`(只停自己起的) |
+-| 網頁部署 | `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(同時寫 `web\runtime.json`) |
+ 
+ ### 9.4 打包與在開發機上驗證打包資料夾(開發人員)
+ 
+diff --git a/docs/evidence/w2-045/tools/run-qtest.bat b/docs/evidence/w2-045/tools/run-qtest.bat
+index a525b14..5c09602 100644
+--- a/docs/evidence/w2-045/tools/run-qtest.bat
++++ b/docs/evidence/w2-045/tools/run-qtest.bat
+@@ -1,7 +1,7 @@
+ @echo off
+ rem w2-045: configure, build and run the History step/keyset QTest harness (Release, MSVC 2022 x64)
+ rem and build the D3 measurement program w2045_bench.exe (run by run_bench.py, not by CTest).
+-rem Needs the w2-041 bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
++rem Needs the w2-041 bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
+ setlocal
+ set TF=%~dp0..\..\..\..
+ call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1
+diff --git a/docs/evidence/w2-049/tools/run-w2041-qtest.bat b/docs/evidence/w2-049/tools/run-w2041-qtest.bat
+index bc1ceb5..7540a49 100644
+--- a/docs/evidence/w2-049/tools/run-w2041-qtest.bat
++++ b/docs/evidence/w2-049/tools/run-w2041-qtest.bat
+@@ -1,7 +1,7 @@
+ @echo off
+ rem w2-049: configure, build and run the w2-041 export/range QTest harness, adapted to the
+ rem AppHttpServer singleton (download test = /exports mount), Release, MSVC 2022 x64.
+-rem Needs the bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
++rem Needs the bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
+ rem Port 8124 must be free (the download test starts AppHttpServer on it); the script refuses otherwise.
+ setlocal
+ set TF=%~dp0..\..\..\..
+diff --git a/docs/evidence/w2-052/tools/run-qtest.bat b/docs/evidence/w2-052/tools/run-qtest.bat
+index 99e42f1..40e6949 100644
+--- a/docs/evidence/w2-052/tools/run-qtest.bat
++++ b/docs/evidence/w2-052/tools/run-qtest.bat
+@@ -2,7 +2,7 @@
+ rem w2-052: configure, build and run the per-client History view QTests (Release, MSVC 2022 x64):
+ rem tst_w2052_views (HistoryViewService + SqlManager + Proxy) and tst_w2052_rangepage (the w2-045
+ rem correctness test through the per-session SqlManager API).  No network port is used.
+-rem Needs the w2-041 bench data: python -B docs\evidence\w2-041\tools\make_bench_db.py
++rem Needs the w2-041 bench data: docs\evidence\w2-062\tools\make-bench-db.bat (C++ generator, no Python; writes build\w2-041-bench\data)
+ setlocal
+ set TF=%~dp0..\..\..\..
+ call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1

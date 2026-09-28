@@ -1,0 +1,16 @@
+﻿=== safety probe 2026-09-29T00:39:08.909+08:00 reason="w2-065 live run (package start script, simulator config)" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\build\w2-067-live\config.json
+  config note: WARNING: "log.full.keepDays" = seven is invalid (expected an integer 1..2147483647) - using the default 7
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=118448 -> accepted
+  device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=118448 -> accepted
+  device 127.0.0.203:502 [effective devices.adam6217b (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=118448 -> accepted
+  device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=118448 -> accepted
+  device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=118448 -> accepted
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 15020=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SAFE

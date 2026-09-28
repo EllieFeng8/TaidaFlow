@@ -1,0 +1,101 @@
+=== w2-067 shutdown test 2026-09-29T00:47:00.8896827+08:00 tag=pm-sim exe=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe runs=10 runSec=15 simulator=True debugger=False
+simulator pid 37520 (SIM_PID=37520 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 122656 started 00:47:07
+run 1 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 7 ms
+run 2 : probe verdict: SAFE; app pid 69948 started 00:47:28
+run 2 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 6 ms
+run 3 : probe verdict: SAFE; app pid 116824 started 00:47:48
+run 3 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 6 ms
+run 4 : probe verdict: SAFE; app pid 139436 started 00:48:09
+run 4 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 8 ms
+run 5 : probe verdict: SAFE; app pid 138512 started 00:48:29
+run 5 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 5 ms
+run 6 : probe verdict: SAFE; app pid 143676 started 00:48:50
+run 6 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 7 ms
+run 7 : probe verdict: SAFE; app pid 143308 started 00:49:10
+run 7 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 5 ms
+run 8 : probe verdict: SAFE; app pid 119288 started 00:49:31
+run 8 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 7 ms
+run 9 : probe verdict: SAFE; app pid 127380 started 00:49:51
+run 9 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 8 ms
+run 10 : probe verdict: SAFE; app pid 139800 started 00:50:12
+run 10 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 4 ms
+    db| file: D:/repo/codex/qmlTester/taidaflow/build/w2-067-run/data/data/sensor_202609.sqlite (40960 bytes)
+    db| journal_mode: delete
+    db| integrity_check: ok -> PASS
+    db| sensor_data rows: 150, first 2026-09-29T00:47:08, last 2026-09-29T00:50:27
+    db| close 2026-09-29T00:47:23: newest row 2026-09-29T00:47:22, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:47:44: newest row 2026-09-29T00:47:43, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:48:04: newest row 2026-09-29T00:48:03, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:48:25: newest row 2026-09-29T00:48:24, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:48:45: newest row 2026-09-29T00:48:44, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:49:06: newest row 2026-09-29T00:49:05, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:49:26: newest row 2026-09-29T00:49:25, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:49:46: newest row 2026-09-29T00:49:46, 0 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:50:07: newest row 2026-09-29T00:50:06, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:50:27: newest row 2026-09-29T00:50:27, 0 s before the close (max 3) -> PASS
+    db| === 0 check(s) failed
+database check exit code 0
+simulator pid 37520 closed
+left running afterwards: none
+=== result: 10 run(s), 0 failed

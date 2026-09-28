@@ -1,0 +1,23 @@
+=== w2-067 shutdown test 2026-09-29T00:08:56.3089772+08:00 tag=before-dbg-attach3 exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe runs=1 runSec=15 simulator=True debugger=True
+simulator pid 129084 (SIM_PID=129084 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+simulator pid 129084 closed
+left running afterwards: none
+=== result: 0 run(s), 0 failed
+=== w2-067 shutdown test 2026-09-29T00:09:11.8232895+08:00 tag=before-dbg-attach3 exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe runs=1 runSec=15 simulator=True debugger=True
+simulator pid 133680 (SIM_PID=133680 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+simulator pid 133680 closed
+left running afterwards: none
+=== result: 0 run(s), 0 failed
+=== w2-067 shutdown test 2026-09-29T00:09:37.2605241+08:00 tag=before-dbg-attach3 exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe runs=1 runSec=15 simulator=True debugger=True
+simulator pid 131772 (SIM_PID=131772 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 142228 started 00:09:43
+run 1 : WM_CLOSE sent True, exited True after 0.5 s, exit code -1073740972 (0xC0000354) -> FAIL
+    stderr| [Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32775 value=50.011
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [REST] REST API stopped
+    stderr| [ModbusServer] stopped
+simulator pid 131772 closed
+left running afterwards: none
+=== result: 1 run(s), 1 failed

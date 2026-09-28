@@ -1,0 +1,14 @@
+=== w2-067 shutdown test 2026-09-29T00:03:01.6858770+08:00 tag=before-dbg-cdb exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe runs=1 runSec=15 simulator=True debugger=True
+simulator pid 143044 (SIM_PID=143044 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 37620 started 00:03:07
+run 1 : app did not exit 60 s after WM_CLOSE - killed (own process)
+run 1 : WM_CLOSE sent True, exited False after 60.1 s, exit code -1 (0xFFFFFFFF) -> FAIL
+    stderr| [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+    stderr| [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [REST] REST API stopped
+simulator pid 143044 closed
+left running afterwards: none
+=== result: 1 run(s), 1 failed

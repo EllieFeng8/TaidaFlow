@@ -1,0 +1,248 @@
+diff --git a/Core/SqlManager.cpp b/Core/SqlManager.cpp
+index 311ed9d..b5a5a61 100644
+--- a/Core/SqlManager.cpp
++++ b/Core/SqlManager.cpp
+@@ -2463,10 +2463,70 @@ void SqlManager::startWorkerThread()
+     m_thread->start();
+ }
+ 
++void SqlManager::shutdown()
++{
++    if (m_shutDown.exchange(true))
++        return;
++    if (!m_thread || !m_thread->isRunning())
++    {
++        qInfo().noquote() << "[SQL] SqlManager shutdown: worker thread not running, nothing to close.";
++        return;
++    }
++
++    // QThread::finished is emitted BY the worker thread after its event loop has ended (every job
++    // queued before quit() has run), before the thread exits.  A direct connection therefore closes
++    // the connections on the thread that opened them - QSqlDatabase connections belong to their
++    // thread and cannot be closed from the main thread.  The main thread waits in wait() meanwhile,
++    // so the captured locals are safe.
++    QStringList closed;
++    QStringList stillInUse;
++    const QMetaObject::Connection closeOnFinish = connect(
++        m_thread, &QThread::finished, this,
++        [this, &closed, &stillInUse]() {
++            QStringList names = m_dataConnectionNames;
++            names << QString::fromLatin1(kSettingsConnection);
++            for (const QString& name : std::as_const(names))
++            {
++                if (!QSqlDatabase::contains(name))
++                    continue;
++                {
++                    QSqlDatabase db = QSqlDatabase::database(name, false);
++                    if (db.isOpen())
++                        db.close();
++                    if (!db.isValid())
++                        stillInUse << name;   // not owned by this thread (should not happen)
++                }
++                QSqlDatabase::removeDatabase(name);
++                closed << name;
++            }
++            m_dataConnectionNames.clear();
++        },
++        Qt::DirectConnection);
++    m_thread->quit();
++    m_thread->wait();
++    disconnect(closeOnFinish);
++    qInfo().noquote() << QStringLiteral("[SQL] SqlManager stopped: worker thread finished, %1 SQLite connection(s) "
++                                        "closed (%2)%3.")
++                                 .arg(closed.size())
++                                 .arg(closed.isEmpty() ? QStringLiteral("none open") : closed.join(QStringLiteral(", ")))
++                                 .arg(stillInUse.isEmpty() ? QString()
++                                                           : QStringLiteral("; not valid on the worker thread: %1")
++                                                                     .arg(stillInUse.join(QStringLiteral(", "))));
++}
++
+ template <typename F>
+ auto SqlManager::runOnThread(F&& func) const -> decltype(func())
+ {
+     using ResultType = decltype(func());
++    if (m_shutDown.load())
++    {
++        // w2-067: the worker thread has ended (shutdown()); a blocking call would never return.
++        qWarning().noquote() << "[SQL] request after SqlManager shutdown ignored.";
++        if constexpr (std::is_void_v<ResultType>)
++            return;
++        else
++            return ResultType{};
++    }
+     if (QThread::currentThread() == this->thread())
+     {
+         return func();
+diff --git a/Core/SqlManager.h b/Core/SqlManager.h
+index ebebe5c..77610f6 100644
+--- a/Core/SqlManager.h
++++ b/Core/SqlManager.h
+@@ -67,6 +67,16 @@ public:
+ 
+     ~SqlManager();
+ 
++    // w2-067: orderly stop at application exit (Core::shutdown, while QCoreApplication still
++    // exists; call it after every user of the SqlManager has been stopped). The worker thread's
++    // event loop ends after the jobs already queued, then - still on the worker thread, which
++    // opened them - every SQLite connection (data_<yyyyMM>, settings) is closed and removed, and
++    // the thread is joined. Afterwards every call that needs the worker thread is refused
++    // (warning + empty / false result) instead of blocking on a thread that no longer runs.
++    // Idempotent; returns at once when called again.
++    void shutdown();
++    bool isShutDown() const { return m_shutDown.load(); }
++
+     void setDataDirectory(const QString& path);
+     void setSettingsFile(const QString& filePath);
+ 
+@@ -203,6 +213,7 @@ private:
+     QThread* m_thread;
+     bool m_threadStarted;
+     std::atomic<quint64> m_latestHistoryRequestId{0};
++    std::atomic<bool> m_shutDown{false};   // w2-067: set by shutdown()
+ 
+     // w2-041 (SqlManager thread only)
+     struct SensorMonthFile
+diff --git a/Core/core.cpp b/Core/core.cpp
+index a172f27..71ff674 100644
+--- a/Core/core.cpp
++++ b/Core/core.cpp
+@@ -195,50 +195,87 @@ Core& Core::instance()
+ 
+ Core::~Core()
+ {
+-    // w2-039/w2-052: stop History results first.  A load may still be running
+-    // on the SqlManager thread; after this its result is not delivered, and a
+-    // result already queued is removed with the receiver by ~QObject.  The
+-    // SqlManager side only captures its own 'this' and values.
+-    if (m_sqlManager)
+-        disconnect(m_sqlManager, nullptr, this, nullptr);
+-    // w2-060: normally already stopped on aboutToQuit (no-op then).
+-    stopRestServer();
+-    if (m_historyViews) {
+-        delete m_historyViews;
+-        m_historyViews = nullptr;
+-    }
+-    // w2-041: normally already stopped on QCoreApplication::aboutToQuit; this
+-    // covers the other exit paths (export thread + download service).
+-    if (m_historyExport) {
+-        delete m_historyExport;
+-        m_historyExport = nullptr;
+-    }
+-    // w2-049: normally already stopped on aboutToQuit (no-op then).
+-    AppHttpServer::instance().stop();
+-    if (m_modbusServer) {
+-        m_modbusServer->stop();
+-        delete m_modbusServer;
+-        m_modbusServer = nullptr;
+-    }
+-    // 釋放 Manager 物件 (這會進一步觸發 Manager 的解構式停止執行緒)
+-    if (m_manager) {
+-        m_manager->stop();
+-        delete m_manager;
+-        m_manager = nullptr;
+-    }
+-    // 釋放 TdProxy 物件
++    // w2-067: Core is the function-local static of Core::instance(), so this destructor runs in
++    // the C runtime's exit handlers - after main() returned, after QApplication was destroyed and
++    // after every function-local static constructed later than Core (AppHttpServer::instance(),
++    // the host table of ModbusClient::displayName, ...) was already destroyed.  The backend was
++    // therefore released by shutdown() while the application still existed (aboutToQuit, or the
++    // post routine of ~QApplication); calling into it from here was the cause of the
++    // 0xC0000005 on close (w2-067 report: ~Core -> Manager::stop -> socket disconnected ->
++    // ModbusClient::displayName() on the destroyed host table).
++    // Not reachable from App/main.cpp (the application always outlives init() and runs the post
++    // routine); logged if it ever happens - the children are then deleted by ~QObject as before.
++    if (!m_shutDown && m_manager)
++        qWarning().noquote() << "[Core] destroyed without shutdown(): backend released without an application";
++    // Normally only the Proxy is left: QML and the Mirror (both destroyed in main() before the
++    // application) used it until the end.  It owns no socket, running timer or thread.
+     if (m_proxy) {
+         delete m_proxy;
+         m_proxy = nullptr;
+     }
+ }
+ 
++void Core::shutdown(const char *reason)
++{
++    if (m_shutDown)
++        return;
++    m_shutDown = true;
++    QElapsedTimer elapsed;
++    elapsed.start();
++    qInfo().noquote() << QStringLiteral("[Core] shutdown (%1): stopping the backend").arg(QLatin1String(reason));
++
++    // w2-039/w2-052: History results first.  A load may still be running on the SqlManager thread;
++    // after this its result is not delivered (a result already queued is removed with the receiver).
++    if (m_sqlManager)
++        disconnect(m_sqlManager, nullptr, this, nullptr);
++
++    // 1. Data acquisition: poll timer, MS300 serial client, the five Modbus TCP clients (sockets
++    //    closed now, while the event dispatcher and ModbusClient's host table still exist), then the
++    //    Modbus server (no external writes any more).  Deleting Manager also removes its connections
++    //    to the Proxy (SV changes from QML during the engine teardown reach nothing) and to the server.
++    if (m_manager)
++        m_manager->stop();
++    if (m_modbusServer)
++        m_modbusServer->stop();
++    delete m_manager;
++    m_manager = nullptr;
++    delete m_modbusServer;
++    m_modbusServer = nullptr;
++
++    // 2. Services that read the database: REST API, History views, CSV export (its thread is joined)
++    //    and the HTTP service (page + /exports; its own thread is joined by stop()).
++    stopRestServer();
++    delete m_historyViews;
++    m_historyViews = nullptr;
++    delete m_historyExport;
++    m_historyExport = nullptr;
++    AppHttpServer::instance().stop();
++
++    // 3. Last: the SqlManager worker thread.  Every write above was synchronous (blocking queued
++    //    call), so the last sample is already committed; the connections are closed on the worker
++    //    thread and the thread is joined.
++    if (m_sqlManager)
++        m_sqlManager->shutdown();
++
++    qInfo().noquote() << QStringLiteral("[Core] shutdown complete in %1 ms").arg(elapsed.elapsed());
++}
++
+ void Core::init()
+ {
+     if (m_proxy)
+         return;
+ 
+     m_proxy = new TaidaFlowProxy(this);
++    // w2-067: release the backend while the application object still exists (see Core::shutdown).
++    // aboutToQuit = normal close (connected first, so it runs before the per-service handlers
++    // below, which then find nothing left to stop).  The post routine covers a main() that returns
++    // before app.exec() (QML or Mirror failed): QApplication's destructor calls post routines
++    // before it tears anything down; after a normal close it finds shutdown() already done.
++    if (QCoreApplication::instance()) {
++        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
++                [this]() { shutdown("aboutToQuit"); });
++        qAddPostRoutine([]() { Core::instance().shutdown("QApplication destructor, main() ended before app.exec()"); });
++    }
+     // w2-036: SVs are no longer restored from TaidaFlowSettings.ini.  They
+     // start at the proxy defaults and Manager replaces them with the actual
+     // device state after each device's first successful read (no Modbus
+diff --git a/Core/core.h b/Core/core.h
+index d477126..624e11a 100644
+--- a/Core/core.h
++++ b/Core/core.h
+@@ -23,6 +23,15 @@ private:
+ 
+     explicit Core(QObject* parent = nullptr) {}
+     ~Core();
++    // w2-067: stops and releases every backend object (Modbus clients / MS300 / poll timer,
++    // Modbus server, REST, History, export, HTTP service, SqlManager thread) while the
++    // QCoreApplication still exists: on QCoreApplication::aboutToQuit (normal close), or - when
++    // main() returns before app.exec() - from the post routine that ~QApplication runs first.
++    // Core itself is a function-local static: ~Core runs during static destruction, after main()
++    // returned and after the other function-local statics created later (AppHttpServer,
++    // ModbusClient's host table) were destroyed, so it must not do this work. Idempotent.
++    void shutdown(const char* reason);
++    bool m_shutDown = false;
+     void reportIgnoredHmiInputSettings();
+     void setHistoryTitleOnce();
+     void loadAlarmRecords();

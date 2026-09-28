@@ -1,0 +1,29 @@
+=== w2-067 shutdown test 2026-09-29T00:18:35.1261049+08:00 tag=before-release-head exe=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe runs=2 runSec=15 simulator=True debugger=False
+simulator pid 115156 (SIM_PID=115156 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 141128 started 00:18:40
+run 1 : WM_CLOSE sent True, exited True after 3.5 s, exit code -1073741819 (0xC0000005) -> FAIL
+    stderr| [Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [REST] REST API stopped
+    stderr| [ModbusServer] stopped
+run 2 : probe verdict: SAFE; app pid 115004 started 00:19:04
+run 2 : WM_CLOSE sent True, exited True after 3.3 s, exit code -1073741819 (0xC0000005) -> FAIL
+    stderr| [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [REST] REST API stopped
+    stderr| [ModbusServer] stopped
+    db| file: D:/repo/codex/qmlTester/taidaflow/build/w2-067-run/data/data/sensor_202609.sqlite (53248 bytes)
+    db| journal_mode: delete
+    db| integrity_check: ok -> PASS
+    db| sensor_data rows: 268, first 2026-09-29T00:03:10, last 2026-09-29T00:19:20
+    db| close 2026-09-29T00:18:56: newest row 2026-09-29T00:18:55, 1 s before the close (max 3) -> PASS
+    db| close 2026-09-29T00:19:20: newest row 2026-09-29T00:19:20, 0 s before the close (max 3) -> PASS
+    db| === 0 check(s) failed
+database check exit code 0
+simulator pid 115156 closed
+left running afterwards: none
+=== result: 2 run(s), 2 failed

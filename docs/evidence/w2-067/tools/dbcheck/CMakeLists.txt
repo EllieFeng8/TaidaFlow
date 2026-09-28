@@ -1,0 +1,10 @@
+# w2-067: SQLite check of the TaidaFlow data file after the shutdown test (Qt program, no Python).
+cmake_minimum_required(VERSION 3.21)
+project(w2067_dbcheck LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Sql)
+qt_standard_project_setup()
+qt_add_executable(w2067_dbcheck main.cpp)
+target_link_libraries(w2067_dbcheck PRIVATE Qt6::Core Qt6::Sql)
+set_target_properties(w2067_dbcheck PROPERTIES WIN32_EXECUTABLE OFF)

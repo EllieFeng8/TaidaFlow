@@ -1,0 +1,14 @@
+=== w2-067 shutdown test 2026-09-29T00:42:05.7937781+08:00 tag=head-2005c26-cdb exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-head\build\TaidaFlowApp.exe runs=1 runSec=15 simulator=True debugger=True
+simulator pid 111844 (SIM_PID=111844 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 67892 started 00:42:11
+run 1 : WM_CLOSE sent True, exited True after 0.3 s, exit code -1073740972 (0xC0000354) -> FAIL
+    stderr| [Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [REST] REST API stopped
+    stderr| [ModbusServer] stopped
+database check skipped: D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbcheck\w2067_dbcheck.exe not built
+simulator pid 111844 closed
+left running afterwards: none
+=== result: 1 run(s), 2 failed

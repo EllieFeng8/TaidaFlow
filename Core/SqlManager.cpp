@@ -2463,10 +2463,70 @@ void SqlManager::startWorkerThread()
     m_thread->start();
 }
 
+void SqlManager::shutdown()
+{
+    if (m_shutDown.exchange(true))
+        return;
+    if (!m_thread || !m_thread->isRunning())
+    {
+        qInfo().noquote() << "[SQL] SqlManager shutdown: worker thread not running, nothing to close.";
+        return;
+    }
+
+    // QThread::finished is emitted BY the worker thread after its event loop has ended (every job
+    // queued before quit() has run), before the thread exits.  A direct connection therefore closes
+    // the connections on the thread that opened them - QSqlDatabase connections belong to their
+    // thread and cannot be closed from the main thread.  The main thread waits in wait() meanwhile,
+    // so the captured locals are safe.
+    QStringList closed;
+    QStringList stillInUse;
+    const QMetaObject::Connection closeOnFinish = connect(
+        m_thread, &QThread::finished, this,
+        [this, &closed, &stillInUse]() {
+            QStringList names = m_dataConnectionNames;
+            names << QString::fromLatin1(kSettingsConnection);
+            for (const QString& name : std::as_const(names))
+            {
+                if (!QSqlDatabase::contains(name))
+                    continue;
+                {
+                    QSqlDatabase db = QSqlDatabase::database(name, false);
+                    if (db.isOpen())
+                        db.close();
+                    if (!db.isValid())
+                        stillInUse << name;   // not owned by this thread (should not happen)
+                }
+                QSqlDatabase::removeDatabase(name);
+                closed << name;
+            }
+            m_dataConnectionNames.clear();
+        },
+        Qt::DirectConnection);
+    m_thread->quit();
+    m_thread->wait();
+    disconnect(closeOnFinish);
+    qInfo().noquote() << QStringLiteral("[SQL] SqlManager stopped: worker thread finished, %1 SQLite connection(s) "
+                                        "closed (%2)%3.")
+                                 .arg(closed.size())
+                                 .arg(closed.isEmpty() ? QStringLiteral("none open") : closed.join(QStringLiteral(", ")))
+                                 .arg(stillInUse.isEmpty() ? QString()
+                                                           : QStringLiteral("; not valid on the worker thread: %1")
+                                                                     .arg(stillInUse.join(QStringLiteral(", "))));
+}
+
 template <typename F>
 auto SqlManager::runOnThread(F&& func) const -> decltype(func())
 {
     using ResultType = decltype(func());
+    if (m_shutDown.load())
+    {
+        // w2-067: the worker thread has ended (shutdown()); a blocking call would never return.
+        qWarning().noquote() << "[SQL] request after SqlManager shutdown ignored.";
+        if constexpr (std::is_void_v<ResultType>)
+            return;
+        else
+            return ResultType{};
+    }
     if (QThread::currentThread() == this->thread())
     {
         return func();

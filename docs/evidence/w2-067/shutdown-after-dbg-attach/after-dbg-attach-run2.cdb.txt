@@ -1,0 +1,187 @@
+Opened log file 'D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-067\shutdown-after-dbg-attach\after-dbg-attach-run2.cdb.txt'
+
+Microsoft (R) Windows Debugger Version 10.0.22621.755 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg
+OK                                             C:\Qt\6.8.3\msvc2022_64\bin
+Symbol search path is: D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg;C:\Qt\6.8.3\msvc2022_64\bin
+Executable search path is: 
+ModLoad: 00007ff6`ec680000 00007ff6`ecd3e000   D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe
+ModLoad: 00007ffc`8f040000 00007ffc`8f2a7000   C:\Windows\SYSTEM32\ntdll.dll
+ModLoad: 00007ffc`8d1a0000 00007ffc`8d26b000   C:\Windows\System32\KERNEL32.DLL
+ModLoad: 00007ffc`8c2d0000 00007ffc`8c6d2000   C:\Windows\System32\KERNELBASE.dll
+ModLoad: 00007ffc`8c8f0000 00007ffc`8ca3c000   C:\Windows\System32\ucrtbase.dll
+ModLoad: 00007ffc`45160000 00007ffc`451ac000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Sql.dll
+ModLoad: 00007ffc`32740000 00007ffc`327a8000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6SerialBus.dll
+ModLoad: 00007ffc`00d20000 00007ffc`00d43000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6SerialPort.dll
+ModLoad: 00007ff8`b7910000 00007ff8`b81fd000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Gui.dll
+ModLoad: 00007ff8`b8200000 00007ff8`b8834000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Widgets.dll
+ModLoad: 00007ffc`8cfa0000 00007ffc`8d05c000   C:\Windows\System32\ADVAPI32.dll
+ModLoad: 00007ffc`8d4f0000 00007ffc`8d599000   C:\Windows\System32\msvcrt.dll
+ModLoad: 00007ff8`b8840000 00007ff8`b8d45000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Qml.dll
+ModLoad: 00007ffc`8dca0000 00007ffc`8dd49000   C:\Windows\System32\sechost.dll
+ModLoad: 00007ffc`8dd50000 00007ffc`8dd7b000   C:\Windows\System32\GDI32.dll
+ModLoad: 00007ffc`8c790000 00007ffc`8c7b7000   C:\Windows\System32\win32u.dll
+ModLoad: 00007ffc`8d080000 00007ffc`8d198000   C:\Windows\System32\RPCRT4.dll
+ModLoad: 00007ffc`8cd30000 00007ffc`8ceff000   C:\Windows\System32\USER32.dll
+ModLoad: 00007ffc`8c7c0000 00007ffc`8c8e9000   C:\Windows\System32\gdi32full.dll
+ModLoad: 00007ffc`8d5a0000 00007ffc`8da27000   C:\Windows\System32\SETUPAPI.dll
+ModLoad: 00007ffc`8c6e0000 00007ffc`8c783000   C:\Windows\System32\msvcp_win.dll
+ModLoad: 00007ffc`8dd80000 00007ffc`8e518000   C:\Windows\System32\SHELL32.dll
+ModLoad: 00007ffc`8ee30000 00007ffc`8efca000   C:\Windows\System32\ole32.dll
+ModLoad: 00007ffc`8e9a0000 00007ffc`8ed25000   C:\Windows\System32\combase.dll
+ModLoad: 00007ffb`ff4a0000 00007ffb`ff4d0000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6HttpServer.dll
+ModLoad: 00007ffb`e6670000 00007ffb`e66a5000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6WebSockets.dll
+ModLoad: 00007ff8`db960000 00007ff8`dbb10000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Network.dll
+ModLoad: 00007ffc`68cb0000 00007ffc`68d4d000   C:\Windows\SYSTEM32\MSVCP140.dll
+ModLoad: 00007ff8`b7320000 00007ff8`b7907000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Core.dll
+ModLoad: 00007ffc`6b2b0000 00007ffc`6b2dc000   C:\Windows\SYSTEM32\VCRUNTIME140.dll
+ModLoad: 00007ffc`8cf10000 00007ffc`8cf90000   C:\Windows\System32\WS2_32.dll
+ModLoad: 00007ffc`6d700000 00007ffc`6d70c000   C:\Windows\SYSTEM32\VCRUNTIME140_1.dll
+ModLoad: 00007ffc`8dbb0000 00007ffc`8dc89000   C:\Windows\System32\OLEAUT32.dll
+ModLoad: 00007ffc`89230000 00007ffc`8936b000   C:\Windows\SYSTEM32\dxgi.dll
+ModLoad: 00007ffc`880e0000 00007ffc`88340000   C:\Windows\SYSTEM32\d3d11.dll
+ModLoad: 00007ffc`51350000 00007ffc`51373000   C:\Windows\SYSTEM32\d3d12.dll
+ModLoad: 00007ffc`89390000 00007ffc`893bf000   C:\Windows\SYSTEM32\dwmapi.dll
+ModLoad: 00007ffc`89130000 00007ffc`891d8000   C:\Windows\SYSTEM32\UxTheme.dll
+ModLoad: 00007ffc`7ba60000 00007ffc`7ba69000   C:\Windows\SYSTEM32\MSVCP140_1.dll
+ModLoad: 00007ffc`88350000 00007ffc`885ba000   C:\Windows\SYSTEM32\DWrite.dll
+ModLoad: 00007ff9`01200000 00007ff9`01243000   C:\Windows\SYSTEM32\MSVCP140_2.dll
+ModLoad: 00007ffc`8a990000 00007ffc`8a9c3000   C:\Windows\SYSTEM32\IPHLPAPI.DLL
+ModLoad: 00007ffc`8a9d0000 00007ffc`8ab28000   C:\Windows\SYSTEM32\DNSAPI.dll
+ModLoad: 00007ffc`86770000 00007ffc`8689a000   C:\Windows\SYSTEM32\WINHTTP.dll
+ModLoad: 00007ffc`88fe0000 00007ffc`88fed000   C:\Windows\SYSTEM32\Secur32.dll
+ModLoad: 00007ffc`8b610000 00007ffc`8b644000   C:\Windows\SYSTEM32\USERENV.dll
+ModLoad: 00007ffc`55b40000 00007ffc`55b61000   C:\Windows\SYSTEM32\MPR.dll
+ModLoad: 00007ffc`8a930000 00007ffc`8a980000   C:\Windows\SYSTEM32\AUTHZ.dll
+ModLoad: 00007ffc`5d060000 00007ffc`5d07a000   C:\Windows\SYSTEM32\NETAPI32.dll
+ModLoad: 00007ffc`820d0000 00007ffc`820db000   C:\Windows\SYSTEM32\VERSION.dll
+ModLoad: 00007ffc`6f440000 00007ffc`6f476000   C:\Windows\SYSTEM32\WINMM.dll
+ModLoad: 00007ffc`8ad00000 00007ffc`8ad5e000   C:\Windows\SYSTEM32\powrprof.dll
+ModLoad: 00007ffc`8b360000 00007ffc`8b36d000   C:\Windows\SYSTEM32\DSPARSE.dll
+ModLoad: 00007ffc`8be90000 00007ffc`8bee2000   C:\Windows\SYSTEM32\cfgmgr32.DLL
+ModLoad: 00007ffc`8b7c0000 00007ffc`8b7cc000   C:\Windows\SYSTEM32\CRYPTBASE.DLL
+ModLoad: 00007ffc`8b280000 00007ffc`8b2c9000   C:\Windows\SYSTEM32\SSPICLI.DLL
+ModLoad: 00007ffc`8a7e0000 00007ffc`8a7ed000   C:\Windows\SYSTEM32\NETUTILS.DLL
+ModLoad: 00007ffc`6a640000 00007ffc`6a669000   C:\Windows\SYSTEM32\SRVCLI.DLL
+ModLoad: 00007ffc`8e870000 00007ffc`8e8a1000   C:\Windows\System32\IMM32.DLL
+ModLoad: 00007ffc`8ace0000 00007ffc`8acf5000   C:\Windows\SYSTEM32\UMPDC.dll
+ModLoad: 00007ffc`8cbe0000 00007ffc`8cc8c000   C:\Windows\System32\bcryptPrimitives.dll
+ModLoad: 00007ffc`8d450000 00007ffc`8d45a000   C:\Windows\System32\NSI.dll
+ModLoad: 00007ffc`89c50000 00007ffc`8a4fe000   C:\Windows\SYSTEM32\windows.storage.dll
+ModLoad: 00007ffc`8ed30000 00007ffc`8ee2b000   C:\Windows\System32\SHCORE.dll
+ModLoad: 00007ffc`8e930000 00007ffc`8e996000   C:\Windows\System32\shlwapi.dll
+ModLoad: 00007ffc`8c130000 00007ffc`8c159000   C:\Windows\SYSTEM32\profapi.dll
+ModLoad: 00007ffb`b8450000 00007ffb`b8532000   C:\Qt\6.8.3\msvc2022_64\plugins\platforms\qwindows.dll
+ModLoad: 00007ffc`8e650000 00007ffc`8e745000   C:\Windows\System32\COMDLG32.dll
+ModLoad: 00007ffc`89000000 00007ffc`8902a000   C:\Windows\SYSTEM32\WTSAPI32.dll
+ModLoad: 00007ffc`8ca50000 00007ffc`8cbce000   C:\Windows\System32\CRYPT32.dll
+ModLoad: 00007ffc`681e0000 00007ffc`68295000   C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.8328_none_87eede957a2ccddd\COMCTL32.dll
+ModLoad: 00007ffc`63a80000 00007ffc`63ea0000   C:\Windows\SYSTEM32\UIAutomationCore.DLL
+ModLoad: 00007ffc`63eb0000 00007ffc`64062000   C:\Windows\SYSTEM32\d3d9.dll
+ModLoad: 00007ffc`89520000 00007ffc`89564000   C:\Windows\SYSTEM32\dxcore.dll
+ModLoad: 00007ffc`8afc0000 00007ffc`8afdb000   C:\Windows\SYSTEM32\kernel.appcore.dll
+ModLoad: 00007ffc`8da50000 00007ffc`8dbab000   C:\Windows\System32\MSCTF.dll
+ModLoad: 00007ffc`8be50000 00007ffc`8be7f000   C:\Windows\SYSTEM32\DEVOBJ.dll
+ModLoad: 00007ffc`8cca0000 00007ffc`8cd22000   C:\Windows\System32\WINTRUST.dll
+ModLoad: 00007ffc`8b9f0000 00007ffc`8ba03000   C:\Windows\SYSTEM32\MSASN1.dll
+ModLoad: 00007ffc`8e750000 00007ffc`8e7fe000   C:\Windows\System32\clbcatq.dll
+ModLoad: 00007ffc`4a4c0000 00007ffc`4a61b000   C:\Windows\System32\Windows.UI.dll
+ModLoad: 00007ffc`490e0000 00007ffc`49231000   C:\Windows\System32\Windows.UI.Immersive.dll
+ModLoad: 00007ffb`babf0000 00007ffb`bac26000   C:\Qt\6.8.3\msvc2022_64\plugins\styles\qmodernwindowsstyle.dll
+ModLoad: 00007ff8`cae80000 00007ff8`cb066000   C:\Qt\6.8.3\msvc2022_64\plugins\sqldrivers\qsqlite.dll
+ModLoad: 00007ffc`868f0000 00007ffc`8690d000   C:\Windows\SYSTEM32\dhcpcsvc6.DLL
+ModLoad: 00007ffc`868c0000 00007ffc`868e5000   C:\Windows\SYSTEM32\dhcpcsvc.DLL
+ModLoad: 00007ffc`8b560000 00007ffc`8b5cc000   C:\Windows\system32\mswsock.dll
+ModLoad: 00007ffc`44e60000 00007ffc`4508a000   C:\Windows\System32\Windows.Globalization.dll
+ModLoad: 00007ffc`85c10000 00007ffc`85d7a000   C:\Windows\System32\wintypes.dll
+ModLoad: 00007ffc`51600000 00007ffc`5165e000   C:\Windows\System32\Bcp47Langs.dll
+ModLoad: 00007ffc`25e30000 00007ffc`25ef2000   C:\Windows\System32\Windows.FileExplorer.Common.dll
+ModLoad: 00007ffc`53630000 00007ffc`5380c000   C:\Windows\System32\urlmon.dll
+ModLoad: 00007ffc`6a670000 00007ffc`6a934000   C:\Windows\System32\iertutil.dll
+ModLoad: 00007ffc`869a0000 00007ffc`86a95000   C:\Windows\System32\PROPSYS.dll
+ModLoad: 00007ffc`34720000 00007ffc`34737000   C:\Windows\SYSTEM32\virtdisk.dll
+ModLoad: 00007ffc`88f30000 00007ffc`88fcf000   C:\Windows\SYSTEM32\apphelp.dll
+ModLoad: 00007ffc`2d9a0000 00007ffc`2d9bb000   C:\Windows\system32\NetworkExplorer.dll
+ModLoad: 00007ffc`871a0000 00007ffc`871aa000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\qtquick2plugin.dll
+ModLoad: 00007ff8`b6d10000 00007ff8`b7311000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Quick.dll
+ModLoad: 00007ffb`fecb0000 00007ffb`fecd6000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QmlMeta.dll
+ModLoad: 00007ffb`b9d20000 00007ffb`b9dd5000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QmlModels.dll
+ModLoad: 00007ff8`b6b20000 00007ff8`b6d02000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6OpenGL.dll
+ModLoad: 00007ffc`85780000 00007ffc`85793000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QmlWorkerScript.dll
+ModLoad: 00007ffc`87190000 00007ffc`8719c000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Controls\qtquickcontrols2plugin.dll
+ModLoad: 00007ffc`7ca20000 00007ffc`7ca3a000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickControls2.dll
+ModLoad: 00007ff8`b6950000 00007ff8`b6b1a000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickTemplates2.dll
+ModLoad: 00007ffc`6b7c0000 00007ffc`6b7ca000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Controls\Universal\qtquickcontrols2universalstyleplugin.dll
+ModLoad: 00007ff8`b6840000 00007ff8`b694b000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickControls2Universal.dll
+ModLoad: 00007ffc`45140000 00007ffc`4514a000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Controls\Basic\qtquickcontrols2basicstyleplugin.dll
+ModLoad: 00007ff8`b66e0000 00007ff8`b6832000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickControls2Basic.dll
+ModLoad: 00007ffc`00ce0000 00007ffc`00cea000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Templates\qtquicktemplates2plugin.dll
+ModLoad: 00007ffc`00cd0000 00007ffc`00cda000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Controls\impl\qtquickcontrols2implplugin.dll
+ModLoad: 00007ff8`ca990000 00007ff8`ca9d8000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickControls2Impl.dll
+ModLoad: 00007ffb`feb80000 00007ffb`feb8a000   C:\Qt\6.8.3\msvc2022_64\qml\QtQuick\Controls\Universal\impl\qtquickcontrols2universalstyleimplplugin.dll
+ModLoad: 00007ffb`e69f0000 00007ffb`e6a0b000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6QuickControls2UniversalStyleImpl.dll
+ModLoad: 00007ffb`fdf30000 00007ffb`fdf3e000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qgif.dll
+ModLoad: 00007ffb`e6660000 00007ffb`e666f000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qicns.dll
+ModLoad: 00007ffb`cb620000 00007ffb`cb62e000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qico.dll
+ModLoad: 00007ff8`c9880000 00007ff8`c990f000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qjpeg.dll
+ModLoad: 00007ffb`c97d0000 00007ffb`c97dc000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qsvg.dll
+ModLoad: 00007ff8`b6500000 00007ff8`b6582000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Svg.dll
+ModLoad: 00007ffb`c9230000 00007ffb`c923c000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qtga.dll
+ModLoad: 00007ff8`b6490000 00007ff8`b64fd000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qtiff.dll
+ModLoad: 00007ffb`bf560000 00007ffb`bf56c000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qwbmp.dll
+ModLoad: 00007ff8`b6400000 00007ff8`b648a000   C:\Qt\6.8.3\msvc2022_64\plugins\imageformats\qwebp.dll
+ModLoad: 00007ffc`79ff0000 00007ffc`7a02b000   C:\Windows\SYSTEM32\cryptnet.dll
+ModLoad: 00007ffc`8e900000 00007ffc`8e920000   C:\Windows\System32\imagehlp.dll
+ModLoad: 00007ffc`8b980000 00007ffc`8b99b000   C:\Windows\SYSTEM32\CRYPTSP.dll
+ModLoad: 00007ffc`8af20000 00007ffc`8af59000   C:\Windows\system32\rsaenh.dll
+ModLoad: 00007ffc`8c100000 00007ffc`8c12a000   C:\Windows\SYSTEM32\bcrypt.dll
+ModLoad: 00007ffc`86630000 00007ffc`8668e000   C:\Windows\SYSTEM32\directxdatabasehelper.dll
+ModLoad: 00007ffc`23630000 00007ffc`2368c000   C:\Windows\system32\dataexchange.dll
+ModLoad: 00007ffc`7c5b0000 00007ffc`7c800000   C:\Windows\system32\twinapi.appcore.dll
+ModLoad: 00007ffc`51f60000 00007ffc`520a2000   C:\Windows\SYSTEM32\textinputframework.dll
+ModLoad: 00007ffc`88c40000 00007ffc`88d6b000   C:\Windows\SYSTEM32\CoreMessaging.dll
+ModLoad: 00007ffc`85d80000 00007ffc`86064000   C:\Windows\SYSTEM32\CoreUIComponents.dll
+ModLoad: 00007ffc`45340000 00007ffc`4540e000   C:\Windows\System32\DriverStore\FileRepository\nvaci.inf_amd64_38e614bedf9c6b04\nvldumdx.dll
+ModLoad: 00007ffc`8b880000 00007ffc`8b8ea000   C:\Windows\SYSTEM32\wldp.dll
+ModLoad: 00007ffc`79d50000 00007ffc`79eca000   C:\Windows\SYSTEM32\drvstore.dll
+ModLoad: 00007ffb`3ec40000 00007ffb`455e8000   C:\Windows\System32\DriverStore\FileRepository\nvaci.inf_amd64_38e614bedf9c6b04\nvgpucomp64.dll
+ModLoad: 00007ffb`ce540000 00007ffb`ce69b000   C:\Windows\System32\DriverStore\FileRepository\nvaci.inf_amd64_38e614bedf9c6b04\NvMemMapStoragex.dll
+ModLoad: 00007ffb`39620000 00007ffb`3ec3a000   C:\Windows\System32\DriverStore\FileRepository\nvaci.inf_amd64_38e614bedf9c6b04\nvwgf2umx.dll
+ModLoad: 00007ffc`0b5a0000 00007ffc`0b70d000   C:\Windows\system32\nvspcap64.dll
+ModLoad: 00007ffc`8b0f0000 00007ffc`8b126000   C:\Windows\SYSTEM32\ntmarta.dll
+ModLoad: 00007ffb`38ef0000 00007ffb`39617000   C:\Windows\System32\DriverStore\FileRepository\nvaci.inf_amd64_38e614bedf9c6b04\nvppex.dll
+ModLoad: 00007ffc`885c0000 00007ffc`887e5000   C:\Windows\SYSTEM32\dcomp.dll
+ModLoad: 00007ffc`873b0000 00007ffc`873ca000   C:\Windows\SYSTEM32\Microsoft.Internal.WarpPal.dll
+(ef8c.12380): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007ffc`8f163ab0 cc              int     3
+0:102> sxe -c ".echo ===== ACCESS VIOLATION =====; .lastevent; .ecxr; kn 80; .echo ===== ALL THREADS =====; ~* kn 40; q" av
+0:102> g
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

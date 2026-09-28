@@ -1,0 +1,60 @@
+w2-067 D1: faulting stack of the 0xC0000005 on close (HEAD 2005c26 sources, RelWithDebInfo build build\w2-067-dbg,
+Adam60xxSimulator connected, cdb attached after start, WM_CLOSE). Extract of shutdown-before-dbg-attach3\before-dbg-attach3-run1.cdb.txt
+(full log incl. all threads there; stderr tail in before-dbg-attach3-run1.stderr.log).
+
+(22b94.1feac): Access violation - code c0000005 (first chance)
+===== ACCESS VIOLATION =====
+Last event: 22b94.1feac: Access violation - code c0000005 (first chance)
+  debugger time: Tue Sep 29 00:10:04.203 2026 (UTC + 8:00)
+Unable to get exception context, HRESULT 0x8000FFFF
+*** WARNING: Unable to verify checksum for D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe
+ # Child-SP          RetAddr               Call Site
+00 0000008c`47d4ef28 00007ff7`e8f63e56     TaidaFlowApp!qHashEquals<int>+0x2 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qhashfunctions.h @ 281]
+01 0000008c`47d4ef30 00007ff7`e8f6a41c     TaidaFlowApp!QHashPrivate::Data<QHashPrivate::Node<int,QString> >::findBucket<int>+0x96 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qhash.h @ 700]
+02 (Inline Function) --------`--------     TaidaFlowApp!QHashPrivate::Data<QHashPrivate::Node<int,QString> >::findNode+0xd [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qhash.h @ 709]
+03 (Inline Function) --------`--------     TaidaFlowApp!QHash<int,QString>::valueImpl+0x15 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qhash.h @ 1065]
+04 (Inline Function) --------`--------     TaidaFlowApp!QHash<int,QString>::value+0x15 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qhash.h @ 1074]
+05 0000008c`47d4ef80 00007ff7`e8f8616e     TaidaFlowApp!ModbusClient::displayName+0x3c [D:\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp @ 285]
+06 0000008c`47d4f040 00007ff7`e8f8f46b     TaidaFlowApp!`Manager::Manager'::`2'::<lambda_3>::operator()+0x5e [D:\repo\codex\qmlTester\taidaflow\Core\manager.cpp @ 199]
+07 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCall<QtPrivate::IndexesList<0,1,2>,QtPrivate::List<enum ModbusClient::Device,bool,QString const &>,void,`Manager::Manager'::`2'::<lambda_3> >::call::__l2::<lambda_1>::operator()+0x1b [C:
+08 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCallBase::call_internal+0x1b [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @ 65]
+09 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCall<QtPrivate::IndexesList<0,1,2>,QtPrivate::List<enum ModbusClient::Device,bool,QString const &>,void,`Manager::Manager'::`2'::<lambda_3> >::call+0x1b [C:\Qt\6.8.3\msvc2022_64\include\
+0a (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCallable<`Manager::Manager'::`2'::<lambda_3>,enum ModbusClient::Device,bool,QString const &>::call+0x1b [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @ 362]
+0b 0000008c`47d4f120 00007ff8`b74024c1     TaidaFlowApp!QtPrivate::QCallableObject<`Manager::Manager'::`2'::<lambda_3>,QtPrivate::List<enum ModbusClient::Device,bool,QString const &>,void>::impl+0x2b [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @
+0c (Inline Function) --------`--------     Qt6Core!QtPrivate::QSlotObjectBase::call+0x1a [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobjectdefs_impl.h @ 486]
+0d 0000008c`47d4f150 00007ff8`b7404fd4     Qt6Core!doActivate<0>+0x5a1 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4123]
+0e 0000008c`47d4f280 00007ff7`e8f453be     Qt6Core!QMetaObject::activate+0x84 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4184]
+0f 0000008c`47d4f2b0 00007ff7`e8f6b043     TaidaFlowApp!ModbusClient::deviceConnectionChanged+0x4e [D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\Core\Core_autogen\EWIEGA46WW\moc_Modbus_Client.cpp @ 246]
+10 (Inline Function) --------`--------     TaidaFlowApp!ModbusClient::{ctor}::__l13::<lambda_2>::operator()+0x7f [D:\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp @ 146]
+11 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCall<QtPrivate::IndexesList<0>,QtPrivate::List<enum QModbusDevice::State>,void,`ModbusClient::ModbusClient'::`13'::<lambda_2> >::call::__l2::<lambda_1>::operator()+0x85 [C:\Qt\6.8.3\msvc
+12 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCallBase::call_internal+0x85 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @ 65]
+13 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCall<QtPrivate::IndexesList<0>,QtPrivate::List<enum QModbusDevice::State>,void,`ModbusClient::ModbusClient'::`13'::<lambda_2> >::call+0x85 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobject
+14 (Inline Function) --------`--------     TaidaFlowApp!QtPrivate::FunctorCallable<`ModbusClient::ModbusClient'::`13'::<lambda_2>,enum QModbusDevice::State>::call+0x85 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @ 362]
+15 0000008c`47d4f320 00007ff8`b74024c1     TaidaFlowApp!QtPrivate::QCallableObject<`ModbusClient::ModbusClient'::`13'::<lambda_2>,QtPrivate::List<enum QModbusDevice::State>,void>::impl+0xa3 [C:\Qt\6.8.3\msvc2022_64\include\QtCore\qobjectdefs_impl.h @ 572]
+16 (Inline Function) --------`--------     Qt6Core!QtPrivate::QSlotObjectBase::call+0x1a [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobjectdefs_impl.h @ 486]
+17 0000008c`47d4f370 00007ff8`b7404fd4     Qt6Core!doActivate<0>+0x5a1 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4123]
+18 0000008c`47d4f4a0 00007ffb`e6803f83     Qt6Core!QMetaObject::activate+0x84 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4184]
+19 0000008c`47d4f4d0 00007ffb`e6838e78     Qt6SerialBus!QModbusDevice::stateChanged+0x33 [C:\Users\qt\work\qt\qtserialbus_build\src\serialbus\SerialBus_autogen\include_RelWithDebInfo\EWIEGA46WW\moc_qmodbusdevice.cpp @ 234]
+1a (Inline Function) --------`--------     Qt6SerialBus!QModbusTcpClientPrivate::setupTcpSocket::__l2::<lambda_2>::operator()+0x69 [C:\Users\qt\work\qt\qtserialbus\src\serialbus\qmodbustcpclient_p.h @ 52]
+1b (Inline Function) --------`--------     Qt6SerialBus!QtPrivate::FunctorCall<QtPrivate::IndexesList<>,QtPrivate::List<>,void,`QModbusTcpClientPrivate::setupTcpSocket'::`2'::<lambda_2> >::call::__l2::<lambda_1>::operator()+0x69 [C:\Users\qt\work\install\inclu
+1c (Inline Function) --------`--------     Qt6SerialBus!QtPrivate::FunctorCallBase::call_internal+0x69 [C:\Users\qt\work\install\include\QtCore\qobjectdefs_impl.h @ 65]
+1d (Inline Function) --------`--------     Qt6SerialBus!QtPrivate::FunctorCall<QtPrivate::IndexesList<>,QtPrivate::List<>,void,`QModbusTcpClientPrivate::setupTcpSocket'::`2'::<lambda_2> >::call+0x69 [C:\Users\qt\work\install\include\QtCore\qobjectdefs_impl.h @
+1e (Inline Function) --------`--------     Qt6SerialBus!QtPrivate::FunctorCallable<`QModbusTcpClientPrivate::setupTcpSocket'::`2'::<lambda_2> >::call+0x69 [C:\Users\qt\work\install\include\QtCore\qobjectdefs_impl.h @ 362]
+1f 0000008c`47d4f510 00007ff8`b74024c1     Qt6SerialBus!QtPrivate::QCallableObject<`QModbusTcpClientPrivate::setupTcpSocket'::`2'::<lambda_2>,QtPrivate::List<>,void>::impl+0x88 [C:\Users\qt\work\install\include\QtCore\qobjectdefs_impl.h @ 572]
+20 (Inline Function) --------`--------     Qt6Core!QtPrivate::QSlotObjectBase::call+0x1a [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobjectdefs_impl.h @ 486]
+21 0000008c`47d4f570 00007ff8`b7404fd4     Qt6Core!doActivate<0>+0x5a1 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4123]
+22 0000008c`47d4f6a0 00007ffb`b8600d76     Qt6Core!QMetaObject::activate+0x84 [C:\Users\qt\work\qt\qtbase\src\corelib\kernel\qobject.cpp @ 4184]
+23 (Inline Function) --------`--------     Qt6Network!QAbstractSocket::disconnected+0x17 [C:\Users\qt\work\qt\qtbase_build\src\network\Network_autogen\include_RelWithDebInfo\moc_qabstractsocket.cpp @ 395]
+24 0000008c`47d4f6d0 00007ff7`e8f6a37b     Qt6Network!QAbstractSocket::disconnectFromHost+0x176 [C:\Users\qt\work\qt\qtbase\src\network\socket\qabstractsocket.cpp @ 2688]
+25 0000008c`47d4f710 00007ff7`e8f52f68     TaidaFlowApp!ModbusClient::disconnectAll+0xdb [D:\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp @ 188]
+26 0000008c`47d4f740 00007ffc`8c939c85     TaidaFlowApp!Core::~Core+0xb8 [D:\repo\codex\qmlTester\taidaflow\Core\core.cpp @ 226]
+27 0000008c`47d4f770 00007ffc`8c9398a7     ucrtbase!bsearch_s+0x255
+28 0000008c`47d4f7c0 00007ffc`8c93985d     ucrtbase!execute_onexit_table+0x87
+29 0000008c`47d4f7f0 00007ffc`8c938f59     ucrtbase!execute_onexit_table+0x3d
+2a 0000008c`47d4f830 00007ffc`8c938eeb     ucrtbase!wcsnicmp_l+0x299
+2b 0000008c`47d4f870 00007ffc`8c9907ba     ucrtbase!wcsnicmp_l+0x22b
+2c 0000008c`47d4f8a0 00007ff7`e923ce76     ucrtbase!logbf+0x26a
+2d 0000008c`47d4f900 00007ffc`8d1ccd87     TaidaFlowApp!__scrt_common_main_seh+0x176 [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl @ 295]
+2e 0000008c`47d4f940 00007ffc`8f0ecaec     KERNEL32!BaseThreadInitThunk+0x17
+2f 0000008c`47d4f970 00000000`00000000     ntdll!RtlUserThreadStart+0x2c
+===== ALL THREADS =====

@@ -195,42 +195,69 @@ Core& Core::instance()
 
 Core::~Core()
 {
-    // w2-039/w2-052: stop History results first.  A load may still be running
-    // on the SqlManager thread; after this its result is not delivered, and a
-    // result already queued is removed with the receiver by ~QObject.  The
-    // SqlManager side only captures its own 'this' and values.
-    if (m_sqlManager)
-        disconnect(m_sqlManager, nullptr, this, nullptr);
-    // w2-060: normally already stopped on aboutToQuit (no-op then).
-    stopRestServer();
-    if (m_historyViews) {
-        delete m_historyViews;
-        m_historyViews = nullptr;
-    }
-    // w2-041: normally already stopped on QCoreApplication::aboutToQuit; this
-    // covers the other exit paths (export thread + download service).
-    if (m_historyExport) {
-        delete m_historyExport;
-        m_historyExport = nullptr;
-    }
-    // w2-049: normally already stopped on aboutToQuit (no-op then).
-    AppHttpServer::instance().stop();
-    if (m_modbusServer) {
-        m_modbusServer->stop();
-        delete m_modbusServer;
-        m_modbusServer = nullptr;
-    }
-    // 釋放 Manager 物件 (這會進一步觸發 Manager 的解構式停止執行緒)
-    if (m_manager) {
-        m_manager->stop();
-        delete m_manager;
-        m_manager = nullptr;
-    }
-    // 釋放 TdProxy 物件
+    // w2-067: Core is the function-local static of Core::instance(), so this destructor runs in
+    // the C runtime's exit handlers - after main() returned, after QApplication was destroyed and
+    // after every function-local static constructed later than Core (AppHttpServer::instance(),
+    // the host table of ModbusClient::displayName, ...) was already destroyed.  The backend was
+    // therefore released by shutdown() while the application still existed (aboutToQuit, or the
+    // post routine of ~QApplication); calling into it from here was the cause of the
+    // 0xC0000005 on close (w2-067 report: ~Core -> Manager::stop -> socket disconnected ->
+    // ModbusClient::displayName() on the destroyed host table).
+    // Not reachable from App/main.cpp (the application always outlives init() and runs the post
+    // routine); logged if it ever happens - the children are then deleted by ~QObject as before.
+    if (!m_shutDown && m_manager)
+        qWarning().noquote() << "[Core] destroyed without shutdown(): backend released without an application";
+    // Normally only the Proxy is left: QML and the Mirror (both destroyed in main() before the
+    // application) used it until the end.  It owns no socket, running timer or thread.
     if (m_proxy) {
         delete m_proxy;
         m_proxy = nullptr;
     }
+}
+
+void Core::shutdown(const char *reason)
+{
+    if (m_shutDown)
+        return;
+    m_shutDown = true;
+    QElapsedTimer elapsed;
+    elapsed.start();
+    qInfo().noquote() << QStringLiteral("[Core] shutdown (%1): stopping the backend").arg(QLatin1String(reason));
+
+    // w2-039/w2-052: History results first.  A load may still be running on the SqlManager thread;
+    // after this its result is not delivered (a result already queued is removed with the receiver).
+    if (m_sqlManager)
+        disconnect(m_sqlManager, nullptr, this, nullptr);
+
+    // 1. Data acquisition: poll timer, MS300 serial client, the five Modbus TCP clients (sockets
+    //    closed now, while the event dispatcher and ModbusClient's host table still exist), then the
+    //    Modbus server (no external writes any more).  Deleting Manager also removes its connections
+    //    to the Proxy (SV changes from QML during the engine teardown reach nothing) and to the server.
+    if (m_manager)
+        m_manager->stop();
+    if (m_modbusServer)
+        m_modbusServer->stop();
+    delete m_manager;
+    m_manager = nullptr;
+    delete m_modbusServer;
+    m_modbusServer = nullptr;
+
+    // 2. Services that read the database: REST API, History views, CSV export (its thread is joined)
+    //    and the HTTP service (page + /exports; its own thread is joined by stop()).
+    stopRestServer();
+    delete m_historyViews;
+    m_historyViews = nullptr;
+    delete m_historyExport;
+    m_historyExport = nullptr;
+    AppHttpServer::instance().stop();
+
+    // 3. Last: the SqlManager worker thread.  Every write above was synchronous (blocking queued
+    //    call), so the last sample is already committed; the connections are closed on the worker
+    //    thread and the thread is joined.
+    if (m_sqlManager)
+        m_sqlManager->shutdown();
+
+    qInfo().noquote() << QStringLiteral("[Core] shutdown complete in %1 ms").arg(elapsed.elapsed());
 }
 
 void Core::init()
@@ -239,6 +266,16 @@ void Core::init()
         return;
 
     m_proxy = new TaidaFlowProxy(this);
+    // w2-067: release the backend while the application object still exists (see Core::shutdown).
+    // aboutToQuit = normal close (connected first, so it runs before the per-service handlers
+    // below, which then find nothing left to stop).  The post routine covers a main() that returns
+    // before app.exec() (QML or Mirror failed): QApplication's destructor calls post routines
+    // before it tears anything down; after a normal close it finds shutdown() already done.
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
+                [this]() { shutdown("aboutToQuit"); });
+        qAddPostRoutine([]() { Core::instance().shutdown("QApplication destructor, main() ended before app.exec()"); });
+    }
     // w2-036: SVs are no longer restored from TaidaFlowSettings.ini.  They
     // start at the proxy defaults and Manager replaces them with the actual
     // device state after each device's first successful read (no Modbus

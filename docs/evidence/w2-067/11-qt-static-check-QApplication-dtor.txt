@@ -1,0 +1,86 @@
+﻿
+Microsoft (R) Windows Debugger Version 10.0.22621.755 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Qt\6.8.3\msvc2022_64\bin\Qt6Widgets.dll]
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Qt\6.8.3\msvc2022_64\bin
+Symbol search path is: C:\Qt\6.8.3\msvc2022_64\bin
+Executable search path is: 
+ModLoad: 00000001`80000000 00000001`80634000   C:\Qt\6.8.3\msvc2022_64\bin\Qt6Widgets.dll
+Qt6Widgets!_DllMainCRTStartup:
+00000001`803efc90 48895c2408      mov     qword ptr [rsp+8],rbx ss:00000000`00000008=????????????????
+0:000> cdb: Reading initial command 'uf /c Qt6Widgets!QApplication::~QApplication; q'
+Flow analysis was incomplete, some code may be missing
+Qt6Widgets!QApplication::~QApplication (00000001`800075c0) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 663]
+  Qt6Widgets!QApplication::~QApplication+0x35 (00000001`800075f5) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 667]:
+    call to Qt6Widgets!_imp_?qt_call_post_routinesYAXXZ (00000001`803f4328)
+  Qt6Widgets!QApplication::~QApplication+0x42 (00000001`80007602) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 670]:
+    call to Qt6Widgets!_imp_?stopQBasicTimerQEAAXXZ (00000001`803f43e0)
+  Qt6Widgets!QApplication::~QApplication+0x4f (00000001`8000760f) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 671]:
+    call to Qt6Widgets!_imp_?stopQBasicTimerQEAAXXZ (00000001`803f43e0)
+  Qt6Widgets!QApplication::~QApplication+0xf2 (00000001`800076b2) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 676]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x111 (00000001`800076d1) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 676]:
+    call to Qt6Widgets!operator delete[] (00000001`803ef1bc) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_array_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x11e (00000001`800076de) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 676]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x133 (00000001`800076f3) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 676]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x239 (00000001`800077f9) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 685]:
+    call to Qt6Widgets!_imp_?parentQObjectQEBAPEAV1XZ (00000001`803f4708)
+  Qt6Widgets!QApplication::~QApplication+0x24e (00000001`8000780e) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 686]:
+    call to Qt6Widgets!QWidget::destroy (00000001`800549d0) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qwidget.cpp @ 12544]
+  Qt6Widgets!QApplication::~QApplication+0x2d9 (00000001`80007899) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 688]:
+    call to Qt6Widgets!QHashPrivate::Data<QHashPrivate::Node<QWidget *,QHashDummyValue> >::`scalar deleting destructor' (00000001`800094b0)
+  Qt6Widgets!QApplication::~QApplication+0x2e6 (00000001`800078a6) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 688]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x31b (00000001`800078db) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 691]:
+    call to Qt6Widgets!_guard_dispatch_icall_nop (00000001`803f02a0) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\misc\amd64\guard_dispatch.asm @ 53]
+  Qt6Widgets!QApplication::~QApplication+0x355 (00000001`80007915) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 694]:
+    call to Qt6Widgets!QHashPrivate::Data<QHashPrivate::Node<QByteArray,QPalette> >::`scalar deleting destructor' (00000001`80009690)
+  Qt6Widgets!QApplication::~QApplication+0x370 (00000001`80007930) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 696]:
+    call to Qt6Widgets!_imp_??1QFontQEAAXZ (00000001`803f7e00)
+  Qt6Widgets!QApplication::~QApplication+0x37e (00000001`8000793e) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 696]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x399 (00000001`80007959) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 698]:
+    call to Qt6Widgets!_imp_??1QFontQEAAXZ (00000001`803f7e00)
+  Qt6Widgets!QApplication::~QApplication+0x3a7 (00000001`80007967) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 698]:
+    call to Qt6Widgets!operator delete (00000001`803ef1b4) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp @ 30]
+  Qt6Widgets!QApplication::~QApplication+0x417 (00000001`800079d7) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 700]:
+    call to Qt6Widgets!QHashPrivate::Data<QHashPrivate::Node<QByteArray,QFont> >::`scalar deleting destructor' (00000001`80009570)
+  Qt6Widgets!QApplication::~QApplication+0x447 (00000001`80007a07) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 702]:
+    call to Qt6Widgets!_guard_dispatch_icall_nop (00000001`803f02a0) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\misc\amd64\guard_dispatch.asm @ 53]
+  Qt6Widgets!QApplication::~QApplication+0x460 (00000001`80007a20) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 707]:
+    call to Qt6Widgets!_imp_?selfQDragManagerSAPEAV1XZ (00000001`803f7d48)
+  Qt6Widgets!QApplication::~QApplication+0x47d (00000001`80007a3d) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 707]:
+    call to Qt6Widgets!_guard_dispatch_icall_nop (00000001`803f02a0) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\misc\amd64\guard_dispatch.asm @ 53]
+  Qt6Widgets!QApplication::~QApplication+0x483 (00000001`80007a43) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 712]:
+    call to Qt6Widgets!_imp_?clearQPixmapCacheSAXXZ (00000001`803f7d50)
+  Qt6Widgets!QApplication::~QApplication+0x489 (00000001`80007a49) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 713]:
+    call to Qt6Widgets!QColormap::cleanup (00000001`800eafa0) [C:\Users\qt\work\qt\qtbase\src\widgets\util\qcolormap.cpp @ 48]
+  Qt6Widgets!QApplication::~QApplication+0x4b3 (00000001`80007a73) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 718]:
+    call to Qt6Widgets!_imp_??0QMessageLoggerQEAAPEBDH0Z (00000001`803f45e8)
+  Qt6Widgets!QApplication::~QApplication+0x4d1 (00000001`80007a91) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 718]:
+    call to Qt6Widgets!_imp_?debugQMessageLoggerQEBAXPEBDZZ (00000001`803f45d8)
+  Qt6Widgets!QApplication::~QApplication+0x50c (00000001`80007acc) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 700]:
+    call to Qt6Widgets!_Init_thread_header (00000001`803ef6d8) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\misc\thread_safe_statics.cpp @ 195]
+  Qt6Widgets!QApplication::~QApplication+0x533 (00000001`80007af3) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 700]:
+    call to Qt6Widgets!atexit (00000001`803ef654) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\utility\utility.cpp @ 274]
+  Qt6Widgets!QApplication::~QApplication+0x53f (00000001`80007aff) [C:\Users\qt\work\qt\qtbase\src\widgets\kernel\qapplication.cpp @ 700]:
+    call to Qt6Widgets!_Init_thread_footer (00000001`803ef66c) [D:\a\_work\1\s\src\vctools\crt\vcstartup\src\misc\thread_safe_statics.cpp @ 236]
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

@@ -1,0 +1,27 @@
+=== w2-067 shutdown test 2026-09-29T00:50:45.4939157+08:00 tag=pm-nosim exe=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe runs=3 runSec=15 simulator=False debugger=False
+run 1 : probe verdict: SAFE; app pid 12816 started 00:50:55
+run 1 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 4 ms
+run 2 : probe verdict: SAFE; app pid 144336 started 00:51:23
+run 2 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 5 ms
+run 3 : probe verdict: SAFE; app pid 147888 started 00:51:51
+run 3 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 5 ms
+left running afterwards: none
+=== result: 3 run(s), 0 failed

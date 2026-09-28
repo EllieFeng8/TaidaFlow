@@ -1,0 +1,21 @@
+=== w2-067 shutdown test 2026-09-29T00:15:50.6955537+08:00 tag=after-dbg-attach exe=D:\repo\codex\qmlTester\taidaflow\build\w2-067-dbg\TaidaFlowApp.exe runs=2 runSec=15 simulator=True debugger=True
+simulator pid 47232 (SIM_PID=47232 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-067-run\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+run 1 : probe verdict: SAFE; app pid 132156 started 00:15:56
+run 1 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 8 ms
+run 2 : probe verdict: SAFE; app pid 61324 started 00:16:22
+run 2 : WM_CLOSE sent True, exited True after 0.1 s, exit code 0 (0x00000000) -> PASS
+    stderr| [REST] REST API stopped
+    stderr| apphttpserver: [AppHttpServer] unmounted /exports
+    stderr| [Export] stopped (export thread; /exports unmounted).
+    stderr| apphttpserver: [AppHttpServer] stopped (was port 8124)
+    stderr| [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+    stderr| [Core] shutdown complete in 6 ms
+simulator pid 47232 closed
+left running afterwards: none
+=== result: 2 run(s), 0 failed

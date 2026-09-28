@@ -1,0 +1,103 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:426
++ ... t=Get-Date; cmd /c "docs\evidence\w2-065\tools\run-app-tests.bat" > " ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+[1/16] Automatic MOC and UIC for target tst_runtimeinfo
+[2/16] Automatic MOC and UIC for target tst_applog
+[3/16] Automatic MOC and UIC for target tst_appconfig
+[4/16] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo_autogen\mocs_compilation.cpp.obj
+[5/16] Building CXX object CMakeFiles\tst_applog.dir\tst_applog_autogen\mocs_compilation.cpp.obj
+[6/16] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig_autogen\mocs_compilation.cpp.obj
+[7/16] Building CXX object CMakeFiles\tst_runtimeinfo.dir\D_\repo\codex\qmlTester\taidaflow\App\runtimeinfo.cpp.obj
+[8/16] Building CXX object CMakeFiles\tst_applog.dir\D_\repo\codex\qmlTester\taidaflow\App\applog.cpp.obj
+[9/16] Building CXX object CMakeFiles\tst_applog.dir\D_\repo\codex\qmlTester\taidaflow\App\appconfig.cpp.obj
+[10/16] Building CXX object CMakeFiles\tst_appconfig.dir\D_\repo\codex\qmlTester\taidaflow\App\appconfig.cpp.obj
+[11/16] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo.cpp.obj
+[12/16] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig.cpp.obj
+[13/16] Linking CXX executable tst_runtimeinfo.exe
+[14/16] Building CXX object CMakeFiles\tst_applog.dir\tst_applog.cpp.obj
+[15/16] Linking CXX executable tst_appconfig.exe
+[16/16] Linking CXX executable tst_applog.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_appconfig
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-065-app-tests\tst_appconfig.exe "-o" "D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests/tst_appconfig.result.txt,txt" "-o" "-,txt"
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+1: Environment variable modifications: 
+1:  PATH=path_list_prepend:C:/Qt/6.8.3/msvc2022_64/bin
+1: Test timeout computed to be: 120
+1: wrote the default configuration to C:\Users\TED\AppData\Local\Temp\tst_appconfig-JiIiwL\scripts\out\config.json
+1: wrote the default configuration to C:\Users\TED\AppData\Local\Temp\tst_appconfig-JiIiwL\eq.json
+1: C:\Users\TED\AppData\Local\Temp\tst_appconfig-WSPwEV\config.json already exists - not overwritten
+1: cannot create the folder C:\Users\TED\AppData\Local\Temp\tst_appconfig-WSPwEV\file
+1: usage: TaidaFlowApp.exe --write-default-config <path of config.json>
+1/3 Test #1: tst_appconfig ....................   Passed    0.81 sec
+test 2
+    Start 2: tst_runtimeinfo
+
+2: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-065-app-tests\tst_runtimeinfo.exe "-o" "D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests/tst_runtimeinfo.result.txt,txt" "-o" "-,txt"
+2: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+2: Environment variable modifications: 
+2:  PATH=path_list_prepend:C:/Qt/6.8.3/msvc2022_64/bin
+2: Test timeout computed to be: 120
+2/3 Test #2: tst_runtimeinfo ..................   Passed    6.39 sec
+test 3
+    Start 3: tst_applog
+
+3: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-065-app-tests\tst_applog.exe "-o" "D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests/tst_applog.result.txt,txt" "-o" "-,txt"
+3: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-065-app-tests
+3: Environment variable modifications: 
+3:  PATH=path_list_prepend:C:/Qt/6.8.3/msvc2022_64/bin
+3: Test timeout computed to be: 120
+3: [AppLog] WARNING: quiet log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: full log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] quiet log file C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs\taidaflow-2026-09-28.log is writable again
+3: [AppLog] full log file C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs\taidaflow-2026-09-28-full.log is writable again
+3: [AppLog] WARNING: quiet log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: full log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] quiet log file C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs\taidaflow-2026-09-29.log is writable again
+3: [AppLog] full log file C:\Users\TED\AppData\Local\Temp\tst_applog-ACLire\blocker\logs\taidaflow-2026-09-29-full.log is writable again
+3: [AppLog] WARNING: full log: cannot open C:\Users\TED\AppData\Local\Temp\tst_applog-qOFJfh\taidaflow-2026-09-28-full.log: �s���Q�ڡC - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: quiet log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-JBLdGS\bad<>|?*name - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: full log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-JBLdGS\bad<>|?*name - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: quiet log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-CoPkiB\install\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3: [AppLog] WARNING: full log: cannot create the log folder C:\Users\TED\AppData\Local\Temp\tst_applog-CoPkiB\install\logs - its messages go to stderr only; retrying every 60 s and at the next date change
+3/3 Test #3: tst_applog .......................   Passed    1.00 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   8.21 sec
+ctest exit code 0

@@ -1,0 +1,7 @@
+2026-09-29 00:39:22 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\build\w2-067-live\data from D:\repo\codex\qmlTester\taidaflow\build\w2-067-live\config.json dataDir (file)) ===
+2026-09-29 00:39:22 [stop]  log folder: D:\repo\codex\qmlTester\taidaflow\build\w2-067-live\data\logs (taidaflow-app.json)
+2026-09-29 00:39:22 [stop]  nginx keeps running (pid 108924, 138376; stop it with: cd <nginx folder> ; nginx -s quit)
+2026-09-29 00:39:22 [stop]  closing TaidaFlowApp pid 142084 (WM_CLOSE to its window, like closing it by hand)
+2026-09-29 00:39:22 [stop]  TaidaFlowApp pid 142084 exited (exit code 0)
+2026-09-29 00:39:23 [stop]  listeners of pid 142084 left: 0
+2026-09-29 00:39:23 [stop]  stopped (exit 0)

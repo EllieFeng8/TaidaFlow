@@ -1,0 +1,635 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:536
++ ... s=Get-Date; cmd /c "docs\evidence\$n\tools\run-qtest.bat" > "$f.log"  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (0.6s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest
+[1/12] Automatic MOC and UIC for target tst_w2052_rangepage
+[2/12] Automatic MOC and UIC for target tst_w2052_views
+[3/12] Building CXX object CMakeFiles\tst_w2052_rangepage.dir\tst_w2052_rangepage_autogen\mocs_compilation.cpp.obj
+[4/12] Building CXX object CMakeFiles\tst_w2052_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryViews.cpp.obj
+[5/12] Building CXX object CMakeFiles\tst_w2052_views.dir\tst_w2052_views_autogen\mocs_compilation.cpp.obj
+[6/12] Building CXX object CMakeFiles\tst_w2052_rangepage.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[7/12] Building CXX object CMakeFiles\tst_w2052_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[8/12] Building CXX object CMakeFiles\tst_w2052_rangepage.dir\tst_w2052_rangepage.cpp.obj
+[9/12] Linking CXX executable tst_w2052_rangepage.exe
+[10/12] Building CXX object CMakeFiles\tst_w2052_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[11/12] Building CXX object CMakeFiles\tst_w2052_views.dir\tst_w2052_views.cpp.obj
+[12/12] Linking CXX executable tst_w2052_views.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2052_views
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-052-qtest\tst_w2052_views.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest
+1: Test timeout computed to be: 1800
+1: ********* Start testing of TestW2052Views *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2052Views::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/settings_schema.sql"
+1: PASS   : TestW2052Views::initTestCase()
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #1 (new view) page 1, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 26 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #2 (new view) page 1, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 56 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #3 (new view) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 3 session(s), posted in 10 us.
+1: QWARN  : TestW2052Views::interleavedSessionsMatchSingleSession() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #2 applied: page 1/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 18.99 ms + page 0.45 ms in 3 step(s) (longest 9.12 ms), page read offset-desc; request-to-apply 58.98 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 1/60481, 10 record(s), total 604801 row(s), revision 1; historyViews has 1 entry.
+1: QWARN  : TestW2052Views::interleavedSessionsMatchSingleSession() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+1: QWARN  : TestW2052Views::interleavedSessionsMatchSingleSession() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #1 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 87.62 ms + page 0.41 ms in 13 step(s) (longest 9.11 ms), page read offset-desc; request-to-apply 197.68 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 1/259201, 10 record(s), total 2592003 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #3 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 89.32 ms + page 0.68 ms in 13 step(s) (longest 8.96 ms), page read offset-desc; request-to-apply 213.49 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 1 web-3f9a: from 1786896000000 to 1789487999999 page 1/259201 rows 2592003 records 10 rev 2
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 1 web-b71c: from 1788883200000 to 1789487999999 page 1/60481 rows 604801 records 10 rev 1
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 1 desktop: from 0 to 8640000000000000 page 1/259212 rows 2592116 records 10 rev 3
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #4 (request) page 2, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 3 session(s), posted in 15 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #5 (request) page 2, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 7 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #6 (request) page 2, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 3 session(s), posted in 3 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #4 applied: page 2/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.50 ms in 1 step(s) (longest 0.95 ms), page read keyset; request-to-apply 14.44 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 2/259201, 10 record(s), total 2592003 row(s), revision 4; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #5 applied: page 2/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.32 ms + page 0.47 ms in 1 step(s) (longest 0.79 ms), page read keyset; request-to-apply 14.66 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 2/60481, 10 record(s), total 604801 row(s), revision 5; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #6 applied: page 2/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.35 ms + page 0.36 ms in 1 step(s) (longest 0.71 ms), page read keyset; request-to-apply 14.79 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 2/259212, 10 record(s), total 2592116 row(s), revision 6; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 2 web-3f9a: from 1786896000000 to 1789487999999 page 2/259201 rows 2592003 records 10 rev 4
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 2 web-b71c: from 1788883200000 to 1789487999999 page 2/60481 rows 604801 records 10 rev 5
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 2 desktop: from 0 to 8640000000000000 page 2/259212 rows 2592116 records 10 rev 6
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #7 (request) page 129601, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 3 session(s), posted in 15 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #8 (request) page 50, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 7 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #9 (request) page 3, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 3 session(s), posted in 3 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #7 applied: page 129601/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.91 ms in 1 step(s) (longest 1.30 ms), page read offset-asc; request-to-apply 14.63 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 129601/259201, 10 record(s), total 2592003 row(s), revision 7; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #8 applied: page 50/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.24 ms + page 0.38 ms in 1 step(s) (longest 0.62 ms), page read offset-desc; request-to-apply 14.78 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 50/60481, 10 record(s), total 604801 row(s), revision 8; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #9 applied: page 3/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.27 ms + page 0.39 ms in 1 step(s) (longest 0.67 ms), page read keyset; request-to-apply 14.87 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 3/259212, 10 record(s), total 2592116 row(s), revision 9; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 3 web-3f9a: from 1786896000000 to 1789487999999 page 129601/259201 rows 2592003 records 10 rev 7
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 3 web-b71c: from 1788883200000 to 1789487999999 page 50/60481 rows 604801 records 10 rev 8
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 3 desktop: from 0 to 8640000000000000 page 3/259212 rows 2592116 records 10 rev 9
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #10 (request) page 259201, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 3 session(s), posted in 50 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #11 (request) page 49, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 4 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #12 (request) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 3 session(s), posted in 2 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #10 applied: page 259201/259201, 3 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.33 ms + page 0.34 ms in 1 step(s) (longest 0.67 ms), page read offset-asc; request-to-apply 14.22 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 259201/259201, 3 record(s), total 2592003 row(s), revision 10; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #11 applied: page 49/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.23 ms + page 0.35 ms in 1 step(s) (longest 0.58 ms), page read keyset; request-to-apply 14.30 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 49/60481, 10 record(s), total 604801 row(s), revision 11; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #12 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.27 ms + page 0.33 ms in 1 step(s) (longest 0.60 ms), page read offset-desc; request-to-apply 14.41 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 12; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 4 web-3f9a: from 1786896000000 to 1789487999999 page 259201/259201 rows 2592003 records 3 rev 10
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 4 web-b71c: from 1788883200000 to 1789487999999 page 49/60481 rows 604801 records 10 rev 11
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 4 desktop: from 0 to 8640000000000000 page 1/259212 rows 2592116 records 10 rev 12
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #13 (request) page 1, range 1786896005000 .. 1789487994999 ms (1786896005 .. 1789487994 s), 3 session(s), posted in 16 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #14 (request) page 2, range 1788883203000 .. 1789401599999 ms (1788883203 .. 1789401599 s), 3 session(s), posted in 34 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #15 (request) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 7 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #15 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.28 ms + page 0.39 ms in 1 step(s) (longest 0.67 ms), page read offset-desc; request-to-apply 30.16 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 4/10, 10 record(s), total 100 row(s), revision 13; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #14 applied: page 2/51840, 10 record(s), total 518397 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 16.26 ms + page 0.50 ms in 3 step(s) (longest 8.85 ms), page read offset-desc; request-to-apply 45.53 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 2/51840, 10 record(s), total 518397 row(s), revision 14; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #13 applied: page 1/259200, 10 record(s), total 2591992 row(s) in 2 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 85.16 ms + page 0.40 ms in 13 step(s) (longest 8.59 ms), page read offset-desc; request-to-apply 107.07 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 1/259200, 10 record(s), total 2591992 row(s), revision 15; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 5 web-3f9a: from 1786896005000 to 1789487994999 page 1/259200 rows 2591992 records 10 rev 15
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 5 web-b71c: from 1788883203000 to 1789401599999 page 2/51840 rows 518397 records 10 rev 14
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 5 desktop: from 1782835200000 to 1785513599999 page 4/10 rows 100 records 10 rev 13
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a request #16 (request) page 2, range 1786896005000 .. 1789487994999 ms (1786896005 .. 1789487994 s), 3 session(s), posted in 15 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c request #17 (request) page 1, range 1788883203000 .. 1789401599999 ms (1788883203 .. 1789401599 s), 3 session(s), posted in 4 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop request #18 (request) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 2 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a #16 applied: page 2/259200, 10 record(s), total 2591992 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.39 ms in 1 step(s) (longest 0.81 ms), page read keyset; request-to-apply 14.44 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-3f9a entry written: page 2/259200, 10 record(s), total 2591992 row(s), revision 16; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c #17 applied: page 1/51840, 10 record(s), total 518397 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.21 ms + page 0.37 ms in 1 step(s) (longest 0.58 ms), page read keyset; request-to-apply 14.73 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-b71c entry written: page 1/51840, 10 record(s), total 518397 row(s), revision 17; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop #18 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.22 ms + page 0.36 ms in 1 step(s) (longest 0.58 ms), page read keyset; request-to-apply 14.85 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] desktop entry written: page 5/10, 10 record(s), total 100 row(s), revision 18; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 6 web-3f9a: from 1786896005000 to 1789487994999 page 2/259200 rows 2591992 records 10 rev 16
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 6 web-b71c: from 1788883203000 to 1789401599999 page 1/51840 rows 518397 records 10 rev 17
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() round 6 desktop: from 1782835200000 to 1785513599999 page 5/10 rows 100 records 10 rev 18
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() writes: 18 for 18 requests
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #1 (new view) page 1, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 67 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #1 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #1 applied: page 1/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.46 ms + page 0.46 ms in 1 step(s) (longest 0.92 ms), page read offset-desc; request-to-apply 14.40 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/259201, 10 record(s), total 2592003 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #2 (request) page 1, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 1 session(s), posted in 37 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #2 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #2 applied: page 1/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.36 ms + page 0.44 ms in 1 step(s) (longest 0.80 ms), page read offset-desc; request-to-apply 15.07 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/60481, 10 record(s), total 604801 row(s), revision 2; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #3 (request) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 1 session(s), posted in 142 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #3 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #3 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.40 ms in 1 step(s) (longest 0.82 ms), page read offset-desc; request-to-apply 15.10 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 3; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #4 (request) page 2, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 63 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #4 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #4 applied: page 2/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.43 ms in 1 step(s) (longest 0.85 ms), page read offset-desc; request-to-apply 14.67 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 2/259201, 10 record(s), total 2592003 row(s), revision 4; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #5 (request) page 2, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 1 session(s), posted in 27 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #5 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #5 applied: page 2/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.48 ms + page 0.42 ms in 1 step(s) (longest 0.90 ms), page read offset-desc; request-to-apply 15.14 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 2/60481, 10 record(s), total 604801 row(s), revision 5; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #6 (request) page 2, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 1 session(s), posted in 58 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #6 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #6 applied: page 2/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.46 ms + page 0.44 ms in 1 step(s) (longest 0.89 ms), page read offset-desc; request-to-apply 14.82 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 2/259212, 10 record(s), total 2592116 row(s), revision 6; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #7 (request) page 129601, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 40 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #7 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #7 applied: page 129601/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.37 ms + page 0.65 ms in 1 step(s) (longest 1.03 ms), page read offset-asc; request-to-apply 14.14 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 129601/259201, 10 record(s), total 2592003 row(s), revision 7; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #8 (request) page 50, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 1 session(s), posted in 289 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #8 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #8 applied: page 50/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.46 ms + page 0.46 ms in 1 step(s) (longest 0.92 ms), page read offset-desc; request-to-apply 14.91 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 50/60481, 10 record(s), total 604801 row(s), revision 8; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #9 (request) page 3, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 1 session(s), posted in 80 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #9 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #9 applied: page 3/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.49 ms in 1 step(s) (longest 0.87 ms), page read offset-desc; request-to-apply 15.03 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 3/259212, 10 record(s), total 2592116 row(s), revision 9; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #10 (request) page 259201, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 76 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #10 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #10 applied: page 259201/259201, 3 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.44 ms + page 0.35 ms in 1 step(s) (longest 0.79 ms), page read offset-asc; request-to-apply 14.59 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 259201/259201, 3 record(s), total 2592003 row(s), revision 10; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #11 (request) page 49, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 1 session(s), posted in 30 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #11 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #11 applied: page 49/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.35 ms + page 0.48 ms in 1 step(s) (longest 0.84 ms), page read offset-desc; request-to-apply 15.03 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 49/60481, 10 record(s), total 604801 row(s), revision 11; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #12 (request) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 1 session(s), posted in 82 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #12 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #12 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.52 ms + page 0.44 ms in 1 step(s) (longest 0.96 ms), page read offset-desc; request-to-apply 14.72 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 12; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #13 (request) page 1, range 1786896005000 .. 1789487994999 ms (1786896005 .. 1789487994 s), 1 session(s), posted in 41 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #13 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #13 applied: page 1/259200, 10 record(s), total 2591992 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.44 ms in 1 step(s) (longest 0.85 ms), page read offset-desc; request-to-apply 14.42 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/259200, 10 record(s), total 2591992 row(s), revision 13; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #14 (request) page 2, range 1788883203000 .. 1789401599999 ms (1788883203 .. 1789401599 s), 1 session(s), posted in 65 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #14 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #14 applied: page 2/51840, 10 record(s), total 518397 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.46 ms in 1 step(s) (longest 0.85 ms), page read offset-desc; request-to-apply 14.20 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 2/51840, 10 record(s), total 518397 row(s), revision 14; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #15 (request) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 1 session(s), posted in 22 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #15 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #15 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.33 ms + page 0.44 ms in 1 step(s) (longest 0.77 ms), page read offset-desc; request-to-apply 14.97 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 4/10, 10 record(s), total 100 row(s), revision 15; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #16 (request) page 2, range 1786896005000 .. 1789487994999 ms (1786896005 .. 1789487994 s), 1 session(s), posted in 90 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #16 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #16 applied: page 2/259200, 10 record(s), total 2591992 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.43 ms + page 0.46 ms in 1 step(s) (longest 0.90 ms), page read offset-desc; request-to-apply 15.32 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 2/259200, 10 record(s), total 2591992 row(s), revision 16; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #17 (request) page 1, range 1788883203000 .. 1789401599999 ms (1788883203 .. 1789401599 s), 1 session(s), posted in 57 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #17 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #17 applied: page 1/51840, 10 record(s), total 518397 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.32 ms + page 0.43 ms in 1 step(s) (longest 0.76 ms), page read offset-desc; request-to-apply 14.62 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 1/51840, 10 record(s), total 518397 row(s), revision 17; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref request #18 (request) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 1 session(s), posted in 47 us.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref result #18 dropped: no such session here (removed, or not created by this service).
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref #18 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.34 ms + page 0.41 ms in 1 step(s) (longest 0.75 ms), page read offset-desc; request-to-apply 14.31 ms.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() [History] web-ref entry written: page 5/10, 10 record(s), total 100 row(s), revision 18; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::interleavedSessionsMatchSingleSession() 18 interleaved entries equal the single-session entries record by record
+1: PASS   : TestW2052Views::interleavedSessionsMatchSingleSession()
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a request #1 (new view) page 5, range 1786896007000 .. 1789487999999 ms (1786896007 .. 1789487999 s), 1 session(s), posted in 15 us.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-b71c request #2 (new view) page 7, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 21 us.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a request #3 (request) page 6, range 1786896007000 .. 1789487999999 ms (1786896007 .. 1789487999 s), 2 session(s), posted in 6 us.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a request #4 (request) page 7, range 1786896007000 .. 1789487999999 ms (1786896007 .. 1789487999 s), 2 session(s), posted in 2 us.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-b71c #2 applied: page 7/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.26 ms + page 0.40 ms in 1 step(s) (longest 0.66 ms), page read offset-desc; request-to-apply 14.19 ms.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-b71c entry written: page 7/60481, 10 record(s), total 604801 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a result #3 (page 6) dropped: stale, newest request of this session is #4 (not executed by SqlManager).
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a result #1 (page 5) dropped: stale, newest request of this session is #4 (not executed by SqlManager).
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a #4 applied: page 7/259200, 10 record(s), total 2591996 row(s) in 2 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 43.46 ms + page 0.60 ms in 6 step(s) (longest 9.53 ms), page read offset-desc; request-to-apply 60.48 ms.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-3f9a entry written: page 7/259200, 10 record(s), total 2591996 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() writes 2, A revisions 1, A page 7, SqlManager results for A 3 (superseded 2), for B 1
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-ref2 request #5 (new view) page 7, range 1786896007000 .. 1789487999999 ms (1786896007 .. 1789487999 s), 3 session(s), posted in 544 us.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-ref2 #5 applied: page 7/259200, 10 record(s), total 2591996 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.45 ms in 1 step(s) (longest 0.90 ms), page read offset-desc; request-to-apply 15.38 ms.
+1: QINFO  : TestW2052Views::sameSessionOnlyNewestApplied() [History] web-ref2 entry written: page 7/259200, 10 record(s), total 2591996 row(s), revision 3; historyViews has 3 entries.
+1: PASS   : TestW2052Views::sameSessionOnlyNewestApplied()
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a request #1 (new view) page 3, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 1 session(s), posted in 29 us.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a #1 applied: page 3/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.47 ms + page 0.84 ms in 1 step(s) (longest 1.31 ms), page read offset-desc; request-to-apply 14.49 ms.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a entry written: page 3/259201, 10 record(s), total 2592003 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c request #2 (new view) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 67 us.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c #2 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.46 ms in 1 step(s) (longest 0.86 ms), page read offset-desc; request-to-apply 14.36 ms.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c entry written: page 4/60481, 10 record(s), total 604801 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] desktop request #3 (new view) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 3 session(s), posted in 34 us.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] desktop #3 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.35 ms + page 0.33 ms in 1 step(s) (longest 0.69 ms), page read offset-desc; request-to-apply 14.92 ms.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] desktop entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a request #4 (request) page 4, range 1786896000000 .. 1789487999999 ms (1786896000 .. 1789487999 s), 3 session(s), posted in 31 us.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a #4 applied: page 4/259201, 10 record(s), total 2592003 row(s) in 2 month file(s) (2 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.40 ms + page 0.46 ms in 1 step(s) (longest 0.85 ms), page read keyset; request-to-apply 15.01 ms.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-3f9a entry written: page 4/259201, 10 record(s), total 2592003 row(s), revision 4; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c request #5 (request) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 20 us.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c #5 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.31 ms + page 0.40 ms in 1 step(s) (longest 0.71 ms), page read keyset; request-to-apply 14.93 ms.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() [History] web-b71c entry unchanged (page 4/60481, revision 2); historyViews not written.
+1: QINFO  : TestW2052Views::revisionOnlyChangesForOwnEntry() revisions: A 4 B 2 D 3 ; repeated B request wrote nothing
+1: PASS   : TestW2052Views::revisionOnlyChangesForOwnEntry()
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] per-client views: idle removal after 0.4 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] desktop request #1 (new view) page 1, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 1 session(s), posted in 96 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] desktop #1 applied: page 1/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.45 ms in 1 step(s) (longest 0.84 ms), page read offset-desc; request-to-apply 14.77 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] desktop entry written: page 1/60481, 10 record(s), total 604801 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 request #2 (new view) page 2, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 93 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 #2 applied: page 2/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.37 ms + page 0.55 ms in 1 step(s) (longest 0.92 ms), page read offset-desc; request-to-apply 14.52 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 entry written: page 2/60481, 10 record(s), total 604801 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #3 (new view) page 3, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 75 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #3 applied: page 3/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.40 ms + page 0.43 ms in 1 step(s) (longest 0.83 ms), page read offset-desc; request-to-apply 14.77 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 3/60481, 10 record(s), total 604801 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #4 (request) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 24 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #4 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.37 ms + page 0.56 ms in 1 step(s) (longest 0.94 ms), page read keyset; request-to-apply 14.21 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 4/60481, 10 record(s), total 604801 row(s), revision 4; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #5 (request) page 3, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 220 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #5 applied: page 3/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.44 ms + page 0.47 ms in 1 step(s) (longest 0.91 ms), page read keyset; request-to-apply 15.36 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 3/60481, 10 record(s), total 604801 row(s), revision 5; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #6 (request) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 82 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #6 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.49 ms in 1 step(s) (longest 0.94 ms), page read keyset; request-to-apply 15.58 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 4/60481, 10 record(s), total 604801 row(s), revision 6; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #7 (request) page 3, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 323 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #7 applied: page 3/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.50 ms in 1 step(s) (longest 0.96 ms), page read keyset; request-to-apply 15.27 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 3/60481, 10 record(s), total 604801 row(s), revision 7; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] removed 1 session(s) (idle): web-idle1; 2 session(s) left, historyViews written once.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #8 (request) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 449 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #8 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.46 ms in 1 step(s) (longest 0.88 ms), page read keyset; request-to-apply 15.43 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 4/60481, 10 record(s), total 604801 row(s), revision 8; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #9 (request) page 3, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 539 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #9 applied: page 3/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.50 ms in 1 step(s) (longest 0.95 ms), page read keyset; request-to-apply 16.03 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 3/60481, 10 record(s), total 604801 row(s), revision 9; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #10 (request) page 4, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 525 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #10 applied: page 4/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.47 ms + page 0.50 ms in 1 step(s) (longest 0.97 ms), page read keyset; request-to-apply 15.54 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 4/60481, 10 record(s), total 604801 row(s), revision 10; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 request #11 (request) page 3, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 2 session(s), posted in 60 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 #11 applied: page 3/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.43 ms + page 0.50 ms in 1 step(s) (longest 0.94 ms), page read keyset; request-to-apply 16.01 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-busy1 entry written: page 3/60481, 10 record(s), total 604801 row(s), revision 11; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() idle entry removed after 991 ms; SqlManager keys QList(desktop, web-busy1)
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 request #12 (new view) page 2, range 1788883200000 .. 1789487999999 ms (1788883200 .. 1789487999 s), 3 session(s), posted in 40 us.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 #12 applied: page 2/60481, 10 record(s), total 604801 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.46 ms in 1 step(s) (longest 0.88 ms), page read offset-desc; request-to-apply 14.71 ms.
+1: QINFO  : TestW2052Views::idleWebEntriesRemoved() [History] web-idle1 entry written: page 2/60481, 10 record(s), total 604801 row(s), revision 12; historyViews has 3 entries.
+1: PASS   : TestW2052Views::idleWebEntriesRemoved()
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] per-client views: idle removal after 0.2 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x1 request #1 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 1 session(s), posted in 27 us.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x1 #1 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.44 ms in 1 step(s) (longest 0.83 ms), page read offset-desc; request-to-apply 14.16 ms.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x1 entry written: page 1/10, 10 record(s), total 100 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x2 request #2 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 2 session(s), posted in 31 us.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x2 #2 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.45 ms in 1 step(s) (longest 0.87 ms), page read offset-desc; request-to-apply 15.38 ms.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x2 entry written: page 1/10, 10 record(s), total 100 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x3 request #3 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 20 us.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x3 #3 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.44 ms + page 0.42 ms in 1 step(s) (longest 0.86 ms), page read offset-desc; request-to-apply 15.52 ms.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] web-x3 entry written: page 1/10, 10 record(s), total 100 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] desktop request #4 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 64 us.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] desktop #4 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.47 ms + page 0.48 ms in 1 step(s) (longest 0.96 ms), page read offset-desc; request-to-apply 14.83 ms.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] desktop entry written: page 2/10, 10 record(s), total 100 row(s), revision 4; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::idleRemovalWritesMapOnce() [History] removed 3 session(s) (idle): web-x1, web-x2, web-x3; 1 session(s) left, historyViews written once.
+1: PASS   : TestW2052Views::idleRemovalWritesMapOnce()
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 4 entries, 10 rows per page
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] desktop request #1 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 1 session(s), posted in 18 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] desktop #1 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.48 ms + page 0.50 ms in 1 step(s) (longest 0.98 ms), page read offset-desc; request-to-apply 14.20 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] desktop entry written: page 1/10, 10 record(s), total 100 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 request #2 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 2 session(s), posted in 174 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 #2 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.38 ms + page 0.42 ms in 1 step(s) (longest 0.80 ms), page read offset-desc; request-to-apply 14.29 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 entry written: page 2/10, 10 record(s), total 100 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 request #3 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 78 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 #3 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.38 ms + page 0.45 ms in 1 step(s) (longest 0.83 ms), page read offset-desc; request-to-apply 14.41 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 entry written: page 3/10, 10 record(s), total 100 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-3 request #4 (new view) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 61 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-3 #4 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.42 ms in 1 step(s) (longest 0.83 ms), page read offset-desc; request-to-apply 14.74 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-3 entry written: page 4/10, 10 record(s), total 100 row(s), revision 4; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 request #5 (request) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 34 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 #5 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.47 ms + page 0.48 ms in 1 step(s) (longest 0.96 ms), page read offset-desc; request-to-apply 14.44 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-1 entry written: page 5/10, 10 record(s), total 100 row(s), revision 5; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] removed 1 session(s) (entry limit): web-2; 3 session(s) left, historyViews written once.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-4 request #6 (new view) page 6, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 9 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-4 #6 applied: page 6/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.40 ms + page 0.44 ms in 1 step(s) (longest 0.84 ms), page read offset-asc; request-to-apply 14.73 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-4 entry written: page 6/10, 10 record(s), total 100 row(s), revision 6; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] removed 1 session(s) (entry limit): web-3; 3 session(s) left, historyViews written once.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 request #7 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 103 us.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 #7 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.40 ms + page 0.42 ms in 1 step(s) (longest 0.82 ms), page read offset-desc; request-to-apply 14.61 ms.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() [History] web-2 entry written: page 3/10, 10 record(s), total 100 row(s), revision 7; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::entryLimitRemovesLeastRecentlyUsed() entries after the limit tests: QList(desktop, web-1, web-2, web-4)
+1: PASS   : TestW2052Views::entryLimitRemovesLeastRecentlyUsed()
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] desktop request #1 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 1 session(s), posted in 16 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] desktop #1 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.55 ms + page 0.54 ms in 1 step(s) (longest 1.09 ms), page read offset-desc; request-to-apply 14.19 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] desktop entry written: page 1/10, 10 record(s), total 100 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n01 request #2 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 2 session(s), posted in 39 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n01 #2 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.50 ms + page 0.56 ms in 1 step(s) (longest 1.06 ms), page read offset-desc; request-to-apply 14.68 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n01 entry written: page 2/10, 10 record(s), total 100 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n02 request #3 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 95 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n02 #3 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.55 ms + page 0.53 ms in 1 step(s) (longest 1.08 ms), page read offset-desc; request-to-apply 14.46 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n02 entry written: page 3/10, 10 record(s), total 100 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n03 request #4 (new view) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 73 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n03 #4 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.36 ms + page 0.45 ms in 1 step(s) (longest 0.81 ms), page read offset-desc; request-to-apply 15.09 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n03 entry written: page 4/10, 10 record(s), total 100 row(s), revision 4; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n04 request #5 (new view) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 5 session(s), posted in 59 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n04 #5 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.47 ms in 1 step(s) (longest 0.91 ms), page read offset-desc; request-to-apply 14.93 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n04 entry written: page 5/10, 10 record(s), total 100 row(s), revision 5; historyViews has 5 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n05 request #6 (new view) page 6, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 6 session(s), posted in 44 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n05 #6 applied: page 6/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.42 ms in 1 step(s) (longest 0.82 ms), page read offset-asc; request-to-apply 14.82 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n05 entry written: page 6/10, 10 record(s), total 100 row(s), revision 6; historyViews has 6 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n06 request #7 (new view) page 7, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 7 session(s), posted in 40 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n06 #7 applied: page 7/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.46 ms in 1 step(s) (longest 0.85 ms), page read offset-asc; request-to-apply 14.92 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n06 entry written: page 7/10, 10 record(s), total 100 row(s), revision 7; historyViews has 7 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n07 request #8 (new view) page 8, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 8 session(s), posted in 39 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n07 #8 applied: page 8/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.50 ms + page 0.49 ms in 1 step(s) (longest 0.99 ms), page read offset-asc; request-to-apply 15.11 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n07 entry written: page 8/10, 10 record(s), total 100 row(s), revision 8; historyViews has 8 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n08 request #9 (new view) page 9, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 9 session(s), posted in 53 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n08 #9 applied: page 9/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.49 ms in 1 step(s) (longest 0.95 ms), page read offset-asc; request-to-apply 14.74 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n08 entry written: page 9/10, 10 record(s), total 100 row(s), revision 9; historyViews has 9 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n09 request #10 (new view) page 10, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 10 session(s), posted in 77 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n09 #10 applied: page 10/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.63 ms + page 0.60 ms in 1 step(s) (longest 1.23 ms), page read offset-asc; request-to-apply 14.42 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n09 entry written: page 10/10, 10 record(s), total 100 row(s), revision 10; historyViews has 10 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n10 request #11 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 11 session(s), posted in 20 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n10 #11 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.54 ms + page 0.54 ms in 1 step(s) (longest 1.08 ms), page read offset-desc; request-to-apply 15.49 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n10 entry written: page 1/10, 10 record(s), total 100 row(s), revision 11; historyViews has 11 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n11 request #12 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 12 session(s), posted in 47 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n11 #12 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.39 ms + page 0.44 ms in 1 step(s) (longest 0.83 ms), page read offset-desc; request-to-apply 14.96 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n11 entry written: page 2/10, 10 record(s), total 100 row(s), revision 12; historyViews has 12 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n12 request #13 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 13 session(s), posted in 94 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n12 #13 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.74 ms + page 0.81 ms in 1 step(s) (longest 1.56 ms), page read offset-desc; request-to-apply 14.87 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n12 entry written: page 3/10, 10 record(s), total 100 row(s), revision 13; historyViews has 13 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n13 request #14 (new view) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 14 session(s), posted in 46 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n13 #14 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.66 ms + page 0.74 ms in 1 step(s) (longest 1.41 ms), page read offset-desc; request-to-apply 14.86 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n13 entry written: page 4/10, 10 record(s), total 100 row(s), revision 14; historyViews has 14 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n14 request #15 (new view) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 15 session(s), posted in 19 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n14 #15 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.91 ms + page 1.05 ms in 1 step(s) (longest 1.96 ms), page read offset-desc; request-to-apply 14.33 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n14 entry written: page 5/10, 10 record(s), total 100 row(s), revision 15; historyViews has 15 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n15 request #16 (new view) page 6, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 16 session(s), posted in 25 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n15 #16 applied: page 6/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.46 ms in 1 step(s) (longest 0.88 ms), page read offset-asc; request-to-apply 14.85 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n15 entry written: page 6/10, 10 record(s), total 100 row(s), revision 16; historyViews has 16 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n16 request #17 (new view) page 7, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 17 session(s), posted in 91 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n16 #17 applied: page 7/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.32 ms + page 0.69 ms in 1 step(s) (longest 1.01 ms), page read offset-asc; request-to-apply 14.53 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n16 entry written: page 7/10, 10 record(s), total 100 row(s), revision 17; historyViews has 17 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n17 request #18 (new view) page 8, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 18 session(s), posted in 34 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n17 #18 applied: page 8/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.49 ms in 1 step(s) (longest 0.90 ms), page read offset-asc; request-to-apply 14.91 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n17 entry written: page 8/10, 10 record(s), total 100 row(s), revision 18; historyViews has 18 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n18 request #19 (new view) page 9, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 19 session(s), posted in 46 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n18 #19 applied: page 9/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.34 ms + page 0.40 ms in 1 step(s) (longest 0.74 ms), page read offset-asc; request-to-apply 14.76 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n18 entry written: page 9/10, 10 record(s), total 100 row(s), revision 19; historyViews has 19 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n19 request #20 (new view) page 10, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 20 session(s), posted in 46 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n19 #20 applied: page 10/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.73 ms + page 0.50 ms in 1 step(s) (longest 1.23 ms), page read offset-asc; request-to-apply 14.45 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n19 entry written: page 10/10, 10 record(s), total 100 row(s), revision 20; historyViews has 20 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n20 request #21 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 21 session(s), posted in 118 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n20 #21 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.62 ms + page 0.49 ms in 1 step(s) (longest 1.11 ms), page read offset-desc; request-to-apply 15.01 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n20 entry written: page 1/10, 10 record(s), total 100 row(s), revision 21; historyViews has 21 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n21 request #22 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 22 session(s), posted in 35 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n21 #22 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.72 ms + page 0.53 ms in 1 step(s) (longest 1.25 ms), page read offset-desc; request-to-apply 15.06 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n21 entry written: page 2/10, 10 record(s), total 100 row(s), revision 22; historyViews has 22 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n22 request #23 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 23 session(s), posted in 43 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n22 #23 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.38 ms + page 0.62 ms in 1 step(s) (longest 1.00 ms), page read offset-desc; request-to-apply 14.70 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n22 entry written: page 3/10, 10 record(s), total 100 row(s), revision 23; historyViews has 23 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n23 request #24 (new view) page 4, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 24 session(s), posted in 70 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n23 #24 applied: page 4/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.55 ms + page 0.60 ms in 1 step(s) (longest 1.15 ms), page read offset-desc; request-to-apply 14.75 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n23 entry written: page 4/10, 10 record(s), total 100 row(s), revision 24; historyViews has 24 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n24 request #25 (new view) page 5, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 25 session(s), posted in 36 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n24 #25 applied: page 5/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.46 ms + page 0.45 ms in 1 step(s) (longest 0.91 ms), page read offset-desc; request-to-apply 15.04 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n24 entry written: page 5/10, 10 record(s), total 100 row(s), revision 25; historyViews has 25 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n25 request #26 (new view) page 6, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 26 session(s), posted in 25 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n25 #26 applied: page 6/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.54 ms + page 0.54 ms in 1 step(s) (longest 1.08 ms), page read offset-asc; request-to-apply 14.80 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n25 entry written: page 6/10, 10 record(s), total 100 row(s), revision 26; historyViews has 26 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n26 request #27 (new view) page 7, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 27 session(s), posted in 87 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n26 #27 applied: page 7/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.47 ms + page 0.53 ms in 1 step(s) (longest 1.01 ms), page read offset-asc; request-to-apply 14.21 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n26 entry written: page 7/10, 10 record(s), total 100 row(s), revision 27; historyViews has 27 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n27 request #28 (new view) page 8, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 28 session(s), posted in 13 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n27 #28 applied: page 8/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.44 ms in 1 step(s) (longest 0.85 ms), page read offset-asc; request-to-apply 15.41 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n27 entry written: page 8/10, 10 record(s), total 100 row(s), revision 28; historyViews has 28 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n28 request #29 (new view) page 9, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 29 session(s), posted in 43 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n28 #29 applied: page 9/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.54 ms + page 0.52 ms in 1 step(s) (longest 1.06 ms), page read offset-asc; request-to-apply 15.04 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n28 entry written: page 9/10, 10 record(s), total 100 row(s), revision 29; historyViews has 29 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n29 request #30 (new view) page 10, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 30 session(s), posted in 41 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n29 #30 applied: page 10/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.30 ms + page 0.45 ms in 1 step(s) (longest 0.75 ms), page read offset-asc; request-to-apply 15.16 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n29 entry written: page 10/10, 10 record(s), total 100 row(s), revision 30; historyViews has 30 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n30 request #31 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 31 session(s), posted in 81 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n30 #31 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.49 ms + page 0.50 ms in 1 step(s) (longest 0.99 ms), page read offset-desc; request-to-apply 14.47 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n30 entry written: page 1/10, 10 record(s), total 100 row(s), revision 31; historyViews has 31 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n31 request #32 (new view) page 2, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 32 session(s), posted in 15 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n31 #32 applied: page 2/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.51 ms + page 0.57 ms in 1 step(s) (longest 1.08 ms), page read offset-desc; request-to-apply 15.11 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n31 entry written: page 2/10, 10 record(s), total 100 row(s), revision 32; historyViews has 32 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] removed 1 session(s) (entry limit): web-n01; 31 session(s) left, historyViews written once.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n32 request #33 (new view) page 3, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 32 session(s), posted in 13 us.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n32 #33 applied: page 3/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.45 ms + page 0.45 ms in 1 step(s) (longest 0.90 ms), page read offset-desc; request-to-apply 14.60 ms.
+1: QINFO  : TestW2052Views::defaultLimitIs32() [History] web-n32 entry written: page 3/10, 10 record(s), total 100 row(s), revision 33; historyViews has 32 entries.
+1: QINFO  : TestW2052Views::defaultLimitIs32() 32 entries; first: QList(desktop, web-n02, web-n03) last: web-n32
+1: PASS   : TestW2052Views::defaultLimitIs32()
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] desktop request #1 (new view) page 1, range 0 .. 8640000000000000 ms (1 .. 8640000000000 s), 1 session(s), posted in 29 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] desktop #1 applied: page 1/259212, 10 record(s), total 2592116 row(s) in 3 month file(s) (3 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.49 ms + page 0.40 ms in 1 step(s) (longest 0.89 ms), page read offset-desc; request-to-apply 13.99 ms.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] desktop entry written: page 1/259212, 10 record(s), total 2592116 row(s), revision 1; historyViews has 1 entry.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() unbounded: from 0 to 8640000000000000 page 1/259212 rows 2592116 records 10 rev 1 ; rows in the files 2592116
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id ""
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id "web 1"
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id "web/1"
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id "../desktop"
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id "web-e"
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] view request ignored: invalid session id "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] web-ok view request ignored: invalid range nan .. 1789487999999 ms
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] web-ok view request ignored: invalid range 1786896000000 .. inf ms
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] web-ok view request ignored: invalid range 1789487999999 .. 1786896000000 ms
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] web-ok view request ignored: page 0 < 1
+1: QWARN  : TestW2052Views::unboundedInvalidAndClamp() [History] web-ok view request ignored: page -3 < 1
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ request #2 (new view) page 1, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 2 session(s), posted in 79 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ #2 applied: page 1/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.42 ms + page 0.46 ms in 1 step(s) (longest 0.88 ms), page read offset-desc; request-to-apply 15.58 ms.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ entry written: page 1/10, 10 record(s), total 100 row(s), revision 2; historyViews has 2 entries.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a request #3 (new view) page 99, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 57 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a #3 page 99 is past the last page 10; requesting page 10.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a request #4 (page past the end) page 10, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 3 session(s), posted in 136 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a #4 applied: page 10/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.41 ms + page 0.46 ms in 1 step(s) (longest 0.88 ms), page read offset-asc; request-to-apply 16.03 ms.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a entry written: page 10/10, 10 record(s), total 100 row(s), revision 3; historyViews has 3 entries.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-b71c request #5 (new view) page 10, range 1782835200000 .. 1785513599999 ms (1782835200 .. 1785513599 s), 4 session(s), posted in 35 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-b71c #5 applied: page 10/10, 10 record(s), total 100 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.57 ms + page 0.52 ms in 1 step(s) (longest 1.10 ms), page read offset-asc; request-to-apply 14.29 ms.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-b71c entry written: page 10/10, 10 record(s), total 100 row(s), revision 4; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() page 99 of July -> from 1782835200000 to 1785513599999 page 10/10 rows 100 records 10 rev 3
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a request #6 (request) page 3, range 978278400000 .. 980956799999 ms (978278400 .. 980956799 s), 4 session(s), posted in 20 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a #6 page 3 is past the last page 1; requesting page 1.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a request #7 (page past the end) page 1, range 978278400000 .. 980956799999 ms (978278400 .. 980956799 s), 4 session(s), posted in 243 us.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a #7 applied: page 1/1, 0 record(s), total 0 row(s) in 0 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.32 ms + page 0.00 ms in 1 step(s) (longest 0.32 ms), page read none; request-to-apply 15.63 ms.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() [History] web-3f9a entry written: page 1/1, 0 record(s), total 0 row(s), revision 5; historyViews has 4 entries.
+1: QINFO  : TestW2052Views::unboundedInvalidAndClamp() empty range page 3 -> from 978278400000 to 980956799999 page 1/1 rows 0 records 0 rev 5
+1: PASS   : TestW2052Views::unboundedInvalidAndClamp()
+1: QINFO  : TestW2052Views::cleanupTestCase() SqlManager session keys at the end: QList()
+1: PASS   : TestW2052Views::cleanupTestCase()
+1: Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 3971ms
+1: ********* Finished testing of TestW2052Views *********
+1/2 Test #1: tst_w2052_views ..................   Passed    4.70 sec
+test 2
+    Start 2: tst_w2052_rangepage
+
+2: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-052-qtest\tst_w2052_rangepage.exe
+2: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest
+2: Test timeout computed to be: 1800
+2: ********* Start testing of TestW2052RangePage *********
+2: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+2: QWARN  : TestW2052RangePage::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/settings_schema.sql"
+2: QINFO  : TestW2052RangePage::initTestCase() data (fresh copy of the w2-041 bench): D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/work-rangepage/data QList(sensor_202607.sqlite, sensor_202608.sqlite, sensor_202609.sqlite)
+2: PASS   : TestW2052RangePage::initTestCase()
+2: QWARN  : TestW2052RangePage::pagesMatchOffset30Days() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffset30Days() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 1: 10 rows 1789487999..1789487991 method=offset-desc count 91.24 ms page 0.45 ms steps 14 max step 9.65 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 2: 10 rows 1789487990..1789487981 method=keyset count 0.59 ms page 0.51 ms steps 1 max step 1.10 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 3: 10 rows 1789487980..1789487971 method=keyset count 0.31 ms page 0.38 ms steps 1 max step 0.69 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 4: 10 rows 1789487970..1789487961 method=keyset count 0.25 ms page 0.36 ms steps 1 max step 0.61 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 5: 10 rows 1789487960..1789487951 method=keyset count 0.30 ms page 0.38 ms steps 1 max step 0.68 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 6: 10 rows 1789487950..1789487941 method=keyset count 0.24 ms page 0.36 ms steps 1 max step 0.60 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 7: 10 rows 1789487940..1789487931 method=keyset count 0.26 ms page 0.36 ms steps 1 max step 0.62 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 8: 10 rows 1789487930..1789487921 method=keyset count 0.24 ms page 0.44 ms steps 1 max step 0.68 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 9: 10 rows 1789487920..1789487911 method=keyset count 0.26 ms page 0.36 ms steps 1 max step 0.61 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 10: 10 rows 1789487910..1789487901 method=keyset count 0.28 ms page 0.36 ms steps 1 max step 0.64 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 11: 10 rows 1789487900..1789487891 method=keyset count 0.24 ms page 0.35 ms steps 1 max step 0.60 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 12: 10 rows 1789487890..1789487881 method=keyset count 0.24 ms page 0.35 ms steps 1 max step 0.59 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 11: 10 rows 1789487900..1789487891 method=keyset count 0.28 ms page 0.37 ms steps 1 max step 0.65 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 10: 10 rows 1789487910..1789487901 method=keyset count 0.27 ms page 0.44 ms steps 1 max step 0.72 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 9: 10 rows 1789487920..1789487911 method=keyset count 0.25 ms page 1.14 ms steps 1 max step 1.38 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129595: 10 rows 1788192061..1788192052 method=offset-asc count 0.28 ms page 0.44 ms steps 1 max step 0.72 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129596: 10 rows 1788192051..1788192042 method=keyset count 0.47 ms page 0.45 ms steps 1 max step 0.92 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129597: 10 rows 1788192041..1788192032 method=keyset count 0.46 ms page 0.45 ms steps 1 max step 0.91 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129598: 10 rows 1788192031..1788192022 method=keyset count 0.44 ms page 0.43 ms steps 1 max step 0.87 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129599: 10 rows 1788192021..1788192012 method=keyset count 0.46 ms page 0.43 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129600: 10 rows 1788192011..1788192003 method=keyset count 0.47 ms page 0.51 ms steps 1 max step 0.98 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=keyset count 0.47 ms page 0.59 ms steps 1 max step 1.07 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129602: 10 rows 1788191992..1788191983 method=keyset count 0.43 ms page 0.41 ms steps 1 max step 0.84 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129603: 10 rows 1788191982..1788191973 method=keyset count 0.74 ms page 0.73 ms steps 1 max step 1.47 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129604: 10 rows 1788191972..1788191963 method=keyset count 0.39 ms page 0.45 ms steps 1 max step 0.84 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129605: 10 rows 1788191962..1788191953 method=keyset count 0.33 ms page 0.39 ms steps 1 max step 0.73 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129606: 10 rows 1788191952..1788191943 method=keyset count 0.40 ms page 0.40 ms steps 1 max step 0.81 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129605: 10 rows 1788191962..1788191953 method=keyset count 0.43 ms page 0.44 ms steps 1 max step 0.87 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129604: 10 rows 1788191972..1788191963 method=keyset count 0.29 ms page 0.37 ms steps 1 max step 0.66 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129603: 10 rows 1788191982..1788191973 method=keyset count 0.37 ms page 0.44 ms steps 1 max step 0.81 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129602: 10 rows 1788191992..1788191983 method=keyset count 0.29 ms page 0.37 ms steps 1 max step 0.66 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=offset-asc count 0.27 ms page 0.51 ms steps 1 max step 0.78 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129600: 10 rows 1788192011..1788192003 method=keyset count 0.60 ms page 0.53 ms steps 1 max step 1.13 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129599: 10 rows 1788192021..1788192012 method=keyset count 0.44 ms page 0.43 ms steps 1 max step 0.88 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129598: 10 rows 1788192031..1788192022 method=keyset count 0.49 ms page 0.43 ms steps 1 max step 0.92 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129597: 10 rows 1788192041..1788192032 method=keyset count 5.36 ms page 0.48 ms steps 1 max step 5.84 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129596: 10 rows 1788192051..1788192042 method=keyset count 0.45 ms page 0.45 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=offset-asc count 0.45 ms page 0.59 ms steps 1 max step 1.04 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=keyset count 0.45 ms page 0.59 ms steps 1 max step 1.04 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259201: 3 rows 1786896002..1786896000 method=offset-asc count 0.58 ms page 0.36 ms steps 1 max step 0.94 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259200: 10 rows 1786896012..1786896003 method=keyset count 0.59 ms page 0.52 ms steps 1 max step 1.11 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259199: 10 rows 1786896022..1786896013 method=keyset count 0.47 ms page 0.44 ms steps 1 max step 0.91 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259198: 10 rows 1786896032..1786896023 method=keyset count 0.48 ms page 0.46 ms steps 1 max step 0.94 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259199: 10 rows 1786896022..1786896013 method=keyset count 0.62 ms page 0.54 ms steps 1 max step 1.16 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259200: 10 rows 1786896012..1786896003 method=keyset count 0.45 ms page 0.45 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 259201: 3 rows 1786896002..1786896000 method=keyset count 0.64 ms page 0.40 ms steps 1 max step 1.04 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194400: 10 rows 1787544012..1787544003 method=seek-desc count 0.61 ms page 22.94 ms steps 4 max step 8.70 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194401: 10 rows 1787544002..1787543993 method=keyset count 0.46 ms page 0.46 ms steps 1 max step 0.93 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194402: 10 rows 1787543992..1787543983 method=keyset count 0.38 ms page 0.48 ms steps 1 max step 0.85 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194403: 10 rows 1787543982..1787543973 method=keyset count 0.46 ms page 0.46 ms steps 1 max step 0.92 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194404: 10 rows 1787543972..1787543963 method=keyset count 0.42 ms page 0.45 ms steps 1 max step 0.88 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194405: 10 rows 1787543962..1787543953 method=keyset count 0.46 ms page 0.46 ms steps 1 max step 0.93 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194406: 10 rows 1787543952..1787543943 method=keyset count 0.42 ms page 0.42 ms steps 1 max step 0.84 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194407: 10 rows 1787543942..1787543933 method=keyset count 0.43 ms page 0.43 ms steps 1 max step 0.86 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194408: 10 rows 1787543932..1787543923 method=keyset count 0.34 ms page 0.39 ms steps 1 max step 0.73 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194409: 10 rows 1787543922..1787543913 method=keyset count 0.44 ms page 0.44 ms steps 1 max step 0.87 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194410: 10 rows 1787543912..1787543903 method=keyset count 0.46 ms page 0.44 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194411: 10 rows 1787543902..1787543893 method=keyset count 0.45 ms page 0.77 ms steps 1 max step 1.23 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194412: 10 rows 1787543892..1787543883 method=keyset count 0.45 ms page 0.44 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194413: 10 rows 1787543882..1787543873 method=keyset count 0.46 ms page 0.52 ms steps 1 max step 0.98 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194414: 10 rows 1787543872..1787543863 method=keyset count 0.64 ms page 0.55 ms steps 1 max step 1.19 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194415: 10 rows 1787543862..1787543853 method=keyset count 0.43 ms page 0.45 ms steps 1 max step 0.89 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194416: 10 rows 1787543852..1787543843 method=keyset count 0.56 ms page 0.46 ms steps 1 max step 1.02 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194417: 10 rows 1787543842..1787543833 method=keyset count 0.60 ms page 0.54 ms steps 1 max step 1.14 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194418: 10 rows 1787543832..1787543823 method=keyset count 0.45 ms page 0.45 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194419: 10 rows 1787543822..1787543813 method=keyset count 0.50 ms page 0.52 ms steps 1 max step 1.02 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 194420: 10 rows 1787543812..1787543803 method=keyset count 0.46 ms page 0.45 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=seek-desc count 0.54 ms page 21.24 ms steps 4 max step 8.50 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 0.44 ms page 0.46 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.37 ms page 0.43 ms steps 1 max step 0.80 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64803: 10 rows 1788839981..1788839972 method=keyset count 0.44 ms page 0.46 ms steps 1 max step 0.90 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.44 ms page 0.50 ms steps 1 max step 0.94 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 0.54 ms page 0.54 ms steps 1 max step 1.08 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=keyset count 0.54 ms page 0.53 ms steps 1 max step 1.07 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64798: 10 rows 1788840030..1788840021 method=seek-desc count 0.61 ms page 22.27 ms steps 4 max step 8.44 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64799: 10 rows 1788840020..1788840011 method=keyset count 0.53 ms page 0.59 ms steps 1 max step 1.13 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=keyset count 0.72 ms page 0.56 ms steps 1 max step 1.28 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 0.56 ms page 0.53 ms steps 1 max step 1.09 ms
+2: QINFO  : TestW2052RangePage::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.44 ms page 0.47 ms steps 1 max step 0.91 ms
+2: PASS   : TestW2052RangePage::pagesMatchOffset30Days()
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 1: total 2592116, first ts 1790607151, method offset-desc, deltas 0, steps 14, max step 10.44 ms, page 0.39 ms, snapshot 1296016 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 2: total 2592131, first ts 1790613174, method keyset, deltas 1, steps 1, max step 1.20 ms, page 0.45 ms, snapshot 1296031 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 3: total 2592131, first ts 1790607146, method keyset, deltas 0, steps 1, max step 0.81 ms, page 0.37 ms, snapshot 1296031 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 4: total 2592131, first ts 1789487998, method keyset, deltas 0, steps 1, max step 0.96 ms, page 0.47 ms, snapshot 1296031 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 3: total 2592131, first ts 1790607146, method keyset, deltas 0, steps 1, max step 1.10 ms, page 0.53 ms, snapshot 1296031 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 2: total 2592131, first ts 1790613174, method keyset, deltas 0, steps 1, max step 0.67 ms, page 0.33 ms, snapshot 1296031 vs now 1296031
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 1: total 2592131, first ts 1790613174, method keyset, deltas 0, steps 1, max step 0.65 ms, page 0.32 ms, snapshot 1296031 vs now 1296031
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150000: total 2592131, first ts 1787988040, method seek-desc, deltas 0, steps 1, max step 6.87 ms, page 6.53 ms, snapshot 1296031 vs now 1296033
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150001: total 2592133, first ts 1787988032, method keyset, deltas 1, steps 1, max step 0.92 ms, page 0.48 ms, snapshot 1296033 vs now 1296033
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150002: total 2592133, first ts 1787988022, method keyset, deltas 0, steps 1, max step 1.06 ms, page 0.55 ms, snapshot 1296033 vs now 1296035
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150003: total 2592135, first ts 1787988014, method keyset, deltas 1, steps 1, max step 1.25 ms, page 0.57 ms, snapshot 1296035 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150004: total 2592137, first ts 1787988006, method keyset, deltas 1, steps 1, max step 1.06 ms, page 0.48 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150005: total 2592137, first ts 1787987996, method keyset, deltas 0, steps 1, max step 0.81 ms, page 0.40 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150006: total 2592137, first ts 1787987986, method keyset, deltas 0, steps 1, max step 1.14 ms, page 0.52 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150007: total 2592137, first ts 1787987976, method keyset, deltas 0, steps 1, max step 0.79 ms, page 0.41 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150008: total 2592137, first ts 1787987966, method keyset, deltas 0, steps 1, max step 0.74 ms, page 0.39 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150007: total 2592137, first ts 1787987976, method keyset, deltas 0, steps 1, max step 0.69 ms, page 0.37 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150006: total 2592137, first ts 1787987986, method keyset, deltas 0, steps 1, max step 0.87 ms, page 0.43 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150005: total 2592137, first ts 1787987996, method keyset, deltas 0, steps 1, max step 1.08 ms, page 0.49 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150004: total 2592137, first ts 1787988006, method keyset, deltas 0, steps 1, max step 0.75 ms, page 0.39 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() all+writes page 150003: total 2592137, first ts 1787988016, method keyset, deltas 0, steps 1, max step 1.15 ms, page 0.57 ms, snapshot 1296037 vs now 1296037
+2: QINFO  : TestW2052RangePage::pagesMatchOffsetWhileWriting() saves during the sequence: 21 ; results whose snapshot was behind the file: 4
+2: PASS   : TestW2052RangePage::pagesMatchOffsetWhileWriting()
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200001 method keyset first ts 1787488038 max step ms 1.325
+2: QINFO  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200002 method keyset first ts 1787488030 max step ms 0.9355
+2: QINFO  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200003 method keyset first ts 1787488020 max step ms 1.1155
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::anchorAfterInsertsAndNewMonth() after the new month file: months 4 total 2592146
+2: PASS   : TestW2052RangePage::anchorAfterInsertsAndNewMonth()
+2: QWARN  : TestW2052RangePage::countCacheDelta() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QWARN  : TestW2052RangePage::countCacheDelta() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-052-qtest/data_schema.sql"
+2: QINFO  : TestW2052RangePage::countCacheDelta() cache: all hits 4/4 (0.39 ms); after 2 saves hits 3, deltas 1, total 2592146 -> 2592148 (0.83 ms)
+2: PASS   : TestW2052RangePage::countCacheDelta()
+2: QINFO  : TestW2052RangePage::uncachedCountAndSeekInSteps() uncached 2-month count: 13 steps, count 88.57 ms, max step 9.17 ms, total 90.28 ms; steps(ms): 9.2 6.2 6.3 6.1 6.3 7.4 7.6 6.9 6.0 6.8 8.8 6.7 4.9
+2: QINFO  : TestW2052RangePage::uncachedCountAndSeekInSteps() page 64799: method seek-desc, steps 3, page 19.72 ms, max step 8.80 ms
+2: QINFO  : TestW2052RangePage::uncachedCountAndSeekInSteps() page 90719: method seek-asc, steps 3, page 13.24 ms, max step 6.20 ms
+2: QINFO  : TestW2052RangePage::uncachedCountAndSeekInSteps() page 194399: method seek-desc, steps 3, page 19.53 ms, max step 8.51 ms
+2: QINFO  : TestW2052RangePage::uncachedCountAndSeekInSteps() page 239199: method seek-asc, steps 1, page 5.93 ms, max step 6.40 ms
+2: PASS   : TestW2052RangePage::uncachedCountAndSeekInSteps()
+2: QINFO  : TestW2052RangePage::supersededBetweenSteps() attempt 0: A superseded=1 after 2 step(s) (21.66 ms); B ok, 7 steps
+2: PASS   : TestW2052RangePage::supersededBetweenSteps()
+2: QINFO  : TestW2052RangePage::otherSessionDoesNotSupersede() attempt 0: A(web-a) superseded=0 steps 7 total 79.29 ms; B(web-b) superseded=0 steps 7 total 76.86 ms
+2: PASS   : TestW2052RangePage::otherSessionDoesNotSupersede()
+2: QINFO  : TestW2052RangePage::sessionsKeepOwnAnchors() alternating sessions: 6/6 keyset pages for each of web-anchor-a web-anchor-b
+2: QINFO  : TestW2052RangePage::sessionsKeepOwnAnchors() session keys after releasing web-anchor-a : QList(web-a, web-anchor-b, web-b, web-main)
+2: PASS   : TestW2052RangePage::sessionsKeepOwnAnchors()
+2: QINFO  : TestW2052RangePage::releasedSessionRequestDropped() attempt 0: superseded=1 after 2 step(s)
+2: PASS   : TestW2052RangePage::releasedSessionRequestDropped()
+2: QINFO  : TestW2052RangePage::cleanupTestCase() SUMMARY: 135 results, 210 steps, longest step 10.94 ms; keyset pages (30d, hot, no writes): 73, page time median 0.450 ms, max 1.137 ms; methods keyset=112, offset-asc=4, offset-desc=9, seek-asc=3, seek-desc=7; pages compared with the OFFSET reference 133, also with the UNION ALL reference 8
+2: PASS   : TestW2052RangePage::cleanupTestCase()
+2: Totals: 11 passed, 0 failed, 0 skipped, 0 blacklisted, 53674ms
+2: ********* Finished testing of TestW2052RangePage *********
+2/2 Test #2: tst_w2052_rangepage ..............   Passed   54.12 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =  58.82 sec

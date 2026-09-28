@@ -1,0 +1,19 @@
+cleanup 2026-09-29T00:40:33+08:00
+build/w2-065-d95c973 exists: no
+build/w2-067-dbg exists: no
+build/w2-067-dbcheck exists: no
+build/w2-067-qtest exists: no
+build/w2-067-run exists: no
+build/w2-067-live exists: no
+dist:
+TaidaFlow-20260929-2005c26-dirty
+git status --short:
+ M Core/SqlManager.cpp
+ M Core/SqlManager.h
+ M Core/core.cpp
+ M Core/core.h
+ M docs/evidence/wasm-v4-sim/safety-probe.log
+ M docs/evidence/wasm-v4/safety-probe.log
+?? docs/evidence/w2-067/
+git diff --stat HEAD -- App QML TaidaFlowProxy/pack/scripts/deploy (expect empty):
+build/w2-067-head exists: no (deleted after the D1 reproduction from git archive 2005c26)

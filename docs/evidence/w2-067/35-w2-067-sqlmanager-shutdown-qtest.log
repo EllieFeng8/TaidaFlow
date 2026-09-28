@@ -1,0 +1,80 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:377
++ ... s=Get-Date; cmd /c "$ev\tools\run-qtest.bat" > "$ev\35-w2-067-sqlmana ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+[1/5] Automatic MOC and UIC for target tst_w2067_sqlmanager_shutdown
+[2/5] Building CXX object CMakeFiles\tst_w2067_sqlmanager_shutdown.dir\tst_w2067_sqlmanager_shutdown_autogen\mocs_compilation.cpp.obj
+[3/5] Building CXX object CMakeFiles\tst_w2067_sqlmanager_shutdown.dir\tst_w2067_sqlmanager_shutdown.cpp.obj
+[4/5] Building CXX object CMakeFiles\tst_w2067_sqlmanager_shutdown.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[5/5] Linking CXX executable tst_w2067_sqlmanager_shutdown.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2067_sqlmanager_shutdown
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-067-qtest\tst_w2067_sqlmanager_shutdown.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+1: Test timeout computed to be: 120
+1: ********* Start testing of TestW2067SqlManagerShutdown *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2067SqlManagerShutdown::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/settings_schema.sql"
+1: PASS   : TestW2067SqlManagerShutdown::initTestCase()
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: QWARN  : TestW2067SqlManagerShutdown::writesBeforeShutdown() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-AhJdxV/data_schema.sql"
+1: PASS   : TestW2067SqlManagerShutdown::writesBeforeShutdown()
+1: QINFO  : TestW2067SqlManagerShutdown::shutdownClosesAndJoins() [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+1: QINFO  : TestW2067SqlManagerShutdown::shutdownClosesAndJoins() shutdown() took 1 ms
+1: PASS   : TestW2067SqlManagerShutdown::shutdownClosesAndJoins()
+1: QWARN  : TestW2067SqlManagerShutdown::callsAfterShutdownRefused() [SQL] request after SqlManager shutdown ignored.
+1: QWARN  : TestW2067SqlManagerShutdown::callsAfterShutdownRefused() [SQL] request after SqlManager shutdown ignored.
+1: PASS   : TestW2067SqlManagerShutdown::callsAfterShutdownRefused()
+1: PASS   : TestW2067SqlManagerShutdown::dataFileIntact()
+1: PASS   : TestW2067SqlManagerShutdown::secondShutdownIsNoOp()
+1: PASS   : TestW2067SqlManagerShutdown::cleanupTestCase()
+1: Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 72ms
+1: ********* Finished testing of TestW2067SqlManagerShutdown *********
+1/1 Test #1: tst_w2067_sqlmanager_shutdown ....   Passed    0.42 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.42 sec

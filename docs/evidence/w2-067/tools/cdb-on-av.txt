@@ -1,0 +1,2 @@
+sxe -c ".echo ===== ACCESS VIOLATION =====; .lastevent; .ecxr; kn 80; .echo ===== ALL THREADS =====; ~* kn 40; q" av
+g

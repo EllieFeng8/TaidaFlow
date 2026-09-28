@@ -23,6 +23,15 @@ private:
 
     explicit Core(QObject* parent = nullptr) {}
     ~Core();
+    // w2-067: stops and releases every backend object (Modbus clients / MS300 / poll timer,
+    // Modbus server, REST, History, export, HTTP service, SqlManager thread) while the
+    // QCoreApplication still exists: on QCoreApplication::aboutToQuit (normal close), or - when
+    // main() returns before app.exec() - from the post routine that ~QApplication runs first.
+    // Core itself is a function-local static: ~Core runs during static destruction, after main()
+    // returned and after the other function-local statics created later (AppHttpServer,
+    // ModbusClient's host table) were destroyed, so it must not do this work. Idempotent.
+    void shutdown(const char* reason);
+    bool m_shutDown = false;
     void reportIgnoredHmiInputSettings();
     void setHistoryTitleOnce();
     void loadAlarmRecords();

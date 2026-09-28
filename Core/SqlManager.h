@@ -67,6 +67,16 @@ public:
 
     ~SqlManager();
 
+    // w2-067: orderly stop at application exit (Core::shutdown, while QCoreApplication still
+    // exists; call it after every user of the SqlManager has been stopped). The worker thread's
+    // event loop ends after the jobs already queued, then - still on the worker thread, which
+    // opened them - every SQLite connection (data_<yyyyMM>, settings) is closed and removed, and
+    // the thread is joined. Afterwards every call that needs the worker thread is refused
+    // (warning + empty / false result) instead of blocking on a thread that no longer runs.
+    // Idempotent; returns at once when called again.
+    void shutdown();
+    bool isShutDown() const { return m_shutDown.load(); }
+
     void setDataDirectory(const QString& path);
     void setSettingsFile(const QString& filePath);
 
@@ -203,6 +213,7 @@ private:
     QThread* m_thread;
     bool m_threadStarted;
     std::atomic<quint64> m_latestHistoryRequestId{0};
+    std::atomic<bool> m_shutDown{false};   // w2-067: set by shutdown()
 
     // w2-041 (SqlManager thread only)
     struct SensorMonthFile

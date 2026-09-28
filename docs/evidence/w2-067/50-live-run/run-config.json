@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "dataDir": "data",
+  "devices": {
+    "adam6256": {
+      "host": "127.0.0.201",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6217a": {
+      "host": "127.0.0.202",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6217b": {
+      "host": "127.0.0.203",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6224": {
+      "host": "127.0.0.204",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6022": {
+      "host": "127.0.0.205",
+      "port": 502,
+      "unitId": 1
+    },
+    "ms300": {
+      "serialPort": "COM2",
+      "baudRate": 9600,
+      "dataBits": 8,
+      "parity": "none",
+      "stopBits": 1,
+      "unitId": 1
+    }
+  },
+  "modbusServer": {
+    "bind": "0.0.0.0",
+    "port": 15020,
+    "unitId": 1
+  },
+  "http": {
+    "bind": "0.0.0.0",
+    "port": 8124
+  },
+  "rest": {
+    "bind": "127.0.0.1",
+    "port": 18080
+  },
+  "mirror": {
+    "internalPort": 18125,
+    "publicBind": "0.0.0.0",
+    "publicPort": 8125
+  },
+  "nginx": {
+    "enabled": true,
+    "port": 80,
+    "exe": "nginx\\nginx.exe"
+  },
+  "log": {
+    "dir": "logs",
+    "quiet": {
+      "enabled": true,
+      "keepDays": 60
+    },
+    "full": {
+      "enabled": true,
+      "keepDays": "seven"
+    }
+  }
+}

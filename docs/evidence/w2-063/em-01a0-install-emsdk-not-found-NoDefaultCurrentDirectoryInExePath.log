@@ -1,0 +1,6 @@
+﻿[w2-063] A-latest-emsdk-no-checkout cwd=D:\repo\codex\qmlTester\taidaflow\build\em
+e566f7b Reduce max python line length from 326 to 160 (#1801)
+[w2-063] HKCU EMSDK before: not set
+'emsdk.bat' is not recognized as an internal or external command,
+operable program or batch file.
+[w2-063] step emsdk-install-3.1.56 exit=1

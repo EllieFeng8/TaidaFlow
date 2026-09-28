@@ -1,0 +1,19 @@
+# build\manual-wasm\CMakeCache.txt (final d2-02 run)
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_MAKE_PROGRAM:UNINITIALIZED=C:/Qt/Tools/Ninja/ninja.exe
+CMAKE_TOOLCHAIN_FILE:FILEPATH=C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/qt.toolchain.cmake
+QT_HOST_PATH:UNINITIALIZED=C:/Qt/6.8.3/msvc2022_64
+QT_HOST_PATH_CMAKE_DIR:UNINITIALIZED=C:/Qt/6.8.3/msvc2022_64/lib/cmake
+# build\manual-desktop\CMakeCache.txt
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CXX_COMPILER:FILEPATH=C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe
+CMAKE_MAKE_PROGRAM:UNINITIALIZED=C:/Qt/Tools/Ninja/ninja.exe
+CMAKE_TOOLCHAIN_FILE:FILEPATH=C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake
+# first try d2-02a recorded QT_HOST_PATH_CMAKE_DIR:PATH=C:/Qt/6.8.3/mingw_64/lib/cmake (see d2-02a log / this file)
+# outputs
+-rwxr-xr-x 1 TED 197609  3426304 Sep 28 19:07 build/manual-desktop/TaidaFlowApp.exe
+-rw-r--r-- 1 TED 197609    12155 Sep 28 19:11 build/manual-wasm/TaidaFlowApp.html
+-rw-r--r-- 1 TED 197609   304976 Sep 28 19:14 build/manual-wasm/TaidaFlowApp.js
+-rw-r--r-- 1 TED 197609 34103893 Sep 28 19:14 build/manual-wasm/TaidaFlowApp.wasm
+-rw-r--r-- 1 TED 197609    12354 Sep 28 19:11 build/manual-wasm/qtloader.js
+-rw-r--r-- 1 TED 197609     1686 Sep 28 19:11 build/manual-wasm/qtlogo.svg

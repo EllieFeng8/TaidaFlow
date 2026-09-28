@@ -1,0 +1,46 @@
+﻿'em' is not recognized as an internal or external command,
+operable program or batch file.
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.4s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/pack-tests
+[1/13] Automatic MOC for target WasmMirrorProxyCore
+[2/13] Building CXX object CMakeFiles\WasmMirrorProxyCore.dir\WasmMirrorProxyCore_autogen\mocs_compilation.cpp.obj
+[3/13] Building CXX object CMakeFiles\WasmMirrorProxyCore.dir\src\infrastructure\proxy_mirror\wasmmirrorproxy.cpp.obj
+[4/13] Building CXX object CMakeFiles\WasmMirrorProxyCore.dir\src\infrastructure\proxy_mirror\proxymirror.cpp.obj
+[5/13] Linking CXX static library WasmMirrorProxyCore.lib
+[6/13] Automatic MOC for target WasmMirrorEngineTests
+[7/13] Automatic MOC for target WasmMirrorRuntimeTests
+[8/13] Building CXX object tests\CMakeFiles\WasmMirrorEngineTests.dir\WasmMirrorEngineTests_autogen\mocs_compilation.cpp.obj
+[9/13] Building CXX object tests\CMakeFiles\WasmMirrorRuntimeTests.dir\WasmMirrorRuntimeTests_autogen\mocs_compilation.cpp.obj
+[10/13] Building CXX object tests\CMakeFiles\WasmMirrorEngineTests.dir\tst_proxymirror.cpp.obj
+[11/13] Linking CXX executable tests\WasmMirrorEngineTests.exe
+[12/13] Building CXX object tests\CMakeFiles\WasmMirrorRuntimeTests.dir\tst_wasmmirrorproxy.cpp.obj
+[13/13] Linking CXX executable tests\WasmMirrorRuntimeTests.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/pack-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/pack-tests
+    Start 1: WasmMirror.Engine
+1/2 Test #1: WasmMirror.Engine ................   Passed    0.37 sec
+    Start 2: WasmMirror.Runtime
+2/2 Test #2: WasmMirror.Runtime ...............   Passed    1.07 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   1.45 sec

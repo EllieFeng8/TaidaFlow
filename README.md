@@ -1,5 +1,9 @@
 # TaidaFlow
 
+> **編譯(給開發人員):[docs/BUILD.md](docs/BUILD.md)**
+> ——從 clone、要裝的軟體與版本、工具路徑,到桌面版 / 網頁版的腳本與不用腳本的手動編譯、Qt Creator、編譯後必跑的檢查、
+> main → core 合併後要做的事、常見問題。
+>
 > **部署與啟動(正式機 / 測試機,給操作人員):[docs/DEPLOY_AND_STARTUP.md](docs/DEPLOY_AND_STARTUP.md)**
 > ——要開哪個檔、怎麼開、不用腳本的手動 cmd 步驟、port 表、防火牆、常見問題。打包時複製成打包資料夾的 `DEPLOY.md`。
 
@@ -44,47 +48,19 @@ desktop 版會對 `192.168.1.201~205:502` 建 Modbus TCP 連線並**寫入** DO/
   「接 Adam60xxSimulator」的測試用 profile。`run-desktop.ps1` 在預設模式會**移除**
   `TAIDAFLOW_DEVICE_PROFILE`,確保 app 用的就是探測過的 192.168.1.x。
 
-## 需求環境
-
-| 項目 | 路徑 / 版本 |
-|---|---|
-| Qt | 6.8.3:`C:\Qt\6.8.3\msvc2022_64`、`C:\Qt\6.8.3\wasm_singlethread` |
-| CMake / Ninja | `C:\Qt\Tools\CMake_64\bin\cmake.exe`、`C:\Qt\Tools\Ninja\ninja.exe` |
-| MSVC | VS 18 Community `vcvars64.bat` |
-| Emscripten | emsdk **3.1.56**(Qt 6.8 對應版)於 `C:\tools\emsdk` |
-| Python 3 | 開發腳本用;字型子集需 `fonttools` |
-
-所有建置輸出都在 `build/` 下(已被 `.gitignore` 排除)。
-注意:本分支 `.gitignore` 排除了 `/CMakePresets.json`,提交時需 `git add -f CMakePresets.json`。
-
 ## 建置
 
-`CMakePresets.json`:`desktop-release`(MSVC,`build\desktop`)、`wasm-debug` / `wasm-release`
-(Qt `wasm_singlethread` toolchain + emsdk 3.1.56 chainload,`QT_HOST_PATH` 指向 msvc2022_64,
-build preset 繼承 configure 環境)。
+完整說明在 **[docs/BUILD.md](docs/BUILD.md)**(需要的軟體與版本、安裝與勾選項目、工具路徑與環境變數、專案 / CMake 結構、
+桌面版與網頁版的腳本做法與不用腳本的手動做法、Qt Creator、編譯後必跑的檢查、main → core 合併後要做的事、常見問題)。
+這裡只留最常用的兩行,其餘以 BUILD.md 為準:
 
 ```bat
-scripts\build-desktop.bat [fresh]                 :: vcvars64 + cmake --preset/--build desktop-release
-scripts\build-wasm.bat [wasm-release|wasm-debug] [fresh]
+scripts\build-desktop.bat [fresh]                          :: -> build\desktop\TaidaFlowApp.exe
+scripts\build-wasm.bat [wasm-release|wasm-debug] [fresh]   :: -> build\wasm-release\TaidaFlowApp.html / .js / .wasm
 ```
 
-WASM 產物:`build\wasm-release\TaidaFlowApp.html / .js / .wasm`、`qtloader.js`
-(Release `.wasm` 約 33.6 MB;本次 33,641,584 bytes)。
-
-### CMake 結構(Desktop-only Core)
-
-- 根 `CMakeLists.txt`:先判斷 `EMSCRIPTEN` 再判斷 `WIN32`(`TAIDAFLOW_IS_WASM` /
-  `TAIDAFLOW_IS_WINDOWS_DESKTOP`)。共用 components:`Core Gui Widgets Qml Quick QuickTimeline
-  ShaderTools Network WebSockets`;**只有 Desktop** `find_package` `SerialBus SerialPort Sql
-  HttpServer Concurrent`。QDS 預設的 `CMAKE_INCLUDE_CURRENT_DIR ON` 保留原狀(pack 1.0.1
-  自行在子目錄關閉,宿主端不加 workaround)。
-- `Core/CMakeLists.txt`:QML module `Core` 的共用來源只有 `TaidaFlowProxy.h`;後端 `.cpp/.h`
-  與上述 Qt 模組的 link 只在 Desktop 分支加入。`Core` link `WasmMirror::Core`,並在此 target
-  `wasm_mirror_register_proxy(CLASS TaidaFlowProxy)` + `finalize`(兩端共用同一 header/contract)。
-- `App/CMakeLists.txt`:`SerialBus`/`Sql` link 只在 Desktop(`main.cpp` 只在 Desktop include `core.h`)。
-
-驗證 WASM 真的沒有後端:`python scripts\check_wasm_backend.py build\desktop build\wasm-release`
-(看 `ninja -t commands`、最終 link 的函式庫、CMakeCache 與二進位字串)。
+工具不在預設位置(`C:\Qt\6.8.3`、`C:\Qt\Tools`、VS 18 的 `vcvars64.bat`、`C:\tools\emsdk`)時,先設 `TAIDAFLOW_QT_ROOT`、
+`TAIDAFLOW_QT_TOOLS`、`TAIDAFLOW_VCVARS64`、`TAIDAFLOW_EMSDK`(BUILD.md §2.6)。
 
 ## 執行(desktop + 瀏覽器)
 

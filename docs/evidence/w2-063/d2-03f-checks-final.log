@@ -1,0 +1,62 @@
+﻿manifest: 24/24 ok
+legacy_VERSION_present=False VERSION.txt=1.0.1
+verify_pack exit=0
+[w2-063] check verify_pack exit=0
+build\manual-desktop [desktop] target=TaidaFlowApp.exe binary_bytes=3426304 commands=578
+  backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (18): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, TAIDAFLOW_REST_PORT, [REST] REST API
+  verdict: OK
+build\manual-wasm [wasm] target=TaidaFlowApp.js binary_bytes=34103893 commands=567
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+check_wasm_backend exit=0
+[w2-063] check check_wasm_backend exit=0
+build\manual-desktop: objects_with_deps=490 version_shadow_hits=0 std_version_deps=0
+build\manual-wasm: objects_with_deps=480 version_shadow_hits=0 std_version_deps=166
+  <version> -> C:/tools/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/version (166 objects)
+[w2-063] check check_version_shadow exit=0
+scanned 185 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=898 size=193520 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=898 size=194192 missing=0
+chars: total=514 cjk=407 total_font_bytes=387712
+[w2-063] check make_font_subset--check exit=0
+RESTManager.cpp registrations: 29 (28 distinct method+path)
+  GET      /
+  GET      /api/device/sn
+  OPTIONS  /api/device/sn
+  GET      /api/holding/last
+  OPTIONS  /api/holding/last
+  GET      /api/holding/range
+  OPTIONS  /api/holding/range
+  GET      /api/holding/rangeDateTime
+  OPTIONS  /api/holding/rangeDateTime
+  GET      /api/holding/rangeDateTimePage
+  OPTIONS  /api/holding/rangeDateTimePage
+  GET      /api/modbus/mode
+  OPTIONS  /api/modbus/mode
+  PUT      /api/modbus/mode
+  GET      /api/sensor/last
+  OPTIONS  /api/sensor/last
+  GET      /api/sensor/range
+  OPTIONS  /api/sensor/range
+  GET      /api/sensor/rangeDateTime
+  OPTIONS  /api/sensor/rangeDateTime
+  GET      /api/sensor/rangeDateTimePage
+  OPTIONS  /api/sensor/rangeDateTimePage
+  GET      /api/settings/frequency
+  OPTIONS  /api/settings/frequency
+  PUT      /api/settings/frequency
+  GET      /api/settings/sensors
+  OPTIONS  /api/settings/sensors
+  PUT      /api/settings/sensors
+  note: OPTIONS /api/settings/frequency is registered 2 times (the first registration answers)
+core.cpp kRestRoutes: 28 method+path
+GET routes (13): / /api/device/sn /api/holding/last /api/holding/range /api/holding/rangeDateTime /api/holding/rangeDateTimePage /api/modbus/mode /api/sensor/last /api/sensor/range /api/sensor/rangeDateTime /api/sensor/rangeDateTimePage /api/settings/frequency /api/settings/sensors
+PUT routes (3): /api/modbus/mode /api/settings/frequency /api/settings/sensors
+check_rest_routes exit=0
+[w2-063] check check_rest_routes exit=0

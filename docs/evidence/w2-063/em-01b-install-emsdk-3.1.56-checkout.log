@@ -1,0 +1,80 @@
+﻿[w2-063] B-emsdk-git-checkout-3.1.56 cwd=D:\repo\codex\qmlTester\taidaflow\build\em
+e10826f 3.1.56 (#1360)
+C:\Users\TED\AppData\Local\Programs\Python\Python312\python.exe
+C:\Users\TED\AppData\Local\Microsoft\WindowsApps\python.exe
+[w2-063] HKCU EMSDK before: not set
+Resolving SDK version '3.1.56' to 'sdk-releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit'
+Installing SDK 'sdk-releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit'..
+Installing tool 'node-16.20.0-64bit'..
+Downloading: D:/repo/codex/qmlTester/taidaflow/build/em/downloads/node-v16.20.0-win-x64.zip from https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/node-v16.20.0-win-x64.zip, 28623474 Bytes
+ [----------------------------------------------------------------------------]
+Unpacking 'D:/repo/codex/qmlTester/taidaflow/build/em/downloads/node-v16.20.0-win-x64.zip' to 'D:/repo/codex/qmlTester/taidaflow/build/em/node/16.20.0_64bit'
+Done installing tool 'node-16.20.0-64bit'.
+Installing tool 'python-3.9.2-nuget-64bit'..
+Downloading: D:/repo/codex/qmlTester/taidaflow/build/em/downloads/python-3.9.2-4-amd64+pywin32.zip from https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/python-3.9.2-4-amd64+pywin32.zip, 14413267 Bytes
+ [----------------------------------------------------------------------------]
+Unpacking 'D:/repo/codex/qmlTester/taidaflow/build/em/downloads/python-3.9.2-4-amd64+pywin32.zip' to 'D:/repo/codex/qmlTester/taidaflow/build/em/python/3.9.2-nuget_64bit'
+Done installing tool 'python-3.9.2-nuget-64bit'.
+Installing tool 'java-8.152-64bit'..
+Downloading: D:/repo/codex/qmlTester/taidaflow/build/em/downloads/portable_jre_8_update_152_64bit.zip from https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/portable_jre_8_update_152_64bit.zip, 69241499 Bytes
+ [----------------------------------------------------------------------------]
+Unpacking 'D:/repo/codex/qmlTester/taidaflow/build/em/downloads/portable_jre_8_update_152_64bit.zip' to 'D:/repo/codex/qmlTester/taidaflow/build/em/java/8.152_64bit'
+Done installing tool 'java-8.152-64bit'.
+Skipped installing releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit, already installed.
+Done installing SDK 'sdk-releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit'.
+[w2-063] step emsdk-install-3.1.56 exit=0
+Adding directories to PATH:
+PATH += D:\repo\codex\qmlTester\taidaflow\build\em
+PATH += D:\repo\codex\qmlTester\taidaflow\build\em\upstream\emscripten
+
+Setting environment variables:
+PATH = D:\repo\codex\qmlTester\taidaflow\build\em;D:\repo\codex\qmlTester\taidaflow\build\em\upstream\emscripten;C:\Users\TED\AppData\Local\Programs\Python\Python312;C:\Program Files\Basler\pylon\Runtime\x64\;C:\Program Files\Basler\pylon\Runtime\Win32\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\Microsoft SQL Server\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Basler\FramegrabberSDK\bin;C:\Program Files\Basler\FramegrabberSDK\Win32\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.1.1\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\TED\AppData\Local\Programs\Python\Launcher\;C:\Users\TED\AppData\Local\Microsoft\WindowsApps;C:\Users\TED\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\TED\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\TED\.dotnet\tools;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin;C:\Users\TED\AppData\Local\PowerToys\DSCModules\;C:\Users\TED\AppData\Local\Microsoft\WinGet\Links;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;C:\Program Files\Git\mingw64\bin
+EMSDK = D:/repo/codex/qmlTester/taidaflow/build/em
+EMSDK_NODE = D:\repo\codex\qmlTester\taidaflow\build\em\node\16.20.0_64bit\bin\node.exe
+EMSDK_PYTHON = D:\repo\codex\qmlTester\taidaflow\build\em\python\3.9.2-nuget_64bit\python.exe
+JAVA_HOME = D:\repo\codex\qmlTester\taidaflow\build\em\java\8.152_64bit
+Clearing existing environment variable: EMSDK_PY
+The changes made to environment variables only apply to the currently running shell instance. Use the 'emsdk_env.bat' to re-enter this environment later, or if you'd like to register this environment permanently, rerun this command with the option --permanent.
+Resolving SDK version '3.1.56' to 'sdk-releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit'
+Setting the following tools as active:
+   node-16.20.0-64bit
+   python-3.9.2-nuget-64bit
+   java-8.152-64bit
+   releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit
+
+Next steps:
+- Consider running `emsdk activate` with --permanent or --system
+  to have emsdk settings available on startup.
+[w2-063] step emsdk-activate-3.1.56 exit=0
+[w2-063] HKCU EMSDK after: not set
+Setting up EMSDK environment (suppress these messages with EMSDK_QUIET=1)
+Setting environment variables:
+Clearing existing environment variable: EMSDK_PY
+[w2-063] step emsdk_env exit=0
+[w2-063] EMSDK=D:/repo/codex/qmlTester/taidaflow/build/em
+[w2-063] EMSDK_NODE=D:\repo\codex\qmlTester\taidaflow\build\em\node\16.20.0_64bit\bin\node.exe
+[w2-063] EMSDK_PYTHON=D:\repo\codex\qmlTester\taidaflow\build\em\python\3.9.2-nuget_64bit\python.exe
+emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.56 (cf90417346b78455089e64eb909d71d091ecc055)
+Copyright (C) 2014 the Emscripten authors (see AUTHORS.txt)
+This is free and open source software under the MIT license.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[w2-063] step emcc-version exit=0
+[w2-063] emcc reports 3.1.56: 0 (0 = yes)
+[w2-063] upstream\emscripten\emscripten-version.txt:
+"3.1.56"
+[w2-063] node\ and python\ folders:
+16.20.0_64bit
+24.19.0_64bit
+3.13.3_64bit
+3.9.2-nuget_64bit
+[w2-063] step emsdk-list exit=0
+The *recommended* precompiled SDK download is 3.1.56 (9d106be887796484c4aaffc9dc45f48a8810f336).
+         3.1.56             INSTALLED
+         3.1.56    INSTALLED
+         3.1.56-asserts    
+    *    sdk-releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit	INSTALLED
+    (*)    releases-9d106be887796484c4aaffc9dc45f48a8810f336-64bit	INSTALLED
+    (*)    node-16.20.0-64bit       	INSTALLED
+     *     python-3.9.2-nuget-64bit 	INSTALLED
+     *     java-8.152-64bit         	INSTALLED

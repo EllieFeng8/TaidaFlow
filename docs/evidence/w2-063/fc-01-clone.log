@@ -1,0 +1,27 @@
+﻿Cloning into 'fc2'...
+[w2-063] step a git-clone-b-core exit=0
+## core...origin/core
+Cloning into 'fc'...
+[w2-063] step b git-clone exit=0
+fatal: 'core' could be both a local file and a tracking branch.
+Please use -- (and optionally --no-guess) to disambiguate
+[w2-063] step b git-checkout-core exit=128 (expected non-zero: ambiguous with folder Core)
+Switched to a new branch 'core'
+branch 'core' set up to track 'origin/core'.
+[w2-063] step b git-switch-core exit=0
+## core...origin/core
+772c00d feat(core): 網頁版載入畫面換成 TaidaFlow 立方體動畫
+From D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-063\tools\..\..\..\..
+ * [new branch]      core       -> local/core
+[w2-063] step c fetch-local-head exit=0
+HEAD is now at f1b0c6a chore(core): 刪除 e2epvdriver.h 與舊版 wasm-mirror-1.0.0.zip
+[w2-063] step c checkout-local-head exit=0
+f1b0c6a chore(core): 刪除 e2epvdriver.h 與舊版 wasm-mirror-1.0.0.zip
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+[w2-063] step c copy-round-files exit=0
+ M scripts/build-desktop.bat
+ M scripts/build-wasm.bat
+?? docs/BUILD.md
+D:\repo\codex\qmlTester\taidaflow\build\fc

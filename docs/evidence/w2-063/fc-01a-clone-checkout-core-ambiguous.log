@@ -1,0 +1,5 @@
+﻿Cloning into 'fc'...
+[w2-063] step git-clone exit=0
+fatal: 'core' could be both a local file and a tracking branch.
+Please use -- (and optionally --no-guess) to disambiguate
+[w2-063] step git-checkout-core exit=128

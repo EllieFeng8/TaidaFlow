@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import "components" as Components
+import "components/NumberFormat.js" as NumberFormat
 import TaidaFlowBackend 1.0
 Item {
     id: mainPage
@@ -474,8 +475,8 @@ Item {
         x: 30
         y: 374
         motorName: "M1"
-        value: String(Td.m1ValueSv)
-        valuePv: String(Td.m1ValuePv)
+        value: Td.m1ValueSv
+        valuePv: Td.m1ValuePv
         onValueEdited: function(newValue) { Td.m1ValueSv = newValue }
     }
 
@@ -484,8 +485,8 @@ Item {
         x: 195
         y: 259
         motorName: "M2"
-        value: String(Td.m2ValueSv)
-        valuePv: String(Td.m2ValuePv)
+        value: Td.m2ValueSv
+        valuePv: Td.m2ValuePv
         onValueEdited: function(newValue) { Td.m2ValueSv = newValue }
     }
 
@@ -494,8 +495,8 @@ Item {
         x: 350
         y: 369
         motorName: "M3"
-        value: String(Td.m3ValueSv)
-        valuePv: String(Td.m3ValuePv)
+        value: Td.m3ValueSv
+        valuePv: Td.m3ValuePv
         onValueEdited: function(newValue) { Td.m3ValueSv = newValue }
     }
 
@@ -504,8 +505,8 @@ Item {
         x: 85
         y: 474
         motorName: "M4"
-        value: String(Td.m4ValueSv)
-        valuePv: String(Td.m4ValuePv)
+        value: Td.m4ValueSv
+        valuePv: Td.m4ValuePv
         onValueEdited: function(newValue) { Td.m4ValueSv = newValue }
     }
 
@@ -888,7 +889,7 @@ Item {
         width: 73
         height: 74
 
-        readonly property string value: String(Td.pump2HzSv)
+        readonly property real value: Td.pump2HzSv
 
         function commitValue() {
             var newValue = Number(motor2EditField.text)
@@ -945,7 +946,7 @@ Item {
                 anchors.topMargin: 1
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: motor2Item.value
+                text: NumberFormat.formatSv(motor2Item.value)
 
                 color: motorMouseArea.containsMouse
                        ? "#FFFFFF"
@@ -983,7 +984,7 @@ Item {
                 cursorShape: Qt.PointingHandCursor
 
                 onClicked: {
-                    motor2EditField.text = motor2Item.value
+                    motor2EditField.text = NumberFormat.svEditText(motor2Item.value)
                     motor2ValueDialog.open()
                 }
             }
@@ -1144,7 +1145,7 @@ Item {
             }
 
             onOpened: {
-                motor2EditField.text = motor2Item.value
+                motor2EditField.text = NumberFormat.svEditText(motor2Item.value)
                 motor2EditField.forceActiveFocus()
                 motor2EditField.selectAll()
 
@@ -1239,7 +1240,7 @@ Item {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                text: flowMeter.value
+                text: NumberFormat.formatPv(flowMeter.value)
                 color: "white"
                 font.pixelSize: 14
                 font.family: "Consolas"

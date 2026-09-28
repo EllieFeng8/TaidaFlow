@@ -1,11 +1,14 @@
 import QtQuick
 import QtQuick.Controls
+import "NumberFormat.js" as NumberFormat
 Item {
     id: motorIcon
 
     property string motorName: "M1"
-    property string value: "20"
-    property string valuePv: "0"
+    // Raw numbers from Td (Main.qml passes Td.mXValueSv / Td.mXValuePv unformatted);
+    // they are formatted for display only, through NumberFormat.js (w1-056).
+    property real value: 0
+    property real valuePv: 0
     property string unit: "PV %"
     signal valueEdited(real newValue)
 
@@ -75,7 +78,7 @@ Item {
 
             anchors.top: parent.top
 
-            text: motorIcon.value
+            text: NumberFormat.formatSv(motorIcon.value)
             readOnly: true
 
             color: valueMouseArea.containsMouse ? "#FFFF00" : "white"
@@ -131,7 +134,7 @@ Item {
             }
 
             Text {
-                text: valuePv+"%"
+                text: NumberFormat.formatPv(motorIcon.valuePv) + "%"
                 color: "#FFD166"
                 font.pixelSize: 14
                 font.family: "Consolas"
@@ -296,7 +299,7 @@ Item {
         }
 
         onOpened: {
-            editField.text = motorIcon.value
+            editField.text = NumberFormat.svEditText(motorIcon.value)
             editField.forceActiveFocus()
             editField.selectAll()
             // 如果已啟用 Qt Virtual Keyboard

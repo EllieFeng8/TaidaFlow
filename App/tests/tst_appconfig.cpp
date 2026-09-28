@@ -29,7 +29,8 @@ const char *const kSpecDefaultJson = R"({
   "http":         { "bind": "0.0.0.0", "port": 8124 },
   "rest":         { "bind": "127.0.0.1", "port": 18080 },
   "mirror":       { "internalPort": 18125, "publicBind": "0.0.0.0", "publicPort": 8125 },
-  "nginx":        { "enabled": true, "port": 80 }
+  "nginx":        { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" },
+  "log":          { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": true, "keepDays": 7 } }
 })";
 
 QByteArray readAll(const QString &path)
@@ -104,6 +105,11 @@ private slots:
     void invalidValuesUseDefaults_data();
     void invalidValuesUseDefaults();
     void groupNotObjectUsesDefaults();
+    void logGroupNotObjectUsesDefaults();
+    void logAndNginxExeFromFile();
+    void logMissingKeysUseDefaults();
+    void nginxExeResolution();
+    void relativeLogDir();
     void validValuesAreNormalised();
     void utf8BomAccepted();
     void logListsEveryValueAndSource();
@@ -156,7 +162,17 @@ void tst_AppConfig::defaultGetters()
     QCOMPARE(c.mirror().publicPort, quint16(8125));
     QCOMPARE(c.nginx().enabled, true);
     QCOMPARE(c.nginx().port, quint16(80));
+    QCOMPARE(c.nginx().exe, QStringLiteral("nginx\\nginx.exe"));
     QCOMPARE(c.downloadPort(), quint16(80));
+    // w2-064: log section.
+    QCOMPARE(c.logDir(), QStringLiteral("logs"));
+    QCOMPARE(c.resolvedLogDir(), QStringLiteral("C:/TaidaFlowData/logs"));
+    const AppConfig::LogSettings log = c.logSettings();
+    QCOMPARE(log.dir, QStringLiteral("C:/TaidaFlowData/logs"));
+    QCOMPARE(log.quiet.enabled, true);
+    QCOMPARE(log.quiet.keepDays, 60);
+    QCOMPARE(log.full.enabled, true);
+    QCOMPARE(log.full.keepDays, 7);
     for (const QString &key : AppConfig::keys())
         QCOMPARE(c.source(key), AppConfig::ValueSource::Default);
 }
@@ -170,6 +186,13 @@ void tst_AppConfig::defaultFileFormat()
     QVERIFY(bytes.contains("\n    \"adam6256\": {\n      \"host\": \"192.168.1.201\",\n"));   // 2-space indent
     QVERIFY(bytes.indexOf("\"devices\"") < bytes.indexOf("\"modbusServer\""));
     QVERIFY(bytes.indexOf("\"mirror\"") < bytes.indexOf("\"nginx\""));
+    // w2-064: nginx.exe after nginx.port, then the log section (3 levels deep).
+    QVERIFY(bytes.contains("\n  \"nginx\": {\n    \"enabled\": true,\n    \"port\": 80,\n"
+                           "    \"exe\": \"nginx\\\\nginx.exe\"\n  },\n"));
+    QVERIFY(bytes.contains("\n  \"log\": {\n    \"dir\": \"logs\",\n    \"quiet\": {\n      \"enabled\": true,\n"
+                           "      \"keepDays\": 60\n    },\n    \"full\": {\n      \"enabled\": true,\n"
+                           "      \"keepDays\": 7\n    }\n  }\n}\n"));
+    QVERIFY(bytes.indexOf("\"nginx\"") < bytes.indexOf("\"log\""));
     QVERIFY(!bytes.contains('\r'));
     QCOMPARE(QString::fromUtf8(bytes).toUtf8(), bytes);           // valid UTF-8
 }
@@ -362,6 +385,31 @@ void tst_AppConfig::invalidValuesUseDefaults_data()
     QTest::newRow("enabled string") << QByteArray(R"({"nginx": {"enabled": "yes"}})") << "nginx.enabled" << "true";
     QTest::newRow("dataDir number") << QByteArray(R"({"dataDir": 5})") << "dataDir" << "\"C:\\\\TaidaFlowData\"";
     QTest::newRow("version 2") << QByteArray(R"({"version": 2})") << "version" << "1";
+    // w2-064: nginx.exe and log.
+    QTest::newRow("nginx.exe empty") << QByteArray(R"({"nginx": {"exe": "  "}})")
+                                     << "nginx.exe" << "\"nginx\\\\nginx.exe\"";
+    QTest::newRow("nginx.exe number") << QByteArray(R"({"nginx": {"exe": 1}})")
+                                      << "nginx.exe" << "\"nginx\\\\nginx.exe\"";
+    QTest::newRow("log.dir empty") << QByteArray(R"({"log": {"dir": ""}})") << "log.dir" << "\"logs\"";
+    QTest::newRow("log.dir number") << QByteArray(R"({"log": {"dir": 3}})") << "log.dir" << "\"logs\"";
+    QTest::newRow("quiet.enabled string") << QByteArray(R"({"log": {"quiet": {"enabled": "yes"}}})")
+                                          << "log.quiet.enabled" << "true";
+    QTest::newRow("full.enabled number") << QByteArray(R"({"log": {"full": {"enabled": 0}}})")
+                                         << "log.full.enabled" << "true";
+    QTest::newRow("quiet.keepDays 0") << QByteArray(R"({"log": {"quiet": {"keepDays": 0}}})")
+                                      << "log.quiet.keepDays" << "60";
+    QTest::newRow("quiet.keepDays -5") << QByteArray(R"({"log": {"quiet": {"keepDays": -5}}})")
+                                       << "log.quiet.keepDays" << "60";
+    QTest::newRow("quiet.keepDays 1.5") << QByteArray(R"({"log": {"quiet": {"keepDays": 1.5}}})")
+                                        << "log.quiet.keepDays" << "60";
+    QTest::newRow("quiet.keepDays string") << QByteArray(R"({"log": {"quiet": {"keepDays": "30"}}})")
+                                           << "log.quiet.keepDays" << "60";
+    QTest::newRow("full.keepDays 0") << QByteArray(R"({"log": {"full": {"keepDays": 0}}})")
+                                     << "log.full.keepDays" << "7";
+    QTest::newRow("full.keepDays huge") << QByteArray(R"({"log": {"full": {"keepDays": 1e12}}})")
+                                        << "log.full.keepDays" << "7";
+    QTest::newRow("full.keepDays null") << QByteArray(R"({"log": {"full": {"keepDays": null}}})")
+                                        << "log.full.keepDays" << "7";
 }
 
 void tst_AppConfig::invalidValuesUseDefaults()
@@ -390,6 +438,156 @@ void tst_AppConfig::groupNotObjectUsesDefaults()
     QCOMPARE(r.config.device(AppConfig::Device::Adam6256).host, QStringLiteral("192.168.1.201"));
     QCOMPARE(r.config.source(QStringLiteral("devices.ms300.serialPort")), AppConfig::ValueSource::Default);
     QCOMPARE(r.config.mirror().publicPort, quint16(8300));
+}
+
+void tst_AppConfig::logGroupNotObjectUsesDefaults()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    AppConfig::LoadResult r = loadJson(dir, R"({"log": "yes"})");
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QVERIFY(hasWarningContaining(r, QStringLiteral("\"log\" = \"yes\" is not an object")));
+    for (const QString &key : {QStringLiteral("log.dir"), QStringLiteral("log.quiet.enabled"),
+                               QStringLiteral("log.quiet.keepDays"), QStringLiteral("log.full.enabled"),
+                               QStringLiteral("log.full.keepDays")}) {
+        QCOMPARE(r.config.source(key), AppConfig::ValueSource::Default);
+    }
+    // Nested group: log.full is not an object, log.quiet from the file still counts.
+    r = loadJson(dir, R"({"log": {"quiet": {"keepDays": 30}, "full": [1, 2]}})");
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QVERIFY(hasWarningContaining(r, QStringLiteral("\"log.full\" = [1,2] is not an object")));
+    QCOMPARE(r.config.logSettings().quiet.keepDays, 30);
+    QCOMPARE(r.config.source(QStringLiteral("log.quiet.keepDays")), AppConfig::ValueSource::File);
+    QCOMPARE(r.config.logSettings().full.keepDays, 7);
+    QCOMPARE(r.config.source(QStringLiteral("log.full.keepDays")), AppConfig::ValueSource::Default);
+}
+
+void tst_AppConfig::logAndNginxExeFromFile()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const AppConfig::LoadResult r = loadJson(dir, R"({
+        "dataDir": "data",
+        "nginx": {"exe": " D:\\nginx-1.26\\nginx.exe "},
+        "log": {"dir": "my logs", "quiet": {"enabled": false, "keepDays": 1}, "full": {"enabled": true, "keepDays": 365.0}}
+    })");
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QVERIFY2(!r.hasWarning(), qPrintable(logText(r)));
+    QCOMPARE(r.config.nginx().exe, QStringLiteral("D:\\nginx-1.26\\nginx.exe"));   // trimmed
+    QCOMPARE(r.config.logDir(), QStringLiteral("my logs"));
+    const AppConfig::LogSettings log = r.config.logSettings();
+    QCOMPARE(log.quiet.enabled, false);
+    QCOMPARE(log.quiet.keepDays, 1);                      // lower limit is valid
+    QCOMPARE(log.full.enabled, true);
+    QCOMPARE(log.full.keepDays, 365);
+    for (const QString &key : {QStringLiteral("nginx.exe"), QStringLiteral("log.dir"),
+                               QStringLiteral("log.quiet.enabled"), QStringLiteral("log.quiet.keepDays"),
+                               QStringLiteral("log.full.enabled"), QStringLiteral("log.full.keepDays")}) {
+        QCOMPARE(r.config.source(key), AppConfig::ValueSource::File);
+    }
+    QVERIFY(hasInfoContaining(r, QStringLiteral("  log.quiet.keepDays = 1 (file)")));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("  log.full.keepDays = 365 (file)")));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("  nginx.exe = \"D:\\\\nginx-1.26\\\\nginx.exe\" (file)")));
+}
+
+void tst_AppConfig::logMissingKeysUseDefaults()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    // A version-1 file written before w2-064 (no nginx.exe, no log): defaults, info only.
+    const QByteArray json = R"({"nginx": {"enabled": true, "port": 80}})";
+    const AppConfig::LoadResult r = loadJson(dir, json);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QVERIFY2(!r.hasWarning(), qPrintable(logText(r)));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("\"nginx.exe\" is missing - using the default \"nginx\\\\nginx.exe\"")));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("\"log.dir\" is missing - using the default \"logs\"")));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("\"log.quiet.keepDays\" is missing - using the default 60")));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("\"log.full.keepDays\" is missing - using the default 7")));
+    QCOMPARE(r.config.logSettings().quiet.keepDays, 60);
+    QCOMPARE(r.config.logSettings().full.keepDays, 7);
+    QCOMPARE(r.config.nginx().exe, QStringLiteral("nginx\\nginx.exe"));
+    QCOMPARE(readAll(dir.filePath(QStringLiteral("config.json"))), json);   // not written back
+}
+
+void tst_AppConfig::nginxExeResolution()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString configDir = QDir::cleanPath(dir.filePath(QStringLiteral("install")));
+    const QString path = QDir(configDir).filePath(QStringLiteral("config.json"));
+
+    // Default "nginx\nginx.exe": relative to the folder of config.json (the install folder).
+    QVERIFY(writeFile(path, R"({"dataDir": "data"})"));
+    AppConfig::LoadResult r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QCOMPARE(r.config.source(QStringLiteral("nginx.exe")), AppConfig::ValueSource::Default);
+    const QString bundled = configDir + QStringLiteral("/nginx/nginx.exe");
+    QCOMPARE(r.config.resolvedNginxExe(), bundled);
+    QCOMPARE(r.config.nginx().exe, QStringLiteral("nginx\\nginx.exe"));
+    QCOMPARE(r.config.nginx().resolvedExe, bundled);
+    QVERIFY2(hasInfoContaining(r, QStringLiteral("  nginx.exe (resolved) = %1").arg(QDir::toNativeSeparators(bundled))),
+             qPrintable(logText(r)));
+    // Not relative to dataDir.
+    QVERIFY(!r.config.resolvedNginxExe().startsWith(r.config.resolvedDataDir()));
+
+    // Other relative paths (with "..", forward slashes) - same base, cleaned.
+    QVERIFY(writeFile(path, R"({"nginx": {"exe": "..\\tools/nginx-1.26\\nginx.exe"}})"));
+    r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QCOMPARE(r.config.source(QStringLiteral("nginx.exe")), AppConfig::ValueSource::File);
+    QCOMPARE(r.config.resolvedNginxExe(), QDir::cleanPath(dir.filePath(QStringLiteral("tools/nginx-1.26/nginx.exe"))));
+
+    // Absolute path: used as is (only cleaned).
+    QVERIFY(writeFile(path, R"({"nginx": {"exe": "C:\\tools\\nginx\\nginx.exe"}})"));
+    r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QCOMPARE(r.config.nginx().exe, QStringLiteral("C:\\tools\\nginx\\nginx.exe"));
+    QCOMPARE(r.config.resolvedNginxExe(), QStringLiteral("C:/tools/nginx/nginx.exe"));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("  nginx.exe (resolved) = C:\\tools\\nginx\\nginx.exe")));
+
+    // TAIDAFLOW_CONFIG missing + created: base = the folder of the created file.
+    const QString created = dir.filePath(QStringLiteral("other/config.json"));
+    r = AppConfig::load(created, dir.path(), std::nullopt);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    QCOMPARE(r.fileSource, AppConfig::FileSource::Created);
+    QCOMPARE(r.config.resolvedNginxExe(), QDir::cleanPath(dir.filePath(QStringLiteral("other/nginx/nginx.exe"))));
+}
+
+void tst_AppConfig::relativeLogDir()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString configDir = dir.filePath(QStringLiteral("cfg"));
+    const QString path = QDir(configDir).filePath(QStringLiteral("config.json"));
+
+    // relative dataDir (to config.json) + relative log.dir (to dataDir)
+    QVERIFY(writeFile(path, R"({"dataDir": "data/run", "log": {"dir": "logs/app"}})"));
+    AppConfig::LoadResult r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY2(r.ok, qPrintable(logText(r)));
+    const QString dataDir = QDir::cleanPath(QDir(configDir).filePath(QStringLiteral("data/run")));
+    QCOMPARE(r.config.resolvedLogDir(), dataDir + QStringLiteral("/logs/app"));
+    QCOMPARE(r.config.logSettings().dir, dataDir + QStringLiteral("/logs/app"));
+    QVERIFY(hasInfoContaining(r, QStringLiteral("  log.dir (resolved) = %1")
+                                     .arg(QDir::toNativeSeparators(dataDir + QStringLiteral("/logs/app")))));
+
+    // "..": still resolved against dataDir (and cleaned)
+    QVERIFY(writeFile(path, R"({"dataDir": "data/run", "log": {"dir": "../logs"}})"));
+    r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY(r.ok);
+    QCOMPARE(r.config.resolvedLogDir(), QDir::cleanPath(QDir(configDir).filePath(QStringLiteral("data/logs"))));
+
+    // absolute log.dir: independent of dataDir
+    const QString absolute = QDir::cleanPath(dir.filePath(QStringLiteral("abs-logs")));
+    QVERIFY(writeFile(path, QJsonDocument(QJsonObject{
+                                {QStringLiteral("dataDir"), QStringLiteral("data/run")},
+                                {QStringLiteral("log"), QJsonObject{{QStringLiteral("dir"), QDir::toNativeSeparators(absolute)}}}})
+                                .toJson()));
+    r = AppConfig::load(path, dir.path(), std::nullopt);
+    QVERIFY(r.ok);
+    QCOMPARE(r.config.resolvedLogDir(), absolute);
+
+    // resolved against the dataDir setting even before applyDataDir() changed the working folder
+    QVERIFY(QDir::currentPath() != dataDir);
 }
 
 void tst_AppConfig::validValuesAreNormalised()

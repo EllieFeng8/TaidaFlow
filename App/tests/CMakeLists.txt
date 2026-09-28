@@ -36,3 +36,11 @@ taidaflow_add_test(tst_runtimeinfo
     tst_runtimeinfo.cpp
     "${APP_DIR}/runtimeinfo.cpp"
     "${APP_DIR}/runtimeinfo.h")
+
+# w2-064: App/applog.{h,cpp} (the app's own daily log files, spec §2 "log").
+taidaflow_add_test(tst_applog
+    tst_applog.cpp
+    "${APP_DIR}/applog.cpp"
+    "${APP_DIR}/applog.h"
+    "${APP_DIR}/appconfig.cpp"   # AppLog::handleConfigFailure uses AppConfig (w2-064 A2)
+    "${APP_DIR}/appconfig.h")

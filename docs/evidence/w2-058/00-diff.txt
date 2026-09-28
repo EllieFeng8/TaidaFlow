@@ -1,0 +1,473 @@
+diff --git a/App/CMakeLists.txt b/App/CMakeLists.txt
+index c389a63..14b7770 100644
+--- a/App/CMakeLists.txt
++++ b/App/CMakeLists.txt
+@@ -33,3 +33,49 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         Qt${QT_VERSION_MAJOR}::Sql
+     )
+ endif()
++
++# w2-058: TaidaFlow loading page for the WebAssembly build.
++# Qt 6.8 has no CMake option for a custom HTML shell: its target finalizer (deferred to the end of
++# the top-level CMakeLists.txt) writes <build>/TaidaFlowApp.html from Qt's wasm_shell.html at
++# CONFIGURE time, and the build never touches that file again. So, also at configure time and
++# right after Qt's finalizer, App/wasm/apply_wasm_shell.cmake writes App/wasm/TaidaFlowApp.shell.html
++# over it, with the placeholder values (APPNAME, APPEXPORTNAME, PRELOAD) taken from the page Qt
++# just generated; the values are printed in the configure log ("[wasm-shell] ..."). The template
++# and the script are configure dependencies: editing them re-runs the configure (and this step)
++# on the next build. Desktop builds are not affected.
++if(TAIDAFLOW_IS_WASM)
++    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
++        "${CMAKE_CURRENT_SOURCE_DIR}/wasm/TaidaFlowApp.shell.html"
++        "${CMAKE_CURRENT_SOURCE_DIR}/wasm/apply_wasm_shell.cmake")
++
++    function(taidaflow_apply_wasm_shell target template script state attempt)
++        # Qt's finalizer may re-defer itself behind other deferred Qt tasks; wait until it ran.
++        get_target_property(finalized ${target} _qt_is_finalized)
++        if(NOT finalized)
++            if(attempt GREATER 20)
++                message(FATAL_ERROR "[wasm-shell] ${target} was not finalized by Qt - TaidaFlowApp.html not replaced")
++            endif()
++            math(EXPR attempt "${attempt} + 1")
++            cmake_language(EVAL CODE "cmake_language(DEFER CALL taidaflow_apply_wasm_shell [[${target}]] [[${template}]] [[${script}]] [[${state}]] ${attempt})")
++            return()
++        endif()
++        # Same location and name as Qt's _qt_internal_wasm_add_target_helpers.
++        get_target_property(out_dir ${target} RUNTIME_OUTPUT_DIRECTORY)
++        if(NOT out_dir)
++            get_target_property(out_dir ${target} BINARY_DIR)
++        endif()
++        get_target_property(out_name ${target} OUTPUT_NAME)
++        if(NOT out_name)
++            set(out_name "${target}")
++        endif()
++        execute_process(
++            COMMAND "${CMAKE_COMMAND}" "-DSHELL_TEMPLATE=${template}" "-DHTML=${out_dir}/${out_name}.html"
++                    "-DSTATE=${state}" -P "${script}"
++            RESULT_VARIABLE rc)
++        if(NOT rc EQUAL 0)
++            message(FATAL_ERROR "[wasm-shell] apply_wasm_shell.cmake failed (${rc})")
++        endif()
++    endfunction()
++
++    cmake_language(EVAL CODE "cmake_language(DEFER DIRECTORY [[${CMAKE_SOURCE_DIR}]] CALL taidaflow_apply_wasm_shell [[${CMAKE_PROJECT_NAME}]] [[${CMAKE_CURRENT_SOURCE_DIR}/wasm/TaidaFlowApp.shell.html]] [[${CMAKE_CURRENT_SOURCE_DIR}/wasm/apply_wasm_shell.cmake]] [[${CMAKE_CURRENT_BINARY_DIR}/wasm-shell-values.cmake]] 0)")
++endif()
+diff --git a/docs/DEPLOY_AND_STARTUP.md b/docs/DEPLOY_AND_STARTUP.md
+index c537ea5..e6a6ce5 100644
+--- a/docs/DEPLOY_AND_STARTUP.md
++++ b/docs/DEPLOY_AND_STARTUP.md
+@@ -264,6 +264,10 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build --preset wasm-release
+   preset `wasm-release`(`CMakePresets.json`),輸出 `build\wasm-release\`。
+ - 產出(網頁要用的只有這 5 個):`TaidaFlowApp.html`、`TaidaFlowApp.js`、
+   `TaidaFlowApp.wasm`(約 33.8 MB)、`qtloader.js`、`qtlogo.svg`。資料夾裡其他檔(CMake/Ninja)不要部署。
++- **載入畫面**(w2-058):`TaidaFlowApp.html` 不是 Qt 預設頁,而是 `App\wasm\TaidaFlowApp.shell.html`
++  (旋轉立方體 + 「TAIDAFLOW」+ 繁中狀態);建置時自動套用(configure log 有 `[wasm-shell]` 兩行)。
++  要改畫面或文字:改這個樣板 → 重新 `scripts\build-wasm.bat` → 重新 `scripts\deploy-web.ps1`(§2.2)。
++  `qtlogo.svg` 新頁面已不用,照常複製無影響。
+ - 改過中文字串(QML/C++)後,先檢查網頁內嵌字型是否涵蓋所有字:
+   `python -B scripts\make_font_subset.py --check`(exit 0 = 涵蓋;exit 1 = 要執行
+   `python scripts\make_font_subset.py` 重新產生字型,再重新建置 wasm)。
+=== README.md (w2-058 section only; the rest of the README diff is w2-059)
++### 網頁載入畫面(w2-058)
++
++- 樣板:`App/wasm/TaidaFlowApp.shell.html`(純 HTML/CSS,重現 CubeLoader 旋轉發光立方體 + 「TAIDAFLOW」
++  與繁中狀態文字;不引用任何外部 CSS/JS/字型)。`onLoaded` 後整個載入頁隱藏,由 App 自己的畫面接手;
++  載入失敗、瀏覽器不支援 WebAssembly、JavaScript 關閉與程式結束時停在載入頁顯示繁中訊息(紅字)。
++- 套用:Qt 6.8 沒有自訂 HTML shell 的 CMake 參數,它在 CMake configure 時從自己的 `wasm_shell.html`
++  產生 `build\<wasm preset>\TaidaFlowApp.html`。`App/CMakeLists.txt` 在同一次 configure、Qt 產生之後
++  立刻呼叫 `App/wasm/apply_wasm_shell.cmake`,以 Qt 產生的頁面取 `@APPNAME@`/`@APPEXPORTNAME@`/
++  `@PRELOAD@` 的值填入樣板並覆蓋;configure log 會印 `[wasm-shell] ...`(值與 SHA-256)。只影響 WASM,
++  桌面版不變。`qtlogo.svg` 仍由 Qt 複製、仍會被 deploy-web 部署,新頁面不再使用(留著無影響)。
++- 修改:改樣板 → `scripts\build-wasm.bat`(樣板是 configure 相依,改了會自動重跑 configure)→
++  `powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`(nginx 執行中另跑
++  `scripts\nginx-web.ps1 -Action reload`,或靠 ETag 重新驗證)。靜態檢查(不開瀏覽器):
++  `python -B docs\evidence\w2-058\check_shell_page.py build\wasm-release\TaidaFlowApp.html`。
++- main 分支的 wasm 建置仍用 Qt 預設頁;要一致需把 `App/wasm/` 與 `App/CMakeLists.txt` 的 w2-058 區塊
++  一起帶到 main(main → core 合併時這兩處只在 core,不會被覆蓋,除非 main 也改了同一段)。
++
+@@ -354,9 +371,6 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
+-- `scripts\desktop_input.py`(OS SendInput 操作真實 desktop UI)、`scripts\capture-window.ps1`
+-  (視窗截圖)。
+-- `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
+-  Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
+-  啟動後進入歷史頁時由 Core 的真實讀取路徑(`historyViewRequested` → `HistoryViewService` → SqlManager →
+=== new file App/wasm/TaidaFlowApp.shell.html
+<!doctype html>
+<!--
+  taidaflow-wasm-shell: TaidaFlow loading page for the Qt WebAssembly build (w2-058).
+
+  Template of build/<wasm preset>/TaidaFlowApp.html. It replaces the page that Qt generates from
+  <Qt>/wasm_singlethread/plugins/platforms/wasm_shell.html (Qt 6.8.3, LicenseRef-Qt-Commercial OR
+  GPL-3.0-only); the loading logic (qtLoad, #screen container, the APPNAME / APPEXPORTNAME /
+  PRELOAD placeholders) is taken from that file. The loader visual re-creates the "CubeLoader"
+  design (loading_page_prompt.md, React/Tailwind) in plain HTML/CSS: no external CSS, JS, fonts
+  or network resources.
+
+  App/CMakeLists.txt + App/wasm/apply_wasm_shell.cmake write this page over Qt's at every CMake
+  configure of a WebAssembly build, with the placeholder values taken from the page Qt generated.
+  Edit this file, then rebuild wasm (scripts\build-wasm.bat; the edit re-runs the configure) and
+  deploy (scripts\deploy-web.ps1). Keep the marker
+  "taidaflow-wasm-shell" in this comment: the apply script uses it to tell this page from Qt's.
+-->
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--Set visual viewport size for mobile devices to the device size,
+        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
+        and Qt device independent pixels. (Qt wasm_shell.html) -->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+
+    <title>TaidaFlow</title>
+    <style>
+      /* Qt shell: the html body covers the entire (visual) viewport with no scroll bars. */
+      html, body { padding: 0; margin: 0; overflow: hidden; height: 100%; }
+      body { background: #0B1527; }
+      #screen { width: 100%; height: 100%; }
+
+      /* ---- Loading page (CubeLoader design) ------------------------------------------- */
+      #tf-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;                      /* gap-12 */
+        padding: 48px;                  /* p-12 */
+        box-sizing: border-box;
+        background: #0B1527;            /* App dark theme (the component itself is transparent) */
+        perspective: 1200px;            /* .perspective-container */
+        font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      }
+      #tf-loader[hidden] { display: none; }
+
+      .tf-scene {                       /* relative w-24 h-24 flex items-center justify-center preserve-3d */
+        position: relative;
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-style: preserve-3d;
+      }
+      .tf-cube {                        /* relative w-full h-full preserve-3d animate-cube-spin */
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: tf-cube-spin 8s linear infinite;
+      }
+      .tf-core {                        /* absolute inset-0 m-auto w-8 h-8 bg-white rounded-full blur-md ... */
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        background: #ffffff;
+        filter: blur(12px);
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+        animation: tf-pulse-fast 2s ease-in-out infinite;
+      }
+      .tf-side {                        /* .side-wrapper */
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-style: preserve-3d;
+      }
+      .tf-front  { transform: rotateY(0deg); }
+      .tf-back   { transform: rotateY(180deg); }
+      .tf-right  { transform: rotateY(90deg); }
+      .tf-left   { transform: rotateY(-90deg); }
+      .tf-top    { transform: rotateX(90deg); }
+      .tf-bottom { transform: rotateX(-90deg); }
+
+      .tf-face {                        /* .face */
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        border: 2px solid;
+        transform: translateZ(48px);    /* resting position = the breathe start frame */
+        opacity: 0.8;
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        animation: tf-breathe 3s ease-in-out infinite;
+      }
+      .tf-front > .tf-face, .tf-back > .tf-face {       /* bg-cyan-500/10 border-cyan-400 */
+        background-color: rgba(6, 182, 212, 0.1);
+        border-color: #22d3ee;
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+      }
+      .tf-right > .tf-face, .tf-left > .tf-face {       /* bg-purple-500/10 border-purple-400 */
+        background-color: rgba(168, 85, 247, 0.1);
+        border-color: #c084fc;
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+      }
+      .tf-top > .tf-face, .tf-bottom > .tf-face {       /* bg-indigo-500/10 border-indigo-400 */
+        background-color: rgba(99, 102, 241, 0.1);
+        border-color: #818cf8;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+      }
+
+      .tf-floor {                       /* absolute -bottom-20 w-24 h-8 bg-black/40 blur-xl rounded-[100%] */
+        position: absolute;
+        bottom: -80px;
+        width: 96px;
+        height: 32px;
+        border-radius: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter: blur(24px);
+        animation: tf-shadow-breathe 3s ease-in-out infinite;
+      }
+
+      .tf-text {                        /* flex flex-col items-center gap-1 mt-2 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        margin-top: 8px;
+        max-width: 100%;
+        text-align: center;
+      }
+      .tf-title {                       /* text-sm font-semibold tracking-[0.3em] text-cyan-300 uppercase */
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #67e8f9;
+      }
+      .tf-status {                      /* text-xs text-slate-400 */
+        margin: 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: #94a3b8;
+      }
+      .tf-status.tf-error { color: #FF5964; }
+
+      /* Failure / exit: the animation stops where it is. */
+      #tf-loader.tf-stopped *,
+      #tf-loader.tf-stopped *::before,
+      #tf-loader.tf-stopped *::after { animation-play-state: paused; }
+
+      @keyframes tf-cube-spin {
+        0%   { transform: rotateX(0deg) rotateY(0deg); }
+        100% { transform: rotateX(360deg) rotateY(360deg); }
+      }
+      @keyframes tf-breathe {           /* 48px = half of the 96px cube */
+        0%, 100% { transform: translateZ(48px); opacity: 0.8; }
+        50%      { transform: translateZ(80px); opacity: 0.4; border-color: rgba(255, 255, 255, 0.8); }
+      }
+      @keyframes tf-pulse-fast {
+        0%, 100% { transform: scale(0.8); opacity: 0.5; }
+        50%      { transform: scale(1.2); opacity: 1; }
+      }
+      @keyframes tf-shadow-breathe {
+        0%, 100% { transform: scale(1); opacity: 0.4; }
+        50%      { transform: scale(1.5); opacity: 0.2; }
+      }
+
+      /* Reduced motion: no animation, the cube is shown still at an angle. */
+      @media (prefers-reduced-motion: reduce) {
+        #tf-loader * { animation: none !important; }
+        .tf-cube { transform: rotateX(-25deg) rotateY(35deg); }
+      }
+    </style>
+    <noscript>
+      <style>
+        #tf-loader * { animation-play-state: paused !important; }
+        #tf-status { display: none; }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div id="tf-loader">
+      <div class="tf-scene" aria-hidden="true">
+        <div class="tf-cube">
+          <div class="tf-core"></div>
+          <div class="tf-side tf-front"><div class="tf-face"></div></div>
+          <div class="tf-side tf-back"><div class="tf-face"></div></div>
+          <div class="tf-side tf-right"><div class="tf-face"></div></div>
+          <div class="tf-side tf-left"><div class="tf-face"></div></div>
+          <div class="tf-side tf-top"><div class="tf-face"></div></div>
+          <div class="tf-side tf-bottom"><div class="tf-face"></div></div>
+        </div>
+        <div class="tf-floor"></div>
+      </div>
+      <div class="tf-text">
+        <h1 class="tf-title">TAIDAFLOW</h1>
+        <p id="tf-status" class="tf-status" role="status" aria-live="polite">系統載入中,首次開啟約需數秒…</p>
+        <noscript><p class="tf-status tf-error" role="alert">請啟用 JavaScript 後重新整理頁面。</p></noscript>
+      </div>
+    </div>
+    <div id="screen"></div>
+
+    <script type="text/javascript">
+        async function init()
+        {
+            const loader = document.querySelector('#tf-loader');
+            const screen = document.querySelector('#screen');
+            const status = document.querySelector('#tf-status');
+            let loaded = false;
+            let failed = false;
+
+            const setStatus = (text) => {
+                status.classList.remove('tf-error');
+                status.textContent = text;
+            };
+            // Error: stop the animation, keep the title, status in #FF5964; the loader is shown
+            // again on top of the app (onExit after the app was running).
+            const showError = (text) => {
+                failed = true;
+                status.textContent = text;
+                status.classList.add('tf-error');
+                loader.classList.add('tf-stopped');
+                loader.hidden = false;
+            };
+            const loadFailed = () =>
+                showError('無法載入系統,請確認網路連線後重新整理頁面(F5)。');
+
+            if (typeof WebAssembly !== 'object'
+                    || typeof WebAssembly.instantiate !== 'function') {
+                showError('此瀏覽器不支援本系統,請使用最新版 Chrome 或 Edge。');
+                return;
+            }
+
+            try {
+                setStatus('系統載入中,首次開啟約需數秒…');
+
+                const instance = await qtLoad({
+                    // Emscripten runs preRun after TaidaFlowApp.wasm was downloaded and
+                    // instantiated, before the Qt runtime starts (qtloader appends its own).
+                    preRun: [() => { if (!failed) setStatus('啟動中…'); }],
+                    qt: {
+                        onLoaded: () => {
+                            loaded = true;
+                            loader.hidden = true;   // the app's own screen takes over
+                        },
+                        onExit: exitData =>
+                        {
+                            if (!loaded) {
+                                loadFailed();       // aborted while downloading / starting
+                                return;
+                            }
+                            showError(exitData.code !== undefined
+                                ? `系統已結束(代碼 ${exitData.code}),請重新整理頁面(F5)。`
+                                : '系統已結束,請重新整理頁面(F5)。');
+                        },
+                        entryFunction: window.@APPEXPORTNAME@,
+                        containerElements: [screen],
+                        @PRELOAD@
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+                console.error(e && e.stack);
+                if (!loaded)
+                    loadFailed();
+            }
+        }
+        window.addEventListener('load', init);
+    </script>
+    <script src="@APPNAME@.js"></script>
+    <script type="text/javascript" src="qtloader.js"></script>
+  </body>
+</html>
+=== new file App/wasm/apply_wasm_shell.cmake
+# w2-058: replace the Qt-generated WebAssembly page with the TaidaFlow loading page.
+#
+# Qt 6.8 has no CMake option for a custom HTML shell: at configure time its target finalizer
+# (_qt_internal_wasm_add_target_helpers) writes <build>/TaidaFlowApp.html from
+# <Qt>/plugins/platforms/wasm_shell.html.  Qt's documentation allows replacing that page with a
+# custom HTML file ("You can deploy app.html as-is, or discard it in favor of a custom HTML file").
+# App/CMakeLists.txt runs this script at CONFIGURE time, in a deferred call right after Qt's
+# finalizer wrote the page (so every configure of a WebAssembly build ends with our page; the build
+# itself never writes TaidaFlowApp.html). It can also be run by hand with the command below.
+#   1. HTML is Qt's page (no "taidaflow-wasm-shell" marker, the normal case): the placeholder
+#      values are taken from it (title = APPNAME, "entryFunction: window.<APPEXPORTNAME>," and the
+#      line after "containerElements: [screen]," = PRELOAD) and stored in STATE;
+#      HTML is already our page (script run again by hand): the values come from STATE.
+#   2. SHELL_TEMPLATE is configured (@ONLY) with those values; the result must not contain any
+#      @NAME@ placeholder; HTML is replaced only when the content differs.
+#   3. The values and the result are printed (configure log = first part of the build log).
+#
+# cmake -DSHELL_TEMPLATE=<template> -DHTML=<build>/TaidaFlowApp.html -DSTATE=<values file> -P apply_wasm_shell.cmake
+cmake_minimum_required(VERSION 3.21)
+
+foreach(var SHELL_TEMPLATE HTML STATE)
+    if(NOT DEFINED ${var} OR "${${var}}" STREQUAL "")
+        message(FATAL_ERROR "[wasm-shell] ${var} is not set")
+    endif()
+endforeach()
+if(NOT EXISTS "${SHELL_TEMPLATE}")
+    message(FATAL_ERROR "[wasm-shell] template not found: ${SHELL_TEMPLATE}")
+endif()
+if(NOT EXISTS "${HTML}")
+    message(FATAL_ERROR "[wasm-shell] ${HTML} not found (Qt writes it when CMake configures the wasm build)")
+endif()
+
+set(marker "taidaflow-wasm-shell")
+file(READ "${HTML}" page)
+string(FIND "${page}" "${marker}" marker_pos)
+
+if(marker_pos EQUAL -1)
+    set(source "Qt-generated page")
+    if(NOT page MATCHES "<title>([^<]*)</title>")
+        message(FATAL_ERROR "[wasm-shell] no <title> in the Qt-generated ${HTML}")
+    endif()
+    set(APPNAME "${CMAKE_MATCH_1}")
+    if(NOT page MATCHES "entryFunction: window\\.([A-Za-z0-9_$]+),")
+        message(FATAL_ERROR "[wasm-shell] no 'entryFunction: window.<name>,' in the Qt-generated ${HTML}")
+    endif()
+    set(APPEXPORTNAME "${CMAKE_MATCH_1}")
+    if(NOT page MATCHES "containerElements: \\[screen\\],\r?\n([^\r\n]*)\r?\n")
+        message(FATAL_ERROR "[wasm-shell] no line after 'containerElements: [screen],' in the Qt-generated ${HTML}")
+    endif()
+    string(STRIP "${CMAKE_MATCH_1}" PRELOAD)
+    # Qt 6.8: "" (static build) or "preload: [...]," (shared build).
+    if(NOT PRELOAD STREQUAL "" AND NOT PRELOAD MATCHES "^preload: \\[.*\\],$")
+        message(FATAL_ERROR "[wasm-shell] unexpected PRELOAD line '${PRELOAD}' in ${HTML} - Qt's wasm_shell.html changed, check the template")
+    endif()
+    if(NOT page MATCHES "<script src=\"${APPNAME}\\.js\"></script>")
+        message(FATAL_ERROR "[wasm-shell] Qt-generated ${HTML} does not load ${APPNAME}.js")
+    endif()
+    file(WRITE "${STATE}"
+        "# written by apply_wasm_shell.cmake from the Qt-generated ${HTML}\n"
+        "set(APPNAME \"${APPNAME}\")\n"
+        "set(APPEXPORTNAME \"${APPEXPORTNAME}\")\n"
+        "set(PRELOAD [==[${PRELOAD}]==])\n")
+else()
+    set(source "values saved from the Qt-generated page (${STATE})")
+    if(NOT EXISTS "${STATE}")
+        message(FATAL_ERROR "[wasm-shell] ${HTML} is already the TaidaFlow page but ${STATE} is missing - re-run the CMake configure (Qt then regenerates its page)")
+    endif()
+    include("${STATE}")
+endif()
+
+set(tmp "${STATE}.html")
+configure_file("${SHELL_TEMPLATE}" "${tmp}" @ONLY)
+file(READ "${tmp}" result)
+if(result MATCHES "@[A-Za-z_][A-Za-z0-9_]*@")
+    message(FATAL_ERROR "[wasm-shell] placeholder '${CMAKE_MATCH_0}' left in the configured page")
+endif()
+if(result MATCHES "entryFunction: window\\.${APPEXPORTNAME},")
+else()
+    message(FATAL_ERROR "[wasm-shell] configured page has no 'entryFunction: window.${APPEXPORTNAME},'")
+endif()
+
+file(COPY_FILE "${tmp}" "${HTML}" ONLY_IF_DIFFERENT RESULT copy_result)
+if(NOT copy_result STREQUAL "0")
+    message(FATAL_ERROR "[wasm-shell] cannot write ${HTML}: ${copy_result}")
+endif()
+file(REMOVE "${tmp}")
+file(SHA256 "${HTML}" sha)
+message(STATUS "[wasm-shell] ${HTML} <- ${SHELL_TEMPLATE}")
+message(STATUS "[wasm-shell] APPNAME=${APPNAME} APPEXPORTNAME=${APPEXPORTNAME} PRELOAD='${PRELOAD}' (from ${source}) sha256=${sha}")

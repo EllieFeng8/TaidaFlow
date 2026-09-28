@@ -1,0 +1,289 @@
+<!doctype html>
+<!--
+  taidaflow-wasm-shell: TaidaFlow loading page for the Qt WebAssembly build (w2-058).
+
+  Template of build/<wasm preset>/TaidaFlowApp.html. It replaces the page that Qt generates from
+  <Qt>/wasm_singlethread/plugins/platforms/wasm_shell.html (Qt 6.8.3, LicenseRef-Qt-Commercial OR
+  GPL-3.0-only); the loading logic (qtLoad, #screen container, the APPNAME / APPEXPORTNAME /
+  PRELOAD placeholders) is taken from that file. The loader visual re-creates the "CubeLoader"
+  design (loading_page_prompt.md, React/Tailwind) in plain HTML/CSS: no external CSS, JS, fonts
+  or network resources.
+
+  App/CMakeLists.txt + App/wasm/apply_wasm_shell.cmake write this page over Qt's at every CMake
+  configure of a WebAssembly build, with the placeholder values taken from the page Qt generated.
+  Edit this file, then rebuild wasm (scripts\build-wasm.bat; the edit re-runs the configure) and
+  deploy (scripts\deploy-web.ps1). Keep the marker
+  "taidaflow-wasm-shell" in this comment: the apply script uses it to tell this page from Qt's.
+-->
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--Set visual viewport size for mobile devices to the device size,
+        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
+        and Qt device independent pixels. (Qt wasm_shell.html) -->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+
+    <title>TaidaFlow</title>
+    <style>
+      /* Qt shell: the html body covers the entire (visual) viewport with no scroll bars. */
+      html, body { padding: 0; margin: 0; overflow: hidden; height: 100%; }
+      body { background: #0B1527; }
+      #screen { width: 100%; height: 100%; }
+
+      /* ---- Loading page (CubeLoader design) ------------------------------------------- */
+      #tf-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;                      /* gap-12 */
+        padding: 48px;                  /* p-12 */
+        box-sizing: border-box;
+        background: #0B1527;            /* App dark theme (the component itself is transparent) */
+        perspective: 1200px;            /* .perspective-container */
+        font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      }
+      #tf-loader[hidden] { display: none; }
+
+      .tf-scene {                       /* relative w-24 h-24 flex items-center justify-center preserve-3d */
+        position: relative;
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-style: preserve-3d;
+      }
+      .tf-cube {                        /* relative w-full h-full preserve-3d animate-cube-spin */
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: tf-cube-spin 8s linear infinite;
+      }
+      .tf-core {                        /* absolute inset-0 m-auto w-8 h-8 bg-white rounded-full blur-md ... */
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        background: #ffffff;
+        filter: blur(12px);
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+        animation: tf-pulse-fast 2s ease-in-out infinite;
+      }
+      .tf-side {                        /* .side-wrapper */
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-style: preserve-3d;
+      }
+      .tf-front  { transform: rotateY(0deg); }
+      .tf-back   { transform: rotateY(180deg); }
+      .tf-right  { transform: rotateY(90deg); }
+      .tf-left   { transform: rotateY(-90deg); }
+      .tf-top    { transform: rotateX(90deg); }
+      .tf-bottom { transform: rotateX(-90deg); }
+
+      .tf-face {                        /* .face */
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        border: 2px solid;
+        transform: translateZ(48px);    /* resting position = the breathe start frame */
+        opacity: 0.8;
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        animation: tf-breathe 3s ease-in-out infinite;
+      }
+      .tf-front > .tf-face, .tf-back > .tf-face {       /* bg-cyan-500/10 border-cyan-400 */
+        background-color: rgba(6, 182, 212, 0.1);
+        border-color: #22d3ee;
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+      }
+      .tf-right > .tf-face, .tf-left > .tf-face {       /* bg-purple-500/10 border-purple-400 */
+        background-color: rgba(168, 85, 247, 0.1);
+        border-color: #c084fc;
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+      }
+      .tf-top > .tf-face, .tf-bottom > .tf-face {       /* bg-indigo-500/10 border-indigo-400 */
+        background-color: rgba(99, 102, 241, 0.1);
+        border-color: #818cf8;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+      }
+
+      .tf-floor {                       /* absolute -bottom-20 w-24 h-8 bg-black/40 blur-xl rounded-[100%] */
+        position: absolute;
+        bottom: -80px;
+        width: 96px;
+        height: 32px;
+        border-radius: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter: blur(24px);
+        animation: tf-shadow-breathe 3s ease-in-out infinite;
+      }
+
+      .tf-text {                        /* flex flex-col items-center gap-1 mt-2 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        margin-top: 8px;
+        max-width: 100%;
+        text-align: center;
+      }
+      .tf-title {                       /* text-sm font-semibold tracking-[0.3em] text-cyan-300 uppercase */
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #67e8f9;
+      }
+      .tf-status {                      /* text-xs text-slate-400 */
+        margin: 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: #94a3b8;
+      }
+      .tf-status.tf-error { color: #FF5964; }
+
+      /* Failure / exit: the animation stops where it is. */
+      #tf-loader.tf-stopped *,
+      #tf-loader.tf-stopped *::before,
+      #tf-loader.tf-stopped *::after { animation-play-state: paused; }
+
+      @keyframes tf-cube-spin {
+        0%   { transform: rotateX(0deg) rotateY(0deg); }
+        100% { transform: rotateX(360deg) rotateY(360deg); }
+      }
+      @keyframes tf-breathe {           /* 48px = half of the 96px cube */
+        0%, 100% { transform: translateZ(48px); opacity: 0.8; }
+        50%      { transform: translateZ(80px); opacity: 0.4; border-color: rgba(255, 255, 255, 0.8); }
+      }
+      @keyframes tf-pulse-fast {
+        0%, 100% { transform: scale(0.8); opacity: 0.5; }
+        50%      { transform: scale(1.2); opacity: 1; }
+      }
+      @keyframes tf-shadow-breathe {
+        0%, 100% { transform: scale(1); opacity: 0.4; }
+        50%      { transform: scale(1.5); opacity: 0.2; }
+      }
+
+      /* Reduced motion: no animation, the cube is shown still at an angle. */
+      @media (prefers-reduced-motion: reduce) {
+        #tf-loader * { animation: none !important; }
+        .tf-cube { transform: rotateX(-25deg) rotateY(35deg); }
+      }
+    </style>
+    <noscript>
+      <style>
+        #tf-loader * { animation-play-state: paused !important; }
+        #tf-status { display: none; }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div id="tf-loader">
+      <div class="tf-scene" aria-hidden="true">
+        <div class="tf-cube">
+          <div class="tf-core"></div>
+          <div class="tf-side tf-front"><div class="tf-face"></div></div>
+          <div class="tf-side tf-back"><div class="tf-face"></div></div>
+          <div class="tf-side tf-right"><div class="tf-face"></div></div>
+          <div class="tf-side tf-left"><div class="tf-face"></div></div>
+          <div class="tf-side tf-top"><div class="tf-face"></div></div>
+          <div class="tf-side tf-bottom"><div class="tf-face"></div></div>
+        </div>
+        <div class="tf-floor"></div>
+      </div>
+      <div class="tf-text">
+        <h1 class="tf-title">TAIDAFLOW</h1>
+        <p id="tf-status" class="tf-status" role="status" aria-live="polite">系統載入中,首次開啟約需數秒…</p>
+        <noscript><p class="tf-status tf-error" role="alert">請啟用 JavaScript 後重新整理頁面。</p></noscript>
+      </div>
+    </div>
+    <div id="screen"></div>
+
+    <script type="text/javascript">
+        async function init()
+        {
+            const loader = document.querySelector('#tf-loader');
+            const screen = document.querySelector('#screen');
+            const status = document.querySelector('#tf-status');
+            let loaded = false;
+            let failed = false;
+
+            const setStatus = (text) => {
+                status.classList.remove('tf-error');
+                status.textContent = text;
+            };
+            // Error: stop the animation, keep the title, status in #FF5964; the loader is shown
+            // again on top of the app (onExit after the app was running).
+            const showError = (text) => {
+                failed = true;
+                status.textContent = text;
+                status.classList.add('tf-error');
+                loader.classList.add('tf-stopped');
+                loader.hidden = false;
+            };
+            const loadFailed = () =>
+                showError('無法載入系統,請確認網路連線後重新整理頁面(F5)。');
+
+            if (typeof WebAssembly !== 'object'
+                    || typeof WebAssembly.instantiate !== 'function') {
+                showError('此瀏覽器不支援本系統,請使用最新版 Chrome 或 Edge。');
+                return;
+            }
+
+            try {
+                setStatus('系統載入中,首次開啟約需數秒…');
+
+                const instance = await qtLoad({
+                    // Emscripten runs preRun after TaidaFlowApp.wasm was downloaded and
+                    // instantiated, before the Qt runtime starts (qtloader appends its own).
+                    preRun: [() => { if (!failed) setStatus('啟動中…'); }],
+                    qt: {
+                        onLoaded: () => {
+                            loaded = true;
+                            loader.hidden = true;   // the app's own screen takes over
+                        },
+                        onExit: exitData =>
+                        {
+                            if (!loaded) {
+                                loadFailed();       // aborted while downloading / starting
+                                return;
+                            }
+                            showError(exitData.code !== undefined
+                                ? `系統已結束(代碼 ${exitData.code}),請重新整理頁面(F5)。`
+                                : '系統已結束,請重新整理頁面(F5)。');
+                        },
+                        entryFunction: window.@APPEXPORTNAME@,
+                        containerElements: [screen],
+                        @PRELOAD@
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+                console.error(e && e.stack);
+                if (!loaded)
+                    loadFailed();
+            }
+        }
+        window.addEventListener('load', init);
+    </script>
+    <script src="@APPNAME@.js"></script>
+    <script type="text/javascript" src="qtloader.js"></script>
+  </body>
+</html>

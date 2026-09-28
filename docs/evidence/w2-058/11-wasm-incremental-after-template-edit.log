@@ -1,0 +1,214 @@
+﻿Preset CMake variables:
+
+  BUILD_TESTING="OFF"
+  CMAKE_BUILD_TYPE="Release"
+  CMAKE_CROSSCOMPILING_EMULATOR="C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe"
+  CMAKE_MAKE_PROGRAM="C:/Qt/Tools/Ninja/ninja.exe"
+  CMAKE_TOOLCHAIN_FILE:FILEPATH="C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/qt.toolchain.cmake"
+  EMSCRIPTEN_ROOT_PATH="C:/tools/emsdk/upstream/emscripten"
+  QT_CHAINLOAD_TOOLCHAIN_FILE="C:/tools/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+  QT_HOST_PATH="C:/Qt/6.8.3/msvc2022_64"
+  QT_HOST_PATH_CMAKE_DIR="C:/Qt/6.8.3/msvc2022_64/lib/cmake"
+
+Preset environment variables:
+
+  EMSCRIPTEN="C:/tools/emsdk/upstream/emscripten"
+  EMSDK="C:/tools/emsdk"
+  EMSDK_NODE="C:/tools/emsdk/node/16.20.0_64bit/bin/node.exe"
+  EMSDK_PYTHON="C:/tools/emsdk/python/3.9.2-nuget_64bit/python.exe"
+  EM_CONFIG="C:/tools/emsdk/.emscripten"
+  PATH="C:/tools/emsdk/python/3.9.2-nuget_64bit;C:/tools/emsdk/node/16.20.0_64bit/bin;C:/tools/emsdk/upstream/emscripten;C:/tools/emsdk/upstream/bin;C:/Qt/6.8.3/msvc2022_64/bin;C:/Qt/Tools/Ninja;C:/Qt/Tools/CMake_64/bin;C:/Windows/System32;C:/Windows;C:/Windows/System32/Wbem;C:/Windows/System32/WindowsPowerShell/v1.0"
+
+-- Using Qt bundled ZLIB.
+-- Using Qt bundled PCRE2.
+-- Using Qt bundled PNG.
+-- Using Qt bundled Harfbuzz.
+-- Using Qt bundled Freetype.
+-- Using Qt bundled Jpeg.
+cmd : CMake Warning at C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:100 (find_package):
+At line:1 char:387
++ ... t=Get-Date; cmd /c "$tf\scripts\build-wasm.bat wasm-release" > "$e\11 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (CMake Warning a...(find_package)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Found package configuration file:
+
+    C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6ProtobufTools/Qt6ProtobufToolsConfig.cmake
+
+  but it set Qt6ProtobufTools_FOUND to FALSE so package "Qt6ProtobufTools" is
+  considered to be NOT FOUND.  Reason given by package:
+
+  Qt6ProtobufTools could not be found because dependency WrapProtoc could not
+  be found.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Protobuf/Qt6ProtobufDependencies.cmake:39 (_qt_internal_find_tool_dependen
+cies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Protobuf/Qt6ProtobufConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6ProtobufQuick/Qt6ProtobufQuickDependencies.cmake:45 (_qt_internal_find_qt_
+dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6ProtobufQuick/Qt6ProtobufQuickConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginDependencies.cmake:19 (_qt_internal_f
+ind_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:632 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlPlugins.cmake:6 (__qt_internal_include_qml_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlConfig.cmake:148 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardDependencies.cmake:45 (_qt_internal_find
+_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginDependencies.cmake:19 (_qt_internal_find_qt_d
+ependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:518 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake:13 (__qt_internal_include_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake:145 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/Qt6Config.cmake:196 (find_package)
+  CMakeLists.txt:32 (find_package)
+
+
+CMake Warning at C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package):
+  Found package configuration file:
+
+    C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Protobuf/Qt6ProtobufConfig.cmake
+
+  but it set Qt6Protobuf_FOUND to FALSE so package "Qt6Protobuf" is
+  considered to be NOT FOUND.  Reason given by package:
+
+  Qt6Protobuf could not be found because dependency Qt6ProtobufTools could
+  not be found.
+
+  Configuring with --debug-find-pkg=Qt6ProtobufTools might reveal details why
+  the package was not found.
+
+  Configuring with -DQT_DEBUG_FIND_PACKAGE=ON will print the values of some
+  of the path variables that find_package uses to try and find the package.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6ProtobufQuick/Qt6ProtobufQuickDependencies.cmake:45 (_qt_internal_find_qt_
+dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6ProtobufQuick/Qt6ProtobufQuickConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginDependencies.cmake:19 (_qt_internal_f
+ind_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:632 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlPlugins.cmake:6 (__qt_internal_include_qml_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlConfig.cmake:148 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardDependencies.cmake:45 (_qt_internal_find
+_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginDependencies.cmake:19 (_qt_internal_find_qt_d
+ependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:518 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake:13 (__qt_internal_include_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake:145 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/Qt6Config.cmake:196 (find_package)
+  CMakeLists.txt:32 (find_package)
+
+
+CMake Warning at C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package):
+  Found package configuration file:
+
+    C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6ProtobufQuick/Qt6ProtobufQuickConfig.cmake
+
+  but it set Qt6ProtobufQuick_FOUND to FALSE so package "Qt6ProtobufQuick" is
+  considered to be NOT FOUND.  Reason given by package:
+
+  Qt6ProtobufQuick could not be found because dependency Qt6Protobuf could
+  not be found.
+
+  Configuring with --debug-find-pkg=Qt6Protobuf might reveal details why the
+  package was not found.
+
+  Configuring with -DQT_DEBUG_FIND_PACKAGE=ON will print the values of some
+  of the path variables that find_package uses to try and find the package.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginDependencies.cmake:19 (_qt_internal_f
+ind_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/QmlPlugins/Qt6protobufquickpluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:632 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlPlugins.cmake:6 (__qt_internal_include_qml_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlConfig.cmake:148 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardDependencies.cmake:45 (_qt_internal_find
+_qt_dependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6VirtualKeyboard/Qt6VirtualKeyboardConfig.cmake:43 (include)
+  C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:145 (find_dependency)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginDependencies.cmake:19 (_qt_internal_find_qt_d
+ependencies)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginConfig.cmake:53 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:518 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake:13 (__qt_internal_include_plugin_packages)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake:145 (include)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6/Qt6Config.cmake:196 (find_package)
+  CMakeLists.txt:32 (find_package)
+
+
+CMake Warning (dev) at C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0001 is not set: ':/qt/qml/' is the default resource prefix
+  for QML modules.  Check https://doc.qt.io/qt-6/qt-cmake-policy-qtp0001.html
+  for policy details.  Use the qt_policy command to set the policy and
+  suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:719 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:1254 (qt6_add_qml_module)
+  Core/CMakeLists.txt:43 (qt_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0004 is not set: You need qmldir files for each extra
+  directory that contains .qml files for your module.  Check
+  https://doc.qt.io/qt-6/qt-cmake-policy-qtp0004.html for policy details.
+  Use the qt_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:3520 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/wasm_singlethread/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:916 (qt6_target_qml_sources)
+  TaidaFlowContent/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+shaders/dropShadow.frag -> shaders/dropShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects
+/shaders/dropShadow.frag.qsb
+shaders/dropShadowClip.frag -> shaders/dropShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/Desig
+nEffects/shaders/dropShadowClip.frag.qsb
+shaders/gaussianBlur.frag -> shaders/gaussianBlur.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEff
+ects/shaders/gaussianBlur.frag.qsb
+shaders/innerShadow.frag -> shaders/innerShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffec
+ts/shaders/innerShadow.frag.qsb
+shaders/innerShadowClip.frag -> shaders/innerShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/Des
+ignEffects/shaders/innerShadowClip.frag.qsb
+shaders/opacityMask.frag -> shaders/opacityMask.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffec
+ts/shaders/opacityMask.frag.qsb
+-- [wasm-shell] D:/repo/codex/qmlTester/taidaflow/build/wasm-release/TaidaFlowApp.html <- D:/repo/codex/qmlTester/taidaflow/App/wasm/TaidaFlowApp.shell.html
+-- [wasm-shell] APPNAME=TaidaFlowApp APPEXPORTNAME=TaidaFlowApp_entry PRELOAD='' (from Qt-generated page) sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+-- Configuring done (3.3s)
+-- Generating done (1.1s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/wasm-release
+[1/6] Generating aggregate ProxyMirror event relay for Core
+[2/6] Building CXX object Core/CMakeFiles/Core.dir/generated/wasm_mirror/Core/proxy_event_relay_generated.cpp.o
+[3/6] Linking CXX static library Core\libCore.a
+[4/6] Automatic MOC and UIC for target TaidaFlowApp
+[5/5] Linking CXX executable TaidaFlowApp.js
+exit=0 elapsed=151s

@@ -1,0 +1,2 @@
+﻿stopping nginx master pid 130184 (workers 37392) with nginx -s quit
+stopped: pids 130184,37392 exited; listeners of these pids on 80: 0

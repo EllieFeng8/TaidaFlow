@@ -1,0 +1,33 @@
+﻿PASS deploy-web: exit=0
+PASS deployed html = build\wasm-release html: sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+PASS run-desktop (safety probe SAFE + start): exit=0
+PASS 8124 html 200: status=200
+PASS 8124 html body = deployed new page: sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f expected=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+PASS 8124 html is the TaidaFlow page: marker + title, no qtlogo / Loading...
+PASS 8124 html Content-Type: text/html; charset=utf-8
+PASS 8124 html Cache-Control: no-cache
+PASS 8124 html COOP/COEP/CORP: same-origin / require-corp / same-origin
+PASS 8124 html ETag present: "2f7b-1a0e73d4ba5"
+PASS 8124 html gzip: status=200 Content-Encoding=gzip
+PASS 8124 html gzip body = page: gunzip sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+PASS 8124 TaidaFlowApp.wasm: status=200 Content-Type=application/wasm Cache-Control=no-cache bytes=34103893
+PASS 8124 TaidaFlowApp.js: status=200 Content-Type=text/javascript; charset=utf-8 Cache-Control=no-cache bytes=304976
+PASS 8124 qtloader.js: status=200 Content-Type=text/javascript; charset=utf-8 Cache-Control=no-cache bytes=12354
+PASS ws://127.0.0.1:8125/mirror upgrade: HTTP_STATUS HTTP/1.1 101 Switching Protocols
+PASS nginx-start (port 80): exit=0
+PASS nginx80 html 200: status=200
+PASS nginx80 html body = deployed new page: sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f expected=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+PASS nginx80 html is the TaidaFlow page: marker + title, no qtlogo / Loading...
+PASS nginx80 html Content-Type: text/html; charset=utf-8
+PASS nginx80 html Cache-Control: no-cache
+PASS nginx80 html COOP/COEP/CORP: same-origin / require-corp / same-origin
+PASS nginx80 html ETag present: "6aba2c5d-2f7b"
+PASS nginx80 html gzip: status=200 Content-Encoding=gzip
+PASS nginx80 html gzip body = page: gunzip sha256=de754c939b77aaadbb47786ebfb54f788fc10bdeb6bdb90c5811bb246555393f
+PASS nginx80 TaidaFlowApp.wasm: status=200 Content-Type=application/wasm Cache-Control=no-cache bytes=34103893
+PASS nginx80 TaidaFlowApp.js: status=200 Content-Type=text/javascript; charset=utf-8 Cache-Control=no-cache bytes=304976
+PASS nginx80 qtloader.js: status=200 Content-Type=text/javascript; charset=utf-8 Cache-Control=no-cache bytes=12354
+PASS nginx-stop: exit=0
+PASS app closed by WM_CLOSE: exit code 0
+PASS no listener left on 80/502/8124/8125/18125: left=0
+PASS no TaidaFlowApp / nginx process left: left=0

@@ -1,0 +1,11 @@
+﻿build\wasm-release\TaidaFlowApp.html:
+  TaidaFlowApp.js defines TaidaFlowApp_entry
+  node --check inline script: OK
+  elements=36 style_bytes=6152 script_bytes=2736
+  OK (0 problem(s))
+build\desktop\web\TaidaFlowApp.html:
+  TaidaFlowApp.js defines TaidaFlowApp_entry
+  node --check inline script: OK
+  elements=36 style_bytes=6152 script_bytes=2736
+  OK (0 problem(s))
+exit=0

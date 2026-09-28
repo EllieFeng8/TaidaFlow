@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+etag: "2086255-1a0e73f8501"
+last-modified: Mon, 28 Sep 2026 09:01:34 GMT
+cache-control: no-cache
+vary: Accept-Encoding
+cross-origin-opener-policy: same-origin
+cross-origin-embedder-policy: require-corp
+cross-origin-resource-policy: same-origin
+content-type: application/wasm
+content-length: 34103893
+

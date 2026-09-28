@@ -1,0 +1,52 @@
+﻿docs\evidence\w2-058\00-qt-generated-TaidaFlowApp.html:
+  node --check inline script: OK
+  elements=18 style_bytes=212 script_bytes=1544
+  FAIL <html lang> = ['en-us']
+  FAIL title = 'TaidaFlowApp'
+  FAIL id 'tf-loader' count = 0
+  FAIL id 'tf-status' count = 0
+  FAIL faces = 0
+  FAIL title text = None
+  FAIL Qt default text present: 'qtlogo'
+  FAIL Qt default text present: 'Loading...'
+  FAIL Qt default text present: 'Qt for WebAssembly'
+  FAIL Qt default text present: 'Application exit'
+  FAIL design value missing in CSS: 'width: 96px'
+  FAIL design value missing in CSS: 'height: 96px'
+  FAIL design value missing in CSS: 'translateZ(48px)'
+  FAIL design value missing in CSS: 'translateZ(80px)'
+  FAIL design value missing in CSS: 'perspective: 1200px'
+  FAIL design value missing in CSS: 'tf-cube-spin 8s linear infinite'
+  FAIL design value missing in CSS: 'tf-breathe 3s ease-in-out infinite'
+  FAIL design value missing in CSS: 'tf-pulse-fast 2s ease-in-out infinite'
+  FAIL design value missing in CSS: 'tf-shadow-breathe 3s ease-in-out infinite'
+  FAIL design value missing in CSS: 'rotateX(360deg) rotateY(360deg)'
+  FAIL design value missing in CSS: 'border-color: rgba(255, 255, 255, 0.8)'
+  FAIL design value missing in CSS: '#22d3ee'
+  FAIL design value missing in CSS: '#c084fc'
+  FAIL design value missing in CSS: '#818cf8'
+  FAIL design value missing in CSS: '#67e8f9'
+  FAIL design value missing in CSS: '#94a3b8'
+  FAIL design value missing in CSS: '#FF5964'
+  FAIL design value missing in CSS: '#0B1527'
+  FAIL design value missing in CSS: 'backdrop-filter: blur(2px)'
+  FAIL design value missing in CSS: 'letter-spacing: 0.3em'
+  FAIL design value missing in CSS: 'text-transform: uppercase'
+  FAIL design value missing in CSS: 'prefers-reduced-motion: reduce'
+  FAIL design value missing in CSS: 'rgba(34, 211, 238, 0.4)'
+  FAIL design value missing in CSS: 'rgba(168, 85, 247, 0.4)'
+  FAIL design value missing in CSS: 'rgba(99, 102, 241, 0.4)'
+  FAIL design value missing in CSS: 'filter: blur(12px)'
+  FAIL design value missing in CSS: 'filter: blur(24px)'
+  FAIL design value missing in CSS: 'bottom: -80px'
+  FAIL design value missing in CSS: '"Segoe UI", "Microsoft JhengHei", sans-serif'
+  FAIL text missing: 'TAIDAFLOW'
+  FAIL text missing: '系統載入中,首次開啟約需數秒…'
+  FAIL text missing: '啟動中…'
+  FAIL text missing: '無法載入系統,請確認網路連線後重新整理頁面(F5)。'
+  FAIL text missing: '此瀏覽器不支援本系統,請使用最新版 Chrome 或 Edge。'
+  FAIL text missing: '請啟用 JavaScript 後重新整理頁面。'
+  FAIL text missing: '系統已結束(代碼 ${exitData.code}),請重新整理頁面(F5)。'
+  FAIL text missing: '系統已結束,請重新整理頁面(F5)。'
+  FAILED (47 problem(s))
+exit=1 (negative control: Qt's original page must FAIL)

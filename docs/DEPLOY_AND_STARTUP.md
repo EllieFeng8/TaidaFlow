@@ -264,6 +264,10 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build --preset wasm-release
   preset `wasm-release`(`CMakePresets.json`),輸出 `build\wasm-release\`。
 - 產出(網頁要用的只有這 5 個):`TaidaFlowApp.html`、`TaidaFlowApp.js`、
   `TaidaFlowApp.wasm`(約 33.8 MB)、`qtloader.js`、`qtlogo.svg`。資料夾裡其他檔(CMake/Ninja)不要部署。
+- **載入畫面**(w2-058):`TaidaFlowApp.html` 不是 Qt 預設頁,而是 `App\wasm\TaidaFlowApp.shell.html`
+  (旋轉立方體 + 「TAIDAFLOW」+ 繁中狀態);建置時自動套用(configure log 有 `[wasm-shell]` 兩行)。
+  要改畫面或文字:改這個樣板 → 重新 `scripts\build-wasm.bat` → 重新 `scripts\deploy-web.ps1`(§2.2)。
+  `qtlogo.svg` 新頁面已不用,照常複製無影響。
 - 改過中文字串(QML/C++)後,先檢查網頁內嵌字型是否涵蓋所有字:
   `python -B scripts\make_font_subset.py --check`(exit 0 = 涵蓋;exit 1 = 要執行
   `python scripts\make_font_subset.py` 重新產生字型,再重新建置 wasm)。

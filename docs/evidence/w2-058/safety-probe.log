@@ -1,0 +1,12 @@
+﻿=== safety probe 2026-09-28T17:05:34.169+08:00 reason="before launch: w2-058 loading page live check (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listeners 80/502/8123/8124/8125/18125: <none>
+  verdict: SAFE

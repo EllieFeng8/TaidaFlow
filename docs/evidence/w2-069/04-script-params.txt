@@ -1,0 +1,23 @@
+scripts\check-package-deps.ps1 : -Package, -Dumpbin = ""
+scripts\check-rest-routes.ps1 : (no script param block)
+scripts\check-version-shadow.ps1 : -Ninja = "", -BuildDirs
+scripts\check-wasm-backend.ps1 : -Ninja = "", -BuildDirs
+scripts\deploy-web.ps1 : -Source = "", -ExeDir = "", -NoGzip, -Config = "", -NoConfig
+scripts\install-nginx-config.ps1 : -Config = "", -InstallDir = "", -Nginx = "", -NginxDir = "", -Build, -IfChanged
+scripts\make-font-subset.ps1 : (no script param block)
+scripts\nginx-start.ps1 : -Config = "", -WebRoot = "", -ExeDir = "", -ExportDir = "", -RuntimeDir = "", -Nginx = "", -Port = 80, -RestPort = 18080, -MirrorPort = 18125, -TimeoutSec = 20, -Test
+scripts\nginx-stop.ps1 : -RuntimeDir = "", -TimeoutSec = 20
+scripts\nginx-web.ps1 : -Action = 'status', -Config = "", -WebRoot = "", -ExeDir = "", -ExportDir = "", -RuntimeDir = "", -Nginx = "", -Port = 80, -RestPort = 18080, -MirrorPort = 18125, -TimeoutSec = 20
+scripts\package-release.ps1 : -NginxDir = "", -OutDir = "dist", -BuildDir = "build\desktop", -WebSource = "build\wasm-release", -QtDir = "C:\Qt\6.8.3\msvc2022_64", -Force, -AllowStale
+scripts\probe_selftest_sim.ps1 : -LogFile = "", -SimulatorExe = "", -Config = "", -SimConfig = ""
+scripts\run-desktop.ps1 : -Label = "manual", -Config = "", -Exe = "", -LogFile = "", -ProbeLog = "", -Wait, -DeviceProfile = "default"
+scripts\run-simulator.ps1 : -SimulatorExe = "", -LogFile = "", -TimeoutSec = 20
+scripts\safety_probe.ps1 : -Reason = "manual", -LogFile = "", -Config = "", -Exe = "", -DeviceProfile = "default"
+scripts\taidaflow-config.ps1 : (no script param block)
+scripts\verify-desktop-startup.ps1 : -Config = "", -ProbeLog = "", -DeviceProfile = "default"
+scripts\verify-pack.ps1 : -Source = ""
+scripts\verify-release-package.ps1 : -Package, -Mode = 'ps1', -DataDir = "", -Evidence = "", -SeedDb = "", -MirrorClient = "build\w2-050-mirror-client\mirror_export_client.exe", -FromMs = 0, -ToMs = 0, -TimeoutSec = 120
+deploy\release\register-autostart.ps1 : -Config = "", -LogDir = "", -TaskName = "TaidaFlow", -User = "", -DelaySec = 30, -Replace
+deploy\release\start-taidaflow.ps1 : -Config = "", -DataDir = "", -LogDir = "", -UseNginx, -NoNginx, -Port = 80, -RestPort = 18080, -Nginx = "", -StartTimeoutSec = 60
+deploy\release\stop-taidaflow.ps1 : -Config = "", -DataDir = "", -LogDir = "", -TimeoutSec = 60, -Force
+deploy\release\unregister-autostart.ps1 : -TaskName = "TaidaFlow"

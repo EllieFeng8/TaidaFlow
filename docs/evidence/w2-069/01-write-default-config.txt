@@ -1,0 +1,152 @@
+# w2-069 D2: config.json defaults from the real program output
+# HEAD: 0113799   exe: build\desktop\TaidaFlowApp.exe  3571200 bytes  2026-09-29 01:42:44
+# ninja -C build\desktop -n TaidaFlowApp -> ninja: no work to do.   (exe is up to date with the sources)
+
+> build\desktop\TaidaFlowApp.exe --write-default-config build\w2-069\config.default.json   (Qt bin on PATH, TAIDAFLOW_CONFIG unset)
+  wrote the default configuration to <repo>\build\w2-069\config.default.json
+  exit=0
+> (same command again: the file exists)
+  <repo>\build\w2-069\config.default.json already exists - not overwritten
+  exit=3
+  SHA-256 8F35E01D416A782CAF0B690ED77E693AA758C7E1DFC49D2EA33AF53962E52543
+
+--- build\w2-069\config.default.json ---
+{
+  "version": 1,
+  "dataDir": "C:\\TaidaFlowData",
+  "devices": {
+    "adam6256": {
+      "host": "192.168.1.201",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6217a": {
+      "host": "192.168.1.202",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6217b": {
+      "host": "192.168.1.203",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6224": {
+      "host": "192.168.1.204",
+      "port": 502,
+      "unitId": 1
+    },
+    "adam6022": {
+      "host": "192.168.1.205",
+      "port": 502,
+      "unitId": 1
+    },
+    "ms300": {
+      "serialPort": "COM2",
+      "baudRate": 9600,
+      "dataBits": 8,
+      "parity": "none",
+      "stopBits": 1,
+      "unitId": 1
+    }
+  },
+  "modbusServer": {
+    "bind": "0.0.0.0",
+    "port": 502,
+    "unitId": 1
+  },
+  "http": {
+    "bind": "0.0.0.0",
+    "port": 8124
+  },
+  "rest": {
+    "bind": "127.0.0.1",
+    "port": 18080
+  },
+  "mirror": {
+    "internalPort": 18125,
+    "publicBind": "0.0.0.0",
+    "publicPort": 8125
+  },
+  "nginx": {
+    "enabled": true,
+    "port": 80,
+    "exe": "nginx\\nginx.exe"
+  },
+  "log": {
+    "dir": "logs",
+    "quiet": {
+      "enabled": true,
+      "keepDays": 60
+    },
+    "full": {
+      "enabled": true,
+      "keepDays": 7
+    }
+  }
+}
+
+--- comparison: program output vs. the example JSON of DEPLOY_AND_STARTUP.md section 6 (key by key) ---
+OK   dataDir                          program=C:\TaidaFlowData     DEPLOY_s6=C:\TaidaFlowData
+OK   devices.adam6022.host            program=192.168.1.205        DEPLOY_s6=192.168.1.205
+OK   devices.adam6022.port            program=502                  DEPLOY_s6=502
+OK   devices.adam6022.unitId          program=1                    DEPLOY_s6=1
+OK   devices.adam6217a.host           program=192.168.1.202        DEPLOY_s6=192.168.1.202
+OK   devices.adam6217a.port           program=502                  DEPLOY_s6=502
+OK   devices.adam6217a.unitId         program=1                    DEPLOY_s6=1
+OK   devices.adam6217b.host           program=192.168.1.203        DEPLOY_s6=192.168.1.203
+OK   devices.adam6217b.port           program=502                  DEPLOY_s6=502
+OK   devices.adam6217b.unitId         program=1                    DEPLOY_s6=1
+OK   devices.adam6224.host            program=192.168.1.204        DEPLOY_s6=192.168.1.204
+OK   devices.adam6224.port            program=502                  DEPLOY_s6=502
+OK   devices.adam6224.unitId          program=1                    DEPLOY_s6=1
+OK   devices.adam6256.host            program=192.168.1.201        DEPLOY_s6=192.168.1.201
+OK   devices.adam6256.port            program=502                  DEPLOY_s6=502
+OK   devices.adam6256.unitId          program=1                    DEPLOY_s6=1
+OK   devices.ms300.baudRate           program=9600                 DEPLOY_s6=9600
+OK   devices.ms300.dataBits           program=8                    DEPLOY_s6=8
+OK   devices.ms300.parity             program=none                 DEPLOY_s6=none
+OK   devices.ms300.serialPort         program=COM2                 DEPLOY_s6=COM2
+OK   devices.ms300.stopBits           program=1                    DEPLOY_s6=1
+OK   devices.ms300.unitId             program=1                    DEPLOY_s6=1
+OK   http.bind                        program=0.0.0.0              DEPLOY_s6=0.0.0.0
+OK   http.port                        program=8124                 DEPLOY_s6=8124
+OK   log.dir                          program=logs                 DEPLOY_s6=logs
+OK   log.full.enabled                 program=True                 DEPLOY_s6=True
+OK   log.full.keepDays                program=7                    DEPLOY_s6=7
+OK   log.quiet.enabled                program=True                 DEPLOY_s6=True
+OK   log.quiet.keepDays               program=60                   DEPLOY_s6=60
+OK   mirror.internalPort              program=18125                DEPLOY_s6=18125
+OK   mirror.publicBind                program=0.0.0.0              DEPLOY_s6=0.0.0.0
+OK   mirror.publicPort                program=8125                 DEPLOY_s6=8125
+OK   modbusServer.bind                program=0.0.0.0              DEPLOY_s6=0.0.0.0
+OK   modbusServer.port                program=502                  DEPLOY_s6=502
+OK   modbusServer.unitId              program=1                    DEPLOY_s6=1
+OK   nginx.enabled                    program=True                 DEPLOY_s6=True
+OK   nginx.exe                        program=nginx\nginx.exe      DEPLOY_s6=nginx\nginx.exe
+OK   nginx.port                       program=80                   DEPLOY_s6=80
+OK   rest.bind                        program=127.0.0.1            DEPLOY_s6=127.0.0.1
+OK   rest.port                        program=18080                DEPLOY_s6=18080
+OK   version                          program=1                    DEPLOY_s6=1
+keys: program 41, DEPLOY section 6 example 41, differences 0
+
+--- DEPLOY_AND_STARTUP.md section 6 table: default column per key (checked by hand against the list above) ---
+| `version` | `1` | 格式版本,固定 1 |
+| `dataDir` | `C:\\TaidaFlowData` | 資料資料夾(設定 ini、每月資料庫、匯出、log)。程式啟動最早就建立並切換過去。相對路徑以 config.json 所在資料夾為準。無法建立時記 warning、維持目前的工作目錄 |
+| `devices.adam6256` / `adam6217a` / `adam6217b` / `adam6224` / `adam6022` | `host` `192.168.1.201` ~ `.205`、`port` 502、`unitId` 1 | 5 台 ADAM(Modbus T
+| `devices.ms300.serialPort` | `COM2` | MS300 變頻器的序列埠(Modbus RTU) |
+| `devices.ms300.baudRate` | `9600` | 1200 / 2400 / 4800 / 9600 / 19200 / 38400 / 57600 / 115200 |
+| `devices.ms300.dataBits` | `8` | 5~8 |
+| `devices.ms300.parity` | `none` | `none` / `even` / `odd` / `space` / `mark` |
+| `devices.ms300.stopBits` | `1` | 1 或 2 |
+| `devices.ms300.unitId` | `1` | 站號 1~247 |
+| `modbusServer.bind` / `port` / `unitId` | `0.0.0.0` / `502` / `1` | 給外部 HMI / SCADA 的 Modbus TCP 伺服器(`unitId` 0~255) |
+| `http.bind` / `port` | `0.0.0.0` / `8124` | app 內建的網頁 + 下載(nginx 的備援) |
+| `rest.bind` / `port` | `127.0.0.1` / `18080` | REST API(只限本機;區網經 nginx `/api/`)。改成非本機位址時 log 會警告 |
+| `mirror.internalPort` | `18125` | 網頁同步伺服器,只綁 127.0.0.1(nginx `/mirror` 轉到這裡) |
+| `mirror.publicBind` / `publicPort` | `0.0.0.0` / `8125` | app 內建的同步轉發(nginx 沒開時網頁連這裡) |
+| `nginx.enabled` | `true` | `start-taidaflow` 是否帶起 nginx;也決定網頁的下載連結與同步 port:true → `nginx.port`,false → `http.port` / `mirror.publicPort` |
+| `nginx.port` | `80` | nginx 監聽的 port |
+| `nginx.exe` | `nginx\\nginx.exe` | nginx 程式位置(程式啟動 log 印出解析後的路徑;腳本用它找 nginx,`-Nginx` 可單次覆寫)。相對路徑以 **config.json 所在資料夾**為準(= 隨包的 `<安裝資料夾>\nginx\nginx
+| `log.dir` | `logs` | log 資料夾。相對路徑以 **`dataDir`** 為準(預設 = `C:\TaidaFlowData\logs`);不存在時自動建立。程式的 log、腳本的 `launcher-<日期>.log`、nginx 的 log 都寫在這裡(§13) |
+| `log.quiet.enabled` / `log.quiet.keepDays` | `true` / `60` | 精簡 log `taidaflow-<日期>.log`(只有 warning / critical / fatal)是否寫、保留幾天(1 以上;含今天)。腳本也用這個天數清理
+| `log.full.enabled` / `log.full.keepDays` | `true` / `7` | 完整 log `taidaflow-<日期>-full.log`(全部訊息,約每小時 15 MB、一天約 360 MB)是否寫、保留幾天(1 以上;含今天) |

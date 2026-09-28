@@ -1,0 +1,17 @@
+# w2-069: does the caller wait for the launched program when the output of a run-*.ps1 style launcher is piped / redirected?
+# launcher (same Start-Process -RedirectStandardError/-RedirectStandardOutput pattern as scripts\run-desktop.ps1 line 96):
+#   # mimics scripts\run-desktop.ps1 / run-simulator.ps1: Start-Process with stdout/stderr redirected to files, then exit
+#   $d = Split-Path -Parent $MyInvocation.MyCommand.Path
+#   $p = Start-Process -FilePath "$env:SystemRoot\System32\PING.EXE" -ArgumentList '-n','12','127.0.0.1' -PassThru -WindowStyle Hidden `
+#        -RedirectStandardError "$d\child.err" -RedirectStandardOutput "$d\child.out"
+#   Write-Output "started pid $($p.Id)"
+#   exit 0
+# child = PING.EXE -n 12 127.0.0.1 (about 11 s, ends by itself); the launcher itself exits at once.
+
+A  PowerShell:  powershell -File launch.ps1 | Out-Null       returned after  11.5 s
+B  PowerShell:  powershell -File launch.ps1 > file           returned after  11.4 s
+C  cmd:         powershell -File launch.ps1 > file           returned after   0.3 s
+D  cmd:         powershell -File launch.ps1   (direct)       returned after   0.3 s
+
+Result: a pipe (A) and a PowerShell ">" redirection (B, PowerShell collects the output through a pipe) wait until the
+launched program ends; cmd ">" to a file (C) and a direct run (D) return at once. README / wasm-integration-report say so.

@@ -1,0 +1,8 @@
+> git grep -n -F "D:\repo" -- README.md docs/BUILD.md docs/DEPLOY_AND_STARTUP.md docs/wasm-integration-report.md
+  exit=1 (1 = no match)  lines=0
+> git grep -n -F "C:\Users" -- README.md docs/BUILD.md docs/DEPLOY_AND_STARTUP.md docs/wasm-integration-report.md
+  exit=1 (1 = no match)  lines=0
+> git grep -n -F "D:/repo" -- README.md docs/BUILD.md docs/DEPLOY_AND_STARTUP.md docs/wasm-integration-report.md
+  exit=1 (1 = no match)  lines=0
+> git grep -n -F "C:/Users" -- README.md docs/BUILD.md docs/DEPLOY_AND_STARTUP.md docs/wasm-integration-report.md
+  exit=1 (1 = no match)  lines=0

@@ -132,7 +132,8 @@
 
 單次覆寫(只影響這一次,config.json 不改;寫成 `<資料資料夾>\config.effective.json` 交給程式):在 cmd 執行
 `C:\TaidaFlow\start-taidaflow.bat -DataDir D:\Test`,可用的有 `-DataDir`、`-LogDir <log 資料夾>`(程式、nginx、腳本的 log
-都改寫到那裡)、`-UseNginx` / `-NoNginx`、`-Port <nginx port>`、`-RestPort <port>`、`-Nginx <nginx.exe>`、`-Config <另一個 config.json>`。
+都改寫到那裡)、`-UseNginx` / `-NoNginx`、`-Port <nginx port>`、`-RestPort <port>`、`-Nginx <nginx.exe>`、`-Config <另一個 config.json>`;
+`-StartTimeoutSec <秒>` 是第 5 步等 port 開始聽的時間(預設 60)。
 (舊版的 `-AppLog quiet|full` 與 `-KeepLogDays` 已移除:quiet 與 full 兩種 log 由程式同時寫,保留天數在 config.json 的 `log`,§13。)
 
 不要直接雙擊 `TaidaFlowApp.exe`:程式可以跑(會讀旁邊的 config.json),但不會做重複執行 / port 檢查,也不會帶起 nginx;
@@ -140,8 +141,12 @@
 
 ### 3.2 停止 TaidaFlow
 
-**雙擊 `<安裝資料夾>\stop-taidaflow.bat`。** 它關閉 TaidaFlow 視窗(與手動按 X 相同,app 正常收尾),最多等 60 秒。
-**nginx 不會被停**(它是獨立的程式)。
+**雙擊 `<安裝資料夾>\stop-taidaflow.bat`。** 它關閉 TaidaFlow 視窗(與手動按 X 相同,app 正常收尾),最多等 60 秒
+(`-TimeoutSec` 可改)。**nginx 不會被停**(它是獨立的程式)。
+
+app 的正常收尾(w2-067):先停止設備連線(5 台 ADAM、MS300)與 Modbus 伺服器,再停 REST API、歷史匯出、內建 HTTP 服務,
+最後把資料庫寫完並關閉;通常 1 秒內完成。連著設備時關閉也會正常結束(舊版在連著設備時關閉會異常結束,已修正)。
+程式 log 有 `[Core] shutdown (aboutToQuit): stopping the backend` 與 `[Core] shutdown complete in ... ms` 兩行(§13)。
 
 結果碼:`0` 已停止;`1` 沒有由 start-taidaflow 啟動的 app 在執行;`7` 60 秒內沒關閉(**不會強制結束**,請到畫面上手動關);
 `2` config.json 有誤。真的關不掉時,管理員可以在 PowerShell 執行
@@ -478,7 +483,7 @@ start "" "C:\TaidaFlow\TaidaFlowApp.exe"
 - log:程式自己寫到 config.json 的 log 資料夾(預設 `C:\TaidaFlowData\logs`,§13),不需要轉存輸出。
   不要設定 `QT_LOGGING_CONF` / `QT_LOGGING_RULES`(會讓 full log 少掉 info 訊息)。
 - 確認:`netstat -ano | findstr LISTENING | findstr ":502 :8124 :8125 :18125 :18080"`。
-- 停止:按視窗右上角的 X,或 `taskkill /IM TaidaFlowApp.exe`(**不要加 `/F`**:不加等於請視窗關閉,程式正常收尾)。
+- 停止:按視窗右上角的 X,或 `taskkill /IM TaidaFlowApp.exe`(**不要加 `/F`**:不加等於請視窗關閉,程式正常收尾,§3.2)。
 
 ### 5.6 防火牆
 
@@ -524,7 +529,7 @@ UTF-8 文字檔,JSON 格式。
 | `devices.ms300.parity` | `none` | `none` / `even` / `odd` / `space` / `mark` |
 | `devices.ms300.stopBits` | `1` | 1 或 2 |
 | `devices.ms300.unitId` | `1` | 站號 1~247 |
-| `modbusServer.bind` / `port` / `unitId` | `0.0.0.0` / `502` / `1` | 給外部 HMI / SCADA 的 Modbus TCP 伺服器 |
+| `modbusServer.bind` / `port` / `unitId` | `0.0.0.0` / `502` / `1` | 給外部 HMI / SCADA 的 Modbus TCP 伺服器(`unitId` 0~255) |
 | `http.bind` / `port` | `0.0.0.0` / `8124` | app 內建的網頁 + 下載(nginx 的備援) |
 | `rest.bind` / `port` | `127.0.0.1` / `18080` | REST API(只限本機;區網經 nginx `/api/`)。改成非本機位址時 log 會警告 |
 | `mirror.internalPort` | `18125` | 網頁同步伺服器,只綁 127.0.0.1(nginx `/mirror` 轉到這裡) |
@@ -601,6 +606,8 @@ netsh advfirewall firewall add rule name="TaidaFlow Modbus server (502)" dir=in 
 
 (port 在 config.json 改過時用改過的值。第一次有程式在 `0.0.0.0` 開 port 時,Windows 可能跳出「允許存取」的詢問視窗,
 由管理員決定。)網頁經 nginx 時,同步(`/mirror`)與下載都在 80,不需要開 8124 / 8125。
+8125(程式內建的同步轉發)與 8124 只是 nginx 沒啟用時的備援;正式的網頁同步一律經 nginx 80 的 `/mirror`,不需要等待
+網頁同步套件(pack)的新版本。
 
 ---
 
@@ -743,6 +750,8 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 建置:`scripts\build-wasm.bat`(BUILD.md §5);部署到 exe 旁的 `web\`:`scripts\deploy-web.ps1`(先清空舊的 `web\`,產生 `.gz`,
 依 config.json 寫 `runtime.json`)。網頁載入後先讀同源的 `/runtime.json` 決定同步 port(讀不到時用 8125),再連
 `ws://<載入網頁的主機>:<port>/mirror`;**畫面上方紅色「離線」橫幅 = 沒有同步**(§10)。瀏覽器以 ETag 重新驗證,重新整理就拿到新版。
+載入時先顯示「TAIDAFLOW」旋轉立方體的載入畫面;載入完成、主畫面畫出來之後約 1 秒的轉場(立方體加速放大、淡出)進入主畫面
+(瀏覽器設定「減少動態效果」時只做 0.2 秒淡出淡入)。載入失敗、瀏覽器不支援 WebAssembly 或 JavaScript 關閉時,停在載入畫面顯示紅字訊息。
 
 ---
 

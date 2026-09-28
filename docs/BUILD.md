@@ -332,11 +332,11 @@ cd /d C:\tools\emsdk
 | `scripts\check-wasm-backend.ps1`、`scripts\check-version-shadow.ps1` | — | Ninja:`TAIDAFLOW_QT_TOOLS\Ninja\ninja.exe`,預設 `C:\Qt\Tools\Ninja\ninja.exe` | 設 `TAIDAFLOW_QT_TOOLS`,或給 `-Ninja <ninja.exe>` |
 | `scripts\run-apphttpserver-tests.bat` | 9、10、12–14 | VS 18 `vcvars64.bat`、`C:\Qt\6.8.3\msvc2022_64`、`C:\Qt\Tools` | 改這幾行 |
 | `scripts\run-pack-tests.bat` | 8、9、14、15、18、19 | 同上 | 改這幾行 |
-| `docs\evidence\w2-049\tools\run-w2041-qtest.bat`、`docs\evidence\w2-052\tools\run-qtest.bat`、`docs\evidence\w2-062\tools\make-bench-db.bat` | vcvars、PATH、cmake 那幾行 | 同上 | 改那幾行 |
+| `docs\evidence\w2-049\tools\run-w2041-qtest.bat`、`docs\evidence\w2-045\tools\run-qtest.bat`、`docs\evidence\w2-052\tools\run-qtest.bat`、`docs\evidence\w2-053\tools\run-qtest.bat`、`docs\evidence\w2-067\tools\run-qtest.bat`、`docs\evidence\w2-062\tools\make-bench-db.bat`、`docs\evidence\w2-065\tools\run-app-tests.bat` | vcvars、PATH、cmake 那幾行 | 同上 | 改那幾行 |
 | `scripts\make_font_subset.py`(選用,§2.5) | 41 | `C:/Windows/Fonts/NotoSansTC-VF.ttf` | 用 `--source <字型>`,不用改檔 |
 | `scripts\run-desktop.ps1`、`verify-release-package.ps1`、`taidaflow-config.ps1` | | 執行時把 Qt 的 bin 加到 PATH:`TAIDAFLOW_QT_ROOT\msvc2022_64\bin`,預設 `C:\Qt\6.8.3\msvc2022_64\bin` | 設 `TAIDAFLOW_QT_ROOT`(執行用,不影響編譯) |
 | `scripts\run-simulator.ps1` | 51 | `C:\Qt\6.8.3\msvc2022_64\bin` 加到 PATH | 改那一行(執行用) |
-| `scripts\package-release.ps1` | | `-QtDir` 預設 `C:\Qt\6.8.3\msvc2022_64`、ninja `C:\Qt\Tools\Ninja`、要附上的 nginx `-NginxDir`(預設 `C:\tools\nginx\nginx-<最新版本>`) | `-QtDir`、`-NginxDir` 參數;ninja 那行要改 |
+| `scripts\package-release.ps1` | | `-QtDir` 預設 `C:\Qt\6.8.3\msvc2022_64`、ninja `C:\Qt\Tools\Ninja`、要附上的 nginx `-NginxDir`(沒給時 = 開發設定 config.json 的 `nginx.exe` 所在資料夾,w2-065;再不行才找最新的 `C:\tools\nginx\nginx-<版本>`) | `-QtDir`、`-NginxDir` 參數(或改開發設定的 `nginx.exe`);ninja 那行要改 |
 | 根 `CMakeLists.txt`(桌面版的 nginx 資料夾,§4.5) | | nginx:快取變數 `TAIDAFLOW_NGINX_DIR`,預設 `C:\tools\nginx\nginx-<最新版本>` | configure 時 `-DTAIDAFLOW_NGINX_DIR=<資料夾>` |
 | `scripts\verify-release-package.ps1` | | emsdk 的 node 16.20.0(只用來算網頁的下載連結) | 改那一行 |
 
@@ -479,7 +479,8 @@ CMake 結構:
   **只有桌面版**另外 `find_package` `SerialBus SerialPort Sql HttpServer Concurrent`。
   接著 `add_subdirectory(integration-pack/wasm-mirror)`、`Core`,最後由 `qds.cmake` 加入 QDS 的子目錄。
 - **Desktop-only Core / WASM 只編 Proxy**(pack 文件 package-integration §1/§5.4):`Core/CMakeLists.txt` 兩邊共用的來源只有
-  `TaidaFlowProxy.h`;後端 `.cpp` 與上述 Qt 模組只在桌面版加入。網頁版是 replica,資料全部經 mirror(8125)跟桌面版同步。
+  `TaidaFlowProxy.h`;後端 `.cpp` 與上述 Qt 模組只在桌面版加入。網頁版是 replica,資料全部經 mirror 跟桌面版同步
+  (經 nginx 80 的 `/mirror`;nginx 未啟用時的備援是 `App/lanrelay.h` 的 8125,port 由 `/runtime.json` 決定)。
   `wasm_mirror_register_proxy(CLASS TaidaFlowProxy)` + `wasm_mirror_finalize_proxy_registration` 在 `Core` target 上,
   兩邊用同一份 contract。
 - **integration-pack/wasm-mirror**:pack **1.0.1**(wire protocol 3,`VERSION.txt`),以子目錄加入;它自己在子目錄關掉
@@ -676,7 +677,9 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 
 ### 5.5 載入頁(configure 時套用)
 
-- 樣板 `App/wasm/TaidaFlowApp.shell.html`,套用腳本 `App/wasm/apply_wasm_shell.cmake`(§3)。
+- 樣板 `App/wasm/TaidaFlowApp.shell.html`,套用腳本 `App/wasm/apply_wasm_shell.cmake`(§3)。樣板含載入完成後的轉場動畫
+  (w1-066:等 App 畫面畫出後約 800 ms 轉場、`prefers-reduced-motion` 時 200 ms 淡出淡入、錯誤時中止並顯示紅字;
+  時序見 README「網頁載入畫面」)。轉場全在樣板裡,`apply_wasm_shell.cmake` 不需要改。
 - configure log 應出現:
   `-- [wasm-shell] <build>/TaidaFlowApp.html <- <repo>/App/wasm/TaidaFlowApp.shell.html` 與
   `-- [wasm-shell] APPNAME=TaidaFlowApp APPEXPORTNAME=TaidaFlowApp_entry PRELOAD='' (...) sha256=...`。
@@ -733,6 +736,8 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 | 改過 `scripts\taidaflow-config.ps1`(腳本的 config.json 讀取器、log 資料夾與清理)後 | `PS docs\evidence\w2-065\tools\test-config-reader.ps1` | `=== 0 check(s) failed`,exit 0(只用 `build\desktop\TaidaFlowApp.exe --write-default-config`,不啟動程式) |
 | 改過 pack 或升級 Qt 後 | `scripts\run-pack-tests.bat` | exit 0(pack 自帶的 native tests;輸出 `build\pack-tests`) |
 | 改過 SqlManager / HistoryExport / HistoryViews / Proxy 後 | `docs\evidence\w2-062\tools\make-bench-db.bat`(C++ 測試資料產生器)→ `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(需 8124 空著)、`docs\evidence\w2-045\tools\run-qtest.bat` 與 `docs\evidence\w2-052\tools\run-qtest.bat` | 各自 exit 0(資料量大,需要較長時間) |
+| 改過 Manager(DI 警報)或 SqlManager 後 | `docs\evidence\w2-053\tools\run-qtest.bat`(DI 警報跨重啟) | exit 0(不需要測試資料、設備或 port) |
+| 改過 `Core::shutdown` / `SqlManager::shutdown()`(關閉流程,w2-067)後 | `docs\evidence\w2-067\tools\run-qtest.bat`(`tst_w2067_sqlmanager_shutdown`) | exit 0(`Totals: 7 passed`;不需要測試資料、設備或 port);連設備時的實際關閉見 README「關閉流程」 |
 
 - `App/tests` 的建置與執行(桌面版 kit;輸出放 `build\` 底下,例如 `build\app-tests`):
   ```bat
@@ -883,6 +888,13 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 ---
 
 ## 11. 驗證紀錄與沒有驗證到的部分
+
+2026-09-29(w2-069,文件一致性檢查)在參考開發機上實際執行,輸出在 `docs/evidence/w2-069/`:
+
+| 項目 | 結果 |
+|---|---|
+| §10 預設 config.json | `build\desktop\TaidaFlowApp.exe --write-default-config build\w2-069\config.default.json` exit 0,內容與 DEPLOY_AND_STARTUP.md §6 的欄位表與範例逐項相同;同一路徑再執行一次 exit 3(`already exists - not overwritten`) |
+| §7 新列出的 QTest | `docs\evidence\w2-067\tools\run-qtest.bat`(7 passed)、`docs\evidence\w2-053\tools\run-qtest.bat`(10 passed)各 exit 0 |
 
 2026-09-29(w2-067-fix1)在參考開發機上實際執行,exit code 與 log 在 `docs/evidence/w2-067-fix1/`:
 

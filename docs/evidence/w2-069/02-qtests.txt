@@ -1,0 +1,29 @@
+> cmd /c docs\evidence\w2-067\tools\run-qtest.bat > build\w2-069\w2-067-qtest.log 2>&1   (exit code of the run: 0)
+  1: Test command: <repo>\build\w2-067-qtest\tst_w2067_sqlmanager_shutdown.exe
+  1: ********* Start testing of TestW2067SqlManagerShutdown *********
+  1: PASS   : TestW2067SqlManagerShutdown::initTestCase()
+  1: PASS   : TestW2067SqlManagerShutdown::writesBeforeShutdown()
+  1: PASS   : TestW2067SqlManagerShutdown::shutdownClosesAndJoins()
+  1: PASS   : TestW2067SqlManagerShutdown::callsAfterShutdownRefused()
+  1: PASS   : TestW2067SqlManagerShutdown::dataFileIntact()
+  1: PASS   : TestW2067SqlManagerShutdown::secondShutdownIsNoOp()
+  1: PASS   : TestW2067SqlManagerShutdown::cleanupTestCase()
+  1: Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 66ms
+  100% tests passed, 0 tests failed out of 1
+
+> cmd /c docs\evidence\w2-053\tools\run-qtest.bat > build\w2-069\w2-053-qtest.log 2>&1   (exit code of the run: 0)
+  1: Test command: <repo>\build\w2-053-qtest\tst_w2053_di_restart.exe
+  1: ********* Start testing of TestW2053DiRestart *********
+  1: PASS   : TestW2053DiRestart::initTestCase()
+  1: PASS   : TestW2053DiRestart::noPreviousRow()
+  1: PASS   : TestW2053DiRestart::previousRowStillAbnormal()
+  1: PASS   : TestW2053DiRestart::previousRowNowNormal()
+  1: PASS   : TestW2053DiRestart::multipleOldRowsStillAbnormal()
+  1: PASS   : TestW2053DiRestart::multipleOldRowsNowNormal()
+  1: PASS   : TestW2053DiRestart::checkRunsOncePerStart()
+  1: PASS   : TestW2053DiRestart::resolveRetriedAfterWriteFailure()
+  1: PASS   : TestW2053DiRestart::lookupRetriedAfterReadFailure()
+  1: PASS   : TestW2053DiRestart::cleanupTestCase()
+  1: Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 14150ms
+  100% tests passed, 0 tests failed out of 1
+

@@ -41,7 +41,8 @@ QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBa
 
 - **Desktop(Windows MSVC)**:authoritative 端。`Core::instance().init()` 建立並擁有
   `TaidaFlowProxy`、啟動全部硬體後端,Mirror server 綁 `ws://127.0.0.1:18125/mirror`(內部 port,
-  只限本機),並由 `App/lanrelay.h` 在 `0.0.0.0:8125` 轉發給它(見「區網連線(mirror)」)。
+  只限本機);區網的網頁經 nginx 80 的 `/mirror` 轉給它,nginx 未啟用時的備援是 `App/lanrelay.h` 在 `0.0.0.0:8125`
+  的轉發(見「區網連線(mirror)」)。
 - **WebAssembly**:replica 端。**不編譯任何後端**(Desktop-only Core,pack 文件
   package-integration §1/§5.4、guide §10/§11),`main.cpp` 直接建立 `TaidaFlowProxy` 當 replica,
   瀏覽器頁面連回**載入頁面的那台主機**(`location.hostname`),port 取自 `/runtime.json` 的 `mirrorPublicPort`
@@ -58,7 +59,8 @@ desktop 版會對 config.json 的 5 台 ADAM(廠區預設 `192.168.1.201~205:502
   非本機位址只做 TCP connect(1.5 秒逾時、**不送任何 Modbus**),本機位址則必須由 `Adam60xxSimulator.exe` 在聽;列出本機序列埠;
   檢查 config.json 的各服務 port。任一裝置可達、設定的 MS300 序列埠存在、或 `modbusServer.port` 被別人占用 → **不啟動**(exit 3);
   `http.port`、`mirror.publicPort`、`mirror.internalPort`、`rest.port` 已被占用 → 不啟動(exit 4 `BUSY`,不會關掉別人的程式);
-  模擬器還沒起來 → exit 5;`nginx.port` 只列出、**不阻擋**(nginx 只送檔 / 轉送,不碰設備)。每次探測附加寫入
+  模擬器還沒起來 → exit 5;config.json 不能用(JSON 格式錯誤等)→ exit 2(`CONFIG-ERROR`);`nginx.port` 只列出、
+  **不阻擋**(nginx 只送檔 / 轉送,不碰設備)。每次探測附加寫入
   `build\runtime-logs\safety-probe.log`(simulator 模式 `safety-probe-sim.log`;`-LogFile` 可改)。
 - desktop 另開 HTTP 服務(`http`,網頁 + CSV 下載)、mirror 區網轉發(`mirror.publicBind:publicPort`)與內部 Mirror
   (`127.0.0.1:mirror.internalPort`)、REST API(`rest`,只限本機;區網經 nginx 的 `/api/`,可用 PUT 改設定,不做存取控管,見「REST API」)。
@@ -86,13 +88,17 @@ scripts\build-wasm.bat [wasm-release|wasm-debug] [fresh]   :: -> build\wasm-rele
 ## 執行(desktop + 瀏覽器)
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"   # 先探測再啟動(deploy\dev\config.dev.json)
-# 有 nginx(port 80):瀏覽器開 http://127.0.0.1/ ;沒有 nginx:http://127.0.0.1:8124/TaidaFlowApp.html
+powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1                     # 先部署網頁 -> build\desktop\web(含 runtime.json)
+powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"   # 再探測並啟動(deploy\dev\config.dev.json)
+# nginx:cd build\desktop\nginx 後 start nginx(BUILD.md §4.5);瀏覽器開 http://127.0.0.1/
+# 沒有 nginx 時的備援:http://127.0.0.1:8124/TaidaFlowApp.html(設定檔要 nginx.enabled=false,網頁才會連 8125 同步)
 ```
 
 - 網頁由 nginx(port 80,見「nginx 網頁前端與下載」)或 **desktop 自己**(`AppHttpServer`,與 CSV 下載同一個 `http.port`)提供。
-  網頁檔資料夾的決定順序見「網頁與下載(HTTP 8124)」;開發機上 `build\wasm-release` 建好就直接用,
-  正式部署用 `scripts\deploy-web.ps1` 複製到 `<exe 資料夾>\web`。
+  網頁檔資料夾的決定順序見「網頁與下載(HTTP 8124)」。**先 `deploy-web.ps1` 再開 app**:app 啟動時才決定網頁資料夾,
+  `build\desktop\web` 還不存在(例如剛做完 fresh 建置)時會退回 `build\wasm-release`,把 `runtime.json` 寫進建置輸出,
+  而 nginx(`build\desktop\nginx`,網頁根目錄 `../web`)送的是 `build\desktop\web`(DEPLOY_AND_STARTUP.md §9.2 步驟 1c)。
+  正式部署同樣是 `<exe 資料夾>\web`。
 - **網頁怎麼知道同步用哪個 port**(規格 §3):程式啟動時把 `runtime.json`(`{"mirrorPublicPort":<port>,"version":1}`)寫進網頁資料夾,
   nginx 與 8124 都當靜態檔送出(`Cache-Control: no-store`)。`nginx.enabled` 為 true 時 port = `nginx.port`(網頁經 nginx 的
   `/mirror` 同步,正式機防火牆只開 80),否則 = `mirror.publicPort`(8125 的區網轉發)。網頁讀不到時退回 8125。
@@ -111,11 +117,21 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
   `[Web] HTTP service listening on 0.0.0.0:8124`(被占用時只記 warning,app 照常執行)。
 - 瀏覽器 console:`/runtime.json: mirrorPublicPort = 80` 與 `WASM Mirror ready: true` 即同步完成。
 
-### 網頁載入畫面(w2-058)
+### 網頁載入畫面(w2-058,轉場 w1-066)
 
-- 樣板:`App/wasm/TaidaFlowApp.shell.html`(純 HTML/CSS,重現 CubeLoader 旋轉發光立方體 + 「TAIDAFLOW」
-  與繁中狀態文字;不引用任何外部 CSS/JS/字型)。`onLoaded` 後整個載入頁隱藏,由 App 自己的畫面接手;
-  載入失敗、瀏覽器不支援 WebAssembly、JavaScript 關閉與程式結束時停在載入頁顯示繁中訊息(紅字)。
+- 樣板:`App/wasm/TaidaFlowApp.shell.html`(純 HTML/CSS/JS,重現 CubeLoader 旋轉發光立方體 + 「TAIDAFLOW」
+  與繁中狀態文字;不引用任何外部 CSS/JS/字型、不用函式庫)。
+- **載入完成後的轉場(w1-066)**:`onLoaded` 不再立刻隱藏載入頁,而是先等 App 的畫面真的畫出來——兩次
+  `requestAnimationFrame` 再加 250 ms(分頁在背景、rAF 不來時,1 秒保底也會開始)——再播約 800 ms 的轉場:
+  狀態文字改成「準備完成」,立方體加速旋轉並放大、中心光暈擴散後淡出,文字與地面陰影先淡出(240 ms),
+  整個載入層在 240~800 ms 淡出(轉場一開始就不再攔截點擊);App 畫面在 200~800 ms 由透明、略縮小淡入。
+  兩者的 `animationend` 都到才收尾(隱藏載入層、移除轉場用的 class 與 `will-change`),沒收到事件時 1.5 秒保底收尾。
+  onLoaded 到畫面完全接手約 1.1 秒。只動 opacity / transform,沒有 filter。
+- **減少動態效果**(瀏覽器 / 系統設定 `prefers-reduced-motion: reduce`):等待階段相同,之後只做 200 ms 的淡出淡入
+  (立方體不旋轉、不放大、沒有光暈)。
+- **錯誤時**:載入失敗、瀏覽器不支援 WebAssembly、JavaScript 關閉與程式結束時停在載入頁顯示繁中訊息(紅字)。
+  若錯誤發生在轉場等待中或播放中,轉場立即中止(計時器、rAF、事件監聽全部取消),載入層回到完全不透明、立方體停住並顯示
+  紅字;轉場結束後才發生的程式結束與以前相同,載入頁重新出現在畫面上方顯示訊息。
 - 套用:Qt 6.8 沒有自訂 HTML shell 的 CMake 參數,它在 CMake configure 時從自己的 `wasm_shell.html`
   產生 `build\<wasm preset>\TaidaFlowApp.html`。`App/CMakeLists.txt` 在同一次 configure、Qt 產生之後
   立刻呼叫 `App/wasm/apply_wasm_shell.cmake`,以 Qt 產生的頁面取 `@APPNAME@`/`@APPEXPORTNAME@`/
@@ -132,7 +148,8 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
 desktop 的 Core 只透過 `AppHttpServer::instance()`(`Core/AppHttpServer/`,只依賴 Qt Core/Network/
 HttpServer 的可重用類別,用法見該資料夾的 `README.md`)提供 HTTP,單例跑在自己的執行緒
 (`AppHttpServerThread`),大檔傳送不占 UI 執行緒。`Core::startHttpServer()` 在 `Core::init()` 掛上網頁
-(`/`)後以 config.json 的 `http.bind` / `http.port`(預設 `0.0.0.0:8124`)`start`;`HistoryExportManager` 掛上 `/exports`;`aboutToQuit` 時 `stop()`。
+(`/`)後以 config.json 的 `http.bind` / `http.port`(預設 `0.0.0.0:8124`)`start`;`HistoryExportManager` 掛上 `/exports`;
+關閉時由 `Core::shutdown`(`aboutToQuit`,w2-067,見「關閉流程」)在匯出之後 `stop()`(join 它的執行緒)。
 
 - **網頁檔資料夾**(第一個含 `TaidaFlowApp.html` 的):環境變數 `TAIDAFLOW_WEB_DIR` →
   `<exe 資料夾>\web` → 開發預設 `<exe 資料夾>\..\wasm-release`(即 `build\wasm-release`;w2-062 起是相對路徑,
@@ -171,19 +188,20 @@ CSV(下載不經過 Qt、支援續傳)。正式機防火牆只開 80(與 502),�
 - `http://<IP>/`(nginx,`nginx.port` 預設 80,`/` → 302 `/TaidaFlowApp.html`)
 - `http://<IP>:8124/TaidaFlowApp.html`(desktop app 內建 `AppHttpServer`,備援)
 
-**設定檔 = 一份樣板、一支產生程式**(w2-062):`deploy/nginx/taidaflow.conf` 是樣板,五個記號(網頁根目錄、匯出資料夾、
-nginx port、REST port、Mirror port)全部由 config.json 帶入。產生程式只有一支:`scripts\install-nginx-config.ps1`,它寫出完整的
+**設定檔 = 一份樣板、一支產生程式**(w2-062):`deploy/nginx/taidaflow.conf` 是樣板,六個記號(網頁根目錄、匯出資料夾、
+log 資料夾(w2-065)、nginx port、REST port、Mirror port)全部由 config.json 帶入(記號表見 DEPLOY_AND_STARTUP.md §5.4)。產生程式只有一支:`scripts\install-nginx-config.ps1`,它寫出完整的
 `<nginx 資料夾>\conf\nginx.conf`(網頁根目錄寫成相對於 nginx 資料夾的 `../web`,整個安裝資料夾搬家也有效;檔頭記錄產生程式版本、
 使用的 config.json 路徑 / 修改時間 / SHA-256 與安裝資料夾),再以預設前綴執行 `nginx -t`。三種用法:
 
 | 情境 | 怎麼產生 | 怎麼啟動 / 停止 |
 |---|---|---|
-| **正式機**(打包資料夾附 `nginx\`,nginx 1.30.5 + 授權檔) | 一次性:`install-nginx-config.ps1`(讀 `<安裝資料夾>\config.json`,舊的非 TaidaFlow `nginx.conf` 先備份成 `nginx.conf.orig-<時間>`);`start-taidaflow` 每次啟動都用同一支程式檢查,檔案不存在、不是這個安裝資料夾 / 這份 config.json 產生的就重產(舊檔留成 `.prev-<時間>`),nginx 執行中則 `nginx -s reload` | 標準做法:`cd <安裝資料夾>\nginx` → `start nginx`(`nginx -s reload` 套用、`nginx -s quit` 停止)。`start-taidaflow` 在 nginx 沒執行時用同樣方式啟動;`stop-taidaflow` **不停** nginx |
+| **正式機**(打包資料夾附 `nginx\`,nginx 1.30.5 + 授權檔) | 一次性:`install-nginx-config.ps1`(讀 `<安裝資料夾>\config.json`,舊的非 TaidaFlow `nginx.conf` 先備份成 `nginx.conf.orig-<時間>`);`start-taidaflow` 每次啟動都用同一支程式檢查,檔案不存在、不是這個安裝資料夾 / 這份 config.json 產生的就重產(自動產生的舊檔留成 `.prev-<時間>`,手寫的留成 `.orig-<時間>`),nginx 執行中則 `nginx -s reload` | 標準做法:`cd <安裝資料夾>\nginx` → `start nginx`(`nginx -s reload` 套用、`nginx -s quit` 停止)。`start-taidaflow` 在 nginx 沒執行時用同樣方式啟動;`stop-taidaflow` **不停** nginx |
 | **桌面版建置**(BUILD.md §4.5) | CMake target `taidaflow_nginx_conf`:`build\desktop\nginx\conf\nginx.conf`(`TAIDAFLOW_NGINX_CONFIG`,預設 `deploy\dev\config.dev.json`),並從 `TAIDAFLOW_NGINX_DIR` 複製 `nginx.exe`、`conf\mime.types` | `cd <repo>\build\desktop\nginx` → `start nginx` / `nginx -s quit` |
-| **開發機腳本** | `scripts\nginx-web.ps1`(`nginx-start.ps1` / `nginx-stop.ps1` 是 `-Action start|stop` 捷徑,另有 `reload`、`test`、`status`)用同一個函式把樣板寫到**獨立前綴** `build\nginx\conf\taidaflow.conf`,不動任何 nginx 安裝資料夾 | 以 `nginx -p build\nginx/ -c conf/taidaflow.conf` 啟動;停止只停本腳本起的那個(狀態檔的 pid + 映像檔路徑 + 啟動時間 + `logs\nginx.pid` 都要相符,`nginx -s quit`) |
+| **開發機腳本** | `scripts\nginx-web.ps1`(`nginx-start.ps1` / `nginx-stop.ps1` 是 `-Action start|stop` 捷徑,另有 `reload`、`test`、`status`)用同一個函式把樣板寫到**獨立前綴** `build\nginx\conf\taidaflow.conf`,不動任何 nginx 安裝資料夾 | 以 `nginx -p <build\nginx>/ -c <build\nginx>/conf/taidaflow.conf`(完整路徑)啟動;停止只停本腳本起的那個(狀態檔的 pid + 映像檔路徑 + 啟動時間 + `logs\nginx.pid` 都要相符,`nginx -s quit`) |
 
 - 開發機腳本的值:`-Config`(否則 `TAIDAFLOW_CONFIG`,否則 `deploy\dev\config.dev.json`)的 `nginx.port`、`rest.port`、
-  `mirror.internalPort`、`<dataDir>\exports`、`nginx.exe`;`-Port`、`-RestPort`、`-MirrorPort`、`-ExportDir`、`-Nginx` 可單次覆寫。
+  `mirror.internalPort`、`<dataDir>\exports`、`nginx.exe`、`log.dir`;`-Port`、`-RestPort`、`-MirrorPort`、`-ExportDir`、`-Nginx` 可單次覆寫,
+  另有 `-WebRoot`(預設 `<exe 資料夾>\web`)、`-ExeDir`、`-RuntimeDir`(預設 `build\nginx`)、`-TimeoutSec`(預設 20)。
   start / reload / test 時順便把網頁資料夾的 `runtime.json` 寫成 nginx 實際的 port。
 - `nginx.exe` 的位置:config.json 的 `nginx.exe`(相對路徑以 config.json 所在資料夾為準;沒寫時 `nginx\nginx.exe`,即打包附的那個)。
   開發設定 `config.dev.json` 指向 `C:\tools\nginx\nginx-1.30.5\nginx.exe`,不同就複製一份改。
@@ -258,7 +276,8 @@ nginx port、REST port、Mirror port)全部由 config.json 帶入。產生程式
   `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-rest-routes.ps1` 比對它與 `RESTManager.cpp`
   實際註冊的 route,不一致 exit 1);RESTManager 自己另印 `Device SN: ...` 與 `Running on http://127.0.0.1: 18080 /`。
   綁定失敗(port 被占用)只記 `[REST] REST API NOT started on 127.0.0.1:18080 ...`,app 照常執行,nginx 的 `/api/` 回 502。
-  關閉:`aboutToQuit` 時刪除 RESTManager(listener 關閉,log `[REST] REST API stopped`)。
+  關閉:`Core::shutdown`(`aboutToQuit`,w2-067)在停止設備連線與 Modbus 伺服器之後刪除 RESTManager
+  (listener 關閉,log `[REST] REST API stopped`)。
 - **工作目錄的檔案**:RESTManager 啟動時(與每次 `GET /api/device/sn`)讀工作目錄的 `device_info.ini`
   (`[device] sn`);**不存在就建立**並寫入 `sn=sn000000`。工作目錄不能寫時 QSettings 只是寫不進去,仍回
   `sn000000`,不會崩潰。其餘資料來自 `SqlManager`(`settings.sqlite`、`data\sensor_YYYYMM.sqlite`)。
@@ -313,8 +332,12 @@ nginx port、REST port、Mirror port)全部由 config.json 帶入。產生程式
 - 正式機 Windows 防火牆**只開 80(nginx)與 502(Modbus,不限來源)**(Mango 決定);8124 / 8125 / 18125 / 18080 不對外。
   `netsh` 範例見 `docs/DEPLOY_AND_STARTUP.md` §7。這由**管理員**設定,本專案的腳本不改防火牆 / 網路設定;
   首次啟動 Windows 可能跳出防火牆詢問視窗。
-- 轉發(8125)是**暫時做法**:pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback。等 wasm-mirror pack **1.0.2** 提供
-  正式開關後,改由 Mirror 直接綁 `0.0.0.0`,並刪除 `App/lanrelay.h` 與 `main.cpp` 中的使用;經 nginx 的 `/mirror` 不受影響。
+- **正式的網頁同步經 nginx 80 的 `/mirror`**(`nginx.enabled=true`,預設):正式機防火牆只開 80 與 502(Mango 決定),
+  網頁一律連 `ws://<IP>/mirror`,由 nginx 轉給只綁本機的 Mirror(`127.0.0.1:<mirror.internalPort>`)。
+- **LanRelay(8125,`App/lanrelay.h`)只是 nginx 未啟用時的備援**:`nginx.enabled=false`(或正式機的 `start-taidaflow`
+  在 nginx 起不來時以 `nginx.enabled=false` 啟動 app)時,`runtime.json` 的 `mirrorPublicPort` 才是 8125,網頁改連它。
+  pack 1.0.0/1.0.1 只允許 Mirror 綁 loopback,所以備援仍靠 LanRelay 轉發;**不再等待 pack 1.0.2**,它不是必要條件
+  ——同步已經走 nginx。若日後 pack 提供 Mirror 綁非 loopback 的正式開關,可再評估是否移除 LanRelay。
 - 8125 綁定失敗(例如被占用)時只記 `LAN relay could not listen on 0.0.0.0:8125: ...`,desktop 照常執行
   (本機的 Mirror 仍在 18125;經 nginx 的網頁仍可同步)。
 
@@ -335,6 +358,22 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
 純本機的檢視控制(分頁切換、警報頁分頁)不受影響;歷史頁的日期篩選 / 顯示前一周 / 下載 CSV / 取消
 改由 desktop Core 執行(request signal 經 mirror),離線時由 HistoryPage.qml 停用。
 
+### 關閉流程(`Core::shutdown`,w2-067)
+
+- desktop 正常關閉(按視窗的 X、`stop-taidaflow` / `verify-desktop-startup.ps1` 送的 WM_CLOSE、`taskkill` 不加 `/F`)時,
+  `QCoreApplication::aboutToQuit`(`Core::init()` 最先連接)呼叫 `Core::shutdown("aboutToQuit")`,在 application 物件還在時
+  依序停止並釋放後端:
+  1. 中斷 SqlManager → Core 的歷史結果連線;
+  2. Manager 停止(輪詢計時器、MS300、5 台 ADAM 的 Modbus TCP 連線)→ Modbus 伺服器停止 → 兩者刪除;
+  3. REST API → 歷史檢視 → CSV 匯出(join 匯出執行緒)→ `AppHttpServer`(join 它的執行緒);
+  4. 最後 SqlManager(`SqlManager::shutdown()`:在 worker 執行緒關閉 SQLite 連線後 join;之後的同步請求立即回失敗並記 warning)。
+- log:`[Core] shutdown (aboutToQuit): stopping the backend` → 各服務的 stopped 行 → `[Core] shutdown complete in <n> ms`。
+  只執行一次(可重入)。`main()` 在 `app.exec()` 之前就返回時(QML 載入失敗等),由 `qAddPostRoutine` 在 `QApplication`
+  解構時執行同一個 shutdown;`~Core` 只刪 Proxy。
+- 修正前,連著設備(或模擬器)關閉會以 0xC0000005 結束(`~Core` 在 C runtime 結束階段才停 Manager,用到已解構的 static);
+  修正後接模擬器 10/10、不接設備 3/3 皆 exit 0(證據 `docs/evidence/w2-067/`)。QTest:`docs\evidence\w2-067\tools\run-qtest.bat`
+  (`tst_w2067_sqlmanager_shutdown`,見「測試 / 驗證」5i)。
+
 ## 正式機部署(w2-057 / w2-062)
 
 操作人員版(打包內容、第一次部署、日常操作、更新、手動部署、config.json 欄位表、防火牆、常見問題、已決定事項)在
@@ -342,7 +381,9 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
 
 - **打包**(開發機):`powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1 [-NginxDir <nginx 資料夾>] [-Force]`
   → `dist\TaidaFlow-<yyyyMMdd>-<git 短雜湊>[-dirty]\`(`dist/` 已加入 `.gitignore`)。`build\desktop` / `build\wasm-release`
-  以 `ninja -n` 確認是最新,否則 exit 3。內容:`TaidaFlowApp.exe`;`windeployqt`(Qt 6.8.3,`--release --no-compiler-runtime
+  以 `ninja -n` 確認是最新,否則 exit 3(`-AllowStale` 可略過,不建議)。其他參數:`-OutDir`(預設 `dist`)、`-BuildDir`、`-WebSource`、`-QtDir`。
+  附上的 nginx:`-NginxDir`,沒給時用開發設定 config.json(`TAIDAFLOW_CONFIG`,否則 `deploy\dev\config.dev.json`)的 `nginx.exe`
+  所在資料夾,再不行才找最新的 `C:\tools\nginx\nginx-<版本>`(w2-065)。內容:`TaidaFlowApp.exe`;`windeployqt`(Qt 6.8.3,`--release --no-compiler-runtime
   --no-translations --skip-plugin-types qmltooling,canbus --exclude-plugins qsqlmimer,qsqlodbc,qsqlpsql`,`--qmldir`
   指向 `TaidaFlowContent`、`TaidaFlow`、`Dependencies`)帶入的 Qt DLL / plugins / `qml\`;**MSVC 執行環境採 app-local**
   (`Microsoft.VC145.CRT` 的 DLL,免安裝 vc_redist);`web\`(同 `deploy-web.ps1 -NoConfig`,含 `.gz` 與預設的 `runtime.json`);
@@ -361,10 +402,13 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
     / 這份 config.json 產生的(不是就重產並對執行中的 nginx `-s reload`),沒在跑就以 `start nginx` 的方式啟動,已在跑就不動;
     nginx 不能用時 app 以 `nginx.enabled=false` 啟動(exit 8);確認 `http.port`、`mirror.publicPort` 在聽。
     `-DataDir`、`-LogDir`、`-UseNginx` / `-NoNginx`、`-Port`、`-RestPort`、`-Nginx` 是**單次覆寫**(寫成 `<資料資料夾>\config.effective.json`
-    交給 app,config.json 本身不改)。w2-065:不再轉存程式輸出、不設 `QT_LOGGING_CONF`(`-AppLog`、`-KeepLogDays` 移除);
+    交給 app,config.json 本身不改);另有 `-Config`(另一份 config.json)與 `-StartTimeoutSec`(等 port 開始聽的秒數,預設 60)。w2-065:不再轉存程式輸出、不設 `QT_LOGGING_CONF`(`-AppLog`、`-KeepLogDays` 移除);
     app 以沒有主控台視窗的方式啟動;nginx 位置 = config.json `nginx.exe`(相對於 config.json 所在資料夾);
     `launcher-YYYY-MM-DD.log` 寫在 `log.dir`,啟動時清理過期的 launcher / nginx access log。
-  - `stop-taidaflow.ps1/.bat`:以 WM_CLOSE 正常關 app(逾時只報告,`-Force` 才強制);**不停 nginx**(`nginx -s quit`)。
+  - `stop-taidaflow.ps1/.bat`:以 WM_CLOSE 正常關 app(app 走「關閉流程」的 `Core::shutdown`,接設備時也 exit 0;
+    最多等 `-TimeoutSec` 60 秒,逾時只報告(exit 7),`-Force` 才強制);**不停 nginx**(要停時在 nginx 資料夾 `nginx -s quit`)。
+    只關 `<資料資料夾>\taidaflow-app.json` 記錄的那個 app(啟動時用了單次 `-DataDir` 才需要給同樣的 `-DataDir`;
+    log 資料夾由 `taidaflow-app.json` 得知,`-LogDir` 通常不用給)。
   - `register-autostart.ps1` / `unregister-autostart.ps1`(工作排程器「使用者登入時」,排程只帶 start-taidaflow.ps1,設定都讀
     config.json;**先 `-WhatIf`**,本專案只做過乾跑)。
   - 舊的站台批次檔(以 `.bat` 設定資料夾與 nginx)機制已刪除,由 config.json 取代。
@@ -416,7 +460,9 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile 
 - 探測自我測試(真的起模擬器與假 listener,exit code 判定;default / simulator / simcfg 三種設定):
   `powershell -ExecutionPolicy Bypass -File scripts\probe_selftest_sim.ps1`。
 - 注意:`run-desktop.ps1` / `run-simulator.ps1` 的輸出若接到管線(`| Select-Object` 等),被啟動
-  的程式可能繼承該管線,指令要等程式結束才返回;直接執行或導向檔案即可。
+  的程式會繼承該管線,指令要等程式結束才返回。**在 PowerShell 裡用 `>` 導向檔案也一樣**(PowerShell 以管線收集
+  外部程式的輸出);直接執行,或在 **cmd** 以 `>` 導向檔案即可(w2-069 以同樣的 `Start-Process` 啟動方式實測,
+  `docs/evidence/w2-069/03-pipe-redirect-test.txt`)。
 
 ## 中文字型(WebAssembly)
 
@@ -425,7 +471,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 - `App/fonts/TaidaFlowNotoSansTC-{Regular,Bold}.ttf` 與 `App/fonts/charset.txt` **已在 git 裡**,建置直接使用
   (CMake 不產生、不呼叫外部程式);clone 下來、部署都**不需要 Python**。
 - 加了新的中文字串、網頁出現方框時才要重新產生:這是專案唯一的 Python 工具(`scripts\make_font_subset.py`,用 fonttools;
-  以 `scripts\make-font-subset.ps1` 執行,`--check` 只檢查)。需求、步驟與提交方式見 [docs/BUILD.md §2.5](docs/BUILD.md)。
+  以 `scripts\make-font-subset.ps1` 執行,`--check` 只檢查)。刪掉中文字串或註解、有字不再使用時 `--check` 也是 exit 1
+  (訊息 `0 new chars`,不缺字),同樣重新產生即可(w2-067-fix1)。需求、步驟與提交方式見 [docs/BUILD.md §2.5](docs/BUILD.md)。
   它掃描 `App/ Core/ TaidaFlow/ TaidaFlowContent/ Dependencies/` 的 QML/JS/C++ 非 ASCII 字元 + 可列印 ASCII + 常用全形標點,
   實體化 wght 400/700 並子集化。
 - 來源字型:`C:\Windows\Fonts\NotoSansTC-VF.ttf`(Noto Sans TC 2.004,Windows 11 內附;亦可從
@@ -531,8 +578,9 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 ## 測試 / 驗證(全部以 exit code 判定)
 
-QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器與 `/runtime.json`,
-見 `App/tests/README.md`)、5b 的歷史/匯出 harness 與 5e 的各連線端歷史檢視 harness;
+QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
+與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
+SqlManager 關閉;
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -575,7 +623,7 @@ PS docs\evidence\w2-065\tools\test-config-reader.ps1
 ::     不限區間、非法輸入)與 tst_w2052_rangepage(w2-045 正確性測試改走每端 API + 各端錨點)。
 ::     需 5b 的測試資料;不用任何 port。
 docs\evidence\w2-052\tools\run-qtest.bat
-:: 5f. (w2-053) DI 警報跨重啟的 QTest
+:: 5f. (w2-053) DI 警報跨重啟的 QTest(不用設備、不用 port)
 docs\evidence\w2-053\tools\run-qtest.bat
 :: 5g. 正式機打包資料夾:打包(exit 0)→ DLL 相依(exit 0)→ 自動啟動乾跑(-WhatIf,不註冊)→ 實機檢查
 ::     (verify-release-package:第一次啟動建立 config.json / 資料資料夾、install-nginx-config + start nginx、
@@ -589,6 +637,9 @@ PS scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<日期>-<雜湊> 
 PS scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<日期>-<雜湊> -Mode bat
 :: 5h. REST API:log 的 route 表與 RESTManager 實際註冊的一致(不用啟動 app)
 PS scripts\check-rest-routes.ps1
+:: 5i. (w2-067) SqlManager::shutdown() 的 QTest(關閉流程最後一步:寫入、關閉並 join、之後的呼叫被拒、資料檔完整、
+::     第二次 shutdown 無作用;不用設備、不用 port,輸出 build\w2-067-qtest)
+docs\evidence\w2-067\tools\run-qtest.bat
 ```
 
 - 以前各輪的專用檢查工具(w2-043 區網轉發、w2-050 nginx / 1 GB Range、w2-060 REST 全表)在各自的 `docs/evidence/<輪次>/tools/`,

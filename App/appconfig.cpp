@@ -110,6 +110,17 @@ const QList<Field> &fields()
         f.append(field("mirror.publicPort", Kind::Port, 8125));
         f.append(field("nginx.enabled", Kind::Bool, true));
         f.append(field("nginx.port", Kind::Port, 80));
+        // w2-064 (spec §2 nginx.exe; Mango: nginx is bundled in the package, <install>\nginx\):
+        // relative = relative to the folder of config.json (like dataDir), absolute = as is.
+        // Read by the start scripts / nginx config generation; the app itself does not start nginx.
+        f.append(field("nginx.exe", Kind::Text, QStringLiteral("nginx\\nginx.exe")));
+        // w2-064 (spec §2 log): the app writes its own daily log files (App/applog.h).
+        // dir: relative to dataDir. keepDays: whole number >= 1 (days kept, today included).
+        f.append(field("log.dir", Kind::Text, QStringLiteral("logs")));
+        f.append(field("log.quiet.enabled", Kind::Bool, true));
+        f.append(integerField(QStringLiteral("log.quiet.keepDays"), 60, 1, INT_MAX));
+        f.append(field("log.full.enabled", Kind::Bool, true));
+        f.append(integerField(QStringLiteral("log.full.keepDays"), 7, 1, INT_MAX));
         return f;
     }();
     return table;
@@ -543,6 +554,8 @@ AppConfig::LoadResult AppConfig::load(const std::optional<QString> &configPathEn
                       sourceName(config.m_sources.value(f.key))));
     }
     info(QStringLiteral("  dataDir (resolved) = %1").arg(nativePath(config.resolvedDataDir())));
+    info(QStringLiteral("  nginx.exe (resolved) = %1").arg(nativePath(config.resolvedNginxExe())));
+    info(QStringLiteral("  log.dir (resolved) = %1").arg(nativePath(config.resolvedLogDir())));
     info(QStringLiteral("  downloadPort = %1 (%2)")
              .arg(config.downloadPort())
              .arg(config.downloadPortSource() == ValueSource::Environment
@@ -719,7 +732,42 @@ AppConfig::NginxSettings AppConfig::nginx() const
     NginxSettings n;
     n.enabled = m_values.value(QStringLiteral("nginx.enabled")).toBool();
     n.port = quint16(integer(QStringLiteral("nginx.port")));
+    n.exe = string(QStringLiteral("nginx.exe"));
+    n.resolvedExe = resolvedNginxExe();
     return n;
+}
+
+QString AppConfig::resolvedNginxExe() const
+{
+    return QDir::cleanPath(QDir(m_baseDir).absoluteFilePath(string(QStringLiteral("nginx.exe"))));
+}
+
+QString AppConfig::logDir() const
+{
+    return string(QStringLiteral("log.dir"));
+}
+
+QString AppConfig::resolvedLogDir() const
+{
+    return QDir::cleanPath(QDir(resolvedDataDir()).absoluteFilePath(logDir()));
+}
+
+AppConfig::LogSettings AppConfig::logSettings() const
+{
+    LogSettings s;
+    s.dir = resolvedLogDir();
+    s.quiet.enabled = m_values.value(QStringLiteral("log.quiet.enabled")).toBool();
+    s.quiet.keepDays = integer(QStringLiteral("log.quiet.keepDays"));
+    s.full.enabled = m_values.value(QStringLiteral("log.full.enabled")).toBool();
+    s.full.keepDays = integer(QStringLiteral("log.full.keepDays"));
+    return s;
+}
+
+AppConfig::LogSettings AppConfig::fallbackLogSettings(const QString &configPath)
+{
+    LogSettings s = defaults().logSettings();
+    s.dir = QDir::cleanPath(QFileInfo(configPath).absolutePath() + QStringLiteral("/logs"));
+    return s;
 }
 
 quint16 AppConfig::downloadPort() const

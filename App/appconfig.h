@@ -96,6 +96,23 @@ public:
     {
         bool enabled = false;
         quint16 port = 0;
+        // nginx.exe (read by the start scripts / nginx config generation, not by the app):
+        // exactly as configured (default "nginx\nginx.exe" = the nginx bundled in the package),
+        // and resolved: relative to the folder of config.json, like dataDir.
+        QString exe;
+        QString resolvedExe;
+    };
+    // log.quiet / log.full (spec §2 "log"): one daily file each, see App/applog.h.
+    struct LogFileSettings
+    {
+        bool enabled = true;
+        int keepDays = 1;   // >= 1: files of the last keepDays days (today included) are kept
+    };
+    struct LogSettings
+    {
+        QString dir;            // absolute: log.dir resolved against resolvedDataDir()
+        LogFileSettings quiet;  // taidaflow-YYYY-MM-DD.log: warning / critical / fatal
+        LogFileSettings full;   // taidaflow-YYYY-MM-DD-full.log: every message
     };
 
     // Where a value comes from (log, diagnostics).
@@ -157,6 +174,17 @@ public:
     Listener rest() const;
     MirrorSettings mirror() const;
     NginxSettings nginx() const;
+    // nginx.exe resolved against baseDir() (absolute nginx.exe values unchanged, cleaned).
+    QString resolvedNginxExe() const;
+    // log.dir exactly as configured, and resolved: a relative log.dir is relative to
+    // resolvedDataDir() (default "logs" -> C:/TaidaFlowData/logs).
+    QString logDir() const;
+    QString resolvedLogDir() const;
+    // log.* with dir = resolvedLogDir() (input of AppLog::install()).
+    LogSettings logSettings() const;
+    // w2-064 A2: log settings when config.json cannot be used (the program exits before
+    // dataDir / log.dir are known): <folder of configPath>/logs, default enabled / keepDays.
+    static LogSettings fallbackLogSettings(const QString &configPath);
     // Port of the download links sent to the page: TAIDAFLOW_DOWNLOAD_PORT when set and
     // valid, else nginx.enabled ? nginx.port : http.port.
     quint16 downloadPort() const;

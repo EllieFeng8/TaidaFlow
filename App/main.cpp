@@ -17,9 +17,11 @@
 #include <string>
 #include "runtimeinfo.h"
 #else
+#include <QDir>
 #include <QHostAddress>
 #include "lanrelay.h"
 #include "appconfig.h"
+#include "applog.h"
 #include <QMessageBox>
 #include <QTimer>
 #endif
@@ -147,6 +149,13 @@ std::unique_ptr<WasmMirrorProxy> createMirror(TaidaFlowProxy *Td, const QString 
 
 int main(int argc, char *argv[])
 {
+#if !defined(Q_OS_WASM)
+    // Log files (docs/taidaflow_config_spec.md §2 "log", App/applog.h): from here on every
+    // message is kept in memory (and still printed as before) until AppLog::install() below
+    // writes it to today's files, so the config.json messages are in the files too. Declared
+    // first: destroyed last (flush, close, previous message handler back).
+    AppLog::Scope appLogScope;
+#endif
     set_qt_environment();
     QApplication app(argc, argv);
 #if !defined(Q_OS_WASM)
@@ -160,12 +169,25 @@ int main(int argc, char *argv[])
         const AppConfig::LoadResult configLoad = AppConfig::loadFromEnvironment();
         configLoad.printLog();
         if (!configLoad.ok) {
-            showConfigErrorDialog(configLoad.errorDialogText());
-            return AppConfig::kConfigErrorExitCode;
+            // w2-064 A2: log files in <folder of config.json>\logs (buffered messages + the
+            // failure), dialog and stderr name the log file; exit code 2 as before.
+            return AppLog::handleConfigFailure(configLoad, showConfigErrorDialog);
         }
         AppConfig::setInstance(configLoad.config);
     }
     AppConfig::instance().applyDataDir();
+    // log.dir (relative to dataDir, created when missing): today's quiet / full files, expired
+    // files deleted; the messages buffered since the start of main() are written first.
+    {
+        const AppConfig::LogSettings logSettings = AppConfig::instance().logSettings();
+        const bool logFilesOpen = AppLog::install(logSettings);
+        qInfo().noquote() << AppLog::describe(logSettings);
+        if (!logFilesOpen) {
+            qWarning().noquote() << "[AppLog] not every enabled log file could be opened in"
+                                 << QDir::toNativeSeparators(logSettings.dir)
+                                 << "- see stderr; messages still go to stderr, the files are retried";
+        }
+    }
     const AppConfig::MirrorSettings mirrorPorts = AppConfig::instance().mirror();
 #endif
 

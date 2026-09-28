@@ -9,6 +9,9 @@ if(NOT EMSCRIPTEN)
     target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         "appconfig.cpp"
         "appconfig.h"
+        # w2-064 (spec §2 log): the desktop app writes its own daily log files.
+        "applog.cpp"
+        "applog.h"
     )
 endif()
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Network)

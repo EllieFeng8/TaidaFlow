@@ -5,8 +5,9 @@
 只依賴 Qt **Core / Network / HttpServer**,不認識使用它的應用程式:像插件一樣,把這個資料夾的
 兩個檔案放進任何 Qt 6.8 專案就能用。
 
-在 TaidaFlow(w2-049)裡,它取代了舊的 Python 開發網頁伺服器(8123)與 `HistoryExport` 內的
-下載伺服器:desktop 在 `0.0.0.0:8124` 同時提供網頁 `/` 與 CSV 下載 `/exports/<檔名>`。
+在 TaidaFlow(w2-049)裡,它取代了舊的開發用網頁伺服器(8123)與 `HistoryExport` 內的
+下載伺服器:desktop 在 `0.0.0.0:8124`(w2-062 起為 config.json `http.bind`/`http.port`)同時提供網頁 `/`
+與 CSV 下載 `/exports/<檔名>`。
 
 ## 功能
 
@@ -36,6 +37,9 @@
 - 快取:`ETag`(檔案大小 + 修改時間)、`Last-Modified`;`If-None-Match`(優先)/ `If-Modified-Since`
   相符 → 304。`htmlCacheControl` / `cacheControl` 預設都是 `no-cache`(瀏覽器每次重新驗證),
   重新建置後 ETag 改變 → 200 新檔,不會新舊混用。
+  `fileCacheControl`(w2-062):個別檔名(小寫、不含資料夾)→ 自己的 `Cache-Control`,優先於上面兩個值;
+  TaidaFlow 用 `{"runtime.json": "no-store"}`(程式每次啟動都會重寫這個檔,瀏覽器不可快取)。
+  該檔其餘規則(MIME、ETag、.gz)不變。
 - gzip(`gzipVariants`,預設開):有 `<檔名>.gz`、**不比原檔舊**、請求的 `Accept-Encoding` 接受 gzip →
   送 `.gz`(`Content-Encoding: gzip`、MIME 仍為原檔、ETag 另帶 `-gz`);回應都帶 `Vary: Accept-Encoding`。
 - `crossOriginIsolation`(預設開):`Cross-Origin-Opener-Policy: same-origin` +

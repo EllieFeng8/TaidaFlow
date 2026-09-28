@@ -1,0 +1,5 @@
+﻿== 5.2 in cmd: cd /d <install> ; TaidaFlowApp.exe --write-default-config <install>\config.json
+(PATH without any Qt folder; NoDefaultCurrentDirectoryInExePath cleared = a normal cmd window - the tool session sets it to 1, then cmd does not find programs in the current folder: first attempt 'TaidaFlowApp.exe is not recognized', docs now also show the full-path form)
+run 1 rc=0 : wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\config.json
+run 2 rc=3 : D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\config.json already exists - not overwritten
+config.json bytes: 1047

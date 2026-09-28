@@ -1,0 +1,15 @@
+data\
+exports\
+logs\
+config.effective.json (1206 bytes)
+device_info.ini (23 bytes)
+settings.sqlite (20480 bytes)
+taidaflow-app.json (934 bytes)
+TaidaFlowSettings.ini (32 bytes)
+data\sensor_202609.sqlite (7303168 bytes)
+exports\w2062verify_20260928_222356.csv (23364 bytes)
+logs\launcher.log (8175 bytes)
+logs\taidaflow-20260928-222309.log (10584 bytes)
+logs\taidaflow-20260928-222309.log.stdout (0 bytes)
+logs\taidaflow-20260928-222331.log (37242 bytes)
+logs\taidaflow-20260928-222331.log.stdout (0 bytes)

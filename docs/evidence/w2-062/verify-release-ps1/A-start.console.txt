@@ -1,0 +1,24 @@
+2026-09-28 22:23:08 [start] === TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ===
+2026-09-28 22:23:08 [start] installation: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty
+2026-09-28 22:23:08 [start] config.json : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\config.json (CREATED now with the default values)
+2026-09-28 22:23:08 [start]   config: config.json did not exist - created with the defaults by TaidaFlowApp.exe --write-default-config: wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\config.json
+2026-09-28 22:23:08 [start]   config: "nginx.exe" is missing - using the default nginx\nginx.exe
+2026-09-28 22:23:08 [start]   one-time override: dataDir=D:\repo\codex\qmlTester\taidaflow\build\verify-release-data (-DataDir)
+2026-09-28 22:23:08 [start]   one-time override: nginx.enabled=false (-NoNginx)
+2026-09-28 22:23:08 [start] data folder : D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 22:23:08 [start] log folder  : D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs
+2026-09-28 22:23:08 [start] devices: adam6256 192.168.1.201:502, adam6217a 192.168.1.202:502, adam6217b 192.168.1.203:502, adam6224 192.168.1.204:502, adam6022 192.168.1.205:502; MS300 COM2 9600
+2026-09-28 22:23:09 [start] ports free: 502 Modbus server (modbusServer.port, 0.0.0.0), 8124 web page + CSV downloads (http.port), 8125 web mirror relay (mirror.publicPort), 18125 internal mirror, 127.0.0.1 (mirror.internalPort), 18080 REST API, 127.0.0.1 (rest.port)
+2026-09-28 22:23:09 [start] TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\config.effective.json (config.json + one-time overrides: dataDir=D:\repo\codex\qmlTester\taidaflow\build\verify-release-data (-DataDir); nginx.enabled=false (-NoNginx))
+2026-09-28 22:23:09 [start] app log mode: quiet (QT_LOGGING_CONF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\logging\quiet.ini)
+2026-09-28 22:23:09 [start] TaidaFlowApp started: pid 110772, log D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs\taidaflow-20260928-222309.log
+2026-09-28 22:23:11 [start]   port 502   Modbus server (modbusServer.port, 0.0.0.0)         listening
+2026-09-28 22:23:11 [start]   port 8124  web page + CSV downloads (http.port)               listening
+2026-09-28 22:23:11 [start]   port 8125  web mirror relay (mirror.publicPort)               listening
+2026-09-28 22:23:11 [start]   port 18125 internal mirror, 127.0.0.1 (mirror.internalPort)   listening
+2026-09-28 22:23:11 [start]   port 18080 REST API, 127.0.0.1 (rest.port)                    listening
+2026-09-28 22:23:11 [start] web page: http://192.168.83.1:8124/TaidaFlowApp.html  (mirror 192.168.83.1:8125)
+2026-09-28 22:23:11 [start] web page: http://192.168.158.1:8124/TaidaFlowApp.html  (mirror 192.168.158.1:8125)
+2026-09-28 22:23:11 [start] web page: http://192.168.0.125:8124/TaidaFlowApp.html  (mirror 192.168.0.125:8125)
+2026-09-28 22:23:11 [start] web page: http://127.0.0.1:8124/TaidaFlowApp.html  (mirror 127.0.0.1:8125)
+2026-09-28 22:23:11 [start] started (exit 0)

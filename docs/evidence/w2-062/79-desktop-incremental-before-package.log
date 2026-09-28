@@ -1,0 +1,15 @@
+﻿[1/1] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+nginx.conf is up to date: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+
+NGINX_CONF=unchanged
+
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+
+build exit=0

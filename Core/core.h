@@ -26,9 +26,9 @@ private:
     void reportIgnoredHmiInputSettings();
     void setHistoryTitleOnce();
     void loadAlarmRecords();
-    // w2-049: web page + /exports on the AppHttpServer singleton (0.0.0.0:8124).
+    // w2-049/w2-062: web page + /exports on the AppHttpServer singleton (config.json http, default 0.0.0.0:8124); writes <web folder>/runtime.json.
     void startHttpServer();
-    // w2-060: REST API (RESTManager) on 127.0.0.1:<TAIDAFLOW_REST_PORT, default 18080>;
+    // w2-060/w2-062: REST API (RESTManager) on config.json rest (default 127.0.0.1:18080);
     // reached from the LAN only through nginx (http://<host>/api/...).
     void startRestServer();
     void stopRestServer();

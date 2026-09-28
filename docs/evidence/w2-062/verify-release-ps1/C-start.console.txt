@@ -1,0 +1,38 @@
+2026-09-28 22:24:02 [start] === TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ===
+2026-09-28 22:24:02 [start] installation: D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty
+2026-09-28 22:24:02 [start] config.json : D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\config.json
+2026-09-28 22:24:02 [start]   config: "nginx.exe" is missing - using the default nginx\nginx.exe
+2026-09-28 22:24:02 [start] data folder : D:\repo\codex\qmlTester\taidaflow\build\verify-release-data
+2026-09-28 22:24:02 [start] log folder  : D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs
+2026-09-28 22:24:02 [start] devices: adam6256 192.168.1.201:502, adam6217a 192.168.1.202:502, adam6217b 192.168.1.203:502, adam6224 192.168.1.204:502, adam6022 192.168.1.205:502; MS300 COM2 9600
+2026-09-28 22:24:02 [start] ports free: 502 Modbus server (modbusServer.port, 0.0.0.0), 8124 web page + CSV downloads (http.port), 8125 web mirror relay (mirror.publicPort), 18125 internal mirror, 127.0.0.1 (mirror.internalPort), 18080 REST API, 127.0.0.1 (rest.port), 80 nginx (nginx.port)
+2026-09-28 22:24:02 [start] TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\config.json
+2026-09-28 22:24:02 [start] app log mode: quiet (QT_LOGGING_CONF=D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\logging\quiet.ini)
+2026-09-28 22:24:02 [start] nginx: D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx\nginx.exe (config.json nginx.exe = nginx\nginx.exe, script default)
+2026-09-28 22:24:04 [start]   nginx.conf | config.json: D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\config.json
+2026-09-28 22:24:04 [start]   nginx.conf |   config: "nginx.exe" is missing - using the default nginx\nginx.exe
+2026-09-28 22:24:04 [start]   nginx.conf | nginx      : D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx
+2026-09-28 22:24:04 [start]   nginx.conf | web root   : D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\web
+2026-09-28 22:24:04 [start]   nginx.conf | exports    : D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\verify-release-data)
+2026-09-28 22:24:04 [start]   nginx.conf | ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+2026-09-28 22:24:04 [start]   nginx.conf | existing nginx.conf (an older TaidaFlow one) kept as D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx\conf\nginx.conf.prev-20260928-222403
+2026-09-28 22:24:04 [start]   nginx.conf | written: D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx\conf\nginx.conf
+2026-09-28 22:24:04 [start]   nginx.conf | NGINX_CONF=written
+2026-09-28 22:24:04 [start]   nginx.conf |   runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\web\runtime.json = {"mirrorPublicPort":80,"version":1}
+2026-09-28 22:24:04 [start]   nginx.conf |   nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx/conf/nginx.conf syntax is ok
+2026-09-28 22:24:04 [start]   nginx.conf |   nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx/conf/nginx.conf test is successful
+2026-09-28 22:24:04 [start]   nginx.conf | nginx is not running: start-taidaflow.ps1 starts it, or by hand:   cd "D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx"   start nginx
+2026-09-28 22:24:04 [start] nginx.conf regenerated for this installation / config.json (see above)
+2026-09-28 22:24:04 [start] starting nginx like 'cd D:\repo\codex\qmlTester\taidaflow\build\verify-release-moved\TaidaFlow-20260928-85c6406-dirty\nginx' + 'start nginx' (no arguments)
+2026-09-28 22:24:05 [start] nginx listening on 0.0.0.0:80 (pid 115420)
+2026-09-28 22:24:05 [start] TaidaFlowApp started: pid 78844, log D:\repo\codex\qmlTester\taidaflow\build\verify-release-data\logs\taidaflow-20260928-222405.log
+2026-09-28 22:24:07 [start]   port 502   Modbus server (modbusServer.port, 0.0.0.0)         listening
+2026-09-28 22:24:07 [start]   port 8124  web page + CSV downloads (http.port)               listening
+2026-09-28 22:24:07 [start]   port 8125  web mirror relay (mirror.publicPort)               listening
+2026-09-28 22:24:07 [start]   port 18125 internal mirror, 127.0.0.1 (mirror.internalPort)   listening
+2026-09-28 22:24:07 [start]   port 18080 REST API, 127.0.0.1 (rest.port)                    listening
+2026-09-28 22:24:07 [start] web page: http://192.168.83.1/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.83.1:8124/TaidaFlowApp.html)
+2026-09-28 22:24:07 [start] web page: http://192.168.158.1/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.158.1:8124/TaidaFlowApp.html)
+2026-09-28 22:24:07 [start] web page: http://192.168.0.125/  (nginx: page, /mirror, /exports, /api/; fallback http://192.168.0.125:8124/TaidaFlowApp.html)
+2026-09-28 22:24:07 [start] web page: http://127.0.0.1/  (nginx: page, /mirror, /exports, /api/; fallback http://127.0.0.1:8124/TaidaFlowApp.html)
+2026-09-28 22:24:07 [start] started (exit 0)

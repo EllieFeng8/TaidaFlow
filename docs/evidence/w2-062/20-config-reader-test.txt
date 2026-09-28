@@ -1,0 +1,37 @@
+﻿[PASS] TaidaFlowApp.exe --write-default-config exit 0 - wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\build\w2-062-config-reader-test\ref\config.json
+[PASS] --write-default-config on an existing file: exit 3, not overwritten - D:\repo\codex\qmlTester\taidaflow\build\w2-062-config-reader-test\ref\config.json already exists - not overwritten
+[PASS] missing file: defaults, Exists=false, no error
+[PASS] missing file: not created by the reader
+[PASS] nginx.exe fallback nginx\nginx.exe (script default), resolved against the config folder
+[PASS] -Create: file written by the app, identical to the reference default file
+[PASS] partial file: given values from the file, the rest defaults
+[PASS] relative dataDir resolved against the config folder
+[PASS] unknown key noted
+[PASS] invalid devices.ms300.baudRate -> default 9600 + warning - 9600
+[PASS] invalid devices.ms300.serialPort -> default COM2 + warning - COM2
+[PASS] invalid version -> default 1 + warning - 1
+[PASS] invalid rest.port -> default 18080 + warning - 18080
+[PASS] invalid modbusServer.bind -> default 0.0.0.0 + warning - 0.0.0.0
+[PASS] invalid devices.adam6256.host -> default 192.168.1.201 + warning - 192.168.1.201
+[PASS] invalid devices.ms300.stopBits -> default 1 + warning - 1
+[PASS] invalid devices.ms300.unitId -> default 1 + warning - 1
+[PASS] invalid nginx.enabled -> default True + warning - True
+[PASS] invalid nginx.port -> default 80 + warning - 80
+[PASS] invalid devices.ms300.dataBits -> default 8 + warning - 8
+[PASS] invalid devices.adam6256.unitId -> default 1 + warning - 1
+[PASS] invalid mirror.publicPort -> default 8125 + warning - 8125
+[PASS] invalid devices.ms300.parity -> default none + warning - none
+[PASS] valid values normalised (trim, 1502.0 -> 1502, EVEN -> even, IPv6)
+[PASS] group that is not an object: its values default + one warning
+[PASS] UTF-8 BOM accepted
+[PASS] broken JSON: Error set, file unchanged - config.json D:\repo\codex\qmlTester\taidaflow\build\w2-062-config-reader-test\badjson\config.json is not valid JSON (Invalid object passed in, ':' or '}' expected. (27): {) - fix it or delete it to recreate the defaults (a Windows path needs \\ in JSON, e.g. "C:\\TaidaFlowData")
+[PASS] top level not an object: Error
+[PASS] empty file: Error
+[PASS] nginx.exe absolute from the file
+[PASS] effective file: complete, dataDir / nginx.exe as full paths, same values when read back
+[PASS] override validated (70000 rejected) - override rest.port = 70000 is invalid (expected a port number 1..65535)
+[PASS] runtime.json body = TaidaFlowRuntime::buildRuntimeJson
+[PASS] page port / download port: nginx off -> mirror.publicPort / http.port
+[PASS] page port / download port: nginx on -> nginx.port
+[PASS] relative path helper: ../web
+=== 0 check(s) failed

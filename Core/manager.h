@@ -20,9 +20,21 @@ class Manager final : public QObject
     Q_OBJECT
 
 public:
+    // w2-062: device addresses and serial parameters (Core fills them from config.json via
+    // AppConfig; the backend itself does not read files).
+    struct DeviceSettings {
+        QList<ModbusClient::DeviceConfig> modbusDevices = ModbusClient::defaultDeviceConfigs();
+        Ms300FaultReader::Settings ms300;
+    };
+
+    // Built-in default devices (stand-alone tests).
     explicit Manager(TaidaFlowProxy *proxy,
                      SqlManager *sql,
                      QObject *parent = nullptr);
+    Manager(TaidaFlowProxy *proxy,
+            SqlManager *sql,
+            const DeviceSettings &devices,
+            QObject *parent = nullptr);
     ~Manager() override;
 
     void start();

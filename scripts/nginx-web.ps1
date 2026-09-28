@@ -1,42 +1,45 @@
-# nginx web front end for TaidaFlow (w2-050): start / stop / reload / test / status.
+# nginx web front end for TaidaFlow (w2-050, w2-062): start / stop / reload / test / status.
+# DEVELOPMENT PC ONLY (Mango A6): runs nginx with its own isolated prefix (build\nginx: rendered
+# conf\, logs\, temp\), so the development PC never touches the conf folder of an installed nginx.
+# The plant uses the standard way instead: scripts\install-nginx-config.ps1 once (writes
+# <nginx folder>\conf\nginx.conf), then "cd <nginx folder>" + "start nginx" (start-taidaflow.ps1 does
+# the same when nginx is not running); "nginx -s reload" / "nginx -s quit" from that folder.
 #
 #   http://<host>/                         -> 302 /TaidaFlowApp.html
 #   http://<host>/TaidaFlowApp.html        web page served by nginx from the deployed web folder
+#   http://<host>/runtime.json             Mirror port for the page (static file, no-store; w2-062)
+#   ws://<host>/mirror                     live synchronisation of the page, proxied to the app's
+#                                          Mirror server 127.0.0.1:<mirror.internalPort> (w2-062)
 #   http://<host>/exports/<file>           history CSV files sent by nginx straight from the app's
 #                                          export folder (HTTP Range / resume supported)
 #   http://<host>/api/...                  REST API (w2-060), proxied to the app's RESTManager on
-#                                          127.0.0.1:<REST port> (default 18080, loopback only)
-# Port: 80 by default (w2-057, http://<host>/); -Port <n> for another one (e.g. -Port 8123, the
-# port used before w2-057 -> http://<host>:8123/).
-# The desktop app keeps serving the page and /exports itself on :8124 (fallback, no Range) - both
-# addresses work. Start the app with TAIDAFLOW_DOWNLOAD_PORT=<the nginx port> (80) so that the
-# download links the page receives point to nginx.
+#                                          127.0.0.1:<rest.port> (loopback only)
+# w2-062: every value comes from config.json (scripts\taidaflow-config.ps1) - the SAME file the app
+# uses: nginx.port (listen port), rest.port (/api/), mirror.internalPort (/mirror), <dataDir>\exports
+# (downloads), nginx.exe (the program). Config file: -Config, else TAIDAFLOW_CONFIG, else
+# deploy\dev\config.dev.json (repository) or <folder of this package>\config.json (package).
+# The command-line options below override single values once. On start / reload / test the web
+# folder's runtime.json is (re)written: {"mirrorPublicPort": <nginx listen port>, "version": 1}.
+# The desktop app keeps serving the page and /exports itself on http.port (8124, fallback, no Range).
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\nginx-web.ps1 -Action <start|stop|reload|test|status>
-#            [-WebRoot <folder>] [-ExeDir <folder>] [-ExportDir <folder>] [-RuntimeDir <folder>]
-#            [-Nginx <nginx.exe or folder>] [-Port 80] [-RestPort 18080] [-TimeoutSec 20]
+#            [-Config <config.json>] [-WebRoot <folder>] [-ExeDir <folder>] [-ExportDir <folder>]
+#            [-RuntimeDir <folder>] [-Nginx <nginx.exe or folder>] [-Port <n>] [-RestPort <n>]
+#            [-MirrorPort <n>] [-TimeoutSec 20]
 #   (scripts\nginx-start.ps1 / scripts\nginx-stop.ps1 are shortcuts for -Action start / stop.)
 #   -WebRoot    : web page folder (default <exe folder>\web, filled by scripts\deploy-web.ps1)
-#   -ExeDir     : exe folder for the default web root (default build\desktop)
-#   -ExportDir  : the app's export folder = <app working directory>\exports (default
-#                 build\runtime-cwd\exports, the working directory of scripts\run-desktop.ps1);
-#                 created when missing (the app creates the same folder at start-up)
+#   -ExeDir     : folder of TaidaFlowApp.exe (default: this package folder when it holds the exe,
+#                 else build\desktop); used for the default web root and for the app's default
+#                 values of keys missing in config.json
+#   -ExportDir  : export folder (default <config.json dataDir>\exports; created when missing)
 #   -RuntimeDir : nginx runtime folder = nginx prefix (-p): conf\ (rendered config), logs\, temp\
 #                 and the state file taidaflow-nginx.json (default build\nginx, git-ignored)
-#   -Port       : listen port (default 80, or the environment variable TAIDAFLOW_NGINX_PORT when set).
-#                 stop / status / reload use the port of the running instance (state file) unless
-#                 -Port is given; reload with another -Port moves it.
-#   -RestPort   : the app's internal REST port on 127.0.0.1 that /api/ is proxied to (default 18080,
-#                 or the environment variable TAIDAFLOW_REST_PORT when set - the same variable the
-#                 app reads, so both agree). reload keeps the port of the running instance (state
-#                 file) unless -RestPort is given.
-#   -Nginx      : nginx.exe (or its folder). Otherwise the environment variable TAIDAFLOW_NGINX,
-#                 otherwise the newest C:\tools\nginx\nginx-<version>\nginx.exe.
+#   -Port / -RestPort / -MirrorPort / -Nginx : one-time overrides of nginx.port / rest.port /
+#                 mirror.internalPort / nginx.exe. stop / status use the running instance (state file).
 #
-# The configuration is deploy\nginx\taidaflow.conf (template, in the repository). It is rendered
-# into <runtime>\conf\taidaflow.conf with the web root, the export folder, the port and the REST
-# port filled in, checked
-# with nginx -t, and run as
+# The configuration is deploy\nginx\taidaflow.conf (template). It is rendered into
+# <runtime>\conf\taidaflow.conf with the web root, the export folder, the port, the REST port and the
+# Mirror port filled in, checked with nginx -t, and run as
 #   nginx -p <runtime>/ -c <runtime>/conf/taidaflow.conf
 #
 # Rules:
@@ -53,13 +56,14 @@
 #     setting is changed.
 #
 # Exit codes: 0 = done (status: our nginx is running); 1 = no nginx started by this script is
-# running (stop/reload/status); 2 = nginx.exe / web root / TaidaFlowApp.html / template missing or
-# unusable path; 3 = nginx -t failed; 4 = the port (default 80) already in use (or already running);
-# 5 = symbolic link / junction in the web root or export folder; 6 = started but not listening on the port in time
-# (stopped again); 7 = stop failed (still running, or pid file does not match).
+# running (stop/reload/status); 2 = nginx.exe / web root / TaidaFlowApp.html / template / config.json
+# missing or unusable; 3 = nginx -t failed; 4 = the port already in use (or already running);
+# 5 = symbolic link / junction in the web root or export folder; 6 = started but not listening on the
+# port in time (stopped again); 7 = stop failed (still running, or pid file does not match).
 param(
     [ValidateSet('start', 'stop', 'reload', 'test', 'status')]
     [string]$Action = 'status',
+    [string]$Config = "",
     [string]$WebRoot = "",
     [string]$ExeDir = "",
     [string]$ExportDir = "",
@@ -69,27 +73,18 @@ param(
     [int]$Port = 80,
     [ValidateRange(1, 65535)]
     [int]$RestPort = 18080,
+    [ValidateRange(1, 65535)]
+    [int]$MirrorPort = 18125,
     [int]$TimeoutSec = 20
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $template = Join-Path $root 'deploy\nginx\taidaflow.conf'
+. (Join-Path $PSScriptRoot 'taidaflow-config.ps1')
 # $port (= -Port; PowerShell variable names are case-insensitive) is the listen port.
 $portGiven = $PSBoundParameters.ContainsKey('Port')
-# Without -Port the environment variable TAIDAFLOW_NGINX_PORT (1..65535) replaces the default 80
-# (e.g. 8123 to rerun the w2-050 checks, which were written for port 8123).
-if (-not $portGiven -and $env:TAIDAFLOW_NGINX_PORT) {
-    $envPort = 0
-    if ([int]::TryParse($env:TAIDAFLOW_NGINX_PORT.Trim(), [ref]$envPort) -and $envPort -ge 1 -and $envPort -le 65535) { $port = $envPort }
-    else { [Console]::Out.WriteLine("TAIDAFLOW_NGINX_PORT='$env:TAIDAFLOW_NGINX_PORT' is not a port (1..65535) - ignored, port $port"); }
-}
-# w2-060: REST port (the app's RESTManager on 127.0.0.1): -RestPort, else TAIDAFLOW_REST_PORT, else 18080.
 $restPortGiven = $PSBoundParameters.ContainsKey('RestPort')
-if (-not $restPortGiven -and $env:TAIDAFLOW_REST_PORT) {
-    $envRest = 0
-    if ([int]::TryParse($env:TAIDAFLOW_REST_PORT.Trim(), [ref]$envRest) -and $envRest -ge 1 -and $envRest -le 65535) { $RestPort = $envRest; $restPortGiven = $true }
-    else { [Console]::Out.WriteLine("TAIDAFLOW_REST_PORT='$env:TAIDAFLOW_REST_PORT' is not a port (1..65535) - ignored, REST port $RestPort"); }
-}
+$mirrorPortGiven = $PSBoundParameters.ContainsKey('MirrorPort')
 # Messages go straight to stdout, so functions return only their values.
 function Say([string]$m) { [Console]::Out.WriteLine($m) }
 function FullPath([string]$p) {
@@ -104,28 +99,37 @@ $RuntimeDir = FullPath $RuntimeDir
 $stateFile = Join-Path $RuntimeDir 'taidaflow-nginx.json'
 $confFile = Join-Path $RuntimeDir 'conf\taidaflow.conf'
 $pidFile = Join-Path $RuntimeDir 'logs\nginx.pid'
+if ($ExeDir -ne "") { $ExeDir = FullPath $ExeDir }
+elseif (Test-Path (Join-Path $root 'TaidaFlowApp.exe') -PathType Leaf) { $ExeDir = $root }
+else { $ExeDir = FullPath 'build\desktop' }
+
+# config.json -> $script:cfg (only the actions that render a configuration need it).
+$script:cfg = $null
+function Read-Config {
+    $path = Resolve-TaidaFlowConfigPath $root $Config
+    $c = Get-TaidaFlowConfig -Path $path -Exe (Join-Path $ExeDir 'TaidaFlowApp.exe')
+    Say "config.json: $path$(if (-not $c.Exists) { ' (does not exist - app defaults)' })"
+    foreach ($n in $c.Notes) { Say "  config note: $n" }
+    if ($c.Error) { Say "config.json unusable: $($c.Error)"; exit 2 }
+    $script:cfg = $c
+    if (-not $portGiven) { $script:port = [int]$c.Values['nginx.port'] }
+    if (-not $restPortGiven) { $script:RestPort = [int]$c.Values['rest.port'] }
+    if (-not $mirrorPortGiven) { $script:MirrorPort = [int]$c.Values['mirror.internalPort'] }
+    Say ("  nginx.port {0}{1}, rest.port {2}{3}, mirror.internalPort {4}{5}, dataDir {6}" -f $script:port, $(if ($portGiven) { ' (-Port)' } else { '' }),
+         $script:RestPort, $(if ($restPortGiven) { ' (-RestPort)' } else { '' }), $script:MirrorPort, $(if ($mirrorPortGiven) { ' (-MirrorPort)' } else { '' }), $c.DataDir)
+    if (-not $c.Values['nginx.enabled']) { Say "  NOTE: config.json nginx.enabled is false - the app then points pages at mirror.publicPort / http.port, not at nginx" }
+}
 
 function Find-Nginx {
-    $source = ''
-    $candidate = ''
     if ($Nginx -ne "") { $source = '-Nginx'; $candidate = $Nginx }
-    elseif ($env:TAIDAFLOW_NGINX) { $source = 'TAIDAFLOW_NGINX'; $candidate = $env:TAIDAFLOW_NGINX }
     else {
-        $source = 'C:\tools\nginx (newest version)'
-        $best = $null; $bestVer = $null
-        if (Test-Path 'C:\tools\nginx' -PathType Container) {
-            foreach ($d in Get-ChildItem 'C:\tools\nginx' -Directory -Filter 'nginx-*') {
-                $v = $null
-                if ([version]::TryParse($d.Name.Substring(6), [ref]$v) -and (Test-Path (Join-Path $d.FullName 'nginx.exe'))) {
-                    if ($null -eq $bestVer -or $v -gt $bestVer) { $best = $d.FullName; $bestVer = $v }
-                }
-            }
-        }
-        if ($best) { $candidate = $best }
+        if (-not $script:cfg) { Read-Config }
+        $source = "config.json nginx.exe = $($script:cfg.Values['nginx.exe']) ($($script:cfg.Sources['nginx.exe']); relative = to the config.json folder)"
+        $candidate = Resolve-TaidaFlowNginxExe $script:cfg
     }
     if ($candidate -ne '' -and (Test-Path $candidate -PathType Container)) { $candidate = Join-Path $candidate 'nginx.exe' }
     if ($candidate -eq '' -or -not (Test-Path $candidate -PathType Leaf)) {
-        Say "nginx.exe not found (source: $source, path: '$candidate'). Pass -Nginx, set TAIDAFLOW_NGINX or unpack the nginx.org Windows zip to C:\tools\nginx\nginx-<version>\"
+        Say "nginx.exe not found (source: $source, path: '$candidate'). Install nginx for Windows (nginx.org zip, e.g. 1.30.x) and set config.json nginx.exe to its nginx.exe, or pass -Nginx"
         exit 2
     }
     $full = [System.IO.Path]::GetFullPath($candidate)
@@ -173,8 +177,7 @@ function Resolve-WebRoot([string]$fromState) {
     if ($WebRoot -ne "") { $w = FullPath $WebRoot }
     elseif ($fromState) { $w = $fromState }
     else {
-        $e = if ($ExeDir -ne "") { FullPath $ExeDir } else { FullPath 'build\desktop' }
-        $w = Join-Path $e 'web'
+        $w = Join-Path $ExeDir 'web'
     }
     if (-not (Test-Path $w -PathType Container)) {
         Say "web root not found: $w (deploy first: scripts\deploy-web.ps1)"; exit 2
@@ -208,7 +211,10 @@ function Assert-NoLinks([string]$what, [string]$path, [string]$advice) {
 function Resolve-ExportDir([string]$fromState) {
     if ($ExportDir -ne "") { $x = FullPath $ExportDir }
     elseif ($fromState) { $x = $fromState }
-    else { $x = FullPath 'build\runtime-cwd\exports' }
+    else {
+        if (-not $script:cfg) { Read-Config }
+        $x = Join-Path $script:cfg.DataDir 'exports'   # the app's export folder (<dataDir>\exports)
+    }
     if (-not (Test-Path $x -PathType Container)) {
         New-Item -ItemType Directory -Force $x | Out-Null
         Say "export folder created: $x (the app creates the same folder at start-up)"
@@ -221,15 +227,19 @@ function Resolve-ExportDir([string]$fromState) {
 function Write-Config([string]$web, [string]$exports) {
     if (-not (Test-Path $template -PathType Leaf)) { Say "template missing: $template"; exit 2 }
     foreach ($sub in 'conf', 'logs', 'temp') { New-Item -ItemType Directory -Force (Join-Path $RuntimeDir $sub) | Out-Null }
-    $text = [System.IO.File]::ReadAllText($template)
-    foreach ($token in '@TAIDAFLOW_WEB_ROOT@', '@TAIDAFLOW_EXPORT_DIR@', '@TAIDAFLOW_NGINX_PORT@', '@TAIDAFLOW_REST_PORT@') {
-        if (-not $text.Contains($token)) { Say "template has no ${token}: $template"; exit 2 }
-    }
-    $header = "# GENERATED by scripts\nginx-web.ps1 from deploy\nginx\taidaflow.conf - edit the template, not this file.`n" +
-              "# web root: $web`n# export folder: $exports`n# port: $port`n# REST port (/api/ -> 127.0.0.1): $RestPort`n"
-    $text = $header + $text.Replace('@TAIDAFLOW_WEB_ROOT@', (Fwd $web)).Replace('@TAIDAFLOW_EXPORT_DIR@', (Fwd $exports)).Replace('@TAIDAFLOW_NGINX_PORT@', "$port").Replace('@TAIDAFLOW_REST_PORT@', "$RestPort")
+    try { $body = Get-TaidaFlowNginxConf $template @{ WebRoot = $web; ExportDir = $exports; Port = $port; RestPort = $RestPort; MirrorPort = $MirrorPort; Prefix = $RuntimeDir } }
+    catch { Say $_.Exception.Message; exit 2 }
+    $header = "# GENERATED by scripts\nginx-web.ps1 (DEVELOPMENT, prefix $RuntimeDir) from deploy\nginx\taidaflow.conf - edit the template, not this file.`n" +
+              "# web root: $web`n# export folder: $exports`n# port: $port`n# REST port (/api/ -> 127.0.0.1): $RestPort`n" +
+              "# Mirror port (/mirror -> 127.0.0.1): $MirrorPort`n"
+    $text = $header + $body
     [System.IO.File]::WriteAllText($confFile, $text, (New-Object System.Text.UTF8Encoding($false)))
-    Say "config: $confFile (web root $web, export folder $exports, port $port, /api/ -> 127.0.0.1:$RestPort)"
+    Say "config: $confFile (web root $web, export folder $exports, port $port, /api/ -> 127.0.0.1:$RestPort, /mirror -> 127.0.0.1:$MirrorPort)"
+}
+
+# runtime.json of the web root: the page connects its Mirror through this nginx (w2-062, Mango A2).
+function Write-Runtime([string]$web) {
+    Say ("  " + (Write-TaidaFlowRuntimeJson $web $port))
 }
 
 function Test-Config([string]$exe) {
@@ -279,12 +289,14 @@ function Show-OtherNginx([int[]]$ours) {
 
 switch ($Action) {
     'test' {
+        Read-Config
         $exe = Find-Nginx
         $web = Resolve-WebRoot $null
         $exports = Resolve-ExportDir $null
         Write-Config $web $exports
         $rc = Test-Config $exe
         if ($rc -ne 0) { exit 3 }
+        Write-Runtime $web
         exit 0
     }
     'status' {
@@ -292,7 +304,7 @@ switch ($Action) {
         if ($inst -and -not $portGiven -and $inst.state.port) { $port = [int]$inst.state.port }
         if ($inst) {
             $ours = @([int]$inst.state.pid) + (Get-Workers ([int]$inst.state.pid))
-            Say ("running: master pid {0}, workers {1}, web root {2}, export folder {3}, runtime {4}, REST port {5}" -f $inst.state.pid, ((Get-Workers ([int]$inst.state.pid)) -join ','), $inst.state.webRoot, $inst.state.exportDir, $RuntimeDir, $(if ($inst.state.restPort) { $inst.state.restPort } else { '(not recorded)' }))
+            Say ("running: master pid {0}, workers {1}, web root {2}, export folder {3}, runtime {4}, REST port {5}, Mirror port {6}" -f $inst.state.pid, ((Get-Workers ([int]$inst.state.pid)) -join ','), $inst.state.webRoot, $inst.state.exportDir, $RuntimeDir, $(if ($inst.state.restPort) { $inst.state.restPort } else { '(not recorded)' }), $(if ($inst.state.mirrorPort) { $inst.state.mirrorPort } else { '(not recorded)' }))
         } else {
             $ours = @()
             Say "no nginx started by this script is running (runtime $RuntimeDir)"
@@ -304,6 +316,7 @@ switch ($Action) {
     'start' {
         $inst = Get-OurInstance
         if ($inst) { Say "already running (master pid $($inst.state.pid)) - use -Action reload or stop"; exit 4 }
+        Read-Config
         $exe = Find-Nginx
         $web = Resolve-WebRoot $null
         $exports = Resolve-ExportDir $null
@@ -314,6 +327,7 @@ switch ($Action) {
         }
         Write-Config $web $exports
         if ((Test-Config $exe) -ne 0) { Say 'nginx NOT started'; exit 3 }
+        Write-Runtime $web
         if (Test-Path $pidFile) { Remove-Item -LiteralPath $pidFile -Force }
         $logs = Join-Path $RuntimeDir 'logs'
         # No output redirection on purpose: Start-Process then uses ShellExecute, so nginx does not
@@ -326,7 +340,8 @@ switch ($Action) {
         $state = [ordered]@{
             pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks
             startTime = $p.StartTime.ToString('o'); prefix = (Fwd $RuntimeDir) + '/'; conf = (Fwd $confFile)
-            webRoot = $web; exportDir = $exports; port = $port; restPort = $RestPort
+            webRoot = $web; exportDir = $exports; port = $port; restPort = $RestPort; mirrorPort = $MirrorPort
+            config = $script:cfg.Path
         }
         [System.IO.File]::WriteAllText($stateFile, ($state | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
         $t0 = Get-Date
@@ -356,26 +371,28 @@ switch ($Action) {
         Say "EXPORTDIR=$exports"
         Say "RUNTIME=$RuntimeDir"
         Say "URL=http://<this host's IPv4>:$port/  (-> /TaidaFlowApp.html)  downloads: http://<this host's IPv4>:$port/exports/<file>"
-        Say "(start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=$port so that its download links point here)"
-        Say "REST=http://<this host's IPv4>:$port/api/...  -> 127.0.0.1:$RestPort (the app's RESTManager; the app uses TAIDAFLOW_REST_PORT, default 18080)"
+        Say "MIRROR=ws://<this host's IPv4>:$port/mirror  -> 127.0.0.1:$MirrorPort (the app's Mirror server; runtime.json mirrorPublicPort=$port)"
+        Say "REST=http://<this host's IPv4>:$port/api/...  -> 127.0.0.1:$RestPort (the app's RESTManager)"
+        Say "(the app takes its download-link port and runtime.json from config.json: nginx.enabled true -> nginx.port)"
         exit 0
     }
     'reload' {
         $inst = Get-OurInstance
         if (-not $inst) { Say "no nginx started by this script is running - nothing to reload"; exit 1 }
+        # w2-062: reload re-reads config.json (edit config.json, then reload); options override once.
+        Read-Config
         $oldPort = if ($inst.state.port) { [int]$inst.state.port } else { 8123 }
-        if (-not $portGiven) { $port = $oldPort }
-        elseif ($port -ne $oldPort) {
+        if ($port -ne $oldPort) {
             $busy = @(Show-Listeners)
             if ($busy.Count -gt 0) { Say "port $port is already in use - configuration NOT reloaded (the owner is not stopped)"; exit 4 }
             Say "moving nginx from port $oldPort to $port"
         }
-        if (-not $restPortGiven -and $inst.state.restPort) { $RestPort = [int]$inst.state.restPort }
         $exe = $inst.state.exe
         $web = Resolve-WebRoot $inst.state.webRoot
-        $exports = Resolve-ExportDir $inst.state.exportDir
+        $exports = Resolve-ExportDir $null
         Write-Config $web $exports
         if ((Test-Config $exe) -ne 0) { Say 'configuration NOT reloaded (the running one stays)'; exit 3 }
+        Write-Runtime $web
         $rc = Invoke-Nginx $exe @('-p', $inst.state.prefix, '-c', $inst.state.conf, '-s', 'reload')
         if ($rc -ne 0) { Say "nginx -s reload failed (exit $rc)"; exit 3 }
         $s = $inst.state
@@ -383,8 +400,9 @@ switch ($Action) {
         $s.exportDir = $exports
         if ($s.PSObject.Properties['port']) { $s.port = $port } else { $s | Add-Member -NotePropertyName port -NotePropertyValue $port }
         if ($s.PSObject.Properties['restPort']) { $s.restPort = $RestPort } else { $s | Add-Member -NotePropertyName restPort -NotePropertyValue $RestPort }
+        if ($s.PSObject.Properties['mirrorPort']) { $s.mirrorPort = $MirrorPort } else { $s | Add-Member -NotePropertyName mirrorPort -NotePropertyValue $MirrorPort }
         [System.IO.File]::WriteAllText($stateFile, ($s | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
-        Say "reloaded (master pid $($s.pid), port $port, REST port $RestPort, web root $web, export folder $exports)"
+        Say "reloaded (master pid $($s.pid), port $port, REST port $RestPort, Mirror port $MirrorPort, web root $web, export folder $exports)"
         exit 0
     }
     'stop' {

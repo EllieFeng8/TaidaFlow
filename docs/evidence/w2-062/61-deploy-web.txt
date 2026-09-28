@@ -1,0 +1,12 @@
+﻿qtloader.js                     12354 bytes  -> .gz         4014 bytes (32%)
+qtlogo.svg                       1686 bytes  -> .gz          901 bytes (53%)
+TaidaFlowApp.html               12155 bytes  -> .gz         3874 bytes (32%)
+TaidaFlowApp.js                304976 bytes  -> .gz        70011 bytes (23%)
+TaidaFlowApp.wasm            33847174 bytes  -> .gz     12457087 bytes (37%)
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json -> nginx.enabled True (file), nginx.port 80 (file), mirror.publicPort 8125 (file)
+runtime.json written: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\runtime.json = {"mirrorPublicPort":80,"version":1}
+deployed 5 file(s), 34178345 bytes (+12535887 bytes .gz) from D:\repo\codex\qmlTester\taidaflow\build\wasm-release to D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+no symbolic links / junctions in D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (config.json http.port; restart it if it is running)
+nginx serves them at http://<host>:80/ (config.json nginx.port, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)
+deploy-web exit=0

@@ -1,0 +1,1 @@
+docs: ninja -t deps failed (1)

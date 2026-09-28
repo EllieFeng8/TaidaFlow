@@ -4,18 +4,27 @@
 #   B  foreign listener 127.0.0.201:502       default=3  simulator=3 (right address, wrong process)
 #   C  Adam60xxSimulator --autostart (5/5)    default=3  simulator=0
 #   D  simulator + foreign 127.0.0.1:502      simulator=3 (any other 502 listener is unsafe)
+# w2-062: the probe reads config.json. "default" and "simulator" use -Config (default
+# deploy\dev\config.dev.json: plant addresses, the simulator profile replaces them); the extra column
+# "simcfg" uses -SimConfig (deploy\dev\config.simulator.json: devices configured directly on
+# 127.0.0.201..205, no profile):  A simcfg=5  B simcfg=3  C simcfg=0  D simcfg=3.
 # The foreign listener is a PowerShell TcpListener started (and stopped) by this script; the
 # simulator is started with scripts\run-simulator.ps1 (cwd build\sim-cwd) and closed again.
 # Preconditions: nothing listening on 502/8125 and no Adam60xxSimulator/TaidaFlowApp running;
-# otherwise exit 2 without touching anything. Probe records go to -LogFile.
+# otherwise exit 2 without touching anything. Probe records go to -LogFile
+# (default build\runtime-logs\probe-selftest.log).
 # Exit 0 = every case matched; 1 = a mismatch; 2 = precondition failed.
 param(
     [string]$LogFile = "",
-    [string]$SimulatorExe = ""
+    [string]$SimulatorExe = "",
+    [string]$Config = "",
+    [string]$SimConfig = ""
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-if ($LogFile -eq "") { $LogFile = Join-Path $root 'docs\evidence\wasm-v4-sim\safety-probe.log' }
+if ($LogFile -eq "") { $LogFile = Join-Path $root 'build\runtime-logs\probe-selftest.log' }
+if ($Config -eq "") { $Config = Join-Path $root 'deploy\dev\config.dev.json' }
+if ($SimConfig -eq "") { $SimConfig = Join-Path $root 'deploy\dev\config.simulator.json' }
 $probe = Join-Path $PSScriptRoot 'safety_probe.ps1'
 
 $pre = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 502, 8125 })
@@ -28,8 +37,9 @@ if ($pre.Count -or $procs.Count) {
 $results = New-Object System.Collections.Generic.List[string]
 $fail = $false
 function Invoke-Probe([string]$case, [string]$prof, [int]$expect) {
-    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $probe, '-Reason', "w2-029 probe self-test $case profile=$prof", '-LogFile', $LogFile)
+    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $probe, '-Reason', "probe self-test $case profile=$prof", '-LogFile', $LogFile)
     if ($prof -eq 'simulator') { $a += @('-DeviceProfile', 'simulator') }
+    $a += @('-Config', $(if ($prof -eq 'simcfg') { $SimConfig } else { $Config }))
     $out = & powershell @a
     $rc = $LASTEXITCODE
     $verdict = ($out | Where-Object { $_ -match 'verdict:' } | Select-Object -Last 1).Trim()
@@ -52,11 +62,13 @@ $foreign = $null; $sim = $null
 try {
     Invoke-Probe 'A' 'default' 0
     Invoke-Probe 'A' 'simulator' 5
+    Invoke-Probe 'A' 'simcfg' 5
 
     $foreign = Start-Foreign '127.0.0.201'
     $results.Add("     (B: foreign listener powershell pid $($foreign.Id) on 127.0.0.201:502)")
     Invoke-Probe 'B' 'default' 3
     Invoke-Probe 'B' 'simulator' 3
+    Invoke-Probe 'B' 'simcfg' 3
     Stop-Process -Id $foreign.Id -Force; $foreign.WaitForExit(); $foreign = $null
     Start-Sleep -Milliseconds 500
 
@@ -76,10 +88,12 @@ try {
     $results.Add("     (C: $simOut)")
     Invoke-Probe 'C' 'default' 3
     Invoke-Probe 'C' 'simulator' 0
+    Invoke-Probe 'C' 'simcfg' 0
 
     $foreign = Start-Foreign '127.0.0.1'
     $results.Add("     (D: foreign listener powershell pid $($foreign.Id) on 127.0.0.1:502 next to the simulator)")
     Invoke-Probe 'D' 'simulator' 3
+    Invoke-Probe 'D' 'simcfg' 3
 } catch {
     $fail = $true
     $results.Add("ERROR: $($_.Exception.Message)")

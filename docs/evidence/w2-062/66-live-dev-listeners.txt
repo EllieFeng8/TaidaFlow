@@ -1,0 +1,18 @@
+﻿== nginx started like 'cd build\desktop\nginx ; start nginx' (pid 100232)
+TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       130156
+TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       138888
+TCP    0.0.0.0:8124           0.0.0.0:0              LISTENING       138888
+TCP    0.0.0.0:8125           0.0.0.0:0              LISTENING       138888
+TCP    127.0.0.1:18080        0.0.0.0:0              LISTENING       138888
+TCP    127.0.0.1:18125        0.0.0.0:0              LISTENING       138888
+TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       83784
+TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       83784
+TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       83784
+TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       83784
+TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       83784
+Adam60xxSimulator pid=83784 path=D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe
+nginx pid=100232 path=D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe
+nginx pid=130156 path=D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe
+TaidaFlowApp pid=138888 path=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+app closed via CloseMainWindow: exited=False exit=; cd build\desktop\nginx ; nginx -s quit rc=0 ; nginx left: 0; listeners left: 0
+app process after close: 0 running; log ends with '[ModbusServer] stopped' (clean shutdown)

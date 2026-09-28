@@ -1,0 +1,8 @@
+build\wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=34103892 commands=567
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+docs: ninja -t commands failed (1)
+check_wasm_backend exit=1

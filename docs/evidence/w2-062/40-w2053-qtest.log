@@ -1,0 +1,378 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:12 char:3
++   cmd /c "$($s[1]) < nul" *> "$E\$($s[0]).log"
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (2.8s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest
+[1/9] Running qmlimportscanner for tst_w2053_di_restart
+[2/9] Automatic MOC and UIC for target tst_w2053_di_restart
+[3/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[4/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[5/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\tst_w2053_di_restart_autogen\mocs_compilation.cpp.obj
+[6/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[7/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\D_\repo\codex\qmlTester\taidaflow\Core\manager.cpp.obj
+[8/9] Building CXX object CMakeFiles\tst_w2053_di_restart.dir\tst_w2053_di_restart.cpp.obj
+[9/9] Linking CXX executable tst_w2053_di_restart.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2053_di_restart
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-053-qtest\tst_w2053_di_restart.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest
+1: Test timeout computed to be: 600
+1: ********* Start testing of TestW2053DiRestart *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2053DiRestart::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/settings_schema.sql"
+1: QWARN  : TestW2053DiRestart::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::initTestCase() w2-053 data folder: D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data months 202609 202608 202607
+1: PASS   : TestW2053DiRestart::initTestCase()
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.1 ms)
+1: QWARN  : TestW2053DiRestart::noPreviousRow() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [SQL] Alarm inserted: sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` id=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 3.04 ms
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 0.02 ms
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::noPreviousRow() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.12 ms
+1: PASS   : TestW2053DiRestart::noPreviousRow()
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.4 ms)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QWARN  : TestW2053DiRestart::previousRowStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [SQL] Alarm inserted: sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` id=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 5.36 ms
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202609 2026-09-28 21:56:34) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI1 still in alarm: took over id=1 (2026-09-28 21:56:34) as the active alarm row; no new row.
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 0.84 ms
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowStillAbnormal() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.82 ms
+1: PASS   : TestW2053DiRestart::previousRowStillAbnormal()
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.1 ms)
+1: QWARN  : TestW2053DiRestart::previousRowNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [SQL] Alarm inserted: sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` id=1
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 2.91 ms
+1: QWARN  : TestW2053DiRestart::previousRowNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::previousRowNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 1 id=2(202609 2026-09-01 00:05:00) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI0 resolving id=2 (2026-09-01 00:05:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [SQL] Alarm resolved: id=2 sensor=DI0 message=�ۦ첧�`�]DI0=0�^ status=���` detail=�ۦ첧�` �Ѱ��]���ҫ�Ū�� DI0=1�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202609 2026-09-28 21:56:34) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI1 resolving id=1 (2026-09-28 21:56:34): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202608 2026-08-01 00:30:00) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [Alarm][Restart] DI2 resolving id=1 (2026-08-01 00:30:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [SQL] Alarm resolved: id=1 sensor=DI2 message=�ɤ�� OL�]DI2=1�^ status=���` detail=�ɤ�� OL �Ѱ��]���ҫ�Ū�� DI2=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 7.02 ms
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::previousRowNowNormal() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.03 ms
+1: PASS   : TestW2053DiRestart::previousRowNowNormal()
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsStillAbnormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 3 id=2(202609 2026-09-01 00:20:00) id=1(202609 2026-09-01 00:10:00) id=1(202608 2026-08-01 00:40:00) (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI1 still in alarm: took over id=2 (2026-09-01 00:20:00) as the active alarm row; no new row.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI1 resolving id=1 (2026-09-01 00:10:00): older duplicate of the taken-over row.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI1 resolving id=1 (2026-08-01 00:40:00): older duplicate of the taken-over row.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=1�A�� id=2 ����^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=1�A�� id=2 ����^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 4.69 ms
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [SQL] Alarm resolved: id=2 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::multipleOldRowsStillAbnormal() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.20 ms
+1: PASS   : TestW2053DiRestart::multipleOldRowsStillAbnormal()
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QWARN  : TestW2053DiRestart::multipleOldRowsNowNormal() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 3 id=2(202609 2026-09-01 00:20:00) id=1(202609 2026-09-01 00:10:00) id=1(202608 2026-08-01 00:40:00) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI1 resolving id=2 (2026-09-01 00:20:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI1 resolving id=1 (2026-09-01 00:10:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI1 resolving id=1 (2026-08-01 00:40:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [SQL] Alarm resolved: id=2 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::multipleOldRowsNowNormal() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 7.03 ms
+1: PASS   : TestW2053DiRestart::multipleOldRowsNowNormal()
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.1 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.68 ms
+1: QWARN  : TestW2053DiRestart::checkRunsOncePerStart() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.03 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 0.01 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202609 2026-09-01 01:00:00) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI1 resolving id=1 (2026-09-01 01:00:00): the DI reads normal after the restart.
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:34
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::checkRunsOncePerStart() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.76 ms
+1: PASS   : TestW2053DiRestart::checkRunsOncePerStart()
+1: QWARN  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202609 2026-09-01 00:15:00) (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Alarm][Restart] DI1 resolving id=1 (2026-09-01 00:15:00): the DI reads normal after the restart.
+1: QWARN  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [SQL] Resolve alarm failed: id=1 sensor=DI1 (database is locked Unable to fetch row); will retry on the next poll.
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.5 ms)
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 5484.91 ms
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]���ҫ�Ū�� DI1=0�^ resolvedAt=2026-09-28 21:56:40
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::resolveRetriedAfterWriteFailure() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.85 ms
+1: PASS   : TestW2053DiRestart::resolveRetriedAfterWriteFailure()
+1: QWARN  : TestW2053DiRestart::lookupRetriedAfterReadFailure() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-053-qtest/work/run-DWswkW/data_schema.sql"
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device profile=simulator
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.201 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.202 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.203 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.204 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1 timeout=1000ms retries=2 (configured host 192.168.1.205 replaced by TAIDAFLOW_DEVICE_PROFILE=simulator)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+1: QWARN  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI0 lookup of unresolved rows from earlier runs failed (attempt 1/5, 7330.5 ms): database is locked Unable to fetch row (202608); retrying on the next poll, no new DI0 row until then.
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI1 lookup deferred to the next poll (a lookup failed 0 ms ago); no new DI1 row until then.
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Leak] ADAM-6224 DI1=1 -> leakDetectedPv=true
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI2 lookup deferred to the next poll (a lookup failed 0 ms ago); no new DI2 row until then.
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 7330.60 ms
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [w2-053 test] poll with the locked file took 7330 ms
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.6 ms)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI1 first read after start: DI1=1 (alarm active); unresolved ���` rows from earlier runs in 202609+202608: 1 id=1(202609 2026-09-01 00:15:00) (lookup 0.3 ms)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI1 still in alarm: took over id=1 (2026-09-01 00:15:00) as the active alarm row; no new row.
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=1
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved ���` rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [w2-053 test] fed DI0=1 DI1=1 DI2=0, handled in 1.31 ms
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [SQL] Alarm resolved: id=1 sensor=DI1 message=�|�G�˥X�]DI1=1�^ status=���` detail=�|�G�˥X �Ѱ��]DI1=0�^ resolvedAt=2026-09-28 21:56:48
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+1: QINFO  : TestW2053DiRestart::lookupRetriedAfterReadFailure() [w2-053 test] fed DI0=1 DI1=0 DI2=0, handled in 2.51 ms
+1: PASS   : TestW2053DiRestart::lookupRetriedAfterReadFailure()
+1: QWARN  : TestW2053DiRestart::cleanupTestCase() QTemporaryDir: Unable to remove "D:\\repo\\codex\\qmlTester\\taidaflow\\build\\w2-053-qtest\\work\\run-DWswkW" most likely due to the presence of read-only files.
+1: PASS   : TestW2053DiRestart::cleanupTestCase()
+1: Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 14106ms
+1: ********* Finished testing of TestW2053DiRestart *********
+1/1 Test #1: tst_w2053_di_restart .............   Passed   14.78 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  14.78 sec
+40-w2053-qtest exit=0 seconds=24

@@ -19,17 +19,27 @@
 # The same folder is served by nginx on port 80 (scripts\nginx-start.ps1; -Port for another port) - run scripts\nginx-web.ps1
 # -Action reload (or stop + start) after deploying while nginx runs; ETag revalidation picks up the
 # new files anyway.
+#   5. (w2-062, spec section 3) writes <exe folder>\web\runtime.json = {"mirrorPublicPort":<port>,
+#      "version":1} from config.json: nginx.enabled ? nginx.port : mirror.publicPort (Mango A2: with
+#      nginx the page reaches the Mirror through nginx /mirror). Never gzipped (.gz would be stale:
+#      the app rewrites the file at every start). Config file: -Config, else TAIDAFLOW_CONFIG, else
+#      <exe folder>\config.json when it exists, else (the repository's build\desktop)
+#      deploy\dev\config.dev.json; -NoConfig = the app's default values (used for the package,
+#      which must not depend on the development configuration). No config.json is ever created.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1
-#            [-Source build\wasm-release] [-ExeDir build\desktop] [-NoGzip]
-# Exit 0 = deployed; 2 = source incomplete / exe folder missing; 5 = symbolic link / junction found
-# (old folder not removed, or the new folder holds one - do not serve it).
+#            [-Source build\wasm-release] [-ExeDir build\desktop] [-NoGzip] [-Config <config.json> | -NoConfig]
+# Exit 0 = deployed; 2 = source incomplete / exe folder missing / config.json unusable; 5 = symbolic
+# link / junction found (old folder not removed, or the new folder holds one - do not serve it).
 param(
     [string]$Source = "",
     [string]$ExeDir = "",
-    [switch]$NoGzip
+    [switch]$NoGzip,
+    [string]$Config = "",
+    [switch]$NoConfig
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'taidaflow-config.ps1')
 if ($Source -eq "") { $Source = Join-Path $root 'build\wasm-release' }
 if ($ExeDir -eq "") { $ExeDir = Join-Path $root 'build\desktop' }
 if (-not [System.IO.Path]::IsPathRooted($Source)) { $Source = Join-Path $root $Source }
@@ -45,6 +55,17 @@ if (-not (Test-Path $ExeDir -PathType Container)) {
     Write-Output "exe folder not found: $ExeDir (build first: scripts\build-desktop.bat)"
     exit 2
 }
+$ExeDir = [System.IO.Path]::GetFullPath($ExeDir).TrimEnd('\')
+$appExe = Join-Path $ExeDir 'TaidaFlowApp.exe'
+# config.json for runtime.json (read only, never created here).
+if ($NoConfig) { $configPath = Join-Path ([System.IO.Path]::GetTempPath()) ('taidaflow-no-config-' + [guid]::NewGuid().ToString('N') + '\config.json') }
+elseif ($Config -ne '') { $configPath = Resolve-TaidaFlowConfigPath $root $Config }
+elseif ($env:TAIDAFLOW_CONFIG) { $configPath = Resolve-TaidaFlowConfigPath $root '' }
+elseif (Test-Path (Join-Path $ExeDir 'config.json') -PathType Leaf) { $configPath = Join-Path $ExeDir 'config.json' }
+else { $configPath = Resolve-TaidaFlowConfigPath $root '' }
+$cfg = Get-TaidaFlowConfig -Path $configPath -Exe $appExe
+if ($cfg.Error) { Write-Output "config.json unusable: $($cfg.Error)"; exit 2 }
+$configShown = if ($NoConfig) { '(-NoConfig: the app defaults)' } elseif ($cfg.Exists) { $configPath } else { "$configPath (does not exist: the app defaults)" }
 
 # Symbolic links / junctions anywhere below (or at) a folder; links are not followed.
 function Find-ReparsePoints([string]$dir) {
@@ -78,7 +99,9 @@ New-Item -ItemType Directory -Force $web | Out-Null
 
 $copyTypes = '.html', '.js', '.mjs', '.wasm', '.css', '.json', '.svg', '.png', '.ico'
 $gzipTypes = '.html', '.js', '.mjs', '.wasm', '.css', '.json', '.svg'
-$files = @(Get-ChildItem -LiteralPath $Source -File | Where-Object { $copyTypes -contains $_.Extension.ToLowerInvariant() })
+# runtime.json of the source (the app may have written one into build\wasm-release, its development
+# web folder) is not copied: it is written below from config.json.
+$files = @(Get-ChildItem -LiteralPath $Source -File | Where-Object { $copyTypes -contains $_.Extension.ToLowerInvariant() -and $_.Name -ne 'runtime.json' })
 $total = 0; $totalGz = 0
 foreach ($f in $files) {
     $dst = Join-Path $web $f.Name
@@ -103,6 +126,11 @@ foreach ($f in $files) {
     }
     Write-Output $line
 }
+$pagePort = Get-TaidaFlowPagePort $cfg
+Write-Output ("config.json: {0} -> nginx.enabled {1} ({2}), nginx.port {3} ({4}), mirror.publicPort {5} ({6})" -f $configShown,
+              $cfg.Values['nginx.enabled'], $cfg.Sources['nginx.enabled'], $cfg.Values['nginx.port'], $cfg.Sources['nginx.port'],
+              $cfg.Values['mirror.publicPort'], $cfg.Sources['mirror.publicPort'])
+Write-Output (Write-TaidaFlowRuntimeJson $web $pagePort)
 $links = Find-ReparsePoints $web
 if ($links.Count -gt 0) {
     Write-Output "REFUSED: the deployed folder $web holds $($links.Count) symbolic link(s) / junction(s) - do not serve it:"
@@ -111,6 +139,6 @@ if ($links.Count -gt 0) {
 }
 Write-Output ("deployed {0} file(s), {1} bytes (+{2} bytes .gz) from {3} to {4}" -f $files.Count, $total, $totalGz, $Source, $web)
 Write-Output "no symbolic links / junctions in $web"
-Write-Output "the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)"
-Write-Output "nginx serves them at http://<host>/ (port 80, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)"
+Write-Output "the desktop app serves them at http://<host>:$($cfg.Values['http.port'])/TaidaFlowApp.html (config.json http.port; restart it if it is running)"
+Write-Output "nginx serves them at http://<host>:$($cfg.Values['nginx.port'])/ (config.json nginx.port, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)"
 exit 0

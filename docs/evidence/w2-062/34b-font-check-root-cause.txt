@@ -1,0 +1,5 @@
+Pre-existing at HEAD 85c6406 (main ec48140 added App/appconfig.cpp dialog text without regenerating App/fonts):
+git diff HEAD -- App  -> empty (w2-062 changes nothing in App)
+git show HEAD:App/fonts/charset.txt | grep -c 刪 -> 0
+HEAD:App/appconfig.cpp:573:    return QStringLiteral("設定檔 config.json 無法讀取,程式即將結束。\n\n"
+HEAD:App/appconfig.cpp:577:                          "請修正 config.json 或刪除它讓程式重建預設值。")

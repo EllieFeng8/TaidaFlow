@@ -58,6 +58,11 @@ public:
         // so a rebuilt page never mixes old and new HTML/JS/WASM.
         QByteArray htmlCacheControl = QByteArrayLiteral("no-cache");
         QByteArray cacheControl = QByteArrayLiteral("no-cache");
+        // Cache-Control for single file names (lower-case file name without folder -> value),
+        // overriding the two values above, e.g. {"runtime.json", "no-store"} for a file that
+        // the application rewrites at every start.  The file is still served as a normal
+        // static file (MIME type, ETag, gzip variant rules unchanged).
+        QHash<QString, QByteArray> fileCacheControl;
         // Path segments starting with '.' (".git", ".env") are answered 404 unless true.
         bool allowHiddenFiles = false;
         // Only files with one of these suffixes (lower-case, without the dot, e.g. "html",

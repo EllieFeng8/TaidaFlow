@@ -1,0 +1,43 @@
+﻿=== safety probe 2026-09-28T22:01:06.869+08:00 reason="before launch: verify-desktop-startup (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 [effective devices.adam6256 (file)] -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 [effective devices.adam6217a (file)] -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 [effective devices.adam6217b (file)] -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 [effective devices.adam6224 (file)] -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 [effective devices.adam6022 (file)] -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 502=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SAFE
+PID=86224 CONFIG=D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json DATADIR=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\verify-startup.log
+[Config] config file D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json)
+[Config] unknown key "nginx.exe" ignored
+[Config] configuration source: TAIDAFLOW_CONFIG
+[Config]   version = 1 (file)
+[Config]   dataDir = "../../build/runtime-cwd" (file)
+[Config]   devices.adam6256.host = "192.168.1.201" (file)
+[Config]   devices.adam6256.port = 502 (file)
+[Config]   devices.adam6256.unitId = 1 (file)
+[Config]   devices.adam6217a.host = "192.168.1.202" (file)
+[Config]   devices.adam6217a.port = 502 (file)
+[Config]   devices.adam6217a.unitId = 1 (file)
+[Config]   devices.adam6217b.host = "192.168.1.203" (file)
+[Config]   devices.adam6217b.port = 502 (file)
+[Config]   devices.adam6217b.unitId = 1 (file)
+[Config]   devices.adam6224.host = "192.168.1.204" (file)
+[Config]   devices.adam6224.port = 502 (file)
+[Config]   devices.adam6224.unitId = 1 (file)
+[Config]   devices.adam6022.host = "192.168.1.205" (file)
+[Config]   devices.adam6022.port = 502 (file)
+[Config]   devices.adam6022.unitId = 1 (file)
+[Config]   devices.ms300.serialPort = "COM2" (file)
+[Config]   devices.ms300.baudRate = 9600 (file)
+[Config]   devices.ms300.dataBits = 8 (file)
+[Config]   devices.ms300.parity = "none" (file)
+[Config]   devices.ms300.stopBits = 1 (file)
+app_pid=86224 config_lines=True endpoint_line=True relay_line=True modbus_server_line=True http_service_line=True web_dir_line=True page_status=200 runtime_json=True({"mirrorPublicPort":80,"version":1}/cache-control: no-store) rest_line=True rest_status=200 listening_rest_app=True listening_internal_18125_app=True listening_public_8125_app=True listening_server_502_app=True listening_http_8124_app=True wm_close_sent=True app_exit_code=0 listeners_left=0
+verify-desktop-startup exit=0

@@ -1,0 +1,16 @@
+﻿config.json       : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\config.json (missing - start-taidaflow.ps1 creates it with the defaults)
+  config: config.json D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\config.json does not exist - the default values are used (the application creates the file at its first start)
+  settings used at each start: data folder C:\TaidaFlowData, nginx on (port 80, nginx\nginx.exe), devices 192.168.1.201, 192.168.1.202, 192.168.1.203, 192.168.1.204, 192.168.1.205
+scheduled task definition (registered only without -WhatIf):
+  name              : \TaidaFlow
+  description       : TaidaFlow field start at logon of LAPTOP-0B3CPPED\TED (start-taidaflow.ps1, data folder C:\TaidaFlowData). Registered by register-autostart.ps1; remove with unregister-autostart.ps1.
+  trigger           : at log on of LAPTOP-0B3CPPED\TED, delay PT30S
+  run as            : LAPTOP-0B3CPPED\TED, logon type Interactive (only when the user is logged on - the HMI window needs the desktop), run level Limited
+  action execute    : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  action arguments  : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty\start-taidaflow.ps1"
+  working directory : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-85c6406-dirty
+  settings          : MultipleInstances=IgnoreNew ExecutionTimeLimit=PT10M StartWhenAvailable=True DisallowStartIfOnBatteries=False StopIfGoingOnBatteries=False
+  existing task     : none
+What if: Performing the operation "Register-ScheduledTask" on target "\TaidaFlow (Task Scheduler, user LAPTOP-0B3CPPED\TED)".
+-WhatIf: NOTHING registered.
+register-autostart -WhatIf exit=0

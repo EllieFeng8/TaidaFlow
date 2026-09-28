@@ -1,74 +1,83 @@
 # =====================================================================================
-#  TaidaFlow - FIELD (production machine) start script.            (w2-057)
+#  TaidaFlow - FIELD (production machine) start script.            (w2-057, w2-062)
 #
 #  !!! THIS SCRIPT IS FOR THE PLANT. IT CONNECTS TO REAL EQUIPMENT. !!!
-#  TaidaFlowApp.exe connects to the five ADAM modules at 192.168.1.201..205:502 and WRITES
-#  DO/AO (pumps, valves, VFD, emergency-stop circuit), opens COM2 (MS300 inverter, Modbus RTU)
-#  and runs a Modbus TCP server on 0.0.0.0:502 for the external HMI.
-#  Its REST API (w2-060, 127.0.0.1:<RestPort>, on the LAN http://<IP>/api/... through nginx) can
-#  change settings (PUT) - no access control (intranet).
-#  Unlike the development script scripts\run-desktop.ps1 it does NOT run the development
-#  safety probe (scripts\safety_probe.ps1 refuses exactly the plant situation on purpose).
-#  Never run this on a development PC that can reach 192.168.1.201..205; there use
-#  scripts\run-desktop.ps1 from the repository instead. The two sets of scripts must not be mixed.
+#  TaidaFlowApp.exe connects to the five ADAM modules of config.json (devices.adam*, plant default
+#  192.168.1.201..205:502) and WRITES DO/AO (pumps, valves, VFD, emergency-stop circuit), opens the
+#  MS300 serial port (devices.ms300, COM2) and runs a Modbus TCP server (modbusServer, 0.0.0.0:502)
+#  for the external HMI. Its REST API (rest, 127.0.0.1:18080; on the LAN http://<IP>/api/... through
+#  nginx) can change settings (PUT) - no access control (intranet).
+#  Unlike the development script scripts\run-desktop.ps1 it does NOT run the development safety
+#  probe (scripts\safety_probe.ps1 refuses exactly the plant situation on purpose). Never run this on
+#  a development PC that can reach the plant devices; there use scripts\run-desktop.ps1 from the
+#  repository. The two sets of scripts must not be mixed.
 # =====================================================================================
+#
+# w2-062: ALL settings come from config.json (docs/taidaflow_config_spec.md), by default the file next
+# to TaidaFlowApp.exe in this folder. The same file is used by the app (TAIDAFLOW_CONFIG is set to it),
+# by the nginx configuration (scripts\install-nginx-config.ps1) and by stop-taidaflow.ps1. A missing config.json is created with
+# the defaults by  TaidaFlowApp.exe --write-default-config <path>  (never overwritten; a package never
+# contains one, so an update keeps the plant's file). A config.json that is not valid JSON: nothing is
+# started (exit 2), the file is not changed - fix it or delete it to get the defaults again.
 #
 # Usage (from the installation folder, e.g. C:\TaidaFlow\TaidaFlow-<date>-<hash>):
 #   powershell -NoProfile -ExecutionPolicy Bypass -File start-taidaflow.ps1
-#       [-DataDir <folder>] [-LogDir <folder>] [-UseNginx [-Port 80]] [-Nginx <nginx.exe or folder>]
-#       [-RestPort 18080] [-AppLog quiet|full] [-KeepLogDays 30] [-StartTimeoutSec 60]
+#       [-Config <config.json>] [-LogDir <folder>] [-AppLog quiet|full] [-KeepLogDays 30] [-StartTimeoutSec 60]
+#       one-time overrides of config.json (this start only; the file is not changed):
+#       [-DataDir <folder>] [-UseNginx | -NoNginx] [-Port <nginx port>] [-RestPort <port>] [-Nginx <nginx.exe or folder>]
 #
-#   -DataDir     : working directory of the app (default <installation folder>\runtime).
-#                  The app writes TaidaFlowSettings.ini, settings.sqlite, data\sensor_YYYYMM.sqlite
-#                  and exports\ there. Keep it OUTSIDE the installation folder for easy updates,
-#                  e.g. D:\TaidaFlowData. Created when missing; must be writable.
-#   -LogDir      : log folder (default <DataDir>\logs): launcher.log (this script and
+#   -Config      : another config.json (default <installation folder>\config.json).
+#   -DataDir     : data folder instead of config.json dataDir (default C:\TaidaFlowData). The app works
+#                  there: TaidaFlowSettings.ini, settings.sqlite, data\sensor_YYYYMM.sqlite, exports\;
+#                  this script adds logs\. Created when missing; must be writable.
+#   -LogDir      : log folder (default <data folder>\logs): launcher.log (this script and
 #                  stop-taidaflow.ps1) and one taidaflow-<yyyyMMdd-HHmmss>.log per app start.
-#   -UseNginx    : also start nginx on 0.0.0.0:<Port> (web page + CSV downloads with resume) and
-#                  start the app with TAIDAFLOW_DOWNLOAD_PORT=<Port>. Without it the download links
-#                  use the app's own port 8124.
-#   -Port        : nginx port (default 80: http://<IP>/ ; e.g. -Port 8123 for the former port).
-#                  Only used with -UseNginx. nginx: <installation folder>\nginx\nginx.exe when
-#                  the package contains it, otherwise -Nginx / TAIDAFLOW_NGINX / C:\tools\nginx.
-#                  nginx runtime folder (config, logs, pid): <DataDir>\nginx.
-#   -RestPort    : internal port of the app's REST API (RESTManager, 127.0.0.1 only; default 18080).
-#                  The app gets it as TAIDAFLOW_REST_PORT, nginx proxies http://<IP>/api/ to it.
-#   -AppLog      : quiet (default) = only warnings and errors of the app go to the log (the app
-#                  logs every Modbus read at info level: measured about 15 MB per hour);
-#                  full = everything (for troubleshooting, watch the disk).
+#   -UseNginx / -NoNginx, -Port, -RestPort, -Nginx : override nginx.enabled, nginx.port, rest.port,
+#                  nginx.exe. The app gets the overrides through a generated complete copy of the
+#                  configuration, <data folder>\config.effective.json (TAIDAFLOW_CONFIG points to it;
+#                  it is rewritten at every start that needs it and is never read by anyone else).
+#   -AppLog      : quiet (default) = only warnings and errors of the app go to the log (the app logs
+#                  every Modbus read at info level: measured about 15 MB per hour); full = everything.
 #   -KeepLogDays : app logs (taidaflow-*.log) older than this are deleted at start (0 = keep all).
 #
 # What it does:
-#   1. Refuses to start (exit 4, nothing started, nothing stopped) when a TaidaFlowApp process is
-#      already running or a port is already in use: 502 (Modbus server), 8124 (web + downloads),
-#      8125 (web mirror relay), 18125 (internal mirror), the REST port (18080) and, with -UseNginx,
-#      the nginx port (80).
-#      For every busy port the owner is listed (pid 4 "System" = Windows HTTP.sys, e.g. IIS / WinRM /
-#      a URL reservation; see DEPLOY.md). Programs of other people are never stopped.
-#   2. Cleans the environment of the app: TAIDAFLOW_DEVICE_PROFILE (test mode) is ALWAYS removed,
-#      TAIDAFLOW_REST_PORT is set to -RestPort, TAIDAFLOW_WEB_DIR is removed (the page is always
-#      <installation folder>\web), Qt variables (QT_PLUGIN_PATH, QML_IMPORT_PATH, ...) are removed
-#      and PATH = installation folder + the system PATH without any folder holding Qt6Core.dll.
-#      The Qt DLLs, plugins and QML modules come from the installation folder only.
-#   3. (-UseNginx) starts nginx through scripts\nginx-web.ps1 (web root <installation folder>\web,
-#      export folder <DataDir>\exports, /api/ -> 127.0.0.1:<RestPort>). If nginx cannot start, the app is still started, with
-#      download links on 8124, and the script ends with exit 8.
-#   4. Starts TaidaFlowApp.exe in <DataDir>, stderr -> <LogDir>\taidaflow-<time>.log, and waits
-#      until the app listens on 8124 and 8125 (502, 18125 and the REST port are reported too).
-#   5. Writes <DataDir>\taidaflow-app.json (pid, image, start time) for stop-taidaflow.ps1.
+#   1. Reads config.json (creates it when missing). Refuses to start (exit 4, nothing started,
+#      nothing stopped) when a TaidaFlowApp process is already running or a port of config.json is
+#      already in use: modbusServer.port, http.port, mirror.publicPort, mirror.internalPort,
+#      rest.port and, with nginx.enabled, nginx.port. For every busy port the owner is listed (pid 4
+#      "System" = Windows HTTP.sys, e.g. IIS / WinRM / a URL reservation). Programs of other people are
+#      never stopped.
+#   2. Cleans the environment of the app: TAIDAFLOW_DEVICE_PROFILE (test mode) is ALWAYS removed, as
+#      are TAIDAFLOW_WEB_DIR (the page is always <installation folder>\web), TAIDAFLOW_DOWNLOAD_PORT,
+#      TAIDAFLOW_REST_PORT (no longer used), Qt variables (QT_PLUGIN_PATH, QML_IMPORT_PATH, ...);
+#      PATH = installation folder + the system PATH without any folder holding Qt6Core.dll.
+#   3. (nginx.enabled; Mango A6/A7/A9) nginx = config.json nginx.exe (default nginx\nginx.exe, the one
+#      bundled in this folder). Its conf\nginx.conf is checked with scripts\install-nginx-config.ps1
+#      -IfChanged: missing, written for another installation folder / config.json, or changed -> it is
+#      regenerated (old file kept as nginx.conf.prev-<time> / .orig-<time>) and a running nginx gets
+#      "nginx -s reload". A running nginx is left as it is; otherwise it is started exactly like
+#      "cd <nginx folder>" + "start nginx" (no arguments). stop-taidaflow.ps1 does NOT stop nginx
+#      ("nginx -s quit" in its folder). If nginx is not available, the app is still started with
+#      nginx.enabled=false (download links and runtime.json then use http.port / mirror.publicPort of
+#      the app itself) and the script ends with exit 8.
+#   4. Starts TaidaFlowApp.exe in the data folder, stderr -> <LogDir>\taidaflow-<time>.log, and waits
+#      until the app listens on http.port and mirror.publicPort (the others are reported too).
+#   5. Writes <data folder>\taidaflow-app.json (pid, image, start time) for stop-taidaflow.ps1.
 #
-# Exit codes: 0 started; 2 package incomplete / folder not usable; 4 refused (already running or
-# port in use); 6 the app exited during start-up, or 8124/8125 not listening in time (the app is
-# left running if it is alive - see the log); 8 app started but nginx did not (links use 8124).
+# Exit codes: 0 started; 2 package incomplete / folder not usable / config.json unusable; 4 refused
+# (already running or port in use); 6 the app exited during start-up, or its ports were not listening
+# in time (the app is left running if it is alive - see the log); 8 app started but nginx did not.
 param(
+    [string]$Config = "",
     [string]$DataDir = "",
     [string]$LogDir = "",
     [switch]$UseNginx,
+    [switch]$NoNginx,
     [ValidateRange(1, 65535)]
     [int]$Port = 80,
-    [string]$Nginx = "",
     [ValidateRange(1, 65535)]
     [int]$RestPort = 18080,
+    [string]$Nginx = "",
     [ValidateSet('quiet', 'full')]
     [string]$AppLog = 'quiet',
     [int]$KeepLogDays = 30,
@@ -78,28 +87,71 @@ $ErrorActionPreference = 'Stop'
 $install = [System.IO.Path]::GetFullPath($PSScriptRoot).TrimEnd('\')
 $exe = Join-Path $install 'TaidaFlowApp.exe'
 $webRoot = Join-Path $install 'web'
-
 function Full([string]$p) {
     if (-not [System.IO.Path]::IsPathRooted($p)) { $p = Join-Path $install $p }
     return [System.IO.Path]::GetFullPath($p).TrimEnd('\')
 }
-if ($DataDir -eq "") { $DataDir = Join-Path $install 'runtime' }
-$DataDir = Full $DataDir
-if ($LogDir -eq "") { $LogDir = Join-Path $DataDir 'logs' }
-$LogDir = Full $LogDir
-$nginxRuntime = Join-Path $DataDir 'nginx'
-$stateFile = Join-Path $DataDir 'taidaflow-app.json'
-
 $script:launcherLog = $null
+$script:pending = New-Object System.Collections.Generic.List[string]
 function Log([string]$m) {
     $line = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss') + ' [start] ' + $m
     [Console]::Out.WriteLine($line)
     if ($script:launcherLog) {
         try { [System.IO.File]::AppendAllText($script:launcherLog, $line + "`r`n", (New-Object System.Text.UTF8Encoding($false))) } catch { }
-    }
+    } else { $script:pending.Add($line) }
 }
 
-# --- folders ------------------------------------------------------------------------
+$helper = Join-Path $install 'scripts\taidaflow-config.ps1'
+if (-not (Test-Path $exe -PathType Leaf) -or -not (Test-Path $helper -PathType Leaf)) {
+    [Console]::Out.WriteLine("ERROR: $exe or $helper not found - incomplete package"); exit 2
+}
+foreach ($required in 'Qt6Core.dll', 'Qt6Quick.dll', 'platforms\qwindows.dll', 'qml\QtQuick\qmldir') {
+    if (-not (Test-Path (Join-Path $install $required))) { [Console]::Out.WriteLine("ERROR: $required missing in $install - incomplete package"); exit 2 }
+}
+. $helper
+if ($UseNginx -and $NoNginx) { [Console]::Out.WriteLine("ERROR: -UseNginx and -NoNginx together"); exit 2 }
+
+# --- environment of the app (also for the --write-default-config call below) -------------------
+$envNotes = New-Object System.Collections.Generic.List[string]
+foreach ($v in 'TAIDAFLOW_DEVICE_PROFILE', 'TAIDAFLOW_WEB_DIR', 'TAIDAFLOW_DOWNLOAD_PORT', 'TAIDAFLOW_REST_PORT', 'TAIDAFLOW_CONFIG',
+               'QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH', 'QML_IMPORT_PATH', 'QML2_IMPORT_PATH',
+               'QT_DEBUG_PLUGINS', 'QT_LOGGING_CONF', 'QT_QPA_PLATFORM') {
+    if (Test-Path "Env:\$v") {
+        $envNotes.Add("environment: removed $v (was '$((Get-Item "Env:\$v").Value)')")
+        Remove-Item "Env:\$v"
+    }
+}
+$kept = New-Object System.Collections.Generic.List[string]
+foreach ($entry in ($env:PATH -split ';')) {
+    $e = $entry.Trim()
+    if ($e -eq '') { continue }
+    $hasQt = $false
+    try { $hasQt = Test-Path -LiteralPath (Join-Path $e 'Qt6Core.dll') } catch { $hasQt = $false }
+    if ($hasQt) { $envNotes.Add("environment: PATH entry removed (holds Qt6Core.dll): $e"); continue }
+    $kept.Add($e)
+}
+$env:PATH = $install + ';' + ($kept -join ';')
+
+# --- config.json ------------------------------------------------------------------------------
+$configPath = if ($Config -ne "") { Full $Config } else { Join-Path $install 'config.json' }
+$cfg = Get-TaidaFlowConfig -Path $configPath -Exe $exe -Create
+if ($cfg.Error) { [Console]::Out.WriteLine("ERROR: $($cfg.Error) - nothing started (exit 2)"); exit 2 }
+$overrides = New-Object System.Collections.Generic.List[string]
+try {
+    if ($DataDir -ne "") { Set-TaidaFlowConfigValue $cfg 'dataDir' (Full $DataDir); $overrides.Add("dataDir=$($cfg.DataDir) (-DataDir)") }
+    if ($UseNginx) { Set-TaidaFlowConfigValue $cfg 'nginx.enabled' $true; $overrides.Add('nginx.enabled=true (-UseNginx)') }
+    if ($NoNginx) { Set-TaidaFlowConfigValue $cfg 'nginx.enabled' $false; $overrides.Add('nginx.enabled=false (-NoNginx)') }
+    if ($PSBoundParameters.ContainsKey('Port')) { Set-TaidaFlowConfigValue $cfg 'nginx.port' $Port; $overrides.Add("nginx.port=$Port (-Port)") }
+    if ($PSBoundParameters.ContainsKey('RestPort')) { Set-TaidaFlowConfigValue $cfg 'rest.port' $RestPort; $overrides.Add("rest.port=$RestPort (-RestPort)") }
+    if ($Nginx -ne "") { Set-TaidaFlowConfigValue $cfg 'nginx.exe' (Full $Nginx); $overrides.Add("nginx.exe=$(Full $Nginx) (-Nginx)") }
+} catch { [Console]::Out.WriteLine("ERROR: $($_.Exception.Message)"); exit 2 }
+$DataDir = $cfg.DataDir
+if ($LogDir -eq "") { $LogDir = Join-Path $DataDir 'logs' }
+$LogDir = Full $LogDir
+$stateFile = Join-Path $DataDir 'taidaflow-app.json'
+$effectiveConfig = Join-Path $DataDir 'config.effective.json'
+
+# --- folders ------------------------------------------------------------------------------------
 foreach ($d in $DataDir, $LogDir) {
     try {
         New-Item -ItemType Directory -Force $d | Out-Null
@@ -113,19 +165,33 @@ foreach ($d in $DataDir, $LogDir) {
 }
 $script:launcherLog = Join-Path $LogDir 'launcher.log'
 Log "=== TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ==="
+foreach ($l in $script:pending) { [System.IO.File]::AppendAllText($script:launcherLog, $l + "`r`n", (New-Object System.Text.UTF8Encoding($false))) }
 Log "installation: $install"
+Log "config.json : $configPath$(if ($cfg.Created) { ' (CREATED now with the default values)' })"
+foreach ($n in $cfg.Notes) { Log "  config: $n" }
+foreach ($o in $overrides) { Log "  one-time override: $o" }
 Log "data folder : $DataDir"
 Log "log folder  : $LogDir"
-
-if (-not (Test-Path $exe -PathType Leaf)) { Log "ERROR: $exe not found - incomplete package"; exit 2 }
-foreach ($required in 'Qt6Core.dll', 'Qt6Quick.dll', 'platforms\qwindows.dll', 'qml\QtQuick\qmldir') {
-    if (-not (Test-Path (Join-Path $install $required))) { Log "ERROR: $required missing in $install - incomplete package"; exit 2 }
-}
+foreach ($n in $envNotes) { Log $n }
 if (-not (Test-Path (Join-Path $webRoot 'TaidaFlowApp.html') -PathType Leaf)) {
     Log "WARNING: $webRoot\TaidaFlowApp.html missing - the web page will not be served (the desktop HMI is not affected)"
 }
+$v = $cfg.Values
+Log ("devices: " + ((@('adam6256', 'adam6217a', 'adam6217b', 'adam6224', 'adam6022') | ForEach-Object { "$_ $($v["devices.$_.host"]):$($v["devices.$_.port"])" }) -join ', ') +
+     "; MS300 $($v['devices.ms300.serialPort']) $($v['devices.ms300.baudRate'])")
 
-# --- single instance / ports ----------------------------------------------------------
+# --- ports / single instance ------------------------------------------------------------------------
+$portNames = [ordered]@{}
+$portNames["$($v['modbusServer.port'])"] = "Modbus server (modbusServer.port, $($v['modbusServer.bind']))"
+$useNginxNow = [bool]$v['nginx.enabled']
+$pairs = @(@([int]$v['http.port'], 'web page + CSV downloads (http.port)'), @([int]$v['mirror.publicPort'], 'web mirror relay (mirror.publicPort)'),
+           @([int]$v['mirror.internalPort'], 'internal mirror, 127.0.0.1 (mirror.internalPort)'), @([int]$v['rest.port'], 'REST API, 127.0.0.1 (rest.port)'))
+if ($useNginxNow) { $pairs += ,@([int]$v['nginx.port'], 'nginx (nginx.port)') }
+foreach ($pp in $pairs) {
+    if ($portNames.Contains("$($pp[0])")) { Log "ERROR: port $($pp[0]) is used twice in config.json ($($portNames["$($pp[0])"]) and $($pp[1])) - fix config.json"; exit 2 }
+    $portNames["$($pp[0])"] = $pp[1]
+}
+$ports = @($portNames.Keys | ForEach-Object { [int]$_ })
 $refuse = $false
 $running = @(Get-Process -Name TaidaFlowApp -ErrorAction SilentlyContinue)
 foreach ($p in $running) {
@@ -133,23 +199,23 @@ foreach ($p in $running) {
     Log "REFUSED: TaidaFlowApp is already running (pid $($p.Id), $path) - close it first (stop-taidaflow.ps1); it is not stopped by this script"
     $refuse = $true
 }
-if (@(502, 8124, 8125, 18125) -contains $RestPort) { Log "ERROR: -RestPort $RestPort is another port of the app - choose another REST port"; exit 2 }
-$ports = @(502, 8124, 8125, 18125, $RestPort)
-if ($UseNginx) {
-    if (@(502, 8124, 8125, 18125, $RestPort) -contains $Port) { Log "ERROR: -Port $Port is used by the app itself - choose another nginx port"; exit 2 }
-    $ports += $Port
-}
 $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $ports -contains $_.LocalPort })
+$cfgNginxExe = Resolve-TaidaFlowNginxExe $cfg
 foreach ($l in $listeners) {
+    $ownerPath = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).Path } catch { '' }
+    if ($useNginxNow -and $l.LocalPort -eq [int]$v['nginx.port'] -and [string]::Equals($ownerPath, $cfgNginxExe, [System.StringComparison]::OrdinalIgnoreCase)) {
+        Log "port $($l.LocalPort) = the configured nginx, already running (pid $($l.OwningProcess)) - fine"
+        continue
+    }
     $owner = try { $pp = Get-Process -Id $l.OwningProcess -ErrorAction Stop; "$($pp.ProcessName) $($pp.Path)".Trim() } catch { '?' }
     if ($l.OwningProcess -eq 4) { $owner = 'System = Windows HTTP.sys (IIS, WinRM, WebDAV, a URL reservation ...; check: netsh http show servicestate)' }
-    Log ("REFUSED: port {0} already in use ({1}:{0}, pid {2}, {3}) - the owner is not stopped" -f $l.LocalPort, $l.LocalAddress, $l.OwningProcess, $owner)
+    Log ("REFUSED: port {0} ({4}) already in use ({1}:{0}, pid {2}, {3}) - the owner is not stopped" -f $l.LocalPort, $l.LocalAddress, $l.OwningProcess, $owner, $portNames["$($l.LocalPort)"])
     $refuse = $true
 }
 if ($refuse) { Log "nothing started (exit 4)"; exit 4 }
-Log ("ports free: " + ($ports -join ', '))
+Log ("ports free: " + (($ports | ForEach-Object { "$_ $($portNames["$_"])" }) -join ', '))
 
-# --- log retention ----------------------------------------------------------------------
+# --- log retention ----------------------------------------------------------------------------------
 if ($KeepLogDays -gt 0) {
     $limit = (Get-Date).AddDays(-$KeepLogDays)
     $old = @(Get-ChildItem -LiteralPath $LogDir -File -Filter 'taidaflow-*.log*' -ErrorAction SilentlyContinue |
@@ -158,28 +224,20 @@ if ($KeepLogDays -gt 0) {
     if ($old.Count) { Log "deleted $($old.Count) app log file(s) older than $KeepLogDays days" }
 }
 
-# --- environment of the app -------------------------------------------------------------
-foreach ($v in 'TAIDAFLOW_DEVICE_PROFILE', 'TAIDAFLOW_WEB_DIR', 'TAIDAFLOW_DOWNLOAD_PORT', 'TAIDAFLOW_REST_PORT',
-               'QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH', 'QML_IMPORT_PATH', 'QML2_IMPORT_PATH',
-               'QT_DEBUG_PLUGINS', 'QT_LOGGING_CONF', 'QT_QPA_PLATFORM') {
-    if (Test-Path "Env:\$v") {
-        Log "environment: removed $v (was '$((Get-Item "Env:\$v").Value)')"
-        Remove-Item "Env:\$v"
+# The configuration file the app and nginx read: config.json itself, or (one-time overrides) a
+# complete copy with the overrides applied.
+function Set-AppConfigFile {
+    if ($overrides.Count -gt 0) {
+        Write-TaidaFlowConfigFile $cfg $effectiveConfig
+        $env:TAIDAFLOW_CONFIG = $effectiveConfig
+        Log "TAIDAFLOW_CONFIG=$effectiveConfig (config.json + one-time overrides: $($overrides -join '; '))"
+    } else {
+        $env:TAIDAFLOW_CONFIG = $configPath
+        Log "TAIDAFLOW_CONFIG=$configPath"
     }
 }
-$kept = New-Object System.Collections.Generic.List[string]
-foreach ($entry in ($env:PATH -split ';')) {
-    $e = $entry.Trim()
-    if ($e -eq '') { continue }
-    $hasQt = $false
-    try { $hasQt = Test-Path -LiteralPath (Join-Path $e 'Qt6Core.dll') } catch { $hasQt = $false }
-    if ($hasQt) { Log "environment: PATH entry removed (holds Qt6Core.dll): $e"; continue }
-    $kept.Add($e)
-}
-$env:PATH = $install + ';' + ($kept -join ';')
+Set-AppConfigFile
 $env:QT_FORCE_STDERR_LOGGING = '1'
-$env:TAIDAFLOW_REST_PORT = "$RestPort"
-Log "TAIDAFLOW_REST_PORT=$RestPort (REST API on 127.0.0.1:$RestPort)"
 if ($AppLog -eq 'quiet') {
     $rules = Join-Path $install 'logging\quiet.ini'
     if (Test-Path $rules -PathType Leaf) { $env:QT_LOGGING_CONF = $rules }
@@ -187,38 +245,76 @@ if ($AppLog -eq 'quiet') {
 }
 Log "app log mode: $AppLog$(if ($env:QT_LOGGING_CONF) { " (QT_LOGGING_CONF=$env:QT_LOGGING_CONF)" })"
 
-# --- nginx (optional) -------------------------------------------------------------------
+# --- nginx (config.json nginx.enabled; Mango A6/A7) -----------------------------------------------
+# nginx is independent of the app: started the standard way ("cd <nginx folder>" + "start nginx", no
+# arguments) with <nginx folder>\conf\nginx.conf written once by scripts\install-nginx-config.ps1.
+# Already running -> left as it is. stop-taidaflow.ps1 does not stop it ("nginx -s quit").
 $nginxOk = $false
-$downloadPort = 8124
-function Invoke-NginxWeb([string[]]$more) {
-    $script = Join-Path $install 'scripts\nginx-web.ps1'
-    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $script) + $more
-    $out = & powershell.exe @a
-    $rc = $LASTEXITCODE
-    foreach ($line in @($out)) { if ("$line".Trim() -ne '') { Log "  nginx | $line" } }
-    return $rc
-}
-if ($UseNginx) {
-    $nginxArgs = @('-Action', 'start', '-Port', "$Port", '-WebRoot', $webRoot, '-ExportDir', (Join-Path $DataDir 'exports'),
-                   '-RuntimeDir', $nginxRuntime, '-RestPort', "$RestPort")
-    $nginxExe = ''
-    if ($Nginx -ne '') { $nginxExe = Full $Nginx }
-    elseif (Test-Path (Join-Path $install 'nginx\nginx.exe') -PathType Leaf) { $nginxExe = Join-Path $install 'nginx\nginx.exe' }
-    if ($nginxExe -ne '') { $nginxArgs += @('-Nginx', $nginxExe) }
-    Log "starting nginx (scripts\nginx-web.ps1 -Action start, runtime $nginxRuntime)"
-    $rc = Invoke-NginxWeb $nginxArgs
-    if ($rc -eq 0) {
-        $nginxOk = $true
-        $downloadPort = $Port
-        Log "nginx started (0.0.0.0:$Port)"
+$nginxStartedNow = $false
+$nginxProblem = ''
+if ($useNginxNow) {
+    $nginxExe = Resolve-TaidaFlowNginxExe $cfg
+    $nginxDir = Split-Path -Parent $nginxExe
+    $nginxConf = Join-Path $nginxDir 'conf\nginx.conf'
+    $nginxPort = [int]$v['nginx.port']
+    Log "nginx: $nginxExe (config.json nginx.exe = $($v['nginx.exe']), $($cfg.Sources['nginx.exe']))"
+    $mine = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } })
+    $confOk = $false
+    if (-not (Test-Path $nginxExe -PathType Leaf)) {
+        $nginxProblem = "nginx.exe not found: $nginxExe"
     } else {
-        Log "WARNING: nginx NOT started (nginx-web.ps1 exit $($rc): 2 missing nginx/web page, 3 nginx -t failed, 4 port $Port busy, 5 link/junction in web or export folder, 6 not listening in time) - the app is started with download links on 8124"
+        # Mango A9: nginx.conf must belong to THIS installation folder and THIS config.json (the header
+        # records both). Missing / older / moved / changed -> regenerated with the same generator as
+        # the one-time install step (the old file is kept as nginx.conf.prev-<time> / .orig-<time>).
+        $gen = Join-Path $install 'scripts\install-nginx-config.ps1'
+        $genOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gen -Config $env:TAIDAFLOW_CONFIG -InstallDir $install -Nginx $nginxExe -IfChanged
+        $genRc = $LASTEXITCODE
+        foreach ($line in @($genOut)) { if ("$line".Trim() -ne '') { Log "  nginx.conf | $line" } }
+        $written = @($genOut | Where-Object { "$_" -match '^NGINX_CONF=written' }).Count -gt 0
+        if ($genRc -eq 0 -or $genRc -eq 4) {
+            $confOk = $true
+            if ($written) { Log "nginx.conf regenerated for this installation / config.json (see above)" }
+            if ($written -and $mine.Count) {
+                Log "nginx is running with the old file - applying the new one: nginx -s reload (from $nginxDir)"
+                $rp = Start-Process -FilePath $nginxExe -ArgumentList @('-s', 'reload') -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
+                $null = $rp.Handle
+                if (-not $rp.WaitForExit(20000) -or $rp.ExitCode -ne 0) { Log "WARNING: nginx -s reload did not succeed (exit $(try { $rp.ExitCode } catch { '?' }))" }
+            }
+        } else {
+            $nginxProblem = "nginx.conf could not be generated / checked (install-nginx-config.ps1 exit $genRc)"
+        }
+    }
+    if ($confOk) {
+        if ($mine.Count) {
+            Log "nginx is already running (pid $(($mine | ForEach-Object { $_.Id }) -join ', ')) - left as it is"
+        } else {
+            Log "starting nginx like 'cd $nginxDir' + 'start nginx' (no arguments)"
+            $np = Start-Process -FilePath $nginxExe -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
+            $null = $np.Handle
+            $nginxStartedNow = $true
+        }
+        $t0 = Get-Date
+        do {
+            Start-Sleep -Milliseconds 250
+            $ids = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } } | ForEach-Object { $_.Id })
+            $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue | Where-Object { $ids -contains $_.OwningProcess })
+        } while ($l.Count -eq 0 -and ((Get-Date) - $t0).TotalSeconds -lt 20)
+        if ($l.Count -gt 0) { $nginxOk = $true; Log "nginx listening on $($l[0].LocalAddress):$nginxPort (pid $($l[0].OwningProcess))" }
+        else {
+            $nginxProblem = "nginx does not listen on port $nginxPort within 20 s (see $nginxDir\logs\error.log)"
+            $err = Join-Path $nginxDir 'logs\error.log'
+            if (Test-Path $err) { Get-Content -LiteralPath $err -Tail 5 | ForEach-Object { Log "  nginx error.log | $_" } }
+        }
+    }
+    if (-not $nginxOk) {
+        Log "WARNING: nginx NOT available ($nginxProblem) - the app is started with nginx.enabled=false (web page, downloads and mirror on its own ports $($v['http.port']) / $($v['mirror.publicPort']))"
+        Set-TaidaFlowConfigValue $cfg 'nginx.enabled' $false
+        $overrides.Add('nginx.enabled=false (nginx not available)')
+        Set-AppConfigFile
     }
 }
-$env:TAIDAFLOW_DOWNLOAD_PORT = "$downloadPort"
-Log "TAIDAFLOW_DOWNLOAD_PORT=$downloadPort"
 
-# --- start the app ----------------------------------------------------------------------
+# --- start the app ----------------------------------------------------------------------------------
 $appLogFile = Join-Path $LogDir ('taidaflow-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
 try {
     $p = Start-Process -FilePath $exe -WorkingDirectory $DataDir -PassThru `
@@ -226,60 +322,54 @@ try {
     $null = $p.Handle
 } catch {
     Log "ERROR: TaidaFlowApp could not be started: $($_.Exception.Message)"
-    if ($nginxOk) {
-        Log "stopping the nginx started above"
-        $null = Invoke-NginxWeb @('-Action', 'stop', '-RuntimeDir', $nginxRuntime)
-    }
+    if ($nginxOk) { Log "nginx is left running (independent of the app; stop it with: cd <nginx folder> ; nginx -s quit)" }
     exit 6
 }
 $state = [ordered]@{
     pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks; startTime = $p.StartTime.ToString('o')
-    dataDir = $DataDir; logDir = $LogDir; appLog = $appLogFile; useNginx = [bool]$UseNginx; nginxStarted = $nginxOk
-    nginxRuntime = $nginxRuntime; nginxPort = $(if ($UseNginx) { $Port } else { 0 }); downloadPort = $downloadPort
-    restPort = $RestPort
+    config = $env:TAIDAFLOW_CONFIG; dataDir = $DataDir; logDir = $LogDir; appLog = $appLogFile; useNginx = $useNginxNow; nginxAvailable = $nginxOk; nginxStartedByThisScript = $nginxStartedNow
+    nginxPort = $(if ($useNginxNow) { [int]$v['nginx.port'] } else { 0 }); downloadPort = (Get-TaidaFlowDownloadPort $cfg)
+    httpPort = [int]$v['http.port']; mirrorPublicPort = [int]$v['mirror.publicPort']; mirrorInternalPort = [int]$v['mirror.internalPort']
+    restPort = [int]$v['rest.port']; modbusServerPort = [int]$v['modbusServer.port']
 }
 [System.IO.File]::WriteAllText($stateFile, ($state | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
 Log "TaidaFlowApp started: pid $($p.Id), log $appLogFile"
 
+$appPorts = @([int]$v['modbusServer.port'], [int]$v['http.port'], [int]$v['mirror.publicPort'], [int]$v['mirror.internalPort'], [int]$v['rest.port'])
 $t0 = Get-Date
-$need = @(8124, 8125)
+$need = @([int]$v['http.port'], [int]$v['mirror.publicPort'])
 $have = @()
 do {
     Start-Sleep -Milliseconds 500
     $have = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
-              Where-Object { $_.OwningProcess -eq $p.Id -and (@(502, 8124, 8125, 18125, $RestPort) -contains $_.LocalPort) } |
+              Where-Object { $_.OwningProcess -eq $p.Id -and ($appPorts -contains $_.LocalPort) } |
               ForEach-Object { [int]$_.LocalPort } | Sort-Object -Unique)
     $missing = @($need | Where-Object { $have -notcontains $_ })
 } while ($missing.Count -gt 0 -and -not $p.HasExited -and ((Get-Date) - $t0).TotalSeconds -lt $StartTimeoutSec)
 
 if ($p.HasExited) {
-    Log "ERROR: TaidaFlowApp exited during start-up (exit code $($p.ExitCode)); last log lines:"
+    Log "ERROR: TaidaFlowApp exited during start-up (exit code $($p.ExitCode)$(if ($p.ExitCode -eq 2) { ' = config.json unusable' })); last log lines:"
     if (Test-Path $appLogFile) { Get-Content -LiteralPath $appLogFile -Tail 15 | ForEach-Object { Log "  app | $_" } }
     Remove-Item -LiteralPath $stateFile -Force -ErrorAction SilentlyContinue
-    if ($nginxOk) {
-        Log "stopping the nginx started above"
-        $null = Invoke-NginxWeb @('-Action', 'stop', '-RuntimeDir', $nginxRuntime)
-    }
+    if ($nginxOk) { Log "nginx is left running (independent of the app; stop it with: cd <nginx folder> ; nginx -s quit)" }
     exit 6
 }
-foreach ($pp in 502, 8124, 8125, 18125, $RestPort) {
-    $what = @{ 502 = 'Modbus server (external HMI)'; 8124 = 'web page + CSV downloads'; 8125 = 'web mirror relay (LAN)'; 18125 = 'internal mirror (127.0.0.1)' }[$pp]
-    if ($pp -eq $RestPort) { $what = 'REST API (127.0.0.1; LAN via nginx /api/)' }
-    Log ("  port {0,-5} {1,-30} {2}" -f $pp, $what, $(if ($have -contains $pp) { 'listening' } else { 'NOT listening' }))
+foreach ($pp in $appPorts) {
+    Log ("  port {0,-5} {1,-50} {2}" -f $pp, $portNames["$pp"], $(if ($have -contains $pp) { 'listening' } else { 'NOT listening' }))
 }
 if ($missing.Count -gt 0) {
     Log "ERROR: after $StartTimeoutSec s the app does not listen on $($missing -join ', ') - the app is left running (desktop HMI); see $appLogFile"
     exit 6
 }
-if ($have -notcontains $RestPort) { Log "WARNING: the REST API does not listen on 127.0.0.1:$RestPort (see [REST] in $appLogFile); the app runs without it" }
+if ($have -notcontains [int]$v['rest.port']) { Log "WARNING: the REST API does not listen on 127.0.0.1:$($v['rest.port']) (see [REST] in $appLogFile); the app runs without it" }
 $ips = @(try { Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop | Where-Object { $_.IPAddress -notlike '169.254.*' -and $_.IPAddress -ne '127.0.0.1' } | ForEach-Object { $_.IPAddress } } catch { })
 foreach ($ip in @($ips) + @('127.0.0.1')) {
     if ($nginxOk) {
-        $base = if ($Port -eq 80) { "http://${ip}" } else { "http://${ip}:$Port" }
-        Log "web page: $base/  (nginx -> /TaidaFlowApp.html; also http://${ip}:8124/TaidaFlowApp.html)  REST API: $base/api/"
+        $base = if ([int]$v['nginx.port'] -eq 80) { "http://${ip}" } else { "http://${ip}:$($v['nginx.port'])" }
+        Log "web page: $base/  (nginx: page, /mirror, /exports, /api/; fallback http://${ip}:$($v['http.port'])/TaidaFlowApp.html)"
     }
-    else { Log "web page: http://${ip}:8124/TaidaFlowApp.html" }
+    else { Log "web page: http://${ip}:$($v['http.port'])/TaidaFlowApp.html  (mirror ${ip}:$($v['mirror.publicPort']))" }
 }
-if ($UseNginx -and -not $nginxOk) { Log "started WITHOUT nginx (exit 8)"; exit 8 }
+if ($useNginxNow -and -not $nginxOk) { Log "started WITHOUT nginx (exit 8)"; exit 8 }
 Log "started (exit 0)"
 exit 0

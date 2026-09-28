@@ -32,13 +32,10 @@ class TaidaFlowProxy;
 
 namespace HistoryExport {
 
+// Default port of the download links (Options::downloadPort). w2-062: the application sets
+// the real value from config.json (AppConfig::downloadPort(): nginx.enabled ? nginx.port :
+// http.port, TAIDAFLOW_DOWNLOAD_PORT as a temporary override), see Core::init.
 constexpr quint16 kDefaultDownloadPort = 8124;
-// w2-050: port of the download links sent to the page (historyExportStatus downloadPort).
-// TAIDAFLOW_DOWNLOAD_PORT=<1..65535> (e.g. 8123 when nginx serves the export folder, see
-// scripts/nginx-start.ps1); unset or invalid -> kDefaultDownloadPort (the app's own
-// AppHttpServer, whose /exports mount stays active as a fallback).  The value is logged.
-constexpr auto kDownloadPortEnv = "TAIDAFLOW_DOWNLOAD_PORT";
-quint16 downloadPortFromEnvironment();
 constexpr int kMaxExportFiles = 20;
 constexpr qint64 kMaxExportBytes = 2LL * 1024 * 1024 * 1024;   // 2 GB
 constexpr int kDefaultChunkRows = 2000;

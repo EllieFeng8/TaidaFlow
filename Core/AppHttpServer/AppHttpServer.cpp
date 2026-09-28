@@ -570,7 +570,10 @@ void AppHttpServer::Private::serveStatic(const Mount &mount, const ParsedPath &p
     QHttpHeaders h;
     h.append(WK::ETag, etag);
     h.append(WK::LastModified, httpDate(mtime));
-    h.append(WK::CacheControl, html ? o.htmlCacheControl : o.cacheControl);
+    const auto fileCacheControl = o.fileCacheControl.constFind(fileName.toLower());
+    h.append(WK::CacheControl, fileCacheControl != o.fileCacheControl.constEnd()
+                                       ? *fileCacheControl
+                                       : html ? o.htmlCacheControl : o.cacheControl);
     if (o.gzipVariants)
         h.append(WK::Vary, "Accept-Encoding");
     if (o.crossOriginIsolation) {

@@ -24,6 +24,9 @@ public:
     };
     Q_ENUM(Device)
 
+    // host / port / unitId come from config.json (w2-062: Core builds the list from
+    // AppConfig, see Core::init); timeoutMs / retryCount stay fixed in the code (Mango: not
+    // in config.json).
     struct DeviceConfig {
         Device device = Device::Unassigned;
         QString name;
@@ -34,7 +37,17 @@ public:
         int retryCount = 2;
     };
 
+    // The five ADAM modules with the built-in plant addresses 192.168.1.201..205:502,
+    // unit 1 (= the config.json defaults). Used by the default constructor (stand-alone
+    // tests) and as the template Core fills with the configured values.
+    static QList<DeviceConfig> defaultDeviceConfigs();
+
+    // Default addresses (defaultDeviceConfigs()).
     explicit ModbusClient(QObject *parent = nullptr);
+    // w2-062: the given devices (normally from config.json). TAIDAFLOW_DEVICE_PROFILE=simulator
+    // (test only) still replaces every host with the simulator address 127.0.0.201..205 of
+    // that device (port and unit id are kept); the replacement is logged.
+    explicit ModbusClient(const QList<DeviceConfig> &configs, QObject *parent = nullptr);
     ~ModbusClient() override;
 
     QList<DeviceConfig> deviceConfigs() const;

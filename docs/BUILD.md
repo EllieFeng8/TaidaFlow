@@ -17,7 +17,7 @@
 [7 編譯後必跑的檢查](#7-編譯後必跑的檢查) ·
 [8 分支分工與合併](#8-分支分工main--ui--core--後端與-main-合併進-core-之後) ·
 [9 常見問題](#9-常見問題) ·
-[10 config.json](#10-configjson待-w2-062-完成後補) ·
+[10 config.json](#10-configjson設定檔) ·
 [11 驗證紀錄](#11-驗證紀錄與沒有驗證到的部分)
 
 ---
@@ -83,7 +83,7 @@ UI 修改先進 `main`,再把 `main` 合併進 `core`(合併後要做的事見 �
   `CMakeUserPresets.json`(已被 `.gitignore` 排除,§2.6)。
 - `integration-pack/wasm-mirror/` 是由維護方提供的網頁同步套件(pack 1.0.1),**唯讀、整包複製**。
   `.gitattributes` 設了 `-text`,不論 `core.autocrlf` 怎麼設都不會改換行,`MANIFEST.sha256` 才能驗證通過
-  (`python -B scripts\verify_pack.py` 應印 24/24 並 exit 0,§7)。
+  (`powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-pack.ps1` 應印 24/24 並 exit 0,§7)。
 
 ---
 
@@ -98,11 +98,13 @@ UI 修改先進 `main`,再把 `main` 合併進 `core`(合併後要做的事見 �
 | Ninja | 1.12.1(Qt 安裝程式附的) | `C:\Qt\Tools\Ninja` | 實際編譯 |
 | Visual Studio | 2022(17.x)或更新,含「使用 C++ 的桌面開發」 | `C:\Program Files\Microsoft Visual Studio\<版本>\<版別>` | MSVC 編譯器(桌面版) |
 | emsdk | **3.1.56**(Qt 6.8 對應版,不能換) | `C:\tools\emsdk` | Emscripten 編譯器(網頁版) |
-| Python | 3.x(參考機 3.12.10)+ `fonttools` | 任意,`python` 要在 PATH | 檢查腳本、字型子集 |
+| nginx for Windows | 1.30.x(參考機 1.30.5)| `C:\tools\nginx\nginx-<版本>` | 選用:桌面版建置時複製到 `build\desktop\nginx`(§4.5)、打包時隨包附上;沒有也能編譯 |
+| Python + fonttools | 3.x + `fonttools` | 任意 | **選用**:只有「重新產生網頁版內嵌字型」需要(§2.5);一般桌面版 / 網頁版編譯、所有檢查腳本與部署都**不需要** |
 | Git | 任意 | 任意 | clone、安裝 emsdk |
 
 參考開發機(本文件指令的驗證環境):Windows 11 Pro 10.0.26200、Qt 6.8.3、CMake 3.30.5、Ninja 1.12.1、
-Visual Studio Community **18**(18.9.3,MSVC `cl` 19.51)、emsdk 3.1.56、Python 3.12.10、fonttools 4.63.0、Git 2.55。
+Visual Studio Community **18**(18.9.3,MSVC `cl` 19.51)、emsdk 3.1.56、nginx 1.30.5、Git 2.55。
+本專案的檢查、執行、打包腳本都是 PowerShell(`scripts\*.ps1`)或批次檔(w2-062 起沒有其他 Python 腳本)。
 
 ### 2.2 Qt 6.8.3(Qt Online Installer)
 
@@ -200,11 +202,11 @@ emsdk 是 Emscripten(把 C++ 編成 WebAssembly 的編譯器)的安裝管理工�
 #### 2.4.2 事前需要
 
 - **Git for Windows**(<https://git-scm.com/download/win>):emsdk 本身是用 git clone 取得的。
-- **能用的 Python 3 在 PATH 上**(§2.5):emsdk 裝好後會用它**自帶**的 Python 與 Node,但**第一次** `emsdk install` 時
-  它還沒有自帶的 Python,`emsdk.bat` 會執行 PATH 上的 `python`。參考機上 cmd 的 `python` 是 Microsoft Store 的別名,
-  第一次安裝就失敗(`The system cannot find the file ...\WindowsApps\python.exe.`,實測)。解法見 §2.5;或在同一個 cmd 視窗先執行
-  `for /f "delims=" %p in ('py -3 -c "import sys,os;print(os.path.dirname(sys.executable))"') do set "PATH=%p;%PATH%"`
-  把真正的 Python 放到 PATH 最前面(寫進 .bat 時 `%p` 要寫成 `%%p`)。
+- **emsdk 安裝程式本身的需求**(不是本專案的腳本):emsdk 裝好後用它**自帶**的直譯器與 Node,但**第一次** `emsdk install`
+  時還沒有自帶的,`emsdk.bat` 會執行 PATH 上的 `python`(emsdk 官方的安裝需求,實測)。參考機上 cmd 的 `python` 是
+  Microsoft Store 的別名,第一次安裝就失敗(`The system cannot find the file ...\WindowsApps\python.exe.`)。解法:在同一個 cmd
+  視窗先執行 `for /f "delims=" %p in ('py -3 -c "import sys,os;print(os.path.dirname(sys.executable))"') do set "PATH=%p;%PATH%"`
+  把真正的直譯器放到 PATH 最前面(寫進 .bat 時 `%p` 要寫成 `%%p`);裝好之後的網頁版編譯只用 emsdk 自帶的。
 - 約 **1.5 GB** 磁碟空間(下載 + 解壓);可以連到 `github.com` 與 `storage.googleapis.com`(下載來源,實測)。
 - 安裝資料夾:**不要有空白或中文**、**要可寫入**(`emsdk_env.bat` 每次執行都會在裡面寫暫存檔,Emscripten 也把編譯快取放在裡面),
   所以不要放 `C:\Program Files`。本專案預設 `C:\tools\emsdk`;放別處時設 `TAIDAFLOW_EMSDK`(§2.6)。
@@ -281,28 +283,38 @@ cd /d C:\tools\emsdk
   資料夾,下次編譯會自動重建。
 - 本專案的建置輸出不含 emsdk 的東西;換 / 重裝 emsdk 後網頁版要 `scripts\build-wasm.bat wasm-release fresh`。
 
-### 2.5 Python 3 與 fonttools
+### 2.5 網頁版內嵌字型(字型子集)
 
-1. 從 <https://www.python.org/downloads/windows/> 安裝 Python 3(參考機 3.12.10),安裝畫面勾
-   **「Add python.exe to PATH」**。
-2. 開新的 cmd:
+網頁版(WebAssembly)沒有系統中文字型,所以把 Noto Sans TC 的**子集**(只含程式用到的字)編進 exe / wasm:
+`App/fonts/TaidaFlowNotoSansTC-Regular.ttf`、`App/fonts/TaidaFlowNotoSansTC-Bold.ttf` 與字元清單 `App/fonts/charset.txt`。
+這三個檔**已經在 git 裡**,建置時直接使用;CMake 不會產生它們,也不會呼叫任何外部程式。
 
-```bat
-python --version
-python -m pip install fonttools
-python -c "import fontTools; print(fontTools.version)"
-```
+**(A)使用 repo 內現成的字型(一般情況)**:什麼都不用做。clone 下來就能編桌面版與網頁版,不需要安裝 Python。
 
-- `fonttools` 只有 `scripts\make_font_subset.py`(網頁版內嵌中文字型)需要;其他檢查腳本只用標準函式庫。
-- 重新產生字型(不是 `--check`)還需要來源字型 `C:\Windows\Fonts\NotoSansTC-VF.ttf`(Windows 11 內附);
-  沒有時從 <https://fonts.google.com/noto/specimen/Noto+Sans+TC> 下載 `NotoSansTC[wght].ttf`,以 `--source` 指定。
-- 本專案的 Python 指令一律加 `-B`(不產生 `__pycache__`)。emsdk 自己帶的 Python 只給 Emscripten 用,不必理會。
-- **`python` 可能被 Windows 的「應用程式執行別名」攔截**:PATH 裡 `%LOCALAPPDATA%\Microsoft\WindowsApps` 排在 Python 前面時,
-  cmd 的 `python` 會打開 Microsoft Store,或直接失敗(參考機的 cmd 就是這樣:`The system cannot find the file
-  C:\Users\<使用者>\AppData\Local\Microsoft\WindowsApps\python.exe.`,exit code 9059)。`where python` 第一行是
-  `...\WindowsApps\python.exe` 就是這個情況。解法二選一:到「設定 → 應用程式 → 進階應用程式設定 → 應用程式執行別名」關掉
-  `python.exe` / `python3.exe`;或改用 Python 安裝程式附的啟動器 **`py -3`**——本文件所有 `python` 都可以換成 `py -3`
-  (例如 `py -3 -B scripts\verify_pack.py`),§7 的檢查在參考機上就是用 `py -3` 跑的。
+**(B)自己重新產生**(只有 UI / C++ 加了新的中文字、網頁出現方框時):這是整個專案**唯一**用到 Python 的地方
+(`scripts\make_font_subset.py`,用 fonttools 子集化字型)。
+
+1. 需要:
+   - Python 3(<https://www.python.org/downloads/windows/>,安裝時勾「Add python.exe to PATH」;或用 Python 附的 `py -3` 啟動器)
+     與 fonttools:`py -3 -m pip install fonttools`(或 `python -m pip install fonttools`)。
+   - 來源字型:Windows 11 內附的 `C:\Windows\Fonts\NotoSansTC-VF.ttf`(預設);沒有時從
+     <https://fonts.google.com/noto/specimen/Noto+Sans+TC> 下載 `NotoSansTC[wght].ttf`,以 `--source <檔案>` 指定。
+2. 先檢查(不改任何檔):
+   ```bat
+   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-font-subset.ps1 --check
+   ```
+   exit 0 = 現有字型涵蓋所有字;exit 1 = 有新字(或缺字),要重新產生。`make-font-subset.ps1` 會先找 `py -3`,再找 PATH 上的
+   `python`(跳過 Windows 市集的 `python.exe` 別名),以 `-B` 執行(不留 `__pycache__`);找不到可用的 Python 3 時清楚說明並 exit 9。
+3. 重新產生:
+   ```bat
+   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-font-subset.ps1
+   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-font-subset.ps1 --source "<下載的資料夾>\NotoSansTC[wght].ttf"
+   ```
+4. 重新編網頁版(`scripts\build-wasm.bat`)與桌面版,確認 `--check` 為 exit 0。
+5. 把 `App/fonts/` 的**兩個 TTF 與 `charset.txt`**,和造成新字的程式修改放在**同一個 `core` commit** 一起提交。
+
+註:`python` 在 cmd 可能被 Windows 的「應用程式執行別名」攔截(打開 Microsoft Store 或 exit 9059);`make-font-subset.ps1`
+已跳過它。要自己在 cmd 打指令時改用 `py -3`,或到「設定 → 應用程式 → 進階應用程式設定 → 應用程式執行別名」關掉 `python.exe`。
 
 ### 2.6 工具路徑:裝在不同位置時怎麼改
 
@@ -314,19 +326,18 @@ python -c "import fontTools; print(fontTools.version)"
 | `scripts\build-wasm.bat` | 23–25、31–32 | `C:\Qt\6.8.3`、`C:\Qt\Tools`、`C:\tools\emsdk`(+ emsdk 內的 Python 3.9.2-nuget / Node 16.20.0) | 設環境變數,**不用改檔** |
 | `CMakePresets.json` | 14、17 | desktop:Qt toolchain、Ninja | 建 `CMakeUserPresets.json`(下方範本),不要改這個檔 |
 | `CMakePresets.json` | 32–48 | wasm:Qt wasm toolchain、Ninja、Emscripten、`QT_HOST_PATH`、node、emsdk 的 `EMSDK`/`EM_CONFIG`/`EMSCRIPTEN`/`EMSDK_PYTHON`/`EMSDK_NODE`/`PATH` | 同上 |
-| `scripts\check_wasm_backend.py` | 36 | `NINJA = r"C:\Qt\Tools\Ninja\ninja.exe"` | 改這一行 |
-| `scripts\check_version_shadow.py` | 28 | `NINJA = r"C:\Qt\Tools\Ninja\ninja.exe"` | 改這一行 |
+| `scripts\check-wasm-backend.ps1`、`scripts\check-version-shadow.ps1` | — | Ninja:`TAIDAFLOW_QT_TOOLS\Ninja\ninja.exe`,預設 `C:\Qt\Tools\Ninja\ninja.exe` | 設 `TAIDAFLOW_QT_TOOLS`,或給 `-Ninja <ninja.exe>` |
 | `scripts\run-apphttpserver-tests.bat` | 9、10、12–14 | VS 18 `vcvars64.bat`、`C:\Qt\6.8.3\msvc2022_64`、`C:\Qt\Tools` | 改這幾行 |
 | `scripts\run-pack-tests.bat` | 8、9、14、15、18、19 | 同上 | 改這幾行 |
-| `docs\evidence\w2-049\tools\run-w2041-qtest.bat`、`docs\evidence\w2-052\tools\run-qtest.bat` | vcvars、PATH、cmake 那幾行 | 同上 | 改那幾行 |
-| `scripts\make_font_subset.py` | 41 | `C:/Windows/Fonts/NotoSansTC-VF.ttf` | 用 `--source <字型>`,不用改檔 |
-| `scripts\run-desktop.ps1` 66、`scripts\run-simulator.ps1` 51 | | `C:\Qt\6.8.3\msvc2022_64\bin` 加到 PATH | 改那一行(執行用,不影響編譯) |
-| `scripts\package-release.ps1` | 35、47 | `-QtDir` 預設 `C:\Qt\6.8.3\msvc2022_64`、ninja | `-QtDir` 參數;ninja 那行要改 |
-| `scripts\verify-desktop-startup.ps1` | 31 | `C:\Users\TED\...\Python312\python.exe`(參考機個人路徑) | 改成自己的 python(或 `python`) |
-| `scripts\verify-release-package.ps1` | 220、240 | Qt bin、emsdk 的 node 16.20.0 | 改那兩行 |
+| `docs\evidence\w2-049\tools\run-w2041-qtest.bat`、`docs\evidence\w2-052\tools\run-qtest.bat`、`docs\evidence\w2-062\tools\make-bench-db.bat` | vcvars、PATH、cmake 那幾行 | 同上 | 改那幾行 |
+| `scripts\make_font_subset.py`(選用,§2.5) | 41 | `C:/Windows/Fonts/NotoSansTC-VF.ttf` | 用 `--source <字型>`,不用改檔 |
+| `scripts\run-desktop.ps1`、`verify-release-package.ps1`、`taidaflow-config.ps1` | | 執行時把 Qt 的 bin 加到 PATH:`TAIDAFLOW_QT_ROOT\msvc2022_64\bin`,預設 `C:\Qt\6.8.3\msvc2022_64\bin` | 設 `TAIDAFLOW_QT_ROOT`(執行用,不影響編譯) |
+| `scripts\run-simulator.ps1` | 51 | `C:\Qt\6.8.3\msvc2022_64\bin` 加到 PATH | 改那一行(執行用) |
+| `scripts\package-release.ps1` | | `-QtDir` 預設 `C:\Qt\6.8.3\msvc2022_64`、ninja `C:\Qt\Tools\Ninja`、要附上的 nginx `-NginxDir`(預設 `C:\tools\nginx\nginx-<最新版本>`) | `-QtDir`、`-NginxDir` 參數;ninja 那行要改 |
+| 根 `CMakeLists.txt`(桌面版的 nginx 資料夾,§4.5) | | nginx:快取變數 `TAIDAFLOW_NGINX_DIR`,預設 `C:\tools\nginx\nginx-<最新版本>` | configure 時 `-DTAIDAFLOW_NGINX_DIR=<資料夾>` |
+| `scripts\verify-release-package.ps1` | | emsdk 的 node 16.20.0(只用來算網頁的下載連結) | 改那一行 |
 
-(上表除了 `build-desktop.bat`、`build-wasm.bat` 之外的腳本,本輪依規定沒有修改,只列出位置;行號以本文件撰寫時的
-`core` 為準。)
+(行號以本文件撰寫時的 `core` 為準。)
 
 **建置腳本的環境變數**(不設 = 預設值;值寫資料夾,不要結尾反斜線):
 
@@ -430,9 +441,9 @@ Node / Python 資料夾名稱照 `dir D:\emsdk\node`、`dir D:\emsdk\python` 看
 - [ ] `cmake --version` = 3.30.x(≥ 3.25);`ninja --version` = 1.12.1(§2.2)
 - [ ] `vcvars64.bat` 路徑已知;執行後 `cl` 印出 `for x64`(§2.3)
 - [ ] `emcc --version` = `3.1.56`;emsdk 資料夾可寫入;`dir <emsdk>\node`、`dir <emsdk>\python` 看得到版本資料夾(§2.4)
-- [ ] `python --version` 是 3.x、`import fontTools` 成功(§2.5)
+- [ ] (選用)要重新產生網頁版字型才需要:`py -3 -c "import fontTools"` 成功(§2.5)
 - [ ] 工具不在預設位置 → `TAIDAFLOW_*` 環境變數已設(§2.6);要用 preset / Qt Creator → `CMakeUserPresets.json` 已建
-- [ ] `python -B scripts\verify_pack.py` exit 0(pack 24/24,§7)
+- [ ] `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-pack.ps1` exit 0(pack 24/24,§7)
 - [ ] `scripts\build-desktop.bat` exit 0、`build\desktop\TaidaFlowApp.exe` 存在(§4)
 - [ ] `scripts\build-wasm.bat` exit 0、`build\wasm-release\` 5 個網頁檔存在(§5)
 - [ ] §7 的檢查全部 exit 0
@@ -451,8 +462,8 @@ TaidaFlow/                 (repo,core 分支)
 │                          Ms300FaultReader、SqlManager、RESTManager、HistoryExport、HistoryViews、AppHttpServer/
 ├─ TaidaFlow/、TaidaFlowContent/、Dependencies/   QDS 的 QML 畫面與元件(main 分支維護)
 ├─ integration-pack/wasm-mirror/                  網頁同步套件 pack 1.0.1(唯讀)
-├─ scripts/                建置、執行、檢查、打包腳本
-├─ deploy/                 nginx 設定樣板、正式機腳本
+├─ scripts/                建置、執行、檢查、打包腳本(PowerShell / 批次檔;只有字型子集是 Python,§2.5)
+├─ deploy/                 nginx 設定樣板(nginx/)、正式機腳本(release/)、開發機設定檔(dev/config.dev.json、config.simulator.json)
 ├─ docs/                   本文件、DEPLOY_AND_STARTUP.md、整合報告、evidence/(各輪驗證證據)
 ├─ build/                  所有建置輸出(.gitignore 排除)
 └─ dist/                   打包輸出(.gitignore 排除)
@@ -473,7 +484,18 @@ CMake 結構:
 - **App/wasm 載入頁**:Qt 6.8 沒有自訂 HTML shell 的參數,它在 **configure** 時產生 `build\<wasm>\TaidaFlowApp.html`。
   `App/CMakeLists.txt` 在同一次 configure、Qt 產生之後呼叫 `App/wasm/apply_wasm_shell.cmake`,用
   `App/wasm/TaidaFlowApp.shell.html` 蓋掉它;configure log 會印兩行 `[wasm-shell] ...`。只影響網頁版。
-- 桌面版把「開發用網頁資料夾」`<repo>\build\wasm-release` 寫進程式(`TAIDAFLOW_DEV_WEB_DIR`,不論桌面版輸出在哪個資料夾)。
+- 桌面版找網頁資料夾的最後一個候選是 `<exe 資料夾>\..\wasm-release`(`build\desktop` → `build\wasm-release`,開發機直接可用)。
+  w2-062 起是**相對於 exe** 的路徑,不再把建置機的絕對路徑編進程式(打包資料夾不帶建置機路徑)。
+- **網頁版的 QML 匯入掃描只看專案資料夾**(w2-062):Qt 6.8 在網頁版(靜態 Qt)的 configure 結尾用 `qmlimportscanner` 決定要靜態
+  連結哪些 QML 模組,它預設以 target 的來源資料夾(= repo 最上層)為唯一 `-rootPath`,會掃到 `build\`、`dist\` 裡的 QML 檔
+  (例如打包資料夾裡 windeployqt 複製的桌面版 Qt 模組),多連結用不到的模組。Qt 的 CMake 沒有公開參數可改這個範圍,
+  `qmlimportscanner` 自己的 `-exclude` 對 `-rootPath` 掃描也無效(實測 Qt 6.8.3)。根 `CMakeLists.txt` 最後一段因此接手
+  Qt 的內部函式 `_qt_internal_scan_qml_imports`:Qt 照常掃描後,用 Qt 寫好的同一份參數檔再掃一次,只把 `-rootPath` 換成 repo
+  最上層的每個資料夾(不含 `build*`、`dist`、`cmake-build-*`、`.` 開頭的資料夾),結果取代 Qt 的。configure log 有一行
+  `-- [qml-scan] QML import scan limited to the project folders (...): 45 import(s) (Qt's whole-folder scan: 59)`。
+  Qt 版本不同、找不到那個函式或參數檔時只印 warning 並沿用 Qt 自己的結果。只影響網頁版。
+- **桌面版建置同時產生 nginx 資料夾**(w2-062,§4.5):根 `CMakeLists.txt` 的 target `taidaflow_nginx_conf`(`TaidaFlowApp`
+  相依於它)產生 `build\desktop\nginx\`。
 
 ---
 
@@ -527,9 +549,51 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\desktop --target TaidaFlowApp
 ### 4.4 執行
 
 - exe 需要 Qt 的 DLL:開發機上把 `C:\Qt\6.8.3\msvc2022_64\bin` 加到 PATH;**一律用 `scripts\run-desktop.ps1` 啟動**
-  (先做安全探測,因為 app 一啟動就會連 `192.168.1.201~205` 的 ADAM 並寫入輸出)。詳見 README「安全注意」與
-  [DEPLOY_AND_STARTUP.md §3](DEPLOY_AND_STARTUP.md)。
+  (先做安全探測,因為 app 一啟動就會連 config.json 裡的 ADAM 位址並寫入輸出)。設定檔用 `deploy\dev\config.dev.json`
+  (§10;`run-desktop.ps1` 以環境變數 `TAIDAFLOW_CONFIG` 指定,`build\desktop` 旁邊**不會**產生 config.json)。
+  詳見 README「安全注意」與 [DEPLOY_AND_STARTUP.md §9](DEPLOY_AND_STARTUP.md)。
 - 正式機用打包資料夾(`scripts\package-release.ps1`,需要 `build\desktop` 與 `build\wasm-release` 都是最新)。
+
+### 4.5 桌面版建置產生的 nginx 資料夾(`build\desktop\nginx`)
+
+桌面版每次建置(不論用腳本、preset 或手動 cmake;網頁版不做)都會一起產生一個可以直接啟動的 nginx 資料夾,
+和正式機的用法相同(`cd` 到 nginx 資料夾,`start nginx`):
+
+```text
+build\desktop\nginx\
+├─ nginx.exe            從 TAIDAFLOW_NGINX_DIR 複製
+├─ conf\mime.types      從 TAIDAFLOW_NGINX_DIR\conf 複製
+├─ conf\nginx.conf      產生(TaidaFlow 的完整設定)
+├─ logs\、temp\         建立(nginx 自己的 log 與暫存)
+```
+
+- `conf\nginx.conf` 由 `scripts\install-nginx-config.ps1 -Build` 產生——與正式機一次性安裝步驟**同一支產生程式**
+  (模板 `deploy\nginx\taidaflow.conf`)。值來自快取變數 `TAIDAFLOW_NGINX_CONFIG` 指定的設定檔
+  (預設 `deploy\dev\config.dev.json`):監聽 `nginx.port`、網頁根目錄 `build\desktop\web`(寫成相對於 nginx 資料夾的
+  `../web`)、`/exports` = `<dataDir>\exports`、`/api/` → `127.0.0.1:<rest.port>`、`/mirror` → `127.0.0.1:<mirror.internalPort>`。
+  產生後在該資料夾執行 `nginx -t`(失敗時建置失敗)。模板、產生程式或設定檔有改,下次建置會自動重新產生
+  (建置輸出直接取代,不留 `.prev-<時間>` 備份;正式機的 `install-nginx-config.ps1` 才會留備份)。
+- 兩個 CMake 快取變數(configure 時用 `-D` 指定,或在 Qt Creator 的 CMake 設定改):
+
+  | 變數 | 預設 | 意思 |
+  |---|---|---|
+  | `TAIDAFLOW_NGINX_DIR` | `C:\tools\nginx\nginx-<最新版本>`(configure 時找) | 要複製 `nginx.exe` 與 `conf\mime.types` 的 nginx for Windows 資料夾 |
+  | `TAIDAFLOW_NGINX_CONFIG` | `<repo>\deploy\dev\config.dev.json` | 產生 `nginx.conf` 用的 config.json |
+
+- 找不到 nginx(`TAIDAFLOW_NGINX_DIR` 不存在或沒有 `nginx.exe`):configure 印 `CMake Warning ... [nginx] ...`,只產生
+  `conf\nginx.conf`(不跑 `nginx -t`),**建置照常成功**。
+- 開發機使用:先部署網頁(`scripts\deploy-web.ps1` → `build\desktop\web`),再
+  ```bat
+  cd /d <repo>\build\desktop\nginx
+  start nginx
+  nginx -s reload     :: 設定重新產生後套用
+  nginx -s quit       :: 停止(同一個資料夾)
+  ```
+  也可以用 `scripts\nginx-start.ps1` / `nginx-stop.ps1`(開發用,另一個獨立的 `build\nginx` 前綴,兩者擇一,不要同時開在同一個 port)。
+- 這份 `nginx.conf` **只適用建置機**(匯出資料夾是 config.dev.json 的 `build\runtime-cwd\exports`)。正式機的 nginx 設定一律在
+  目標電腦上重新產生(`install-nginx-config.ps1`,或 `start-taidaflow` 發現不符時自動重產,見 DEPLOY_AND_STARTUP.md)。
+  `package-release.ps1` 打包時附上 nginx 程式,但**不附** `nginx.conf`。
+- 產生的都是建置輸出(`build\` 已被 git 忽略),不寫進原始碼樹,也不動 nginx 安裝資料夾。
 
 ---
 
@@ -541,11 +605,11 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\desktop --target TaidaFlowApp
 |---|---|
 | `TaidaFlowApp.html`(TaidaFlow 載入頁,§5.5) | 12,155 |
 | `TaidaFlowApp.js` | 304,976 |
-| `TaidaFlowApp.wasm` | 34,103,893(約 34 MB;`deploy-web.ps1` 產生的 `.gz` 約 12.4 MB)。全新 clone 建出來是 33,838,617:參考機 repo 的 `dist\` 裡有打包時 windeployqt 複製的 Qt QML 檔,被 `qmlimportscanner` 掃到而多連結了 Windows 原生樣式模組(§9) |
+| `TaidaFlowApp.wasm` | 33,847,174(約 34 MB;`deploy-web.ps1` 產生的 `.gz` 約 12.4 MB)。w2-062 起 QML 匯入掃描只看專案資料夾(§3、§9),repo 裡有沒有 `dist\`、`build\` 大小都一樣(w2-062 實測:工作目錄與不含 `dist\`/`build\` 的乾淨複本都是 33,847,174,只差 rcc 時間戳記的 69 個 byte);w2-062 之前參考機曾因掃到 `dist\` 而多連結 Windows 原生樣式模組 |
 | `qtloader.js` | 12,354 |
 | `qtlogo.svg`(新載入頁不用,留著無影響) | 1,686 |
 
-參考機完整編譯約 3 分鐘(567 個步驟;最後的連結 + 最佳化最久,畫面停在 `Linking CXX executable TaidaFlowApp.js`
+參考機完整編譯約 3 分鐘(568 個步驟;最後的連結 + 最佳化最久,畫面停在 `Linking CXX executable TaidaFlowApp.js`
 好幾分鐘是正常的)。
 
 ### 5.1 用腳本
@@ -607,7 +671,8 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
   `-- [wasm-shell] <build>/TaidaFlowApp.html <- <repo>/App/wasm/TaidaFlowApp.shell.html` 與
   `-- [wasm-shell] APPNAME=TaidaFlowApp APPEXPORTNAME=TaidaFlowApp_entry PRELOAD='' (...) sha256=...`。
 - 改了樣板:重新跑 `scripts\build-wasm.bat`(樣板是 configure 相依,會自動重跑 configure)→ 重新 `deploy-web.ps1`。
-- 靜態檢查(不開瀏覽器):`python -B docs\evidence\w2-058\check_shell_page.py build\wasm-release\TaidaFlowApp.html`。
+- 靜態檢查(不開瀏覽器):`findstr /c:"TAIDAFLOW" build\wasm-release\TaidaFlowApp.html` 有結果、`findstr /c:"@APPNAME@"
+  build\wasm-release\TaidaFlowApp.html` 沒有結果(佔位都已填入)。
 
 ---
 
@@ -643,16 +708,20 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 
 全部在 repo 資料夾的 cmd 執行,以 **exit code** 判定(0 = 通過)。
 
+以下 `PS` 代表 `powershell -NoProfile -ExecutionPolicy Bypass -File`(w2-062 起檢查腳本全部是 PowerShell,取代原本的 `.py`;
+輸出與判定和原本相同,新舊版對同一建置的輸出逐行相同,證據 `docs/evidence/w2-062/05-python-to-ps1-equivalence/`)。
+
 | 時機 | 指令 | 通過條件 |
 |---|---|---|
-| clone 後 / 更新 pack 後 | `python -B scripts\verify_pack.py` | `MANIFEST` 24/24、exit 0 |
-| 每次兩邊都建完 | `python -B scripts\check_wasm_backend.py build\desktop build\wasm-release` | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
-| 每次兩邊都建完 | `python -B scripts\check_version_shadow.py build\desktop build\wasm-release` | 兩行都是 `version_shadow_hits=0`,exit 0 |
-| 改過 UI / C++ 中文字串後 | `python -B scripts\make_font_subset.py --check` | exit 0;exit 1 = 有新字 → `python -B scripts\make_font_subset.py` 重新產生字型 → 重建 wasm |
-| 改過 REST 相關程式後 | `python -B scripts\check_rest_routes.py` | exit 0(log 的 route 表與實際註冊一致) |
+| clone 後 / 更新 pack 後 | `PS scripts\verify-pack.ps1`(與來源比對:`-Source <pack 來源資料夾>`) | `MANIFEST` 24/24、exit 0 |
+| 每次兩邊都建完 | `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release` | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
+| 每次兩邊都建完 | `PS scripts\check-version-shadow.ps1 build\desktop build\wasm-release` | 兩行都是 `version_shadow_hits=0`,exit 0 |
+| 改過 UI / C++ 中文字串後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字 → 照 §2.5 (B) 重新產生 → 重建 wasm |
+| 改過 REST 相關程式後 | `PS scripts\check-rest-routes.ps1` | exit 0(log 的 route 表與實際註冊一致) |
 | 改過 `Core/AppHttpServer/` 後(或定期) | `scripts\run-apphttpserver-tests.bat` | CTest `100% tests passed`,exit 0(需約 2 GiB 暫存磁碟空間;輸出 `build\apphttpserver-qtest`) |
+| 改過 `App/appconfig.*`、`App/runtimeinfo.*` 後 | 建置並執行 `App/tests`(CTest,見 `App/tests/README.md`) | `100% tests passed` |
 | 改過 pack 或升級 Qt 後 | `scripts\run-pack-tests.bat` | exit 0(pack 自帶的 native tests;輸出 `build\pack-tests`) |
-| 改過 SqlManager / HistoryExport / HistoryViews / Proxy 後 | `python -B docs\evidence\w2-041\tools\make_bench_db.py` → `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(需 8124 空著)與 `docs\evidence\w2-052\tools\run-qtest.bat` | 各自 exit 0(資料量大,需要較長時間) |
+| 改過 SqlManager / HistoryExport / HistoryViews / Proxy 後 | `docs\evidence\w2-062\tools\make-bench-db.bat`(C++ 測試資料產生器)→ `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(需 8124 空著)、`docs\evidence\w2-045\tools\run-qtest.bat` 與 `docs\evidence\w2-052\tools\run-qtest.bat` | 各自 exit 0(資料量大,需要較長時間) |
 
 - 檢查腳本的參數可以換成其他建置資料夾(例如 Qt Creator 的),桌面版與網頁版各給一個。
 - 需要啟動 app 的整合檢查(`verify-desktop-startup.ps1`、nginx、REST、打包驗證)見 README「測試 / 驗證」。
@@ -667,13 +736,13 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
   `wasm_multithread` kit 與 Qt 預設載入頁。合併時這些只在 `core` 的檔案不會被動到,除非 `main` 也改了同一段
   (特別注意 `App/CMakeLists.txt` 的 w2-058 區塊、`Core/TaidaFlowProxy.h`、根 `CMakeLists.txt` 的平台判斷)。
 - **合併後必做**(依序,全部 exit 0 才算合併完成):
-  1. `python -B scripts\make_font_subset.py --check` —— UI 常帶新的中文字;exit 1 → `python -B scripts\make_font_subset.py`
-     → 把 `App/fonts/` 的變更一起提交。
+  1. 字型:UI 常帶新的中文字。有 Python + fonttools 的人跑 `PS scripts\make-font-subset.ps1 --check`;exit 1 → 照 §2.5 (B)
+     重新產生 → 把 `App/fonts/` 的三個檔一起提交。沒有 Python 的人:把網頁版有方框的情況回報給有工具的人處理。
   2. **fresh 建置**:`scripts\build-desktop.bat fresh`,再 `scripts\build-wasm.bat wasm-release fresh`
      (QDS 產生的 CMake / qmldir / 新 QML 檔與 configure 時套用的載入頁,都需要重新 configure 才會完全反映)。
-  3. `python -B scripts\check_wasm_backend.py build\desktop build\wasm-release`
-  4. `python -B scripts\check_version_shadow.py build\desktop build\wasm-release`
-  5. `python -B scripts\check_rest_routes.py`
+  3. `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release`
+  4. `PS scripts\check-version-shadow.ps1 build\desktop build\wasm-release`
+  5. `PS scripts\check-rest-routes.ps1`
   6. 改到 `TaidaFlowProxy.h` 時:§7 最後一列的 QTest,以及 README「測試 / 驗證」的啟動檢查(mirror 同步需要兩端同一份
      contract,桌面版與網頁版要一起重建、一起部署)。
 
@@ -684,7 +753,7 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 **`#include <version>` 相關的奇怪編譯錯誤 / 標準函式庫錯誤**:pack 1.0.0 在最上層放了沒有副檔名的 `VERSION` 檔,
 QDS 預設的 `CMAKE_INCLUDE_CURRENT_DIR ON` 讓它進了 include 路徑,Windows 不分大小寫,`#include <version>` 就讀到它。
 pack 1.0.1 已改名 `VERSION.txt` 並在自己的子目錄關掉該設定。出現時:確認 `integration-pack\wasm-mirror\VERSION`(無副檔名)
-**不存在**(`python -B scripts\verify_pack.py` 會檢查)→ fresh 建置 → `check_version_shadow.py` 應為 `version_shadow_hits=0`。
+**不存在**(`scripts\verify-pack.ps1` 會檢查)→ fresh 建置 → `scripts\check-version-shadow.ps1` 應為 `version_shadow_hits=0`。
 不要把任何名為 `VERSION`(或 `version`)的檔案放在會進 include 路徑的資料夾。
 
 **改了 `CMakePresets.json` 但 `git status` 看不到 / `git add` 沒反應**:`.gitignore` 有 `/CMakePresets.json`;
@@ -724,34 +793,61 @@ QuickTimeline、ShaderTools)**:Qt 安裝時沒勾該模組(§2.2),用 Qt Mainten
 瀏覽器重新整理。
 
 **網頁版連結時出現大量 `wasm-ld: error: duplicate symbol: QAreaSeries::...`(`libQt6Charts.a` 與 `libQt6Graphs.a`)**:
-Qt 的 `qmlimportscanner` 會掃描**整個 repo 資料夾**(`-rootPath <repo>`,包含 `build\`)裡所有 QML 檔,決定要把哪些 QML 模組
-靜態連結進網頁版。repo 裡如果放了別的 QML 來源(另一份 clone、解壓的 Qt 範例、指到 Qt 安裝資料夾的 junction 等),就會把
-QtCharts、QtGraphs 等根本沒用到的模組拉進來而連結失敗(本輪實測:repo 的 `build\` 下有一個指到 `C:\Qt` 的 junction 時,
-匯入從 59 個變成 459 個)。把那些東西移出 repo 資料夾,再 `scripts\build-wasm.bat wasm-release fresh`。
-`build\` 底下只放本專案自己的建置輸出。較輕微的同類情況:`scripts\package-release.ps1` 的輸出 `dist\` 也在 repo 裡,
-裡面 windeployqt 複製的 Qt QML 檔會讓網頁版多連結 `QtQuick.NativeStyle` 等模組(全新 clone 57 個匯入、33,838,617 bytes;
-有 `dist\` 的參考機 59 個、34,103,893 bytes,都能正常建置)。
+Qt 的 `qmlimportscanner` 會掃描 QML 檔,決定要把哪些 QML 模組靜態連結進網頁版。Qt 預設掃描**整個 repo 資料夾**;w2-062 起
+根 `CMakeLists.txt` 把範圍限制在 repo 最上層的專案資料夾(不含 `build*`、`dist`,§3 最後一點,configure log 的 `[qml-scan]`),
+所以 `build\`、`dist\` 裡的 QML(另一份建置、打包資料夾裡 windeployqt 複製的 Qt 模組、指到 Qt 安裝資料夾的 junction)
+不再影響網頁版。仍會掃到的是**專案資料夾本身**(`App`、`Core`、`TaidaFlow`、`TaidaFlowContent`、`Dependencies`、`docs`、
+`scripts` …):不要把別的 QML 來源(另一份 clone、解壓的 Qt 範例、junction)放進這些資料夾;放了就移走,再
+`scripts\build-wasm.bat wasm-release fresh`。configure log 沒有 `[qml-scan]` 那一行而有 `[qml-scan]` 的 warning 時,表示這個
+Qt 版本的內部函式不同,掃描又回到整個 repo(w2-063 的實測:`build\` 下有指到 `C:\Qt` 的 junction 時,匯入從 59 個變成 459 個)。
 
 **`Filename longer than 260 characters` / 奇怪的找不到檔案**:repo 路徑太長(§1.3),搬到 `C:\src\TaidaFlow` 之類再 fresh 建置。
 
 **`emsdk_env.bat` 失敗或權限錯誤**:emsdk 資料夾不可寫(例如放在 `C:\Program Files`),搬到 `C:\tools\emsdk`。
 
-**`python` 打開 Microsoft Store / `The system cannot find the file ...\WindowsApps\python.exe`(exit 9059)**:
-Windows 的應用程式執行別名擋在前面,改用 `py -3`,或關掉別名(§2.5)。
-
 **網頁版 configure 出現一堆 `CMake Warning`(`Qt6ProtobufTools could not be found because dependency WrapProtoc
 could not be found`、`Qt policy QTP0001/QTP0004 is not set`、`Manually-specified variables were not used by the project:
 BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與 `[wasm-shell]` 兩行為準。
 
-**Python 腳本出現 `ModuleNotFoundError: No module named 'fontTools'`**:`python -m pip install fonttools`(要裝在執行腳本的
-那個 python;有多個 Python 時用 `python -m pip`)。
+**字型子集工具出現 `ModuleNotFoundError: No module named 'fontTools'` 或 `make-font-subset: no Python 3 found`(exit 9)**:
+只影響重新產生網頁版字型(§2.5 (B)),編譯不受影響。照 §2.5 安裝後再跑。
+
+**桌面版 configure 出現 `CMake Warning ... [nginx] TAIDAFLOW_NGINX_DIR="..." holds no nginx.exe`**:這台電腦沒有 nginx
+(或放在別處)。建置照常成功,只是 `build\desktop\nginx` 沒有 `nginx.exe`。要用時裝 nginx for Windows 到
+`C:\tools\nginx\nginx-<版本>\`,或 configure 時加 `-DTAIDAFLOW_NGINX_DIR=<資料夾>`(§4.5)。
 
 ---
 
-## 10. config.json(待 w2-062 完成後補)
+## 10. config.json(設定檔)
 
-外部設定檔 `config.json`(w2-061 / w2-062)仍在進行中,本節待完成後補上:檔案位置、欄位、預設值、與建置 / 打包的關係。
-已確定的事項:Modbus / MS300 的逾時設定**不會**放進 `config.json`(Mango 決定)。
+桌面版所有「現場會不一樣」的設定(資料資料夾、5 台 ADAM 與 MS300 的位址 / 序列埠參數、各服務的位址與 port、nginx)
+都在 **`config.json`**(w2-061 讀取器 `App/appconfig.*`、w2-062 後端與腳本接上)。欄位表與正式機用法見
+[DEPLOY_AND_STARTUP.md §6](DEPLOY_AND_STARTUP.md);這裡只寫開發者要知道的部分。
+
+- **程式找檔的順序**:環境變數 `TAIDAFLOW_CONFIG`(完整路徑)→ `<TaidaFlowApp.exe 所在資料夾>\config.json` →
+  兩者都沒有時**在 exe 旁建立**預設檔。JSON 格式錯誤:程式顯示錯誤對話框並結束(exit 2),**不覆寫**檔案。
+  `TaidaFlowApp.exe --write-default-config <路徑>` 只寫出預設檔就結束(已存在不覆寫,exit 3)。
+- **開發機一律用 repo 內的開發設定**,不要讓 `build\desktop` 旁邊出現 config.json(那會是正式機預設:資料寫到
+  `C:\TaidaFlowData`、連廠區 IP):
+  | 檔案 | 內容 | 用法 |
+  |---|---|---|
+  | `deploy\dev\config.dev.json` | `dataDir` = `../../build/runtime-cwd`(相對於設定檔所在資料夾)、設備位址維持廠區預設、nginx.exe 指向開發機的 nginx | `scripts\run-desktop.ps1` 的預設;接模擬器時 `-DeviceProfile simulator`(`TAIDAFLOW_DEVICE_PROFILE=simulator` 把 5 台 ADAM 換成 `127.0.0.201~205`,log 會記) |
+  | `deploy\dev\config.simulator.json` | 同上,但 5 台 ADAM 直接寫 `127.0.0.201~205` | `scripts\run-desktop.ps1 -Config deploy\dev\config.simulator.json` |
+  `run-desktop.ps1` 以 `TAIDAFLOW_CONFIG` 把設定檔交給程式,設定檔不存在就拒絕啟動;`safety_probe.ps1`、`nginx-web.ps1`、
+  `deploy-web.ps1`、`verify-desktop-startup.ps1` 用同一份(`-Config`,否則 `TAIDAFLOW_CONFIG`,否則 `config.dev.json`)。
+  改自己的 port 或 nginx 位置:複製一份 `config.dev.json` 到 `build\` 底下改,再用 `-Config` 指定(不要改到別人的設定)。
+- **腳本不重複定義預設值**:`scripts\taidaflow-config.ps1`(所有腳本共用的讀取器)缺檔時呼叫
+  `TaidaFlowApp.exe --write-default-config` 產生;檔案缺某些鍵時,也從同一個程式取得預設值。驗證規則(型別、範圍)與
+  `App/appconfig.cpp` 相同。唯一例外是 `nginx.exe`(只有腳本用;程式的讀取器之後由 main 分支補上):檔案沒有時用
+  `nginx\nginx.exe`(相對於 config.json 所在資料夾)。
+- **環境變數**:`TAIDAFLOW_REST_PORT` 已移除(REST port 改由 `rest.port`);`TAIDAFLOW_DOWNLOAD_PORT` 仍可臨時覆寫下載連結的
+  port(程式 log 會記「environment override」);`TAIDAFLOW_DEVICE_PROFILE=simulator` 只給測試用。
+- **打包**:`package-release.ps1` 不附 config.json(正式機第一次啟動時建立,之後更新版本不會覆蓋);打包資料夾的
+  `web\runtime.json` 用程式預設值產生,正式機的程式每次啟動都會依它的 config.json 重寫。
+- **固定在程式裡、不放 config.json**(Mango 決定):Modbus TCP 逾時 1000 ms / 重試 2 / 重連 3000 ms、MS300 逾時 1000 ms /
+  重試 1 / 輪詢 1000 ms。
+- 程式啟動時 log 會列出每一項的生效值與來源(`[Config] ...`:file / default / environment;後端使用的值另有
+  `[Config] Core ...` 行)。
 
 ---
 
@@ -768,6 +864,16 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 | §4.1 / §5.1 / §4.2 / §5.2 預設路徑 | 在上述 clone 資料夾(不同的 repo 位置)跑 `build-desktop.bat`、`build-wasm.bat`(preset 做法)與手動 A,各 exit 0 |
 | §2.6 不同安裝位置 | 在上述 clone:Qt、Qt Tools、VS 用 junction 放到另一個路徑、emsdk 用**另外真的安裝的一份**(下一列),設 `TAIDAFLOW_*` 後 `build-desktop.bat fresh`、`build-wasm.bat wasm-release fresh` 各 exit 0,`CMakeCache.txt` 用的都是新路徑;`CMakeUserPresets.json` 範本(照抄本文件,只換路徑)建置桌面版與網頁版 exit 0;工具路徑錯誤時腳本印出訊息並 exit 1(5 種情況) |
 | §2.4 emsdk 安裝 | 另一個資料夾真的 `git clone` emsdk 並 `emsdk install / activate 3.1.56`(不加 `--permanent`,使用者永久環境變數前後都沒有 `EMSDK`):(a) 2026-09 最新 emsdk → Node 24.19.0 / Python 3.13.3,`emcc` 3.1.56,用它建網頁版 exit 0(腳本自動不經 preset);(b) `git checkout 3.1.56` → Node 16.20.0 / Python 3.9.2-nuget / Java 8,與 `CMakePresets.json` 一致,用 `CMakeUserPresets.json` 建網頁版 exit 0。第一次 install 因 cmd 的 `python` 是 Store 別名而失敗,照 §2.4.2 的做法後成功 |
+
+2026-09-28(w2-062)在參考開發機上實際執行,log 在 `docs/evidence/w2-062/`:
+
+| 項目 | 結果 |
+|---|---|
+| §4.1 / §5.1 全新建置 | `build-desktop.bat fresh`、`build-wasm.bat wasm-release fresh` 各 exit 0;網頁版 configure 印 `[qml-scan] ... 45 import(s) (Qt's whole-folder scan: 59)` |
+| §3 QML 匯入掃描(D6) | 工作目錄(有 `dist\`、`build\`)與不含它們的乾淨複本建出的 `TaidaFlowApp.wasm` 都是 33,847,174 bytes |
+| §4.5 nginx 資料夾 | 全新建置產生、`nginx -t` 通過;改模板、產生程式或 config.dev.json(只改時間也算)→ 下次建置重新產生,沒改 → `no work to do`;`-DTAIDAFLOW_NGINX_DIR=<不存在>` → configure 警告、建置 exit 0、只有 `conf\`;還原後 `nginx.exe` 回來 |
+| §7 檢查 | `check-wasm-backend.ps1`、`check-version-shadow.ps1`、`check-rest-routes.ps1`、`verify-pack.ps1`、`run-apphttpserver-tests.bat`、`App/tests`(CTest)、bench(`make-bench-db.bat` → w2-041/w2-049、w2-045、w2-052、w2-053 的 QTest)各 exit 0;新舊(`.py` / `.ps1`)檢查輸出逐行相同後才刪 `.py` |
+| §2.5 字型 | `make-font-subset.ps1 --check` exit 1:main 的 `App/appconfig.cpp`(設定檔錯誤對話框)帶進 4 個新字「刪它將讓」,`App/fonts` 未重新產生(core 未改 App,見 w2-062 報告) |
 
 **沒有驗證到**(只有一台已裝好所有工具的參考機):
 

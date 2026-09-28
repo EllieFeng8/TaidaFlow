@@ -1,0 +1,14 @@
+﻿[PASS] GET :8124/TaidaFlowApp.html -> 200 - HTTP/1.1 200 OK
+[PASS] GET :8124/runtime.json -> 200, Cache-Control no-store, {"mirrorPublicPort":80,"version":1} - HTTP/1.1 200 OK / no-store / {"mirrorPublicPort":80,"version":1}
+[PASS] WebSocket upgrade on the relay :8125/mirror -> 101 - HTTP/1.1 101 Switching Protocols
+[PASS] GET http://127.0.0.1/ -> 302 /TaidaFlowApp.html - HTTP/1.1 302 Moved Temporarily /TaidaFlowApp.html
+[PASS] GET http://127.0.0.1/TaidaFlowApp.html -> 200 + COOP/COEP - HTTP/1.1 200 OK
+[PASS] GET http://127.0.0.1/TaidaFlowApp.wasm (gzip) -> 200 Content-Encoding gzip - HTTP/1.1 200 OK gzip
+[PASS] GET http://127.0.0.1/runtime.json -> 200, Cache-Control no-store, no gzip, no ETag, {"mirrorPublicPort":80,"version":1} - HTTP/1.1 200 OK / no-store / {"mirrorPublicPort":80,"version":1}
+[PASS] GET http://127.0.0.1/api/ -> REST status - {"status":"ok"}
+[PASS] WebSocket upgrade through nginx http://127.0.0.1/mirror -> 101 - HTTP/1.1 101 Switching Protocols
+[PASS] history export through ws://127.0.0.1/mirror, downloadPort = 80 - 22:09:57.753 RESULT state=done fileName=w2062live_20260928_220957.csv url=/exports/w2062live_20260928_220957.csv downloadPort=80
+[PASS] download http://127.0.0.1/exports/w2062live_20260928_220957.csv -> 200 attachment - HTTP/1.1 200 OK attachment; filename="w2062live_20260928_220957.csv"
+[PASS] download Range bytes=0-99 -> 206 - HTTP/1.1 206 Partial Content
+=== 0 check(s) failed
+live-curl-checks exit=0

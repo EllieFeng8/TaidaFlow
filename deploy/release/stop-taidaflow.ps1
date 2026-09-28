@@ -1,16 +1,16 @@
-# TaidaFlow - FIELD (production machine) stop script.                (w2-057)
-# Counterpart of start-taidaflow.ps1 (same installation folder, same -DataDir).
+# TaidaFlow - FIELD (production machine) stop script.                (w2-057, w2-062)
+# Counterpart of start-taidaflow.ps1 (same installation folder, same config.json).
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File stop-taidaflow.ps1
-#            [-DataDir <folder>] [-LogDir <folder>] [-TimeoutSec 60] [-Force]
-#   -DataDir : the SAME data folder that was given to start-taidaflow.ps1 (default
-#              <installation folder>\runtime); its taidaflow-app.json identifies the app.
+#            [-Config <config.json>] [-DataDir <folder>] [-LogDir <folder>] [-TimeoutSec 60] [-Force]
+#   w2-062: the data folder is config.json dataDir (default <installation folder>\config.json, or
+#   -Config); its taidaflow-app.json identifies the app. config.json is only read, never created.
+#   -DataDir : only when start-taidaflow.ps1 was started with the same one-time -DataDir.
 #
-# Order:
-#   1. nginx - only the nginx started by start-taidaflow.ps1 (runtime <DataDir>\nginx; pid, image
-#      and start time must match its state file), stopped gracefully with "nginx -s quit" by
-#      scripts\nginx-web.ps1. Any other nginx is never touched.
-#   2. TaidaFlowApp - only the process recorded in <DataDir>\taidaflow-app.json (pid + image path +
+# What it does:
+#   * nginx is NOT stopped (w2-062, Mango A6: nginx is independent of the app; stop it by hand with
+#     "cd <nginx folder>" + "nginx -s quit"). A running nginx is only reported.
+#   * TaidaFlowApp - only the process recorded in <DataDir>\taidaflow-app.json (pid + image path +
 #      start time must match). It is closed like a user closing the window (WM_CLOSE to its main
 #      window), so the app runs its normal shutdown (HTTP service stop, SQLite close). The script
 #      waits up to -TimeoutSec seconds.
@@ -24,8 +24,9 @@
 #
 # Exit codes: 0 stopped; 1 no app started by start-taidaflow.ps1 (with this data folder) is
 # running; 7 the app did not exit (not killed; or kill failed with -Force);
-# 9 nginx could not be stopped (the app was still closed).
+# 2 config.json unusable (pass -DataDir). (9 = nginx stop failure is no longer used: nginx is not stopped.)
 param(
+    [string]$Config = "",
     [string]$DataDir = "",
     [string]$LogDir = "",
     [int]$TimeoutSec = 60,
@@ -37,7 +38,16 @@ function Full([string]$p) {
     if (-not [System.IO.Path]::IsPathRooted($p)) { $p = Join-Path $install $p }
     return [System.IO.Path]::GetFullPath($p).TrimEnd('\')
 }
-if ($DataDir -eq "") { $DataDir = Join-Path $install 'runtime' }
+$configNote = ''
+if ($DataDir -eq "") {
+    # config.json dataDir (the defaults of TaidaFlowApp.exe for keys missing in the file).
+    . (Join-Path $install 'scripts\taidaflow-config.ps1')
+    $configPath = if ($Config -ne "") { Full $Config } else { Join-Path $install 'config.json' }
+    $cfg = Get-TaidaFlowConfig -Path $configPath -Exe (Join-Path $install 'TaidaFlowApp.exe')
+    if ($cfg.Error) { [Console]::Out.WriteLine("ERROR: $($cfg.Error) - pass -DataDir <data folder>"); exit 2 }
+    $DataDir = $cfg.DataDir
+    $configNote = " from $configPath dataDir ($($cfg.Sources['dataDir']))"
+}
 $DataDir = Full $DataDir
 if ($LogDir -eq "") { $LogDir = Join-Path $DataDir 'logs' }
 $LogDir = Full $LogDir
@@ -54,31 +64,19 @@ function Log([string]$m) {
 }
 function SamePath([string]$a, [string]$b) { return [string]::Equals($a, $b, [System.StringComparison]::OrdinalIgnoreCase) }
 
-Log "=== TaidaFlow stop (data folder $DataDir) ==="
+Log "=== TaidaFlow stop (data folder $DataDir$configNote) ==="
 $state = $null
 if (Test-Path $stateFile -PathType Leaf) {
     try { $state = Get-Content -Raw -LiteralPath $stateFile | ConvertFrom-Json } catch { Log "state file unreadable: $stateFile"; $state = $null }
 }
-$nginxRuntime = if ($state -and $state.nginxRuntime) { [string]$state.nginxRuntime } else { Join-Path $DataDir 'nginx' }
-
-# --- 1. nginx (ours only) -------------------------------------------------------------------
+# --- nginx: NOT stopped (w2-062, Mango A6) -------------------------------------------------------
+# nginx is independent of the app (started with "start nginx" in its folder, by hand or by
+# start-taidaflow.ps1). Stop it by hand when needed:  cd <nginx folder>  then  nginx -s quit
 $nginxFailed = $false
-$nginxState = Join-Path $nginxRuntime 'taidaflow-nginx.json'
-if (Test-Path $nginxState -PathType Leaf) {
-    Log "stopping nginx (runtime $nginxRuntime)"
-    $script = Join-Path $install 'scripts\nginx-web.ps1'
-    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $script, '-Action', 'stop', '-RuntimeDir', $nginxRuntime)
-    $out = & powershell.exe @a
-    $rc = $LASTEXITCODE
-    foreach ($line in @($out)) { if ("$line".Trim() -ne '') { Log "  nginx | $line" } }
-    if ($rc -eq 0) { Log "nginx stopped" }
-    elseif ($rc -eq 1) { Log "no nginx of ours was running" }
-    else { Log "WARNING: nginx stop failed (nginx-web.ps1 exit $rc)"; $nginxFailed = $true }
-} else {
-    Log "no nginx state file in $nginxRuntime - nginx not started by start-taidaflow.ps1, nothing to stop"
-}
+$running = @(Get-Process nginx -ErrorAction SilentlyContinue)
+if ($running.Count) { Log ("nginx keeps running (pid {0}; stop it with: cd <nginx folder> ; nginx -s quit)" -f (($running | ForEach-Object { $_.Id }) -join ', ')) }
 
-# --- 2. the app (ours only) --------------------------------------------------------------------
+# --- the app (ours only) -------------------------------------------------------------------------
 $ours = $null
 if ($state -and $state.pid) {
     $p = Get-Process -Id ([int]$state.pid) -ErrorAction SilentlyContinue

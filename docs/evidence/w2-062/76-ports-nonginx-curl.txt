@@ -1,0 +1,10 @@
+﻿[PASS] GET :8134/TaidaFlowApp.html -> 200 - HTTP/1.1 200 OK
+[PASS] GET :8134/runtime.json -> 200, Cache-Control no-store, {"mirrorPublicPort":8135,"version":1} - HTTP/1.1 200 OK / no-store / {"mirrorPublicPort":8135,"version":1}
+[PASS] WebSocket upgrade on the relay :8135/mirror -> 101 - HTTP/1.1 101 Switching Protocols
+[PASS] history export through ws://127.0.0.1:8135/mirror, downloadPort = 8134 - 22:13:51.081 RESULT state=done fileName=w2062live_20260928_221351.csv url=/exports/w2062live_20260928_221351.csv downloadPort=8134
+[PASS] download http://127.0.0.1:8134/exports/w2062live_20260928_221351.csv -> 200 attachment - HTTP/1.1 200 OK attachment; filename="w2062live_20260928_221351.csv"
+=== 0 check(s) failed
+live-curl-checks exit=0
+[Config] Core download links -> port 8134 (file; nginx.enabled false file, nginx.port 8081 file, http.port 8134 file)
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes), download links -> port 8134
+[Web] runtime.json written: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\runtime.json = {"mirrorPublicPort":8135,"version":1} (nginx.enabled false -> mirror.publicPort file (LanRelay))

@@ -1,0 +1,26 @@
+﻿=== safety probe 2026-09-28T22:14:11.202+08:00 reason="manual" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\config.json
+  config note: "nginx.exe" is missing - using the default nginx\nginx.exe
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  device 127.0.0.203:502 [effective devices.adam6217b (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 502=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listener 127.0.0.205:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.204:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.203:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.202:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.201:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  verdict: SAFE
+safety_probe exit=0

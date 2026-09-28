@@ -1,0 +1,17 @@
+﻿A    default   exit=0 expect=0 OK [verdict: SAFE]
+A    simulator exit=5 expect=5 OK [verdict: SIMULATOR-NOT-READY]
+A    simcfg    exit=5 expect=5 OK [verdict: SIMULATOR-NOT-READY]
+     (B: foreign listener powershell pid 146868 on 127.0.0.201:502)
+B    default   exit=3 expect=3 OK [verdict: UNSAFE]
+B    simulator exit=3 expect=3 OK [verdict: UNSAFE]
+B    simcfg    exit=3 expect=3 OK [verdict: UNSAFE]
+     (C: SIM_PID=140072 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\probe-selftest-simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205)
+C    default   exit=3 expect=3 OK [verdict: UNSAFE]
+C    simulator exit=0 expect=0 OK [verdict: SAFE]
+C    simcfg    exit=0 expect=0 OK [verdict: SAFE]
+     (D: foreign listener powershell pid 110068 on 127.0.0.1:502 next to the simulator)
+D    simulator exit=3 expect=3 OK [verdict: UNSAFE]
+D    simcfg    exit=3 expect=3 OK [verdict: UNSAFE]
+502 listeners left after cleanup: 0
+probe_selftest_sim exit=0
+probe_selftest_sim exit=0

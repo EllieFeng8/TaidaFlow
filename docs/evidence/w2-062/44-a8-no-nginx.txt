@@ -1,0 +1,138 @@
+
+cache before: TAIDAFLOW_NGINX_DIR:PATH=C:/tools/nginx/nginx-1.30.5
+== reconfigure with -DTAIDAFLOW_NGINX_DIR=C:/does-not-exist/nginx + build
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0001 is not set: ':/qt/qml/' is the default resource prefix
+  for QML modules.  Check https://doc.qt.io/qt-6/qt-cmake-policy-qtp0001.html
+  for policy details.  Use the qt_policy command to set the policy and
+  suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:719 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:1254 (qt6_add_qml_module)
+  Core/CMakeLists.txt:43 (qt_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0004 is not set: You need qmldir files for each extra
+  directory that contains .qml files for your module.  Check
+  https://doc.qt.io/qt-6/qt-cmake-policy-qtp0004.html for policy details.
+  Use the qt_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:3520 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:916 (qt6_target_qml_sources)
+  TaidaFlowContent/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+shaders/dropShadow.frag -> shaders/dropShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadow.frag.qsb
+shaders/dropShadowClip.frag -> shaders/dropShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadowClip.frag.qsb
+shaders/gaussianBlur.frag -> shaders/gaussianBlur.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/gaussianBlur.frag.qsb
+shaders/innerShadow.frag -> shaders/innerShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadow.frag.qsb
+shaders/innerShadowClip.frag -> shaders/innerShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadowClip.frag.qsb
+shaders/opacityMask.frag -> shaders/opacityMask.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/opacityMask.frag.qsb
+CMake Warning at CMakeLists.txt:126 (message):
+  [nginx] TAIDAFLOW_NGINX_DIR="C:/does-not-exist/nginx" holds no nginx.exe +
+  conf/mime.types - <build>/nginx gets conf/nginx.conf only (no nginx.exe to
+  start; see docs/BUILD.md).  The build continues.
+
+
+-- Configuring done (3.4s)
+-- Generating done (0.8s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/desktop
+configure exit=0
+[1/7] Generating aggregate ProxyMirror event relay for Core
+[2/7] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx (no nginx.exe there - nginx -t skipped)
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+
+note: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\TaidaFlowApp.html not deployed yet (scripts\deploy-web.ps1)
+
+nginx.conf is up to date: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+
+NGINX_CONF=unchanged
+
+nginx -t skipped: no nginx.exe in D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+
+[3/7] Building CXX object Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.obj
+[4/7] Linking CXX static library Core\Core.lib
+[5/7] Automatic MOC and UIC for target TaidaFlowApp
+[6/6] Linking CXX executable TaidaFlowApp.exe
+build exit=0
+nginx folder now: conf, logs, temp; conf: mime.types, nginx.conf, nginx.conf.prev-20260928-215806, nginx.conf.prev-20260928-215809
+== restore: -UTAIDAFLOW_NGINX_DIR (default = newest C:\tools\nginx\nginx-<ver>) + build
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0001 is not set: ':/qt/qml/' is the default resource prefix
+  for QML modules.  Check https://doc.qt.io/qt-6/qt-cmake-policy-qtp0001.html
+  for policy details.  Use the qt_policy command to set the policy and
+  suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:719 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:1254 (qt6_add_qml_module)
+  Core/CMakeLists.txt:43 (qt_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0004 is not set: You need qmldir files for each extra
+  directory that contains .qml files for your module.  Check
+  https://doc.qt.io/qt-6/qt-cmake-policy-qtp0004.html for policy details.
+  Use the qt_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:3520 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:916 (qt6_target_qml_sources)
+  TaidaFlowContent/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+shaders/dropShadow.frag -> shaders/dropShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadow.frag.qsb
+shaders/dropShadowClip.frag -> shaders/dropShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadowClip.frag.qsb
+shaders/gaussianBlur.frag -> shaders/gaussianBlur.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/gaussianBlur.frag.qsb
+shaders/innerShadow.frag -> shaders/innerShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadow.frag.qsb
+shaders/innerShadowClip.frag -> shaders/innerShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadowClip.frag.qsb
+shaders/opacityMask.frag -> shaders/opacityMask.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/opacityMask.frag.qsb
+-- [nginx] <build>/nginx: nginx.exe from C:/tools/nginx/nginx-1.30.5, conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+-- Configuring done (2.3s)
+-- Generating done (0.8s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/desktop
+configure exit=0
+[1/7] Generating aggregate ProxyMirror event relay for Core
+[2/7] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+note: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\TaidaFlowApp.html not deployed yet (scripts\deploy-web.ps1)
+
+nginx.conf is up to date: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+
+NGINX_CONF=unchanged
+
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+
+[3/7] Building CXX object Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.obj
+[4/7] Linking CXX static library Core\Core.lib
+[5/7] Automatic MOC and UIC for target TaidaFlowApp
+[6/6] Linking CXX executable TaidaFlowApp.exe
+build exit=0
+cache after: TAIDAFLOW_NGINX_DIR:PATH=C:/tools/nginx/nginx-1.30.5
+nginx folder now: conf, logs, temp, nginx.exe
+== after the -Build no-backup change (script is a DEPENDS -> regenerated): build exit=0
+[1/1] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+nginx.conf is up to date: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+NGINX_CONF=unchanged
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+conf folder: mime.types, nginx.conf

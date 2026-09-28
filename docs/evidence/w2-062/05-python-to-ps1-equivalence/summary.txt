@@ -1,0 +1,22 @@
+﻿python = py -3 (C:\Users\TED\AppData\Local\Programs\Python\Python312\python.exe 3.12.10)
+check_wasm_backend.py rc=0
+check-wasm-backend.ps1 rc=0
+check_version_shadow.py rc=0
+check-version-shadow.ps1 rc=0
+check_rest_routes.py rc=0
+check-rest-routes.ps1 rc=0
+verify_pack.py rc=0
+verify-pack.ps1 rc=0
+check_wasm_backend.py vs check-wasm-backend.ps1: 13/13 lines, byte-for-byte line compare -> IDENTICAL
+check_version_shadow.py vs check-version-shadow.ps1: 3/3 lines, byte-for-byte line compare -> IDENTICAL
+check_rest_routes.py vs check-rest-routes.ps1: 34/34 lines, byte-for-byte line compare -> IDENTICAL
+verify_pack.py vs verify-pack.ps1: 29/29 lines, byte-for-byte line compare -> IDENTICAL
+NEG check_wasm_backend.py (build\wasm-release + docs) rc=1
+NEG check-wasm-backend.ps1 (build\wasm-release + docs) rc=1
+NEG check_version_shadow.py (docs) rc=2
+NEG check-version-shadow.ps1 (docs) rc=2
+NEG verify_pack.py (--source docs\evidence\w2-060) rc=1
+NEG verify-pack.ps1 (-Source docs\evidence\w2-060) rc=1
+neg-check_wasm_backend.py vs neg-check-wasm-backend.ps1: 8/8 lines -> IDENTICAL
+neg-check_version_shadow.py vs neg-check-version-shadow.ps1: 1/1 lines -> IDENTICAL
+neg-verify_pack.py vs neg-verify-pack.ps1: 54/54 lines -> IDENTICAL

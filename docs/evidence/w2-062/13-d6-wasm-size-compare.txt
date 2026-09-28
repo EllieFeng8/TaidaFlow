@@ -1,0 +1,14 @@
+D6 - wasm size, work tree (with build\ and dist\ present) vs clean copy of the same sources (git ls-files + untracked, no build\/dist\)
+work tree : 33847174 bytes  build/wasm-release/TaidaFlowApp.wasm (fresh build, 11-wasm-release-fresh-build.log)
+clean copy: 33847174 bytes  build/cc/build/wasm-release/TaidaFlowApp.wasm (fresh build, 12-cleancopy-wasm-build.log)
+cmp: 69 differing bytes, all inside the rcc resource data (3-byte groups = resource time stamps), same size
+
+configure lines:
+-- [qml-scan] QML import scan limited to the project folders (App;Core;Dependencies;Generated;TaidaFlow;TaidaFlowContent;cmake;deploy;docs;integration-pack;scripts); build*/dist/hidden folders left out: 45 import(s) (Qt's whole-folder scan: 59)
+-- [qml-scan] QML import scan limited to the project folders (App;Core;Dependencies;Generated;TaidaFlow;TaidaFlowContent;cmake;deploy;docs;integration-pack;scripts); build*/dist/hidden folders left out: 45 import(s) (Qt's whole-folder scan: 51)
+
+imports actually used (qml_import_scanner_imports_count):
+set(qml_import_scanner_imports_count 45)
+set(qml_import_scanner_imports_count 45)
+
+before the fix (w2-060/w2-063, same work tree with dist\): 34,103,893 bytes, 59 imports (extra QtQuick.NativeStyle, QtQuick.Controls.Windows.impl, QtQuickControls2NativeStylePlugin); w2-063 clean clone at 5b2de0f: 33,838,617 bytes (the sources grew since: main ec48140 runtimeinfo + w2-062)

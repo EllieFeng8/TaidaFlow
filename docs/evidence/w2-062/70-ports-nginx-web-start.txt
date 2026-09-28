@@ -1,0 +1,16 @@
+config.json: D:\repo\codex\qmlTester\taidaflow\build\w2-062-ports\config.json
+  nginx.port 8081, rest.port 18080, mirror.internalPort 18125, dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd
+nginx: C:\tools\nginx\nginx-1.30.5\nginx.exe (from config.json nginx.exe = C:\tools\nginx\nginx-1.30.5\nginx.exe (file; relative = to the config.json folder))
+config: D:\repo\codex\qmlTester\taidaflow\build\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\build\desktop\web, export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports, port 8081, /api/ -> 127.0.0.1:18080, /mirror -> 127.0.0.1:18125)
+nginx -t:
+  | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf syntax is ok
+  | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx/conf/taidaflow.conf test is successful
+  runtime.json written: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\runtime.json = {"mirrorPublicPort":8081,"version":1}
+NGINX_PID=143532 WORKERS=142868 PIDFILE=143532
+WEBROOT=D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+EXPORTDIR=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+RUNTIME=D:\repo\codex\qmlTester\taidaflow\build\nginx
+URL=http://<this host's IPv4>:8081/  (-> /TaidaFlowApp.html)  downloads: http://<this host's IPv4>:8081/exports/<file>
+MIRROR=ws://<this host's IPv4>:8081/mirror  -> 127.0.0.1:18125 (the app's Mirror server; runtime.json mirrorPublicPort=8081)
+REST=http://<this host's IPv4>:8081/api/...  -> 127.0.0.1:18080 (the app's RESTManager)
+(the app takes its download-link port and runtime.json from config.json: nginx.enabled true -> nginx.port)

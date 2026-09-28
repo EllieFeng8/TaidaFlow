@@ -1,5 +1,12 @@
 #include "core.h"
 
+// w2-062: config.json reader and /runtime.json format of the App target (App/appconfig.h,
+// App/runtimeinfo.h, compiled into TaidaFlowApp; Core/CMakeLists.txt adds App/ to the include
+// path). Only this file uses them: the backend classes get plain values from here, so their
+// stand-alone test projects need neither.
+#include "appconfig.h"
+#include "runtimeinfo.h"
+
 #include "AppHttpServer/AppHttpServer.h"
 #include "HistoryExport.h"
 #include "HistoryViews.h"
@@ -10,12 +17,14 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QHostAddress>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QSaveFile>
 #include <QSettings>
 #include <QStringList>
 #include <QTime>
@@ -81,6 +90,101 @@ AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus, 
         fields.alarmStatus = resolved;
     return fields;
 }
+
+// ---- w2-062: backend values from config.json (docs/taidaflow_config_spec.md §2) -----------
+// AppConfig::instance() was loaded by main() before Core::init() (App/main.cpp). Every value
+// the backends use is logged once here with its source (file / default / environment); the
+// full config.json listing is printed by main ("[Config] ..."). Timeouts, retries and poll
+// intervals stay fixed in the backend classes (Mango: not in config.json).
+QString configSource(const AppConfig &config, const QString &key)
+{
+    return AppConfig::sourceName(config.source(key));
+}
+
+// "<k1>: <source>, <k2>: <source>" for the keys of one group.
+QString configSources(const AppConfig &config, const QString &group, const QStringList &names)
+{
+    QStringList parts;
+    for (const QString &name : names)
+        parts.append(QStringLiteral("%1 %2").arg(name, configSource(config, group + QLatin1Char('.') + name)));
+    return parts.join(QStringLiteral(", "));
+}
+
+Manager::DeviceSettings deviceSettingsFromConfig(const AppConfig &config)
+{
+    struct Map { AppConfig::Device configDevice; ModbusClient::Device clientDevice; };
+    static const Map map[] = {
+        {AppConfig::Device::Adam6256, ModbusClient::Device::Adam6256_201},
+        {AppConfig::Device::Adam6217A, ModbusClient::Device::Adam6217_202},
+        {AppConfig::Device::Adam6217B, ModbusClient::Device::Adam6217_203},
+        {AppConfig::Device::Adam6224, ModbusClient::Device::Adam6224_204},
+        {AppConfig::Device::Adam6022, ModbusClient::Device::Adam6022_205},
+    };
+    Manager::DeviceSettings settings;   // names, timeouts and retries from the defaults
+    for (ModbusClient::DeviceConfig &device : settings.modbusDevices) {
+        for (const Map &m : map) {
+            if (m.clientDevice != device.device)
+                continue;
+            const AppConfig::TcpDevice configured = config.device(m.configDevice);
+            device.host = configured.host;
+            device.port = configured.port;
+            device.unitId = configured.unitId;
+            const QString group = QStringLiteral("devices.") + AppConfig::deviceKey(m.configDevice);
+            qInfo().noquote() << QStringLiteral("[Config] Core %1 (%2) -> %3:%4 unit %5 (%6)")
+                                         .arg(device.name, group, device.host)
+                                         .arg(device.port).arg(device.unitId)
+                                         .arg(configSources(config, group, {QStringLiteral("host"), QStringLiteral("port"),
+                                                                            QStringLiteral("unitId")}));
+        }
+    }
+    const AppConfig::SerialDevice ms300 = config.ms300();
+    settings.ms300.serialPort = ms300.serialPort;
+    settings.ms300.baudRate = ms300.baudRate;
+    settings.ms300.dataBits = ms300.dataBits;
+    settings.ms300.parity = ms300.parity;
+    settings.ms300.stopBits = ms300.stopBits;
+    settings.ms300.unitId = ms300.unitId;
+    qInfo().noquote() << QStringLiteral("[Config] Core MS300 (devices.ms300) -> %1 %2 baud, data bits %3, parity %4, "
+                                        "stop bits %5, unit %6 (%7)")
+                                 .arg(ms300.serialPort).arg(ms300.baudRate).arg(ms300.dataBits)
+                                 .arg(ms300.parity).arg(ms300.stopBits).arg(ms300.unitId)
+                                 .arg(configSources(config, QStringLiteral("devices.ms300"),
+                                                    {QStringLiteral("serialPort"), QStringLiteral("baudRate"),
+                                                     QStringLiteral("dataBits"), QStringLiteral("parity"),
+                                                     QStringLiteral("stopBits"), QStringLiteral("unitId")}));
+    return settings;
+}
+
+// Writes <web folder>/runtime.json (spec §3, revised 2026-09-28: nginx and AppHttpServer send it
+// as a static file). Only when the content differs, so an unchanged file keeps its date.
+// A folder that cannot be written only logs a warning: the page then falls back to port 8125.
+void writeRuntimeJson(const QString &webDir, quint16 mirrorPublicPort, const QString &portSource)
+{
+    const QString path = QDir(webDir).filePath(QStringLiteral("runtime.json"));
+    const QByteArray body = TaidaFlowRuntime::buildRuntimeJson(mirrorPublicPort);
+    QFile existing(path);
+    if (existing.open(QIODevice::ReadOnly) && existing.readAll() == body) {
+        qInfo().noquote() << QStringLiteral("[Web] runtime.json unchanged: %1 = %2 (%3)")
+                                     .arg(QDir::toNativeSeparators(path), QString::fromUtf8(body), portSource);
+        return;
+    }
+    existing.close();
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly) || file.write(body) != body.size() || !file.commit()) {
+        qWarning().noquote() << QStringLiteral("[Web] runtime.json NOT written to %1 (%2) - web pages fall back to "
+                                               "Mirror port %3; the application keeps running")
+                                        .arg(QDir::toNativeSeparators(path), file.errorString())
+                                        .arg(TaidaFlowRuntime::kDefaultMirrorPublicPort);
+        return;
+    }
+    // A pre-compressed copy would be older than the new file (AppHttpServer ignores it) but
+    // nginx gzip_static does not compare dates: never leave one behind.
+    const QString gz = path + QStringLiteral(".gz");
+    if (QFileInfo::exists(gz) && !QFile::remove(gz))
+        qWarning().noquote() << QStringLiteral("[Web] cannot remove stale %1").arg(QDir::toNativeSeparators(gz));
+    qInfo().noquote() << QStringLiteral("[Web] runtime.json written: %1 = %2 (%3)")
+                                 .arg(QDir::toNativeSeparators(path), QString::fromUtf8(body), portSource);
+}
 }
 
 Core& Core::instance()
@@ -144,7 +248,9 @@ void Core::init()
     if (!m_sqlManager->initialize())
         qWarning() << "SqlManager initialization failed; Server Input Registers will not be saved.";
 
-    m_manager = new Manager(m_proxy, m_sqlManager, this);
+    // w2-062: every backend value from config.json (AppConfig, loaded by main before init()).
+    const AppConfig &config = AppConfig::instance();
+    m_manager = new Manager(m_proxy, m_sqlManager, deviceSettingsFromConfig(config), this);
     connect(m_manager, &Manager::alarmSaved, this, &Core::loadAlarmRecords);
     // w2-052 (spec §2.1, Mango 2026-09-27): every client has its own History
     // range and page.  historyViewRequested(sessionId, fromMs, toMs, page) -
@@ -157,10 +263,19 @@ void Core::init()
     // w2-041 (spec §3): raw CSV export queue/engine (export folder <working
     // directory>/exports); it mounts GET /exports/<file> on the AppHttpServer
     // singleton, which also serves the web page (w2-049, startHttpServer).
-    // w2-050: the port of the download links comes from TAIDAFLOW_DOWNLOAD_PORT (default 8124;
-    // 8123 when nginx serves the export folder).
+    // w2-062 (spec §2 nginx): the port of the download links = nginx.enabled ? nginx.port :
+    // http.port from config.json; TAIDAFLOW_DOWNLOAD_PORT stays a temporary override (the start
+    // script sets it to http.port when nginx is enabled but could not be started).
     HistoryExportManager::Options exportOptions;
-    exportOptions.downloadPort = HistoryExport::downloadPortFromEnvironment();
+    exportOptions.downloadPort = config.downloadPort();
+    qInfo().noquote() << QStringLiteral("[Config] Core download links -> port %1 (%2; nginx.enabled %3 %4, "
+                                        "nginx.port %5 %6, http.port %7 %8)")
+                                 .arg(exportOptions.downloadPort)
+                                 .arg(AppConfig::sourceName(config.downloadPortSource()))
+                                 .arg(config.nginx().enabled ? QStringLiteral("true") : QStringLiteral("false"),
+                                      configSource(config, QStringLiteral("nginx.enabled")))
+                                 .arg(config.nginx().port).arg(configSource(config, QStringLiteral("nginx.port")))
+                                 .arg(config.http().port).arg(configSource(config, QStringLiteral("http.port")));
     m_historyExport = new HistoryExportManager(m_proxy, m_sqlManager, exportOptions, this);
     startHttpServer();
     startRestServer();
@@ -199,7 +314,13 @@ void Core::init()
             m_modbusServer, &ModbusServer::setHoldingRegister);
 
     m_manager->start();
-    m_modbusServer->start();
+    const AppConfig::ModbusServerSettings serverSettings = config.modbusServer();
+    qInfo().noquote() << QStringLiteral("[Config] Core Modbus server (modbusServer) -> %1:%2 unit %3 (%4)")
+                                 .arg(serverSettings.bind).arg(serverSettings.port).arg(serverSettings.unitId)
+                                 .arg(configSources(config, QStringLiteral("modbusServer"),
+                                                    {QStringLiteral("bind"), QStringLiteral("port"),
+                                                     QStringLiteral("unitId")}));
+    m_modbusServer->start(QHostAddress(serverSettings.bind), serverSettings.port, serverSettings.unitId);
     setHistoryTitleOnce();
     loadAlarmRecords();
 }
@@ -209,9 +330,10 @@ constexpr auto kWebDirEnv = "TAIDAFLOW_WEB_DIR";
 const QString kWebPage = QStringLiteral("TaidaFlowApp.html");
 
 // w2-049: folder of the WebAssembly build served at http://<host>:8124/.
-// Order: TAIDAFLOW_WEB_DIR -> <exe folder>/web -> the repository's build/wasm-release
-// (development default, compiled in; only if it exists).  A candidate is used when it
-// holds TaidaFlowApp.html.  Every candidate and the result are logged.
+// Order: TAIDAFLOW_WEB_DIR -> <exe folder>/web -> <exe folder>/../wasm-release (development
+// default: build\desktop -> build\wasm-release; w2-062: relative, so no build-machine path is
+// compiled into the exe).  A candidate is used when it holds TaidaFlowApp.html.  Every candidate
+// and the result are logged.
 QString resolveWebDir(QString *source)
 {
     struct Candidate { QString source; QString dir; };
@@ -223,9 +345,8 @@ QString resolveWebDir(QString *source)
         candidates.append({QString::fromLatin1(kWebDirEnv), env});
     candidates.append({QStringLiteral("<exe folder>/web"),
                        QCoreApplication::applicationDirPath() + QStringLiteral("/web")});
-#ifdef TAIDAFLOW_DEV_WEB_DIR
-    candidates.append({QStringLiteral("development default"), QStringLiteral(TAIDAFLOW_DEV_WEB_DIR)});
-#endif
+    candidates.append({QStringLiteral("development default <exe folder>/../wasm-release"),
+                       QCoreApplication::applicationDirPath() + QStringLiteral("/../wasm-release")});
     for (const Candidate &c : std::as_const(candidates)) {
         const QString dir = QDir::cleanPath(QDir(c.dir).absolutePath());
         const bool hasDir = QFileInfo(dir).isDir();
@@ -247,15 +368,24 @@ QString resolveWebDir(QString *source)
 void Core::startHttpServer()
 {
     AppHttpServer &http = AppHttpServer::instance();
+    // w2-062: http.bind / http.port from config.json (default 0.0.0.0:8124).
+    const AppConfig &config = AppConfig::instance();
+    const AppConfig::Listener listener = config.http();
+    const QHostAddress bindAddress(listener.bind);
+    qInfo().noquote() << QStringLiteral("[Config] Core HTTP service (http) -> %1:%2 (%3)")
+                                 .arg(listener.bind).arg(listener.port)
+                                 .arg(configSources(config, QStringLiteral("http"),
+                                                    {QStringLiteral("bind"), QStringLiteral("port")}));
     QString source;
     const QString webDir = resolveWebDir(&source);
     if (webDir.isEmpty()) {
         qWarning().noquote() << QStringLiteral("[Web] no web page folder found (set %1, or deploy with "
                                                "scripts\\deploy-web.ps1 to <exe folder>\\web) - the web page "
-                                               "is not served; /exports downloads work as before")
+                                               "is not served (runtime.json not written); /exports downloads "
+                                               "work as before")
                                         .arg(QLatin1String(kWebDirEnv));
     } else {
-        // Replaces the former Python development server (COOP/COEP/CORP on, as before),
+        // Replaces the former development web server (COOP/COEP/CORP on, as before),
         // plus ETag/304 revalidation (Cache-Control: no-cache) and pre-compressed .gz files.
         AppHttpServer::StaticOptions options;
         options.indexFile = kWebPage;                  // "/" -> 302 /TaidaFlowApp.html
@@ -266,21 +396,35 @@ void Core::startHttpServer()
             QStringLiteral("css"), QStringLiteral("json"), QStringLiteral("map"), QStringLiteral("svg"),
             QStringLiteral("png"), QStringLiteral("jpg"), QStringLiteral("ico"), QStringLiteral("ttf"),
             QStringLiteral("otf"), QStringLiteral("woff"), QStringLiteral("woff2")};
+        // w2-062 (spec §3): runtime.json (Mirror port for the page) is a static file of this
+        // folder, rewritten at every start - never cached by the browser.
+        options.fileCacheControl.insert(QStringLiteral("runtime.json"), QByteArrayLiteral("no-store"));
+        // Mango A2 (2026-09-28, the plant firewall opens only port 80): with nginx.enabled the page
+        // reaches the Mirror through nginx (location /mirror -> 127.0.0.1:mirror.internalPort), so
+        // the port it gets is nginx.port; without nginx it is the LanRelay port mirror.publicPort.
+        const bool viaNginx = config.nginx().enabled;
+        const quint16 pagePort = viaNginx ? config.nginx().port : config.mirror().publicPort;
+        const QString pagePortSource = viaNginx
+                ? QStringLiteral("nginx.enabled true -> nginx.port %1, /mirror proxied by nginx")
+                          .arg(configSource(config, QStringLiteral("nginx.port")))
+                : QStringLiteral("nginx.enabled false -> mirror.publicPort %1 (LanRelay)")
+                          .arg(configSource(config, QStringLiteral("mirror.publicPort")));
+        writeRuntimeJson(webDir, pagePort, pagePortSource);
         if (http.mountStatic(QStringLiteral("/"), webDir, options)) {
             qInfo().noquote() << QStringLiteral("[Web] web page folder (%1): %2 -> http://<host>:%3/%4")
                                          .arg(source, QDir::toNativeSeparators(webDir))
-                                         .arg(HistoryExport::kDefaultDownloadPort).arg(kWebPage);
+                                         .arg(listener.port).arg(kWebPage);
         }
     }
     // One listener for the page and the CSV downloads.  A bind failure is only logged.
-    if (http.start(HistoryExport::kDefaultDownloadPort, QHostAddress::AnyIPv4)) {
-        qInfo().noquote() << QStringLiteral("[Web] HTTP service listening on 0.0.0.0:%1 (web page %2, /exports downloads)")
-                                     .arg(http.port())
+    if (http.start(listener.port, bindAddress)) {
+        qInfo().noquote() << QStringLiteral("[Web] HTTP service listening on %1:%2 (web page %3, /exports downloads)")
+                                     .arg(listener.bind).arg(http.port())
                                      .arg(webDir.isEmpty() ? QStringLiteral("NOT served") : QStringLiteral("served"));
     } else {
-        qWarning().noquote() << QStringLiteral("[Web] HTTP service NOT started on 0.0.0.0:%1: %2 (web page and "
+        qWarning().noquote() << QStringLiteral("[Web] HTTP service NOT started on %1:%2: %3 (web page and "
                                                "CSV downloads unavailable; the application keeps running)")
-                                        .arg(HistoryExport::kDefaultDownloadPort).arg(http.lastError());
+                                        .arg(listener.bind).arg(listener.port).arg(http.lastError());
     }
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this,
@@ -292,13 +436,12 @@ namespace {
 // w2-060 (Mango 2026-09-28): the REST API of RESTManager (original backend code) is enabled.
 // It listens on the loopback address only; the LAN reaches it through nginx on port 80
 // (deploy/nginx/taidaflow.conf: location /api/ -> proxy_pass http://127.0.0.1:<port>).
-// The port is TAIDAFLOW_REST_PORT (1..65535), default 18080 (free on the development PC and
-// not used by any other TaidaFlow service: 80 nginx, 502 Modbus server, 8124 AppHttpServer,
-// 8125 LAN relay, 18125 internal mirror). No access control (intranet, Mango's decision).
-constexpr auto kRestPortEnv = "TAIDAFLOW_REST_PORT";
-constexpr quint16 kDefaultRestPort = 18080;
+// w2-062: address and port come from config.json rest.bind / rest.port (default 127.0.0.1:18080;
+// 18080 is not used by any other TaidaFlow service: 80 nginx, 502 Modbus server, 8124
+// AppHttpServer, 8125 LAN relay, 18125 internal mirror). The former environment variable
+// TAIDAFLOW_REST_PORT is no longer read. No access control (intranet, Mango's decision).
 
-// The routes RESTManager::setupRoutes() registers, logged at start-up.  scripts/check_rest_routes.py
+// The routes RESTManager::setupRoutes() registers, logged at start-up.  scripts/check-rest-routes.ps1
 // compares this table with the m_httpServer.route(...) calls in RESTManager.cpp (exit 1 when they
 // differ), so the log and the documentation cannot silently drift from the code.
 struct RestRoute { const char *methods; const char *path; const char *purpose; };
@@ -318,28 +461,26 @@ constexpr RestRoute kRestRoutes[] = {
     {"GET,OPTIONS",     "/api/holding/rangeDateTimePage",  "holding register rows paged (page, pageSize <= 1000)"},
 };
 
-quint16 restPortFromEnvironment()
-{
-    const QString text = qEnvironmentVariable(kRestPortEnv).trimmed();
-    if (text.isEmpty())
-        return kDefaultRestPort;
-    bool ok = false;
-    const uint value = text.toUInt(&ok);
-    if (!ok || value < 1 || value > 65535) {
-        qWarning().noquote() << QStringLiteral("[REST] %1=\"%2\" is not a port (1..65535) - using %3")
-                                        .arg(QLatin1String(kRestPortEnv), text).arg(kDefaultRestPort);
-        return kDefaultRestPort;
-    }
-    return static_cast<quint16>(value);
-}
 } // namespace
 
 void Core::startRestServer()
 {
     if (m_rest || !m_sqlManager)
         return;
-    const quint16 port = restPortFromEnvironment();
-    const QHostAddress address(QHostAddress::LocalHost);
+    const AppConfig &config = AppConfig::instance();
+    const AppConfig::Listener rest = config.rest();
+    const quint16 port = rest.port;
+    const QHostAddress address(rest.bind);
+    qInfo().noquote() << QStringLiteral("[Config] Core REST API (rest) -> %1:%2 (%3)")
+                                 .arg(rest.bind).arg(rest.port)
+                                 .arg(configSources(config, QStringLiteral("rest"),
+                                                    {QStringLiteral("bind"), QStringLiteral("port")}));
+    if (!address.isLoopback()) {
+        qWarning().noquote() << QStringLiteral("[REST] rest.bind %1 is not a loopback address: the REST API (no "
+                                               "access control) is reachable directly on the network, not only "
+                                               "through nginx /api/")
+                                        .arg(rest.bind);
+    }
     m_rest = new RESTManager(m_sqlManager, this);
     // RESTManager::start() reads (and creates, when missing) device_info.ini in the working
     // directory, registers the routes and listens.  A failure is only logged; the application
@@ -353,12 +494,12 @@ void Core::startRestServer()
         m_rest = nullptr;
         return;
     }
-    qInfo().noquote() << QStringLiteral("[REST] REST API listening on %1:%2 (loopback only; LAN: "
-                                        "http://<host>/api/... through nginx; %3=%4)")
+    qInfo().noquote() << QStringLiteral("[REST] REST API listening on %1:%2 (%3; LAN: "
+                                        "http://<host>/api/... through nginx; config.json rest.port %4)")
                                  .arg(address.toString()).arg(port)
-                                 .arg(QLatin1String(kRestPortEnv),
-                                      qEnvironmentVariableIsSet(kRestPortEnv) ? qEnvironmentVariable(kRestPortEnv)
-                                                                             : QStringLiteral("(not set, default)"));
+                                 .arg(address.isLoopback() ? QStringLiteral("loopback only")
+                                                           : QStringLiteral("NOT loopback"),
+                                      configSource(config, QStringLiteral("rest.port")));
     for (const RestRoute &r : kRestRoutes) {
         qInfo().noquote() << QStringLiteral("[REST] route %1 %2 - %3")
                                      .arg(QLatin1String(r.methods), -16)

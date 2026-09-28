@@ -1,0 +1,42 @@
+﻿== 5.4: cd /d <install>\nginx ; start nginx
+(nginx started by 'cmd /c cd /d <install>\nginx && start nginx': pids 131504,143860, path D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\nginx\nginx.exe)
+== 5.5: cd /d <install> ; start "" "<install>\TaidaFlowApp.exe"   (PATH without Qt, no TAIDAFLOW_* variables)
+app pid(s): 127656
+== 5.5 check: netstat -ano | findstr LISTENING | findstr ":80 :502 :8124 :8125 :18125 :18080"
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       131504
+  TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       127656
+  TCP    0.0.0.0:8011           0.0.0.0:0              LISTENING       64888
+  TCP    0.0.0.0:8124           0.0.0.0:0              LISTENING       127656
+  TCP    0.0.0.0:8125           0.0.0.0:0              LISTENING       127656
+  TCP    127.0.0.1:18080        0.0.0.0:0              LISTENING       127656
+  TCP    127.0.0.1:18125        0.0.0.0:0              LISTENING       127656
+  TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       83784
+  TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       83784
+  TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       83784
+  TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       83784
+  TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       83784
+== 5.4 check: curl -I http://127.0.0.1/
+HTTP/1.1 302 Moved Temporarily
+Server: nginx
+Date: Mon, 28 Sep 2026 14:17:19 GMT
+Content-Type: text/html
+Content-Length: 138
+Connection: keep-alive
+Location: /TaidaFlowApp.html
+Cache-Control: no-cache
+
+== 5.7: curl http://127.0.0.1/runtime.json
+{"mirrorPublicPort":80,"version":1}
+== 5.7: curl http://127.0.0.1/api/
+{"status":"ok"}
+loaded from: D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\MSVCP140.dll ; D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\VCRUNTIME140.dll ; D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\Qt6Core.dll
+data folder: data, exports, device_info.ini, settings.sqlite, TaidaFlowSettings.ini
+web\runtime.json: {"mirrorPublicPort":80,"version":1}
+== 5.5 stop: taskkill (no /F) - here /PID 127656 = the app started above (the chapter's /IM TaidaFlowApp.exe is the same request)
+SUCCESS: Sent termination signal to the process with PID 127656.
+taskkill rc=0
+app exited: True
+== 5.4 / 3.3 stop nginx: cd /d <install>\nginx ; nginx -s quit
+rc=1
+nginx left: 2; listeners left: 1
+(the cmd /c wrapper of the harness printed 'The system cannot find the path specified' and nginx kept running; rerun in PowerShell from the nginx folder: Set-Location <install>\nginx ; .\nginx.exe -s quit -> rc=0, nginx processes left: 0)

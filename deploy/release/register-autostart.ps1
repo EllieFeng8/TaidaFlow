@@ -1,4 +1,4 @@
-# TaidaFlow - register automatic start at user logon (Windows Task Scheduler).   (w2-057)
+# TaidaFlow - register automatic start at user logon (Windows Task Scheduler).   (w2-057, w2-062)
 #
 # FIELD machine only. Registers ONE scheduled task that runs start-taidaflow.ps1 (this folder) when
 # the given user logs on. Run it once, as that user (or as an administrator for another user), on
@@ -7,7 +7,7 @@
 #
 # Usage:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File register-autostart.ps1 -WhatIf
-#       [-DataDir <folder>] [-LogDir <folder>] [-UseNginx] [-Port 80] [-TaskName TaidaFlow]
+#       [-Config <config.json>] [-LogDir <folder>] [-TaskName TaidaFlow]
 #       [-User <DOMAIN\user>] [-DelaySec 30]
 #   (the same without -WhatIf registers it; remove it again with unregister-autostart.ps1)
 #
@@ -17,32 +17,32 @@
 #   rendering there is not supported/tested. So the app must run in the operator's interactive
 #   session, which "At log on" + "Run only when user is logged on" (LogonType Interactive) gives.
 #   For an unattended restart after a power failure the PC must log that user on automatically
-#   (Windows automatic sign-in) - a decision for the plant owner (see DEPLOY.md).
+#   (Windows automatic sign-in) - set up on site by the plant (decided, see DEPLOY.md section 7);
+#   this script does not touch it.
 #   If a headless service is ever wanted (web page only, no local HMI): wrap the exe with a service
-#   wrapper such as WinSW (XML: <executable>C:\TaidaFlow\...\TaidaFlowApp.exe</executable>,
-#   <workingdirectory>D:\TaidaFlowData</workingdirectory>, <env name="TAIDAFLOW_DOWNLOAD_PORT"
-#   value="80"/>, <stopparentprocessfirst>, logs) or NSSM ("nssm install TaidaFlow <exe>", then
+#   wrapper such as WinSW (XML: <executable>C:\TaidaFlow\...\TaidaFlowApp.exe</executable>, the
+#   settings in config.json next to it, <stopparentprocessfirst>, logs) or NSSM ("nssm install TaidaFlow <exe>", then
 #   AppDirectory, AppEnvironmentExtra, AppStdout/AppStderr, AppStopMethodWindow). nginx can be
 #   wrapped the same way (arguments -p <runtime>/ -c conf/taidaflow.conf, stop: -s quit). This is
 #   NOT done or tested in this project; a service in session 0 has no local window at all.
 #
 # The task: action = powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden
-#   -File "<this folder>\start-taidaflow.ps1" -DataDir "<DataDir>" [-LogDir "<LogDir>"] [-UseNginx -Port <n>],
+#   -File "<this folder>\start-taidaflow.ps1" [-Config "<config.json>"] [-LogDir "<LogDir>"],
 #   working directory = this folder; trigger = at logon of -User, delayed by -DelaySec (network,
 #   drivers); principal = that user, Interactive, RunLevel Limited (no administrator rights needed:
-#   ports 80/502/8124/8125 can be opened without them); settings = start also on battery, ignore
-#   a second start while running, stop the start script after 10 minutes (the app itself is not
-#   limited: start-taidaflow.ps1 ends as soon as the app runs).
+#   the ports of config.json above 1024 and 80/502 can be opened without them); settings = start
+#   also on battery, ignore a second start while running, stop the start script after 10 minutes
+#   (the app itself is not limited: start-taidaflow.ps1 ends as soon as the app runs).
+# w2-062: the data folder, nginx and every port come from config.json at EACH start (edit config.json,
+#   the task stays as it is). The task passes no setting of its own; -Config only when the file is not
+#   <this folder>\config.json. A missing config.json is created now with the defaults (not with -WhatIf).
 #
-# Exit codes: 0 registered (or -WhatIf printed); 2 wrong parameter / start script missing;
-# 3 registration failed; 4 a task with this name already exists (use -Replace to overwrite it).
+# Exit codes: 0 registered (or -WhatIf printed); 2 wrong parameter / start script missing /
+# config.json unusable; 3 registration failed; 4 a task with this name already exists (use -Replace).
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
-    [string]$DataDir = "",
+    [string]$Config = "",
     [string]$LogDir = "",
-    [switch]$UseNginx,
-    [ValidateRange(1, 65535)]
-    [int]$Port = 80,
     [string]$TaskName = "TaidaFlow",
     [string]$User = "",
     [ValidateRange(0, 3600)]
@@ -59,18 +59,23 @@ function Say([string]$m) { [Console]::Out.WriteLine($m) }
 
 $start = Join-Path $install 'start-taidaflow.ps1'
 if (-not (Test-Path $start -PathType Leaf)) { Say "start script not found: $start"; exit 2 }
-if ($DataDir -eq "") { $DataDir = Join-Path $install 'runtime' }
-$DataDir = Full $DataDir
+. (Join-Path $install 'scripts\taidaflow-config.ps1')
+$configPath = if ($Config -ne "") { Full $Config } else { Join-Path $install 'config.json' }
+# Only without -WhatIf a missing config.json is written (TaidaFlowApp.exe --write-default-config).
+$create = -not $WhatIfPreference
+$cfg = Get-TaidaFlowConfig -Path $configPath -Exe (Join-Path $install 'TaidaFlowApp.exe') -Create:$create
+if ($cfg.Error) { Say "config.json unusable: $($cfg.Error)"; exit 2 }
+$DataDir = $cfg.DataDir
 if ($LogDir -ne "") { $LogDir = Full $LogDir }
 if ($User -eq "") { $User = "$env:USERDOMAIN\$env:USERNAME" }
-foreach ($v in $start, $DataDir, $LogDir) {
+foreach ($v in $start, $configPath, $LogDir) {
     if ($v -match '"') { Say "path must not contain a double quote: $v"; exit 2 }
 }
 
 # Every path is quoted, so folders with spaces stay one argument each.
-$arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $start + '" -DataDir "' + $DataDir + '"'
+$arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $start + '"'
+if ($Config -ne "") { $arguments += ' -Config "' + $configPath + '"' }
 if ($LogDir -ne "") { $arguments += ' -LogDir "' + $LogDir + '"' }
-if ($UseNginx) { $arguments += " -UseNginx -Port $Port" }
 $execute = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
 
 # The objects below are built in memory only (New-ScheduledTask* do not register anything).
@@ -87,6 +92,11 @@ $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principa
 $existing = $null
 try { $existing = Get-ScheduledTask -TaskName $TaskName -TaskPath '\' -ErrorAction Stop } catch { $existing = $null }
 
+Say "config.json       : $configPath$(if ($cfg.Created) { ' (CREATED now with the default values)' } elseif (-not $cfg.Exists) { ' (missing - start-taidaflow.ps1 creates it with the defaults)' })"
+foreach ($n in $cfg.Notes) { Say "  config: $n" }
+Say ("  settings used at each start: data folder {0}, nginx {1} (port {2}, {3}), devices {4}" -f $DataDir,
+     $(if ($cfg.Values['nginx.enabled']) { 'on' } else { 'off' }), $cfg.Values['nginx.port'], $cfg.Values['nginx.exe'],
+     ((@('adam6256', 'adam6217a', 'adam6217b', 'adam6224', 'adam6022') | ForEach-Object { $cfg.Values["devices.$_.host"] }) -join ', '))
 Say "scheduled task definition (registered only without -WhatIf):"
 Say "  name              : \$TaskName"
 Say "  description       : $description"

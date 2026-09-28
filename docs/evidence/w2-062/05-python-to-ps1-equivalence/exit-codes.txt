@@ -1,0 +1,8 @@
+﻿check_wasm_backend.py rc=
+check-wasm-backend.ps1 rc=0
+check_version_shadow.py rc=0
+check-version-shadow.ps1 rc=0
+check_rest_routes.py rc=0
+check-rest-routes.ps1 rc=0
+verify_pack.py rc=0
+verify-pack.ps1 rc=0

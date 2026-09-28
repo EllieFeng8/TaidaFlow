@@ -259,6 +259,8 @@ class TestAppHttpServer : public QObject
     {
         AppHttpServer::StaticOptions o;
         o.indexFile = QStringLiteral("index.html");
+        // w2-062: runtime.json is rewritten by the application at every start.
+        o.fileCacheControl.insert(QStringLiteral("runtime.json"), QByteArrayLiteral("no-store"));
         return o;
     }
 
@@ -343,6 +345,34 @@ private slots:
         QVERIFY(r.header("ETag").startsWith('"'));
         QVERIFY(r.header("Last-Modified").endsWith(" GMT"));
         QVERIFY(!r.has("Content-Encoding"));
+    }
+
+    // w2-062: StaticOptions::fileCacheControl - one file name gets its own Cache-Control
+    // (runtime.json: no-store); every other file keeps the default (no-cache).
+    void perFileCacheControl()
+    {
+        const QString path = m_web + QStringLiteral("/runtime.json");
+        const QByteArray v1 = R"({"mirrorPublicPort":8125,"version":1})";
+        const QByteArray v2 = R"({"mirrorPublicPort":9125,"version":1})";
+        writeFile(path, v1, QDateTime::currentDateTime().addSecs(-120));
+        const Reply r = http("GET", "/runtime.json", m_port);
+        QCOMPARE(r.status, 200);
+        QCOMPARE(r.header("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(r.header("Cache-Control"), QByteArray("no-store"));
+        QCOMPARE(r.body, v1);
+        QCOMPARE(http("HEAD", "/runtime.json", m_port).header("Cache-Control"), QByteArray("no-store"));
+        // Case-insensitive file name match (Windows file system).
+        QCOMPARE(http("GET", "/RUNTIME.json", m_port).header("Cache-Control"), QByteArray("no-store"));
+        // Other files unchanged.
+        QCOMPARE(http("GET", "/data.json", m_port).header("Cache-Control"), QByteArray("no-cache"));
+        QCOMPARE(http("GET", "/app.html", m_port).header("Cache-Control"), QByteArray("no-cache"));
+        // Rewritten at the next start: the new content is served at once.
+        writeFile(path, v2);
+        const Reply r2 = http("GET", "/runtime.json", m_port);
+        QCOMPARE(r2.status, 200);
+        QCOMPARE(r2.body, v2);
+        QCOMPARE(r2.header("Cache-Control"), QByteArray("no-store"));
+        QVERIFY(QFile::remove(path));
     }
 
     void conditionalRequests()

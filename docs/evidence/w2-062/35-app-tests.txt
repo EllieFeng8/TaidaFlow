@@ -1,0 +1,48 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:3 char:1
++ cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Aux ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-062-app-tests
+[1/10] Automatic MOC and UIC for target tst_runtimeinfo
+[2/10] Automatic MOC and UIC for target tst_appconfig
+[3/10] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo_autogen\mocs_compilation.cpp.obj
+[4/10] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig_autogen\mocs_compilation.cpp.obj
+[5/10] Building CXX object CMakeFiles\tst_runtimeinfo.dir\D_\repo\codex\qmlTester\taidaflow\App\runtimeinfo.cpp.obj
+[6/10] Building CXX object CMakeFiles\tst_appconfig.dir\D_\repo\codex\qmlTester\taidaflow\App\appconfig.cpp.obj
+[7/10] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo.cpp.obj
+[8/10] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig.cpp.obj
+[9/10] Linking CXX executable tst_runtimeinfo.exe
+[10/10] Linking CXX executable tst_appconfig.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-062-app-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-062-app-tests
+    Start 1: tst_appconfig
+1/2 Test #1: tst_appconfig ....................   Passed    0.77 sec
+    Start 2: tst_runtimeinfo
+2/2 Test #2: tst_runtimeinfo ..................   Passed    6.39 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   7.16 sec
+app-tests exit=0

@@ -10,8 +10,7 @@
 #include <QVariant>
 
 namespace {
-constexpr auto kMs300PortName = "COM2";
-constexpr int kMs300UnitId = 1;
+constexpr int kMs300Retries = 1;
 constexpr quint16 kMs300FaultStatusRegister = 0x2100;
 constexpr int kMs300PollIntervalMs = 1000;
 constexpr int kMs300TimeoutMs = 1000;
@@ -186,25 +185,50 @@ QString warningCodeText(quint8 code)
 }
 
 Ms300FaultReader::Ms300FaultReader(QObject *parent)
+    : Ms300FaultReader(Settings{}, parent)
+{
+}
+
+Ms300FaultReader::Ms300FaultReader(const Settings &settings, QObject *parent)
     : QObject(parent)
+    , m_settings(settings)
     , m_client(new QModbusRtuSerialClient(this))
 {
     m_pollTimer.setInterval(kMs300PollIntervalMs);
     connect(&m_pollTimer, &QTimer::timeout, this, &Ms300FaultReader::pollFaultStatus);
 
-    // MS300 RTU connection: COM2, 9600, N-8-1, station address 1.
+    // MS300 RTU connection (w2-062: config.json devices.ms300; default COM2, 9600, N-8-1,
+    // station address 1). AppConfig has already validated the values.
+    const QString parityText = m_settings.parity.trimmed().toLower();
+    QSerialPort::Parity parity = QSerialPort::NoParity;
+    if (parityText == QLatin1String("even"))
+        parity = QSerialPort::EvenParity;
+    else if (parityText == QLatin1String("odd"))
+        parity = QSerialPort::OddParity;
+    else if (parityText == QLatin1String("space"))
+        parity = QSerialPort::SpaceParity;
+    else if (parityText == QLatin1String("mark"))
+        parity = QSerialPort::MarkParity;
+    const QSerialPort::StopBits stopBits = m_settings.stopBits == 2 ? QSerialPort::TwoStop
+                                                                     : QSerialPort::OneStop;
     m_client->setConnectionParameter(QModbusDevice::SerialPortNameParameter,
-                                     QVariant(QString::fromLatin1(kMs300PortName)));
+                                     QVariant(m_settings.serialPort));
     m_client->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,
-                                     QVariant::fromValue(QSerialPort::Baud9600));
+                                     QVariant::fromValue(static_cast<QSerialPort::BaudRate>(m_settings.baudRate)));
     m_client->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,
-                                     QVariant::fromValue(QSerialPort::Data8));
+                                     QVariant::fromValue(static_cast<QSerialPort::DataBits>(m_settings.dataBits)));
     m_client->setConnectionParameter(QModbusDevice::SerialParityParameter,
-                                     QVariant::fromValue(QSerialPort::NoParity));
+                                     QVariant::fromValue(parity));
     m_client->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,
-                                     QVariant::fromValue(QSerialPort::OneStop));
+                                     QVariant::fromValue(stopBits));
     m_client->setTimeout(kMs300TimeoutMs);
-    m_client->setNumberOfRetries(1);
+    m_client->setNumberOfRetries(kMs300Retries);
+    qInfo().noquote() << QStringLiteral("[MS300] %1, %2 baud, data bits %3, parity %4, stop bits %5, "
+                                        "unit %6, timeout %7 ms, retries %8, poll %9 ms")
+                                 .arg(m_settings.serialPort).arg(m_settings.baudRate)
+                                 .arg(m_settings.dataBits).arg(parityText)
+                                 .arg(m_settings.stopBits).arg(m_settings.unitId)
+                                 .arg(kMs300TimeoutMs).arg(kMs300Retries).arg(kMs300PollIntervalMs);
 
     connect(m_client, &QModbusDevice::stateChanged, this,
             [this](QModbusDevice::State state) {
@@ -213,10 +237,12 @@ Ms300FaultReader::Ms300FaultReader(QObject *parent)
         if (detail.isEmpty())
             detail = QStringLiteral("disconnected");
         qInfo().noquote()
-                << QStringLiteral("[MS300] %1 COM2, Unit ID 1: %2")
+                << QStringLiteral("[MS300] %1 %2, Unit ID %3: %4")
                            .arg(connected ? QStringLiteral("Connected to")
                                           : QStringLiteral("Disconnected from"),
-                                detail);
+                                m_settings.serialPort)
+                           .arg(m_settings.unitId)
+                           .arg(detail);
         emit connectionChanged(connected, detail);
 
         if (connected && m_running)
@@ -278,7 +304,7 @@ void Ms300FaultReader::pollFaultStatus()
     const QModbusDataUnit request(QModbusDataUnit::HoldingRegisters,
                                   kMs300FaultStatusRegister,
                                   1);
-    QModbusReply *reply = m_client->sendReadRequest(request, kMs300UnitId);
+    QModbusReply *reply = m_client->sendReadRequest(request, m_settings.unitId);
     if (!reply) {
         const QString message = m_client->errorString();
         qWarning().noquote() << "[MS300] Fault-status read request failed:" << message;

@@ -122,11 +122,16 @@ QString commandPointName(ModbusMapping::CommandPoint point)
 }
 
 Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, QObject *parent)
+    : Manager(proxy, sql, DeviceSettings{}, parent)
+{
+}
+
+Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &devices, QObject *parent)
     : QObject(parent)
     , m_proxy(proxy)
     , m_sql(sql)
-    , m_modbus(this)
-    , m_ms300FaultReader(this)
+    , m_modbus(devices.modbusDevices, this)
+    , m_ms300FaultReader(devices.ms300, this)
     , m_readBindings(ModbusMapping::defaultReadBindings())
     , m_writeBindings(ModbusMapping::defaultWriteBindings())
     , m_serverInputRegisters(ModbusServerBridgeMapping::ServerInputRegisterCount, 0)

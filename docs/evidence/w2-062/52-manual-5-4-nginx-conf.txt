@@ -1,0 +1,9 @@
+﻿== 5.2 edit: dataDir -> build\w2-062-manual\data, devices -> 127.0.0.201..205 (development PC)
+== 5.4 manual nginx.conf (template + 5 tokens), in cmd: cd /d <install>\nginx ; nginx -t
+nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\nginx/conf/nginx.conf syntax is ok
+nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\w2-062-manual\TaidaFlow\nginx/conf/nginx.conf test is successful
+nginx -t exit=0
+== manual nginx.conf vs install-nginx-config.ps1 output (comments/blank lines removed, export dir normalised): 0 differing line(s) of 135
+
+== DEPLOY 5.4 full example vs template (comments removed, placeholders as in the doc): 0 differing line(s) of 135
+

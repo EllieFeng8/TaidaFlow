@@ -1,0 +1,19 @@
+﻿[PASS] GET :8134/TaidaFlowApp.html -> 200 - HTTP/1.1 200 OK
+[PASS] GET :8134/runtime.json -> 200, Cache-Control no-store, {"mirrorPublicPort":8081,"version":1} - HTTP/1.1 200 OK / no-store / {"mirrorPublicPort":8081,"version":1}
+[PASS] WebSocket upgrade on the relay :8135/mirror -> 101 - HTTP/1.1 101 Switching Protocols
+[PASS] GET http://127.0.0.1:8081/ -> 302 /TaidaFlowApp.html - HTTP/1.1 302 Moved Temporarily /TaidaFlowApp.html
+[PASS] GET http://127.0.0.1:8081/TaidaFlowApp.html -> 200 + COOP/COEP - HTTP/1.1 200 OK
+[PASS] GET http://127.0.0.1:8081/TaidaFlowApp.wasm (gzip) -> 200 Content-Encoding gzip - HTTP/1.1 200 OK gzip
+[PASS] GET http://127.0.0.1:8081/runtime.json -> 200, Cache-Control no-store, no gzip, no ETag, {"mirrorPublicPort":8081,"version":1} - HTTP/1.1 200 OK / no-store / {"mirrorPublicPort":8081,"version":1}
+[PASS] GET http://127.0.0.1:8081/api/ -> REST status - {"status":"ok"}
+[PASS] WebSocket upgrade through nginx http://127.0.0.1:8081/mirror -> 101 - HTTP/1.1 101 Switching Protocols
+[PASS] history export through ws://127.0.0.1:8081/mirror, downloadPort = 8081 - 22:12:33.007 RESULT state=done fileName=w2062live_20260928_221233.csv url=/exports/w2062live_20260928_221233.csv downloadPort=8081
+[PASS] download http://127.0.0.1:8081/exports/w2062live_20260928_221233.csv -> 200 attachment - HTTP/1.1 200 OK attachment; filename="w2062live_20260928_221233.csv"
+[PASS] download Range bytes=0-99 -> 206 - HTTP/1.1 206 Partial Content
+=== 0 check(s) failed
+live-curl-checks exit=0
+[Config] Core download links -> port 8081 (file; nginx.enabled true file, nginx.port 8081 file, http.port 8134 file)
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes), download links -> port 8081
+[Web] runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\runtime.json = {"mirrorPublicPort":8081,"version":1} (nginx.enabled true -> nginx.port file, /mirror proxied by nginx)
+[Web] HTTP service listening on 0.0.0.0:8134 (web page served, /exports downloads)
+LAN relay listening: 0.0.0.0:8135 -> 127.0.0.1:18125

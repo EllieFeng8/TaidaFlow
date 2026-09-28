@@ -67,8 +67,13 @@ target_link_libraries(Core
 if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
     # w2-049: development default of the web page folder (used only when neither
     # TAIDAFLOW_WEB_DIR nor <exe folder>/web holds TaidaFlowApp.html).
-    get_filename_component(TAIDAFLOW_DEV_WEB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../build/wasm-release" ABSOLUTE)
-    target_compile_definitions(Core PRIVATE TAIDAFLOW_DEV_WEB_DIR="${TAIDAFLOW_DEV_WEB_DIR}")
+    # w2-062 (Mango A9, no build-machine path in the package): the development default is no
+    # longer an absolute path compiled into the exe, but <exe folder>/../wasm-release (build\desktop
+    # -> build\wasm-release), see Core/core.cpp resolveWebDir().
+    # w2-062: core.cpp reads config.json through App/appconfig.h and writes runtime.json with
+    # App/runtimeinfo.h. Both .cpp files are compiled into the TaidaFlowApp executable (App/
+    # CMakeLists.txt), which also links this static library, so only the header path is needed.
+    target_include_directories(Core PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../App")
     target_link_libraries(Core
             PRIVATE
             Qt${QT_VERSION_MAJOR}::Concurrent

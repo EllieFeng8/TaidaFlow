@@ -1,0 +1,32 @@
+=== safety probe 2026-09-28T22:11:57.579+08:00 reason="before launch: w2-062 ports (D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe)" host=LAPTOP-0B3CPPED profile=simulator
+  config: D:\repo\codex\qmlTester\taidaflow\build\w2-062-ports\config.json
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file), simulator profile replaces 192.168.1.201] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  tcp 192.168.1.201:502 [configured devices.adam6256 (must be unreachable)] -> unreachable timeout 1500ms
+  device 127.0.0.202:502 [effective devices.adam6217a (file), simulator profile replaces 192.168.1.202] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  tcp 192.168.1.202:502 [configured devices.adam6217a (must be unreachable)] -> unreachable timeout 1500ms
+  device 127.0.0.203:502 [effective devices.adam6217b (file), simulator profile replaces 192.168.1.203] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  tcp 192.168.1.203:502 [configured devices.adam6217b (must be unreachable)] -> unreachable timeout 1500ms
+  device 127.0.0.204:502 [effective devices.adam6224 (file), simulator profile replaces 192.168.1.204] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  tcp 192.168.1.204:502 [configured devices.adam6224 (must be unreachable)] -> unreachable timeout 1500ms
+  device 127.0.0.205:502 [effective devices.adam6022 (file), simulator profile replaces 192.168.1.205] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=83784 -> accepted
+  tcp 192.168.1.205:502 [configured devices.adam6022 (must be unreachable)] -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 502=modbusServer.port (Modbus server); 8134=http.port (web page + CSV downloads); 8135=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 8081=nginx.port (nginx web front end, information only)
+  listener 0.0.0.0:8081 pid=142868 (nginx) = nginx.port (nginx web front end, information only)
+    nginx.port 8081 = web front end -> information only, does not block the launch
+  listener 127.0.0.205:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.204:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.203:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.202:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  listener 127.0.0.201:502 pid=83784 (Adam60xxSimulator) = modbusServer.port (Modbus server)
+    = Adam60xxSimulator on an effective device endpoint -> accepted
+  verdict: SAFE
+PID=137400 CONFIG=D:\repo\codex\qmlTester\taidaflow\build\w2-062-ports\config.json DATADIR=D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\desktop-20260928-221207.log PROFILE=simulator

@@ -1,0 +1,39 @@
+
+before: 
+== 1. build after the template changed (comment line): expect regenerate
+[1/1] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+note: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\TaidaFlowApp.html not deployed yet (scripts\deploy-web.ps1)
+existing nginx.conf (an older TaidaFlow one) kept as D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf.prev-20260928-215806
+written: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+NGINX_CONF=written
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+
+exit=0  after: 
+== 2. build again, nothing changed: expect no work
+ninja: no work to do.
+exit=0  after: 
+== 3. touch deploy\dev\config.dev.json (LastWriteTime = now), build: expect regenerate (header records the write time)
+[1/1] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+note: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\TaidaFlowApp.html not deployed yet (scripts\deploy-web.ps1)
+existing nginx.conf (an older TaidaFlow one) kept as D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf.prev-20260928-215809
+written: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+NGINX_CONF=written
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+
+exit=0  after: 
+# config written : 2026-09-28T13:58:07Z   SHA-256 9567CFED90342DCCEF784F696B59DE2306E50A196C39B6A91ACF48812A1CE395
+nginx -t exit=0
+nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful

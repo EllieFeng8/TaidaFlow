@@ -1,4 +1,4 @@
-# Build the portable FIELD package of TaidaFlow (w2-057) - runs on the DEVELOPMENT PC.
+# Build the portable FIELD package of TaidaFlow (w2-057, w2-062) - runs on the DEVELOPMENT PC.
 #
 # Output: dist\TaidaFlow-<yyyyMMdd>-<git short hash>[-dirty]\  (dist\ is git-ignored)
 #   TaidaFlowApp.exe                     from build\desktop (preset desktop-release; must be up to date)
@@ -7,27 +7,35 @@
 #                                        = windeployqt (Qt 6.8.3) --release --qmldir <project QML>
 #   vcruntime140*.dll, msvcp140*.dll ... MSVC runtime, app-local copy of the VC++ redistributable
 #                                        DLLs of the toolset that built the exe (no installer needed)
-#   web\                                 WebAssembly page + .gz = scripts\deploy-web.ps1 (build\wasm-release)
+#   web\                                 WebAssembly page + .gz + runtime.json (the app defaults) =
+#                                        scripts\deploy-web.ps1 -NoConfig (build\wasm-release)
 #   start-taidaflow.ps1/.bat, stop-taidaflow.ps1/.bat, register-autostart.ps1,
-#   unregister-autostart.ps1, taidaflow-site.example.bat, logging\quiet.ini   (deploy\release\)
-#   scripts\nginx-web.ps1 + deploy\nginx\taidaflow.conf    nginx control script + config template
+#   unregister-autostart.ps1, logging\quiet.ini                     (deploy\release\)
+#   scripts\install-nginx-config.ps1, scripts\taidaflow-config.ps1 + deploy\nginx\taidaflow.conf
+#                                        nginx.conf generator (one-time install step; start-taidaflow.ps1
+#                                        also runs it when nginx.conf is missing or out of date),
+#                                        config.json reader, nginx template
+#   nginx\                               nginx for Windows (Mango A7): nginx.exe, docs\ (licences), conf\
+#                                        WITHOUT nginx.conf (written on the plant PC by
+#                                        install-nginx-config.ps1, so an update never overwrites it),
+#                                        SOURCE.txt; from -NginxDir (default: newest C:\tools\nginx\nginx-<version>)
 #   DEPLOY.md                            = docs\DEPLOY_AND_STARTUP.md
 #   VERSION.txt, MANIFEST.txt            build information; every file with size and SHA-256
-#   nginx\ (only with -IncludeNginx)     nginx.exe + docs\ (LICENSE and the third-party licences)
+# w2-062: NO config.json (created on the plant PC at the first start by TaidaFlowApp.exe
+# --write-default-config, so an update never overwrites the plant's file) and no nginx.conf.
+# No path of the build machine is written into any text file of the package (Mango A9).
 # Not included: CMake/Ninja files, .lib/.exp/.pdb, tests, databases, ini files, exports, logs,
-# Python files, __pycache__ (checked at the end; any hit fails the packaging).
+# config.json, Python files, __pycache__ (checked at the end; any hit fails the packaging).
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1
-#            [-IncludeNginx] [-NginxDir C:\tools\nginx\nginx-1.30.5] [-OutDir dist]
-#            [-BuildDir build\desktop] [-WebSource build\wasm-release] [-Force] [-AllowStale]
+#            [-NginxDir <nginx folder>] [-OutDir dist] [-BuildDir build\desktop] [-WebSource build\wasm-release] [-Force] [-AllowStale]
 #   -Force      : replace an existing package folder of the same name (only below -OutDir)
 #   -AllowStale : package even when ninja reports that build\desktop or build\wasm-release is not
 #                 up to date (not recommended: the folder name carries the current git hash)
-# Exit codes: 0 packaged; 2 missing input (build, web, CRT, nginx, windeployqt); 3 build not up to
+# Exit codes: 0 packaged; 2 missing input (build, web, CRT, windeployqt); 3 build not up to
 # date; 4 package folder exists (use -Force); 5 windeployqt / deploy-web failed; 6 forbidden file
 # found in the package.
 param(
-    [switch]$IncludeNginx,
     [string]$NginxDir = "",
     [string]$OutDir = "dist",
     [string]$BuildDir = "build\desktop",
@@ -91,26 +99,26 @@ foreach ($required in 'TaidaFlowApp.html', 'TaidaFlowApp.js', 'TaidaFlowApp.wasm
 }
 foreach ($f in 'deploy\release\start-taidaflow.ps1', 'deploy\release\stop-taidaflow.ps1', 'deploy\release\start-taidaflow.bat',
                'deploy\release\stop-taidaflow.bat', 'deploy\release\register-autostart.ps1', 'deploy\release\unregister-autostart.ps1',
-               'deploy\release\taidaflow-site.example.bat', 'deploy\release\logging\quiet.ini', 'deploy\nginx\taidaflow.conf',
-               'scripts\nginx-web.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md') {
+               'deploy\release\logging\quiet.ini', 'deploy\nginx\taidaflow.conf',
+               'scripts\install-nginx-config.ps1', 'scripts\taidaflow-config.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md') {
     if (-not (Test-Path (Join-Path $root $f) -PathType Leaf)) { Say "missing: $f"; exit 2 }
 }
-if ($IncludeNginx) {
-    if ($NginxDir -eq "") {
-        $best = $null; $bestVer = $null
-        foreach ($d in @(Get-ChildItem 'C:\tools\nginx' -Directory -Filter 'nginx-*' -ErrorAction SilentlyContinue)) {
-            $v = $null
-            if ([version]::TryParse($d.Name.Substring(6), [ref]$v) -and (Test-Path (Join-Path $d.FullName 'nginx.exe'))) {
-                if ($null -eq $bestVer -or $v -gt $bestVer) { $best = $d.FullName; $bestVer = $v }
-            }
+# nginx for Windows to bundle (Mango A7).
+if ($NginxDir -eq "") {
+    $best = $null; $bestVer = $null
+    foreach ($d in @(Get-ChildItem 'C:\tools\nginx' -Directory -Filter 'nginx-*' -ErrorAction SilentlyContinue)) {
+        $v = $null
+        if ([version]::TryParse($d.Name.Substring(6), [ref]$v) -and (Test-Path (Join-Path $d.FullName 'nginx.exe'))) {
+            if ($null -eq $bestVer -or $v -gt $bestVer) { $best = $d.FullName; $bestVer = $v }
         }
-        $NginxDir = $best
     }
-    if (-not $NginxDir -or -not (Test-Path (Join-Path $NginxDir 'nginx.exe')) -or -not (Test-Path (Join-Path $NginxDir 'docs\LICENSE'))) {
-        Say "nginx.exe / docs\LICENSE not found (-NginxDir '$NginxDir')"; exit 2
-    }
-    $NginxDir = Full $NginxDir
+    $NginxDir = $best
 }
+if (-not $NginxDir -or -not (Test-Path (Join-Path $NginxDir 'nginx.exe')) -or -not (Test-Path (Join-Path $NginxDir 'docs\LICENSE')) -or
+    -not (Test-Path (Join-Path $NginxDir 'conf\mime.types'))) {
+    Say "nginx.exe / docs\LICENSE / conf\mime.types not found (-NginxDir '$NginxDir')"; exit 2
+}
+$NginxDir = Full $NginxDir
 
 # --- package name -----------------------------------------------------------------------------
 $hash = (& git -C $root rev-parse --short HEAD).Trim()
@@ -160,39 +168,45 @@ foreach ($f in $crtFiles) { Copy-Item -LiteralPath $f.FullName -Destination $pkg
 Say "MSVC runtime: $($crtFiles.Count) DLL(s) copied ($(($crtFiles | ForEach-Object { $_.Name }) -join ', '))"
 
 # --- 3. web page (same logic as for the development build: scripts\deploy-web.ps1) -------------
-$webOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\deploy-web.ps1') -Source $WebSource -ExeDir $pkg
+# -NoConfig: runtime.json from the app's default values (the package must not carry the development
+# configuration; the app rewrites runtime.json from the plant's config.json at every start).
+$webOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\deploy-web.ps1') -Source $WebSource -ExeDir $pkg -NoConfig
 $webRc = $LASTEXITCODE
 $webOut | ForEach-Object { Say "  web | $_" }
 if ($webRc -ne 0) { Say "deploy-web.ps1 exit $webRc"; exit 5 }
 
 # --- 4. field scripts, nginx template, documentation --------------------------------------------
 foreach ($f in 'start-taidaflow.ps1', 'stop-taidaflow.ps1', 'start-taidaflow.bat', 'stop-taidaflow.bat',
-               'register-autostart.ps1', 'unregister-autostart.ps1', 'taidaflow-site.example.bat') {
+               'register-autostart.ps1', 'unregister-autostart.ps1') {
     Copy-Item -LiteralPath (Join-Path $root "deploy\release\$f") -Destination $pkg
 }
 New-Item -ItemType Directory -Force (Join-Path $pkg 'logging'), (Join-Path $pkg 'scripts'), (Join-Path $pkg 'deploy\nginx') | Out-Null
 Copy-Item -LiteralPath (Join-Path $root 'deploy\release\logging\quiet.ini') -Destination (Join-Path $pkg 'logging')
-Copy-Item -LiteralPath (Join-Path $root 'scripts\nginx-web.ps1') -Destination (Join-Path $pkg 'scripts')
+Copy-Item -LiteralPath (Join-Path $root 'scripts\install-nginx-config.ps1') -Destination (Join-Path $pkg 'scripts')
+Copy-Item -LiteralPath (Join-Path $root 'scripts\taidaflow-config.ps1') -Destination (Join-Path $pkg 'scripts')
 Copy-Item -LiteralPath (Join-Path $root 'deploy\nginx\taidaflow.conf') -Destination (Join-Path $pkg 'deploy\nginx')
 Copy-Item -LiteralPath (Join-Path $root 'docs\DEPLOY_AND_STARTUP.md') -Destination (Join-Path $pkg 'DEPLOY.md')
 
-# --- 5. nginx (optional) -------------------------------------------------------------------------
-if ($IncludeNginx) {
-    $nDir = Join-Path $pkg 'nginx'
-    New-Item -ItemType Directory -Force $nDir | Out-Null
-    Copy-Item -LiteralPath (Join-Path $NginxDir 'nginx.exe') -Destination $nDir
-    Copy-Item -LiteralPath (Join-Path $NginxDir 'docs') -Destination $nDir -Recurse
-    $nginxVer = Split-Path -Leaf $NginxDir
-    $nginxHash = (Get-FileHash -Algorithm SHA256 (Join-Path $nDir 'nginx.exe')).Hash
-    [System.IO.File]::WriteAllLines((Join-Path $nDir 'SOURCE.txt'), [string[]]@(
-        "nginx for Windows, $nginxVer, copied unchanged from $NginxDir (official nginx.org zip, signature",
-        "checked when it was installed - see the TaidaFlow README, section nginx).",
-        "nginx.exe SHA-256: $nginxHash",
-        "Licence: docs\LICENSE (2-clause BSD); bundled libraries: docs\OpenSSL.LICENSE, docs\PCRE.LICENCE, docs\zlib.LICENSE.",
-        "Only nginx.exe and docs\ are copied: the configuration is rendered by scripts\nginx-web.ps1 into",
-        "<data folder>\nginx\conf\taidaflow.conf; logs and temp files go to <data folder>\nginx\."))
-    Say "nginx: $nginxVer copied (nginx.exe + docs\ with LICENSE)"
+# --- 5. nginx for Windows (Mango A7): nginx.exe, docs\, conf\ without nginx.conf ------------------
+$nDir = Join-Path $pkg 'nginx'
+New-Item -ItemType Directory -Force $nDir, (Join-Path $nDir 'conf') | Out-Null
+Copy-Item -LiteralPath (Join-Path $NginxDir 'nginx.exe') -Destination $nDir
+Copy-Item -LiteralPath (Join-Path $NginxDir 'docs') -Destination $nDir -Recurse
+foreach ($c in @(Get-ChildItem -LiteralPath (Join-Path $NginxDir 'conf') -File | Where-Object { $_.Name -ne 'nginx.conf' })) {
+    Copy-Item -LiteralPath $c.FullName -Destination (Join-Path $nDir 'conf')
 }
+$nginxVer = Split-Path -Leaf $NginxDir
+$nginxHash = (Get-FileHash -Algorithm SHA256 (Join-Path $nDir 'nginx.exe')).Hash
+[System.IO.File]::WriteAllLines((Join-Path $nDir 'SOURCE.txt'), [string[]]@(
+    "nginx for Windows, $nginxVer, copied unchanged from the official nginx.org zip (signature checked when",
+    "it was installed on the build PC - see the TaidaFlow README, section nginx).",
+    "nginx.exe SHA-256: $nginxHash",
+    "Licence: docs\LICENSE (2-clause BSD); bundled libraries: docs\OpenSSL.LICENSE, docs\PCRE.LICENCE, docs\zlib.LICENSE.",
+    "conf\ holds the zip's files WITHOUT nginx.conf: scripts\install-nginx-config.ps1 writes conf\nginx.conf",
+    "for this installation (start-taidaflow.ps1 does it too when it is missing or out of date).",
+    "Start: cd <installation folder>\nginx  then  start nginx ; apply changes: nginx -s reload ; stop: nginx -s quit.",
+    "logs\ and temp\ are created by install-nginx-config.ps1."))
+Say "nginx: $nginxVer bundled (nginx.exe + docs\ + conf\ without nginx.conf)"
 
 # --- 6. forbidden content ------------------------------------------------------------------------
 $all = @(Get-ChildItem -LiteralPath $pkg -Recurse -Force)
@@ -201,13 +215,38 @@ $forbidden = @($all | Where-Object {
     ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -or
     ($_.PSIsContainer -and ($n -in '__pycache__', 'cmakefiles', 'exports', 'data', 'runtime', 'logs', 'temp', 'tests', '.qt', '.rcc')) -or
     (-not $_.PSIsContainer -and ($n -match '\.(sqlite|sqlite3|db|py|pyc|pdb|lib|exp|ilk|obj|ninja|cmake|log|csv)$' -or
-                                 $n -in 'cmakecache.txt', 'taidaflowsettings.ini', 'device_info.ini', 'taidaflow-site.bat'))
+                                 $n -in 'cmakecache.txt', 'taidaflowsettings.ini', 'device_info.ini',
+                                        'config.json', 'config.effective.json', 'taidaflow-app.json', 'nginx.conf'))
 })
 if ($forbidden.Count) {
     Say "FORBIDDEN content in the package:"
     $forbidden | ForEach-Object { Say "  $($_.FullName)" }
     exit 6
 }
+# No path of the build machine (Mango A9): the repository folder and the user profile, in any text
+# file (no NUL byte) and in TaidaFlowApp.exe (ASCII / UTF-16). Qt's own DLLs are not ours and not checked.
+$machinePaths = @($root, (Split-Path -Parent $root), $env:USERPROFILE) | Where-Object { $_ } | ForEach-Object { @($_, ($_ -replace '\\', '/')) }
+$latin1 = [System.Text.Encoding]::GetEncoding(28591)
+$hits = New-Object System.Collections.Generic.List[string]
+foreach ($f in @(Get-ChildItem -LiteralPath $pkg -Recurse -File)) {
+    $isExe = $f.Name -eq 'TaidaFlowApp.exe'
+    if (-not $isExe -and ($f.Length -gt 20MB -or $f.Extension -match '^\.(exe|dll|wasm|gz|png|jpg|ico|ttf|otf|woff2?|qmlc)$')) { continue }
+    $bytes = [System.IO.File]::ReadAllBytes($f.FullName)
+    if (-not $isExe -and [Array]::IndexOf($bytes, [byte]0) -ge 0) { continue }
+    $text = $latin1.GetString($bytes)
+    foreach ($m in $machinePaths) {
+        $u16 = $latin1.GetString([System.Text.Encoding]::Unicode.GetBytes($m))
+        if ($text.IndexOf($m, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -or ($isExe -and $text.IndexOf($u16, [System.StringComparison]::OrdinalIgnoreCase) -ge 0)) {
+            $hits.Add("$($f.FullName.Substring($pkg.Length + 1)): $m")
+        }
+    }
+}
+if ($hits.Count) {
+    Say "BUILD-MACHINE PATH in the package ($($hits.Count)):"
+    $hits | ForEach-Object { Say "  $_" }
+    exit 6
+}
+Say "no build-machine path (repository, user profile) in the package's text files or TaidaFlowApp.exe"
 
 # --- 7. VERSION.txt / MANIFEST.txt -----------------------------------------------------------------
 $files = @(Get-ChildItem -LiteralPath $pkg -Recurse -File | Sort-Object FullName)
@@ -217,12 +256,13 @@ $gitDate = (& git -C $root log -1 --format=%cI).Trim()
     "created      : $((Get-Date).ToString('o')) on $env:COMPUTERNAME",
     "git          : $(& git -C $root rev-parse HEAD) ($gitDate)$(if ($dirty) { ' + UNCOMMITTED source changes' })",
     "Qt           : 6.8.3 msvc2022_64 (windeployqt, Release)",
-    "exe          : $exe ($((Get-Item $exe).LastWriteTime.ToString('s')))",
-    "MSVC runtime : app-local DLLs from $crtDir",
-    "web page     : $WebSource (TaidaFlowApp.wasm $((Get-Item (Join-Path $WebSource 'TaidaFlowApp.wasm')).LastWriteTime.ToString('s')))",
-    "nginx        : $(if ($IncludeNginx) { "included ($NginxDir)" } else { 'not included (use C:\tools\nginx or -Nginx)' })",
+    "exe          : TaidaFlowApp.exe built $((Get-Item $exe).LastWriteTime.ToString('s')) (desktop-release)",
+    "MSVC runtime : app-local DLLs, $(Split-Path -Leaf $crtDir) $(Split-Path -Leaf (Split-Path -Parent (Split-Path -Parent $crtDir)))",
+    "web page     : WebAssembly build of $((Get-Item (Join-Path $WebSource 'TaidaFlowApp.wasm')).LastWriteTime.ToString('s')) (wasm-release)",
+    "nginx        : $nginxVer bundled in nginx\ (start: cd nginx + start nginx); conf\nginx.conf written on the plant PC by scripts\install-nginx-config.ps1",
+    "config.json  : not included - created at the first start with the defaults (TaidaFlowApp.exe --write-default-config); never overwritten by an update",
     "start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md",
-    "REST API     : http://<IP>/api/... through nginx -> 127.0.0.1:18080 (w2-060; start-taidaflow.ps1 -RestPort / TAIDAFLOW_REST_PORT)"))
+    "ports        : config.json; plant firewall inbound only 80 (nginx: page, /mirror, /exports, /api/) and 502 (Modbus server)"))
 $manifest = New-Object System.Collections.Generic.List[string]
 $manifest.Add("# path<TAB>bytes<TAB>SHA-256 (relative to the package folder; MANIFEST.txt itself not listed)")
 $files = @(Get-ChildItem -LiteralPath $pkg -Recurse -File | Where-Object { $_.Name -ne 'MANIFEST.txt' } | Sort-Object FullName)

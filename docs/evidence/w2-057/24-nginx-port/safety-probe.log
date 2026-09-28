@@ -1,0 +1,26 @@
+﻿=== safety probe 2026-09-28T16:13:02.348+08:00 reason="w2-057 D7: nginx on 80 is information only" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 0.0.0.0:80 pid=6420 (nginx)
+  port 80 = nginx web front end (scripts\nginx-start.ps1) -> information only, does not block the launch
+  verdict: SAFE
+=== safety probe 2026-09-28T16:20:08.229+08:00 reason="w2-057 D7: nginx on 80 is information only" host=LAPTOP-0B3CPPED
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 0.0.0.0:80 pid=54220 (nginx)
+  port 80 = nginx web front end (scripts\nginx-start.ps1) -> information only, does not block the launch
+  verdict: SAFE

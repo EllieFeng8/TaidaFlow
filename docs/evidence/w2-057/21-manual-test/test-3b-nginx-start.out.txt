@@ -1,0 +1,67 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 3 (after the replace) + step 4 curl checks (literal) 
+
+D:\repo\codex\qmlTester\taidaflow>set "NGX=C:\tools\nginx\nginx-1.30.5\nginx.exe" 
+
+D:\repo\codex\qmlTester\taidaflow>"C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf -t 
+nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/conf/taidaflow.conf syntax is ok
+nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/conf/taidaflow.conf test is successful
+
+D:\repo\codex\qmlTester\taidaflow>echo nginx -t exit 0 
+nginx -t exit 0
+
+D:\repo\codex\qmlTester\taidaflow>start "TaidaFlow nginx" /min "C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf 
+
+D:\repo\codex\qmlTester\taidaflow>ping -n 3 127.0.0.1  1>nul 
+
+D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1/ 
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0  0    138   0      0   0      0      0      0                              0  0    138   0      0   0      0      0      0                              0  0    138   0      0   0      0      0      0                              0
+HTTP/1.1 302 Moved Temporarily
+Server: nginx
+Date: Mon, 28 Sep 2026 08:06:05 GMT
+Content-Type: text/html
+Content-Length: 138
+Connection: keep-alive
+Location: /TaidaFlowApp.html
+Cache-Control: no-cache
+
+
+D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1/TaidaFlowApp.html 
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0  0   3092   0      0   0      0      0      0                              0  0   3092   0      0   0      0      0      0                              0  0   3092   0      0   0      0      0      0                              0
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 28 Sep 2026 08:06:05 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 3092
+Last-Modified: Mon, 28 Sep 2026 07:54:23 GMT
+Connection: keep-alive
+Vary: Accept-Encoding
+ETag: "6aba1d2f-c14"
+Cache-Control: no-cache
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
+Accept-Ranges: bytes
+
+
+D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1:8124/TaidaFlowApp.html 
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0
+curl: (8) Invalid Content-Length: value
+HTTP/1.1 200 OK
+etag: "c14-1a0e7020347"
+last-modified: Mon, 28 Sep 2026 07:54:23 GMT
+cache-control: no-cache
+vary: Accept-Encoding
+cross-origin-opener-policy: same-origin
+cross-origin-embedder-policy: require-corp
+cross-origin-resource-policy: same-origin
+content-type: text/html; charset=utf-8
+content-length: 3092
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

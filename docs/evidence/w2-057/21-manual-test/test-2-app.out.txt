@@ -1,0 +1,27 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 header + step 2 with the "keep a log" variant (set QT_FORCE_STDERR_LOGGING=1 + start /b cmd /c ... 2> manual.log) 
+
+D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+
+D:\repo\codex\qmlTester\taidaflow>set "PATH=C:\Qt\6.8.3\msvc2022_64\bin;C:\Program Files\Basler\pylon\Runtime\x64\;C:\Program Files\Basler\pylon\Runtime\Win32\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\Microsoft SQL Server\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Basler\FramegrabberSDK\bin;C:\Program Files\Basler\FramegrabberSDK\Win32\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.1.1\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\TED\AppData\Local\Programs\Python\Launcher\;C:\Users\TED\AppData\Local\Microsoft\WindowsApps;C:\Users\TED\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\TED\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\TED\.dotnet\tools;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin;C:\Users\TED\AppData\Local\PowerToys\DSCModules\;C:\Users\TED\AppData\Local\Microsoft\WinGet\Links;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;C:\Users\TED\AppData\Local\Programs\Python\Python312;C:\Program Files\Git\mingw64\bin" 
+
+D:\repo\codex\qmlTester\taidaflow>set TAIDAFLOW_DEVICE_PROFILE=simulator 
+
+D:\repo\codex\qmlTester\taidaflow>set TAIDAFLOW_DOWNLOAD_PORT=80 
+
+D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd"  2>nul 
+
+D:\repo\codex\qmlTester\taidaflow>cd /d "D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd" 
+
+D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>set QT_FORCE_STDERR_LOGGING=1 
+
+D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>start "" /b cmd /c ""D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe" 2> "D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\manual.log"" 
+
+D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>ping -n 8 127.0.0.1  1>nul 
+
+D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>netstat -ano   | findstr LISTENING   | findstr ":8124 :8125 :18125" 
+  TCP    0.0.0.0:8124           0.0.0.0:0              LISTENING       41728
+  TCP    0.0.0.0:8125           0.0.0.0:0              LISTENING       41728
+  TCP    127.0.0.1:18125        0.0.0.0:0              LISTENING       41728
+
+D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>exit /b 0 

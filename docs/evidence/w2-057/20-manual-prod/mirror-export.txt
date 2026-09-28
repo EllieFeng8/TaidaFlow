@@ -1,0 +1,8 @@
+16:04:29.479 contractHash=3a46a41b750f3577674e0a7d8fb6de7f7a7f2a375307002f74f244909630639c
+16:04:29.540 connected to ws://127.0.0.1:8125/mirror (origin http://127.0.0.1)
+16:04:29.542 welcome, connectionSessionId=295ff2ad-8eb0-4b21-8a53-5bda7e93c742
+16:04:29.542 sent historyExportRequested("w2057manual", 1790577423000, 1790581023000) = 2026-09-28T14:37:03 .. 2026-09-28T15:37:03
+16:04:29.545 STATUS {"downloadPort":80,"fileName":"w2057manual_20260928_160429.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+16:04:29.546 STATUS {"downloadPort":80,"fileName":"w2057manual_20260928_160429.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":2134,"url":""}
+16:04:29.564 STATUS {"downloadPort":80,"fileName":"w2057manual_20260928_160429.csv","message":"匯出完成,共 2134 筆","progress":100,"queuePosition":0,"rowsWritten":2134,"savedPath":"","state":"done","totalRows":2134,"url":"/exports/w2057manual_20260928_160429.csv"}
+16:04:29.564 RESULT state=done fileName=w2057manual_20260928_160429.csv url=/exports/w2057manual_20260928_160429.csv downloadPort=80

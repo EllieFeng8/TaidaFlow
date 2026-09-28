@@ -1,0 +1,33 @@
+﻿scheduled tasks named TaidaFlow* BEFORE: 0
+--- register-autostart.ps1 -WhatIf -DataDir "C:\TaidaFlow Data" -UseNginx -Port 80
+scheduled task definition (registered only without -WhatIf):
+  name              : \TaidaFlow
+  description       : TaidaFlow field start at logon of LAPTOP-0B3CPPED\TED (start-taidaflow.ps1, data folder C:\TaidaFlow Data). Registered by register-autostart.ps1; remove with unregister-autostart.ps1.
+  trigger           : at log on of LAPTOP-0B3CPPED\TED, delay PT30S
+  run as            : LAPTOP-0B3CPPED\TED, logon type Interactive (only when the user is logged on - the HMI window needs the desktop), run level Limited
+  action execute    : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  action arguments  : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\start-taidaflow.ps1" -DataDir "C:\TaidaFlow Data" -UseNginx -Port 80
+  working directory : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee
+  settings          : MultipleInstances=IgnoreNew ExecutionTimeLimit=PT10M StartWhenAvailable=True DisallowStartIfOnBatteries=False StopIfGoingOnBatteries=False
+  existing task     : none
+What if: Performing the operation "Register-ScheduledTask" on target "\TaidaFlow (Task Scheduler, user LAPTOP-0B3CPPED\TED)".
+-WhatIf: NOTHING registered.
+exit=0
+--- register-autostart.ps1 -WhatIf
+scheduled task definition (registered only without -WhatIf):
+  name              : \TaidaFlow
+  description       : TaidaFlow field start at logon of LAPTOP-0B3CPPED\TED (start-taidaflow.ps1, data folder D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime). Registered by register-autostart.ps1; remove with unregister-autostart.ps1.
+  trigger           : at log on of LAPTOP-0B3CPPED\TED, delay PT30S
+  run as            : LAPTOP-0B3CPPED\TED, logon type Interactive (only when the user is logged on - the HMI window needs the desktop), run level Limited
+  action execute    : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  action arguments  : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\start-taidaflow.ps1" -DataDir "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime"
+  working directory : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee
+  settings          : MultipleInstances=IgnoreNew ExecutionTimeLimit=PT10M StartWhenAvailable=True DisallowStartIfOnBatteries=False StopIfGoingOnBatteries=False
+  existing task     : none
+What if: Performing the operation "Register-ScheduledTask" on target "\TaidaFlow (Task Scheduler, user LAPTOP-0B3CPPED\TED)".
+-WhatIf: NOTHING registered.
+exit=0
+--- unregister-autostart.ps1 -WhatIf
+no scheduled task \TaidaFlow - nothing to remove
+exit=1 (1 = no such task, nothing removed)
+scheduled tasks named TaidaFlow* AFTER: 0

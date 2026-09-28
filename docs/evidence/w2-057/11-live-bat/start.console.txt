@@ -1,0 +1,36 @@
+2026-09-28 16:15:39 [start] === TaidaFlow FIELD start (connects to the real equipment; no development safety probe) ===
+2026-09-28 16:15:39 [start] installation: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee
+2026-09-28 16:15:39 [start] data folder : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime
+2026-09-28 16:15:39 [start] log folder  : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\logs
+2026-09-28 16:15:40 [start] ports free: 502, 8124, 8125, 18125, 80
+2026-09-28 16:15:40 [start] app log mode: quiet (QT_LOGGING_CONF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\logging\quiet.ini)
+2026-09-28 16:15:40 [start] starting nginx (scripts\nginx-web.ps1 -Action start, runtime D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\nginx)
+2026-09-28 16:15:44 [start]   nginx | nginx: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\nginx\nginx.exe (from -Nginx)
+2026-09-28 16:15:44 [start]   nginx | export folder created: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\exports (the app creates the same folder at start-up)
+2026-09-28 16:15:44 [start]   nginx | config: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\nginx\conf\taidaflow.conf (web root D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\web, export folder D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\exports, port 80)
+2026-09-28 16:15:44 [start]   nginx | nginx -t:
+2026-09-28 16:15:44 [start]   nginx |   | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/dist/TaidaFlow-20260928-c714aee/runtime/nginx/conf/taidaflow.conf syntax is ok
+2026-09-28 16:15:44 [start]   nginx |   | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/dist/TaidaFlow-20260928-c714aee/runtime/nginx/conf/taidaflow.conf test is successful
+2026-09-28 16:15:44 [start]   nginx | NGINX_PID=30660 WORKERS=131020 PIDFILE=30660
+2026-09-28 16:15:44 [start]   nginx | WEBROOT=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\web
+2026-09-28 16:15:44 [start]   nginx | EXPORTDIR=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\exports
+2026-09-28 16:15:44 [start]   nginx | RUNTIME=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\nginx
+2026-09-28 16:15:44 [start]   nginx | URL=http://<this host's IPv4>:80/  (-> /TaidaFlowApp.html)  downloads: http://<this host's IPv4>:80/exports/<file>
+2026-09-28 16:15:44 [start]   nginx | (start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=80 so that its download links point here)
+2026-09-28 16:15:44 [start] nginx started (0.0.0.0:80)
+2026-09-28 16:15:44 [start] TAIDAFLOW_DOWNLOAD_PORT=80
+2026-09-28 16:15:44 [start] TaidaFlowApp started: pid 129628, log D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\logs\taidaflow-20260928-161544.log
+2026-09-28 16:15:46 [start]   port 502   Modbus server (external HMI)   listening
+2026-09-28 16:15:46 [start]   port 8124  web page + CSV downloads       listening
+2026-09-28 16:15:46 [start]   port 8125  web mirror relay (LAN)         listening
+2026-09-28 16:15:46 [start]   port 18125 internal mirror (127.0.0.1)    listening
+2026-09-28 16:15:46 [start] web page: http://192.168.83.1/  (nginx -> /TaidaFlowApp.html; also http://192.168.83.1:8124/TaidaFlowApp.html)
+2026-09-28 16:15:46 [start] web page: http://192.168.158.1/  (nginx -> /TaidaFlowApp.html; also http://192.168.158.1:8124/TaidaFlowApp.html)
+2026-09-28 16:15:46 [start] web page: http://192.168.0.125/  (nginx -> /TaidaFlowApp.html; also http://192.168.0.125:8124/TaidaFlowApp.html)
+2026-09-28 16:15:46 [start] web page: http://127.0.0.1/  (nginx -> /TaidaFlowApp.html; also http://127.0.0.1:8124/TaidaFlowApp.html)
+2026-09-28 16:15:46 [start] started (exit 0)
+
+start-taidaflow exit code 0
+  0 = started   4 = already running or a port is in use (nothing started)
+  6 = the app did not come up (see the log)   8 = started WITHOUT nginx   2 = package or folder problem
+  log folder: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\runtime\logs

@@ -1,0 +1,44 @@
+# DEPLOY_AND_STARTUP.md 3.1: why double-clicking build\desktop\TaidaFlowApp.exe fails
+## dumpbin /dependents build\desktop\TaidaFlowApp.exe
+
+Dump of file build\desktop\TaidaFlowApp.exe
+
+File Type: EXECUTABLE IMAGE
+
+  Image has the following dependencies:
+
+    Qt6Widgets.dll
+    Qt6SerialBus.dll
+    Qt6Sql.dll
+    Qt6Qml.dll
+    Qt6Gui.dll
+    Qt6SerialPort.dll
+    Qt6HttpServer.dll
+    Qt6WebSockets.dll
+    Qt6Network.dll
+    Qt6Core.dll
+    MSVCP140.dll
+    VCRUNTIME140.dll
+    VCRUNTIME140_1.dll
+    api-ms-win-crt-heap-l1-1-0.dll
+    api-ms-win-crt-string-l1-1-0.dll
+    api-ms-win-crt-math-l1-1-0.dll
+    api-ms-win-crt-runtime-l1-1-0.dll
+    api-ms-win-crt-stdio-l1-1-0.dll
+    api-ms-win-crt-locale-l1-1-0.dll
+    KERNEL32.dll
+
+  Summary
+
+       10000 .data
+        C000 .pdata
+      1B8000 .rdata
+        3000 .reloc
+        1000 .rsrc
+      162000 .text
+## Qt6*.dll inside build\desktop (none expected):
+ls: cannot access 'build/desktop/Qt6*.dll': No such file or directory
+## Qt6Core.dll in C:\Qt\6.8.3\msvc2022_64\bin:
+/c/Qt/6.8.3/msvc2022_64/bin/Qt6Core.dll
+## system PATH (machine + user, from registry) holds a folder with Qt6Core.dll?
+folders with Qt6Core.dll on the registry PATH: 1 C:\Program Files\Basler\FramegrabberSDK\bin

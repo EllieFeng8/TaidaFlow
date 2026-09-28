@@ -1,0 +1,18 @@
+﻿web-1-build-wasm exit 0
+  last: [4/6] Automatic MOC and UIC for target TaidaFlowApp | [5/5] Linking CXX executable TaidaFlowApp.js
+web-2-build-wasm-manual exit 0
+  last: [4/6] Automatic MOC and UIC for target TaidaFlowApp | [5/5] Linking CXX executable TaidaFlowApp.js
+deploy-web.ps1 -ExeDir build\w2-057-webcopy exit 0
+  qtloader.js                     12354 bytes  -> .gz         4014 bytes (32%)
+  qtlogo.svg                       1686 bytes  -> .gz          901 bytes (53%)
+  TaidaFlowApp.html                3092 bytes  -> .gz         1218 bytes (39%)
+  TaidaFlowApp.js                304976 bytes  -> .gz        70014 bytes (23%)
+  TaidaFlowApp.wasm            34103893 bytes  -> .gz     12531004 bytes (37%)
+  deployed 5 file(s), 34426001 bytes (+12607151 bytes .gz) from D:\repo\codex\qmlTester\taidaflow\build\wasm-release to D:\repo\codex\qmlTester\taidaflow\build\w2-057-webcopy\web
+  no symbolic links / junctions in D:\repo\codex\qmlTester\taidaflow\build\w2-057-webcopy\web
+  the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)
+  nginx serves them at http://<host>/ (port 80, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)
+web-3-deploy-manual exit 0; files: qtloader.js 12354, qtlogo.svg 1686, TaidaFlowApp.html 3092, TaidaFlowApp.js 304976, TaidaFlowApp.wasm 34103893
+manual copy identical to build\wasm-release: 5/5
+python -B scripts\make_font_subset.py --check exit 0
+  

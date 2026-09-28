@@ -1,0 +1,18 @@
+data\
+exports\
+nginx\
+settings.sqlite (20480 bytes)
+TaidaFlowSettings.ini (32 bytes)
+data\sensor_202609.sqlite (7262208 bytes)
+exports\w2057manual_20260928_160429.csv (335874 bytes)
+nginx\conf\
+nginx\logs\
+nginx\temp\
+nginx\conf\taidaflow.conf (9724 bytes)
+nginx\logs\access.log (524 bytes)
+nginx\logs\error.log (68 bytes)
+nginx\temp\client_body_temp\
+nginx\temp\fastcgi_temp\
+nginx\temp\proxy_temp\
+nginx\temp\scgi_temp\
+nginx\temp\uwsgi_temp\

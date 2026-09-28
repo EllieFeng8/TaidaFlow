@@ -1,0 +1,30 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 1b (literal; -LogFile added so the record goes to the w2-057 evidence folder) 
+
+D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+
+D:\repo\codex\qmlTester\taidaflow>powershell -ExecutionPolicy Bypass -File "D:\repo\codex\qmlTester\taidaflow\scripts\safety_probe.ps1" -DeviceProfile simulator -Reason "manual" -LogFile "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-057\21-manual-test\safety-probe.log" 
+=== safety probe 2026-09-28T16:05:44.844+08:00 reason="manual" host=LAPTOP-0B3CPPED profile=simulator
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  listener 127.0.0.205:502 pid=132744 (Adam60xxSimulator)
+  port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.204:502 pid=132744 (Adam60xxSimulator)
+  port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.203:502 pid=132744 (Adam60xxSimulator)
+  port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.202:502 pid=132744 (Adam60xxSimulator)
+  port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  listener 127.0.0.201:502 pid=132744 (Adam60xxSimulator)
+  port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  simulator endpoints listening: 5/5
+  verdict: SAFE
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

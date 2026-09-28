@@ -1,0 +1,11 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 3: mkdir + copy (literal); the Notepad replace is done by the harness. 
+
+D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+
+D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\conf" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\logs" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\temp" 
+
+D:\repo\codex\qmlTester\taidaflow>copy "D:\repo\codex\qmlTester\taidaflow\deploy\nginx\taidaflow.conf" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\conf\taidaflow.conf" 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

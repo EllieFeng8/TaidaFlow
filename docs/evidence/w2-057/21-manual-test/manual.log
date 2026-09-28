@@ -1,0 +1,492 @@
+Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+[HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql"
+[Modbus] device profile=simulator
+[Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1
+[Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[Modbus] device ADAM-6217 B -> 127.0.0.203:502 unit=1
+[Modbus] device ADAM-6224 -> 127.0.0.204:502 unit=1
+[Modbus] device ADAM-6022 -> 127.0.0.205:502 unit=1
+[Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+[History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+[Export] TAIDAFLOW_DOWNLOAD_PORT=80 - download links use port 80 (served by another program, e.g. nginx; /exports on AppHttpServer port 8124 stays available as fallback)
+[Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (max 20 files / 2147483648 bytes), download links -> port 80
+apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+[Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports: mounted on AppHttpServer
+[Web] TAIDAFLOW_WEB_DIR is not set
+[Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> has TaidaFlowApp.html, used
+apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\desktop\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+[Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\build\desktop\web -> http://<host>:8124/TaidaFlowApp.html
+apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+[Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=125
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=125 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=124 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=123 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=122 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=121 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=120 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=119 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=118 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[SQL] Loaded 44 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=44; severity 嚴重=8 警告=36; unknown core status=0).
+[MS300] Disconnected from COM2, Unit ID 1: disconnected
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[Alarm][UI] id=125 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[Alarm][UI] id=124 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=123 sensor=DI2 message=補水泵 OL（DI2=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=122 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=121 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=120 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=119 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+[Alarm][UI] id=118 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+[SQL] Loaded 44 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=44; severity 嚴重=8 警告=36; unknown core status=0).
+WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+ADAM-6256 (127.0.0.201) connected 
+ADAM-6022 (127.0.0.205) connected 
+ADAM-6224 (127.0.0.204) connected 
+ADAM-6217 A (127.0.0.202) connected 
+ADAM-6217 B (127.0.0.203) connected 
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Local update] type=3 offset=8 count=1
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=990
+[ModbusServer][Local update] type=3 offset=9 count=1
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=943
+[ModbusServer][Local update] type=3 offset=10 count=1
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Local update] type=3 offset=12 count=1
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13106
+[ModbusServer][Local update] type=3 offset=13 count=1
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19666
+[ModbusServer][Local update] type=3 offset=14 count=1
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26211
+[ModbusServer][Local update] type=3 offset=15 count=1
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32772
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=990 value=15.106
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=943 value=14.389
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13106 value=19.998
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19666 value=30.008
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26211 value=39.995
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32772 value=50.007
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[SV sync] pump2HzSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] pump2HzSv <- 40.00 Hz from ADAM-6022 HR10 raw=2730 (was 0.00)
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18555
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18826
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21812
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21269
+[ModbusServer][Local update] type=3 offset=4 count=1
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+[ModbusServer][Local update] type=3 offset=5 count=1
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Local update] type=3 offset=6 count=1
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Local update] type=3 offset=7 count=1
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1037
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18555 value=28.313
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18826 value=28.727
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21812 value=33.283
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21269 value=32.454
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1037 value=15.824
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[SV sync] motorRunningSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] emergencyStopSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] motorRunningSv <- false from ADAM-6256 DO3 (coil 19) = 0 (was false)
+[SV sync] wayValveOpenSv <- false from ADAM-6256 DO4 (coil 20) = 0 (was false)
+[SV sync] emergencyStopSv <- true from ADAM-6256 DO2 (coil 18) = 0, active-low (was false)
+[ModbusServer][Local update] type=2 offset=10 count=1
+[Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.3 ms)
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+[Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved 異常 rows from earlier runs in 202609+202608: 0 (lookup 0.2 ms)
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[SV sync] m1ValueSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] m1ValueSv <- 20.00 % from ADAM-6224 HR0 raw=819 (was 0.00)
+[SV sync] m2ValueSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] m2ValueSv <- 30.01 % from ADAM-6224 HR1 raw=1229 (was 0.00)
+[SV sync] m3ValueSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] m3ValueSv <- 40.00 % from ADAM-6224 HR2 raw=1638 (was 0.00)
+[SV sync] m4ValueSv changed by the startup device sync; Modbus write suppressed.
+[SV sync] m4ValueSv <- 50.01 % from ADAM-6224 HR3 raw=2048 (was 0.00)
+[SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=7, Modbus write requests since start=0.
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Local update] type=3 offset=8 count=1
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=943
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13106
+[ModbusServer][Local update] type=3 offset=13 count=1
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19667
+[ModbusServer][Local update] type=3 offset=14 count=1
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26212
+[ModbusServer][Local update] type=3 offset=15 count=1
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32774
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=943 value=14.389
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13106 value=19.998
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19667 value=30.010
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26212 value=39.997
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32774 value=50.010
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18586
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18861
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21889
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21338
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Local update] type=3 offset=7 count=1
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18586 value=28.360
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18861 value=28.780
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21889 value=33.400
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21338 value=32.560
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Local update] type=3 offset=9 count=1
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=944
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Local update] type=3 offset=12 count=1
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13107
+[ModbusServer][Local update] type=3 offset=13 count=1
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19668
+[ModbusServer][Local update] type=3 offset=14 count=1
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26213
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32774
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13107 value=20.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19668 value=30.011
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26213 value=39.998
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32774 value=50.010
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18611
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18890
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21953
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21396
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18611 value=28.399
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18890 value=28.824
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21953 value=33.498
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21396 value=32.648
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=944
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13107
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19668
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26213
+[ModbusServer][Local update] type=3 offset=15 count=1
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32775
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13107 value=20.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19668 value=30.011
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26213 value=39.998
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32775 value=50.011
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18629
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18909
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=21996
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21435
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1179
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18629 value=28.426
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18909 value=28.853
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=21996 value=33.564
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21435 value=32.708
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1179 value=17.990
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=944
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13107
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19668
+[ModbusServer][Local update] type=3 offset=14 count=1
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26214
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32775
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13107 value=20.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19668 value=30.011
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26214 value=40.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32775 value=50.011
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18647
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18930
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=22043
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21477
+[ModbusServer][Local update] type=3 offset=4 count=1
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1180
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18647 value=28.453
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18930 value=28.885
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=22043 value=33.635
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21477 value=32.772
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=944
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13107
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19668
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26214
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32775
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13107 value=20.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19668 value=30.011
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26214 value=40.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32775 value=50.011
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18663
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18948
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=22082
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21512
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1180
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18663 value=28.478
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18948 value=28.913
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=22082 value=33.695
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21512 value=32.825
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Referenced serial device does not exist.
+[MS300] 系統找不到指定的檔案。
+[MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+[MS300] Connection request failed: 系統找不到指定的檔案。
+[ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.203) AI=0 raw=991
+[ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.203) AI=1 raw=944
+[ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.203) AI=2 raw=896
+[ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.203) AI=3 raw=0
+[ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.203) AI=4 raw=13107
+[ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.203) AI=5 raw=19668
+[ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.203) AI=6 raw=26214
+[ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.203) AI=7 raw=32775
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-05 offset=0 raw=991 value=15.122
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-06 offset=0 raw=944 value=14.405
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=PT-07 offset=0 raw=896 value=13.672
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=FlowMeter offset=0 raw=0 value=0.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV1 Position offset=0 raw=13107 value=20.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV2 Position offset=0 raw=19668 value=30.011
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV3 Position offset=0 raw=26214 value=40.000
+[Modbus][Read] device=ADAM-6217 B (127.0.0.203) point=MV4 Position offset=0 raw=32775 value=50.011
+[Modbus][Read] device=ADAM-6022 (127.0.0.205) point=Pump2Hz(AO0 read-back) offset=10 raw=2730 value=40.000 -> pump2HzPv
+[ModbusServer][Local update] type=3 offset=0 count=1
+[ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.202) AI=0 raw=18676
+[ModbusServer][Local update] type=3 offset=1 count=1
+[ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.202) AI=1 raw=18963
+[ModbusServer][Local update] type=3 offset=2 count=1
+[ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.202) AI=2 raw=22115
+[ModbusServer][Local update] type=3 offset=3 count=1
+[ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.202) AI=3 raw=21542
+[ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.202) AI=4 raw=1180
+[ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.202) AI=5 raw=1132
+[ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.202) AI=6 raw=1085
+[ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.202) AI=7 raw=1038
+Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+[SQL] Saved Server Input Registers 0..19 to sensor_data.
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-01 offset=0 raw=18676 value=28.498
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-02 offset=0 raw=18963 value=28.936
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-03 offset=0 raw=22115 value=33.745
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=TT-04 offset=0 raw=21542 value=32.871
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-01 offset=0 raw=1180 value=18.006
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-02 offset=0 raw=1132 value=17.273
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-03 offset=0 raw=1085 value=16.556
+[Modbus][Read] device=ADAM-6217 A (127.0.0.202) point=PT-04 offset=0 raw=1038 value=15.839
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO0 offset=16 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO1 offset=17 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO2 offset=18 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO3 offset=19 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO4 offset=20 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO5 offset=21 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO6 offset=22 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO7 offset=23 raw=0 value=0
+[Modbus][Read] device=ADAM-6256 (127.0.0.201) point=DO8 offset=24 raw=0 value=0
+[ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.204) DI=0 value=1
+[ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.204) DI=1 value=0
+[ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.204) DI=2 value=0

@@ -1,0 +1,9 @@
+2026-09-28 15:51:40 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-8c9dd8e\runtime) ===
+2026-09-28 15:51:40 [stop]  no nginx state file in D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-8c9dd8e\runtime\nginx - nginx not started by start-taidaflow.ps1, nothing to stop
+2026-09-28 15:51:40 [stop]  other TaidaFlowApp (not started by start-taidaflow.ps1 with this data folder, not touched): pid 50444 D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-8c9dd8e\TaidaFlowApp.exe
+2026-09-28 15:51:40 [stop]  no TaidaFlowApp started by start-taidaflow.ps1 (data folder D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-8c9dd8e\runtime) is running
+
+stop-taidaflow exit code 1
+  0 = stopped   1 = nothing started by start-taidaflow was running
+  7 = the app did not close in time (NOT killed - close the window by hand)   9 = nginx could not be stopped
+Press any key to continue . . . 

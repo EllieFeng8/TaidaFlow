@@ -1,0 +1,32 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 5 (literal) 
+
+D:\repo\codex\qmlTester\taidaflow>set "NGX=C:\tools\nginx\nginx-1.30.5\nginx.exe" 
+
+D:\repo\codex\qmlTester\taidaflow>"C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf -s quit 
+
+D:\repo\codex\qmlTester\taidaflow>echo nginx -s quit exit 0 
+nginx -s quit exit 0
+
+D:\repo\codex\qmlTester\taidaflow>taskkill /IM TaidaFlowApp.exe 
+成功: 已將終止信號傳送到處理程序 "TaidaFlowApp.exe" (PID 為 41728)。
+
+D:\repo\codex\qmlTester\taidaflow>echo taskkill app exit 0 
+taskkill app exit 0
+
+D:\repo\codex\qmlTester\taidaflow>ping -n 6 127.0.0.1  1>nul 
+
+D:\repo\codex\qmlTester\taidaflow>taskkill /IM Adam60xxSimulator.exe 
+成功: 已將終止信號傳送到處理程序 "Adam60xxSimulator.exe" (PID 為 132744)。
+
+D:\repo\codex\qmlTester\taidaflow>echo taskkill simulator exit 0 
+taskkill simulator exit 0
+
+D:\repo\codex\qmlTester\taidaflow>ping -n 4 127.0.0.1  1>nul 
+
+D:\repo\codex\qmlTester\taidaflow>netstat -ano   | findstr LISTENING   | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " 
+
+D:\repo\codex\qmlTester\taidaflow>echo findstr exit 1 (1 = nothing listening) 
+findstr exit 1 (1 = nothing listening)
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

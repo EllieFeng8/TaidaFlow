@@ -1,0 +1,17 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 1.4 (c) line 4 (nginx -s quit) and 1.4 (d) (taskkill without /F). 
+
+D:\repo\codex\qmlTester\taidaflow>set "TF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee" 
+
+D:\repo\codex\qmlTester\taidaflow>"D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\nginx\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/w2-057-manual-prod/nginx/" -c conf/taidaflow.conf -s quit 
+
+D:\repo\codex\qmlTester\taidaflow>echo nginx -s quit exit 0 
+nginx -s quit exit 0
+
+D:\repo\codex\qmlTester\taidaflow>taskkill /IM TaidaFlowApp.exe 
+成功: 已將終止信號傳送到處理程序 "TaidaFlowApp.exe" (PID 為 118304)。
+
+D:\repo\codex\qmlTester\taidaflow>echo taskkill exit 0 
+taskkill exit 0
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

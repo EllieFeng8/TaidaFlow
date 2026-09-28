@@ -14,9 +14,9 @@
 #      never mix.
 #   4. (w2-050) symbolic links / junctions (reparse points): the old web folder is NOT removed when
 #      it is a link or holds one (Remove-Item could follow it), and after copying the new web folder
-#      is scanned again; nginx for Windows (scripts\nginx-start.ps1, port 8123) has no
+#      is scanned again; nginx for Windows (scripts\nginx-start.ps1, port 80) has no
 #      disable_symlinks and would serve files outside the folder through a link.
-# The same folder is served by nginx on 8123 (scripts\nginx-start.ps1) - run scripts\nginx-web.ps1
+# The same folder is served by nginx on port 80 (scripts\nginx-start.ps1; -Port for another port) - run scripts\nginx-web.ps1
 # -Action reload (or stop + start) after deploying while nginx runs; ETag revalidation picks up the
 # new files anyway.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1
@@ -112,5 +112,5 @@ if ($links.Count -gt 0) {
 Write-Output ("deployed {0} file(s), {1} bytes (+{2} bytes .gz) from {3} to {4}" -f $files.Count, $total, $totalGz, $Source, $web)
 Write-Output "no symbolic links / junctions in $web"
 Write-Output "the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)"
-Write-Output "nginx serves them at http://<host>:8123/TaidaFlowApp.html (scripts\nginx-start.ps1)"
+Write-Output "nginx serves them at http://<host>/ (port 80, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)"
 exit 0

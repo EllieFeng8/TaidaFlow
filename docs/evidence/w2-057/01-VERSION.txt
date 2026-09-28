@@ -1,0 +1,9 @@
+TaidaFlow field package TaidaFlow-20260928-c714aee
+created      : 2026-09-28T16:14:24.0694106+08:00 on LAPTOP-0B3CPPED
+git          : c714aee9549eb2d1f58f98f6836ad90b969ec36a (2026-09-28T15:53:21+08:00)
+Qt           : 6.8.3 msvc2022_64 (windeployqt, Release)
+exe          : D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe (2026-09-28T15:54:13)
+MSVC runtime : app-local DLLs from C:\Program Files\Microsoft Visual Studio\18\Community\VC\Redist\MSVC\14.51.36231\x64\Microsoft.VC145.CRT
+web page     : D:\repo\codex\qmlTester\taidaflow\build\wasm-release (TaidaFlowApp.wasm 2026-09-28T16:11:32)
+nginx        : included (C:\tools\nginx\nginx-1.30.5)
+start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md

@@ -1,0 +1,34 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 2.2 manual copy (literal except build\desktop -> build\w2-057-webcopy, so the live build\desktop\web is not touched) 
+
+D:\repo\codex\qmlTester\taidaflow>cd /d D:\repo\codex\qmlTester\taidaflow 
+
+D:\repo\codex\qmlTester\taidaflow>rmdir /s /q build\w2-057-webcopy\web 
+
+D:\repo\codex\qmlTester\taidaflow>mkdir build\w2-057-webcopy\web 
+
+D:\repo\codex\qmlTester\taidaflow>for %f in (TaidaFlowApp.html TaidaFlowApp.js TaidaFlowApp.wasm qtloader.js qtlogo.svg) do copy build\wasm-release\%f build\w2-057-webcopy\web\ 
+
+D:\repo\codex\qmlTester\taidaflow>copy build\wasm-release\TaidaFlowApp.html build\w2-057-webcopy\web\ 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>copy build\wasm-release\TaidaFlowApp.js build\w2-057-webcopy\web\ 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>copy build\wasm-release\TaidaFlowApp.wasm build\w2-057-webcopy\web\ 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>copy build\wasm-release\qtloader.js build\w2-057-webcopy\web\ 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>copy build\wasm-release\qtlogo.svg build\w2-057-webcopy\web\ 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>dir /b build\w2-057-webcopy\web 
+qtloader.js
+qtlogo.svg
+TaidaFlowApp.html
+TaidaFlowApp.js
+TaidaFlowApp.wasm
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

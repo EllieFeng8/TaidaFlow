@@ -28,7 +28,8 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
 - **後端只在桌面版**:Modbus、MS300、REST、SQLite、歷史匯出、HTTP 服務只編進桌面版
   (`scripts/check_wasm_backend.py` 檢查網頁版的後端來源、Qt 模組、字串皆為 0)。網頁版無法直接連任何設備。
 - **網頁由桌面自己提供**:desktop 內建 `AppHttpServer` 在 `0.0.0.0:8124` 送網頁與 CSV 下載;
-  另可選用 nginx 在 `0.0.0.0:8123` 送網頁,並直接從匯出資料夾送 CSV(支援續傳)。
+  另可選用 nginx 在 `0.0.0.0:80`(w2-057 起預設 80,之前 8123)送網頁,並直接從匯出資料夾送 CSV(支援續傳)。
+  正式機部署(打包資料夾、啟動/停止腳本、自動啟動、防火牆)見 `docs/DEPLOY_AND_STARTUP.md`。
 - **區網電腦可連線**:網頁連回「載入頁面的那台主機」的 `8125`;desktop 的 Mirror 綁在
   `127.0.0.1:18125`,由 `App/lanrelay.h` 在 `0.0.0.0:8125` 轉發(pack 1.0.1 只允許 loopback 的暫時做法)。
   依 Mango 決定為內網系統,**不做存取控管**(`allowedOrigins = {}`)。
@@ -53,26 +54,27 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
  │                         │   WS 8125     │ LanRelay 0.0.0.0:8125 ──▶ Mirror 127.0.0.1:18125     │
  │ Td(TaidaFlowProxy)     │◀─────────────▶│                          (/mirror,wire protocol 3)  │
  └─────────────────────────┘               │ Core:Modbus 5×ADAM、Modbus server 0.0.0.0:502、      │
-            │ HTTP 8123(選用)             │       MS300 COM2、SqlManager(data\)、匯出(exports\) │
+            │ HTTP 80(選用)               │       MS300 COM2、SqlManager(data\)、匯出(exports\) │
             ▼                               └──────────────────────────────────────────────────────┘
  ┌─────────────────────────┐  讀檔                 ▲ 匯出檔寫入 build\runtime-cwd\exports\
- │ nginx 0.0.0.0:8123      │──────────────────────┘
+ │ nginx 0.0.0.0:80        │──────────────────────┘
  │ 網頁:<exe>\web          │  /exports/<檔名> 直接從匯出資料夾送(支援續傳)
  └─────────────────────────┘
 ```
 
 | Port | 綁定 | 由誰提供 | 用途 |
 |---|---|---|---|
-| 8123 | `0.0.0.0:8123` | nginx(另一個程式,`scripts/nginx-start.ps1`,選用) | 網頁 `http://<IP>:8123/TaidaFlowApp.html`;`/exports/<檔名>` 由 nginx 直接從匯出資料夾送,支援 HTTP Range 續傳 |
+| 80 | `0.0.0.0:80` | nginx(另一個程式,`scripts/nginx-start.ps1` 或正式機 `start-taidaflow -UseNginx`,選用;`-Port` 可改,例如舊的 8123) | 網頁 `http://<IP>/`(→ 302 `/TaidaFlowApp.html`);`/exports/<檔名>` 由 nginx 直接從匯出資料夾送,支援 HTTP Range 續傳 |
 | 8124 | `0.0.0.0:8124` | desktop 內建 `AppHttpServer`(`Core/AppHttpServer/`) | 網頁 `http://<IP>:8124/TaidaFlowApp.html`;`/exports/<檔名>` 下載(備援,不支援 Range) |
 | 8125 | `0.0.0.0:8125` | desktop `App/lanrelay.h` | 網頁連的公開 mirror port,每條連線原樣轉發到 18125 |
 | 18125 | `127.0.0.1:18125` | desktop Mirror server(pack) | 內部 port,只限本機 |
-| 502 | `0.0.0.0:502` | desktop `Modbus_Server`(聚合 server) | 既有功能,與網頁無關(§4.3-4) |
+| 502 | `0.0.0.0:502` | desktop `Modbus_Server`(聚合 server) | 既有功能,外部 HMI 用,與網頁無關(§4.3-4) |
 
 - 網頁版的 mirror host = `location.hostname`,port `8125`,路徑 `/mirror`;取不到主機名稱時退回
   `127.0.0.1` 並記 warning(`App/main.cpp`)。從哪個位址開網頁,就連回同一個位址。
 - 下載連結由網頁組成:`http://<Td.pageHost>:<downloadPort><url>`(`url` = `/exports/<檔名>`)。
-  `downloadPort` 預設 8124;app 以 `TAIDAFLOW_DOWNLOAD_PORT=8123` 啟動時改為 8123(由 nginx 送檔)。
+  `downloadPort` 預設 8124;app 以 `TAIDAFLOW_DOWNLOAD_PORT=80` 啟動時改為 80(由 nginx 送檔;連結
+  `http://<host>:80/exports/...` 與不帶 `:80` 等價)。
   8124 的 `/exports` 一直保留作備援。
 - 8124/8125 綁定失敗只記 warning,desktop 照常執行(本機 UI 不受影響,只是網頁或下載連不上)。
 
@@ -81,8 +83,8 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
 **步驟 0:安全確認(每次啟動 desktop 前)**。一律用 `scripts/run-desktop.ps1` 啟動,它先跑
 `scripts/safety_probe.ps1`:對 `192.168.1.201~205:502` 只做 TCP connect(1.5 秒逾時、不送 Modbus)、
 列本機序列埠、檢查 listener。任一設備可達、出現 COM2、502 已被占用 → 不啟動(exit 3);
-8124 / 8125 / 18125 已被占用 → 不啟動(exit 4 `BUSY`,不關掉占用者);8123 只列出供參考,不阻擋
-(nginx 只送靜態檔,app 不綁 8123)。desktop 的工作目錄固定為 `build\runtime-cwd\`。
+8124 / 8125 / 18125 已被占用 → 不啟動(exit 4 `BUSY`,不關掉占用者);80 與 8123(nginx)只列出供參考,不阻擋
+(nginx 只送靜態檔,app 不綁這兩個 port)。desktop 的工作目錄固定為 `build\runtime-cwd\`。
 
 **步驟 1:建置**(依序,不可並行)
 
@@ -97,18 +99,18 @@ desktop 找網頁資料夾的順序:環境變數 `TAIDAFLOW_WEB_DIR` → `<exe �
 `<repo>\build\wasm-release`(編譯時寫入),第一個含 `TaidaFlowApp.html` 的就用;都找不到只記 warning。
 
 **步驟 3:啟動 desktop**:`powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "<說明>"`。
-要讓下載連結走 nginx:啟動前 `$env:TAIDAFLOW_DOWNLOAD_PORT = '8123'`(`run-desktop.ps1` 會帶給 app;
+要讓下載連結走 nginx:啟動前 `$env:TAIDAFLOW_DOWNLOAD_PORT = '80'`(nginx 的 port)(`run-desktop.ps1` 會帶給 app;
 不是 1..65535 的值 → 記 warning、用 8124)。啟動 log 應有 `WASM Mirror endpoint: ws://127.0.0.1:18125/mirror`、
 `LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125`、`[Web] HTTP service listening on 0.0.0.0:8124`。
 
 **步驟 4(選用):nginx**:`scripts\nginx-start.ps1` / `scripts\nginx-stop.ps1`(`scripts\nginx-web.ps1 -Action start|stop|reload|test|status`
-的捷徑)。設定樣板 `deploy/nginx/taidaflow.conf` 只替換 `@TAIDAFLOW_WEB_ROOT@`(預設 `<exe>\web`)與
-`@TAIDAFLOW_EXPORT_DIR@`(預設 `build\runtime-cwd\exports`),寫到 runtime 資料夾(預設 `build\nginx\`),
+的捷徑)。設定樣板 `deploy/nginx/taidaflow.conf` 只替換 `@TAIDAFLOW_WEB_ROOT@`(預設 `<exe>\web`)、
+`@TAIDAFLOW_EXPORT_DIR@`(預設 `build\runtime-cwd\exports`)與 `@TAIDAFLOW_NGINX_PORT@`(預設 80,`-Port` 可改),寫到 runtime 資料夾(預設 `build\nginx\`),
 `nginx -t` 通過才啟動。停止只針對本腳本起的那個 nginx(`nginx -s quit`)。nginx 本體放在
 `C:\tools\nginx\nginx-<版本>\`(安裝與驗簽步驟見 `README.md`)。
 
-**步驟 5:防火牆**:別台電腦要連進來,Windows 防火牆需放行 TCP 輸入 **8124、8125**(用 nginx 時再加
-**8123**)。由**管理員**設定;本專案的腳本不改防火牆 / 網路設定。
+**步驟 5:防火牆**:別台電腦要連進來,Windows 防火牆需放行 TCP 輸入 **80(nginx)、8125**(8124 只在用備援網址
+時需要;外部 HMI 另需 **502**,建議只開給 HMI 的 IP;`netsh` 範例見 `docs/DEPLOY_AND_STARTUP.md` §1.9)。由**管理員**設定;本專案的腳本不改防火牆 / 網路設定。
 
 **接模擬器(測試用)**:先 `scripts\run-simulator.ps1`(Adam60xxSimulator 在 `127.0.0.201~205:502`),再
 `scripts\run-desktop.ps1 -DeviceProfile simulator`(app 設 `TAIDAFLOW_DEVICE_PROFILE=simulator`)。順序不能反(§4.6)。
@@ -149,7 +151,7 @@ desktop 找網頁資料夾的順序:環境變數 `TAIDAFLOW_WEB_DIR` → `<exe �
 - **網頁**:寫到 `<desktop 工作目錄>\exports\<sessionId>_<yyyyMMdd_HHmmss>.csv`,完成時送
   `url = /exports/<檔名>` 與 `downloadPort`,網頁組成完整網址並開啟下載。清理:`*.csv` 超過 20 個或
   總量超過 2 GB 時刪最舊的(不刪剛產生的檔;刪不掉的記 log 跳過)。
-- **下載**:nginx 8123(`^/exports/[A-Za-z0-9_-]{1,40}_\d{8}_\d{6}\.csv$`,支援 Range / If-Range,
+- **下載**:nginx(port 80,w2-057 前為 8123)(`^/exports/[A-Za-z0-9_-]{1,40}_\d{8}_\d{6}\.csv$`,支援 Range / If-Range,
   `max_ranges 1`)或 AppHttpServer 8124(同一檔名規則,串流、不支援 Range)。回應皆為
   `text/csv; charset=utf-8`、`Content-Disposition: attachment`、`Cache-Control: no-store`、
   `Access-Control-Allow-Origin: *`。
@@ -315,7 +317,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 ### 4.4 歷史紀錄:網頁版「下載 CSV」(w2-028,2026-09-24)
 
 > 本小節是 2026-09-24 的做法,已被取代。取代它的做法:Core 匯出佇列 + 下載服務(w2-040 / w2-041 起,
-> 下載由 AppHttpServer 8124 或 nginx 8123 提供,見 §2.3)。`saveHistoryCsv` 已由 main w2-042 自
+> 下載由 AppHttpServer 8124 或 nginx(port 80)提供,見 §2.3)。`saveHistoryCsv` 已由 main w2-042 自
 > `TaidaFlowProxy.h` 刪除並合併進 core。
 
 當時 `saveHistoryCsv` 在網頁版(`Q_OS_WASM`)改用 `QFileDialog::saveFileContent` 由瀏覽器下載目前頁面的
@@ -356,14 +358,14 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
    匯出資料夾裡的 junction。現行防護:`nginx-start.ps1` / `reload` / `deploy-web.ps1` 掃描 reparse point,有就拒絕
    (exit 5);`/exports` 中名稱像匯出檔的資料夾一律 404。nginx 執行中才建立的連結掃不到(`docs/evidence/w2-050/live/`)。
 2. **nginx 在 Windows 不是服務**,開機不會自己起來;本專案不註冊服務。
-3. **8124 備援不支援續傳**(`Range` 被忽略,一律 200 整檔);續傳只有 nginx 8123 提供。續傳的前提是檔案仍在匯出
+3. **8124 備援不支援續傳**(`Range` 被忽略,一律 200 整檔);續傳只有 nginx(port 80)提供。續傳的前提是檔案仍在匯出
    資料夾(清理規則可能已刪除,之後 404)。
 4. **既有的阻塞式存檔對外部長讀取或鎖敏感**:主執行緒每秒 `saveSensorData`、警報寫入都以
    `BlockingQueuedConnection` 等 SqlManager 執行緒;SQLite 為 rollback journal(非 WAL),外部程式持有讀鎖或
    寫鎖時,寫入要等 SQLite busy timeout(未另外設定;實測約 5 秒)才失敗,這段時間主執行緒停住。w2-053 的 QTest 在鎖住
    月份檔時量到單次輪詢 5.5~7.4 秒(`docs/evidence/w2-053/10b-w2-053-qtest.utf8.log`)。w2-045 已讓歷史頁
    查詢拆成短步驟、匯出用自己的唯讀連線分段讀,但外部工具(例如對 live 資料庫的長查詢)仍會造成停頓。
-5. **8123/8124/8125 對區網開放且不做存取控管**(Mango 決定,內網系統);任何能連到這三個 port 的人都能看畫面、
+5. **80(nginx)/8124/8125 對區網開放且不做存取控管**(Mango 決定,內網系統);任何能連到這三個 port 的人都能看畫面、
    送指令(含解除急停,建議 1)與下載匯出檔。
 
 ---
@@ -420,7 +422,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 22. **nginx 不是 Windows 服務**:需要開機自動啟動時,擇一以工作排程器、服務包裝器(WinSW / NSSM)或
     desktop 的登入腳本啟動 `nginx-start.ps1`;本專案未做。——**仍建議(由維護方決定)**。
 23. **合併 main 後一律跑 `make_font_subset.py --check`**(w2-044 就是合併後出現缺字「排□中」);可加入合併檢查清單。——**仍建議**。
-24. **若網路不再是可信內網,重新評估 8123/8124/8125 的存取控管**(來源限制、防火牆範圍、急停權限)。——**仍建議**。
+24. **若網路不再是可信內網,重新評估 80/8124/8125 的存取控管**(來源限制、防火牆範圍、急停權限)。——**仍建議**。
 
 ---
 
@@ -433,9 +435,9 @@ scripts\build-wasm.bat wasm-release           :: 網頁版(桌面版建完再建
 
 1. (選用,正式部署)`powershell -ExecutionPolicy Bypass -File scripts\deploy-web.ps1`
 2. 啟動桌面版:`powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"`
-   (先安全探測,工作目錄 `build\runtime-cwd`;要讓下載走 nginx 先設 `$env:TAIDAFLOW_DOWNLOAD_PORT = '8123'`)
+   (先安全探測,工作目錄 `build\runtime-cwd`;要讓下載走 nginx 先設 `$env:TAIDAFLOW_DOWNLOAD_PORT = '80'`)
 3. 瀏覽器開 `http://127.0.0.1:8124/TaidaFlowApp.html`(區網:`http://<desktop 的區網 IP>:8124/TaidaFlowApp.html`)
-4. (選用)`powershell -ExecutionPolicy Bypass -File scripts\nginx-start.ps1`,開 `http://<IP>:8123/TaidaFlowApp.html`;
+4. (選用)`powershell -ExecutionPolicy Bypass -File scripts\nginx-start.ps1`,開 `http://<IP>/`(port 80);
    結束時 `scripts\nginx-stop.ps1`
 
 接模擬器:先 `scripts\run-simulator.ps1`,再 `scripts\run-desktop.ps1 -DeviceProfile simulator`,網頁同上。
@@ -450,7 +452,7 @@ scripts\build-wasm.bat wasm-release           :: 網頁版(桌面版建完再建
 | Mirror 18125 / relay 8125 / `allowedOrigins = {}` / `location.hostname` | `git grep -n "MirrorPublicPort\|MirrorInternalPort\|allowedOrigins" -- App/main.cpp`、`App/lanrelay.h` 檔頭 |
 | 8124 HTTP 服務、網頁資料夾順序 | `git grep -n "AnyIPv4\|TAIDAFLOW_WEB_DIR" -- Core/core.cpp`、`Core/AppHttpServer/README.md` |
 | `TAIDAFLOW_DOWNLOAD_PORT` | `git grep -n "TAIDAFLOW_DOWNLOAD_PORT" -- Core/HistoryExport.h Core/core.cpp` |
-| nginx 8123、`/exports` 規則、無 `disable_symlinks` | `deploy/nginx/taidaflow.conf`、`scripts/nginx-web.ps1`(`ValidateSet('start','stop','reload','test','status')`) |
+| nginx(port 80,`@TAIDAFLOW_NGINX_PORT@`)、`/exports` 規則、無 `disable_symlinks` | `deploy/nginx/taidaflow.conf`、`scripts/nginx-web.ps1`(`ValidateSet('start','stop','reload','test','status')`) |
 | 部署腳本參數 | `scripts/deploy-web.ps1`(`-Source`、`-ExeDir`、`-NoGzip`) |
 | `saveHistoryCsv` 已刪除 | `git grep -n saveHistoryCsv -- App Core TaidaFlowContent` 無結果 |
 | 歷史頁各端獨立(w2-052 更新) | `git grep -n "historyViewRequested\|setHistoryViews" -- Core/HistoryViews.cpp Core/TaidaFlowProxy.h`(有);`git grep -n "historyCurrentPage\|historyRangeRequested\|historyRefreshRequested" -- Core App TaidaFlowContent` 無結果 |

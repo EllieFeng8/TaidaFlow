@@ -1,0 +1,30 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 1.4 (a) - literal commands; TF / DATA set to the test package and a test data folder. 
+
+D:\repo\codex\qmlTester\taidaflow>rem PATH is reduced to the Windows folders (the plant PC has no Qt at all). 
+
+D:\repo\codex\qmlTester\taidaflow>set "PATH=C:\Windows\System32;C:\Windows;C:\Windows\System32\Wbem" 
+
+D:\repo\codex\qmlTester\taidaflow>set "TF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee" 
+
+D:\repo\codex\qmlTester\taidaflow>set "DATA=D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod" 
+
+D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod"  2>nul 
+
+D:\repo\codex\qmlTester\taidaflow>cd /d "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod" 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set TAIDAFLOW_DEVICE_PROFILE= 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set TAIDAFLOW_E2E_PV_FILE= 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set QT_PLUGIN_PATH= 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set QML_IMPORT_PATH= 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set QML2_IMPORT_PATH= 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>set TAIDAFLOW_DOWNLOAD_PORT=80 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>start "" "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\TaidaFlowApp.exe" 
+
+D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod>exit /b 0 

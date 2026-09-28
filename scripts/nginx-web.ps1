@@ -1,15 +1,18 @@
 # nginx web front end for TaidaFlow (w2-050): start / stop / reload / test / status.
 #
-#   http://<host>:8123/TaidaFlowApp.html   web page served by nginx from the deployed web folder
-#   http://<host>:8123/exports/<file>      history CSV files sent by nginx straight from the app's
+#   http://<host>/                         -> 302 /TaidaFlowApp.html
+#   http://<host>/TaidaFlowApp.html        web page served by nginx from the deployed web folder
+#   http://<host>/exports/<file>           history CSV files sent by nginx straight from the app's
 #                                          export folder (HTTP Range / resume supported)
+# Port: 80 by default (w2-057, http://<host>/); -Port <n> for another one (e.g. -Port 8123, the
+# port used before w2-057 -> http://<host>:8123/).
 # The desktop app keeps serving the page and /exports itself on :8124 (fallback, no Range) - both
-# addresses work. Start the app with TAIDAFLOW_DOWNLOAD_PORT=8123 so that the download links the
-# page receives point to nginx.
+# addresses work. Start the app with TAIDAFLOW_DOWNLOAD_PORT=<the nginx port> (80) so that the
+# download links the page receives point to nginx.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\nginx-web.ps1 -Action <start|stop|reload|test|status>
 #            [-WebRoot <folder>] [-ExeDir <folder>] [-ExportDir <folder>] [-RuntimeDir <folder>]
-#            [-Nginx <nginx.exe or folder>] [-TimeoutSec 20]
+#            [-Nginx <nginx.exe or folder>] [-Port 80] [-TimeoutSec 20]
 #   (scripts\nginx-start.ps1 / scripts\nginx-stop.ps1 are shortcuts for -Action start / stop.)
 #   -WebRoot    : web page folder (default <exe folder>\web, filled by scripts\deploy-web.ps1)
 #   -ExeDir     : exe folder for the default web root (default build\desktop)
@@ -18,6 +21,9 @@
 #                 created when missing (the app creates the same folder at start-up)
 #   -RuntimeDir : nginx runtime folder = nginx prefix (-p): conf\ (rendered config), logs\, temp\
 #                 and the state file taidaflow-nginx.json (default build\nginx, git-ignored)
+#   -Port       : listen port (default 80, or the environment variable TAIDAFLOW_NGINX_PORT when set).
+#                 stop / status / reload use the port of the running instance (state file) unless
+#                 -Port is given; reload with another -Port moves it.
 #   -Nginx      : nginx.exe (or its folder). Otherwise the environment variable TAIDAFLOW_NGINX,
 #                 otherwise the newest C:\tools\nginx\nginx-<version>\nginx.exe.
 #
@@ -29,7 +35,8 @@
 # Rules:
 #   * start / reload refuse when the web root or the export folder is or holds a symbolic link /
 #     junction (reparse point): nginx for Windows has no disable_symlinks and would follow it (exit 5);
-#   * start refuses when anything already listens on port 8123 - the owner is never stopped (exit 4);
+#   * start refuses when anything already listens on the port - the owner is listed (pid 4 "System"
+#     = Windows HTTP.sys: IIS, WinRM, WebDAV, a URL reservation ...) and never stopped (exit 4);
 #   * nginx is started only when nginx -t passes (exit 3 otherwise);
 #   * stop only acts on the nginx started by this script: the master pid in the state file must be
 #     alive, have the same image path and start time, and match <runtime>\logs\nginx.pid. It is
@@ -40,8 +47,8 @@
 #
 # Exit codes: 0 = done (status: our nginx is running); 1 = no nginx started by this script is
 # running (stop/reload/status); 2 = nginx.exe / web root / TaidaFlowApp.html / template missing or
-# unusable path; 3 = nginx -t failed; 4 = port 8123 already in use (or already running);
-# 5 = symbolic link / junction in the web root or export folder; 6 = started but not listening on 8123 in time
+# unusable path; 3 = nginx -t failed; 4 = the port (default 80) already in use (or already running);
+# 5 = symbolic link / junction in the web root or export folder; 6 = started but not listening on the port in time
 # (stopped again); 7 = stop failed (still running, or pid file does not match).
 param(
     [ValidateSet('start', 'stop', 'reload', 'test', 'status')]
@@ -51,12 +58,22 @@ param(
     [string]$ExportDir = "",
     [string]$RuntimeDir = "",
     [string]$Nginx = "",
+    [ValidateRange(1, 65535)]
+    [int]$Port = 80,
     [int]$TimeoutSec = 20
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $template = Join-Path $root 'deploy\nginx\taidaflow.conf'
-$port = 8123
+# $port (= -Port; PowerShell variable names are case-insensitive) is the listen port.
+$portGiven = $PSBoundParameters.ContainsKey('Port')
+# Without -Port the environment variable TAIDAFLOW_NGINX_PORT (1..65535) replaces the default 80
+# (e.g. 8123 to rerun the w2-050 checks, which were written for port 8123).
+if (-not $portGiven -and $env:TAIDAFLOW_NGINX_PORT) {
+    $envPort = 0
+    if ([int]::TryParse($env:TAIDAFLOW_NGINX_PORT.Trim(), [ref]$envPort) -and $envPort -ge 1 -and $envPort -le 65535) { $port = $envPort }
+    else { [Console]::Out.WriteLine("TAIDAFLOW_NGINX_PORT='$env:TAIDAFLOW_NGINX_PORT' is not a port (1..65535) - ignored, port $port"); }
+}
 
 # Messages go straight to stdout, so functions return only their values.
 function Say([string]$m) { [Console]::Out.WriteLine($m) }
@@ -190,14 +207,14 @@ function Write-Config([string]$web, [string]$exports) {
     if (-not (Test-Path $template -PathType Leaf)) { Say "template missing: $template"; exit 2 }
     foreach ($sub in 'conf', 'logs', 'temp') { New-Item -ItemType Directory -Force (Join-Path $RuntimeDir $sub) | Out-Null }
     $text = [System.IO.File]::ReadAllText($template)
-    foreach ($token in '@TAIDAFLOW_WEB_ROOT@', '@TAIDAFLOW_EXPORT_DIR@') {
+    foreach ($token in '@TAIDAFLOW_WEB_ROOT@', '@TAIDAFLOW_EXPORT_DIR@', '@TAIDAFLOW_NGINX_PORT@') {
         if (-not $text.Contains($token)) { Say "template has no ${token}: $template"; exit 2 }
     }
     $header = "# GENERATED by scripts\nginx-web.ps1 from deploy\nginx\taidaflow.conf - edit the template, not this file.`n" +
-              "# web root: $web`n# export folder: $exports`n"
-    $text = $header + $text.Replace('@TAIDAFLOW_WEB_ROOT@', (Fwd $web)).Replace('@TAIDAFLOW_EXPORT_DIR@', (Fwd $exports))
+              "# web root: $web`n# export folder: $exports`n# port: $port`n"
+    $text = $header + $text.Replace('@TAIDAFLOW_WEB_ROOT@', (Fwd $web)).Replace('@TAIDAFLOW_EXPORT_DIR@', (Fwd $exports)).Replace('@TAIDAFLOW_NGINX_PORT@', "$port")
     [System.IO.File]::WriteAllText($confFile, $text, (New-Object System.Text.UTF8Encoding($false)))
-    Say "config: $confFile (web root $web, export folder $exports)"
+    Say "config: $confFile (web root $web, export folder $exports, port $port)"
 }
 
 function Test-Config([string]$exe) {
@@ -227,7 +244,11 @@ function Get-OurInstance {
 function Show-Listeners {
     $l = @(Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
     foreach ($x in $l) {
-        $pname = try { (Get-Process -Id $x.OwningProcess -ErrorAction Stop).ProcessName } catch { '?' }
+        $pname = try { $pp = Get-Process -Id $x.OwningProcess -ErrorAction Stop; ("$($pp.ProcessName) $($pp.Path)").Trim() } catch { '?' }
+        if ($x.OwningProcess -eq 4) {
+            $pname = 'System = Windows HTTP.sys (kernel HTTP server used by IIS, WinRM, WebDAV, a URL reservation ...; ' +
+                     'see "netsh http show servicestate" - not stopped by this script)'
+        }
         Say ("  listener {0}:{1} pid={2} ({3})" -f $x.LocalAddress, $x.LocalPort, $x.OwningProcess, $pname)
     }
     return $l
@@ -253,6 +274,7 @@ switch ($Action) {
     }
     'status' {
         $inst = Get-OurInstance
+        if ($inst -and -not $portGiven -and $inst.state.port) { $port = [int]$inst.state.port }
         if ($inst) {
             $ours = @([int]$inst.state.pid) + (Get-Workers ([int]$inst.state.pid))
             Say ("running: master pid {0}, workers {1}, web root {2}, export folder {3}, runtime {4}" -f $inst.state.pid, ((Get-Workers ([int]$inst.state.pid)) -join ','), $inst.state.webRoot, $inst.state.exportDir, $RuntimeDir)
@@ -318,13 +340,20 @@ switch ($Action) {
         Say "WEBROOT=$web"
         Say "EXPORTDIR=$exports"
         Say "RUNTIME=$RuntimeDir"
-        Say "URL=http://<this host's IPv4>:$port/TaidaFlowApp.html  downloads: http://<this host's IPv4>:$port/exports/<file>"
+        Say "URL=http://<this host's IPv4>:$port/  (-> /TaidaFlowApp.html)  downloads: http://<this host's IPv4>:$port/exports/<file>"
         Say "(start the desktop app with TAIDAFLOW_DOWNLOAD_PORT=$port so that its download links point here)"
         exit 0
     }
     'reload' {
         $inst = Get-OurInstance
         if (-not $inst) { Say "no nginx started by this script is running - nothing to reload"; exit 1 }
+        $oldPort = if ($inst.state.port) { [int]$inst.state.port } else { 8123 }
+        if (-not $portGiven) { $port = $oldPort }
+        elseif ($port -ne $oldPort) {
+            $busy = @(Show-Listeners)
+            if ($busy.Count -gt 0) { Say "port $port is already in use - configuration NOT reloaded (the owner is not stopped)"; exit 4 }
+            Say "moving nginx from port $oldPort to $port"
+        }
         $exe = $inst.state.exe
         $web = Resolve-WebRoot $inst.state.webRoot
         $exports = Resolve-ExportDir $inst.state.exportDir
@@ -335,8 +364,9 @@ switch ($Action) {
         $s = $inst.state
         $s.webRoot = $web
         $s.exportDir = $exports
+        if ($s.PSObject.Properties['port']) { $s.port = $port } else { $s | Add-Member -NotePropertyName port -NotePropertyValue $port }
         [System.IO.File]::WriteAllText($stateFile, ($s | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
-        Say "reloaded (master pid $($s.pid), web root $web, export folder $exports)"
+        Say "reloaded (master pid $($s.pid), port $port, web root $web, export folder $exports)"
         exit 0
     }
     'stop' {
@@ -348,6 +378,7 @@ switch ($Action) {
             exit 1
         }
         $masterPid = [int]$inst.state.pid
+        if ($inst.state.port) { $port = [int]$inst.state.port }
         $exe = $inst.state.exe
         $pidInFile = if (Test-Path $pidFile) { (Get-Content -Raw $pidFile).Trim() } else { '' }
         if ($pidInFile -ne "$masterPid") {

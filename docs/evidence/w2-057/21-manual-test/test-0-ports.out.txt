@@ -1,0 +1,9 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 0 (literal) 
+
+D:\repo\codex\qmlTester\taidaflow>netstat -ano   | findstr LISTENING   | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " 
+
+D:\repo\codex\qmlTester\taidaflow>echo findstr exit 1 (1 = nothing listening) 
+findstr exit 1 (1 = nothing listening)
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

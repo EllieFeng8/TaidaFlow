@@ -1,0 +1,15 @@
+
+D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 1.4 (b) - mkdir + copy literal; the Notepad replace step is done by the harness (same three replacements). 
+
+D:\repo\codex\qmlTester\taidaflow>set "TF=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee" 
+
+D:\repo\codex\qmlTester\taidaflow>set "DATA=D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod" 
+
+D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\nginx\conf" "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\nginx\logs" "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\nginx\temp" "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\exports" 
+子目錄或檔案 D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\exports 已經存在。
+處理時發生錯誤: D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\exports。
+
+D:\repo\codex\qmlTester\taidaflow>copy "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260928-c714aee\deploy\nginx\taidaflow.conf" "D:\repo\codex\qmlTester\taidaflow\build\w2-057-manual-prod\nginx\conf\taidaflow.conf" 
+複製了         1 個檔案。
+
+D:\repo\codex\qmlTester\taidaflow>exit /b 0 

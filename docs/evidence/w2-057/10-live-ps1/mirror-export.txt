@@ -1,0 +1,8 @@
+16:15:19.846 contractHash=3a46a41b750f3577674e0a7d8fb6de7f7a7f2a375307002f74f244909630639c
+16:15:19.888 connected to ws://127.0.0.1:8125/mirror (origin http://127.0.0.1)
+16:15:19.891 welcome, connectionSessionId=2b709e17-5264-45c0-98bb-bdbd2f12ca78
+16:15:19.891 sent historyExportRequested("w2057verify", 1790577423000, 1790581023000) = 2026-09-28T14:37:03 .. 2026-09-28T15:37:03
+16:15:19.893 STATUS {"downloadPort":80,"fileName":"w2057verify_20260928_161519.csv","message":"讀取資料中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":0,"url":""}
+16:15:19.894 STATUS {"downloadPort":80,"fileName":"w2057verify_20260928_161519.csv","message":"匯出中","progress":0,"queuePosition":0,"rowsWritten":0,"savedPath":"","state":"running","totalRows":2134,"url":""}
+16:15:19.911 STATUS {"downloadPort":80,"fileName":"w2057verify_20260928_161519.csv","message":"匯出完成,共 2134 筆","progress":100,"queuePosition":0,"rowsWritten":2134,"savedPath":"","state":"done","totalRows":2134,"url":"/exports/w2057verify_20260928_161519.csv"}
+16:15:19.911 RESULT state=done fileName=w2057verify_20260928_161519.csv url=/exports/w2057verify_20260928_161519.csv downloadPort=80

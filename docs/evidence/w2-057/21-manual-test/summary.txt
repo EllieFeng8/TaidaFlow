@@ -1,0 +1,224 @@
+=== DEPLOY_AND_STARTUP.md 3.2 manual test-machine flow 2026-09-28T16:05:38.8205717+08:00
+  test-0-ports | 
+  test-0-ports | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 0 (literal) 
+  test-0-ports | 
+  test-0-ports | D:\repo\codex\qmlTester\taidaflow>netstat -ano   | findstr LISTENING   | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " 
+  test-0-ports | 
+  test-0-ports | D:\repo\codex\qmlTester\taidaflow>echo findstr exit 1 (1 = nothing listening) 
+  test-0-ports | findstr exit 1 (1 = nothing listening)
+  test-0-ports | 
+  test-0-ports | D:\repo\codex\qmlTester\taidaflow>exit /b 0 
+[PASS] 3.2 step 0: nothing listening on 80/502/8124/8125/18125
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 header + step 1 (literal) 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow>set "PATH=C:\Qt\6.8.3\msvc2022_64\bin;C:\Program Files\Basler\pylon\Runtime\x64\;C:\Program Files\Basler\pylon\Runtime\Win32\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\Microsoft SQL Server\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Basler\FramegrabberSDK\bin;C:\Program Files\Basler\FramegrabberSDK\Win32\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.1.1\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\TED\AppData\Local\Programs\Python\Launcher\;C:\Users\TED\AppData\Local\Microsoft\WindowsApps;C:\Users\TED\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\TED\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\TED\.dotnet\tools;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin;C:\Users\TED\AppData\Local\PowerToys\DSCModules\;C:\Users\TED\AppData\Local\Microsoft\WinGet\Links;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;C:\Users\TED\AppData\Local\Programs\Python\Python312;C:\Program Files\Git\mingw64\bin" 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\sim-cwd"  2>nul 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow>cd /d "D:\repo\codex\qmlTester\taidaflow\build\sim-cwd" 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow\build\sim-cwd>start "" "D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe" --autostart 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow\build\sim-cwd>ping -n 4 127.0.0.1  1>nul 
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow\build\sim-cwd>netstat -ano   | findstr LISTENING   | findstr ":502 " 
+  test-1-simulator |   TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       132744
+  test-1-simulator |   TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       132744
+  test-1-simulator |   TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       132744
+  test-1-simulator |   TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       132744
+  test-1-simulator |   TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       132744
+  test-1-simulator | 
+  test-1-simulator | D:\repo\codex\qmlTester\taidaflow\build\sim-cwd>exit /b 0 
+[PASS] 3.2 step 1: simulator listening on 127.0.0.201..205:502 - 127.0.0.201, 127.0.0.202, 127.0.0.203, 127.0.0.204, 127.0.0.205
+  test-1b-probe | 
+  test-1b-probe | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 1b (literal; -LogFile added so the record goes to the w2-057 evidence folder) 
+  test-1b-probe | 
+  test-1b-probe | D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+  test-1b-probe | 
+  test-1b-probe | D:\repo\codex\qmlTester\taidaflow>powershell -ExecutionPolicy Bypass -File "D:\repo\codex\qmlTester\taidaflow\scripts\safety_probe.ps1" -DeviceProfile simulator -Reason "manual" -LogFile "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-057\21-manual-test\safety-probe.log" 
+  test-1b-probe | === safety probe 2026-09-28T16:05:44.844+08:00 reason="manual" host=LAPTOP-0B3CPPED profile=simulator
+  test-1b-probe |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  test-1b-probe |   tcp 192.168.1.201:502 -> unreachable timeout 1500ms
+  test-1b-probe |   tcp 192.168.1.202:502 -> unreachable timeout 1500ms
+  test-1b-probe |   tcp 192.168.1.203:502 -> unreachable timeout 1500ms
+  test-1b-probe |   tcp 192.168.1.204:502 -> unreachable timeout 1500ms
+  test-1b-probe |   tcp 192.168.1.205:502 -> unreachable timeout 1500ms
+  test-1b-probe |   serial GetPortNames: <none>
+  test-1b-probe |   serial SERIALCOMM  : <none>
+  test-1b-probe |   serial PnP (COMx)  : <none>
+  test-1b-probe |   listener 127.0.0.205:502 pid=132744 (Adam60xxSimulator)
+  test-1b-probe |   port 502 on 127.0.0.205 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  test-1b-probe |   listener 127.0.0.204:502 pid=132744 (Adam60xxSimulator)
+  test-1b-probe |   port 502 on 127.0.0.204 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  test-1b-probe |   listener 127.0.0.203:502 pid=132744 (Adam60xxSimulator)
+  test-1b-probe |   port 502 on 127.0.0.203 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  test-1b-probe |   listener 127.0.0.202:502 pid=132744 (Adam60xxSimulator)
+  test-1b-probe |   port 502 on 127.0.0.202 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  test-1b-probe |   listener 127.0.0.201:502 pid=132744 (Adam60xxSimulator)
+  test-1b-probe |   port 502 on 127.0.0.201 = Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) -> accepted (simulator profile)
+  test-1b-probe |   simulator endpoints listening: 5/5
+  test-1b-probe |   verdict: SAFE
+  test-1b-probe | 
+  test-1b-probe | D:\repo\codex\qmlTester\taidaflow>exit /b 0 
+[PASS] 3.2 step 1b: safety_probe -DeviceProfile simulator -> SAFE (exit 0) - exit 0
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 header + step 2 with the "keep a log" variant (set QT_FORCE_STDERR_LOGGING=1 + start /b cmd /c ... 2> manual.log) 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>set "PATH=C:\Qt\6.8.3\msvc2022_64\bin;C:\Program Files\Basler\pylon\Runtime\x64\;C:\Program Files\Basler\pylon\Runtime\Win32\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\Microsoft SQL Server\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Basler\FramegrabberSDK\bin;C:\Program Files\Basler\FramegrabberSDK\Win32\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.1.1\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\TED\AppData\Local\Programs\Python\Launcher\;C:\Users\TED\AppData\Local\Microsoft\WindowsApps;C:\Users\TED\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\TED\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\TED\.dotnet\tools;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin;C:\Users\TED\AppData\Local\PowerToys\DSCModules\;C:\Users\TED\AppData\Local\Microsoft\WinGet\Links;C:\Users\TED\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;C:\Users\TED\AppData\Local\Programs\Python\Python312;C:\Program Files\Git\mingw64\bin" 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>set TAIDAFLOW_DEVICE_PROFILE=simulator 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>set TAIDAFLOW_DOWNLOAD_PORT=80 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd"  2>nul 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow>cd /d "D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd" 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>set QT_FORCE_STDERR_LOGGING=1 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>start "" /b cmd /c ""D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe" 2> "D:\repo\codex\qmlTester\taidaflow\build\runtime-logs\manual.log"" 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>ping -n 8 127.0.0.1  1>nul 
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>netstat -ano   | findstr LISTENING   | findstr ":8124 :8125 :18125" 
+  test-2-app |   TCP    0.0.0.0:8124           0.0.0.0:0              LISTENING       41728
+  test-2-app |   TCP    0.0.0.0:8125           0.0.0.0:0              LISTENING       41728
+  test-2-app |   TCP    127.0.0.1:18125        0.0.0.0:0              LISTENING       41728
+  test-2-app | 
+  test-2-app | D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd>exit /b 0 
+[PASS] 3.2 step 2: TaidaFlowApp (build\desktop) listening on 502/8124/8125/18125 - pid 41728 ports 502,8124,8125,18125 path D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+[PASS] manual.log: [Modbus] device profile=simulator (TAIDAFLOW_DEVICE_PROFILE from the cmd step) - [Modbus] device profile=simulator | [Modbus] device ADAM-6256 -> 127.0.0.201:502 unit=1 | [Modbus] device ADAM-6217 A -> 127.0.0.202:502 unit=1
+[PASS] manual.log: TAIDAFLOW_DOWNLOAD_PORT=80 - download links use port 80
+[PASS] manual.log: working directory build\runtime-cwd - [HmiInput] Ignoring stale [HmiInput] values in D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/TaidaFlowSettings.ini (m1ValueSv=12.3, m2ValueSv=35, m3ValueSv=33, m4ValueSv=40, motorRunningSv=false, pump2HzSv=0, wayValveOpenSv=false); SVs are taken from the first successful device read instead.
+  test-3-nginx | 
+  test-3-nginx | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 3: mkdir + copy (literal); the Notepad replace is done by the harness. 
+  test-3-nginx | 
+  test-3-nginx | D:\repo\codex\qmlTester\taidaflow>set "REPO=D:\repo\codex\qmlTester" 
+  test-3-nginx | 
+  test-3-nginx | D:\repo\codex\qmlTester\taidaflow>mkdir "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\conf" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\logs" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\temp" 
+  test-3-nginx | 
+  test-3-nginx | D:\repo\codex\qmlTester\taidaflow>copy "D:\repo\codex\qmlTester\taidaflow\deploy\nginx\taidaflow.conf" "D:\repo\codex\qmlTester\taidaflow\build\nginx-manual\conf\taidaflow.conf" 
+  test-3-nginx | 複製了         1 個檔案。
+  test-3-nginx | 
+  test-3-nginx | D:\repo\codex\qmlTester\taidaflow>exit /b 0 
+  (Notepad step) replaced the three tokens exactly as listed in 3.2 step 3
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 3 (after the replace) + step 4 curl checks (literal) 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>set "NGX=C:\tools\nginx\nginx-1.30.5\nginx.exe" 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>"C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf -t 
+  test-3b-nginx-start | nginx: the configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/conf/taidaflow.conf syntax is ok
+  test-3b-nginx-start | nginx: configuration file D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/conf/taidaflow.conf test is successful
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>echo nginx -t exit 0 
+  test-3b-nginx-start | nginx -t exit 0
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>start "TaidaFlow nginx" /min "C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>ping -n 3 127.0.0.1  1>nul 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1/ 
+  test-3b-nginx-start |   % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+  test-3b-nginx-start |                                  Dload  Upload  Total   Spent   Left   Speed
+  test-3b-nginx-start | 
+  test-3b-nginx-start |   0      0   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0    138   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0    138   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0    138   0      0   0      0      0      0                              0
+  test-3b-nginx-start | HTTP/1.1 302 Moved Temporarily
+  test-3b-nginx-start | Server: nginx
+  test-3b-nginx-start | Date: Mon, 28 Sep 2026 08:06:05 GMT
+  test-3b-nginx-start | Content-Type: text/html
+  test-3b-nginx-start | Content-Length: 138
+  test-3b-nginx-start | Connection: keep-alive
+  test-3b-nginx-start | Location: /TaidaFlowApp.html
+  test-3b-nginx-start | Cache-Control: no-cache
+  test-3b-nginx-start | 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1/TaidaFlowApp.html 
+  test-3b-nginx-start |   % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+  test-3b-nginx-start |                                  Dload  Upload  Total   Spent   Left   Speed
+  test-3b-nginx-start | 
+  test-3b-nginx-start |   0      0   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0   3092   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0   3092   0      0   0      0      0      0                              0
+  test-3b-nginx-start |   0   3092   0      0   0      0      0      0                              0
+  test-3b-nginx-start | HTTP/1.1 200 OK
+  test-3b-nginx-start | Server: nginx
+  test-3b-nginx-start | Date: Mon, 28 Sep 2026 08:06:05 GMT
+  test-3b-nginx-start | Content-Type: text/html; charset=utf-8
+  test-3b-nginx-start | Content-Length: 3092
+  test-3b-nginx-start | Last-Modified: Mon, 28 Sep 2026 07:54:23 GMT
+  test-3b-nginx-start | Connection: keep-alive
+  test-3b-nginx-start | Vary: Accept-Encoding
+  test-3b-nginx-start | ETag: "6aba1d2f-c14"
+  test-3b-nginx-start | Cache-Control: no-cache
+  test-3b-nginx-start | Cross-Origin-Opener-Policy: same-origin
+  test-3b-nginx-start | Cross-Origin-Embedder-Policy: require-corp
+  test-3b-nginx-start | Cross-Origin-Resource-Policy: same-origin
+  test-3b-nginx-start | Accept-Ranges: bytes
+  test-3b-nginx-start | 
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>curl -I http://127.0.0.1:8124/TaidaFlowApp.html 
+  test-3b-nginx-start |   % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+  test-3b-nginx-start |                                  Dload  Upload  Total   Spent   Left   Speed
+  test-3b-nginx-start | 
+  test-3b-nginx-start |   0      0   0      0   0      0      0      0                              0
+  test-3b-nginx-start | curl: (8) Invalid Content-Length: value
+  test-3b-nginx-start | HTTP/1.1 200 OK
+  test-3b-nginx-start | etag: "c14-1a0e7020347"
+  test-3b-nginx-start | last-modified: Mon, 28 Sep 2026 07:54:23 GMT
+  test-3b-nginx-start | cache-control: no-cache
+  test-3b-nginx-start | vary: Accept-Encoding
+  test-3b-nginx-start | cross-origin-opener-policy: same-origin
+  test-3b-nginx-start | cross-origin-embedder-policy: require-corp
+  test-3b-nginx-start | cross-origin-resource-policy: same-origin
+  test-3b-nginx-start | content-type: text/html; charset=utf-8
+  test-3b-nginx-start | content-length: 3092
+  test-3b-nginx-start | 
+  test-3b-nginx-start | D:\repo\codex\qmlTester\taidaflow>exit /b 0 
+[PASS] 3.2 step 3: nginx -t ok
+[PASS] 3.2 step 4: curl -I http://127.0.0.1/ -> 302 /TaidaFlowApp.html
+[PASS] 3.2 step 4: curl -I page on 80 and 8124 -> 200 (two 200 responses)
+listeners: 127.0.0.1:18125 pid 41728 (TaidaFlowApp); 0.0.0.0:8125 pid 41728 (TaidaFlowApp); 0.0.0.0:8124 pid 41728 (TaidaFlowApp); 127.0.0.205:502 pid 132744 (Adam60xxSimulator); 127.0.0.204:502 pid 132744 (Adam60xxSimulator); 127.0.0.203:502 pid 132744 (Adam60xxSimulator); 127.0.0.202:502 pid 132744 (Adam60xxSimulator); 127.0.0.201:502 pid 132744 (Adam60xxSimulator); 0.0.0.0:502 pid 41728 (TaidaFlowApp); 0.0.0.0:80 pid 46180 (nginx)
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>rem DEPLOY_AND_STARTUP.md 3.2 step 5 (literal) 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>set "NGX=C:\tools\nginx\nginx-1.30.5\nginx.exe" 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>"C:\tools\nginx\nginx-1.30.5\nginx.exe" -p "D:/repo/codex/qmlTester/taidaflow/build/nginx-manual/" -c conf/taidaflow.conf -s quit 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>echo nginx -s quit exit 0 
+  test-5-close | nginx -s quit exit 0
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>taskkill /IM TaidaFlowApp.exe 
+  test-5-close | 成功: 已將終止信號傳送到處理程序 "TaidaFlowApp.exe" (PID 為 41728)。
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>echo taskkill app exit 0 
+  test-5-close | taskkill app exit 0
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>ping -n 6 127.0.0.1  1>nul 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>taskkill /IM Adam60xxSimulator.exe 
+  test-5-close | 成功: 已將終止信號傳送到處理程序 "Adam60xxSimulator.exe" (PID 為 132744)。
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>echo taskkill simulator exit 0 
+  test-5-close | taskkill simulator exit 0
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>ping -n 4 127.0.0.1  1>nul 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>netstat -ano   | findstr LISTENING   | findstr /C:":80 " /C:":502 " /C:":8124 " /C:":8125 " /C:":18125 " 
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>echo findstr exit 1 (1 = nothing listening) 
+  test-5-close | findstr exit 1 (1 = nothing listening)
+  test-5-close | 
+  test-5-close | D:\repo\codex\qmlTester\taidaflow>exit /b 0 
+[PASS] 3.2 step 5: nginx -s quit, taskkill app, taskkill simulator -> nothing left
+[PASS] 3.2 step 5: no listener on 80/502/8124/8125/18125
+=== 0 check(s) failed

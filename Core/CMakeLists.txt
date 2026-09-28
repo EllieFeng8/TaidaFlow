@@ -30,6 +30,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
         # of AppHttpServer below)
         HistoryExport.h
         HistoryExport.cpp
+        # w2-052: one History view per client (historyViewRequested -> historyViews)
+        HistoryViews.h
+        HistoryViews.cpp
         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
         AppHttpServer/AppHttpServer.h

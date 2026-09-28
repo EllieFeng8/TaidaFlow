@@ -5,7 +5,7 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷�
 `192.168.1.201~205:502`,會寫 DO/AO;**測試用**環境變數 `TAIDAFLOW_DEVICE_PROFILE=simulator`
 改連本機模擬器 `127.0.0.201~205:502`,見「接 Adam60xxSimulator」)、`Modbus_Server`(bind `AnyIPv4:502`)、
 `Ms300FaultReader`(Modbus RTU `COM2`)、`RESTManager`、`SqlManager`(SQLite)、
-`HistoryExport`(歷史 CSV 匯出佇列,見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
+`HistoryViews`(各連線端獨立的歷史檢視)與 `HistoryExport`(歷史 CSV 匯出佇列,兩者見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
 HTTP 伺服器單例,`0.0.0.0:8124` 同時提供**網頁**與 **CSV 下載**,見「網頁與下載(HTTP 8124)」)。
 
 QML 只面對 `Core/TaidaFlowProxy.h`(QML singleton `Td`,module URI `TaidaFlowBackend`)。
@@ -243,11 +243,11 @@ powershell -ExecutionPolicy Bypass -File scripts\nginx-stop.ps1         # nginx 
 - `TopNav.qml` 顯示紅色「離線」橫幅(含 transport 訊息);
 - 所有會寫同步 property 的控制項 disabled:變頻器復歸、緊急停止、M1~M4 數值對話框、
   泵浦開關對話框、泵浦頻率對話框、二通閥對話框(已開的對話框會被關閉)、歷史頁上/下一頁
-  (`historyCurrentPage` 是同步屬性);
+  (換頁是送給 desktop Core 的請求 `historyViewRequested`,見「歷史資料」);
 - 畫面保留最後一份 authoritative 狀態;重連並收到完整 snapshot 後自動恢復。
 
 desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)。
-純本機的檢視控制(分頁切換、警報頁分頁)不受影響;歷史頁的日期篩選 / 顯示全部 / 下載 CSV / 取消
+純本機的檢視控制(分頁切換、警報頁分頁)不受影響;歷史頁的日期篩選 / 顯示前一周 / 下載 CSV / 取消
 改由 desktop Core 執行(request signal 經 mirror),離線時由 HistoryPage.qml 停用。
 
 ## 接 Adam60xxSimulator(測試用設備位址切換)
@@ -301,7 +301,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 - 產生:`python scripts\make_font_subset.py`。掃描 `App/ Core/ TaidaFlow/ TaidaFlowContent/
   Dependencies/` 的 QML/JS/C++ 非 ASCII 字元(涵蓋 core 分支後端全部中文)+ 可列印 ASCII +
   常用全形標點,實體化 wght 400/700 並子集化:`App/fonts/TaidaFlowNotoSansTC-{Regular,Bold}.ttf`
-  (184,856 / 185,544 bytes,490 字元,CJK 385)、`App/fonts/charset.txt`。
+  與 `App/fonts/charset.txt`。目前的檔案大小、字元數與缺字以
+  `python -B scripts\make_font_subset.py --check` 的輸出為準(README 不記數字,以免與字型不同步)。
   **新增中文字串後要重跑**;`--check` 在字元集變動或缺字時 exit 1。
 - 來源字型:`C:\Windows\Fonts\NotoSansTC-VF.ttf`(Noto Sans TC 2.004,Windows 11 內附;亦可從
   <https://fonts.google.com/noto/specimen/Noto+Sans+TC> 下載 `NotoSansTC[wght].ttf` 以 `--source` 指定)。
@@ -319,8 +320,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   (視窗截圖)。
 - `scripts\seed_history_sqlite.py`(**測試資料,dev-only**):app 未執行時,把已知的 N 筆 sensor 列寫進
   Core 自己建立的 `build\runtime-cwd\data\sensor_<yyyyMM>.sqlite`(只接受該路徑、表必須為空),
-  下次啟動時由 Core 的真實讀取路徑(`Core::loadHistoryRecords` → SqlManager → `historyRecords` → Mirror)
-  載入歷史頁;同時輸出畫面應顯示的值(`--out rows.json`)。無設備時 Core 永遠不會寫 sensor 列,
+  啟動後進入歷史頁時由 Core 的真實讀取路徑(`historyViewRequested` → `HistoryViewService` → SqlManager →
+  `historyViews[<clientSessionId>]` → Mirror)載入;同時輸出畫面應顯示的值(`--out rows.json`)。無設備時 Core 永遠不會寫 sensor 列,
   所以歷史頁 / CSV 匯出只能這樣準備資料。它不走 Core 的寫入路徑(`saveSensorData`)。
 - `scripts\compare_history_csv.py --fixture rows.json A.csv B.csv ...`:檢查匯出 CSV 的 BOM、標頭、
   列數、每格內容與 fixture 一致,且各檔位元組相同。
@@ -331,18 +332,38 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 ## 歷史資料:時間區間與匯出(w2-041,`docs/taidaflow_history_export_spec.md`)
 
-### 時間區間查詢(spec §2)
+### 時間區間查詢:各連線端獨立的檢視(spec §2 / §2.1,w2-052)
 
-- 歷史頁按「篩選」/ Enter 發 `Td.historyRangeRequested(fromMs, toMs)`,「顯示全部」發
-  `(0, 8640000000000000)`(不限區間)。單位 epoch 毫秒、本機時區日界、兩端都含(w2-040 契約)。
-- Core(`Core::onHistoryRangeRequested`)寫回同步屬性 `historyRangeFromMs/ToMs`、回到第 1 頁
-  (`historyCurrentPage` 不是 1 時設成 1,由它觸發載入),載入沿用 w2-039 的非同步 + 序號機制,每次只推送 10 筆。
-  預設區間 = 啟動當月(Proxy 預設值)。區間與頁碼是**所有連線端共享**(與頁碼相同)。
+- 每個連線端(桌面 `desktop`、每個網頁分頁 `web-xxxx`,即 `Td.clientSessionId`)有**自己的區間與頁碼**;
+  一端篩選或翻頁,其他端的畫面不變(2026-09-27 Mango 問題 8,取代原本全部連線端共用一組區間與頁碼的做法)。
+- 唯一的請求:`Td.historyViewRequested(sessionId, fromMs, toMs, page)`(WASM 經 mirror relay 到 desktop)。
+  進入歷史頁(第一次 = 當月第 1 頁)、「篩選」/ Enter、「顯示前一周」(今天往前 7 天,含今天)送 page 1,
+  上/下一頁送目前頁 ∓ 1;`fromMs/toMs` 永遠是該端自己的區間,Core 只照請求分頁、不保留會影響請求的區間。
+  單位 epoch 毫秒、本機時區、兩端都含(w2-040 契約);`0 .. 8640000000000000` = 不限區間
+  (UI 已不送,Core 仍接受)。
+- 處理者:`Core/HistoryViews.{h,cpp}` 的 `HistoryViewService`(`Core::init` 建立)。驗證:sessionId 必須是
+  `[A-Za-z0-9_-]{1,40}`(與匯出相同)、區間為有限值且 from <= to、page >= 1;不合法的請求只記 warning,
+  不寫任何東西、也不查詢。
+- 結果寫到同步屬性 `Td.historyViews[sessionId] = {fromMs, toMs, page, totalPages, totalRows, records, revision}`:
+  `records` = 本頁 10 筆(新到舊),每筆 `{timestampMs, values}`,`values` 依 `Td.historyTitle` 欄位順序一欄一格
+  (時間字串 `yyyy/MM/dd HH:mm:ss` + 16 個換算後數值,無值為 null);`page` 超過總頁數時夾到最後一頁
+  (Core 自動改要最後一頁);`totalPages` 至少 1。每次都以 `setHistoryViews` 寫**整個 map**;`revision`
+  取自 Core 全域遞增計數,只有該 entry 內容變了才換(同一請求結果相同就不寫)。各端 QML 只讀自己的 key,
+  revision 變了才重畫。`historyTitle` 仍是所有連線端共用,啟動時設一次。
+- 生命週期:網頁端超過 30 分鐘沒有請求,移除其 entry 與 SqlManager 內該端的狀態(每分鐘檢查一次,
+  實際為 30~31 分鐘);最多同時 32 個 entry(含 `desktop`),新的一端進來時先移除最久未用的網頁端;
+  `desktop` 永不移除;被移除的一端下次請求會重建(新的 revision)。移除時同樣只寫一次整個 map。
+  Core 啟動時不預先載入任何一端,也不因每秒存檔而重載。
+- 查詢在 SqlManager 執行緒非同步分步執行(w2-039/w2-045:每步約 6 ms、步驟之間每秒存檔可插隊、月份檔快照、
+  COUNT 快取、相鄰頁用 keyset 錨點);**過時判定與 keyset 錨點依 sessionId 分開**
+  (`SqlManager::requestSensorHistoryRangePage(sessionKey, ...)`、`releaseHistorySession`):只有同一端較新的請求
+  會讓自己的舊請求作廢,A 端不會讓 B 端的請求作廢或結果被丟,也不會搶走 B 端的錨點。
 - 秒換算:`ceil(fromMs/1000) .. floor(toMs/1000)`,且至少從 1 開始(timestamp <= 0 的列歷史頁本來就不顯示)。
 - 跨月:`SqlManager::requestSensorHistoryRangePage` 只列出資料夾裡**實際存在**且與區間相交的
-  `sensor_YYYYMM.sqlite`(不逐月走,「全部」不會掃幾百萬個月),新月份在前;總數 = 各月 COUNT 加總;
-  頁面在月份間串接(每月內 `ORDER BY timestamp DESC, rowid DESC`)。各月 COUNT 有快取:月份檔大小與
-  SQLite 檔頭 change counter 都沒變才沿用(有寫入的月份會重算)。
+  `sensor_YYYYMM.sqlite`(不逐月走,不限區間也不會掃幾百萬個月),新月份在前;總數 = 各月 COUNT 加總;
+  頁面在月份間串接(每月內 `ORDER BY timestamp DESC, rowid DESC`)。各月 COUNT 有快取,以(月份檔, 區間)為 key
+  (w2-052 起,各端不同區間不會互相擠掉;最多 256 筆,超過丟最久未用的):月份檔大小與 SQLite 檔頭
+  change counter 都沒變才直接沿用,只新增了列時只數新增的列。
 
 ### 匯出(spec §3)
 
@@ -396,7 +417,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 ## 測試 / 驗證(全部以 exit code 判定)
 
-QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)與 5b 的歷史/匯出 harness;
+QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、5b 的歷史/匯出 harness 與
+5e 的各連線端歷史檢視 harness;
 其餘整合以下列可重跑檢查驗證:
 
 ```bat
@@ -439,6 +461,16 @@ scripts\run-apphttpserver-tests.bat
 ::     TAIDAFLOW_DOWNLOAD_PORT 啟動確認 downloadPort = 8124。需先建 mirror client 工具。
 docs\evidence\w2-050\tools\build-mirror-client.bat
 powershell -ExecutionPolicy Bypass -File docs\evidence\w2-050\tools\verify-nginx.ps1
+:: 5e. (w2-052) 各連線端獨立的歷史檢視 QTest(編譯真的 HistoryViews / SqlManager / HistoryExport / Proxy):
+::     tst_w2052_views(多端交錯請求 = 單端結果、互不作廢、revision 只變自己的、閒置移除、上限 32、
+::     不限區間、非法輸入)與 tst_w2052_rangepage(w2-045 正確性測試改走每端 API + 各端錨點)。
+::     需 5b 的測試資料;不用任何 port。
+docs\evidence\w2-052\tools\run-qtest.bat
+::     app 執行中以 Mirror 客戶端送兩個 session 的請求並印出 historyViews(與網頁相同的路徑)
+docs\evidence\w2-052\tools\build-mirror-client.bat
+build\w2-052-mirror-client\mirror_history_client.exe --round "web-c1|month|1;web-c2|week|1" --round "web-c1|month|2"
+::     (同一 round 內同一端的前一個請求視為會被後一個取代;--start-at-ms 讓多個客戶端同時開始送;
+::      每筆 entry 印出整頁 records 的 SHA-1。w2-052 的實測輸出與檢查腳本見 docs\evidence\w2-052\)
 :: 6. desktop 逐像素不退步(基準 = dc91f01 原始碼,scripts\build-baseline.bat 可重建)
 python scripts\image_diff.py docs\evidence\wasm-v4\02-baseline-dc91f01-main.png docs\evidence\wasm-v4\05-after-desktop-main.png --mask 0,0,1942,45 --mask 1760,55,1942,110 --tolerance 2
 ```

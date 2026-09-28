@@ -318,6 +318,7 @@ void SqlManager::setDataDirectory(const QString& path)
             // w2-045: History counts and the page anchor belong to the old files.
             m_rangeCountCache.clear();
             m_historyAnchor = HistoryAnchor{};
+            m_sessionHistoryAnchors.clear();   // w2-052 (session ids are kept: stale rules unchanged)
             m_historySchemaChecked.clear();
         }
     });
@@ -1106,6 +1107,8 @@ struct SqlManager::HistoryRangeJob
     enum class Phase { Start, Count, Locate, Fetch };
 
     quint64 requestId = 0;
+    bool sessionScoped = false;       // w2-052: stale rule and anchor of sessionKey
+    QString sessionKey;
     qint64 from = 0;
     qint64 to = 0;
     int page = 0;
@@ -1127,6 +1130,37 @@ struct SqlManager::HistoryRangeJob
     SensorHistoryPageResult result;
     QElapsedTimer wall;               // started when the request was posted
 };
+
+// w2-052: the count cache holds one entry per (month file, range clamped to the month),
+// so the ranges of different clients do not replace each other's counts (it was one
+// entry per month file, i.e. one range).  At most kRangeCountCacheMax entries; the least
+// recently used one is dropped.  SqlManager thread only.
+namespace
+{
+    constexpr int kRangeCountCacheMax = 256;
+}
+
+QString SqlManager::rangeCountCacheKey(const QString& monthKey, qint64 lo, qint64 hi)
+{
+    return QStringLiteral("%1|%2|%3").arg(monthKey).arg(lo).arg(hi);
+}
+
+void SqlManager::rangeCountCacheStore(const QString& key, const RangeCountCacheEntry& entry)
+{
+    RangeCountCacheEntry stored = entry;
+    stored.lastUse = ++m_rangeCountCacheUse;
+    m_rangeCountCache.insert(key, stored);
+    while (m_rangeCountCache.size() > kRangeCountCacheMax)
+    {
+        auto oldest = m_rangeCountCache.begin();
+        for (auto it = m_rangeCountCache.begin(); it != m_rangeCountCache.end(); ++it)
+        {
+            if (it->lastUse < oldest->lastUse)
+                oldest = it;
+        }
+        m_rangeCountCache.erase(oldest);
+    }
+}
 
 QList<SqlManager::SensorMonthFile> SqlManager::sensorMonthFilesInRange(qint64 from, qint64 to) const
 {
@@ -1187,15 +1221,113 @@ void SqlManager::requestSensorHistoryRangePage(quint64 requestId, qint64 from, q
     QMetaObject::invokeMethod(this, [this, job]() { runHistoryRangeStep(job); }, Qt::QueuedConnection);
 }
 
+void SqlManager::requestSensorHistoryRangePage(const QString& sessionKey, quint64 requestId, qint64 from,
+                                               qint64 to, int page, int pageSize)
+{
+    // w2-052: the newest id of THIS session only (the shared m_latestHistoryRequestId of
+    // the overloads without a session is not touched), recorded before the job is queued
+    // so that an older request of the same session still waiting in the queue is skipped.
+    {
+        QMutexLocker locker(&m_historySessionMutex);
+        quint64& latest = m_sessionLatestRequestIds[sessionKey];
+        if (latest < requestId)
+            latest = requestId;
+    }
+
+    auto job = std::make_shared<HistoryRangeJob>();
+    job->requestId = requestId;
+    job->sessionScoped = true;
+    job->sessionKey = sessionKey;
+    job->from = from;
+    job->to = to;
+    job->page = page;
+    job->pageSize = pageSize;
+    job->result.requestId = requestId;
+    job->result.sessionKey = sessionKey;
+    job->result.page = page;
+    job->result.pageSize = pageSize;
+    job->wall.start();
+
+    QMetaObject::invokeMethod(this, [this, job]() { runHistoryRangeStep(job); }, Qt::QueuedConnection);
+}
+
+void SqlManager::releaseHistorySession(const QString& sessionKey)
+{
+    // The id first (from the calling thread): a running job of this session sees
+    // "no such session" at its next step and is dropped.  The anchor is SqlManager
+    // thread data; it is removed by a queued call.  That call runs after every step
+    // queued before it (so a job finishing meanwhile cannot leave an anchor behind) and
+    // before the steps of any later request of the same key (queued after it), so a
+    // new session with the same key starts without the old anchor.
+    {
+        QMutexLocker locker(&m_historySessionMutex);
+        m_sessionLatestRequestIds.remove(sessionKey);
+    }
+    QMetaObject::invokeMethod(this, [this, sessionKey]() {
+        m_sessionHistoryAnchors.remove(sessionKey);
+    }, Qt::QueuedConnection);
+}
+
+QStringList SqlManager::historySessionKeys()
+{
+    return runOnThread([this]() {
+        QMutexLocker locker(&m_historySessionMutex);
+        QSet<QString> keys(m_sessionLatestRequestIds.keyBegin(), m_sessionLatestRequestIds.keyEnd());
+        for (auto it = m_sessionHistoryAnchors.cbegin(); it != m_sessionHistoryAnchors.cend(); ++it)
+            keys.insert(it.key());
+        QStringList list(keys.cbegin(), keys.cend());
+        list.sort();
+        return list;
+    });
+}
+
+bool SqlManager::historyJobStale(const HistoryRangeJob& job) const
+{
+    if (!job.sessionScoped)
+        return job.requestId < m_latestHistoryRequestId.load();
+    QMutexLocker locker(&m_historySessionMutex);
+    const auto it = m_sessionLatestRequestIds.constFind(job.sessionKey);
+    return it == m_sessionLatestRequestIds.constEnd() || job.requestId < it.value();
+}
+
+const SqlManager::HistoryAnchor& SqlManager::historyAnchorFor(const HistoryRangeJob& job) const
+{
+    static const HistoryAnchor none;
+    if (!job.sessionScoped)
+        return m_historyAnchor;
+    const auto it = m_sessionHistoryAnchors.constFind(job.sessionKey);
+    return it == m_sessionHistoryAnchors.constEnd() ? none : it.value();
+}
+
+void SqlManager::storeHistoryAnchor(const HistoryRangeJob& job, const HistoryAnchor& anchor)
+{
+    if (!job.sessionScoped)
+    {
+        m_historyAnchor = anchor;
+        return;
+    }
+    QMutexLocker locker(&m_historySessionMutex);
+    if (!m_sessionLatestRequestIds.contains(job.sessionKey))
+    {
+        m_sessionHistoryAnchors.remove(job.sessionKey);          // session released meanwhile
+        return;
+    }
+    if (anchor.valid)
+        m_sessionHistoryAnchors.insert(job.sessionKey, anchor);
+    else
+        m_sessionHistoryAnchors.remove(job.sessionKey);
+}
+
 void SqlManager::runHistoryRangeStep(const std::shared_ptr<HistoryRangeJob>& job)
 {
     QElapsedTimer step;
     step.start();
     SensorHistoryPageResult& result = job->result;
 
-    if (job->requestId < m_latestHistoryRequestId.load())
+    if (historyJobStale(*job))
     {
-        // A newer request exists: drop the remaining steps.
+        // A newer request exists (w2-052: of the same session, for session requests):
+        // drop the remaining steps.
         result.superseded = true;
         result.totalMs = msSince(job->wall);
         emit sensorHistoryPageReady(result);
@@ -1325,6 +1457,7 @@ bool SqlManager::historyCountUnit(HistoryRangeJob& job)
 
     HistoryMonth& month = job.months[job.index];
     const QString path = dataFileForKey(month.file.key);
+    const QString cacheKey = rangeCountCacheKey(month.file.key, month.lo, month.hi);   // w2-052
 
     if (job.walk.active)
     {
@@ -1341,11 +1474,11 @@ bool SqlManager::historyCountUnit(HistoryRangeJob& job)
         {
             month.count = job.walk.counted;
             if (job.walk.stampOk)
-                m_rangeCountCache.insert(month.file.key,
-                                         RangeCountCacheEntry{month.lo, month.hi, job.walk.stampSize,
-                                                              job.walk.stampCounter, month.count, month.snap, path});
+                rangeCountCacheStore(cacheKey,
+                                     RangeCountCacheEntry{month.lo, month.hi, job.walk.stampSize,
+                                                          job.walk.stampCounter, month.count, month.snap, path});
             else
-                m_rangeCountCache.remove(month.file.key);
+                m_rangeCountCache.remove(cacheKey);
             ++job.index;
         }
         return false;
@@ -1355,7 +1488,12 @@ bool SqlManager::historyCountUnit(HistoryRangeJob& job)
     quint32 counter = 0;
     qint64 size = -1;
     const bool stampOk = readSqliteChangeCounter(path, &counter, &size);
-    const auto cached = m_rangeCountCache.constFind(month.file.key);
+    {
+        const auto used = m_rangeCountCache.find(cacheKey);          // w2-052: LRU order
+        if (used != m_rangeCountCache.end())
+            used->lastUse = ++m_rangeCountCacheUse;
+    }
+    const auto cached = m_rangeCountCache.constFind(cacheKey);
     const bool sameRange = cached != m_rangeCountCache.constEnd() && cached->from == month.lo
             && cached->to == month.hi && cached->path == path && cached->snapRowid >= 0;
     if (stampOk && sameRange && cached->fileSize == size && cached->changeCounter == counter)
@@ -1377,10 +1515,10 @@ bool SqlManager::historyCountUnit(HistoryRangeJob& job)
     const auto store = [&](qint64 count) {
         month.count = count;
         if (stampOk)
-            m_rangeCountCache.insert(month.file.key,
-                                     RangeCountCacheEntry{month.lo, month.hi, size, counter, count, month.snap, path});
+            rangeCountCacheStore(cacheKey,
+                                 RangeCountCacheEntry{month.lo, month.hi, size, counter, count, month.snap, path});
         else
-            m_rangeCountCache.remove(month.file.key);
+            m_rangeCountCache.remove(cacheKey);
         ++job.index;
     };
 
@@ -1563,7 +1701,7 @@ bool SqlManager::historyEvaluateAnchor(HistoryRangeJob& job, QString* errMsg)
     // old position + rows added since in newer months + rows added since in
     // its own month that sort before it.
     job.anchorMonth = -1;
-    const HistoryAnchor& anchor = m_historyAnchor;
+    const HistoryAnchor& anchor = historyAnchorFor(job);   // w2-052: this session's
     if (!anchor.valid)
     {
         job.anchorNote = QStringLiteral("no previous page");
@@ -1839,7 +1977,7 @@ void SqlManager::historyFinish(HistoryRangeJob& job, bool ok, const QString& err
     }
     if (!ok || job.rows.isEmpty())
     {
-        m_historyAnchor = HistoryAnchor{};
+        storeHistoryAnchor(job, HistoryAnchor{});
         return;
     }
     for (const HistoryRow& row : std::as_const(job.rows))
@@ -1856,7 +1994,7 @@ void SqlManager::historyFinish(HistoryRangeJob& job, bool ok, const QString& err
     anchor.first = HistoryAnchorRow{job.rowKeys.first(), job.rows.first().ts, job.rows.first().rowid, job.target};
     anchor.last = HistoryAnchorRow{job.rowKeys.last(), job.rows.last().ts, job.rows.last().rowid,
                                    job.target + job.rows.size() - 1};
-    m_historyAnchor = anchor;
+    storeHistoryAnchor(job, anchor);
 }
 
 QStringList SqlManager::sensorDataFilesInRange(qint64 from, qint64 to)

@@ -1,0 +1,15 @@
+﻿cmd.exe : 'vswhere.exe' is not recognized as an internal or external command,
+At line:2 char:1
++ & cmd.exe "/c" "`"$ev\tools\build-mirror-client.bat`"" *> "$ev\40-bui ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (0.6s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-052-mirror-client
+[1/4] Automatic MOC for target mirror_history_client
+[2/3] Building CXX object CMakeFiles\mirror_history_client.dir\main.cpp.obj
+[3/3] Linking CXX executable mirror_history_client.exe

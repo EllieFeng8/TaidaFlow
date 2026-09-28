@@ -1,0 +1,9 @@
+﻿qtloader.js                     12354 bytes  -> .gz         4014 bytes (32%)
+qtlogo.svg                       1686 bytes  -> .gz          901 bytes (53%)
+TaidaFlowApp.html                3092 bytes  -> .gz         1218 bytes (39%)
+TaidaFlowApp.js                304976 bytes  -> .gz        70016 bytes (23%)
+TaidaFlowApp.wasm            33835337 bytes  -> .gz     12451028 bytes (37%)
+deployed 5 file(s), 34157445 bytes (+12527177 bytes .gz) from D:\repo\codex\qmlTester\taidaflow\build\wasm-release to D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+no symbolic links / junctions in D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (restart it if it is running)
+nginx serves them at http://<host>:8123/TaidaFlowApp.html (scripts\nginx-start.ps1)

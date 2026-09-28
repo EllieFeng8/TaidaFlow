@@ -1,0 +1,85 @@
+# w2-052 D5 excerpt of build\runtime-logs\w2-052-d5-desktop.log (desktop PID 120520, simulator profile, runtime-cwd)
+# 1) start-up
+[History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+[Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+[ModbusServer] listening on 0.0.0.0:502 unit=1
+# 2) all [History] lines of the unchanged-entry case (attempt 1, web-d5a on an empty day)
+[History] web-d5a request #5 (new view) page 1, range 1790265600000 .. 1790351999999 ms (1790265600 .. 1790351999 s), 3 session(s), posted in 15 us.
+[History] web-d5a #5 applied: page 1/1, 0 record(s), total 0 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.55 ms + page 0.00 ms in 1 step(s) (longest 0.56 ms), page read none; request-to-apply 0.73 ms.
+[History] web-d5a entry written: page 1/1, 0 record(s), total 0 row(s), revision 4; historyViews has 3 entries.
+[History] web-d5a request #8 (request) page 2, range 1790265600000 .. 1790351999999 ms (1790265600 .. 1790351999 s), 4 session(s), posted in 11 us.
+[History] web-d5a #8 page 2 is past the last page 1; requesting page 1.
+[History] web-d5a request #9 (page past the end) page 1, range 1790265600000 .. 1790351999999 ms (1790265600 .. 1790351999 s), 4 session(s), posted in 19 us.
+[History] web-d5a #9 applied: page 1/1, 0 record(s), total 0 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.23 ms + page 0.00 ms in 1 step(s) (longest 0.24 ms), page read none; request-to-apply 0.39 ms.
+[History] web-d5a entry unchanged (page 1/1, revision 4); historyViews not written.
+# 3) run 47 round 6: web-d5A page 4 superseded by page 5 of the same session
+8:[History] web-d5A #18 applied: page 3/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.31 ms + page 0.48 ms in 1 step(s) (longest 0.80 ms), page read keyset; request-to-apply 0.93 ms.
+9:[History] web-d5A entry written: page 3/303, 10 record(s), total 3024 row(s), revision 15; historyViews has 9 entries.
+10:[History] web-d5A request #20 (request) page 4, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 15 us.
+11:[History] web-d5A request #21 (request) page 5, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 31 us.
+12:[History] web-d5A result #20 (page 4) dropped: stale, newest request of this session is #21.
+13:[History] web-d5A #21 applied: page 5/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.18 ms + page 0.37 ms in 1 step(s) (longest 0.55 ms), page read keyset; request-to-apply 1.39 ms.
+14:[History] web-d5A entry written: page 5/303, 10 record(s), total 3024 row(s), revision 17; historyViews has 9 entries.
+15:[History] web-d5A request #23 (request) page 99999, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 15 us.
+16:[History] web-d5A #23 page 99999 is past the last page 303; requesting page 303.
+17:[History] web-d5A request #24 (page past the end) page 303, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 11 us.
+18:[History] web-d5A #24 applied: page 303/303, 4 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.22 ms + page 0.32 ms in 1 step(s) (longest 0.55 ms), page read offset-asc; request-to-apply 0.63 ms.
+19:[History] web-d5A entry written: page 303/303, 4 record(s), total 3024 row(s), revision 19; historyViews has 9 entries.
+# 4) run 49 interleaving in the Core (first 24 [History] lines of web-d5E / web-d5F)
+[History] web-d5F request #102 (new view) page 1, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 12 session(s), posted in 32 us.
+[History] web-d5F #102 applied: page 1/6098, 10 record(s), total 60979 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.83 ms + page 0.38 ms in 1 step(s) (longest 1.21 ms), page read offset-desc; request-to-apply 1.34 ms.
+[History] web-d5F entry written: page 1/6098, 10 record(s), total 60979 row(s), revision 97; historyViews has 12 entries.
+[History] web-d5F request #103 (request) page 2, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 12 session(s), posted in 15 us.
+[History] web-d5F #103 applied: page 2/6098, 10 record(s), total 60979 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.29 ms + page 0.50 ms in 1 step(s) (longest 0.79 ms), page read keyset; request-to-apply 1.02 ms.
+[History] web-d5F entry written: page 2/6098, 10 record(s), total 60979 row(s), revision 98; historyViews has 12 entries.
+[History] web-d5E request #104 (new view) page 1, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 13 session(s), posted in 11 us.
+[History] web-d5E #104 applied: page 1/303, 10 record(s), total 3024 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.35 ms + page 0.52 ms in 1 step(s) (longest 0.87 ms), page read offset-desc; request-to-apply 1.34 ms.
+[History] web-d5E entry written: page 1/303, 10 record(s), total 3024 row(s), revision 99; historyViews has 13 entries.
+[History] web-d5F request #105 (request) page 3, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 13 session(s), posted in 11 us.
+[History] web-d5F #105 applied: page 3/6098, 10 record(s), total 60979 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.25 ms + page 0.43 ms in 1 step(s) (longest 0.67 ms), page read keyset; request-to-apply 1.20 ms.
+[History] web-d5F entry written: page 3/6098, 10 record(s), total 60979 row(s), revision 100; historyViews has 13 entries.
+[History] web-d5E request #106 (request) page 2, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 13 session(s), posted in 12 us.
+[History] web-d5E #106 applied: page 2/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.26 ms + page 0.44 ms in 1 step(s) (longest 0.70 ms), page read keyset; request-to-apply 1.16 ms.
+[History] web-d5E entry written: page 2/303, 10 record(s), total 3024 row(s), revision 101; historyViews has 13 entries.
+[History] web-d5F request #107 (request) page 4, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 13 session(s), posted in 15 us.
+[History] web-d5F #107 applied: page 4/6098, 10 record(s), total 60979 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.30 ms + page 0.47 ms in 1 step(s) (longest 0.76 ms), page read keyset; request-to-apply 0.88 ms.
+[History] web-d5F entry written: page 4/6098, 10 record(s), total 60979 row(s), revision 102; historyViews has 13 entries.
+[History] web-d5E request #108 (request) page 3, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 13 session(s), posted in 11 us.
+[History] web-d5E #108 applied: page 3/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.23 ms + page 0.42 ms in 1 step(s) (longest 0.64 ms), page read keyset; request-to-apply 1.26 ms.
+[History] web-d5E entry written: page 3/303, 10 record(s), total 3024 row(s), revision 103; historyViews has 13 entries.
+[History] web-d5F request #109 (request) page 5, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 13 session(s), posted in 21 us.
+[History] web-d5F #109 applied: page 5/6098, 10 record(s), total 60979 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.43 ms + page 0.53 ms in 1 step(s) (longest 0.96 ms), page read keyset; request-to-apply 1.14 ms.
+[History] web-d5F entry written: page 5/6098, 10 record(s), total 60979 row(s), revision 104; historyViews has 13 entries.
+# 5) stale / dropped / removed lines in the whole log
+[History] web-d5A result #20 (page 4) dropped: stale, newest request of this session is #21.
+# 6) warnings
+# 7) run 47 in the Core, log lines 8406-8433: requests of web-d5A and web-d5B in flight at the same time (#14/#15, #16/#17, #21/#22 posted before the other session's result was applied) - none of them made the other session's request stale (under the former global rule #14, #16 and #21 would have been dropped)
+[History] web-d5A request #14 (new view) page 1, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 8 session(s), posted in 23 us.
+[History] web-d5B request #15 (new view) page 1, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 9 session(s), posted in 8 us.
+[History] web-d5A #14 applied: page 1/303, 10 record(s), total 3024 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.53 ms + page 0.37 ms in 1 step(s) (longest 0.90 ms), page read offset-desc; request-to-apply 1.15 ms.
+[History] web-d5A entry written: page 1/303, 10 record(s), total 3024 row(s), revision 11; historyViews has 8 entries.
+[History] web-d5B #15 applied: page 1/6087, 10 record(s), total 60865 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.32 ms + page 0.34 ms in 1 step(s) (longest 0.66 ms), page read offset-desc; request-to-apply 1.87 ms.
+[History] web-d5B entry written: page 1/6087, 10 record(s), total 60865 row(s), revision 12; historyViews has 9 entries.
+[History] web-d5B request #16 (request) page 3, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 9 session(s), posted in 18 us.
+[History] web-d5A request #17 (request) page 2, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 42 us.
+[History] web-d5B #16 applied: page 3/6087, 10 record(s), total 60865 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.34 ms + page 0.48 ms in 1 step(s) (longest 0.82 ms), page read offset-desc; request-to-apply 1.02 ms.
+[History] web-d5B entry written: page 3/6087, 10 record(s), total 60865 row(s), revision 13; historyViews has 9 entries.
+[History] web-d5A #17 applied: page 2/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.18 ms + page 0.40 ms in 1 step(s) (longest 0.59 ms), page read keyset; request-to-apply 1.80 ms.
+[History] web-d5A entry written: page 2/303, 10 record(s), total 3024 row(s), revision 14; historyViews has 9 entries.
+[History] web-d5A request #18 (request) page 3, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 16 us.
+[History] web-d5A #18 applied: page 3/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.31 ms + page 0.48 ms in 1 step(s) (longest 0.80 ms), page read keyset; request-to-apply 0.93 ms.
+[History] web-d5A entry written: page 3/303, 10 record(s), total 3024 row(s), revision 15; historyViews has 9 entries.
+[History] web-d5B request #19 (request) page 2, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 9 session(s), posted in 14 us.
+[History] web-d5B #19 applied: page 2/6087, 10 record(s), total 60865 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.32 ms + page 0.46 ms in 1 step(s) (longest 0.79 ms), page read keyset; request-to-apply 0.91 ms.
+[History] web-d5B entry written: page 2/6087, 10 record(s), total 60865 row(s), revision 16; historyViews has 9 entries.
+[History] web-d5A request #20 (request) page 4, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 15 us.
+[History] web-d5A request #21 (request) page 5, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 31 us.
+[History] web-d5B request #22 (request) page 4, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 9 session(s), posted in 7 us.
+[History] web-d5A result #20 (page 4) dropped: stale, newest request of this session is #21.
+[History] web-d5A #21 applied: page 5/303, 10 record(s), total 3024 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.18 ms + page 0.37 ms in 1 step(s) (longest 0.55 ms), page read keyset; request-to-apply 1.39 ms.
+[History] web-d5A entry written: page 5/303, 10 record(s), total 3024 row(s), revision 17; historyViews has 9 entries.
+[History] web-d5B #22 applied: page 4/6087, 10 record(s), total 60865 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.16 ms + page 0.35 ms in 1 step(s) (longest 0.51 ms), page read offset-desc; request-to-apply 2.19 ms.
+[History] web-d5B entry written: page 4/6087, 10 record(s), total 60865 row(s), revision 18; historyViews has 9 entries.
+[History] web-d5A request #23 (request) page 99999, range 1790179200000 .. 1790265599999 ms (1790179200 .. 1790265599 s), 9 session(s), posted in 15 us.
+[History] web-d5A #23 page 99999 is past the last page 303; requesting page 303.

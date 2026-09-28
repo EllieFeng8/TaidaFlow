@@ -1,0 +1,2 @@
+﻿pid 120520 (TaidaFlowApp) CloseMainWindow=True exited=True exitCode=
+pid 117432 (Adam60xxSimulator) CloseMainWindow=True exited=True exitCode=

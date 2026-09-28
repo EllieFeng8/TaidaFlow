@@ -1,0 +1,51 @@
+﻿[History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+[Export] TAIDAFLOW_DOWNLOAD_PORT is not set - download links use port 8124 (AppHttpServer)
+apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports
+[Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports: mounted on AppHttpServer
+apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\desktop\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.html from 127.0.0.1 -> 200 (text/html; charset=utf-8, 1218 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /qtlogo.svg from 127.0.0.1 -> 200 (image/svg+xml, 901 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 70016 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /qtloader.js from 127.0.0.1 -> 200 (text/javascript; charset=utf-8, 4014 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.wasm from 127.0.0.1 -> 200 (application/wasm, 12451030 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /favicon.ico from 127.0.0.1 -> 404 (no such file)
+LAN relay: accepted 127.0.0.1:57416 -> 127.0.0.1:18125
+[History] web-a5b7 request #1 (new view) page 1, range 1788192000000 .. 1790783999999 ms (1788192000 .. 1790783999 s), 1 session(s), posted in 35 us.
+[History] web-a5b7 #1 applied: page 1/6110, 10 record(s), total 61093 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 3.34 ms + page 0.44 ms in 1 step(s) (longest 3.79 ms), page read offset-desc; request-to-apply 4.07 ms.
+[History] web-a5b7 entry written: page 1/6110, 10 record(s), total 61093 row(s), revision 1; historyViews has 1 entry.
+[History] web-a5b7 request #2 (request) page 2, range 1788192000000 .. 1790783999999 ms (1788192000 .. 1790783999 s), 1 session(s), posted in 22 us.
+[History] web-a5b7 #2 applied: page 2/6110, 10 record(s), total 61099 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.83 ms + page 0.53 ms in 1 step(s) (longest 1.37 ms), page read keyset; request-to-apply 1.52 ms.
+[History] web-a5b7 entry written: page 2/6110, 10 record(s), total 61099 row(s), revision 2; historyViews has 1 entry.
+[History] web-a5b7 request #3 (request) page 3, range 1788192000000 .. 1790783999999 ms (1788192000 .. 1790783999 s), 1 session(s), posted in 23 us.
+[History] web-a5b7 #3 applied: page 3/6110, 10 record(s), total 61099 row(s) in 1 month file(s) (1 count(s) from cache, 0 updated by new rows); SqlManager thread count 0.35 ms + page 0.47 ms in 1 step(s) (longest 0.83 ms), page read keyset; request-to-apply 0.98 ms.
+[History] web-a5b7 entry written: page 3/6110, 10 record(s), total 61099 row(s), revision 3; historyViews has 1 entry.
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.html from 192.168.0.125 -> 200 (text/html; charset=utf-8, 1218 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /qtlogo.svg from 192.168.0.125 -> 200 (image/svg+xml, 901 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.js from 192.168.0.125 -> 200 (text/javascript; charset=utf-8, 70016 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /qtloader.js from 192.168.0.125 -> 200 (text/javascript; charset=utf-8, 4014 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.wasm from 192.168.0.125 -> 200 (application/wasm, 12451030 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /favicon.ico from 192.168.0.125 -> 404 (no such file)
+[History] removed 1 session(s) (idle): web-a5b7; 0 session(s) left, historyViews written once.
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.html from 127.0.0.1 -> 304 ("4c2-1a0e615df3b-gz")
+apphttpserver: [AppHttpServer] GET /qtlogo.svg from 127.0.0.1 -> 304 ("385-1a0e615df44-gz")
+apphttpserver: [AppHttpServer] GET /qtloader.js from 127.0.0.1 -> 304 ("fae-1a0e615df42-gz")
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.js from 127.0.0.1 -> 304 ("11180-1a0e6186ec2-gz")
+apphttpserver: [AppHttpServer] GET /TaidaFlowApp.wasm from 127.0.0.1 -> 200 (application/wasm, 12451030 byte(s) streamed, gzip)
+apphttpserver: [AppHttpServer] GET /favicon.ico from 127.0.0.1 -> 404 (no such file)
+LAN relay: accepted 127.0.0.1:54771 -> 127.0.0.1:18125
+[History] web-8845 request #4 (new view) page 1, range 1788192000000 .. 1790783999999 ms (1788192000 .. 1790783999 s), 1 session(s), posted in 31 us.
+[History] web-8845 #4 applied: page 1/7321, 10 record(s), total 73208 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 3.12 ms + page 0.38 ms in 1 step(s) (longest 3.50 ms), page read offset-desc; request-to-apply 6.65 ms.
+[History] web-8845 entry written: page 1/7321, 10 record(s), total 73208 row(s), revision 4; historyViews has 1 entry.
+[History] web-8845 request #5 (request) page 1, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 1 session(s), posted in 36 us.
+[History] web-8845 #5 applied: page 1/7321, 10 record(s), total 73210 row(s) in 1 month file(s) (0 count(s) from cache, 0 updated by new rows); SqlManager thread count 4.49 ms + page 0.51 ms in 1 step(s) (longest 5.00 ms), page read offset-desc; request-to-apply 6.55 ms.
+[History] web-8845 entry written: page 1/7321, 10 record(s), total 73210 row(s), revision 5; historyViews has 1 entry.
+[History] web-8845 request #6 (request) page 2, range 1790006400000 .. 1790611199999 ms (1790006400 .. 1790611199 s), 1 session(s), posted in 29 us.
+[History] web-8845 #6 applied: page 2/7322, 10 record(s), total 73212 row(s) in 1 month file(s) (0 count(s) from cache, 1 updated by new rows); SqlManager thread count 0.90 ms + page 0.78 ms in 1 step(s) (longest 1.68 ms), page read keyset; request-to-apply 1.88 ms.
+[History] web-8845 entry written: page 2/7322, 10 record(s), total 73212 row(s), revision 6; historyViews has 1 entry.
+LAN relay: closed 127.0.0.1:54771
+LAN relay: closed 127.0.0.1:57416
+apphttpserver: [AppHttpServer] unmounted /exports
+apphttpserver: [AppHttpServer] stopped (was port 8124)

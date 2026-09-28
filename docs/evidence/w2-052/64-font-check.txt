@@ -1,0 +1,5 @@
+scanned 185 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=898 size=193520 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=898 size=194192 missing=0
+chars: total=514 cjk=407 total_font_bytes=387712
+make_font_subset --check rc=0

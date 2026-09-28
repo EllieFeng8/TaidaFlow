@@ -1,0 +1,240 @@
+11:26:15.805 contractHash=3a46a41b750f3577674e0a7d8fb6de7f7a7f2a375307002f74f244909630639c
+11:26:15.850 connected to ws://192.168.0.125:8125/mirror (origin http://192.168.0.125:8124)
+11:26:15.853 welcome, connectionSessionId=cea17503-0cc6-4a05-a6b2-c5b49be3bcf3
+11:26:15.855 snapshot: historyViews entries [desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2]; historyTitle 17 column(s)
+11:26:15.855 waiting 3544 ms for --start-at-ms
+11:26:19.392 SEND round 1: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 1)  [week]
+11:26:19.401 PATCH historyViews: new revision [], added [web-d5F], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5F=97 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.401 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 1/6098 (asked 1), totalRows 60979, 10 record(s) 2026/09/28 11:26:18 .. 2026/09/28 11:26:09, revision 97
+11:26:19.401 ENTRY web-d5F record[0] {"timestampMs":1790565978000,"values":["2026/09/28 11:26:18",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.401 ENTRY web-d5F digest page 1 rows 10 sha1 33c621523baa01c2ae731649ca7592f3c588c0e7
+11:26:19.402 ROUND 1 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5F=97 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.402 SEND round 2: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 2)  [week]
+11:26:19.408 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5F=98 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.408 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 2/6098 (asked 2), totalRows 60979, 10 record(s) 2026/09/28 11:26:08 .. 2026/09/28 11:25:59, revision 98
+11:26:19.408 ENTRY web-d5F record[0] {"timestampMs":1790565968000,"values":["2026/09/28 11:26:08",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.408 ENTRY web-d5F digest page 2 rows 10 sha1 047d12ccd1036cb467b11aea17ff438e48869cad
+11:26:19.408 ROUND 2 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5F=98 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.408 SEND round 3: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 3)  [week]
+11:26:19.411 PATCH historyViews: new revision [], added [web-d5E], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=99 web-d5F=98 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.415 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=99 web-d5F=100 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.415 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 3/6098 (asked 3), totalRows 60979, 10 record(s) 2026/09/28 11:25:58 .. 2026/09/28 11:25:49, revision 100
+11:26:19.415 ENTRY web-d5F record[0] {"timestampMs":1790565958000,"values":["2026/09/28 11:25:58",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.415 ENTRY web-d5F digest page 3 rows 10 sha1 1a1a6535d019881aa0181a8e895059997c75e178
+11:26:19.416 ROUND 3 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=99 web-d5F=100 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.416 SEND round 4: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 4)  [week]
+11:26:19.418 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=101 web-d5F=100 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.423 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=101 web-d5F=102 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.424 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 4/6098 (asked 4), totalRows 60979, 10 record(s) 2026/09/28 11:25:48 .. 2026/09/28 11:25:39, revision 102
+11:26:19.424 ENTRY web-d5F record[0] {"timestampMs":1790565948000,"values":["2026/09/28 11:25:48",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.424 ENTRY web-d5F digest page 4 rows 10 sha1 4c4cb720c31ea740a52a34e7237f73b91b8bb9d8
+11:26:19.424 ROUND 4 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=101 web-d5F=102 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.424 SEND round 5: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 5)  [week]
+11:26:19.427 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=103 web-d5F=102 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.433 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=103 web-d5F=104 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.433 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 5/6098 (asked 5), totalRows 60979, 10 record(s) 2026/09/28 11:25:38 .. 2026/09/28 11:25:29, revision 104
+11:26:19.433 ENTRY web-d5F record[0] {"timestampMs":1790565938000,"values":["2026/09/28 11:25:38",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.433 ENTRY web-d5F digest page 5 rows 10 sha1 8f7aaf6dcf5cca42bd46c2e0b9406900f5ea4b8d
+11:26:19.433 ROUND 5 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=103 web-d5F=104 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.434 SEND round 6: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 6)  [week]
+11:26:19.436 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=105 web-d5F=104 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.441 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=105 web-d5F=106 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.441 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 6/6098 (asked 6), totalRows 60979, 10 record(s) 2026/09/28 11:25:28 .. 2026/09/28 11:25:19, revision 106
+11:26:19.442 ENTRY web-d5F record[0] {"timestampMs":1790565928000,"values":["2026/09/28 11:25:28",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.442 ENTRY web-d5F digest page 6 rows 10 sha1 6508b6c8a3e869441ac017cb1ed1f95d143c97b5
+11:26:19.442 ROUND 6 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=105 web-d5F=106 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.442 SEND round 7: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 7)  [week]
+11:26:19.449 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=107 web-d5F=106 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.453 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=107 web-d5F=108 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.453 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 7/6098 (asked 7), totalRows 60979, 10 record(s) 2026/09/28 11:25:18 .. 2026/09/28 11:25:09, revision 108
+11:26:19.453 ENTRY web-d5F record[0] {"timestampMs":1790565918000,"values":["2026/09/28 11:25:18",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.453 ENTRY web-d5F digest page 7 rows 10 sha1 a04e0b1bb1b72a90941caafb4d9a327f00c89b33
+11:26:19.454 ROUND 7 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=107 web-d5F=108 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.454 SEND round 8: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 8)  [week]
+11:26:19.459 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=109 web-d5F=108 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.461 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=109 web-d5F=110 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.462 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 8/6098 (asked 8), totalRows 60979, 10 record(s) 2026/09/28 11:25:08 .. 2026/09/28 11:24:59, revision 110
+11:26:19.462 ENTRY web-d5F record[0] {"timestampMs":1790565908000,"values":["2026/09/28 11:25:08",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.462 ENTRY web-d5F digest page 8 rows 10 sha1 da6c3620bfc997ef97ab34d49d626edf05c30621
+11:26:19.462 ROUND 8 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=109 web-d5F=110 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.462 SEND round 9: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 9)  [week]
+11:26:19.467 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=111 web-d5F=110 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.470 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=111 web-d5F=112 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.470 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 9/6098 (asked 9), totalRows 60979, 10 record(s) 2026/09/28 11:24:58 .. 2026/09/28 11:24:49, revision 112
+11:26:19.470 ENTRY web-d5F record[0] {"timestampMs":1790565898000,"values":["2026/09/28 11:24:58",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.470 ENTRY web-d5F digest page 9 rows 10 sha1 5fdc9780fa7f9a4451def9e7246d1a0a0184d048
+11:26:19.470 ROUND 9 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=111 web-d5F=112 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.471 SEND round 10: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 10)  [week]
+11:26:19.475 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=113 web-d5F=112 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.479 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=113 web-d5F=114 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.479 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 10/6098 (asked 10), totalRows 60979, 10 record(s) 2026/09/28 11:24:48 .. 2026/09/28 11:24:39, revision 114
+11:26:19.479 ENTRY web-d5F record[0] {"timestampMs":1790565888000,"values":["2026/09/28 11:24:48",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.479 ENTRY web-d5F digest page 10 rows 10 sha1 5092c6d9f6b09ee462572efa3bcd345d79397794
+11:26:19.479 ROUND 10 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=113 web-d5F=114 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.479 SEND round 11: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 11)  [week]
+11:26:19.484 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=115 web-d5F=114 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.487 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=115 web-d5F=116 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.487 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 11/6098 (asked 11), totalRows 60979, 10 record(s) 2026/09/28 11:24:38 .. 2026/09/28 11:24:29, revision 116
+11:26:19.487 ENTRY web-d5F record[0] {"timestampMs":1790565878000,"values":["2026/09/28 11:24:38",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.488 ENTRY web-d5F digest page 11 rows 10 sha1 515285ce7d5f3027b39214abfe2936832e10e41d
+11:26:19.488 ROUND 11 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=115 web-d5F=116 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.488 SEND round 12: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 12)  [week]
+11:26:19.493 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=117 web-d5F=116 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.496 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=117 web-d5F=118 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.497 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 12/6098 (asked 12), totalRows 60979, 10 record(s) 2026/09/28 11:24:28 .. 2026/09/28 11:24:19, revision 118
+11:26:19.497 ENTRY web-d5F record[0] {"timestampMs":1790565868000,"values":["2026/09/28 11:24:28",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.497 ENTRY web-d5F digest page 12 rows 10 sha1 78d0b12cd8ae76fafe1c52b30096a209c42ece36
+11:26:19.497 ROUND 12 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=117 web-d5F=118 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.497 SEND round 13: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 13)  [week]
+11:26:19.502 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=119 web-d5F=118 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.504 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=119 web-d5F=120 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.504 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 13/6098 (asked 13), totalRows 60979, 10 record(s) 2026/09/28 11:24:18 .. 2026/09/28 11:24:09, revision 120
+11:26:19.504 ENTRY web-d5F record[0] {"timestampMs":1790565858000,"values":["2026/09/28 11:24:18",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.504 ENTRY web-d5F digest page 13 rows 10 sha1 0fdfbd89b5f03a6479f666b738b67b4221f579e9
+11:26:19.504 ROUND 13 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=119 web-d5F=120 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.505 SEND round 14: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 14)  [week]
+11:26:19.509 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=121 web-d5F=120 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.512 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=121 web-d5F=122 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.512 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 14/6098 (asked 14), totalRows 60979, 10 record(s) 2026/09/28 11:24:08 .. 2026/09/28 11:23:59, revision 122
+11:26:19.512 ENTRY web-d5F record[0] {"timestampMs":1790565848000,"values":["2026/09/28 11:24:08",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.512 ENTRY web-d5F digest page 14 rows 10 sha1 f021a95a78a1ccf90a1477445cd684b5971f9afb
+11:26:19.512 ROUND 14 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=121 web-d5F=122 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.512 SEND round 15: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 15)  [week]
+11:26:19.517 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=123 web-d5F=122 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.518 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=123 web-d5F=124 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.519 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 15/6098 (asked 15), totalRows 60979, 10 record(s) 2026/09/28 11:23:58 .. 2026/09/28 11:23:49, revision 124
+11:26:19.519 ENTRY web-d5F record[0] {"timestampMs":1790565838000,"values":["2026/09/28 11:23:58",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.519 ENTRY web-d5F digest page 15 rows 10 sha1 0bd7151937a35d85757cf0be4bf323da58f9023c
+11:26:19.519 ROUND 15 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=123 web-d5F=124 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.519 SEND round 16: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 16)  [week]
+11:26:19.524 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=125 web-d5F=124 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.527 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=125 web-d5F=126 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.527 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 16/6098 (asked 16), totalRows 60979, 10 record(s) 2026/09/28 11:23:48 .. 2026/09/28 11:23:39, revision 126
+11:26:19.527 ENTRY web-d5F record[0] {"timestampMs":1790565828000,"values":["2026/09/28 11:23:48",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.527 ENTRY web-d5F digest page 16 rows 10 sha1 4f4c74ff6394182c6638396420eeedc396d0dc66
+11:26:19.527 ROUND 16 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=125 web-d5F=126 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.528 SEND round 17: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 17)  [week]
+11:26:19.532 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=127 web-d5F=126 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.535 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=127 web-d5F=128 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.535 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 17/6098 (asked 17), totalRows 60979, 10 record(s) 2026/09/28 11:23:38 .. 2026/09/28 11:23:29, revision 128
+11:26:19.535 ENTRY web-d5F record[0] {"timestampMs":1790565818000,"values":["2026/09/28 11:23:38",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.536 ENTRY web-d5F digest page 17 rows 10 sha1 45f948d8416011c0a6f8b6bc57215d7f8a3c1b7d
+11:26:19.536 ROUND 17 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=127 web-d5F=128 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.536 SEND round 18: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 18)  [week]
+11:26:19.540 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=129 web-d5F=128 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.543 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=129 web-d5F=130 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.543 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 18/6098 (asked 18), totalRows 60979, 10 record(s) 2026/09/28 11:23:28 .. 2026/09/28 11:23:19, revision 130
+11:26:19.543 ENTRY web-d5F record[0] {"timestampMs":1790565808000,"values":["2026/09/28 11:23:28",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.543 ENTRY web-d5F digest page 18 rows 10 sha1 84a08b9aa46c9bf0661e1fd8bc034252698b71c7
+11:26:19.544 ROUND 18 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=129 web-d5F=130 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.544 SEND round 19: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 19)  [week]
+11:26:19.550 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=131 web-d5F=130 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.557 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=131 web-d5F=132 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.557 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 19/6098 (asked 19), totalRows 60979, 10 record(s) 2026/09/28 11:23:18 .. 2026/09/28 11:23:09, revision 132
+11:26:19.557 ENTRY web-d5F record[0] {"timestampMs":1790565798000,"values":["2026/09/28 11:23:18",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.558 ENTRY web-d5F digest page 19 rows 10 sha1 40a907444adf1f6e0b8397db0b2e09e52068425a
+11:26:19.558 ROUND 19 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=131 web-d5F=132 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.558 SEND round 20: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 20)  [week]
+11:26:19.562 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=133 web-d5F=132 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.569 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=133 web-d5F=134 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.569 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 20/6098 (asked 20), totalRows 60979, 10 record(s) 2026/09/28 11:23:08 .. 2026/09/28 11:22:59, revision 134
+11:26:19.569 ENTRY web-d5F record[0] {"timestampMs":1790565788000,"values":["2026/09/28 11:23:08",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.569 ENTRY web-d5F digest page 20 rows 10 sha1 811a056125c6ceb4951975964108d58437acc79d
+11:26:19.569 ROUND 20 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=133 web-d5F=134 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.569 SEND round 21: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 21)  [week]
+11:26:19.578 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=135 web-d5F=134 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.582 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=135 web-d5F=136 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.582 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 21/6098 (asked 21), totalRows 60979, 10 record(s) 2026/09/28 11:22:58 .. 2026/09/28 11:22:49, revision 136
+11:26:19.582 ENTRY web-d5F record[0] {"timestampMs":1790565778000,"values":["2026/09/28 11:22:58",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.582 ENTRY web-d5F digest page 21 rows 10 sha1 2d70fc312b666069d6c7186c078d830b85f2a1e0
+11:26:19.583 ROUND 21 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=135 web-d5F=136 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.583 SEND round 22: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 22)  [week]
+11:26:19.587 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=137 web-d5F=136 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.591 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=137 web-d5F=138 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.591 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 22/6098 (asked 22), totalRows 60979, 10 record(s) 2026/09/28 11:22:48 .. 2026/09/28 11:22:39, revision 138
+11:26:19.591 ENTRY web-d5F record[0] {"timestampMs":1790565768000,"values":["2026/09/28 11:22:48",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.592 ENTRY web-d5F digest page 22 rows 10 sha1 9dcf2e310f9d5b088b3bc5ac18e2f69c1a6c421c
+11:26:19.592 ROUND 22 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=137 web-d5F=138 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.592 SEND round 23: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 23)  [week]
+11:26:19.598 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=139 web-d5F=138 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.600 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=139 web-d5F=140 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.600 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 23/6098 (asked 23), totalRows 60979, 10 record(s) 2026/09/28 11:22:38 .. 2026/09/28 11:22:29, revision 140
+11:26:19.600 ENTRY web-d5F record[0] {"timestampMs":1790565758000,"values":["2026/09/28 11:22:38",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.600 ENTRY web-d5F digest page 23 rows 10 sha1 ce6bdc0806cdad69ce0b13e7d25fe115261fedad
+11:26:19.600 ROUND 23 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=139 web-d5F=140 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.601 SEND round 24: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 24)  [week]
+11:26:19.608 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=141 web-d5F=140 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.610 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=141 web-d5F=142 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.610 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 24/6098 (asked 24), totalRows 60979, 10 record(s) 2026/09/28 11:22:28 .. 2026/09/28 11:22:19, revision 142
+11:26:19.610 ENTRY web-d5F record[0] {"timestampMs":1790565748000,"values":["2026/09/28 11:22:28",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.610 ENTRY web-d5F digest page 24 rows 10 sha1 8a4a8fea995891bcf8b299fb716954f1c4965353
+11:26:19.610 ROUND 24 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=141 web-d5F=142 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.610 SEND round 25: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 25)  [week]
+11:26:19.616 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=143 web-d5F=142 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.617 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=143 web-d5F=144 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.618 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 25/6098 (asked 25), totalRows 60979, 10 record(s) 2026/09/28 11:22:18 .. 2026/09/28 11:22:09, revision 144
+11:26:19.618 ENTRY web-d5F record[0] {"timestampMs":1790565738000,"values":["2026/09/28 11:22:18",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.618 ENTRY web-d5F digest page 25 rows 10 sha1 bbd3fc35d060a333c0abbe521003be8b0d2640a5
+11:26:19.618 ROUND 25 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=143 web-d5F=144 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.618 SEND round 26: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 26)  [week]
+11:26:19.624 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=145 web-d5F=144 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.626 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=145 web-d5F=146 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.626 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 26/6098 (asked 26), totalRows 60979, 10 record(s) 2026/09/28 11:22:08 .. 2026/09/28 11:21:59, revision 146
+11:26:19.626 ENTRY web-d5F record[0] {"timestampMs":1790565728000,"values":["2026/09/28 11:22:08",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.627 ENTRY web-d5F digest page 26 rows 10 sha1 3ef7d07c867a5662370625bddd3e6d826efd0742
+11:26:19.627 ROUND 26 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=145 web-d5F=146 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.627 SEND round 27: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 27)  [week]
+11:26:19.632 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=147 web-d5F=146 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.634 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=147 web-d5F=148 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.634 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 27/6098 (asked 27), totalRows 60979, 10 record(s) 2026/09/28 11:21:58 .. 2026/09/28 11:21:49, revision 148
+11:26:19.634 ENTRY web-d5F record[0] {"timestampMs":1790565718000,"values":["2026/09/28 11:21:58",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.634 ENTRY web-d5F digest page 27 rows 10 sha1 25053001570f57a48be7a2398fd5f0b0370ffba8
+11:26:19.635 ROUND 27 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=147 web-d5F=148 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.635 SEND round 28: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 28)  [week]
+11:26:19.641 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=149 web-d5F=148 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.643 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=149 web-d5F=150 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.643 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 28/6098 (asked 28), totalRows 60979, 10 record(s) 2026/09/28 11:21:48 .. 2026/09/28 11:16:44, revision 150
+11:26:19.643 ENTRY web-d5F record[0] {"timestampMs":1790565708000,"values":["2026/09/28 11:21:48",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.643 ENTRY web-d5F digest page 28 rows 10 sha1 9b19d709ef4ffc169d97938a10dd120ef7103c1e
+11:26:19.643 ROUND 28 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=149 web-d5F=150 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.643 SEND round 29: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 29)  [week]
+11:26:19.649 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=151 web-d5F=150 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.651 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=151 web-d5F=152 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.651 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 29/6098 (asked 29), totalRows 60979, 10 record(s) 2026/09/28 11:16:43 .. 2026/09/28 11:16:34, revision 152
+11:26:19.651 ENTRY web-d5F record[0] {"timestampMs":1790565403000,"values":["2026/09/28 11:16:43",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.651 ENTRY web-d5F digest page 29 rows 10 sha1 4d35b30ac37637ddff2d36560ea87004d49fc43a
+11:26:19.651 ROUND 29 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=151 web-d5F=152 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.652 SEND round 30: historyViewRequested("web-d5F", 1790006400000, 1790611199999, 30)  [week]
+11:26:19.657 PATCH historyViews: new revision [web-d5E], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=153 web-d5F=152 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.660 PATCH historyViews: new revision [web-d5F], added [], removed []; now desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=153 web-d5F=154 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.660 ENTRY web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999 (week), page 30/6098 (asked 30), totalRows 60979, 10 record(s) 2026/09/28 11:16:33 .. 2026/09/28 11:16:24, revision 154
+11:26:19.660 ENTRY web-d5F record[0] {"timestampMs":1790565393000,"values":["2026/09/28 11:16:33",28.599984740978105,29.050125886930648,34.00015259021897,33.09987029831388,18.005645838101778,17.27321278706035,16.556038757915616,15.838864728770885,15.121690699626154,14.404516670481422,13.68734264133669,0,20,30.012970168612192,40,50.01297016861219]}
+11:26:19.660 ENTRY web-d5F digest page 30 rows 10 sha1 149b1b3abf6513fdd1094fce2f4ed89b006b07c9
+11:26:19.660 ROUND 30 done; revisions: desktop=10 web-d5A=19 web-d5B=20 web-d5C=96 web-d5D=93 web-d5E=153 web-d5F=154 web-d5a=4 web-d5b=6 web-d5p24=7 web-d5p26=8 web-d5p27=9 web-d5probe=2
+11:26:19.661 DUMP desktop: range 2026/09/01 00:00:00.000 .. 2026/09/30 23:59:59.999, page 2/6087, totalRows 60865, 10 record(s) 2026/09/28 11:24:14 .. 2026/09/28 11:24:05, revision 10
+11:26:19.661 DUMP desktop digest sha1 2abeac6a70c216ec389882b0b5d8357d8ce847e2
+11:26:19.661 DUMP web-d5A: range 2026/09/24 00:00:00.000 .. 2026/09/24 23:59:59.999, page 303/303, totalRows 3024, 4 record(s) 2026/09/24 13:43:07 .. 2026/09/24 13:28:07, revision 19
+11:26:19.661 DUMP web-d5A digest sha1 8b252a62a77f86fdbdc21c87e73f3f61e4118a13
+11:26:19.661 DUMP web-d5B: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999, page 1/6087, totalRows 60865, 10 record(s) 2026/09/28 11:24:24 .. 2026/09/28 11:24:15, revision 20
+11:26:19.661 DUMP web-d5B digest sha1 fd937d6e3aa86a09f645a7c52e203c9e600d426d
+11:26:19.661 DUMP web-d5C: range 2026/09/24 00:00:00.000 .. 2026/09/24 23:59:59.999, page 30/303, totalRows 3024, 10 record(s) 2026/09/24 17:50:44 .. 2026/09/24 17:50:35, revision 96
+11:26:19.662 DUMP web-d5C digest sha1 ffe7b83e0640f46a5b7dce4cab10308f598f44a0
+11:26:19.662 DUMP web-d5D: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999, page 30/6092, totalRows 60920, 10 record(s) 2026/09/28 11:15:34 .. 2026/09/28 11:15:25, revision 93
+11:26:19.662 DUMP web-d5D digest sha1 e79ad3deb60e1ca388a000d265ccad04dedfcade
+11:26:19.662 DUMP web-d5E: range 2026/09/24 00:00:00.000 .. 2026/09/24 23:59:59.999, page 28/303, totalRows 3024, 10 record(s) 2026/09/24 17:51:04 .. 2026/09/24 17:50:55, revision 153
+11:26:19.663 DUMP web-d5E digest sha1 d09f805f7c21c061c20cf8ea466f7d89dcca0eb8
+11:26:19.663 DUMP web-d5F: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999, page 30/6098, totalRows 60979, 10 record(s) 2026/09/28 11:16:33 .. 2026/09/28 11:16:24, revision 154
+11:26:19.663 DUMP web-d5F digest sha1 149b1b3abf6513fdd1094fce2f4ed89b006b07c9
+11:26:19.663 DUMP web-d5a: range 2026/09/25 00:00:00.000 .. 2026/09/25 23:59:59.999, page 1/1, totalRows 0, 0 record(s)  .. , revision 4
+11:26:19.663 DUMP web-d5a digest sha1 97d170e1550eee4afc0af065b78cda302a97674c
+11:26:19.663 DUMP web-d5b: range 2026/09/22 00:00:00.000 .. 2026/09/28 23:59:59.999, page 3/6076, totalRows 60751, 10 record(s) 2026/09/28 11:22:10 .. 2026/09/28 11:22:01, revision 6
+11:26:19.664 DUMP web-d5b digest sha1 8278d6b881edbbf471c718ee125b61479db0e3b2
+11:26:19.664 DUMP web-d5p24: range 2026/09/24 00:00:00.000 .. 2026/09/24 23:59:59.999, page 1/303, totalRows 3024, 10 record(s) 2026/09/24 18:39:40 .. 2026/09/24 18:39:30, revision 7
+11:26:19.664 DUMP web-d5p24 digest sha1 e4c62f9636caf4ad0d14a2dcdaf47b59d450105c
+11:26:19.664 DUMP web-d5p26: range 2026/09/26 00:00:00.000 .. 2026/09/26 23:59:59.999, page 1/78, totalRows 773, 10 record(s) 2026/09/26 03:09:51 .. 2026/09/26 03:09:18, revision 8
+11:26:19.664 DUMP web-d5p26 digest sha1 afab8e5ec11d4a1ef25fdc041e756447b462fda0
+11:26:19.664 DUMP web-d5p27: range 2026/09/27 00:00:00.000 .. 2026/09/27 23:59:59.999, page 1/1631, totalRows 16305, 10 record(s) 2026/09/27 23:59:59 .. 2026/09/27 23:59:51, revision 9
+11:26:19.664 DUMP web-d5p27 digest sha1 48f806d3097a274ac62e64930cb07a22cea2e749
+11:26:19.665 DUMP web-d5probe: range 1970/01/01 08:00:00.000 .. 275760/09/13 08:00:00.000, page 1/6074, totalRows 60734, 10 record(s) 2026/09/28 11:22:13 .. 2026/09/28 11:22:04, revision 2
+11:26:19.665 DUMP web-d5probe digest sha1 1d8698bdcad1462400ea04c2f9711a7ebdc12673
+11:26:19.665 RESULT ok: 30 round(s), entries desktop,web-d5A,web-d5B,web-d5C,web-d5D,web-d5E,web-d5F,web-d5a,web-d5b,web-d5p24,web-d5p26,web-d5p27,web-d5probe

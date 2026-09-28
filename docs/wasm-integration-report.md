@@ -5,7 +5,7 @@
 | 項目 | 內容 |
 |---|---|
 | 專案 | TaidaFlow(https://github.com/EllieFeng8/TaidaFlow.git) |
-| 現況基準 | 分支 `core`,commit `58c6037`(合併 `main` 8a95a26),2026-09-27 |
+| 現況基準 | 分支 `core`,commit `58c6037`(合併 `main` 8a95a26),2026-09-27;歷史檢視部分為 `eec628f`(合併 `main` 8e3ea06)+ w2-052 |
 | 初版整合基準 | 分支 `core`,commit `dc91f01`(「更新History」),2026-09-24(見 §2.6、§3.2 歷史紀錄) |
 | 使用套件 | wasm-mirror integration pack **1.0.1**(wire protocol 3),`integration-pack/wasm-mirror/` 原封不動 |
 | 建置環境 | Qt 6.8.3(msvc2022_64 / wasm_singlethread)、emsdk 3.1.56、MSVC 2022(VS 18 Community) |
@@ -35,8 +35,8 @@ UI 與 `TaidaFlowProxy`)。兩端透過 wasm-mirror 同步 `Td` 的全部同步�
 - **斷線時網頁鎖住操作**:網頁顯示紅色「離線」橫幅(把頁面內容往下推,不遮擋),所有會送指令的控制項
   停用,重連後自動恢復(§4.2)。
 - **歷史資料**:可跨月的時間區間查詢(每次推送 10 筆)與原始資料匯出(佇列、進度、取消、網頁下載 /
-  桌面另存新檔)。**各連線端獨立的區間與頁碼**(spec §2.1,2026-09-27 Mango 修訂)**進行中**:main 端
-  w1-052 已完成、尚未合併進 core;Core 端 w2-052 尚未開始。目前 core 的區間與頁碼仍是所有連線端共享(§2.3)。
+  桌面另存新檔)。**各連線端獨立的區間與頁碼**(spec §2.1,2026-09-27 Mango 修訂)**已完成**:main 端
+  w1-052(8e3ea06,已合併進 core eec628f)+ Core 端 w2-052(§2.3);一端篩選或翻頁,其他端畫面不變。
 - **pack 原封不動**:1.0.1 整包,`scripts/verify_pack.py` 驗 MANIFEST 24/24、25 檔與官方來源逐位元相同。
 
 ---
@@ -119,20 +119,22 @@ desktop 找網頁資料夾的順序:環境變數 `TAIDAFLOW_WEB_DIR` → `<exe �
 
 **時間區間查詢(spec §2,core 現況)**
 - 歷史頁起訖「日期與時間」選擇器(可輸入也可點選,分鐘精度;main 1af6884 / w1-047),「篩選」或 Enter 送
-  `Td.historyRangeRequested(fromMs, toMs)`;「顯示前一周」= 今天往前 7 天(main d752ded / w1-046)。
-  Core 仍接受 `0 .. 8640000000000000` 的不限區間。
-- Core 寫回同步屬性 `historyRangeFromMs/ToMs`、回到第 1 頁,載入走 w2-039 的非同步 + 序號與倒序分頁,
+  `Td.historyViewRequested(clientSessionId, fromMs, toMs, 1)`;「顯示前一周」= 今天往前 7 天
+  (main d752ded / w1-046)。Core 仍接受 `0 .. 8640000000000000` 的不限區間。
+- Core 依請求的區間分頁,結果寫到該端的 `historyViews[sessionId]`,載入走 w2-039 的非同步 + 倒序分頁,
   每次只推送 10 筆。跨月:只讀實際存在且與區間相交的 `data\sensor_YYYYMM.sqlite`,各月 COUNT 有快取。
 - w2-045(c321d6d):區間查詢在 SqlManager 執行緒上拆成約 6 ms 的短步驟,深頁與大區間不再長時間占住該執行緒
   (主執行緒每秒存檔要等它)。
 
-**各連線端獨立的歷史檢視(spec §2.1,2026-09-27 修訂)——進行中**
-- 目前 core(58c6037)的 `historyRecords`、`historyCurrentPage`、`historyTotalPages`、`historyRangeFromMs/ToMs`
-  仍是**所有連線端共享**:一端篩選或翻頁,其他端畫面一起變。
-- 修訂後的契約:同步屬性 `historyViews`(key = `clientSessionId`)+ 請求
-  `historyViewRequested(sessionId, fromMs, toMs, page)`,移除上述共享屬性與 `historyRangeRequested` /
-  `historyRefreshRequested`。
-- 狀態:**main 端 w1-052 已完成,尚未合併進 core;Core 端 w2-052 尚未開始。** 完成並合併後再更新本節。
+**各連線端獨立的歷史檢視(spec §2.1,2026-09-27 修訂)——已完成(main w1-052 + Core w2-052)**
+- 契約(main w1-052,8e3ea06,已合併進 core eec628f):同步屬性 `historyViews`(key = `clientSessionId`,
+  值 `{fromMs, toMs, page, totalPages, totalRows, records, revision}`)+ 唯一請求
+  `historyViewRequested(sessionId, fromMs, toMs, page)`;原本共享的 `historyRecords`、`historyCurrentPage`、
+  `historyTotalPages`、`historyRangeFromMs/ToMs` 與 `historyRangeRequested` / `historyRefreshRequested` 已移除。
+- Core(w2-052):`Core/HistoryViews.cpp` 的 `HistoryViewService` 依 sessionId 各自處理並寫整個 map;
+  `revision` 為全域遞增、內容變才換;網頁端閒置 30 分鐘移除、最多 32 個、`desktop` 不移除。SqlManager 的
+  過時判定與 keyset 錨點改為依 sessionId 分開,一端的請求不會讓另一端的請求作廢。細節見 `README.md`
+  「歷史資料」與 `docs/evidence/w2-052/`。
 
 **匯出(spec §3)**
 - 觸發 `Td.historyExportRequested(sessionId, fromMs, toMs)`(區間 = 目前查詢區間),取消
@@ -166,9 +168,10 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 4. 建置後可確認兩個 build 的 rcc 資源內嵌了同一份 TTF(`docs/evidence/w2-055/tools/check_embedded_resource.py`)。
 
 重產紀錄:w2-044(df6fa45,補「排隊中」等缺字)、w2-048(946753d,日期時間選擇器用字)、w2-055
-(合併 8a95a26 後:加 `×` U+00D7、移除不再使用且字型沒有的 `✕` U+2715)。w2-055 後的工作目錄狀態:
-513 字元(CJK 406),Regular 193,364 / Bold 194,036 bytes,各 897 glyphs,來源用字中字型缺少的字元 0 個
-(w2-055 的變更待 PM 提交)。
+(合併 8a95a26 後:加 `×` U+00D7、移除不再使用且字型沒有的 `✕` U+2715)。當時(w2-055)的紀錄:
+513 字元(CJK 406),Regular 193,364 / Bold 194,036 bytes,各 897 glyphs,來源用字中字型缺少的字元 0 個。
+這些數字只是歷史紀錄;目前的字元數、檔案大小與缺字一律以 `python -B scripts\make_font_subset.py --check`
+的輸出為準(w2-052 未新增中文字串,`--check` exit 0,見 `docs/evidence/w2-052/`)。
 
 ### 2.5 整合點與偏離清單(現況)
 
@@ -292,7 +295,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 |---|---|---|
 | 1 | 網頁端可以解除緊急停止(`emergencyStopSv` 是雙向同步屬性) | 仍存在(建議 1) |
 | 2 | `saveHistoryCsv` 在網頁版於瀏覽器本機執行 | 已不適用:該函式已刪除,改為 Core 匯出(§2.3、§4.4) |
-| 3 | 歷史頁區間與頁碼是共享狀態,一端翻頁其他端一起翻 | 仍存在於 core;改為各端獨立**進行中**(main w1-052 已完成未合併、Core w2-052 未開始,建議 9) |
+| 3 | 歷史頁區間與頁碼是共享狀態,一端翻頁其他端一起翻 | 已完成:改為各端獨立(main w1-052 8e3ea06 + Core w2-052,§2.3,建議 9) |
 | 4 | Modbus server 綁 `0.0.0.0:502`(`Modbus_Server::start` 預設 `AnyIPv4`) | 仍存在(建議 6) |
 | 5 | 設備位址寫死(ADAM 192.168.1.201~205、MS300 COM2) | 仍存在;已有測試用 simulator profile(§4.6,建議 8) |
 | 6 | 找不到 `data_schema.sql`,啟動 log 有 `Schema file not found`(SqlManager 以內建 schema 退回) | 仍存在(建議 10) |
@@ -388,11 +391,12 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 
 8. **設備位址改成可設定**(ADAM IP、MS300 COM port,例如放進 `TaidaFlowSettings.ini`)。——**仍建議**。
    7d06ef1(w2-029)只提供開發用的 `TAIDAFLOW_DEVICE_PROFILE=simulator`。
-9. **決定歷史頁頁碼要不要共享**。——**進行中**:Mango 2026-09-27 決定各連線端獨立(spec §2.1);main 端
-   w1-052 已完成、尚未合併進 core;Core 端 w2-052 尚未開始。完成後更新本條與 §2.3。
+9. **決定歷史頁頁碼要不要共享**。——**已完成**:Mango 2026-09-27 決定各連線端獨立(spec §2.1);main 端
+   w1-052(8e3ea06,已合併進 core eec628f)與 Core 端 w2-052 已完成(§2.3)。
 10. **修正 `data_schema.sql` 找不到**(部署時一起帶,或改用 qrc 內嵌)。——**仍建議**。
 11. **補上 setter 等值比較**(pack 文件 §6.1),並確認不影響重送指令的語意。——**仍建議(部分完成)**:
-    main 9dea0d0 讓 `historyTitle` 值不變時不通知;`setMotorRunningSv/Pv`、`setHistoryRecords` 等仍無比較。
+    main 9dea0d0 讓 `historyTitle` 值不變時不通知,main w1-052 的 `setHistoryViews` 也有比較(`setHistoryRecords`
+    已隨共享屬性移除);`setMotorRunningSv/Pv` 等仍無比較。
 12. **正式版移除 Proxy 建構子的示範資料**,或只在沒有 Core 時才填。——**仍建議**。
 13. **重試加退避、降低 log 量**。——**仍建議**(ADAM 仍固定 3 秒)。
 14. **調整離線橫幅位置,不要遮住內容**。——**已完成**(c7b7b9b,橫幅佔自己的一列、把內容往下推)。
@@ -449,7 +453,7 @@ scripts\build-wasm.bat wasm-release           :: 網頁版(桌面版建完再建
 | nginx 8123、`/exports` 規則、無 `disable_symlinks` | `deploy/nginx/taidaflow.conf`、`scripts/nginx-web.ps1`(`ValidateSet('start','stop','reload','test','status')`) |
 | 部署腳本參數 | `scripts/deploy-web.ps1`(`-Source`、`-ExeDir`、`-NoGzip`) |
 | `saveHistoryCsv` 已刪除 | `git grep -n saveHistoryCsv -- App Core TaidaFlowContent` 無結果 |
-| 歷史頁仍共享 | `git grep -n "historyCurrentPage\|historyRangeRequested\|historyViews" -- Core/TaidaFlowProxy.h`(有前兩者、無 `historyViews`) |
+| 歷史頁各端獨立(w2-052 更新) | `git grep -n "historyViewRequested\|setHistoryViews" -- Core/HistoryViews.cpp Core/TaidaFlowProxy.h`(有);`git grep -n "historyCurrentPage\|historyRangeRequested\|historyRefreshRequested" -- Core App TaidaFlowContent` 無結果 |
 | 離線橫幅推開內容 | `TaidaFlowContent/TopNav.qml` 的 `offlineBanner`(`height: visible ? 64 : 0`)與註解;`git log -- TaidaFlowContent/TopNav.qml` |
 | Modbus server `AnyIPv4`、重連 3 秒 | `Core/Modbus_Server.h`(`start` 預設參數)、`git grep -n kReconnectDelayMs -- Core/Modbus_Client.cpp` |
 | 示範資料、setter 無比較 | `Core/TaidaFlowProxy.h`(建構子 `initializeListData()`、`setMotorRunningSv`) |

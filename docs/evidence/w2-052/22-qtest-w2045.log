@@ -1,0 +1,225 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:859
++ ... te -Format HH:mm:ss; cmd /c ($r[1]) > "$ev\$($r[0]).log" 2>&1; $rc=$L ...
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Configuring done (2.0s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest
+[1/15] Automatic MOC and UIC for target w2045_bench
+[2/15] Automatic MOC and UIC for target w2045_bench_old
+[3/15] Automatic MOC and UIC for target tst_w2045_history
+[4/15] Building CXX object CMakeFiles\w2045_bench_old.dir\w2045_bench_old_autogen\mocs_compilation.cpp.obj
+[5/15] Building CXX object CMakeFiles\w2045_bench.dir\w2045_bench_autogen\mocs_compilation.cpp.obj
+[6/15] Building CXX object CMakeFiles\tst_w2045_history.dir\tst_w2045_history_autogen\mocs_compilation.cpp.obj
+[7/15] Building CXX object CMakeFiles\w2045_bench_old.dir\w2045_bench.cpp.obj
+[8/15] Building CXX object CMakeFiles\w2045_bench.dir\w2045_bench.cpp.obj
+[9/15] Building CXX object CMakeFiles\w2045_bench_old.dir\D_\repo\codex\qmlTester\taidaflow\build\w2-045-old\Core\SqlManager.cpp.obj
+[10/15] Linking CXX executable w2045_bench_old.exe
+[11/15] Building CXX object CMakeFiles\tst_w2045_history.dir\tst_w2045_history.cpp.obj
+[12/15] Building CXX object CMakeFiles\w2045_bench.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[13/15] Building CXX object CMakeFiles\tst_w2045_history.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[14/15] Linking CXX executable w2045_bench.exe
+[15/15] Linking CXX executable tst_w2045_history.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2045_history
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-045-qtest\tst_w2045_history.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest
+1: Test timeout computed to be: 1800
+1: ********* Start testing of TestW2045History *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2045History::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/settings_schema.sql"
+1: QINFO  : TestW2045History::initTestCase() data (fresh copy of the w2-041 bench): D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/work/data QList(sensor_202607.sqlite, sensor_202608.sqlite, sensor_202609.sqlite)
+1: PASS   : TestW2045History::initTestCase()
+1: QWARN  : TestW2045History::pagesMatchOffset30Days() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffset30Days() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 1: 10 rows 1789487999..1789487991 method=offset-desc count 85.28 ms page 0.60 ms steps 13 max step 8.76 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 2: 10 rows 1789487990..1789487981 method=keyset count 0.42 ms page 0.51 ms steps 1 max step 0.93 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 3: 10 rows 1789487980..1789487971 method=keyset count 0.28 ms page 0.38 ms steps 1 max step 0.66 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 4: 10 rows 1789487970..1789487961 method=keyset count 0.32 ms page 0.38 ms steps 1 max step 0.70 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 5: 10 rows 1789487960..1789487951 method=keyset count 0.25 ms page 0.36 ms steps 1 max step 0.61 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 6: 10 rows 1789487950..1789487941 method=keyset count 0.25 ms page 0.36 ms steps 1 max step 0.61 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 7: 10 rows 1789487940..1789487931 method=keyset count 0.32 ms page 0.39 ms steps 1 max step 0.71 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 8: 10 rows 1789487930..1789487921 method=keyset count 0.29 ms page 0.37 ms steps 1 max step 0.66 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 9: 10 rows 1789487920..1789487911 method=keyset count 0.24 ms page 0.37 ms steps 1 max step 0.60 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 10: 10 rows 1789487910..1789487901 method=keyset count 0.28 ms page 0.37 ms steps 1 max step 0.65 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 11: 10 rows 1789487900..1789487891 method=keyset count 0.30 ms page 0.38 ms steps 1 max step 0.68 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 12: 10 rows 1789487890..1789487881 method=keyset count 0.25 ms page 0.35 ms steps 1 max step 0.60 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 11: 10 rows 1789487900..1789487891 method=keyset count 0.26 ms page 0.36 ms steps 1 max step 0.62 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 10: 10 rows 1789487910..1789487901 method=keyset count 0.31 ms page 0.37 ms steps 1 max step 0.68 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 9: 10 rows 1789487920..1789487911 method=keyset count 0.25 ms page 0.50 ms steps 1 max step 0.74 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129595: 10 rows 1788192061..1788192052 method=offset-asc count 0.27 ms page 0.40 ms steps 1 max step 0.68 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129596: 10 rows 1788192051..1788192042 method=keyset count 0.40 ms page 0.42 ms steps 1 max step 0.82 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129597: 10 rows 1788192041..1788192032 method=keyset count 0.40 ms page 0.42 ms steps 1 max step 0.83 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129598: 10 rows 1788192031..1788192022 method=keyset count 0.38 ms page 0.42 ms steps 1 max step 0.80 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129599: 10 rows 1788192021..1788192012 method=keyset count 0.43 ms page 0.44 ms steps 1 max step 0.87 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129600: 10 rows 1788192011..1788192003 method=keyset count 0.44 ms page 0.44 ms steps 1 max step 0.88 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=keyset count 0.76 ms page 0.61 ms steps 1 max step 1.37 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129602: 10 rows 1788191992..1788191983 method=keyset count 0.39 ms page 0.48 ms steps 1 max step 0.87 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129603: 10 rows 1788191982..1788191973 method=keyset count 0.82 ms page 0.43 ms steps 1 max step 1.25 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129604: 10 rows 1788191972..1788191963 method=keyset count 0.26 ms page 0.37 ms steps 1 max step 0.63 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129605: 10 rows 1788191962..1788191953 method=keyset count 0.23 ms page 0.36 ms steps 1 max step 0.59 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129606: 10 rows 1788191952..1788191943 method=keyset count 0.30 ms page 0.46 ms steps 1 max step 0.76 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129605: 10 rows 1788191962..1788191953 method=keyset count 0.25 ms page 0.37 ms steps 1 max step 0.63 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129604: 10 rows 1788191972..1788191963 method=keyset count 0.29 ms page 0.37 ms steps 1 max step 0.66 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129603: 10 rows 1788191982..1788191973 method=keyset count 0.27 ms page 0.37 ms steps 1 max step 0.64 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129602: 10 rows 1788191992..1788191983 method=keyset count 0.28 ms page 0.35 ms steps 1 max step 0.63 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=offset-asc count 0.99 ms page 1.06 ms steps 1 max step 2.06 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129600: 10 rows 1788192011..1788192003 method=keyset count 0.50 ms page 0.49 ms steps 1 max step 0.99 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129599: 10 rows 1788192021..1788192012 method=keyset count 0.58 ms page 0.50 ms steps 1 max step 1.08 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129598: 10 rows 1788192031..1788192022 method=keyset count 0.44 ms page 0.42 ms steps 1 max step 0.86 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129597: 10 rows 1788192041..1788192032 method=keyset count 1.17 ms page 0.70 ms steps 1 max step 1.87 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129596: 10 rows 1788192051..1788192042 method=keyset count 0.42 ms page 0.42 ms steps 1 max step 0.85 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=offset-asc count 0.45 ms page 0.58 ms steps 1 max step 1.02 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 129601: 10 rows 1788192002..1788191993 method=keyset count 0.57 ms page 0.70 ms steps 1 max step 1.27 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259201: 3 rows 1786896002..1786896000 method=offset-asc count 0.59 ms page 0.37 ms steps 1 max step 0.96 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259200: 10 rows 1786896012..1786896003 method=keyset count 0.56 ms page 0.51 ms steps 1 max step 1.07 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259199: 10 rows 1786896022..1786896013 method=keyset count 0.78 ms page 0.81 ms steps 1 max step 1.59 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259198: 10 rows 1786896032..1786896023 method=keyset count 0.46 ms page 0.57 ms steps 1 max step 1.03 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259199: 10 rows 1786896022..1786896013 method=keyset count 0.60 ms page 0.54 ms steps 1 max step 1.14 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259200: 10 rows 1786896012..1786896003 method=keyset count 0.93 ms page 0.96 ms steps 1 max step 1.89 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 259201: 3 rows 1786896002..1786896000 method=keyset count 0.36 ms page 0.28 ms steps 1 max step 0.64 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194400: 10 rows 1787544012..1787544003 method=seek-desc count 0.59 ms page 20.16 ms steps 3 max step 8.36 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194401: 10 rows 1787544002..1787543993 method=keyset count 0.38 ms page 0.41 ms steps 1 max step 0.79 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194402: 10 rows 1787543992..1787543983 method=keyset count 0.52 ms page 0.51 ms steps 1 max step 1.03 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194403: 10 rows 1787543982..1787543973 method=keyset count 0.58 ms page 0.51 ms steps 1 max step 1.09 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194404: 10 rows 1787543972..1787543963 method=keyset count 0.38 ms page 0.42 ms steps 1 max step 0.79 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194405: 10 rows 1787543962..1787543953 method=keyset count 0.54 ms page 0.51 ms steps 1 max step 1.04 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194406: 10 rows 1787543952..1787543943 method=keyset count 0.42 ms page 0.42 ms steps 1 max step 0.84 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194407: 10 rows 1787543942..1787543933 method=keyset count 0.48 ms page 0.48 ms steps 1 max step 0.96 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194408: 10 rows 1787543932..1787543923 method=keyset count 0.53 ms page 0.49 ms steps 1 max step 1.02 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194409: 10 rows 1787543922..1787543913 method=keyset count 0.43 ms page 0.45 ms steps 1 max step 0.89 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194410: 10 rows 1787543912..1787543903 method=keyset count 0.51 ms page 0.48 ms steps 1 max step 1.00 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194411: 10 rows 1787543902..1787543893 method=keyset count 0.60 ms page 0.64 ms steps 1 max step 1.25 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194412: 10 rows 1787543892..1787543883 method=keyset count 0.38 ms page 0.41 ms steps 1 max step 0.80 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194413: 10 rows 1787543882..1787543873 method=keyset count 0.32 ms page 0.39 ms steps 1 max step 0.72 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194414: 10 rows 1787543872..1787543863 method=keyset count 0.36 ms page 0.43 ms steps 1 max step 0.79 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194415: 10 rows 1787543862..1787543853 method=keyset count 0.66 ms page 0.62 ms steps 1 max step 1.28 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194416: 10 rows 1787543852..1787543843 method=keyset count 0.36 ms page 0.48 ms steps 1 max step 0.84 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194417: 10 rows 1787543842..1787543833 method=keyset count 0.36 ms page 0.42 ms steps 1 max step 0.78 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194418: 10 rows 1787543832..1787543823 method=keyset count 0.93 ms page 1.04 ms steps 1 max step 1.97 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194419: 10 rows 1787543822..1787543813 method=keyset count 0.52 ms page 0.51 ms steps 1 max step 1.04 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 194420: 10 rows 1787543812..1787543803 method=keyset count 0.38 ms page 0.43 ms steps 1 max step 0.81 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=seek-desc count 0.87 ms page 20.98 ms steps 3 max step 9.05 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 0.47 ms page 0.40 ms steps 1 max step 0.87 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.68 ms page 0.71 ms steps 1 max step 1.39 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64803: 10 rows 1788839981..1788839972 method=keyset count 0.94 ms page 0.93 ms steps 1 max step 1.87 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.38 ms page 0.40 ms steps 1 max step 0.78 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 0.74 ms page 0.77 ms steps 1 max step 1.51 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=keyset count 0.35 ms page 0.39 ms steps 1 max step 0.74 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64798: 10 rows 1788840030..1788840021 method=seek-desc count 0.60 ms page 19.40 ms steps 3 max step 8.37 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64799: 10 rows 1788840020..1788840011 method=keyset count 0.39 ms page 0.42 ms steps 1 max step 0.81 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64800: 10 rows 1788840010..1788840001 method=keyset count 0.43 ms page 0.43 ms steps 1 max step 0.86 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64801: 10 rows 1788840000..1788839992 method=keyset count 1.15 ms page 0.86 ms steps 1 max step 2.01 ms
+1: QINFO  : TestW2045History::pagesMatchOffset30Days() 30d page 64802: 10 rows 1788839991..1788839982 method=keyset count 0.45 ms page 0.44 ms steps 1 max step 0.89 ms
+1: PASS   : TestW2045History::pagesMatchOffset30Days()
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 1: total 2592404, first ts 1790509092, method offset-desc, deltas 0, steps 15, max step 8.41 ms, page 0.33 ms, snapshot 1296304 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 2: total 2592420, first ts 1790509150, method keyset, deltas 1, steps 1, max step 0.96 ms, page 0.36 ms, snapshot 1296320 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 3: total 2592420, first ts 1790509088, method keyset, deltas 0, steps 1, max step 1.12 ms, page 0.47 ms, snapshot 1296320 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 4: total 2592420, first ts 1790507612, method keyset, deltas 0, steps 1, max step 0.87 ms, page 0.40 ms, snapshot 1296320 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 3: total 2592420, first ts 1790509088, method keyset, deltas 0, steps 1, max step 0.80 ms, page 0.37 ms, snapshot 1296320 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 2: total 2592420, first ts 1790509150, method keyset, deltas 0, steps 1, max step 0.80 ms, page 0.38 ms, snapshot 1296320 vs now 1296320
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 1: total 2592420, first ts 1790509150, method keyset, deltas 0, steps 1, max step 0.66 ms, page 0.33 ms, snapshot 1296320 vs now 1296320
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150000: total 2592420, first ts 1787988329, method seek-desc, deltas 0, steps 1, max step 6.27 ms, page 5.97 ms, snapshot 1296320 vs now 1296322
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150001: total 2592422, first ts 1787988321, method keyset, deltas 1, steps 1, max step 0.93 ms, page 0.46 ms, snapshot 1296322 vs now 1296322
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::pagesMatchOffsetWhileWriting() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150002: total 2592422, first ts 1787988311, method keyset, deltas 0, steps 1, max step 0.88 ms, page 0.46 ms, snapshot 1296322 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150003: total 2592424, first ts 1787988303, method keyset, deltas 1, steps 1, max step 0.93 ms, page 0.45 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150004: total 2592424, first ts 1787988293, method keyset, deltas 0, steps 1, max step 0.88 ms, page 0.42 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150005: total 2592424, first ts 1787988283, method keyset, deltas 0, steps 1, max step 0.77 ms, page 0.40 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150006: total 2592424, first ts 1787988273, method keyset, deltas 0, steps 1, max step 0.69 ms, page 0.37 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150007: total 2592424, first ts 1787988263, method keyset, deltas 0, steps 1, max step 0.75 ms, page 0.39 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150008: total 2592424, first ts 1787988253, method keyset, deltas 0, steps 1, max step 0.76 ms, page 0.40 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150007: total 2592424, first ts 1787988263, method keyset, deltas 0, steps 1, max step 0.71 ms, page 0.38 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150006: total 2592424, first ts 1787988273, method keyset, deltas 0, steps 1, max step 0.77 ms, page 0.39 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150005: total 2592424, first ts 1787988283, method keyset, deltas 0, steps 1, max step 0.75 ms, page 0.39 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150004: total 2592424, first ts 1787988293, method keyset, deltas 0, steps 1, max step 0.69 ms, page 0.37 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() all+writes page 150003: total 2592424, first ts 1787988303, method keyset, deltas 0, steps 1, max step 0.70 ms, page 0.37 ms, snapshot 1296324 vs now 1296324
+1: QINFO  : TestW2045History::pagesMatchOffsetWhileWriting() saves during the sequence: 20 ; results whose snapshot was behind the file: 3
+1: PASS   : TestW2045History::pagesMatchOffsetWhileWriting()
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200001 method keyset first ts 1787488325 max step ms 1.0234
+1: QINFO  : TestW2045History::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200002 method keyset first ts 1787488317 max step ms 0.9037
+1: QINFO  : TestW2045History::anchorAfterInsertsAndNewMonth() after inserts into the anchor month, page 200003 method keyset first ts 1787488307 max step ms 0.8088
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::anchorAfterInsertsAndNewMonth() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::anchorAfterInsertsAndNewMonth() after the new month file: months 4 total 2592433
+1: PASS   : TestW2045History::anchorAfterInsertsAndNewMonth()
+1: QWARN  : TestW2045History::countCacheDelta() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QWARN  : TestW2045History::countCacheDelta() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-045-qtest/data_schema.sql"
+1: QINFO  : TestW2045History::countCacheDelta() cache: all hits 4/4 (0.39 ms); after 2 saves hits 3, deltas 1, total 2592433 -> 2592435 (0.69 ms)
+1: PASS   : TestW2045History::countCacheDelta()
+1: QINFO  : TestW2045History::uncachedCountAndSeekInSteps() uncached 2-month count: 11 steps, count 75.41 ms, max step 9.12 ms, total 76.87 ms; steps(ms): 8.6 6.1 6.1 6.0 6.1 9.1 9.0 6.1 9.1 6.2 3.3
+1: QINFO  : TestW2045History::uncachedCountAndSeekInSteps() page 64799: method seek-desc, steps 3, page 18.61 ms, max step 8.56 ms
+1: QINFO  : TestW2045History::uncachedCountAndSeekInSteps() page 90719: method seek-asc, steps 2, page 11.71 ms, max step 8.77 ms
+1: QINFO  : TestW2045History::uncachedCountAndSeekInSteps() page 194399: method seek-desc, steps 3, page 20.51 ms, max step 8.80 ms
+1: QINFO  : TestW2045History::uncachedCountAndSeekInSteps() page 239199: method seek-asc, steps 1, page 6.04 ms, max step 6.45 ms
+1: PASS   : TestW2045History::uncachedCountAndSeekInSteps()
+1: QINFO  : TestW2045History::supersededBetweenSteps() attempt 0: A superseded=1 after 3 step(s) (28.30 ms); B ok, 8 steps
+1: PASS   : TestW2045History::supersededBetweenSteps()
+1: QINFO  : TestW2045History::cleanupTestCase() SUMMARY: 117 results, 173 steps, longest step 9.88 ms; keyset pages (30d, hot, no writes): 73, page time median 0.427 ms, max 1.063 ms; methods keyset=99, offset-asc=4, offset-desc=5, seek-asc=3, seek-desc=6; pages compared with the OFFSET reference 115, also with the UNION ALL reference 8
+1: PASS   : TestW2045History::cleanupTestCase()
+1: Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 48857ms
+1: ********* Finished testing of TestW2045History *********
+1/1 Test #1: tst_w2045_history ................   Passed   49.20 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  49.21 sec

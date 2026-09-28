@@ -16,6 +16,7 @@
 #include <QHash>
 #include <QList>
 #include <QSet>
+#include <QMutex>
 #include <atomic>
 
 // w2-039: result of one History-page load (one COUNT + one newest-first page),
@@ -51,6 +52,9 @@ struct SensorHistoryPageResult
     double totalMs = 0.0;
     QString pageMethod;
     QHash<QString, qint64> snapshotRowids;
+    // w2-052: the session key of requestSensorHistoryRangePage(sessionKey, ...); empty for
+    // the requests without a session (requestSensorHistoryPage and the w2-041 overload).
+    QString sessionKey;
 };
 Q_DECLARE_METATYPE(SensorHistoryPageResult)
 
@@ -164,6 +168,32 @@ public:
     void requestSensorHistoryRangePage(quint64 requestId, qint64 from, qint64 to,
                                        int page, int pageSize);
 
+    // w2-052 (spec §2.1, one History view per client): the same stepped range request,
+    // but the "stale request" rule and the keyset anchor belong to sessionKey (the
+    // client's clientSessionId) only.  A request is dropped (superseded = true) only
+    // when a newer request id of the SAME sessionKey exists, or the session was
+    // released; requests of other sessions (and of the overloads without a session,
+    // which keep their own shared id sequence and anchor) never make it stale.  Each
+    // session has its own anchor (previous result's first/last row), so clients paging
+    // different ranges do not take each other's anchor.  requestId only has to grow
+    // within one sessionKey.  The result carries sessionKey.  Steps, snapshots and the
+    // count cache work as described above (the count cache is shared by all requests;
+    // w2-052 keys it by month and range, so ranges of different clients do not evict
+    // each other).
+    void requestSensorHistoryRangePage(const QString& sessionKey, quint64 requestId, qint64 from,
+                                       qint64 to, int page, int pageSize);
+
+    // w2-052: forgets everything kept for sessionKey (its newest request id and its
+    // anchor).  A request of that session still running is dropped at its next step
+    // (superseded = true); a later request of the same key starts a new session.
+    // Returns immediately (the anchor is removed on the SqlManager thread).
+    void releaseHistorySession(const QString& sessionKey);
+
+    // w2-052 (diagnostics / tests): the session keys SqlManager currently keeps state
+    // for (newest request id or anchor), sorted.  Blocking like the other public
+    // functions when called from another thread.
+    QStringList historySessionKeys();
+
     // w2-041 export: absolute paths of the existing sensor_YYYYMM.sqlite files
     // whose month intersects [from, to] (epoch seconds), newest month first.
     // Only lists files (no query).  Blocking like the other public functions
@@ -205,8 +235,14 @@ private:
         qint64 count = 0;
         qint64 snapRowid = -1;   // w2-045: MAX(rowid) of sensor_data the count was taken at
         QString path;            // w2-045: file the entry belongs to
+        quint64 lastUse = 0;     // w2-052: for dropping the least recently used entry
     };
-    QHash<QString, RangeCountCacheEntry> m_rangeCountCache;   // key = yyyyMM
+    // w2-052: key = rangeCountCacheKey(yyyyMM, lo, hi) (was yyyyMM only, one range per
+    // month), at most kRangeCountCacheMax entries (least recently used dropped).
+    QHash<QString, RangeCountCacheEntry> m_rangeCountCache;
+    quint64 m_rangeCountCacheUse = 0;
+    static QString rangeCountCacheKey(const QString& monthKey, qint64 lo, qint64 hi);
+    void rangeCountCacheStore(const QString& key, const RangeCountCacheEntry& entry);
     QList<SensorMonthFile> sensorMonthFilesInRange(qint64 from, qint64 to) const;
 
     // w2-045 (SqlManager thread only): stepped History range request.
@@ -234,7 +270,16 @@ private:
         HistoryAnchorRow first;
         HistoryAnchorRow last;
     };
-    HistoryAnchor m_historyAnchor;
+    HistoryAnchor m_historyAnchor;          // requests without a session (w2-041 overload)
+    // w2-052: per session (SqlManager thread only): the anchor of each session's last result.
+    QHash<QString, HistoryAnchor> m_sessionHistoryAnchors;
+    // w2-052: per session newest request id, written by the requesting thread and read by
+    // the steps on the SqlManager thread (guarded by m_historySessionMutex).
+    mutable QMutex m_historySessionMutex;
+    QHash<QString, quint64> m_sessionLatestRequestIds;
+    bool historyJobStale(const HistoryRangeJob& job) const;
+    const HistoryAnchor& historyAnchorFor(const HistoryRangeJob& job) const;
+    void storeHistoryAnchor(const HistoryRangeJob& job, const HistoryAnchor& anchor);
     QSet<QString> m_historySchemaChecked;   // month keys whose schema was checked once
     enum class HistoryKeyset { None, OlderOrEqual, Older, Newer };
 

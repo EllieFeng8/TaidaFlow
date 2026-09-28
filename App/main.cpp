@@ -21,19 +21,43 @@
 #if defined(Q_OS_WASM)
 #include <emscripten/val.h>
 #include <string>
+#include "runtimeinfo.h"
 #else
 #include <QHostAddress>
 #include "lanrelay.h"
+#include "appconfig.h"
+#include <QMessageBox>
+#include <QTimer>
 #endif
 
 namespace {
 
-// Public Mirror port: the port the web pages connect to (desktop: served by LanRelay).
-constexpr quint16 MirrorPublicPort = 8125;
+// Mirror ports (docs/taidaflow_config_spec.md §2 "mirror", §3):
+// - desktop: config.json mirror.internalPort (Mirror server on 127.0.0.1, default 18125) and
+//   mirror.publicBind/publicPort (LanRelay, default 0.0.0.0:8125), see AppConfig;
+// - WebAssembly: mirrorPublicPort from the page's own /runtime.json, fallback 8125
+//   (TaidaFlowRuntime::kDefaultMirrorPublicPort).
+
 #if !defined(Q_OS_WASM)
-// Internal Mirror port on the desktop, loopback only (pack 1.0.0 permits loopback binds only);
-// LanRelay forwards MirrorPublicPort to it. Not meant to be reached from outside.
-constexpr quint16 MirrorInternalPort = 18125;
+// config.json cannot be used (spec §1.4): tell the operator, then main exits non-zero.
+// TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS=<ms> (unattended checks only) closes the dialog
+// automatically after that time; unset = it stays until the operator closes it.
+void showConfigErrorDialog(const QString &text)
+{
+    QMessageBox box(QMessageBox::Critical, QStringLiteral("TaidaFlow - config.json"), text,
+                    QMessageBox::Ok);
+    bool timeoutOk = false;
+    const int timeoutMs = qEnvironmentVariableIntValue("TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS", &timeoutOk);
+    if (timeoutOk && timeoutMs > 0) {
+        QTimer::singleShot(timeoutMs, &box, [&box, timeoutMs] {
+            qWarning().noquote() << "[Config] error dialog closed automatically after" << timeoutMs
+                                 << "ms (TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS)";
+            box.done(QMessageBox::Ok);
+        });
+    }
+    qWarning().noquote() << "[Config] showing the config.json error dialog";
+    box.exec();
+}
 #endif
 
 #if defined(Q_OS_WASM)
@@ -51,7 +75,79 @@ QString browserPageHostName()
         return {};
     return QString::fromStdString(hostName.as<std::string>()).trimmed();
 }
+
+// <page URL>/runtime.json, resolved against window.location.href (same origin as the page,
+// e.g. http://192.168.1.20/runtime.json). Invalid QUrl when the location cannot be read;
+// requestRuntimeInfo() then falls back to port 8125.
+QUrl browserRuntimeInfoUrl()
+{
+    const emscripten::val location = emscripten::val::global("location");
+    if (location.isUndefined() || location.isNull())
+        return {};
+    const emscripten::val href = location["href"];
+    if (!href.isString())
+        return {};
+    const QUrl page(QString::fromStdString(href.as<std::string>()));
+    if (!page.isValid() || page.isRelative())
+        return {};
+    return page.resolved(QUrl(QStringLiteral("/runtime.json")));
+}
 #endif
+
+// Creates the Mirror runtime for the Td Proxy: desktop = server bound to host:port,
+// WebAssembly = client connecting to host:port. Logs and returns nullptr on failure.
+std::unique_ptr<WasmMirrorProxy> createMirror(TaidaFlowProxy *Td, const QString &host, quint16 port)
+{
+    WasmMirrorConfig mirrorConfig;
+    mirrorConfig.host = host;
+    mirrorConfig.port = port;
+    mirrorConfig.path = QStringLiteral("/mirror");
+    // Empty list = accept every Origin (pack docs wasm-mirror-integration.md §7.5). Intranet
+    // system: pages are opened from other computers under their own host names, and Mango
+    // decided not to do origin/access control.
+    mirrorConfig.allowedOrigins = {};
+
+    WasmMirrorProxyOptions mirrorOptions;
+    mirrorOptions.required = true;
+#if defined(Q_OS_WASM)
+    // Keeps the transport overlay (set to "not ready" in main before QML loads) in sync
+    // with the mirror client (offline / synchronizing / ready).
+    mirrorOptions.transportStateHandler =
+        [Td](bool ready, const QString &message) {
+            Td->setTransportState(ready, message);
+        };
+#endif
+
+    if (!mirrorConfig.addProxy(QStringLiteral("TaidaFlow"),
+                               *Td,
+                               std::move(mirrorOptions))) {
+        qCritical().noquote() << mirrorConfig.validationError();
+        return nullptr;
+    }
+
+    QString mirrorError;
+    auto mirror = WasmMirrorProxy::create(mirrorConfig, &mirrorError);
+    if (!mirror) {
+        qCritical().noquote() << mirrorError;
+        return nullptr;
+    }
+
+    qInfo().noquote()
+        << "WASM Mirror endpoint:"
+        << mirror->webSocketUrl().toString();
+
+    // Transport diagnostics (desktop: server listening; WASM: snapshot ready /
+    // offline). On WebAssembly these lines appear in the browser console.
+    QObject::connect(mirror.get(), &WasmMirrorProxy::readyChanged, mirror.get(),
+                     [](bool ready) {
+        qInfo().noquote() << "WASM Mirror ready:" << (ready ? "true" : "false");
+    });
+    QObject::connect(mirror.get(), &WasmMirrorProxy::transportError, mirror.get(),
+                     [](const QString &mirrorName, const QString &message) {
+        qInfo().noquote() << "WASM Mirror transport:" << mirrorName << message;
+    });
+    return mirror;
+}
 
 } // namespace
 
@@ -59,6 +155,25 @@ int main(int argc, char *argv[])
 {
     set_qt_environment();
     QApplication app(argc, argv);
+#if !defined(Q_OS_WASM)
+    // config.json (docs/taidaflow_config_spec.md §1), before anything that writes a file:
+    // `--write-default-config <path>` only writes the default file and exits (scripts);
+    // otherwise load it (TAIDAFLOW_CONFIG -> <exe folder>/config.json -> create defaults),
+    // exit non-zero if it is not valid JSON, and switch to dataDir (relative to config.json).
+    if (const std::optional<int> writeExitCode = AppConfig::runWriteDefaultConfigCommand(app.arguments()))
+        return *writeExitCode;
+    {
+        const AppConfig::LoadResult configLoad = AppConfig::loadFromEnvironment();
+        configLoad.printLog();
+        if (!configLoad.ok) {
+            showConfigErrorDialog(configLoad.errorDialogText());
+            return AppConfig::kConfigErrorExitCode;
+        }
+        AppConfig::setInstance(configLoad.config);
+    }
+    AppConfig::instance().applyDataDir();
+    const AppConfig::MirrorSettings mirrorPorts = AppConfig::instance().mirror();
+#endif
 
     // (core only) WebAssembly has no system CJK fonts: register the embedded
     // Noto Sans TC subset and make it the fallback for every UI font. The desktop
@@ -96,34 +211,20 @@ int main(int argc, char *argv[])
     // imports `TaidaFlowBackend 1.0`.
     qmlRegisterSingletonInstance<TaidaFlowProxy>("TaidaFlowBackend", 1, 0, "Td", Td);
 
-    WasmMirrorConfig mirrorConfig;
+    // Declared after the Proxy owner and before the engine: destroyed after the engine and
+    // before the Proxy (pack guide §9).
+    std::unique_ptr<WasmMirrorProxy> mirror;
+
 #if defined(Q_OS_WASM)
-    // LAN access: connect back to the host the page was loaded from (location.hostname),
-    // public port 8125. Fallback 127.0.0.1 (the previous fixed host) if it cannot be read.
+    // LAN access: connect back to the host the page was loaded from (location.hostname).
+    // Fallback 127.0.0.1 (the previous fixed host) if it cannot be read.
     QString mirrorHost = browserPageHostName();
     if (mirrorHost.isEmpty()) {
         mirrorHost = QStringLiteral("127.0.0.1");
         qWarning().noquote()
             << "location.hostname is not available; Mirror host falls back to" << mirrorHost;
     }
-    mirrorConfig.host = mirrorHost;
-    mirrorConfig.port = MirrorPublicPort;
-#else
-    // Desktop: the Mirror itself stays on loopback (internal port); LanRelay below exposes
-    // it on 0.0.0.0:8125. Temporary until wasm-mirror pack 1.0.2 (see App/lanrelay.h).
-    mirrorConfig.host = QStringLiteral("127.0.0.1");
-    mirrorConfig.port = MirrorInternalPort;
-#endif
-    mirrorConfig.path = QStringLiteral("/mirror");
-    // Empty list = accept every Origin (pack docs wasm-mirror-integration.md §7.5). Intranet
-    // system: pages are opened from other computers under their own host names, and Mango
-    // decided not to do origin/access control.
-    mirrorConfig.allowedOrigins = {};
 
-    WasmMirrorProxyOptions mirrorOptions;
-    mirrorOptions.required = true;
-
-#if defined(Q_OS_WASM)
     // Download links (spec §3.5 revised): the Core only sends the path + downloadPort, the
     // page completes it with its own host name. Same source (and fallback) as the Mirror
     // host above. pageHost is STORED false (never mirrored); desktop keeps "".
@@ -140,56 +241,52 @@ int main(int argc, char *argv[])
 
     // Transport overlay (package-integration §9): the Proxy member defaults to
     // true so the desktop UI never waits for a remote transport. Only the WASM
-    // composition root switches it to false before QML loads, then the handler
-    // keeps it in sync with the mirror client (offline / synchronizing / ready).
+    // composition root switches it to false before QML loads, then the mirror's
+    // transportStateHandler keeps it in sync with the mirror client (createMirror()).
     Td->setTransportState(
         false, QStringLiteral("Connecting to the Qt desktop Core..."));
-    mirrorOptions.transportStateHandler =
-        [Td](bool ready, const QString &message) {
-            Td->setTransportState(ready, message);
-        };
-#endif
 
-    if (!mirrorConfig.addProxy(QStringLiteral("TaidaFlow"),
-                               *Td,
-                               std::move(mirrorOptions))) {
-        qCritical().noquote() << mirrorConfig.validationError();
+    // Mirror port (config spec §3): asynchronous GET of the page's own /runtime.json, then
+    // the Mirror client is created. QML loads meanwhile (the offline overlay stays up until
+    // the mirror is ready). No route / error / >3 s / invalid content -> port 8125 + console
+    // warning (main alone has no /runtime.json route: always the fallback).
+    // `mirror` lives in main's scope for the whole run (WebAssembly: app.exec() never
+    // returns), like the engine below.
+    TaidaFlowRuntime::requestRuntimeInfo(
+        browserRuntimeInfoUrl(), TaidaFlowRuntime::kRuntimeRequestTimeoutMs, &app,
+        [Td, mirrorHost, &mirror](const TaidaFlowRuntime::RuntimeLookup &lookup) {
+            if (lookup.fromServer) {
+                qInfo().noquote() << "/runtime.json: mirrorPublicPort =" << lookup.info.mirrorPublicPort;
+            } else {
+                qWarning().noquote() << "/runtime.json not usable (" + lookup.detail + "); Mirror port falls back to"
+                                     << lookup.info.mirrorPublicPort;
+            }
+            mirror = createMirror(Td, mirrorHost, lookup.info.mirrorPublicPort);
+            if (!mirror) {
+                Td->setTransportState(
+                    false, QStringLiteral("Mirror client could not be created (see the browser console)."));
+            }
+        });
+#else
+    // Desktop: the Mirror itself stays on loopback (config.json mirror.internalPort);
+    // LanRelay below exposes it on mirror.publicBind:publicPort. Temporary until wasm-mirror
+    // pack 1.0.2 (see App/lanrelay.h).
+    mirror = createMirror(Td, QStringLiteral("127.0.0.1"), mirrorPorts.internalPort);
+    if (!mirror)
         return EXIT_FAILURE;
-    }
 
-    QString mirrorError;
-    auto mirror = WasmMirrorProxy::create(mirrorConfig, &mirrorError);
-    if (!mirror) {
-        qCritical().noquote() << mirrorError;
-        return EXIT_FAILURE;
-    }
-
-    qInfo().noquote()
-        << "WASM Mirror endpoint:"
-        << mirror->webSocketUrl().toString();
-
-#if !defined(Q_OS_WASM)
-    // LAN access (temporary, see App/lanrelay.h): 0.0.0.0:8125 -> 127.0.0.1:18125.
-    // Declared after the mirror, so it is destroyed first. A failure (e.g. port 8125 in
-    // use) is only logged and the desktop app keeps running; only web pages need the relay.
-    LanRelay lanRelay(QHostAddress(QHostAddress::AnyIPv4), MirrorPublicPort,
-                      QHostAddress(QHostAddress::LocalHost), MirrorInternalPort);
+    // LAN access (temporary, see App/lanrelay.h): publicBind:publicPort -> 127.0.0.1:internalPort
+    // (defaults 0.0.0.0:8125 -> 127.0.0.1:18125). Declared after the mirror, so it is destroyed
+    // first. A failure (e.g. the port in use) is only logged and the desktop app keeps running;
+    // only web pages need the relay.
+    LanRelay lanRelay(QHostAddress(mirrorPorts.publicBind), mirrorPorts.publicPort,
+                      QHostAddress(QHostAddress::LocalHost), mirrorPorts.internalPort);
     QString lanRelayError;
     if (lanRelay.start(&lanRelayError))
         qInfo().noquote() << "LAN relay listening:" << lanRelay.description();
     else
         qWarning().noquote() << lanRelayError;
 #endif
-    // Transport diagnostics (desktop: server listening; WASM: snapshot ready /
-    // offline). On WebAssembly these lines appear in the browser console.
-    QObject::connect(mirror.get(), &WasmMirrorProxy::readyChanged, &app,
-                     [](bool ready) {
-        qInfo().noquote() << "WASM Mirror ready:" << (ready ? "true" : "false");
-    });
-    QObject::connect(mirror.get(), &WasmMirrorProxy::transportError, &app,
-                     [](const QString &mirrorName, const QString &message) {
-        qInfo().noquote() << "WASM Mirror transport:" << mirrorName << message;
-    });
     const auto logTransportOverlay = [Td] {
         qInfo().noquote() << "Transport overlay: transportReady ="
                           << (Td->transportReady() ? "true" : "false")

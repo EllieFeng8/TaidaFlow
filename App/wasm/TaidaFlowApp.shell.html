@@ -14,6 +14,12 @@
   Edit this file, then rebuild wasm (scripts\build-wasm.bat; the edit re-runs the configure) and
   deploy (scripts\deploy-web.ps1). Keep the marker
   "taidaflow-wasm-shell" in this comment: the apply script uses it to tell this page from Qt's.
+
+  w1-066: when Qt reports onLoaded the page waits until the app has painted (two animation
+  frames + 250 ms), then plays an 800 ms transition (cube spins faster and grows, a glow spreads
+  and fades, the loader fades out while #screen fades in from 0.98 scale) and hides the loader.
+  prefers-reduced-motion: a 200 ms cross-fade only. Only opacity / transform are animated.
+  This file goes through configure_file(@ONLY): never write a word between two at-signs.
 -->
 <html lang="zh-Hant-TW">
   <head>
@@ -181,10 +187,93 @@
         50%      { transform: scale(1.5); opacity: 0.2; }
       }
 
-      /* Reduced motion: no animation, the cube is shown still at an angle. */
+      /* ---- Transition loader -> app (w1-066) --------------------------------------------
+         JS adds .tf-leaving to #tf-loader and .tf-entering to #screen once the app has painted,
+         and removes both (and hides the loader) on animationend of both, or after 1500 ms.
+         0-800 ms  .tf-scene grows 1 -> 2.8 (ease-in), .tf-spin adds 540 deg Y / 180 deg X on top
+                   of the idle spin (ease-in = the cube accelerates)
+         0-800 ms  .tf-flash (radial glow at the cube) 0 -> 0.9 opacity at 280 ms, spreads to 7x
+                   and fades to 0
+         0-240 ms  title / status text and floor shadow fade out
+         0-800 ms  #tf-loader opacity 1 (until 240 ms) -> 0, pointer-events: none throughout
+       200-800 ms  #screen opacity 0 -> 1, scale 0.98 -> 1 (ease-out)
+         Only opacity / transform; no filter on the Qt canvas. */
+      .tf-spin {                        /* extra rotation for the exit, idle = no transform */
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+      }
+      .tf-flash {                       /* exit glow, invisible until .tf-leaving */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 160px;
+        height: 160px;
+        margin: -80px 0 0 -80px;
+        border-radius: 50%;
+        background: radial-gradient(circle,
+                                    rgba(255, 255, 255, 0.95) 0%,
+                                    rgba(103, 232, 249, 0.6) 28%,
+                                    rgba(129, 140, 248, 0.28) 52%,
+                                    rgba(129, 140, 248, 0) 70%);
+        opacity: 0;
+        transform: scale(0.2);
+        pointer-events: none;
+      }
+      #tf-loader.tf-leaving {
+        pointer-events: none;           /* never blocks the app during the fade */
+        animation: tf-exit-loader 800ms ease-in-out both;
+      }
+      #tf-loader.tf-leaving .tf-scene { animation: tf-exit-zoom 800ms cubic-bezier(0.5, 0, 0.75, 0) both; }
+      #tf-loader.tf-leaving .tf-spin  { animation: tf-exit-spin 800ms cubic-bezier(0.5, 0, 0.75, 0) both; }
+      #tf-loader.tf-leaving .tf-flash { animation: tf-exit-flash 800ms ease-out both; }
+      #tf-loader.tf-leaving .tf-text  { animation: tf-exit-text 240ms ease-in both; }
+      #tf-loader.tf-leaving .tf-floor { animation: tf-shadow-breathe 3s ease-in-out infinite,
+                                                   tf-exit-fade 240ms ease-in both; }
+      #screen.tf-entering {
+        animation: tf-screen-enter 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 200ms both;
+      }
+
+      @keyframes tf-exit-loader {
+        0%, 30% { opacity: 1; }
+        100%    { opacity: 0; }
+      }
+      @keyframes tf-exit-zoom {         /* scale3d: the cube's depth grows with it */
+        from { transform: scale3d(1, 1, 1); }
+        to   { transform: scale3d(2.8, 2.8, 2.8); }
+      }
+      @keyframes tf-exit-spin {
+        from { transform: rotateX(0deg) rotateY(0deg); }
+        to   { transform: rotateX(180deg) rotateY(540deg); }
+      }
+      @keyframes tf-exit-flash {
+        0%   { opacity: 0;   transform: scale(0.2); }
+        35%  { opacity: 0.9; transform: scale(1.6); }
+        100% { opacity: 0;   transform: scale(7); }
+      }
+      @keyframes tf-exit-text {
+        to { opacity: 0; transform: translateY(8px); }
+      }
+      @keyframes tf-exit-fade {
+        to { opacity: 0; }
+      }
+      @keyframes tf-screen-enter {
+        from { opacity: 0; transform: scale(0.98); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+      @keyframes tf-fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      /* Reduced motion: no animation, the cube is shown still at an angle; the transition is a
+         200 ms cross-fade (loader out, app in) without spin, zoom or glow. */
       @media (prefers-reduced-motion: reduce) {
         #tf-loader * { animation: none !important; }
         .tf-cube { transform: rotateX(-25deg) rotateY(35deg); }
+        #tf-loader.tf-leaving { animation: tf-exit-fade 200ms ease-out both; }
+        #screen.tf-entering { animation: tf-fade-in 200ms ease-out both; }
       }
     </style>
     <noscript>
@@ -197,14 +286,17 @@
   <body>
     <div id="tf-loader">
       <div class="tf-scene" aria-hidden="true">
-        <div class="tf-cube">
-          <div class="tf-core"></div>
-          <div class="tf-side tf-front"><div class="tf-face"></div></div>
-          <div class="tf-side tf-back"><div class="tf-face"></div></div>
-          <div class="tf-side tf-right"><div class="tf-face"></div></div>
-          <div class="tf-side tf-left"><div class="tf-face"></div></div>
-          <div class="tf-side tf-top"><div class="tf-face"></div></div>
-          <div class="tf-side tf-bottom"><div class="tf-face"></div></div>
+        <div class="tf-flash"></div>
+        <div class="tf-spin">
+          <div class="tf-cube">
+            <div class="tf-core"></div>
+            <div class="tf-side tf-front"><div class="tf-face"></div></div>
+            <div class="tf-side tf-back"><div class="tf-face"></div></div>
+            <div class="tf-side tf-right"><div class="tf-face"></div></div>
+            <div class="tf-side tf-left"><div class="tf-face"></div></div>
+            <div class="tf-side tf-top"><div class="tf-face"></div></div>
+            <div class="tf-side tf-bottom"><div class="tf-face"></div></div>
+          </div>
         </div>
         <div class="tf-floor"></div>
       </div>
@@ -222,6 +314,7 @@
             const loader = document.querySelector('#tf-loader');
             const screen = document.querySelector('#screen');
             const status = document.querySelector('#tf-status');
+            const scene = document.querySelector('.tf-scene');
             let loaded = false;
             let failed = false;
 
@@ -229,9 +322,100 @@
                 status.classList.remove('tf-error');
                 status.textContent = text;
             };
+
+            // ---- Transition loader -> app (w1-066) ------------------------------------------
+            // onLoaded comes from Emscripten's onRuntimeInitialized, i.e. BEFORE main() runs: the
+            // app has not built its window yet. The transition therefore waits for two animation
+            // frames (Qt paints its first frame in a requestAnimationFrame callback queued while
+            // main() runs, so the second frame after onLoaded comes after that paint) plus
+            // SETTLE_MS for the first QML frames, then plays; RAF_GUARD_MS starts it anyway if no
+            // frame comes (hidden tab). FINISH_GUARD_MS ends it even without animationend.
+            const SETTLE_MS = 250;
+            const RAF_GUARD_MS = 1000;
+            const FINISH_GUARD_MS = 1500;
+            const ANIMATED = [loader, screen];      // the two elements whose animation ends it
+            const END_EVENTS = ['animationend', 'animationcancel'];
+            let transition = null;  // { started, timers, rafs, pending, onEnd } while active
+
+            // Back to the page's resting state: no transition class, no inline style. #screen is
+            // then fully visible (opacity / transform are only set by .tf-entering).
+            const clearTransitionStyles = () => {
+                loader.classList.remove('tf-leaving');
+                screen.classList.remove('tf-entering');
+                for (const el of [loader, screen, scene])
+                    el.style.removeProperty('will-change');
+            };
+            const cancelTransition = () => {
+                const t = transition;
+                transition = null;
+                if (t) {
+                    t.timers.forEach(clearTimeout);
+                    t.rafs.forEach(cancelAnimationFrame);
+                    if (t.onEnd) {
+                        for (const el of ANIMATED)
+                            for (const type of END_EVENTS)
+                                el.removeEventListener(type, t.onEnd);
+                    }
+                }
+                clearTransitionStyles();
+            };
+            const finishTransition = () => {
+                if (failed)
+                    return;                 // showError already restored the loader
+                loader.hidden = true;       // the app's own screen takes over
+                cancelTransition();
+            };
+            const startTransition = (t) => {
+                if (transition !== t || t.started || failed)
+                    return;
+                t.started = true;
+                t.timers.forEach(clearTimeout);
+                t.rafs.forEach(cancelAnimationFrame);
+                t.timers = [];
+                t.rafs = [];
+
+                setStatus('準備完成');
+                loader.style.willChange = 'opacity';
+                scene.style.willChange = 'transform';
+                screen.style.willChange = 'opacity, transform';
+                t.pending = new Set(ANIMATED);
+                // Bubbled events of the loader's children (text, glow...) have another target.
+                t.onEnd = (e) => {
+                    if (transition === t && t.pending.delete(e.target) && t.pending.size === 0)
+                        finishTransition();
+                };
+                for (const el of ANIMATED)
+                    for (const type of END_EVENTS)
+                        el.addEventListener(type, t.onEnd);
+                t.timers.push(setTimeout(() => { if (transition === t) finishTransition(); },
+                                         FINISH_GUARD_MS));
+                loader.classList.add('tf-leaving');
+                screen.classList.add('tf-entering');
+            };
+            const beginTransition = () => {
+                const t = { started: false, timers: [], rafs: [], pending: null, onEnd: null };
+                transition = t;
+                const go = () => {
+                    try {
+                        startTransition(t);
+                    } catch (e) {
+                        console.error(e);
+                        finishTransition(); // never leave #screen transparent or covered
+                    }
+                };
+                t.rafs.push(requestAnimationFrame(() => {
+                    t.rafs.push(requestAnimationFrame(() => {
+                        t.timers.push(setTimeout(go, SETTLE_MS));
+                    }));
+                }));
+                t.timers.push(setTimeout(go, RAF_GUARD_MS));
+            };
+
             // Error: stop the animation, keep the title, status in #FF5964; the loader is shown
-            // again on top of the app (onExit after the app was running).
+            // again on top of the app (onExit after the app was running). A running or pending
+            // transition is aborted and its classes / inline styles are removed first.
             const showError = (text) => {
+                cancelTransition();
                 failed = true;
                 status.textContent = text;
                 status.classList.add('tf-error');
@@ -257,7 +441,15 @@
                     qt: {
                         onLoaded: () => {
                             loaded = true;
-                            loader.hidden = true;   // the app's own screen takes over
+                            if (failed)
+                                return;
+                            // Called inside Emscripten's runtime start: never let it throw.
+                            try {
+                                beginTransition();
+                            } catch (e) {
+                                console.error(e);
+                                finishTransition();
+                            }
                         },
                         onExit: exitData =>
                         {

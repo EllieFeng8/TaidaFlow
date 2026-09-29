@@ -1,0 +1,48 @@
+********* Start testing of TestManagerSvGuard *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : TestManagerSvGuard::initTestCase()
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device profile=default
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device ADAM-6256 -> 127.0.0.1:53585 unit=1 timeout=1000ms retries=2
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device ADAM-6217 A -> 127.0.0.1:53585 unit=1 timeout=1000ms retries=2
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device ADAM-6217 B -> 127.0.0.1:53585 unit=1 timeout=1000ms retries=2
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device ADAM-6224 -> 127.0.0.1:53585 unit=1 timeout=1000ms retries=2
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus] device ADAM-6022 -> 127.0.0.1:53585 unit=1 timeout=1000ms retries=2
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: disconnected
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: 系統找不到指定的檔案。
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 B (127.0.0.1) connected 
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6256 (127.0.0.1) connected 
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6022 (127.0.0.1) connected 
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 A (127.0.0.1) connected 
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6224 (127.0.0.1) connected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [SV guard] m1ValueSv = nan refused: not a finite number; no Modbus write; SV put back to 0.00 (current PV)
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [SV guard] m2ValueSv = nan refused: not a finite number; no Modbus write; SV put back to 0.00 (current PV)
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [SV guard] m3ValueSv = nan refused: not a finite number; no Modbus write; SV put back to 0.00 (current PV)
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [SV guard] m4ValueSv = nan refused: not a finite number; no Modbus write; SV put back to 0.00 (current PV)
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [SV guard] pump2HzSv = nan refused: not a finite number; no Modbus write; SV put back to 0.00 (current PV)
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() non-finite phase: write frames 0, [SV guard] warning lines 5 (after the first round 5), VfdRun start attempts 0
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus][Write request] device=ADAM-6224 (127.0.0.1) command=MV1 offset=0 input=30.000 raw=1229
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [HMI->ModbusServer] holdingRegister=0 raw=1229
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus][Write request] device=ADAM-6022 (127.0.0.1) command=Pump2Hz offset=10 input=30.000 raw=2048
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [HMI->ModbusServer] holdingRegister=4 raw=2048
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus][Write completed] device=ADAM-6224 (127.0.0.1) type=4 offset=0 count=1
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Modbus][Write completed] device=ADAM-6022 (127.0.0.1) type=4 offset=10 count=1
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Safety Interlock] DI0 is false/unknown; VfdRun was not energized.
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6256 (127.0.0.1) disconnected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6256 (127.0.0.1) Reply aborted due to connection closure.
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 A (127.0.0.1) disconnected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 A (127.0.0.1) Reply aborted due to connection closure.
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 B (127.0.0.1) disconnected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6217 B (127.0.0.1) Reply aborted due to connection closure.
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6224 (127.0.0.1) disconnected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6224 (127.0.0.1) Reply aborted due to connection closure.
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6224 (127.0.0.1) Reply aborted due to connection closure.
+QINFO  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6022 (127.0.0.1) disconnected 
+QWARN  : TestManagerSvGuard::nonFiniteRefusedValidWritten() ADAM-6022 (127.0.0.1) Reply aborted due to connection closure.
+PASS   : TestManagerSvGuard::nonFiniteRefusedValidWritten()
+PASS   : TestManagerSvGuard::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 2535ms
+********* Finished testing of TestManagerSvGuard *********

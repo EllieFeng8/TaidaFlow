@@ -626,18 +626,29 @@ TaidaFlow 內建的 REST API 只在本機 `127.0.0.1:<rest.port>`(預設 18080)�
 | PUT | `/api/settings/frequency` | 改讀取頻率設定值 | body `{"read_frequency":n}`,n > 0 | **會改** `settings.sqlite`(`app_settings`;目前沒有程式使用這個值,實際讀取週期不變) |
 | GET | `/api/modbus/mode` | `{"mode":"network"}` | — | 不改 |
 | PUT | `/api/modbus/mode` | 設定模式 | body `{"mode":"network"}` 或 `"standalone"` | **會改** 程式記憶體中的值(不影響 Modbus 連線;重啟後回 `network`) |
-| GET | `/api/sensor/range` | 感測器歷史列(舊到新,**不分頁**) | `from`、`to`:epoch 秒 | 不改 |
-| GET | `/api/sensor/rangeDateTime` | 同上 | `from`、`to`:`2026-09-28T10:00:00`(本機時間;`Z` 結尾 = UTC) | 不改 |
-| GET | `/api/sensor/rangeDateTimePage` | 分頁版 | 同上 + `page`(預設 1)、`pageSize`(預設 200,最多 1000) | 不改 |
+| GET | `/api/sensor/range` | 感測器歷史列,**分頁**(舊到新,可跨月;回應格式見下) | `from`、`to`:epoch 秒;選填 `page`、`pageSize` | 不改 |
+| GET | `/api/sensor/rangeDateTime` | 同上(分頁) | `from`、`to`:`2026-09-28T10:00:00`(本機時間;`Z` 結尾 = UTC)或 epoch 秒;選填 `page`、`pageSize` | 不改 |
+| GET | `/api/sensor/rangeDateTimePage` | 同 `rangeDateTime`(保留舊名稱) | 同上 | 不改 |
 | GET | `/api/sensor/last` | 本月最新一列(沒有 → 404) | — | 不改 |
-| GET | `/api/holding/range`、`/api/holding/rangeDateTime`、`/api/holding/rangeDateTimePage`、`/api/holding/last` | holding register 的同上查詢(目前不存 holding register,回空陣列 / 404) | 同 sensor | 不改 |
+| GET | `/api/holding/range`、`/api/holding/rangeDateTime`、`/api/holding/rangeDateTimePage`、`/api/holding/last` | holding register 的同上查詢(同樣分頁;目前不存 holding register,`items` 為空 / 404) | 同 sensor | 不改 |
 | GET | `/api/device/sn` | `{"sn":"sn000000"}` | — | `device_info.ini` 不存在時建立 |
 
 範例(cmd):`curl http://127.0.0.1/api/settings/frequency`、
 `curl -X PUT -H "Content-Type: application/json" -d "{\"read_frequency\":1000}" http://127.0.0.1/api/settings/frequency`。
 
-**注意**:`/api/sensor/range`、`rangeDateTime` 一次回傳整個區間(每秒一列,一個月約 260 萬列),大區間會讓畫面停住很久;
-大量資料請用 `rangeDateTimePage`。內部 port 要改(例如 18080 被別的程式占用):改 config.json 的 `rest.port`,再重新產生 nginx
+**區間查詢一律分頁**(w2-071 起;6 個 range 路由格式相同):
+
+- 回應:`{"page":1,"pageSize":200,"totalCount":5000,"totalPages":25,"hasPreviousPage":false,"hasNextPage":true,"items":[{"ts":...,"s1":...,...}]}`。
+  `items` 舊到新、可跨月;`totalCount` 是整個區間的列數;超過最後一頁時 `items` 為空陣列。
+- `page`:選填,預設 1;`pageSize`:選填,預設 200,**最多 1000**(給更大的值會當成 1000,回應的 `pageSize` 是實際值)。
+  兩者都要是正整數且不超過 2147483647,否則回 `400`。
+- `from`、`to`:必須在 `0` ~ `253402300799`(西元 9999-12-31 23:59:59 UTC)之間且 `to` 不小於 `from`,否則回 `400`,不會查詢。
+- 要取整個區間:從 `page=1` 開始,依 `hasNextPage` 逐頁取。例:
+  `curl "http://127.0.0.1/api/sensor/range?from=1759248000&to=1759334399&page=2&pageSize=1000"`。
+- **與舊版不同**:以前 `/api/sensor/range`、`/api/holding/range`、`rangeDateTime` 回傳整個區間的陣列 `[...]`(不分頁),
+  現在回傳上面的物件;原本讀陣列的程式要改讀 `items` 並逐頁取。
+
+內部 port 要改(例如 18080 被別的程式占用):改 config.json 的 `rest.port`,再重新產生 nginx
 設定(§3.4;`start-taidaflow` 也會自動做)。
 
 ---
@@ -917,3 +928,24 @@ TaidaFlow 的 log **由程式自己寫檔**(w2-064),啟動腳本不再把程式�
 - `launcher.log` 改為 `launcher-<日期>.log`,與程式的 log 放在同一個 log 資料夾;舊的 `launcher.log` 保留不動。
 - `-LogDir <資料夾>`:單次覆寫 `log.dir`,程式、nginx、腳本的 log 都寫到那裡(寫在 `config.effective.json` 交給程式與 nginx 設定產生器;
   `stop-taidaflow` 由 `taidaflow-app.json` 得知這個資料夾)。平常請改 config.json 的 `log.dir`。
+
+### 13.6 設備離線與重複警告的限流(w2-071、w2-072)
+
+設備斷線、COM port 打不開這類「每秒都會再發生一次」的問題,quiet log 只記**第一次**,之後**同一個來源最多每 60 秒一行**,
+那一行會附上「期間另外壓下幾次」(`N similar warning(s) held back since the previous one`);恢復時在 full log 記一行 info 收尾。
+
+- **ADAM 模組(Modbus TCP)離線**:
+  - 輪詢照常每秒執行,但該設備未連線時**不送出讀取、也不每次記錄**;每一段斷線期間只記一次
+    `Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).`。
+  - 重新連線**只由重連計時器做,每次失敗後隔 3 秒再試**(以前每次讀取都直接重連,等於每秒好幾次);每次重試在 full log 記
+    `[Modbus] <設備> reconnect attempt #N (offline for X s)`。
+  - 連線失敗的警告(`TCP socket error (...)`、`Connection refused` 等):第一次立即記,之後最多每 60 秒一行並附壓下次數。
+  - 恢復連線:full log `<設備> connected (connected again after X s offline, N reconnect attempt(s), M connection warning(s) held back)`。
+  - **寫入**(操作員從畫面按的設定)在未連線時仍**每次**記一行 `Device is not connected; request was not sent.`(操作員動作,次數少)。
+- **MS300 變頻器(Modbus RTU)的 COM port 打不開 / 讀不到**:未開啟時**最少隔 3 秒**才再試開 COM port(以前每秒一次);
+  連線失敗與故障碼讀取失敗的警告同樣「第一次 + 最多每 60 秒一行 + 壓下次數」;恢復時 full log 記
+  `[MS300] <port> open again after ...` 或 `[MS300] fault-status reads OK again after ...`。故障碼的讀取與警報行為不變。
+- **設定值不是有效數字**(NaN、無限大,例如網頁同步送來的異常值):不寫 Modbus、不會啟動變頻器,畫面上的設定值改回
+  上一次成功寫入的值(沒有時用目前的回授值);quiet log 記 `[SV guard] <點位> = nan refused ...`,同一點位最多每 60 秒一行。
+- `Schema file not found`(沒有 `settings_schema.sql` / `data_schema.sql`,正常情況):整個程式執行期間**最多一行**(w2-071)。
+- 例:一台 ADAM 整天離線,quiet log 約為「開始 2 行 + 每小時 60 行」;以前約每秒 8 行(一天約 70 萬行)。

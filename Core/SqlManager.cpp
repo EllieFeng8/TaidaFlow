@@ -85,143 +85,20 @@ bool SqlManager::setReadFrequency(int value, QString* errMsg)
     });
 }
 
-bool SqlManager::queryHoldingRangeJson(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)
-{
-    return queryHoldingRangeJsonPaged(from, to, 1, std::numeric_limits<int>::max(), out, errMsg);
-}
-
-bool SqlManager::queryHoldingRangeJsonPaged(qint64 from, qint64 to, int page, int pageSize, QJsonArray* out, QString* errMsg)
-{
-    return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
-        if (!out)
-        {
-            if (errMsg) *errMsg = "output array is null";
-            return false;
-        }
-        *out = QJsonArray();
-        if (to < from)
-        {
-            if (errMsg) *errMsg = "to < from";
-            return false;
-        }
-        if (page <= 0 || pageSize <= 0)
-        {
-            if (errMsg) *errMsg = "page and pageSize must be positive";
-            return false;
-        }
-
-        QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
-        QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
-
-        QDate iter = QDate(startDate.year(), startDate.month(), 1);
-        QDate endIter = QDate(endDate.year(), endDate.month(), 1);
-
-        qint64 skipRemaining = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
-        int takeRemaining = pageSize;
-
-        while (iter <= endIter)
-        {
-            if (takeRemaining <= 0)
-            {
-                break;
-            }
-
-            QString key = monthKey(iter);
-            QString filePath = dataFileForKey(key);
-            QFileInfo fi(filePath);
-            if (!fi.exists())
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QSqlDatabase db = openDataDb(key);
-            if (!db.isValid() || !db.isOpen())
-            {
-                if (errMsg) *errMsg = "db open failed";
-                return false;
-            }
-            if (!ensureDataSchema(db))
-            {
-                if (errMsg) *errMsg = "ensure schema failed";
-                return false;
-            }
-
-            QSqlQuery countQuery(db);
-            countQuery.prepare("SELECT COUNT(1) FROM holding_register WHERE timestamp >= :from AND timestamp <= :to");
-            countQuery.bindValue(":from", from);
-            countQuery.bindValue(":to", to);
-            if (!countQuery.exec() || !countQuery.next())
-            {
-                if (errMsg) *errMsg = countQuery.lastError().text();
-                return false;
-            }
-
-            qint64 monthCount = countQuery.value(0).toLongLong();
-            if (monthCount <= 0)
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            if (skipRemaining >= monthCount)
-            {
-                skipRemaining -= monthCount;
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QStringList columns;
-            columns << "timestamp";
-            for (int i = 0; i < kHoldingCount; ++i)
-            {
-                columns << QString("h%1").arg(i + 1);
-            }
-
-            int localOffset = static_cast<int>(skipRemaining);
-            skipRemaining = 0;
-
-            QSqlQuery query(db);
-            query.prepare(QString("SELECT %1 FROM holding_register WHERE timestamp >= :from AND timestamp <= :to ORDER BY timestamp LIMIT :limit OFFSET :offset")
-                              .arg(columns.join(", ")));
-            query.bindValue(":from", from);
-            query.bindValue(":to", to);
-            query.bindValue(":limit", takeRemaining);
-            query.bindValue(":offset", localOffset);
-            if (!query.exec())
-            {
-                if (errMsg) *errMsg = query.lastError().text();
-                return false;
-            }
-
-            while (query.next())
-            {
-                QJsonObject obj;
-                obj.insert("ts", query.value(0).toLongLong());
-                for (int i = 0; i < kHoldingCount; ++i)
-                {
-                    obj.insert(QString("h%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
-                }
-                out->append(obj);
-                --takeRemaining;
-                if (takeRemaining <= 0)
-                {
-                    break;
-                }
-            }
-
-            iter = iter.addMonths(1);
-        }
-        return true;
-    });
-}
-
 bool SqlManager::executeSqlFile(const QString& path, QSqlDatabase& db) const
 {
     QFile file(path);
     if (!file.exists())
     {
-        qWarning() << "Schema file not found" << path;
+        // w2-071 (review D-002): the caller then uses its built-in schema. A missing schema
+        // file is the normal installation (none is shipped), so the warning is written at most
+        // once per run (for the first missing file, settings or data) instead of every call.
+        if (!m_schemaMissingLogged.exchange(true))
+        {
+            qWarning().noquote() << QStringLiteral("Schema file not found \"%1\" - the built-in schema is used "
+                                                   "(logged once per run; later missing schema files are not logged)")
+                                            .arg(path);
+        }
         return false;
     }
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -295,6 +172,7 @@ SqlManager::~SqlManager()
             QSqlDatabase::removeDatabase(name);
         }
     }
+    m_dataSchemaReady.clear();   // w2-071
 
     if (QSqlDatabase::contains(kSettingsConnection))
     {
@@ -319,7 +197,7 @@ void SqlManager::setDataDirectory(const QString& path)
             m_rangeCountCache.clear();
             m_historyAnchor = HistoryAnchor{};
             m_sessionHistoryAnchors.clear();   // w2-052 (session ids are kept: stale rules unchanged)
-            m_historySchemaChecked.clear();
+            m_dataSchemaReady.clear();         // w2-071 (was m_historySchemaChecked)
         }
     });
 }
@@ -656,195 +534,206 @@ bool SqlManager::insertBatchSamplesJson(const QJsonArray& items, int* inserted, 
     });
 }
 
-bool SqlManager::queryRangeJson(qint64 from, qint64 to, QJsonArray* out, QString* errMsg)
+// ---------------------------------------------------------------------------
+// w2-071 (review D-001): REST range queries (sensor_data / holding_register).
+//
+// The month files are taken from a listing of the data directory
+// (sensorMonthFilesInRange, the w2-041 History listing) instead of walking every
+// calendar month from 'from' to 'to' with QDate::addMonths: a range like
+// 0 .. 9200000000000000 was billions of loop steps (and QDateTime::fromSecsSinceEpoch
+// is invalid far beyond year 9999).  Only files that exist are opened, oldest month
+// first - the same files, order and SQL as the former month loop, so the rows returned
+// are unchanged.  holding_register lives in the same sensor_<yyyyMM>.sqlite files.
+// The former unpaged queryRangeJson / queryHoldingRangeJson (pageSize INT_MAX) are
+// removed: every REST range route is paged (RESTManager, pageSize <= 1000).
+// SqlManager thread only (called inside runOnThread).
+// ---------------------------------------------------------------------------
+
+namespace
 {
-    return queryRangeJsonPaged(from, to, 1, std::numeric_limits<int>::max(), out, errMsg);
+    const QStringList& rangeValueColumns(bool holding)
+    {
+        static const QStringList sensor = []() {
+            QStringList list;
+            for (int i = 0; i < kSensorCount; ++i)
+                list << QStringLiteral("s%1").arg(i + 1);
+            return list;
+        }();
+        static const QStringList holdingColumns = []() {
+            QStringList list;
+            for (int i = 0; i < kHoldingCount; ++i)
+                list << QStringLiteral("h%1").arg(i + 1);
+            return list;
+        }();
+        return holding ? holdingColumns : sensor;
+    }
+}
+
+bool SqlManager::rangePageOnThread(bool holding, qint64 from, qint64 to, int page, int pageSize,
+                                   QJsonArray* out, QString* errMsg)
+{
+    if (!out)
+    {
+        if (errMsg) *errMsg = "output array is null";
+        return false;
+    }
+    *out = QJsonArray();
+    if (to < from)
+    {
+        if (errMsg) *errMsg = "to < from";
+        return false;
+    }
+    if (page <= 0 || pageSize <= 0)
+    {
+        if (errMsg) *errMsg = "page and pageSize must be positive";
+        return false;
+    }
+
+    const QString table = holding ? QStringLiteral("holding_register") : QStringLiteral("sensor_data");
+    const QStringList& valueColumns = rangeValueColumns(holding);
+
+    QList<SensorMonthFile> months = sensorMonthFilesInRange(from, to);   // newest first
+    std::reverse(months.begin(), months.end());                          // oldest first
+
+    qint64 skipRemaining = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
+    qint64 takeRemaining = pageSize;
+
+    for (const SensorMonthFile& month : std::as_const(months))
+    {
+        if (takeRemaining <= 0)
+            break;
+
+        QSqlDatabase db = openDataDb(month.key);
+        if (!db.isValid() || !db.isOpen())
+        {
+            if (errMsg) *errMsg = "db open failed";
+            return false;
+        }
+        if (!ensureDataSchema(db))
+        {
+            if (errMsg) *errMsg = "ensure schema failed";
+            return false;
+        }
+
+        QSqlQuery countQuery(db);
+        countQuery.prepare(QStringLiteral("SELECT COUNT(1) FROM %1 WHERE timestamp >= :from AND timestamp <= :to").arg(table));
+        countQuery.bindValue(":from", from);
+        countQuery.bindValue(":to", to);
+        if (!countQuery.exec() || !countQuery.next())
+        {
+            if (errMsg) *errMsg = countQuery.lastError().text();
+            return false;
+        }
+
+        const qint64 monthCount = countQuery.value(0).toLongLong();
+        if (monthCount <= 0)
+            continue;
+        if (skipRemaining >= monthCount)
+        {
+            skipRemaining -= monthCount;
+            continue;
+        }
+
+        const qint64 localOffset = skipRemaining;
+        skipRemaining = 0;
+
+        QSqlQuery query(db);
+        query.prepare(QStringLiteral("SELECT timestamp, %1 FROM %2 WHERE timestamp >= :from AND timestamp <= :to "
+                                     "ORDER BY timestamp LIMIT :limit OFFSET :offset")
+                          .arg(valueColumns.join(QStringLiteral(", ")), table));
+        query.bindValue(":from", from);
+        query.bindValue(":to", to);
+        query.bindValue(":limit", takeRemaining);
+        query.bindValue(":offset", localOffset);
+        if (!query.exec())
+        {
+            if (errMsg) *errMsg = query.lastError().text();
+            return false;
+        }
+
+        while (query.next())
+        {
+            QJsonObject obj;
+            obj.insert("ts", query.value(0).toLongLong());
+            for (int i = 0; i < valueColumns.size(); ++i)
+                obj.insert(valueColumns.at(i), QJsonValue::fromVariant(query.value(i + 1)));
+            out->append(obj);
+            if (--takeRemaining <= 0)
+                break;
+        }
+    }
+    return true;
+}
+
+bool SqlManager::rangeCountOnThread(bool holding, qint64 from, qint64 to, qint64* total, QString* errMsg)
+{
+    if (!total)
+    {
+        if (errMsg) *errMsg = "total is null";
+        return false;
+    }
+    *total = 0;
+    if (to < from)
+    {
+        if (errMsg) *errMsg = "to < from";
+        return false;
+    }
+
+    const QString table = holding ? QStringLiteral("holding_register") : QStringLiteral("sensor_data");
+    const QList<SensorMonthFile> months = sensorMonthFilesInRange(from, to);
+    for (const SensorMonthFile& month : months)
+    {
+        QSqlDatabase db = openDataDb(month.key);
+        if (!db.isValid() || !db.isOpen())
+        {
+            if (errMsg) *errMsg = "db open failed";
+            return false;
+        }
+        if (!ensureDataSchema(db))
+        {
+            if (errMsg) *errMsg = "ensure schema failed";
+            return false;
+        }
+
+        QSqlQuery query(db);
+        query.prepare(QStringLiteral("SELECT COUNT(1) FROM %1 WHERE timestamp >= :from AND timestamp <= :to").arg(table));
+        query.bindValue(":from", from);
+        query.bindValue(":to", to);
+        if (!query.exec() || !query.next())
+        {
+            if (errMsg) *errMsg = query.lastError().text();
+            return false;
+        }
+        *total += query.value(0).toLongLong();
+    }
+    return true;
 }
 
 bool SqlManager::queryRangeJsonPaged(qint64 from, qint64 to, int page, int pageSize, QJsonArray* out, QString* errMsg)
 {
     return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
-        if (!out)
-        {
-            if (errMsg) *errMsg = "output array is null";
-            return false;
-        }
-        *out = QJsonArray();
-        if (to < from)
-        {
-            if (errMsg) *errMsg = "to < from";
-            return false;
-        }
-        if (page <= 0 || pageSize <= 0)
-        {
-            if (errMsg) *errMsg = "page and pageSize must be positive";
-            return false;
-        }
+        return rangePageOnThread(false, from, to, page, pageSize, out, errMsg);
+    });
+}
 
-        QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
-        QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
-
-        QDate iter = QDate(startDate.year(), startDate.month(), 1);
-        QDate endIter = QDate(endDate.year(), endDate.month(), 1);
-
-        qint64 skipRemaining = static_cast<qint64>(page - 1) * static_cast<qint64>(pageSize);
-        int takeRemaining = pageSize;
-
-        while (iter <= endIter)
-        {
-            if (takeRemaining <= 0)
-            {
-                break;
-            }
-
-            QString key = monthKey(iter);
-            QString filePath = dataFileForKey(key);
-            QFileInfo fi(filePath);
-            if (!fi.exists())
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QSqlDatabase db = openDataDb(key);
-            if (!db.isValid() || !db.isOpen())
-            {
-                if (errMsg) *errMsg = "db open failed";
-                return false;
-            }
-            if (!ensureDataSchema(db))
-            {
-                if (errMsg) *errMsg = "ensure schema failed";
-                return false;
-            }
-
-            QSqlQuery countQuery(db);
-            countQuery.prepare("SELECT COUNT(1) FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to");
-            countQuery.bindValue(":from", from);
-            countQuery.bindValue(":to", to);
-            if (!countQuery.exec() || !countQuery.next())
-            {
-                if (errMsg) *errMsg = countQuery.lastError().text();
-                return false;
-            }
-
-            qint64 monthCount = countQuery.value(0).toLongLong();
-            if (monthCount <= 0)
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            if (skipRemaining >= monthCount)
-            {
-                skipRemaining -= monthCount;
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QStringList columns;
-            columns << "timestamp";
-            for (int i = 0; i < kSensorCount; ++i)
-            {
-                columns << QString("s%1").arg(i + 1);
-            }
-
-            int localOffset = static_cast<int>(skipRemaining);
-            skipRemaining = 0;
-
-            QSqlQuery query(db);
-            query.prepare(QString("SELECT %1 FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to ORDER BY timestamp LIMIT :limit OFFSET :offset")
-                              .arg(columns.join(", ")));
-            query.bindValue(":from", from);
-            query.bindValue(":to", to);
-            query.bindValue(":limit", takeRemaining);
-            query.bindValue(":offset", localOffset);
-            if (!query.exec())
-            {
-                if (errMsg) *errMsg = query.lastError().text();
-                return false;
-            }
-
-            while (query.next())
-            {
-                QJsonObject obj;
-                obj.insert("ts", query.value(0).toLongLong());
-                for (int i = 0; i < kSensorCount; ++i)
-                {
-                    obj.insert(QString("s%1").arg(i + 1), QJsonValue::fromVariant(query.value(i + 1)));
-                }
-                out->append(obj);
-                --takeRemaining;
-                if (takeRemaining <= 0)
-                {
-                    break;
-                }
-            }
-
-            iter = iter.addMonths(1);
-        }
-        return true;
+bool SqlManager::queryHoldingRangeJsonPaged(qint64 from, qint64 to, int page, int pageSize, QJsonArray* out, QString* errMsg)
+{
+    return runOnThread([this, from, to, page, pageSize, out, errMsg]() {
+        return rangePageOnThread(true, from, to, page, pageSize, out, errMsg);
     });
 }
 
 bool SqlManager::countSensorRange(qint64 from, qint64 to, qint64* total, QString* errMsg)
 {
     return runOnThread([this, from, to, total, errMsg]() {
-        if (!total)
-        {
-            if (errMsg) *errMsg = "total is null";
-            return false;
-        }
-        *total = 0;
-        if (to < from)
-        {
-            if (errMsg) *errMsg = "to < from";
-            return false;
-        }
+        return rangeCountOnThread(false, from, to, total, errMsg);
+    });
+}
 
-        QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
-        QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
-        QDate iter = QDate(startDate.year(), startDate.month(), 1);
-        QDate endIter = QDate(endDate.year(), endDate.month(), 1);
-
-        while (iter <= endIter)
-        {
-            QString key = monthKey(iter);
-            QString filePath = dataFileForKey(key);
-            QFileInfo fi(filePath);
-            if (!fi.exists())
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QSqlDatabase db = openDataDb(key);
-            if (!db.isValid() || !db.isOpen())
-            {
-                if (errMsg) *errMsg = "db open failed";
-                return false;
-            }
-            if (!ensureDataSchema(db))
-            {
-                if (errMsg) *errMsg = "ensure schema failed";
-                return false;
-            }
-
-            QSqlQuery query(db);
-            query.prepare("SELECT COUNT(1) FROM sensor_data WHERE timestamp >= :from AND timestamp <= :to");
-            query.bindValue(":from", from);
-            query.bindValue(":to", to);
-            if (!query.exec() || !query.next())
-            {
-                if (errMsg) *errMsg = query.lastError().text();
-                return false;
-            }
-            *total += query.value(0).toLongLong();
-
-            iter = iter.addMonths(1);
-        }
-
-        return true;
+bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)
+{
+    return runOnThread([this, from, to, total, errMsg]() {
+        return rangeCountOnThread(true, from, to, total, errMsg);
     });
 }
 
@@ -1260,16 +1149,12 @@ bool SqlManager::historyOpenMonth(HistoryMonth& month, QSqlDatabase* db, QString
         if (errMsg) *errMsg = QStringLiteral("db open failed");
         return false;
     }
-    if (!month.dbChecked && !m_historySchemaChecked.contains(month.file.key))
+    // w2-071: ensureDataSchema runs the schema statements only once per open connection
+    // (m_dataSchemaReady); it was the w2-045 m_historySchemaChecked set here.
+    if (!month.dbChecked && !ensureDataSchema(*db))
     {
-        // Once per month file and data directory (the schema statements take
-        // longer than a keyset page read).
-        if (!ensureDataSchema(*db))
-        {
-            if (errMsg) *errMsg = QStringLiteral("ensure schema failed");
-            return false;
-        }
-        m_historySchemaChecked.insert(month.file.key);
+        if (errMsg) *errMsg = QStringLiteral("ensure schema failed");
+        return false;
     }
     month.dbChecked = true;
     return true;
@@ -1865,67 +1750,6 @@ QStringList SqlManager::sensorDataFilesInRange(qint64 from, qint64 to)
     });
 }
 
-bool SqlManager::countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg)
-{
-    return runOnThread([this, from, to, total, errMsg]() {
-        if (!total)
-        {
-            if (errMsg) *errMsg = "total is null";
-            return false;
-        }
-        *total = 0;
-        if (to < from)
-        {
-            if (errMsg) *errMsg = "to < from";
-            return false;
-        }
-
-        QDate startDate = QDateTime::fromSecsSinceEpoch(from).date();
-        QDate endDate = QDateTime::fromSecsSinceEpoch(to).date();
-        QDate iter = QDate(startDate.year(), startDate.month(), 1);
-        QDate endIter = QDate(endDate.year(), endDate.month(), 1);
-
-        while (iter <= endIter)
-        {
-            QString key = monthKey(iter);
-            QString filePath = dataFileForKey(key);
-            QFileInfo fi(filePath);
-            if (!fi.exists())
-            {
-                iter = iter.addMonths(1);
-                continue;
-            }
-
-            QSqlDatabase db = openDataDb(key);
-            if (!db.isValid() || !db.isOpen())
-            {
-                if (errMsg) *errMsg = "db open failed";
-                return false;
-            }
-            if (!ensureDataSchema(db))
-            {
-                if (errMsg) *errMsg = "ensure schema failed";
-                return false;
-            }
-
-            QSqlQuery query(db);
-            query.prepare("SELECT COUNT(1) FROM holding_register WHERE timestamp >= :from AND timestamp <= :to");
-            query.bindValue(":from", from);
-            query.bindValue(":to", to);
-            if (!query.exec() || !query.next())
-            {
-                if (errMsg) *errMsg = query.lastError().text();
-                return false;
-            }
-            *total += query.value(0).toLongLong();
-
-            iter = iter.addMonths(1);
-        }
-
-        return true;
-    });
-}
-
 bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason, QString* errMsg,
                              qint64* insertedId)
 {
@@ -2356,6 +2180,24 @@ bool SqlManager::ensureSettingsDb()
 
 bool SqlManager::ensureDataSchema(QSqlDatabase& db) const
 {
+    // w2-071 (review D-002): the schema statements (file or built-in DDL, all "IF NOT EXISTS")
+    // run only the first time an open month connection is used; later calls on the same
+    // connection return at once. The flag is keyed by connection name and cleared when the
+    // connection is (re)opened by openDataDb, closed by shutdown(), or the data directory
+    // changes. A failed schema run leaves the flag unset, so the next call tries again.
+    // SqlManager thread only (every caller runs inside runOnThread / the history steps).
+    const QString connection = db.connectionName();
+    if (!connection.isEmpty() && m_dataSchemaReady.contains(connection))
+        return true;
+    if (!ensureDataSchemaStatements(db))
+        return false;
+    if (!connection.isEmpty())
+        m_dataSchemaReady.insert(connection);
+    return true;
+}
+
+bool SqlManager::ensureDataSchemaStatements(QSqlDatabase& db) const
+{
     // execute schema from file; fallback to built-in
     if (!executeSqlFile(m_dataSchemaPath, db))
     {
@@ -2434,6 +2276,8 @@ QSqlDatabase SqlManager::openDataDb(const QString& monthKey)
 
     if (!db.isOpen())
     {
+        // w2-071: a connection that is (re)opened gets its schema checked again.
+        m_dataSchemaReady.remove(connection);
         if (!ensureDirExists(m_dataDir))
         {
             qWarning() << "Failed to create data directory" << m_dataDir;
@@ -2500,6 +2344,7 @@ void SqlManager::shutdown()
                 closed << name;
             }
             m_dataConnectionNames.clear();
+            m_dataSchemaReady.clear();   // w2-071: the connections are gone
         },
         Qt::DirectConnection);
     m_thread->quit();

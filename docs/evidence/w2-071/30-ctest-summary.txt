@@ -1,0 +1,12 @@
+﻿=== all CTest suites 2026-09-29T13:43:11.6250662+08:00
+01 core-tests (Core\tests: w2-071 + w2-072, fresh): exit code 0 (58 s) 100% tests passed, 0 tests failed out of 6
+02 app-tests (App\tests): exit code 0 (15 s) 100% tests passed, 0 tests failed out of 3
+03 apphttpserver (Core\AppHttpServer\tests): exit code 0 (45 s) 1: Totals: 25 passed, 0 failed, 0 skipped, 0 blacklisted, 43316ms | 100% tests passed, 0 tests failed out of 1
+04 bench data (C++ generator, not a test): exit code 0 (2 s) 
+05 w2-041/w2-049 export + range harness (HistoryExport, SqlManager): exit code 0 (30 s) 1: Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 26684ms | 100% tests passed, 0 tests failed out of 1
+06 w2-045 stepped History range (SqlManager): exit code 0 (55 s) 1: Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 53242ms | 100% tests passed, 0 tests failed out of 1
+07 w2-052 History views (SqlManager, HistoryExport): exit code 0 (64 s) 1: Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 3897ms | 2: Totals: 11 passed, 0 failed, 0 skipped, 0 blacklisted, 57015ms | 100% tests passed, 0 tests failed out of 2
+08 w2-053 DI restart (SqlManager): exit code 0 (17 s) 1: Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 13966ms | 100% tests passed, 0 tests failed out of 1
+09 w2-067 SqlManager shutdown: exit code 0 (2 s) 1: Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 63ms | 100% tests passed, 0 tests failed out of 1
+10 wasm-mirror pack native tests: exit code 0 (11 s) 100% tests passed, 0 tests failed out of 2
+=== 0 suite(s) with a non-zero exit code

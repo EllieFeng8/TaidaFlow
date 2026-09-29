@@ -1,0 +1,43 @@
+﻿=== live-run mode=rest start=2026-09-29T13:51:35.7382814+08:00 runSec=95 exe=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+run-simulator: SIM_PID=147920 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-071\live\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+quiet log D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\logs\taidaflow-2026-09-29.log had 1597 line(s) before this run
+PASS  safety_probe (config.simulator.json, -DeviceProfile simulator) verdict SAFE before the launch
+PASS  REST 127.0.0.1:18080 answers GET / (after 4 s)
+PASS  /api/sensor/range default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 74537, items 200
+PASS  /api/sensor/range page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/sensor/range page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/sensor/range from=0&to=9200000000000000 -> 400 in 0.01475 s
+PASS  /api/sensor/range from=0&to=100000000000000 -> 400 in 0.00313 s
+PASS  /api/holding/range default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 0, items 0
+PASS  /api/holding/range page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/holding/range page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/holding/range from=0&to=9200000000000000 -> 400 in 0.001607 s
+PASS  /api/holding/range from=0&to=100000000000000 -> 400 in 0.001725 s
+PASS  /api/sensor/rangeDateTime default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 74538, items 200
+PASS  /api/sensor/rangeDateTime page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/sensor/rangeDateTime page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/sensor/rangeDateTime from=0&to=9200000000000000 -> 400 in 0.003163 s
+PASS  /api/sensor/rangeDateTime from=0&to=100000000000000 -> 400 in 0.002323 s
+PASS  /api/holding/rangeDateTime default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 0, items 0
+PASS  /api/holding/rangeDateTime page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/holding/rangeDateTime page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/holding/rangeDateTime from=0&to=9200000000000000 -> 400 in 0.002542 s
+PASS  /api/holding/rangeDateTime from=0&to=100000000000000 -> 400 in 0.002199 s
+PASS  /api/sensor/rangeDateTimePage default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 74538, items 200
+PASS  /api/sensor/rangeDateTimePage page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/sensor/rangeDateTimePage page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/sensor/rangeDateTimePage from=0&to=9200000000000000 -> 400 in 0.002335 s
+PASS  /api/sensor/rangeDateTimePage from=0&to=100000000000000 -> 400 in 0.004854 s
+PASS  /api/holding/rangeDateTimePage default -> 200, keys [hasNextPage,hasPreviousPage,items,page,pageSize,totalCount,totalPages], page 1, pageSize 200, totalCount 0, items 0
+PASS  /api/holding/rangeDateTimePage page=2&pageSize=5000 -> 200, pageSize 1000 (clamped to 1000)
+PASS  /api/holding/rangeDateTimePage page=4294967297 -> 400 {"error":"page and pageSize must be at most 2147483647","ok":false}
+PASS  /api/holding/rangeDateTimePage from=0&to=9200000000000000 -> 400 in 0.002471 s
+PASS  /api/holding/rangeDateTimePage from=0&to=100000000000000 -> 400 in 0.004026 s
+PASS  sensor rows present (74536) and identical through /api/sensor/range and /api/sensor/rangeDateTimePage
+PASS  app still running after 95 s
+taskkill /PID 50152 (no /F): SUCCESS: Sent termination signal to the process with PID 50152.
+app exited: True, exit code 
+simulator pid 147920 (started by this script) closed with taskkill (no /F): SUCCESS: Sent termination signal to the process with PID 147920.; exited True
+quiet log lines written by this run: 4; 'Schema file not found': 1
+PASS  'Schema file not found' <= 1 line in the quiet log of this run
+=== result: 0 failed check(s)

@@ -453,7 +453,7 @@ QString stateName(int outcome)
          : outcome == Cancelled ? QStringLiteral("cancelled")
                                 : QStringLiteral("error");
 }
-constexpr int kMaxFinishedEntries = 30;
+constexpr qint64 kInvalidIdLogIntervalMs = 60000;   // w2-071
 } // namespace
 
 HistoryExportManager::HistoryExportManager(TaidaFlowProxy *proxy, SqlManager *sql,
@@ -548,10 +548,43 @@ bool HistoryExportManager::sessionBusy(const QString &sessionId) const
     return sessionId == QStringLiteral("desktop") && m_desktopDialogOpen;
 }
 
+// w2-071 (review D-007 a): a request whose session id is not valid is not stored in the status
+// map (a client could otherwise add one entry per made-up id, and the page only ever looks up
+// its own valid id). Logged at most once per kInvalidIdLogIntervalMs with the number of
+// further ones since the previous line.
+void HistoryExportManager::logInvalidSessionId(const QString &sessionId)
+{
+    if (m_invalidIdLogClock.isValid() && m_invalidIdLogClock.elapsed() < kInvalidIdLogIntervalMs) {
+        ++m_invalidIdSuppressed;
+        return;
+    }
+    QString shown = sessionId.left(40);
+    for (QChar &c : shown) {
+        if (c.unicode() < 0x20 || c.unicode() > 0x7e)
+            c = QLatin1Char('?');
+    }
+    const QString more = m_invalidIdSuppressed > 0
+            ? QStringLiteral("; %1 more since the previous message").arg(m_invalidIdSuppressed)
+            : QString();
+    qWarning().noquote() << QStringLiteral("[Export] request with an invalid session id \"%1\"%2 (%3 chars) "
+                                           "rejected, not stored%4 (logged at most once per %5 s)")
+                                    .arg(shown, sessionId.size() > 40 ? QStringLiteral("...") : QString())
+                                    .arg(sessionId.size())
+                                    .arg(more)
+                                    .arg(kInvalidIdLogIntervalMs / 1000);
+    m_invalidIdSuppressed = 0;
+    m_invalidIdLogClock.start();
+}
+
 void HistoryExportManager::rejectRequest(const QString &sessionId, const QString &message,
                                          const QString &logReason)
 {
     qWarning().noquote() << QStringLiteral("[Export] request from \"%1\" rejected: %2").arg(sessionId, logReason);
+    // w2-071 (review D-007 b): the refusal of a session without a job queued/running is a
+    // finished entry (state "error"), pruned like done/cancelled ones. A busy session keeps its
+    // queued/running entry (only the message changes) and is not listed.
+    if (!sessionBusy(sessionId))
+        noteFinished(sessionId);
     QVariantMap entry = m_status.value(sessionId).toMap();
     if (entry.isEmpty()) {
         entry = QVariantMap{
@@ -571,8 +604,7 @@ void HistoryExportManager::requestExport(const QString &sessionId, double fromMs
     if (m_shutDown)
         return;
     if (!isValidSessionId(sessionId)) {
-        rejectRequest(sessionId, QStringLiteral("匯出失敗:連線端錯誤"),
-                      QStringLiteral("invalid session id"));
+        logInvalidSessionId(sessionId);   // w2-071: not stored (was an error entry)
         return;
     }
     qint64 fromSec = 0;
@@ -600,6 +632,13 @@ void HistoryExportManager::requestExport(const QString &sessionId, double fromMs
         // the dialog is open.
         m_desktopDialogOpen = true;
         QTimer::singleShot(0, this, [this, fromMs, toMs]() { openDesktopDialog(fromMs, toMs); });
+        return;
+    }
+    // w2-071 (review D-007 d): the queue of web exports is limited, so the number of
+    // queued/running entries in the status map is limited too.
+    if (m_queue.size() >= kMaxQueuedJobs) {
+        rejectRequest(sessionId, QStringLiteral("匯出排隊已達上限,請晚點再試"),
+                      QStringLiteral("export queue full (%1 queued)").arg(m_queue.size()));
         return;
     }
 
@@ -635,6 +674,7 @@ void HistoryExportManager::openDesktopDialog(double fromMs, double toMs)
             {QStringLiteral("downloadPort"), 0}, {QStringLiteral("savedPath"), QString()},
             {QStringLiteral("message"), QStringLiteral("已取消儲存")},
         };
+        noteFinished(QStringLiteral("desktop"));   // w2-071: pruned like other finished entries
         setEntry(QStringLiteral("desktop"), entry);
         emit jobFinished(QStringLiteral("desktop"), QStringLiteral("cancelled"));
         return;
@@ -733,8 +773,8 @@ void HistoryExportManager::cancelExport(const QString &sessionId)
         qInfo().noquote() << QStringLiteral("[Export] #%1 cancelled while queued (position %2): session %3")
                                      .arg(job.id).arg(i + 1).arg(sessionId);
         job.message = QStringLiteral("已取消");
+        noteFinished(sessionId);
         setEntry(sessionId, entryFor(job, QStringLiteral("cancelled"), 0));
-        m_finishedOrder.append(sessionId);
         publishQueue();
         emit jobFinished(sessionId, QStringLiteral("cancelled"));
         return;
@@ -770,14 +810,75 @@ QVariantMap HistoryExportManager::entryFor(const Job &job, const QString &state,
 void HistoryExportManager::setEntry(const QString &sessionId, const QVariantMap &entry)
 {
     m_status.insert(sessionId, entry);
-    // Keep the mirrored map small: drop the oldest finished entries.
-    while (m_finishedOrder.size() > kMaxFinishedEntries) {
-        const QString oldest = m_finishedOrder.takeFirst();
-        if (oldest != sessionId && !sessionBusy(oldest))
-            m_status.remove(oldest);
-    }
+    pruneStatus(sessionId);
     if (m_proxy)
         m_proxy->setHistoryExportStatus(m_status);
+}
+
+// w2-071 (review D-007): a session id finished (done / cancelled / error or a refused request):
+// listed once, as the newest finished entry.
+void HistoryExportManager::noteFinished(const QString &sessionId)
+{
+    m_finishedOrder.removeAll(sessionId);
+    m_finishedOrder.append(sessionId);
+}
+
+int HistoryExportManager::activeSessionCount() const
+{
+    int count = (m_running ? 1 : 0) + int(m_queue.size());
+    const QString desktop = QStringLiteral("desktop");
+    if (m_desktopDialogOpen && !(m_running && m_running->sessionId == desktop)) {
+        bool queued = false;
+        for (const Job &job : m_queue)
+            queued = queued || job.sessionId == desktop;
+        if (!queued)
+            ++count;
+    }
+    return count;
+}
+
+// Keep the mirrored map small (w2-071, review D-007 c/d):
+//  1. at most kMaxFinishedStatusEntries finished session ids: the oldest are removed from the
+//     map; an id that cannot be removed now (the entry just written, or its session is queued/
+//     running again) goes back to the end of the list instead of being dropped from it;
+//  2. hard limit on the map itself: kMaxFinishedStatusEntries + the sessions with a job queued/
+//     running (activeSessionCount). Anything above it that is not busy and not the entry just
+//     written is removed - first ids that are not in the finished list (should not exist),
+//     then the oldest finished ones.
+void HistoryExportManager::pruneStatus(const QString &keepSessionId)
+{
+    qsizetype attempts = m_finishedOrder.size();
+    while (m_finishedOrder.size() > kMaxFinishedStatusEntries && attempts-- > 0) {
+        const QString oldest = m_finishedOrder.takeFirst();
+        if (oldest == keepSessionId || sessionBusy(oldest)) {
+            m_finishedOrder.append(oldest);
+            continue;
+        }
+        m_status.remove(oldest);
+    }
+
+    const qsizetype cap = kMaxFinishedStatusEntries + activeSessionCount();
+    if (m_status.size() <= cap)
+        return;
+    QStringList candidates;
+    for (auto it = m_status.cbegin(); it != m_status.cend(); ++it) {
+        if (!m_finishedOrder.contains(it.key()))
+            candidates << it.key();
+    }
+    candidates << m_finishedOrder;
+    for (const QString &key : std::as_const(candidates)) {
+        if (m_status.size() <= cap)
+            break;
+        if (key == keepSessionId || sessionBusy(key))
+            continue;
+        m_status.remove(key);
+        m_finishedOrder.removeAll(key);
+    }
+    if (m_status.size() > cap) {
+        qWarning().noquote() << QStringLiteral("[Export] status map holds %1 entries, above its limit %2 "
+                                               "(all of them queued/running)")
+                                        .arg(m_status.size()).arg(cap);
+    }
 }
 
 void HistoryExportManager::publishQueue()
@@ -862,8 +963,8 @@ void HistoryExportManager::onFinished(quint64 id, int outcome, qint64 rowsWritte
     if (outcome == Done && !job->desktop && !downloadServerListening())
         qWarning().noquote() << "[Export] the download service is not running; the file is only on disk.";
 
+    noteFinished(job->sessionId);
     setEntry(job->sessionId, entryFor(*job, state, 0));
-    m_finishedOrder.append(job->sessionId);
     emit jobFinished(job->sessionId, state);
     startNext();
 }

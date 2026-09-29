@@ -1,0 +1,562 @@
+********* Start testing of TestHistoryExportStatus *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : TestHistoryExportStatus::initTestCase()
+QINFO  : TestHistoryExportStatus::invalidSessionIdsNotStored() [Export] web export folder C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-1 (max 20 files / 2147483648 bytes), download links -> port 8124
+QWARN  : TestHistoryExportStatus::invalidSessionIdsNotStored() [Export] request with an invalid session id "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"... (41 chars) rejected, not stored (logged at most once per 60 s)
+QINFO  : TestHistoryExportStatus::invalidSessionIdsNotStored() 1000 invalid session ids -> status entries 0, log lines 1
+QINFO  : TestHistoryExportStatus::invalidSessionIdsNotStored() [Export] stopped (export thread; /exports unmounted).
+PASS   : TestHistoryExportStatus::invalidSessionIdsNotStored()
+QINFO  : TestHistoryExportStatus::refusedRequestsPruned() [Export] web export folder C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-2 (max 20 files / 2147483648 bytes), download links -> port 8124
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-0" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-1" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-2" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-3" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-4" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-5" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-6" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-7" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-8" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-9" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-10" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-11" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-12" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-13" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-14" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-15" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-16" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-17" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-18" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-19" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-20" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-21" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-22" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-23" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-24" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-25" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-26" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-27" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-28" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-29" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-30" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-31" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-32" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-33" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-34" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-35" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-36" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-37" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-38" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-39" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-40" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-41" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-42" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-43" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-44" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-45" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-46" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-47" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-48" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-49" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-50" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-51" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-52" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-53" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-54" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-55" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-56" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-57" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-58" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-59" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-60" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-61" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-62" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-63" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-64" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-65" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-66" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-67" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-68" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-69" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-70" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-71" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-72" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-73" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-74" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-75" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-76" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-77" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-78" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-79" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-80" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-81" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-82" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-83" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-84" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-85" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-86" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-87" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-88" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-89" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-90" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-91" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-92" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-93" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-94" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-95" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-96" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-97" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-98" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::refusedRequestsPruned() [Export] request from "refused-99" rejected: invalid range 2000 .. 1000
+QINFO  : TestHistoryExportStatus::refusedRequestsPruned() 100 refused requests -> 30 entries
+QINFO  : TestHistoryExportStatus::refusedRequestsPruned() [Export] stopped (export thread; /exports unmounted).
+PASS   : TestHistoryExportStatus::refusedRequestsPruned()
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] web export folder C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-3 (max 20 files / 2147483648 bytes), download links -> port 8124
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #1 queued: session busy-run, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-3\busy-run_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #1 running: session busy-run (0 still queued)
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #2 queued: session busy-q1, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-3\busy-q1_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-0" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-1" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-2" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-3" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-4" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-5" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-6" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-7" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-8" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-9" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-10" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-11" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-12" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-13" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-14" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-15" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-16" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-17" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-18" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-19" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-20" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-21" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-22" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-23" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-24" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-25" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-26" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-27" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-28" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-29" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-30" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-31" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-32" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-33" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-34" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-35" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-36" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-37" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-38" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-39" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-40" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-41" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-42" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-43" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-44" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-45" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-46" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-47" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-48" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-49" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-50" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-51" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-52" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-53" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-54" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-55" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-56" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-57" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-58" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-59" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-60" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-61" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-62" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-63" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-64" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-65" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-66" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-67" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-68" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-69" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-70" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-71" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-72" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-73" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-74" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-75" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-76" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-77" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-78" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-79" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-80" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-81" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-82" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-83" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-84" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-85" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-86" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-87" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-88" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-89" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-90" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-run" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "busy-q1" rejected: this session already has an export queued or running
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-91" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-92" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-93" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-94" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-95" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-96" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-97" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-98" rejected: invalid range 2000 .. 1000
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] request from "other-99" rejected: invalid range 2000 .. 1000
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #1 0 row(s) to write
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #1 done: session busy-run, 24.2 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.1 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 228 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-3\busy-run_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #2 running: session busy-q1 (0 still queued)
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #2 0 row(s) to write
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] #2 done: session busy-q1, 15.9 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.2 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 2 file(s) / 456 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-3\busy-q1_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::busyEntriesKept() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::busyEntriesKept() after the busy jobs finished: 30 entries
+QINFO  : TestHistoryExportStatus::busyEntriesKept() [Export] stopped (export thread; /exports unmounted).
+PASS   : TestHistoryExportStatus::busyEntriesKept()
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] web export folder C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4 (max 20 files / 2147483648 bytes), download links -> port 8124
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #1 queued: session q-0, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-0_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #1 running: session q-0 (0 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #2 queued: session q-1, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-1_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #3 queued: session q-2, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-2_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #4 queued: session q-3, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-3_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #5 queued: session q-4, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-4_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #6 queued: session q-5, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-5_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #7 queued: session q-6, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-6_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #8 queued: session q-7, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-7_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #9 queued: session q-8, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-8_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #10 queued: session q-9, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-9_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #11 queued: session q-10, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-10_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #12 queued: session q-11, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-11_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #13 queued: session q-12, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-12_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #14 queued: session q-13, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-13_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #15 queued: session q-14, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-14_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #16 queued: session q-15, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-15_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #17 queued: session q-16, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-16_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #18 queued: session q-17, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-17_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #19 queued: session q-18, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-18_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #20 queued: session q-19, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-19_20260929_130722.csv
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #21 queued: session q-20, web (export folder), range 1 .. 8640000000000 s, file C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-20_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "q-21" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "q-22" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "q-23" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "q-24" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-0" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-1" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-2" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-3" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-4" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-5" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-6" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-7" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-8" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-9" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-10" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-11" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-12" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-13" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-14" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-15" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-16" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-17" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-18" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-19" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-20" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-21" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-22" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-23" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-24" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-25" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-26" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-27" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-28" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-29" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-30" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-31" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-32" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-33" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-34" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-35" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-36" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-37" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-38" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-39" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-40" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-41" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-42" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-43" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-44" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-45" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-46" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-47" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-48" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-49" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-50" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-51" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-52" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-53" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-54" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-55" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-56" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-57" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-58" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-59" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-60" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-61" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-62" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-63" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-64" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-65" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-66" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-67" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-68" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-69" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-70" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-71" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-72" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-73" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-74" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-75" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-76" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-77" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-78" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-79" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-80" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-81" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-82" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-83" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-84" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-85" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-86" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-87" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-88" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-89" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-90" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-91" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-92" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-93" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-94" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-95" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-96" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-97" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-98" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-99" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-100" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-101" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-102" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-103" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-104" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-105" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-106" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-107" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-108" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-109" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-110" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-111" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-112" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-113" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-114" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-115" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-116" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-117" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-118" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-119" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-120" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-121" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-122" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-123" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-124" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-125" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-126" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-127" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-128" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-129" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-130" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-131" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-132" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-133" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-134" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-135" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-136" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-137" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-138" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-139" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-140" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-141" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-142" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-143" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-144" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-145" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-146" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-147" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-148" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-149" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-150" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-151" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-152" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-153" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-154" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-155" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-156" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-157" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-158" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-159" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-160" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-161" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-162" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-163" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-164" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-165" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-166" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-167" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-168" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-169" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-170" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-171" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-172" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-173" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-174" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-175" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-176" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-177" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-178" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-179" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-180" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-181" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-182" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-183" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-184" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-185" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-186" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-187" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-188" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-189" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-190" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-191" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-192" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-193" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-194" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-195" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-196" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-197" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-198" rejected: export queue full (20 queued)
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] request from "more-199" rejected: export queue full (20 queued)
+QINFO  : TestHistoryExportStatus::queueLimit() queue full + 200 more requests -> 51 entries (limit 51)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #1 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #1 done: session q-0, 27.0 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.9 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 228 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-0_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #2 running: session q-1 (19 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #2 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #2 done: session q-1, 15.0 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.0 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 2 file(s) / 456 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-1_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #3 running: session q-2 (18 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #3 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #3 done: session q-2, 15.9 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.1 ms, total 2.2 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 3 file(s) / 684 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-2_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #4 running: session q-3 (17 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #4 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #4 done: session q-3, 15.2 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.8 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 4 file(s) / 912 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-3_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #5 running: session q-4 (16 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #5 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #5 done: session q-4, 14.6 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.3 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 5 file(s) / 1140 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-4_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #6 running: session q-5 (15 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #6 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #6 done: session q-5, 15.6 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.1 ms, total 2.4 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 6 file(s) / 1368 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-5_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #7 running: session q-6 (14 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #7 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #7 done: session q-6, 15.4 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.9 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 7 file(s) / 1596 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-6_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #8 running: session q-7 (13 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #8 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #8 done: session q-7, 15.6 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.9 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 8 file(s) / 1824 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-7_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #9 running: session q-8 (12 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #9 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #9 done: session q-8, 15.0 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 3.1 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 9 file(s) / 2052 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-8_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #10 running: session q-9 (11 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #10 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #10 done: session q-9, 15.1 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.1 ms, total 2.0 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 10 file(s) / 2280 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-9_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #11 running: session q-10 (10 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #11 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #11 done: session q-10, 14.7 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.8 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 11 file(s) / 2508 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-10_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #12 running: session q-11 (9 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #12 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #12 done: session q-11, 15.1 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.1 ms, total 2.4 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 12 file(s) / 2736 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-11_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #13 running: session q-12 (8 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #13 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #13 done: session q-12, 15.4 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.3 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 13 file(s) / 2964 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-12_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #14 running: session q-13 (7 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #14 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #14 done: session q-13, 15.4 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.0 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 14 file(s) / 3192 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-13_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #15 running: session q-14 (6 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #15 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #15 done: session q-14, 15.8 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.8 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 15 file(s) / 3420 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-14_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #16 running: session q-15 (5 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #16 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #16 done: session q-15, 14.9 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.3 ms, total 2.0 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 16 file(s) / 3648 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-15_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #17 running: session q-16 (4 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #17 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #17 done: session q-16, 14.9 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.4 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 17 file(s) / 3876 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-16_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #18 running: session q-17 (3 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #18 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #18 done: session q-17, 15.0 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.1 ms, total 1.9 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 18 file(s) / 4104 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-17_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #19 running: session q-18 (2 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #19 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #19 done: session q-18, 14.9 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 2.6 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 19 file(s) / 4332 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-18_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #20 running: session q-19 (1 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #20 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #20 done: session q-19, 15.0 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.7 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 20 file(s) / 4560 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-19_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #21 running: session q-20 (0 still queued)
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #21 0 row(s) to write
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] #21 done: session q-20, 15.3 ms; 0 row(s), 228 byte(s), 0 month file(s), count 0.0 ms, total 1.8 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 1 [q-0_20260929_130722.csv], failed 0 [], left 20 file(s) / 4560 byte(s); 228 byte(s) -> C:\Users\TED\AppData\Local\Temp\tst_historyexport_status-LHvgcz\exports-4\q-20_20260929_130722.csv
+QWARN  : TestHistoryExportStatus::queueLimit() [Export] the download service is not running; the file is only on disk.
+QINFO  : TestHistoryExportStatus::queueLimit() [Export] stopped (export thread; /exports unmounted).
+PASS   : TestHistoryExportStatus::queueLimit()
+PASS   : TestHistoryExportStatus::cleanupTestCase()
+Totals: 6 passed, 0 failed, 0 skipped, 0 blacklisted, 433ms
+********* Finished testing of TestHistoryExportStatus *********

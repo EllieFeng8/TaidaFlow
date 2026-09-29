@@ -294,22 +294,25 @@ log 資料夾(w2-065)、nginx port、REST port、Mirror port)全部由 config.js
 | PUT | `/api/settings/frequency` | 回 `{"ok":true,"read_frequency":n}` | body `{"read_frequency": n}`(n > 0) | `settings.sqlite` 的 `app_settings.read_frequency`;目前**沒有程式讀它**(Modbus 讀取週期不變) |
 | GET | `/api/modbus/mode` | `{"mode":"network"}` | — | 不改 |
 | PUT | `/api/modbus/mode` | 回 `{"ok":true,"mode":...}` | body `{"mode":"network"\|"standalone"}` | 只改 RESTManager 記憶體內的值並發 `modbusModeChanged`;Core **沒有接**這個 signal,不影響 Modbus;重啟後回 `network` |
-| GET | `/api/sensor/range` | `sensor_data` 列 `[{"ts":..,"s1":..,...,"s40":..}]`(舊到新,可跨月) | `from`、`to`:epoch 秒(也接受 `123+60` / `123-60`) | 不改 |
-| GET | `/api/holding/range` | `holding_register` 列(`h1..h100`) | 同上 | 不改 |
+| GET | `/api/sensor/range` | `sensor_data` 列,**分頁**:`{"page","pageSize","totalCount","totalPages","hasPreviousPage","hasNextPage","items":[{"ts":..,"s1":..,...,"s40":..}]}`(`items` 舊到新,可跨月) | `from`、`to`:epoch 秒(也接受 `123+60` / `123-60`);選填 `page`(預設 1)、`pageSize`(預設 200,最多 1000) | 不改 |
+| GET | `/api/holding/range` | `holding_register` 列(`h1..h100`),分頁格式同上 | 同上 | 不改 |
 | GET | `/api/device/sn` | `{"sn":"sn000000"}` | — | `device_info.ini` 不存在時建立 |
 | GET | `/api/sensor/last` | 本月最新一列;沒有 → 404 `{"ok":false,"error":"no data"}` | — | 本月資料檔不存在時建立(SqlManager 開檔) |
 | GET | `/api/holding/last` | 同上(holding) | — | 同上 |
-| GET | `/api/sensor/rangeDateTime` | 同 `/api/sensor/range` | `from`、`to`:ISO 8601(`2026-09-28T10:00:00` = 本機時間,結尾 `Z` = UTC)或 epoch 秒 | 不改 |
-| GET | `/api/sensor/rangeDateTimePage` | `{"page","pageSize","totalCount","totalPages","hasPreviousPage","hasNextPage","items":[...]}` | 同上 + `page`(預設 1)、`pageSize`(預設 200,最多 1000) | 不改 |
-| GET | `/api/holding/rangeDateTime` | 同 `/api/holding/range` | 同 `sensor/rangeDateTime` | 不改 |
-| GET | `/api/holding/rangeDateTimePage` | 分頁版 | 同 `sensor/rangeDateTimePage` | 不改 |
+| GET | `/api/sensor/rangeDateTime` | 同 `/api/sensor/range`(分頁) | `from`、`to`:ISO 8601(`2026-09-28T10:00:00` = 本機時間,結尾 `Z` = UTC)或 epoch 秒;選填 `page`、`pageSize` | 不改 |
+| GET | `/api/sensor/rangeDateTimePage` | 同 `/api/sensor/rangeDateTime`(保留舊名稱) | 同上 | 不改 |
+| GET | `/api/holding/rangeDateTime` | 同 `/api/holding/range`(分頁) | 同 `sensor/rangeDateTime` | 不改 |
+| GET | `/api/holding/rangeDateTimePage` | 同 `/api/holding/rangeDateTime`(保留舊名稱) | 同上 | 不改 |
 
 - 每個 `/api/...` 路徑都有 `OPTIONS`(CORS 預檢,200 + 上述標頭);`/api/settings/frequency` 的 OPTIONS 被註冊兩次(原程式),
   第一個生效,行為相同。錯誤:參數/JSON 不合法 400 `{"ok":false,"error":"..."}`、SQL 失敗 500、沒有的路徑 404。
-- 目前 Manager 存檔時**不寫** `holding_register`,holding 類 route 回空陣列 / 404 `no data`(原樣)。
-- **注意**:RESTManager 在**主執行緒**(UI)執行,每個查詢以 blocking 方式等 SqlManager 執行緒;`/api/sensor/range` 與
-  `/api/holding/range`、`rangeDateTime` 會一次回傳整個區間的所有列(不分頁),大區間(例如幾個月,每月約 260 萬列)
-  會讓 UI 停住很久並佔大量記憶體。大量資料請用 `...Page` 版本(每頁最多 1000 列)。這是原程式行為,本輪沒有改。
+- 目前 Manager 存檔時**不寫** `holding_register`,holding 類 range route 的 `items` 為空陣列、`/api/holding/last` 回 404 `no data`(原樣)。
+- **區間查詢一律分頁**(w2-071):上表 6 個 range 路由回應格式相同。`page`、`pageSize` 要是正整數且不超過 2147483647,
+  `pageSize` 大於 1000 時當成 1000(回應的 `pageSize` 是實際值);`from`、`to` 要在 `0` ~ `253402300799`
+  (9999-12-31 23:59:59 UTC)之間且 `to >= from`,否則 400、不查詢。超過最後一頁 `items` 為空陣列;要整個區間請依
+  `hasNextPage` 逐頁取。**與舊版不同**:以前 `range`、`rangeDateTime` 回傳整個區間的陣列 `[...]`(不分頁,大區間會讓 UI
+  停住並佔大量記憶體),現在回傳分頁物件,原本讀陣列的程式要改讀 `items`。月份資料檔由資料夾列檔取得(不再逐月走訪),
+  任何 `from`/`to` 都立即回應。RESTManager 仍在主執行緒以 blocking 方式等 SqlManager 執行緒,但每次最多讀 1000 列。
 - 實測:w2-060 的 REST 檢查(simulator profile、經 `127.0.0.1` 與區網 IP 的 nginx 80、PUT 寫入後讀回再寫回原值、區網直連 18080
   被拒)在 `docs/evidence/w2-060/`;w2-062 起由 `scripts\verify-release-package.ps1` 在打包資料夾上重驗 `/api/` 狀態、
   `/api/settings/frequency`、CORS 與 OPTIONS 預檢,以及內部 port 在區網位址被拒。
@@ -539,6 +542,11 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   fileName, url, downloadPort, savedPath, message}`;`state` = queued / running / done / cancelled / error;
   `queuePosition` 1 = 下一個、執行中 0。進度只在「比上次多 >= 1 個百分點**且**距上次 >= 500 ms」時更新
   (每 1% 與每 500 ms 取較少者),狀態轉換立即更新。已結束的項目最多保留 30 筆。
+- 狀態表上限(w2-071):`sessionId` 不合法的要求**不存入** `historyExportStatus`(只記 log,最多每 60 秒一行並附期間
+  另外拒絕的次數);合法 sessionId 被拒(例如區間錯誤;已有匯出進行中時仍照上面的規則只改原本那筆的 `message`)存成 `error`
+  項目,與 done / cancelled 一起算在「已結束最多 30 筆」內(最舊的先移除;排隊中/執行中的項目不會被移除);網頁匯出最多 20 筆排隊,
+  再要求 → `error`「匯出排隊已達上限,請晚點再試」。所以狀態表最多 30 + 1(執行中)+ 20(排隊)+ 1(desktop)筆。
+  欄位與 `state` 值不變。
 - 生成(`HistoryExportWorker`,專用低優先權執行緒):用**自己的唯讀 SQLite 連線**讀月份檔(新月份在前),
   以 keyset 分段(每段 <= 2000 列,每段是一個獨立的短 statement,讀鎖只持有一段),邊讀邊寫
   (1 MB 緩衝)到 `QSaveFile`,完成才改名成正式檔名;取消 / 失敗時暫存檔丟棄。記憶體不隨檔案大小成長。
@@ -580,7 +588,7 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
 
 QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
-SqlManager 關閉;
+SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表);
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -640,6 +648,12 @@ PS scripts\check-rest-routes.ps1
 :: 5i. (w2-067) SqlManager::shutdown() 的 QTest(關閉流程最後一步:寫入、關閉並 join、之後的呼叫被拒、資料檔完整、
 ::     第二次 shutdown 無作用;不用設備、不用 port,輸出 build\w2-067-qtest)
 docs\evidence\w2-067\tools\run-qtest.bat
+:: 5j. (w2-071 起) Core 單元測試 Core\tests(QTest + CTest,編譯真的 Core 原始碼,資料在暫存資料夾,
+::     REST 測試用系統挑的空 port,不用設備;輸出 build\core-tests):
+::     tst_rest_range_paging(6 個 range 路由分頁格式、page/pageSize > 2147483647 → 400、from/to 超界 1 秒內 400)、
+::     tst_sqlmanager_schema_once(每個月份連線只跑一次 schema、「Schema file not found」整個執行期間最多一行)、
+::     tst_historyexport_status(匯出狀態表上限:不合法 id 不存、拒絕項目與完成項目一起清理、忙碌項目不遺失)
+Core\tests\run-core-tests.bat fresh
 ```
 
 - 以前各輪的專用檢查工具(w2-043 區網轉發、w2-050 nginx / 1 GB Range、w2-060 REST 全表)在各自的 `docs/evidence/<輪次>/tools/`,

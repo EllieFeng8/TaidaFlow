@@ -1,0 +1,43 @@
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+-- Configuring done (0.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+ninja: no work to do.
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/DartConfiguration.tcl
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tst_w2067_sqlmanager_shutdown
+
+1: Test command: D:\repo\codex\qmlTester\taidaflow\build\w2-067-qtest\tst_w2067_sqlmanager_shutdown.exe
+1: Working Directory: D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest
+1: Test timeout computed to be: 120
+1: ********* Start testing of TestW2067SqlManagerShutdown *********
+1: Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+1: QWARN  : TestW2067SqlManagerShutdown::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-067-qtest/work/run-qLxPLv/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+1: PASS   : TestW2067SqlManagerShutdown::initTestCase()
+1: PASS   : TestW2067SqlManagerShutdown::writesBeforeShutdown()
+1: QINFO  : TestW2067SqlManagerShutdown::shutdownClosesAndJoins() [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+1: QINFO  : TestW2067SqlManagerShutdown::shutdownClosesAndJoins() shutdown() took 1 ms
+1: PASS   : TestW2067SqlManagerShutdown::shutdownClosesAndJoins()
+1: QWARN  : TestW2067SqlManagerShutdown::callsAfterShutdownRefused() [SQL] request after SqlManager shutdown ignored.
+1: QWARN  : TestW2067SqlManagerShutdown::callsAfterShutdownRefused() [SQL] request after SqlManager shutdown ignored.
+1: PASS   : TestW2067SqlManagerShutdown::callsAfterShutdownRefused()
+1: PASS   : TestW2067SqlManagerShutdown::dataFileIntact()
+1: PASS   : TestW2067SqlManagerShutdown::secondShutdownIsNoOp()
+1: PASS   : TestW2067SqlManagerShutdown::cleanupTestCase()
+1: Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 63ms
+1: ********* Finished testing of TestW2067SqlManagerShutdown *********
+1/1 Test #1: tst_w2067_sqlmanager_shutdown ....   Passed    0.09 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.10 sec

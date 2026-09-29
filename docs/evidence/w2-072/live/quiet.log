@@ -1,0 +1,7 @@
+2026-09-29 13:53:23.734 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-072-run/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 13:53:23.846 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+2026-09-29 13:53:27.864 [warning] ADAM-6217 B (127.0.0.210) TCP socket error (連線被拒). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-09-29 13:53:28.841 [warning] ADAM-6217 B (127.0.0.210) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-09-29 13:54:24.848 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 61 s, 18 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)
+2026-09-29 13:54:31.275 [warning] ADAM-6217 B (127.0.0.210) TCP socket error (連線被拒). (offline for 63 s, 9 reconnect attempt(s) so far; one every 3 s) (8 similar warning(s) held back since the previous one; at most one per 60 s)
+2026-09-29 13:55:26.842 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 122 s, 35 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)

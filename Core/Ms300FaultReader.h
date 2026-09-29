@@ -1,8 +1,11 @@
 #pragma once
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QString>
 #include <QTimer>
+
+#include "Modbus_Client.h"   // w2-072: RepeatedWarningLimiter
 
 class QModbusRtuSerialClient;
 
@@ -32,6 +35,14 @@ public:
     void start();
     void stop();
 
+    static constexpr int kConnectRetryMs = 3000;   // w2-072
+    // Tests only: a shorter warning interval than RepeatedWarningLimiter::kDefaultIntervalMs.
+    void setWarningIntervalMs(qint64 intervalMs)
+    {
+        m_connectionWarnings.setIntervalMs(intervalMs);
+        m_readWarnings.setIntervalMs(intervalMs);
+    }
+
 signals:
     void connectionChanged(bool connected, const QString &detail);
     void faultStatusRead(quint8 faultCode, quint8 warningCode, const QString &message);
@@ -41,6 +52,8 @@ signals:
 private:
     void pollFaultStatus();
     void publishFaultStatus(quint16 rawStatus);
+    void warnConnection(const QString &message);   // w2-072
+    void warnRead(const QString &message);         // w2-072
 
     Settings m_settings;
     QModbusRtuSerialClient *m_client = nullptr;
@@ -49,4 +62,14 @@ private:
     bool m_requestPending = false;
     bool m_hasLastStatus = false;
     quint16 m_lastStatus = 0;
+    // w2-072 (review D-003): while the serial port is not open a connection is tried at most every
+    // kConnectRetryMs; connection warnings and fault-status read failures are rate limited
+    // (first at once, then at most one per 60 s with the number held back); the end of an outage
+    // / of a series of read failures is logged once (info).
+    QElapsedTimer m_lastConnectAttempt;
+    QElapsedTimer m_outageClock;
+    int m_connectAttempts = 0;
+    RepeatedWarningLimiter m_connectionWarnings;
+    RepeatedWarningLimiter m_readWarnings;
+    qint64 m_readFailures = 0;
 };

@@ -1,0 +1,113 @@
+# Core unit tests (QTest + CTest). Separate small CTest project, like App/tests, so the
+# application's Qt Design Studio CMake is not touched. Each test compiles the application's own
+# Core source files (same folder tree, nothing copied) and runs without devices, without a
+# fixed network port (REST tests listen on a free port picked by the OS) and with its data in a
+# temporary folder. See README.md (section on the Core unit tests) and run-core-tests.bat.
+#
+#   w2-071: tst_rest_range_paging, tst_sqlmanager_schema_once, tst_historyexport_status
+#   w2-072: tst_modbusclient_offline, tst_ms300_offline, tst_manager_sv_guard
+cmake_minimum_required(VERSION 3.21)
+project(TaidaFlowCoreTests LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Network Sql HttpServer Test)
+qt_standard_project_setup()
+enable_testing()
+
+get_filename_component(CORE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+# Qt DLLs for ctest runs (no PATH setup needed).
+set(QT_BIN_DIR "${QT6_INSTALL_PREFIX}/${QT6_INSTALL_BINS}")
+
+function(taidaflow_core_test name)
+    cmake_parse_arguments(T "" "" "SOURCES;LIBS" ${ARGN})
+    qt_add_executable(${name} ${T_SOURCES})
+    set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE FALSE MACOSX_BUNDLE FALSE)
+    target_include_directories(${name} PRIVATE "${CORE_DIR}")
+    target_link_libraries(${name} PRIVATE Qt6::Core Qt6::Test ${T_LIBS})
+    if(MSVC)
+        target_compile_options(${name} PRIVATE /utf-8)
+    endif()
+    # Plain-text result per test in the build folder + the same on stdout.
+    add_test(NAME ${name} COMMAND ${name} -o "${CMAKE_CURRENT_BINARY_DIR}/${name}.result.txt,txt" -o "-,txt")
+    set_tests_properties(${name} PROPERTIES
+        ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_FORCE_STDERR_LOGGING=set:1"
+        TIMEOUT 300)
+endfunction()
+
+# w2-071 D1/D2 (review D-001): the REST range routes are paged; page/pageSize > INT_MAX and
+# from/to outside 0 .. 9999-12-31 are refused (400) at once; month files are listed, not walked.
+taidaflow_core_test(tst_rest_range_paging
+    SOURCES
+        tst_rest_range_paging.cpp
+        "${CORE_DIR}/RESTManager.h"
+        "${CORE_DIR}/RESTManager.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+    LIBS Qt6::Network Qt6::Sql Qt6::HttpServer)
+
+# w2-071 D3 (review D-002): the data schema runs once per month connection; "Schema file not
+# found" is logged at most once per run.
+taidaflow_core_test(tst_sqlmanager_schema_once
+    SOURCES
+        tst_sqlmanager_schema_once.cpp
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+    LIBS Qt6::Sql)
+
+# w2-071 D4 (review D-007): HistoryExportManager status map limits.
+taidaflow_core_test(tst_historyexport_status
+    SOURCES
+        tst_historyexport_status.cpp
+        "${CORE_DIR}/HistoryExport.h"
+        "${CORE_DIR}/HistoryExport.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer)
+
+# ---------------------------------------------------------------------------------------------
+# w2-072 (review D-003 / I-003): Modbus client / MS300 while offline, NaN/Inf set values.
+# ---------------------------------------------------------------------------------------------
+find_package(Qt6 6.8 REQUIRED COMPONENTS SerialBus SerialPort)
+
+# D1/D2: read() reports "not connected" once per outage, reconnects only every 3 s, connection
+# warnings rate limited (127.0.0.1 only: a refused port and a QTcpServer of the test).
+taidaflow_core_test(tst_modbusclient_offline
+    SOURCES
+        tst_modbusclient_offline.cpp
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+    LIBS Qt6::Network Qt6::SerialBus)
+
+# D3: MS300 with a serial port that does not exist: one connection attempt per 3 s, warnings
+# rate limited.
+taidaflow_core_test(tst_ms300_offline
+    SOURCES
+        tst_ms300_offline.cpp
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"   # (RepeatedWarningLimiter lives in Modbus_Client.h)
+    LIBS Qt6::Network Qt6::SerialBus Qt6::SerialPort)
+
+# D4/D5c: Manager refuses NaN/+Inf/-Inf set values (no Modbus write, no VFD start, SV put back);
+# 30.0 is written. Modbus TCP server of the test on 127.0.0.1.
+taidaflow_core_test(tst_manager_sv_guard
+    SOURCES
+        tst_manager_sv_guard.cpp
+        "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/manager.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/ModbusMapping.h"
+        "${CORE_DIR}/ModbusServerBridgeMapping.h"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::SerialBus Qt6::SerialPort)

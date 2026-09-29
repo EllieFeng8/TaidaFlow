@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QElapsedTimer>
 #include <QList>
 #include <QModbusDataUnit>
 #include <QObject>
@@ -8,6 +9,63 @@
 
 #include <memory>
 #include <vector>
+
+// w2-072 (review D-003): rate limit of the repeated warnings of one source (a device that is
+// offline, a set value that keeps being refused, ...). The first warning is written at once;
+// after that at most one per interval, and that one reports how many were held back since the
+// previous written one. reset() starts over (e.g. the device is connected again).
+// Used by ModbusClient, Ms300FaultReader and Manager; main thread only (no locking).
+class RepeatedWarningLimiter
+{
+public:
+    static constexpr qint64 kDefaultIntervalMs = 60000;
+
+    explicit RepeatedWarningLimiter(qint64 intervalMs = kDefaultIntervalMs) : m_intervalMs(intervalMs) {}
+    void setIntervalMs(qint64 intervalMs) { m_intervalMs = intervalMs; }
+
+    // One more warning. True: write it now (*suppressedBefore = warnings held back since the
+    // previous written one); false: hold it back.
+    bool allow(qint64 *suppressedBefore = nullptr)
+    {
+        ++m_total;
+        if (m_clock.isValid() && m_clock.elapsed() < m_intervalMs) {
+            ++m_suppressed;
+            return false;
+        }
+        if (suppressedBefore)
+            *suppressedBefore = m_suppressed;
+        m_suppressed = 0;
+        m_clock.start();
+        return true;
+    }
+    qint64 total() const { return m_total; }              // warnings since the last reset()
+    qint64 heldBack() const { return m_suppressed; }      // held back and not reported yet
+    qint64 totalHeldBack() const { return m_totalHeldBack + m_suppressed; }
+    void reset()
+    {
+        m_clock.invalidate();
+        m_suppressed = 0;
+        m_total = 0;
+        m_totalHeldBack = 0;
+    }
+    // Text appended to a written warning: "" or " (N similar warning(s) held back since the
+    // previous one)"; also adds N to totalHeldBack().
+    QString suffix(qint64 suppressedBefore)
+    {
+        m_totalHeldBack += suppressedBefore;
+        return suppressedBefore > 0
+                ? QStringLiteral(" (%1 similar warning(s) held back since the previous one; at most one "
+                                 "per %2 s)").arg(suppressedBefore).arg(m_intervalMs / 1000.0, 0, 'f', 0)
+                : QString();
+    }
+
+private:
+    QElapsedTimer m_clock;
+    qint64 m_intervalMs;
+    qint64 m_suppressed = 0;
+    qint64 m_total = 0;
+    qint64 m_totalHeldBack = 0;
+};
 
 class ModbusClient final : public QObject
 {
@@ -70,6 +128,20 @@ public:
 
     static QString displayName(Device device);
 
+    // w2-072 (review D-003): while a device is not connected
+    //  * read() sends nothing and reports "not connected" (deviceError) once per outage;
+    //    write() still reports every refused write (operator action);
+    //  * reconnects only through the reconnect timer: one attempt kReconnectDelayMs (3 s)
+    //    after the previous one failed (read()/write() never connect directly);
+    //  * connection failures (connectDevice() refused, errorOccurred) are reported through
+    //    deviceError: the first at once, then at most one per warning interval (60 s) with the
+    //    number held back; deviceConnectionChanged(true, ...) ends the outage (its detail then
+    //    says how long it lasted, the attempts and the warnings held back).
+    // deviceConnectionChanged is emitted on every state change as before.
+    static constexpr int kReconnectDelayMs = 3000;
+    // Tests only: a shorter warning interval than RepeatedWarningLimiter::kDefaultIntervalMs.
+    void setWarningIntervalMs(qint64 intervalMs);
+
 signals:
     void deviceConnectionChanged(Device device, bool connected, const QString &detail);
     void deviceError(Device device, const QString &message);
@@ -89,6 +161,7 @@ private:
     void connectDevice(DeviceSession *session);
     void scheduleReconnect(DeviceSession *session);
     bool ensureConnected(DeviceSession *session);
+    void reportConnectionProblem(DeviceSession *session, const QString &message);   // w2-072
 
     std::vector<std::unique_ptr<DeviceSession>> m_sessions;
     QSet<QString> m_pendingReadRequests;

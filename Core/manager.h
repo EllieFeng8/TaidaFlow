@@ -102,6 +102,12 @@ private:
     void handleAdam6224AnalogOutputs(const QList<quint16> &values);
     void syncCoilSvsFromAdam6256(int startAddress, const QList<quint16> &values);
     bool isSvWriteSuppressed(const char *svName);
+    // w2-072 (review I-003): NaN / +-Inf set values are refused before anything else (no Modbus
+    // write, no VFD start); the warning is rate limited per point and the proxy SV is put back
+    // to the last accepted value (or the PV when none is known yet).
+    bool rejectNonFiniteSv(ModbusMapping::CommandPoint point, const char *svName, double value);
+    void warnNonFinite(ModbusMapping::CommandPoint point, const QString &text);
+    void restoreSv(ModbusMapping::CommandPoint point, QString *restoredText);
     double decodeCommandRaw(ModbusMapping::CommandPoint point, quint16 raw) const;
     void logStartupSyncProgress();
     // w2-036: DI1 leak -> leakDetectedPv; DI2 makeup-pump OL interlock.
@@ -169,4 +175,10 @@ private:
     int m_suppressedSvWrites = 0;
     // Every Modbus write request handed to ModbusClient (HMI, bridge, safety).
     int m_modbusWriteRequests = 0;
+    // w2-072 (review I-003): last set value accepted for M1..M4 / Pump2Hz (written to the
+    // device, or taken from it by the startup sync), per CommandPoint; the rate limit of the
+    // "not a finite number" warning per CommandPoint; true while restoreSv() writes the proxy.
+    QHash<int, double> m_lastAcceptedSv;
+    QHash<int, RepeatedWarningLimiter> m_nonFiniteWarnings;
+    bool m_restoringSv = false;
 };

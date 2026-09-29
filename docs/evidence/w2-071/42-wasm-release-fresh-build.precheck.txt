@@ -1,0 +1,2 @@
+﻿processes before the wasm build (by name cl, clang++, clang, wasm-ld, em++, emcc, ninja): 0 
+(first run 13:2x reported 2 unidentified processes right after the CTest script ended; that build is replaced by this re-run)

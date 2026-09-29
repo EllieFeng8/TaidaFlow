@@ -39,6 +39,14 @@ constexpr quint16 kDefaultDownloadPort = 8124;
 constexpr int kMaxExportFiles = 20;
 constexpr qint64 kMaxExportBytes = 2LL * 1024 * 1024 * 1024;   // 2 GB
 constexpr int kDefaultChunkRows = 2000;
+// w2-071 (review D-007): size limits of HistoryExportManager's status map
+// (TaidaFlowProxy::historyExportStatus). At most kMaxFinishedStatusEntries entries of sessions
+// that have no job queued/running (done / cancelled / error, including refused requests), plus
+// one entry per session with a job queued or running; at most kMaxQueuedJobs web jobs wait
+// in the queue (a further request is refused with an error entry). So the map never holds more
+// than kMaxFinishedStatusEntries + 1 (running) + kMaxQueuedJobs + 1 (desktop) = 52 entries.
+constexpr int kMaxFinishedStatusEntries = 30;
+constexpr int kMaxQueuedJobs = 20;
 
 // History page column titles (Td.historyTitle), shared by the page and the CSV.
 QVariantList historyColumnTitles();
@@ -181,6 +189,11 @@ private:
     void startNext();
     bool sessionBusy(const QString &sessionId) const;
     void setEntry(const QString &sessionId, const QVariantMap &entry);
+    // w2-071 (review D-007)
+    void pruneStatus(const QString &keepSessionId);
+    int activeSessionCount() const;
+    void noteFinished(const QString &sessionId);
+    void logInvalidSessionId(const QString &sessionId);
     QVariantMap entryFor(const Job &job, const QString &state, int queuePosition) const;
     void publishQueue();
     void publishRunning(bool force);
@@ -203,6 +216,9 @@ private:
     bool m_shutDown = false;
     QVariantMap m_status;
     QStringList m_finishedOrder;       // finished session ids, oldest first (pruning)
+    // w2-071: requests with an invalid session id are only logged, at most once per 60 s.
+    QElapsedTimer m_invalidIdLogClock;
+    qint64 m_invalidIdSuppressed = 0;
     QElapsedTimer m_lastPublishClock;
     int m_lastPublishedProgress = 0;
 };

@@ -1,0 +1,155 @@
+********* Start testing of TestRestRangePaging *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+QWARN  : TestRestRangePaging::initTestCase() Schema file not found "C:/Users/TED/AppData/Local/Temp/tst_rest_range_paging-pehost/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+QINFO  : TestRestRangePaging::initTestCase() Device SN: "sn000000"
+QINFO  : TestRestRangePaging::initTestCase() Running on http://127.0.0.1: 61364 /
+QINFO  : TestRestRangePaging::initTestCase() REST test server on 127.0.0.1:61364, data C:/Users/TED/AppData/Local/Temp/tst_rest_range_paging-pehost
+PASS   : TestRestRangePaging::initTestCase()
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range default)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/range page INT_MAX)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range default)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/range page INT_MAX)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime default)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTime page INT_MAX)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime default)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTime page INT_MAX)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage default)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/sensor/rangeDateTimePage page INT_MAX)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage default)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage page 2 (month boundary))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage page 3 (last))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage page 4 (past the end))
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage pageSize 5000 -> 1000)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage pageSize 7 page 36)
+PASS   : TestRestRangePaging::pagedFormat(/api/holding/rangeDateTimePage page INT_MAX)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/range page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/range page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/range pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/range page=4294967296+1)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/range page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/range page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/range pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/range page=4294967296+1)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTime page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTime page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTime pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTime page=4294967296+1)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTime page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTime page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTime pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTime page=4294967296+1)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTimePage page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTimePage page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTimePage pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/sensor/rangeDateTimePage page=4294967296+1)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTimePage page=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTimePage page=2147483648)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTimePage pageSize=4294967297)
+PASS   : TestRestRangePaging::pageAboveIntMax(/api/holding/rangeDateTimePage page=4294967296+1)
+PASS   : TestRestRangePaging::invalidPaging()
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range to=9200000000000000) /api/sensor/range?from=0&to=9200000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from=0&to=100000000000000) /api/sensor/range?from=0&to=100000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range to=253402300800) /api/sensor/range?from=0&to=253402300800 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range both huge) /api/sensor/range?from=9000000000000000&to=9200000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from > to) /api/sensor/range?from=200&to=100 -> 400 in 0 ms: {"error":"invalid from/to","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from=-5) /api/sensor/range?from=-5&to=100 -> 400 in 1 ms: {"error":"invalid from/to","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/range from=-5)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range to=9200000000000000) /api/holding/range?from=0&to=9200000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from=0&to=100000000000000) /api/holding/range?from=0&to=100000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range to=253402300800) /api/holding/range?from=0&to=253402300800 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range both huge) /api/holding/range?from=9000000000000000&to=9200000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from > to) /api/holding/range?from=200&to=100 -> 400 in 0 ms: {"error":"invalid from/to","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from=-5) /api/holding/range?from=-5&to=100 -> 400 in 0 ms: {"error":"invalid from/to","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/range from=-5)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime to=9200000000000000) /api/sensor/rangeDateTime?from=0&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from=0&to=100000000000000) /api/sensor/rangeDateTime?from=0&to=100000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime to=253402300800) /api/sensor/rangeDateTime?from=0&to=253402300800 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime both huge) /api/sensor/rangeDateTime?from=9000000000000000&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from > to) /api/sensor/rangeDateTime?from=200&to=100 -> 400 in 1 ms: {"error":"to < from","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from=-5) /api/sensor/rangeDateTime?from=-5&to=100 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTime from=-5)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime to=9200000000000000) /api/holding/rangeDateTime?from=0&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from=0&to=100000000000000) /api/holding/rangeDateTime?from=0&to=100000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime to=253402300800) /api/holding/rangeDateTime?from=0&to=253402300800 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime both huge) /api/holding/rangeDateTime?from=9000000000000000&to=9200000000000000 -> 400 in 0 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from > to) /api/holding/rangeDateTime?from=200&to=100 -> 400 in 1 ms: {"error":"to < from","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from=-5) /api/holding/rangeDateTime?from=-5&to=100 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTime from=-5)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage to=9200000000000000) /api/sensor/rangeDateTimePage?from=0&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from=0&to=100000000000000) /api/sensor/rangeDateTimePage?from=0&to=100000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage to=253402300800) /api/sensor/rangeDateTimePage?from=0&to=253402300800 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage both huge) /api/sensor/rangeDateTimePage?from=9000000000000000&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from > to) /api/sensor/rangeDateTimePage?from=200&to=100 -> 400 in 1 ms: {"error":"to < from","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from=-5) /api/sensor/rangeDateTimePage?from=-5&to=100 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/sensor/rangeDateTimePage from=-5)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage to=9200000000000000) /api/holding/rangeDateTimePage?from=0&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage to=9200000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from=0&to=100000000000000) /api/holding/rangeDateTimePage?from=0&to=100000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from=0&to=100000000000000)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage to=253402300800) /api/holding/rangeDateTimePage?from=0&to=253402300800 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage to=253402300800)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage both huge) /api/holding/rangeDateTimePage?from=9000000000000000&to=9200000000000000 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage both huge)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from > to) /api/holding/rangeDateTimePage?from=200&to=100 -> 400 in 1 ms: {"error":"to < from","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from > to)
+QINFO  : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from=-5) /api/holding/rangeDateTimePage?from=-5&to=100 -> 400 in 1 ms: {"error":"from/to out of range (0 .. 253402300799 epoch seconds, 9999-12-31T23:59:59Z)","ok":false}
+PASS   : TestRestRangePaging::rangeOutOfBounds(/api/holding/rangeDateTimePage from=-5)
+PASS   : TestRestRangePaging::sameItemsAllRoutes()
+QINFO  : TestRestRangePaging::sqlManagerHugeRangeFast() SqlManager 0 .. 9200000000000000: 500 rows (page of 500), holding 500, 11 ms
+QINFO  : TestRestRangePaging::sqlManagerHugeRangeFast() SqlManager 0 .. 100000000000000: 500 rows (page of 500), holding 500, 10 ms
+QINFO  : TestRestRangePaging::sqlManagerHugeRangeFast() SqlManager 0 .. 9223372036854775807: 500 rows (page of 500), holding 500, 11 ms
+PASS   : TestRestRangePaging::sqlManagerHugeRangeFast()
+QINFO  : TestRestRangePaging::cleanupTestCase() [SQL] SqlManager stopped: worker thread finished, 3 SQLite connection(s) closed (data_202607, data_202608, settings).
+PASS   : TestRestRangePaging::cleanupTestCase()
+Totals: 107 passed, 0 failed, 0 skipped, 0 blacklisted, 3923ms
+********* Finished testing of TestRestRangePaging *********

@@ -1,0 +1,38 @@
+﻿=== live-run mode=offline start=2026-09-29T13:53:15.5863707+08:00 runSec=130 exe=D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+run-simulator: SIM_PID=122080 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-072\live\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+test config D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-072\config.offline-adam6217b.json: device hosts 127.0.0.201, 127.0.0.202, 127.0.0.210, 127.0.0.204, 127.0.0.205
+PASS  test config: every device host is 127.x
+PASS  test config: devices.adam6217b.host = 127.0.0.210
+PASS  gate 1: safety_probe config.simulator.json -DeviceProfile simulator -> exit 0 (SAFE)
+PASS  gate 2: safety_probe test config -> exit 5; not-ready endpoints: device 127.0.0.210:502 [effective devices.adam6217b (file)] -> loopback, nobody listening -> SIMULATOR NOT READY (start scripts\run-simulator.ps1 first); nothing UNSAFE / BUSY
+app pid 108420 config D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-072\config.offline-adam6217b.json
+PASS  REST 127.0.0.1:18080 answers GET / (after 1 s)
+PASS  app still running after 130 s
+taskkill /PID 108420 (no /F): SUCCESS: Sent termination signal to the process with PID 108420.
+app exited: True, exit code 
+simulator pid 122080 (started by this script) closed with taskkill (no /F): SUCCESS: Sent termination signal to the process with PID 122080.; exited True
+--- analyse-offline: quiet.log 7 line(s), full.log 4239 line(s)
+full log covers 13:53:23 .. 13:55:33 = 130 s
+PASS  the app ran >= 120 s (full log span)
+quiet log lines of ADAM-6217 B (127.0.0.210):
+    2026-09-29 13:53:27.864 [warning] ADAM-6217 B (127.0.0.210) TCP socket error (連線被拒). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+    2026-09-29 13:53:28.841 [warning] ADAM-6217 B (127.0.0.210) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+    2026-09-29 13:54:31.275 [warning] ADAM-6217 B (127.0.0.210) TCP socket error (連線被拒). (offline for 63 s, 9 reconnect attempt(s) so far; one every 3 s) (8 similar warning(s) held back since the previous one; at most one per 60 s)
+PASS  offline device warnings in the quiet log: 3 (<= 4)
+quiet log lines of MS300:
+    2026-09-29 13:53:23.846 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+    2026-09-29 13:54:24.848 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 61 s, 18 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)
+    2026-09-29 13:55:26.842 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 122 s, 35 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)
+PASS  MS300 warnings in the quiet log: 3 (<= 4)
+reconnect attempts of 127.0.0.210 in the full log: 18; gaps between attempts 7.1,7.0,7.1,7.1,7.1,7.0,7.0,7.1,7.0,7.0,7.1,7.0,7.0,7.1,7.1,7.0,7.1 s; delay after the previous attempt ended 3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 s
+PASS  reconnect attempts at least 3 s apart (min gap 7.03 s)
+PASS  each attempt starts >= 3 s after the previous one ended (min 2.99 s)
+MS300 connection attempts (logged, #2..): 36; gaps 3.0,3.0,4.0,4.0,4.0,4.0,4.0,3.0,4.0,3.0,4.0,4.0,3.0,4.0,3.0,3.0,4.0,4.0,4.0,4.0,4.0,4.0,3.0,3.0,4.0,3.0,4.0,3.0,4.0,4.0,3.0,4.0,3.0,4.0,3.0 s
+PASS  MS300 connection attempts at least ~3 s apart (min 3.00 s; poll timer 1 s)
+PASS  127.0.0.201 connected (1x), [Modbus][Read] lines 1170, warnings in the quiet log 0
+PASS  127.0.0.202 connected (1x), [Modbus][Read] lines 1040, warnings in the quiet log 0
+PASS  127.0.0.204 connected (1x), [Modbus][Read] lines 0, warnings in the quiet log 0
+PASS  127.0.0.205 connected (1x), [Modbus][Read] lines 130, warnings in the quiet log 0
+before (review evidence docs\evidence\w2-057\10-live-ps1\app.log, former code, devices offline): 260 of 307 lines are 'Device is not connected; request was not sent.', 42 are [MS300] lines
+--- analyse-offline: 0 failed check(s)
+=== result: 0 failed check(s)

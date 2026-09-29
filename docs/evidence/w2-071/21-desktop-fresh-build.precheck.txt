@@ -1,0 +1,1 @@
+﻿processes before the build (by name cl, clang++, clang, wasm-ld, em++, emcc, ninja): 0

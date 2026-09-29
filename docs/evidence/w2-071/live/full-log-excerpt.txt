@@ -1,0 +1,40 @@
+﻿2026-09-29 12:01:12.065 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+2026-09-29 12:01:13.063 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+2026-09-29 12:01:15.118 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/data_schema.sql"
+2026-09-29 12:01:15.134 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-09-29 12:01:15.150 [info] [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+2026-09-29 12:01:15.150 [info] [Core] shutdown complete in 15 ms
+2026-09-29 13:31:36.291 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 13:31:36.314 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-29 13:31:36.314 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-29 13:31:36.314 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-29 13:31:36.314 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+2026-09-29 13:31:36.314 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)
+2026-09-29 13:33:08.196 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-09-29 13:33:08.205 [info] [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+2026-09-29 13:33:08.205 [info] [Core] shutdown complete in 9 ms
+2026-09-29 13:51:41.824 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/runtime-cwd/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 13:51:41.847 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-29 13:51:41.847 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-29 13:51:41.847 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-29 13:51:41.847 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows, from/to epoch seconds
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows, from/to epoch seconds
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows, from/to ISO date-time
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000)
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows, from/to ISO date-time
+2026-09-29 13:51:41.847 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000)
+2026-09-29 13:53:14.230 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-09-29 13:53:14.240 [info] [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+2026-09-29 13:53:14.240 [info] [Core] shutdown complete in 9 ms

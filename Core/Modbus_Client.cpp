@@ -9,8 +9,6 @@
 #include <QVariant>
 
 namespace {
-constexpr int kReconnectDelayMs = 3000;
-
 // Test-only device address switch.  TAIDAFLOW_DEVICE_PROFILE=simulator points the five
 // ADAM sessions at Adam60xxSimulator (127.0.0.201..205, same port and unit id), whatever
 // host config.json gives (w2-062).  Unset (or empty) keeps the configured addresses; any
@@ -72,7 +70,39 @@ struct ModbusClient::DeviceSession
     DeviceConfig config;
     QModbusTcpClient *client = nullptr;
     QTimer *reconnectTimer = nullptr;
+    // w2-072 (review D-003): the current outage (from the first failure until connected).
+    bool inOutage = false;
+    bool notConnectedReported = false;     // read() reported "not connected" in this outage
+    int reconnectAttempts = 0;             // connection attempts in this outage
+    QElapsedTimer outageClock;
+    RepeatedWarningLimiter connectionWarnings;
 };
+
+void ModbusClient::setWarningIntervalMs(qint64 intervalMs)
+{
+    for (const auto &session : m_sessions)
+        session->connectionWarnings.setIntervalMs(intervalMs);
+}
+
+// w2-072: a connection failure of an outage (connectDevice() refused, errorOccurred while not
+// connected). Starts the outage; the warning (deviceError) is rate limited per device.
+void ModbusClient::reportConnectionProblem(DeviceSession *session, const QString &message)
+{
+    if (!session->inOutage) {
+        session->inOutage = true;
+        session->outageClock.start();
+    }
+    qint64 heldBack = 0;
+    if (session->connectionWarnings.allow(&heldBack)) {
+        emit deviceError(session->config.device,
+                         QStringLiteral("%1 (offline for %2 s, %3 reconnect attempt(s) so far; one every %4 s)%5")
+                                 .arg(message.isEmpty() ? QStringLiteral("Connection failed.") : message)
+                                 .arg(session->outageClock.elapsed() / 1000)
+                                 .arg(session->reconnectAttempts)
+                                 .arg(kReconnectDelayMs / 1000)
+                                 .arg(session->connectionWarnings.suffix(heldBack)));
+    }
+}
 
 QList<ModbusClient::DeviceConfig> ModbusClient::defaultDeviceConfigs()
 {
@@ -137,12 +167,30 @@ ModbusClient::ModbusClient(const QList<DeviceConfig> &requestedConfigs, QObject 
                 [this, rawSession](QModbusDevice::State state) {
             if (state == QModbusDevice::ConnectedState) {
                 rawSession->reconnectTimer->stop();
-                emit deviceConnectionChanged(rawSession->config.device, true, {});
+                // w2-072: the end of an outage is logged once (Manager logs this signal as info).
+                QString detail;
+                if (rawSession->inOutage) {
+                    detail = QStringLiteral("(connected again after %1 s offline, %2 reconnect attempt(s), "
+                                            "%3 connection warning(s) held back)")
+                                     .arg(rawSession->outageClock.elapsed() / 1000.0, 0, 'f', 1)
+                                     .arg(rawSession->reconnectAttempts)
+                                     .arg(rawSession->connectionWarnings.totalHeldBack());
+                }
+                rawSession->inOutage = false;
+                rawSession->notConnectedReported = false;
+                rawSession->reconnectAttempts = 0;
+                rawSession->outageClock.invalidate();
+                rawSession->connectionWarnings.reset();
+                emit deviceConnectionChanged(rawSession->config.device, true, detail);
                 return;
             }
 
             if (state == QModbusDevice::UnconnectedState) {
                 const QString detail = rawSession->client->errorString();
+                if (!rawSession->inOutage) {
+                    rawSession->inOutage = true;
+                    rawSession->outageClock.start();
+                }
                 emit deviceConnectionChanged(rawSession->config.device, false, detail);
                 if (m_autoReconnect)
                     scheduleReconnect(rawSession);
@@ -150,10 +198,18 @@ ModbusClient::ModbusClient(const QList<DeviceConfig> &requestedConfigs, QObject 
         });
 
         connect(session->client, &QModbusDevice::errorOccurred, this,
-                [this, rawSession](QModbusDevice::Error) {
+                [this, rawSession](QModbusDevice::Error error) {
             const QString message = rawSession->client->errorString();
-            if (!message.isEmpty())
-                emit deviceError(rawSession->config.device, message);
+            if (message.isEmpty())
+                return;
+            // w2-072: connection errors (and any error while not connected) belong to the
+            // outage and are rate limited; other errors of a connected device as before.
+            if (error == QModbusDevice::ConnectionError
+                    || rawSession->client->state() != QModbusDevice::ConnectedState) {
+                reportConnectionProblem(rawSession, message);
+                return;
+            }
+            emit deviceError(rawSession->config.device, message);
         });
 
         m_sessions.push_back(std::move(session));
@@ -204,12 +260,30 @@ void ModbusClient::read(Device device,
         emit deviceError(device, QStringLiteral("Invalid Modbus read request."));
         return;
     }
-    if (!ensureConnected(session))
-        return;
-
+    // w2-072: the same read still waiting for its reply is skipped first (before the connection
+    // check), as before.
     const QString requestKey = readRequestKey(device, registerType, startAddress, valueCount);
     if (m_pendingReadRequests.contains(requestKey))
         return;
+    if (session->client->state() != QModbusDevice::ConnectedState) {
+        // w2-072 (review D-003): nothing is sent while the device is not connected; this is
+        // reported once per outage (the poll calls read() for every binding every second), and
+        // the reconnect is left to the reconnect timer. While a connection attempt is still in
+        // progress (Connecting) the read is skipped silently; a failed attempt reports itself.
+        if (session->client->state() == QModbusDevice::UnconnectedState && !session->notConnectedReported) {
+            session->notConnectedReported = true;
+            if (!session->inOutage) {
+                session->inOutage = true;
+                session->outageClock.start();
+            }
+            emit deviceError(device, QStringLiteral("Device is not connected; reads are skipped until it is "
+                                                    "connected again (reconnect attempt every %1 s).")
+                                             .arg(kReconnectDelayMs / 1000));
+        }
+        if (session->client->state() == QModbusDevice::UnconnectedState)
+            scheduleReconnect(session);
+        return;
+    }
 
     const QModbusDataUnit request(registerType, startAddress, valueCount);
     QModbusReply *reply = session->client->sendReadRequest(request, session->config.unitId);
@@ -322,13 +396,21 @@ void ModbusClient::connectDevice(DeviceSession *session)
     if (!session || session->client->state() != QModbusDevice::UnconnectedState)
         return;
 
+    // w2-072: attempts during an outage are counted and logged (info, full log only), so the
+    // log shows the 3 s rhythm.
+    if (session->inOutage) {
+        ++session->reconnectAttempts;
+        qInfo().noquote() << QStringLiteral("[Modbus] %1 reconnect attempt #%2 (offline for %3 s)")
+                                     .arg(displayName(session->config.device))
+                                     .arg(session->reconnectAttempts)
+                                     .arg(session->outageClock.elapsed() / 1000.0, 0, 'f', 1);
+    }
     session->client->setConnectionParameter(QModbusDevice::NetworkAddressParameter,
                                              session->config.host);
     session->client->setConnectionParameter(QModbusDevice::NetworkPortParameter,
                                              session->config.port);
     if (!session->client->connectDevice()) {
-        const QString message = session->client->errorString();
-        emit deviceError(session->config.device, message);
+        reportConnectionProblem(session, session->client->errorString());
         scheduleReconnect(session);
     }
 }
@@ -345,9 +427,13 @@ bool ModbusClient::ensureConnected(DeviceSession *session)
         return true;
 
     if (session) {
+        // Used by write(): every refused write is reported (operator action, rare).
+        // w2-072 (review D-003): no direct connectDevice() any more (it bypassed the 3 s
+        // reconnect delay); the reconnect timer is started if it is not running.
         emit deviceError(session->config.device,
                          QStringLiteral("Device is not connected; request was not sent."));
-        connectDevice(session);
+        if (session->client->state() == QModbusDevice::UnconnectedState)
+            scheduleReconnect(session);
     }
     return false;
 }

@@ -95,9 +95,11 @@ public:
     bool updateSensorMapJson(const QJsonArray& arr, QString* errMsg = nullptr);
     bool insertOneSampleJson(const QJsonObject& obj, QString* errMsg = nullptr);
     bool insertBatchSamplesJson(const QJsonArray& items, int* inserted = nullptr, QString* errMsg = nullptr);
-    bool queryRangeJson(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
+    // REST range queries: [from, to] epoch seconds (both inclusive), oldest first, page 1-based.
+    // w2-071 (review D-001): only the month files that exist in the data directory are
+    // visited (directory listing, no calendar-month loop), so any from/to returns at once;
+    // the unpaged queryRangeJson / queryHoldingRangeJson (pageSize INT_MAX) were removed.
     bool queryRangeJsonPaged(qint64 from, qint64 to, int page, int pageSize, QJsonArray* out, QString* errMsg = nullptr);
-    bool queryHoldingRangeJson(qint64 from, qint64 to, QJsonArray* out, QString* errMsg = nullptr);
     bool queryHoldingRangeJsonPaged(qint64 from, qint64 to, int page, int pageSize, QJsonArray* out, QString* errMsg = nullptr);
     bool countSensorRange(qint64 from, qint64 to, qint64* total, QString* errMsg = nullptr);
     bool countHoldingRange(qint64 from, qint64 to, qint64* total, QString* errMsg = nullptr);
@@ -276,7 +278,12 @@ private:
     bool historyJobStale(const HistoryRangeJob& job) const;
     const HistoryAnchor& historyAnchorFor(const HistoryRangeJob& job) const;
     void storeHistoryAnchor(const HistoryRangeJob& job, const HistoryAnchor& anchor);
-    QSet<QString> m_historySchemaChecked;   // month keys whose schema was checked once
+    // w2-071 (review D-002, SqlManager thread only): data connections (data_<yyyyMM>) whose
+    // schema statements already ran since the connection was opened (see ensureDataSchema);
+    // replaces the w2-045 m_historySchemaChecked (History page only).
+    mutable QSet<QString> m_dataSchemaReady;
+    // w2-071: "Schema file not found" is logged at most once per run.
+    mutable std::atomic<bool> m_schemaMissingLogged{false};
     enum class HistoryKeyset { None, OlderOrEqual, Older, Newer };
 
     void runHistoryRangeStep(const std::shared_ptr<HistoryRangeJob>& job);
@@ -302,7 +309,12 @@ private:
     bool ensureDirExists(const QString& dir) const;
 
     bool ensureSettingsDb();
-    bool ensureDataSchema(QSqlDatabase& db) const;
+    bool ensureDataSchema(QSqlDatabase& db) const;             // once per open connection (w2-071)
+    bool ensureDataSchemaStatements(QSqlDatabase& db) const;   // the schema file / built-in DDL
+    // w2-071: bodies of the REST range functions (SqlManager thread).
+    bool rangePageOnThread(bool holding, qint64 from, qint64 to, int page, int pageSize,
+                           QJsonArray* out, QString* errMsg);
+    bool rangeCountOnThread(bool holding, qint64 from, qint64 to, qint64* total, QString* errMsg);
     QSqlDatabase openDataDb(const QString& monthKey);
     bool executeSqlFile(const QString& path, QSqlDatabase& db) const;
 

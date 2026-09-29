@@ -243,6 +243,18 @@ Ms300FaultReader::Ms300FaultReader(const Settings &settings, QObject *parent)
                                 m_settings.serialPort)
                            .arg(m_settings.unitId)
                            .arg(detail);
+        if (connected && m_outageClock.isValid()) {
+            // w2-072: end of the outage, logged once.
+            qInfo().noquote() << QStringLiteral("[MS300] %1 open again after %2 s, %3 connection attempt(s), "
+                                                "%4 warning(s) held back")
+                                         .arg(m_settings.serialPort)
+                                         .arg(m_outageClock.elapsed() / 1000.0, 0, 'f', 1)
+                                         .arg(m_connectAttempts)
+                                         .arg(m_connectionWarnings.totalHeldBack());
+            m_outageClock.invalidate();
+            m_connectAttempts = 0;
+            m_connectionWarnings.reset();
+        }
         emit connectionChanged(connected, detail);
 
         if (connected && m_running)
@@ -255,9 +267,44 @@ Ms300FaultReader::Ms300FaultReader(const Settings &settings, QObject *parent)
             return;
 
         const QString message = m_client->errorString();
-        qWarning().noquote() << "[MS300]" << message;
+        // w2-072: rate limited (connection errors / errors while the port is not open belong to
+        // the outage, the others to the fault-status reads); readError is emitted as before.
+        if (error == QModbusDevice::ConnectionError || m_client->state() != QModbusDevice::ConnectedState)
+            warnConnection(message);
+        else
+            warnRead(message);
         emit readError(message);
     });
+}
+
+// w2-072 (review D-003): one warning of the current outage of the serial port.
+void Ms300FaultReader::warnConnection(const QString &message)
+{
+    if (!m_outageClock.isValid())
+        m_outageClock.start();
+    qint64 heldBack = 0;
+    if (m_connectionWarnings.allow(&heldBack)) {
+        qWarning().noquote() << QStringLiteral("[MS300] %1: %2 (not open for %3 s, %4 connection attempt(s); "
+                                               "next attempt in %5 s)%6")
+                                        .arg(m_settings.serialPort, message)
+                                        .arg(m_outageClock.elapsed() / 1000)
+                                        .arg(m_connectAttempts)
+                                        .arg(kConnectRetryMs / 1000)
+                                        .arg(m_connectionWarnings.suffix(heldBack));
+    }
+}
+
+// w2-072: one failed fault-status read of an open port (e.g. the inverter does not answer).
+void Ms300FaultReader::warnRead(const QString &message)
+{
+    ++m_readFailures;
+    qint64 heldBack = 0;
+    if (m_readWarnings.allow(&heldBack)) {
+        qWarning().noquote() << QStringLiteral("[MS300] %1 (%2 failed read(s) in a row)%3")
+                                        .arg(message)
+                                        .arg(m_readFailures)
+                                        .arg(m_readWarnings.suffix(heldBack));
+    }
 }
 
 Ms300FaultReader::~Ms300FaultReader()
@@ -280,6 +327,7 @@ void Ms300FaultReader::stop()
     m_running = false;
     m_pollTimer.stop();
     m_requestPending = false;
+    m_lastConnectAttempt.invalidate();   // w2-072: the next start() tries at once
     if (m_client->state() != QModbusDevice::UnconnectedState)
         m_client->disconnectDevice();
 }
@@ -290,11 +338,23 @@ void Ms300FaultReader::pollFaultStatus()
         return;
 
     if (m_client->state() != QModbusDevice::ConnectedState) {
+        // w2-072 (review D-003): a connection is tried at most every kConnectRetryMs (was every
+        // poll = every second); the first poll after start() tries at once.
         if (m_client->state() == QModbusDevice::UnconnectedState
-                && !m_client->connectDevice()) {
-            const QString message = m_client->errorString();
-            qWarning().noquote() << "[MS300] Connection request failed:" << message;
-            emit readError(message);
+                && (!m_lastConnectAttempt.isValid() || m_lastConnectAttempt.elapsed() >= kConnectRetryMs)) {
+            m_lastConnectAttempt.start();
+            ++m_connectAttempts;
+            if (m_outageClock.isValid()) {
+                qInfo().noquote() << QStringLiteral("[MS300] %1 connection attempt #%2 (not open for %3 s)")
+                                             .arg(m_settings.serialPort)
+                                             .arg(m_connectAttempts)
+                                             .arg(m_outageClock.elapsed() / 1000.0, 0, 'f', 1);
+            }
+            if (!m_client->connectDevice()) {
+                const QString message = m_client->errorString();
+                warnConnection(QStringLiteral("Connection request failed: %1").arg(message));
+                emit readError(message);
+            }
         }
         return;
     }
@@ -307,7 +367,7 @@ void Ms300FaultReader::pollFaultStatus()
     QModbusReply *reply = m_client->sendReadRequest(request, m_settings.unitId);
     if (!reply) {
         const QString message = m_client->errorString();
-        qWarning().noquote() << "[MS300] Fault-status read request failed:" << message;
+        warnRead(QStringLiteral("Fault-status read request failed: %1").arg(message));   // w2-072
         emit readError(message);
         return;
     }
@@ -317,15 +377,24 @@ void Ms300FaultReader::pollFaultStatus()
         m_requestPending = false;
         if (reply->error() != QModbusDevice::NoError) {
             const QString message = reply->errorString();
-            qWarning().noquote() << "[MS300] Fault-status read failed:" << message;
+            warnRead(QStringLiteral("Fault-status read failed: %1").arg(message));   // w2-072
             emit readError(message);
         } else {
             const QList<quint16> values = reply->result().values();
             if (values.isEmpty()) {
                 const QString message = QStringLiteral("MS300 returned an empty fault-status response.");
-                qWarning().noquote() << "[MS300]" << message;
+                warnRead(message);   // w2-072
                 emit readError(message);
             } else {
+                if (m_readFailures > 0) {
+                    // w2-072: end of a series of failed reads, logged once.
+                    qInfo().noquote() << QStringLiteral("[MS300] fault-status reads OK again after %1 failed "
+                                                        "read(s), %2 warning(s) held back")
+                                                 .arg(m_readFailures)
+                                                 .arg(m_readWarnings.totalHeldBack());
+                    m_readFailures = 0;
+                    m_readWarnings.reset();
+                }
                 publishFaultStatus(values.constFirst());
             }
         }

@@ -1,0 +1,25 @@
+********* Start testing of TestModbusClientOffline *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : TestModbusClientOffline::initTestCase()
+PASS   : TestModbusClientOffline::limiterRules()
+QINFO  : TestModbusClientOffline::readsWhileRefused() [Modbus] device profile=default
+QINFO  : TestModbusClientOffline::readsWhileRefused() [Modbus] device ADAM-6217 B (test) -> 127.0.0.1:61366 unit=1 timeout=1000ms retries=0
+QINFO  : TestModbusClientOffline::readsWhileRefused() [Modbus] ADAM-6217 B (127.0.0.1) reconnect attempt #1 (offline for 3.0 s)
+QINFO  : TestModbusClientOffline::readsWhileRefused() 60 reads in 9139 ms: deviceError total 2 (not connected 1, connection 1); reconnect attempts 1 at 7103 ms; attempt ends at 4085 ms
+QINFO  : TestModbusClientOffline::readsWhileRefused()   deviceError at 4085 ms: TCP socket error (Connection refused). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+QINFO  : TestModbusClientOffline::readsWhileRefused()   deviceError at 4116 ms: Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+PASS   : TestModbusClientOffline::readsWhileRefused()
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() [Modbus] device profile=default
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() [Modbus] device ADAM-6217 B (test) -> 127.0.0.1:61374 unit=1 timeout=1000ms retries=0
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() [Modbus] ADAM-6217 B (127.0.0.1) reconnect attempt #1 (offline for 3.0 s)
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() outage 1: connected again, detail "(connected again after 3.0 s offline, 1 reconnect attempt(s), 0 connection warning(s) held back)"
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() [Modbus] ADAM-6217 B (127.0.0.1) reconnect attempt #1 (offline for 3.0 s)
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage() outage 2: connected again, detail "(connected again after 3.0 s offline, 1 reconnect attempt(s), 0 connection warning(s) held back)"
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage()   deviceError at 77 ms: TCP socket error (The remote host closed the connection). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage()   deviceError at 77 ms: Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage()   deviceError at 3114 ms: TCP socket error (The remote host closed the connection). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+QINFO  : TestModbusClientOffline::dropReportedOncePerOutage()   deviceError at 3115 ms: Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+PASS   : TestModbusClientOffline::dropReportedOncePerOutage()
+PASS   : TestModbusClientOffline::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 15661ms
+********* Finished testing of TestModbusClientOffline *********

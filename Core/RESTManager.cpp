@@ -17,6 +17,8 @@
 #include <QRegularExpression>
 #include <QSettings>
 #include <QDir>
+#include <QtNumeric>
+#include <limits>
 
 RESTManager::RESTManager(SqlManager* sql, QObject* parent)
     : QObject(parent)
@@ -226,7 +228,13 @@ void RESTManager::setupRoutes()
 
     m_httpServer.route("/api/settings/frequency", QHttpServerRequest::Method::Options, optionsHandler);
 
-    // GET range
+    // w2-071 (review D-001): every range route is paged - the same response as the former
+    // rangeDateTimePage ({page, pageSize, totalCount, totalPages, hasPreviousPage,
+    // hasNextPage, items}), optional page (default 1) and pageSize (default 200, at most
+    // 1000); from/to must lie in 0 .. kMaxRangeEpochSecs (else 400, no query). See
+    // pagedRangeResponse / checkRangeBounds / parsePaging below.
+
+    // GET range (from/to: epoch seconds, also "123+60" / "123-60")
     m_httpServer.route("/api/sensor/range", QHttpServerRequest::Method::Get, [this](const QHttpServerRequest& req) {
         QUrlQuery q(req.query());
         qint64 from = 0, to = 0;
@@ -234,13 +242,7 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid from/to");
         }
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryRangeJson(from, to, &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-        return jsonResp(out);
+        return pagedRangeResponse(false, from, to, q);
     });
 
     m_httpServer.route("/api/sensor/range", QHttpServerRequest::Method::Options, optionsHandler);
@@ -253,13 +255,7 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid from/to");
         }
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryHoldingRangeJson(from, to, &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-        return jsonResp(out);
+        return pagedRangeResponse(true, from, to, q);
     });
 
     m_httpServer.route("/api/holding/range", QHttpServerRequest::Method::Options, optionsHandler);
@@ -310,7 +306,7 @@ void RESTManager::setupRoutes()
 
     m_httpServer.route("/api/holding/last", QHttpServerRequest::Method::Options, optionsHandler);
 
-    // GET range by datetime (ISO string)
+    // GET range by datetime (ISO string or epoch seconds) - w2-071: paged
     m_httpServer.route("/api/sensor/rangeDateTime", QHttpServerRequest::Method::Get, [this](const QHttpServerRequest& req) {
         QUrlQuery q(req.query());
         qint64 from = 0, to = 0;
@@ -318,22 +314,12 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid datetime");
         }
-        if (to < from)
-        {
-            return errResp(400, "to < from");
-        }
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryRangeJson(from, to, &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-        return jsonResp(out);
+        return pagedRangeResponse(false, from, to, q);
     });
 
     m_httpServer.route("/api/sensor/rangeDateTime", QHttpServerRequest::Method::Options, optionsHandler);
 
-    // GET sensor range by datetime with pagination
+    // GET sensor range by datetime with pagination (same as rangeDateTime since w2-071)
     m_httpServer.route("/api/sensor/rangeDateTimePage", QHttpServerRequest::Method::Get, [this](const QHttpServerRequest& req) {
         QUrlQuery q(req.query());
         qint64 from = 0, to = 0;
@@ -341,63 +327,12 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid datetime");
         }
-        if (to < from)
-        {
-            return errResp(400, "to < from");
-        }
-
-        qint64 pageVal = 1;
-        qint64 pageSizeVal = 200;
-        QString pageText = q.queryItemValue("page").trimmed();
-        QString pageSizeText = q.queryItemValue("pageSize").trimmed();
-        if (!pageText.isEmpty() && !parseIntExpr(pageText, pageVal))
-        {
-            return errResp(400, "invalid page");
-        }
-        if (!pageSizeText.isEmpty() && !parseIntExpr(pageSizeText, pageSizeVal))
-        {
-            return errResp(400, "invalid pageSize");
-        }
-        if (pageVal <= 0 || pageSizeVal <= 0)
-        {
-            return errResp(400, "page and pageSize must be positive");
-        }
-        if (pageSizeVal > 1000)
-        {
-            pageSizeVal = 1000;
-        }
-
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryRangeJsonPaged(from, to, static_cast<int>(pageVal), static_cast<int>(pageSizeVal), &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-
-        qint64 totalCount = 0;
-        if (!m_sql->countSensorRange(from, to, &totalCount, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-
-        qint64 totalPages = (totalCount > 0) ? ((totalCount + pageSizeVal - 1) / pageSizeVal) : 0;
-        bool hasPrevious = pageVal > 1;
-        bool hasNext = pageVal < totalPages;
-
-        QJsonObject obj;
-        obj.insert("page", pageVal);
-        obj.insert("pageSize", pageSizeVal);
-        obj.insert("totalCount", totalCount);
-        obj.insert("totalPages", totalPages);
-        obj.insert("hasPreviousPage", hasPrevious);
-        obj.insert("hasNextPage", hasNext);
-        obj.insert("items", out);
-        return jsonResp(obj);
+        return pagedRangeResponse(false, from, to, q);
     });
 
     m_httpServer.route("/api/sensor/rangeDateTimePage", QHttpServerRequest::Method::Options, optionsHandler);
 
-    // GET holding range by datetime (ISO string)
+    // GET holding range by datetime (ISO string or epoch seconds) - w2-071: paged
     m_httpServer.route("/api/holding/rangeDateTime", QHttpServerRequest::Method::Get, [this](const QHttpServerRequest& req) {
         QUrlQuery q(req.query());
         qint64 from = 0, to = 0;
@@ -405,22 +340,12 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid datetime");
         }
-        if (to < from)
-        {
-            return errResp(400, "to < from");
-        }
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryHoldingRangeJson(from, to, &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-        return jsonResp(out);
+        return pagedRangeResponse(true, from, to, q);
     });
 
     m_httpServer.route("/api/holding/rangeDateTime", QHttpServerRequest::Method::Options, optionsHandler);
 
-    // GET holding range by datetime with pagination
+    // GET holding range by datetime with pagination (same as holding/rangeDateTime since w2-071)
     m_httpServer.route("/api/holding/rangeDateTimePage", QHttpServerRequest::Method::Get, [this](const QHttpServerRequest& req) {
         QUrlQuery q(req.query());
         qint64 from = 0, to = 0;
@@ -428,61 +353,108 @@ void RESTManager::setupRoutes()
         {
             return errResp(400, "invalid datetime");
         }
-        if (to < from)
-        {
-            return errResp(400, "to < from");
-        }
-
-        qint64 pageVal = 1;
-        qint64 pageSizeVal = 200;
-        QString pageText = q.queryItemValue("page").trimmed();
-        QString pageSizeText = q.queryItemValue("pageSize").trimmed();
-        if (!pageText.isEmpty() && !parseIntExpr(pageText, pageVal))
-        {
-            return errResp(400, "invalid page");
-        }
-        if (!pageSizeText.isEmpty() && !parseIntExpr(pageSizeText, pageSizeVal))
-        {
-            return errResp(400, "invalid pageSize");
-        }
-        if (pageVal <= 0 || pageSizeVal <= 0)
-        {
-            return errResp(400, "page and pageSize must be positive");
-        }
-        if (pageSizeVal > 1000)
-        {
-            pageSizeVal = 1000;
-        }
-
-        QJsonArray out;
-        QString errMsg;
-        if (!m_sql->queryHoldingRangeJsonPaged(from, to, static_cast<int>(pageVal), static_cast<int>(pageSizeVal), &out, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-
-        qint64 totalCount = 0;
-        if (!m_sql->countHoldingRange(from, to, &totalCount, &errMsg))
-        {
-            return errResp(500, errMsg);
-        }
-
-        qint64 totalPages = (totalCount > 0) ? ((totalCount + pageSizeVal - 1) / pageSizeVal) : 0;
-        bool hasPrevious = pageVal > 1;
-        bool hasNext = pageVal < totalPages;
-
-        QJsonObject obj;
-        obj.insert("page", pageVal);
-        obj.insert("pageSize", pageSizeVal);
-        obj.insert("totalCount", totalCount);
-        obj.insert("totalPages", totalPages);
-        obj.insert("hasPreviousPage", hasPrevious);
-        obj.insert("hasNextPage", hasNext);
-        obj.insert("items", out);
-        return jsonResp(obj);
+        return pagedRangeResponse(true, from, to, q);
     });
 
     m_httpServer.route("/api/holding/rangeDateTimePage", QHttpServerRequest::Method::Options, optionsHandler);
+}
+
+// w2-071: from/to limits of the range routes. Negative values and values past
+// 9999-12-31T23:59:59Z are refused (400) before any query.
+QString RESTManager::checkRangeBounds(qint64 from, qint64 to)
+{
+    if (from < 0 || to < 0 || from > kMaxRangeEpochSecs || to > kMaxRangeEpochSecs)
+    {
+        return QStringLiteral("from/to out of range (0 .. %1 epoch seconds, 9999-12-31T23:59:59Z)")
+            .arg(kMaxRangeEpochSecs);
+    }
+    if (to < from)
+    {
+        return QStringLiteral("to < from");
+    }
+    return QString();
+}
+
+// w2-071: page / pageSize of every range route (the rules of the former ...Page routes, plus
+// the INT_MAX limit: the values were cast to int before, e.g. page=4294967297 became 1).
+bool RESTManager::parsePaging(const QUrlQuery& q, qint64* page, qint64* pageSize, QString* error)
+{
+    qint64 pageVal = 1;
+    qint64 pageSizeVal = kDefaultPageSize;
+    const QString pageText = q.queryItemValue("page").trimmed();
+    const QString pageSizeText = q.queryItemValue("pageSize").trimmed();
+    if (!pageText.isEmpty() && !parseIntExpr(pageText, pageVal))
+    {
+        *error = QStringLiteral("invalid page");
+        return false;
+    }
+    if (!pageSizeText.isEmpty() && !parseIntExpr(pageSizeText, pageSizeVal))
+    {
+        *error = QStringLiteral("invalid pageSize");
+        return false;
+    }
+    if (pageVal <= 0 || pageSizeVal <= 0)
+    {
+        *error = QStringLiteral("page and pageSize must be positive");
+        return false;
+    }
+    if (pageVal > std::numeric_limits<int>::max() || pageSizeVal > std::numeric_limits<int>::max())
+    {
+        *error = QStringLiteral("page and pageSize must be at most %1").arg(std::numeric_limits<int>::max());
+        return false;
+    }
+    if (pageSizeVal > kMaxPageSize)
+    {
+        pageSizeVal = kMaxPageSize;
+    }
+    *page = pageVal;
+    *pageSize = pageSizeVal;
+    return true;
+}
+
+QHttpServerResponse RESTManager::pagedRangeResponse(bool holding, qint64 from, qint64 to, const QUrlQuery& q)
+{
+    const QString rangeError = checkRangeBounds(from, to);
+    if (!rangeError.isEmpty())
+    {
+        return errResp(400, rangeError);
+    }
+    qint64 pageVal = 1;
+    qint64 pageSizeVal = kDefaultPageSize;
+    QString pagingError;
+    if (!parsePaging(q, &pageVal, &pageSizeVal, &pagingError))
+    {
+        return errResp(400, pagingError);
+    }
+
+    QJsonArray out;
+    QString errMsg;
+    const bool pageOk = holding
+        ? m_sql->queryHoldingRangeJsonPaged(from, to, static_cast<int>(pageVal), static_cast<int>(pageSizeVal), &out, &errMsg)
+        : m_sql->queryRangeJsonPaged(from, to, static_cast<int>(pageVal), static_cast<int>(pageSizeVal), &out, &errMsg);
+    if (!pageOk)
+    {
+        return errResp(500, errMsg);
+    }
+
+    qint64 totalCount = 0;
+    const bool countOk = holding ? m_sql->countHoldingRange(from, to, &totalCount, &errMsg)
+                                 : m_sql->countSensorRange(from, to, &totalCount, &errMsg);
+    if (!countOk)
+    {
+        return errResp(500, errMsg);
+    }
+
+    const qint64 totalPages = (totalCount > 0) ? ((totalCount + pageSizeVal - 1) / pageSizeVal) : 0;
+    QJsonObject obj;
+    obj.insert("page", pageVal);
+    obj.insert("pageSize", pageSizeVal);
+    obj.insert("totalCount", totalCount);
+    obj.insert("totalPages", totalPages);
+    obj.insert("hasPreviousPage", pageVal > 1);
+    obj.insert("hasNextPage", pageVal < totalPages);
+    obj.insert("items", out);
+    return jsonResp(obj);
 }
 
 bool RESTManager::parseIntExpr(const QString& text, qint64& outVal)
@@ -503,7 +475,11 @@ bool RESTManager::parseIntExpr(const QString& text, qint64& outVal)
     if (!ok) return false;
     if (m.captured(2) == "-")
         offset = -offset;
-    outVal = base + offset;
+    // w2-071: "9223372036854775807+1" overflowed (undefined behaviour); it is refused now.
+    qint64 sum = 0;
+    if (qAddOverflow(base, offset, &sum))
+        return false;
+    outVal = sum;
     return true;
 }
 

@@ -1,0 +1,36 @@
+********* Start testing of TestMs300Offline *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : TestMs300Offline::initTestCase()
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: disconnected
+QWARN  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #2 (not open for 3.0 s)
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #3 (not open for 7.0 s)
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning() 10 s with a missing port: 1 warning line(s), 2 logged reconnect attempt(s), 9 readError signal(s)
+QINFO  : TestMs300Offline::attemptsEvery3sOneWarning()   warning at 0 ms: [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+PASS   : TestMs300Offline::attemptsEvery3sOneWarning()
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: disconnected
+QWARN  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #2 (not open for 3.0 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #3 (not open for 6.0 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QWARN  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 6 s, 3 connection attempt(s); next attempt in 3 s) (5 similar warning(s) held back since the previous one; at most one per 4 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #4 (not open for 9.0 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: ╰参тぃ﹚郎
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted()   warning at 0 ms: [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+QINFO  : TestMs300Offline::warningsHeldBackAndCounted()   warning at 6021 ms: [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 6 s, 3 connection attempt(s); next attempt in 3 s) (5 similar warning(s) held back since the previous one; at most one per 4 s)
+PASS   : TestMs300Offline::warningsHeldBackAndCounted()
+PASS   : TestMs300Offline::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 20522ms
+********* Finished testing of TestMs300Offline *********

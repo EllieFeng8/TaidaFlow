@@ -1,0 +1,9 @@
+﻿TaidaFlowNotoSansTC-Regular.ttf HEAD=191452 new=191452 differing byte offsets: 113,114,115,229,230,231,254,255
+  tables: GPOS@56+200 GSUB@0+218 OS/2@88+96 cmap@168+36 gasp@48+8 glyf@204+4 head@220+54 hhea@20+36 hmtx@184+240 loca@204+0 maxp@56+32 name@208+64 post@16+32
+TaidaFlowNotoSansTC-Bold.ttf HEAD=192136 new=192136 differing byte offsets: 113,114,115,229,230,231,254,255
+  tables: GPOS@236+192 GSUB@172+218 OS/2@88+96 cmap@168+36 gasp@228+8 glyf@204+128 head@220+54 hhea@20+36 hmtx@184+240 loca@204+0 maxp@56+32 name@76+118 post@196+32
+解析(TTF 表目錄,兩檔相同配置):head 表 offset 220 長度 54。
+差異位元組 113-115 = 表目錄 head 項的 checksum;229-231 = head.checkSumAdjustment(head+8..11);
+254-255 = head.modified 時間戳(head+28..35 的低位元組)。
+=> 重產的兩個 TTF 只差 fontTools 寫入的修改時間與對應 checksum;glyf/cmap/hmtx 等字形內容與 HEAD 逐位元組相同。
+charset.txt 與 HEAD 相同(SHA256 DC0B7D90...),新增字元 0、移除字元 0(main 新增的「範圍請輸入」原本就已在字集內)。

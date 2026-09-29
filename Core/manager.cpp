@@ -338,8 +338,66 @@ bool Manager::isSvWriteSuppressed(const char *svName)
     return true;
 }
 
+// w2-072 (review I-003) ---------------------------------------------------------------------
+// A NaN / +-Inf set value (e.g. written through the web page mirror) is refused before any
+// other check: no Modbus write, no VFD start. The proxy SV is put back so no page shows NaN.
+bool Manager::rejectNonFiniteSv(ModbusMapping::CommandPoint point, const char *svName, double value)
+{
+    if (std::isfinite(value))
+        return false;
+    QString restored;
+    restoreSv(point, &restored);
+    warnNonFinite(point, QStringLiteral("[SV guard] %1 = %2 refused: not a finite number; no Modbus write%3")
+                                 .arg(QLatin1String(svName))
+                                 .arg(value)
+                                 .arg(restored));
+    return true;
+}
+
+void Manager::warnNonFinite(ModbusMapping::CommandPoint point, const QString &text)
+{
+    RepeatedWarningLimiter &limiter = m_nonFiniteWarnings[static_cast<int>(point)];
+    qint64 heldBack = 0;
+    if (limiter.allow(&heldBack))
+        qWarning().noquote() << text + limiter.suffix(heldBack);
+}
+
+void Manager::restoreSv(ModbusMapping::CommandPoint point, QString *restoredText)
+{
+    if (!m_proxy)
+        return;
+    using Setter = void (TaidaFlowProxy::*)(double);
+    using Getter = double (TaidaFlowProxy::*)() const;
+    Setter set = nullptr;
+    Getter pv = nullptr;
+    switch (point) {
+    case ModbusMapping::CommandPoint::M1: set = &TaidaFlowProxy::setM1ValueSv; pv = &TaidaFlowProxy::m1ValuePv; break;
+    case ModbusMapping::CommandPoint::M2: set = &TaidaFlowProxy::setM2ValueSv; pv = &TaidaFlowProxy::m2ValuePv; break;
+    case ModbusMapping::CommandPoint::M3: set = &TaidaFlowProxy::setM3ValueSv; pv = &TaidaFlowProxy::m3ValuePv; break;
+    case ModbusMapping::CommandPoint::M4: set = &TaidaFlowProxy::setM4ValueSv; pv = &TaidaFlowProxy::m4ValuePv; break;
+    case ModbusMapping::CommandPoint::Pump2Hz: set = &TaidaFlowProxy::setPump2HzSv; pv = &TaidaFlowProxy::pump2HzPv; break;
+    default: return;
+    }
+    const auto last = m_lastAcceptedSv.constFind(static_cast<int>(point));
+    const bool haveLast = last != m_lastAcceptedSv.constEnd();
+    double value = haveLast ? last.value() : (m_proxy->*pv)();
+    if (!std::isfinite(value))
+        value = 0.0;
+    {
+        const QScopedValueRollback<bool> guard(m_restoringSv, true);   // no write for our own change
+        (m_proxy->*set)(value);
+    }
+    if (restoredText) {
+        *restoredText = QStringLiteral("; SV put back to %1 (%2)")
+                                .arg(value, 0, 'f', 2)
+                                .arg(haveLast ? QStringLiteral("last accepted value") : QStringLiteral("current PV"));
+    }
+}
+
 void Manager::setM1Sv(double value)
 {
+    if (m_restoringSv || rejectNonFiniteSv(ModbusMapping::CommandPoint::M1, "m1ValueSv", value))
+        return;   // w2-072
     if (isSvWriteSuppressed("m1ValueSv"))
         return;
     writeCommand(ModbusMapping::CommandPoint::M1, value);
@@ -347,6 +405,8 @@ void Manager::setM1Sv(double value)
 
 void Manager::setM2Sv(double value)
 {
+    if (m_restoringSv || rejectNonFiniteSv(ModbusMapping::CommandPoint::M2, "m2ValueSv", value))
+        return;   // w2-072
     if (isSvWriteSuppressed("m2ValueSv"))
         return;
     writeCommand(ModbusMapping::CommandPoint::M2, value);
@@ -354,6 +414,8 @@ void Manager::setM2Sv(double value)
 
 void Manager::setM3Sv(double value)
 {
+    if (m_restoringSv || rejectNonFiniteSv(ModbusMapping::CommandPoint::M3, "m3ValueSv", value))
+        return;   // w2-072
     if (isSvWriteSuppressed("m3ValueSv"))
         return;
     writeCommand(ModbusMapping::CommandPoint::M3, value);
@@ -361,6 +423,8 @@ void Manager::setM3Sv(double value)
 
 void Manager::setM4Sv(double value)
 {
+    if (m_restoringSv || rejectNonFiniteSv(ModbusMapping::CommandPoint::M4, "m4ValueSv", value))
+        return;   // w2-072
     if (isSvWriteSuppressed("m4ValueSv"))
         return;
     writeCommand(ModbusMapping::CommandPoint::M4, value);
@@ -368,6 +432,10 @@ void Manager::setM4Sv(double value)
 
 void Manager::setPump2HzSv(double value)
 {
+    // w2-072 (review I-003): checked first - NaN used to take the "start the VFD" branch below
+    // (value <= 0.0 is false for NaN).
+    if (m_restoringSv || rejectNonFiniteSv(ModbusMapping::CommandPoint::Pump2Hz, "pump2HzSv", value))
+        return;
     if (isSvWriteSuppressed("pump2HzSv"))
         return;
 
@@ -496,6 +564,7 @@ void Manager::handlePump2HzFeedback(const QList<quint16> &values)
         const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
         m_proxy->setPump2HzSv(sv);
     }
+    m_lastAcceptedSv.insert(static_cast<int>(ModbusMapping::CommandPoint::Pump2Hz), sv);   // w2-072
     qInfo().noquote()
             << QStringLiteral("[SV sync] pump2HzSv <- %1 Hz from ADAM-6022 HR%2 raw=%3 (was %4)")
                        .arg(sv, 0, 'f', 2)
@@ -538,6 +607,7 @@ void Manager::handleAdam6224AnalogOutputs(const QList<quint16> &values)
             const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
             (m_proxy->*entry.set)(sv);
         }
+        m_lastAcceptedSv.insert(static_cast<int>(entry.point), sv);   // w2-072
         qInfo().noquote()
                 << QStringLiteral("[SV sync] %1 <- %2 % from ADAM-6224 HR%3 raw=%4 (was %5)")
                            .arg(QLatin1String(entry.name))
@@ -1312,6 +1382,18 @@ void Manager::mirrorHmiCommandToServer(const ModbusMapping::WriteBinding &bindin
 
 bool Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
 {
+    // w2-072 (review I-003): second line of defence (the SV slots check first). NaN passed the
+    // range check below (every comparison is false) and was only stopped by std::llround(NaN)
+    // returning LLONG_MIN on MSVC (unspecified behaviour); VfdRun / MakeupPump with NaN also
+    // counted as "energize".
+    if (!std::isfinite(value)) {
+        warnNonFinite(point, QStringLiteral("[SV guard] %1 write refused: value %2 is not a finite number; "
+                                            "no Modbus write")
+                                     .arg(commandPointName(point))
+                                     .arg(value));
+        return false;
+    }
+
     if ((point == ModbusMapping::CommandPoint::VfdRun
             || point == ModbusMapping::CommandPoint::MotorRunning)
             && value != 0.0 && !m_di0OutputPermit) {
@@ -1361,10 +1443,13 @@ bool Manager::writeCommand(ModbusMapping::CommandPoint point, double value)
         const quint16 encodedValue = static_cast<quint16>(roundedValue);
         mirrorHmiCommandToServer(binding, encodedValue);
         countModbusWriteRequest();
-        return m_modbus.write(binding.device,
-                              binding.registerType,
-                              binding.startAddress,
-                              {encodedValue});
+        const bool sent = m_modbus.write(binding.device,
+                                         binding.registerType,
+                                         binding.startAddress,
+                                         {encodedValue});
+        if (sent)
+            m_lastAcceptedSv.insert(static_cast<int>(point), value);   // w2-072: for restoreSv()
+        return sent;
     }
 
     qWarning().noquote()

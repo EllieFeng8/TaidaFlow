@@ -242,7 +242,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
   `rest.bind` / `rest.port`(預設 `127.0.0.1:18080`;環境變數 `TAIDAFLOW_REST_PORT` 已不讀)。綁定失敗只記
   `[REST] REST API NOT started ...`,app 照常;關閉時由 `Core::shutdown`(`aboutToQuit`,w2-067)在停止設備連線與 Modbus 伺服器
   之後刪除(關閉 listener),接著是歷史檢視、CSV 匯出、`AppHttpServer`,最後 SqlManager(README「關閉流程」)。
-- RESTManager 的改動只有一處:`start()` 多一個綁定位址參數(預設 `QHostAddress::Any` = 原行為);route 與回應不變。
+- w2-060 時 RESTManager 的改動只有一處:`start()` 多一個綁定位址參數(預設 `QHostAddress::Any` = 原行為);route 不變。
+  w2-071 起 6 個 range 路由的回應改為分頁(見下表與表後說明),其他路由的回應不變。
 - nginx `location ^~ /api/` → `proxy_pass http://127.0.0.1:<rest.port>`(HTTP/1.1、方法/body/query 原樣、連線 5 s、讀取 120 s、
   body 上限 1 MB、`Cache-Control: no-store`);`location = /api/` → REST 的 `/`(狀態)。CORS 標頭由 RESTManager 自己加(含 OPTIONS 預檢)。
 - 開放範圍(Mango 決定):全部,讀 + 改設定,**內網不做存取控管**。
@@ -253,16 +254,20 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | GET / PUT | `/api/settings/sensors` | 感測器 key/名稱 | PUT body `[{"key","name"}]`(合併) | PUT:`settings.sqlite` `sensor_config`(app 其他地方不讀) |
 | GET / PUT | `/api/settings/frequency` | `read_frequency` | PUT body `{"read_frequency":n}`,n > 0 | PUT:`settings.sqlite` `app_settings`(沒有程式使用) |
 | GET / PUT | `/api/modbus/mode` | `network` / `standalone` | PUT body `{"mode":...}` | PUT:RESTManager 記憶體(signal 未連接,不影響 Modbus) |
-| GET | `/api/sensor/range`、`/api/holding/range` | 區間所有列(不分頁) | `from`、`to` epoch 秒 | — |
-| GET | `/api/sensor/rangeDateTime`、`/api/holding/rangeDateTime` | 同上 | `from`、`to` ISO 8601 | — |
-| GET | `/api/sensor/rangeDateTimePage`、`/api/holding/rangeDateTimePage` | 分頁 | 同上 + `page`、`pageSize`(<= 1000) | — |
+| GET | `/api/sensor/range`、`/api/holding/range` | 區間的列,**分頁**(w2-071):`{"page","pageSize","totalCount","totalPages","hasPreviousPage","hasNextPage","items":[...]}`,`items` 舊到新、可跨月 | `from`、`to` epoch 秒;選填 `page`(預設 1)、`pageSize`(預設 200,最多 1000) | — |
+| GET | `/api/sensor/rangeDateTime`、`/api/holding/rangeDateTime` | 同上(分頁,格式相同) | `from`、`to` ISO 8601 或 epoch 秒;選填 `page`、`pageSize` | — |
+| GET | `/api/sensor/rangeDateTimePage`、`/api/holding/rangeDateTimePage` | 同 `rangeDateTime`(保留舊名稱) | 同上 | — |
 | GET | `/api/sensor/last`、`/api/holding/last` | 本月最新一列(無 → 404) | — | — |
 | GET | `/api/device/sn` | 序號 | — | `device_info.ini` 不存在時建立(`sn000000`) |
 
 完整說明(回應格式、錯誤碼、PUT 範例)見 `README.md`「REST API」與 `docs/DEPLOY_AND_STARTUP.md` §8;
 `scripts\check-rest-routes.ps1` 確認 log 的 route 表與 `RESTManager.cpp` 一致。
-已知限制(原程式行為,未改):RESTManager 在主執行緒執行,每個查詢 blocking 等 SqlManager 執行緒;不分頁的
-range 路由在大區間時會讓 UI 停住並占大量記憶體(建議 26);`holding_register` 目前沒有資料(Manager 不寫)。
+區間查詢一律分頁(w2-071):6 個 range 路由格式相同;`page`、`pageSize` 要是正整數且不超過 2147483647(`pageSize`
+大於 1000 時當成 1000),`from`、`to` 要在 `0` ~ `253402300799` 之間且 `to >= from`,否則 400、不查詢;要整個區間依
+`hasNextPage` 逐頁取。與舊版不同:以前 `range`、`rangeDateTime` 一次回傳整個區間的陣列(不分頁),大區間會讓 UI 停住
+並占大量記憶體(建議 26);現在已沒有不限筆數的查詢。
+已知限制:RESTManager 仍在主執行緒執行,每個查詢 blocking 等 SqlManager 執行緒,但每次最多讀 1000 列;
+`totalCount`(COUNT)仍涵蓋整個區間,區間很大時這一步仍要掃過整個區間。`holding_register` 目前沒有資料(Manager 不寫)。
 
 ### 2.8 config.json、/runtime.json 與建置調整(w2-062,現況)
 
@@ -507,8 +512,10 @@ range 路由在大區間時會讓 UI 停住並占大量記憶體(建議 26);`hol
 
 25. **RESTManager(原後端的 REST API)啟用與開放範圍**。——**已啟用**(w2-060):`127.0.0.1:18080` + nginx `/api/`,
     GET + PUT 全部開放、內網不做存取控管(Mango 2026-09-28 決定,§2.7)。
-26. **REST 查詢不要卡住 UI**:不分頁的 `/api/sensor/range`、`/api/holding/range`、`rangeDateTime` 會一次讀完整個區間
-    (主執行緒 blocking 等 SqlManager);建議限制區間 / 筆數,或把 RESTManager 移到自己的執行緒。——**仍建議**。
+26. **REST 查詢不要卡住 UI**:當時不分頁的 `/api/sensor/range`、`/api/holding/range`、`rangeDateTime` 會一次讀完整個區間
+    (主執行緒 blocking 等 SqlManager);建議限制區間 / 筆數,或把 RESTManager 移到自己的執行緒。——**已完成**(w2-071):
+    6 個 range 路由全部分頁(`pageSize` 預設 200、最多 1000,`from`/`to`/`page`/`pageSize` 超界回 400,§2.7)。RESTManager
+    仍在主執行緒 blocking 等 SqlManager,但每次最多讀 1000 列;移到自己的執行緒未做。
 27. **REST 的 PUT 目前沒有實際作用對象**:`read_frequency`、`sensor_config` 沒有程式讀取,`modbusModeChanged` 沒有連接;
     若要讓它們生效需另案定義行為。——**仍建議(由維護方決定)**。
 28. **網頁版 QML 匯入掃描的範圍限制依賴 Qt 6.8 的內部函式**(`_qt_internal_scan_qml_imports`,§2.8):升級 Qt 時確認

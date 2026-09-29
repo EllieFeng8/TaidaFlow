@@ -481,21 +481,24 @@ namespace {
 // The routes RESTManager::setupRoutes() registers, logged at start-up.  scripts/check-rest-routes.ps1
 // compares this table with the m_httpServer.route(...) calls in RESTManager.cpp (exit 1 when they
 // differ), so the log and the documentation cannot silently drift from the code.
+// w2-071: all six range routes are paged (page default 1, pageSize default 200 and at most 1000;
+// from/to 0..253402300799 and page/pageSize <= INT_MAX, otherwise 400). Only the purpose strings
+// below describe this; the routes themselves are registered in RESTManager::setupRoutes().
 struct RestRoute { const char *methods; const char *path; const char *purpose; };
 constexpr RestRoute kRestRoutes[] = {
     {"GET",             "/",                               "status {\"status\": \"ok\"} (via nginx: /api/)"},
     {"GET,PUT,OPTIONS", "/api/settings/sensors",           "sensor key/name map (settings.sqlite sensor_config)"},
     {"GET,PUT,OPTIONS", "/api/settings/frequency",         "read_frequency (settings.sqlite app_settings)"},
     {"GET,PUT,OPTIONS", "/api/modbus/mode",                "mode network|standalone (in memory only)"},
-    {"GET,OPTIONS",     "/api/sensor/range",               "sensor rows, from/to epoch seconds"},
-    {"GET,OPTIONS",     "/api/holding/range",              "holding register rows, from/to epoch seconds"},
+    {"GET,OPTIONS",     "/api/sensor/range",               "sensor rows paged (page, pageSize <= 1000), from/to epoch seconds"},
+    {"GET,OPTIONS",     "/api/holding/range",              "holding register rows paged (page, pageSize <= 1000), from/to epoch seconds"},
     {"GET,OPTIONS",     "/api/device/sn",                  "device serial number (device_info.ini)"},
     {"GET,OPTIONS",     "/api/sensor/last",                "newest sensor row of the current month"},
     {"GET,OPTIONS",     "/api/holding/last",               "newest holding register row of the current month"},
-    {"GET,OPTIONS",     "/api/sensor/rangeDateTime",       "sensor rows, from/to ISO date-time"},
-    {"GET,OPTIONS",     "/api/sensor/rangeDateTimePage",   "sensor rows paged (page, pageSize <= 1000)"},
-    {"GET,OPTIONS",     "/api/holding/rangeDateTime",      "holding register rows, from/to ISO date-time"},
-    {"GET,OPTIONS",     "/api/holding/rangeDateTimePage",  "holding register rows paged (page, pageSize <= 1000)"},
+    {"GET,OPTIONS",     "/api/sensor/rangeDateTime",       "sensor rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds"},
+    {"GET,OPTIONS",     "/api/sensor/rangeDateTimePage",   "sensor rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)"},
+    {"GET,OPTIONS",     "/api/holding/rangeDateTime",      "holding register rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds"},
+    {"GET,OPTIONS",     "/api/holding/rangeDateTimePage",  "holding register rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)"},
 };
 
 } // namespace

@@ -10,12 +10,21 @@ Item {
     property real value: 0
     property real valuePv: 0
     property string unit: "PV %"
+    // Allowed set value of the edit dialog, both ends included (w1-070: M1..M4 0 ~ 100).
+    property real minValue: 0
+    property real maxValue: 100
+    // Red hint in the dialog after a rejected commit; cleared when the input changes.
+    property string errorText: ""
     signal valueEdited(real newValue)
 
     function commitValue() {
-        var newValue = Number(editField.text)
-        if (isNaN(newValue))
+        // w1-070: only a number in [minValue, maxValue] with at most 2 decimals is written;
+        // anything else keeps the dialog open and shows the hint. Never clamps.
+        var newValue = NumberFormat.parseSvInRange(editField.text, motorIcon.minValue, motorIcon.maxValue)
+        if (!editField.acceptableInput || isNaN(newValue)) {
+            motorIcon.errorText = "請輸入 " + NumberFormat.rangeText(motorIcon.minValue, motorIcon.maxValue)
             return
+        }
 
         motorIcon.valueEdited(newValue)
         Qt.inputMethod.hide()
@@ -206,9 +215,24 @@ Item {
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                 validator: DoubleValidator {
-                    bottom: 0
-                    top: 9999
+                    bottom: motorIcon.minValue
+                    top: motorIcon.maxValue
                     decimals: 2
+                    notation: DoubleValidator.StandardNotation
+                }
+
+                onTextChanged: motorIcon.errorText = ""
+
+                // w1-070: red hint after a rejected commit, drawn in the spacing under the
+                // field (not a Column child, so the dialog layout does not change).
+                Text {
+                    anchors.top: parent.bottom
+                    anchors.topMargin: 1
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: motorIcon.errorText !== ""
+                    text: motorIcon.errorText
+                    color: "#FF5C5C"
+                    font.pixelSize: 14
                 }
 
                 background: Rectangle {
@@ -235,7 +259,7 @@ Item {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: "單位：" + unit
+                text: "單位：" + motorIcon.unit + "  範圍：" + NumberFormat.rangeText(motorIcon.minValue, motorIcon.maxValue)
 
                 color: "#AFC5D8"
                 font.pixelSize: 16
@@ -300,6 +324,7 @@ Item {
 
         onOpened: {
             editField.text = NumberFormat.svEditText(motorIcon.value)
+            motorIcon.errorText = ""
             editField.forceActiveFocus()
             editField.selectAll()
             // 如果已啟用 Qt Virtual Keyboard

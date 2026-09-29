@@ -890,11 +890,21 @@ Item {
         height: 74
 
         readonly property real value: Td.pump2HzSv
+        // Allowed pump frequency, both ends included (w1-070: 0 ~ 60 Hz).
+        readonly property real minValue: 0
+        readonly property real maxValue: 60
+        // Red hint in the dialog after a rejected commit; cleared when the input changes.
+        property string errorText: ""
 
         function commitValue() {
-            var newValue = Number(motor2EditField.text)
-            if (isNaN(newValue))
+            // w1-070: Enter, Return and 確認 all land here; only a number in [minValue,
+            // maxValue] with at most 2 decimals is written, otherwise the dialog stays open
+            // and shows the hint. Never clamps.
+            var newValue = NumberFormat.parseSvInRange(motor2EditField.text, motor2Item.minValue, motor2Item.maxValue)
+            if (!motor2EditField.acceptableInput || isNaN(newValue)) {
+                motor2Item.errorText = "請輸入 " + NumberFormat.rangeText(motor2Item.minValue, motor2Item.maxValue)
                 return
+            }
 
             Td.pump2HzSv = newValue
             Qt.inputMethod.hide()
@@ -1050,9 +1060,24 @@ Item {
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                     validator: DoubleValidator {
-                        bottom: 0
-                        top: 9999
+                        bottom: motor2Item.minValue
+                        top: motor2Item.maxValue
                         decimals: 2
+                        notation: DoubleValidator.StandardNotation
+                    }
+
+                    onTextChanged: motor2Item.errorText = ""
+
+                    // w1-070: red hint after a rejected commit, drawn in the spacing under
+                    // the field (not a Column child, so the dialog layout does not change).
+                    Text {
+                        anchors.top: parent.bottom
+                        anchors.topMargin: 1
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: motor2Item.errorText !== ""
+                        text: motor2Item.errorText
+                        color: "#FF5C5C"
+                        font.pixelSize: 14
                     }
 
                     background: Rectangle {
@@ -1081,7 +1106,7 @@ Item {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    text: "單位：Hz"
+                    text: "單位：Hz  範圍：" + NumberFormat.rangeText(motor2Item.minValue, motor2Item.maxValue)
 
                     color: "white"
                     font.pixelSize: 17
@@ -1146,6 +1171,7 @@ Item {
 
             onOpened: {
                 motor2EditField.text = NumberFormat.svEditText(motor2Item.value)
+                motor2Item.errorText = ""
                 motor2EditField.forceActiveFocus()
                 motor2EditField.selectAll()
 

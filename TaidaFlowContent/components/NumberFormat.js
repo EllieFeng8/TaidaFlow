@@ -44,3 +44,24 @@ function formatSv(value) {
 function svEditText(value) {
     return isNaN(toFiniteNumber(value)) ? "" : formatSv(value)
 }
+
+// Range check of an SV edit dialog before it writes (w1-070): M1..M4 0 ~ 100, pump Hz 0 ~ 60.
+// The text must be a plain decimal number with at most 2 decimals (what the dialogs'
+// DoubleValidator allows, no exponent) and lie in [minValue, maxValue], both ends included.
+// Returns the number to write, or NaN when nothing may be written (empty, not a number, more
+// than 2 decimals, out of range). Never clamps: 100.01 is rejected, not turned into 100.
+function parseSvInRange(text, minValue, maxValue) {
+    var trimmed = (text === null || text === undefined) ? "" : String(text).trim()
+    if (!/^[+-]?(\d+(\.\d{0,2})?|\.\d{1,2})$/.test(trimmed))
+        return NaN
+    var number = Number(trimmed)
+    if (!isFinite(number) || number < minValue || number > maxValue)
+        return NaN
+    // Adding 0 turns -0 into 0.
+    return number + 0
+}
+
+// "0 ~ 100": the range shown in an SV edit dialog and in its "請輸入 ..." hint (w1-070).
+function rangeText(minValue, maxValue) {
+    return formatSv(minValue) + " ~ " + formatSv(maxValue)
+}

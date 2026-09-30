@@ -14,6 +14,7 @@
 [4 桌面版編譯](#4-桌面版編譯) ·
 [5 網頁版編譯](#5-網頁版編譯webassembly) ·
 [6 Qt Creator](#6-用-qt-creator-開專案) ·
+[6A CLion](#6a-用-clion-開專案) ·
 [7 編譯後必跑的檢查](#7-編譯後必跑的檢查) ·
 [8 分支分工與合併](#8-分支分工main--ui--core--後端與-main-合併進-core-之後) ·
 [9 常見問題](#9-常見問題) ·
@@ -33,6 +34,12 @@ scripts\build-wasm.bat               :: 網頁版 -> build\wasm-release\TaidaFlo
 
 兩支都是 exit code 0 = 成功。工具裝在別的位置:先設環境變數(§2.6)再跑同樣的指令。
 第一次在新電腦上做,請從 §1 依序往下,最後用 §2.7 的檢查清單確認。
+
+- **nginx**(選用):沒有也能編譯;要讓桌面版建置帶出可直接啟動的 `build\desktop\nginx`、或要打包,先照 §2.9
+  把 nginx for Windows 1.30.5 解壓到 `C:\tools\nginx\nginx-1.30.5\`。
+- **用 CLion 編譯**:照 §6A。重點只有兩個:Toolchain 一定要選 **Visual Studio**(CLion 預設的 MinGW 不能用,
+  configure 會直接停下並說明),自訂 profile 的 CMake options 填 `-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`;
+  要部署 / 打包時改用 `desktop-release` preset(或上面的腳本)。
 
 ---
 
@@ -94,16 +101,19 @@ UI 修改先進 `main`,再把 `main` 合併進 `core`(合併後要做的事見 �
 | 軟體 | 版本 | 預設安裝位置(本專案腳本的預設值) | 用途 |
 |---|---|---|---|
 | Qt | **6.8.3**(只能用這版) | `C:\Qt\6.8.3` | 桌面 kit `msvc2022_64`、網頁 kit `wasm_singlethread` |
-| CMake | 3.30.5(Qt 安裝程式附的;最低 3.25,因 `CMakePresets.json` 是 version 6) | `C:\Qt\Tools\CMake_64` | 產生建置檔 |
+| CMake | 3.30.5(Qt 安裝程式附的;最低 3.25,因 `CMakePresets.json` 是 version 6;CLion 內建的 4.3.1 也實測可用,§6A.4) | `C:\Qt\Tools\CMake_64` | 產生建置檔 |
 | Ninja | 1.12.1(Qt 安裝程式附的) | `C:\Qt\Tools\Ninja` | 實際編譯 |
 | Visual Studio | 2022(17.x)或更新,含「使用 C++ 的桌面開發」 | `C:\Program Files\Microsoft Visual Studio\<版本>\<版別>` | MSVC 編譯器(桌面版) |
 | emsdk | **3.1.56**(Qt 6.8 對應版,不能換) | `C:\tools\emsdk` | Emscripten 編譯器(網頁版) |
-| nginx for Windows | 1.30.x(參考機 1.30.5)| `C:\tools\nginx\nginx-<版本>` | 選用:桌面版建置時複製到 `build\desktop\nginx`(§4.5)、打包時隨包附上;沒有也能編譯 |
+| nginx for Windows | 1.30.x(參考機 1.30.5)| `C:\tools\nginx\nginx-<版本>` | 選用:桌面版建置時複製到 `build\desktop\nginx`(§4.5)、打包時隨包附上;沒有也能編譯。取得、驗簽、寫死此路徑的地方與換位置見 §2.9 |
+| WinSW(Windows Service Wrapper) | **2.12.0**(`WinSW-x64.exe`,.NET 6 自帶執行環境的單檔)| `C:\tools\winsw\WinSW-x64-2.12.0.exe` + `LICENSE.txt` | **打包需要**:`package-release.ps1` 把它放進包內 `nginx\nginx-service.exe`(把 nginx 註冊成 Windows 服務,DEPLOY §2A);編譯不需要。取得與換位置見 §2.8 |
 | Python + fonttools | 3.x + `fonttools` | 任意 | **選用**:只有「重新產生網頁版內嵌字型」需要(§2.5);一般桌面版 / 網頁版編譯、所有檢查腳本與部署都**不需要** |
-| Git | 任意 | 任意 | clone、安裝 emsdk |
+| Git | 任意 | 任意 | clone、安裝 emsdk;附的 `gpg.exe` 用來驗 nginx 的簽章(§2.9) |
+| CLion | **選用**,2026.2.x(參考機 2026.2.3) | 參考機 `%LOCALAPPDATA%\Programs\CLion`(JetBrains Toolbox / 只裝給目前使用者時的位置);裝給所有使用者時常見 `C:\Program Files\JetBrains\CLion <版本>`。本專案不依賴它的位置(§6A.1) | 想用 CLion 編輯 / 編譯 / 偵錯時才需要(§6A);Toolchain 要選 **Visual Studio**(內建 MinGW 不能用)。腳本與命令列建置都不需要它 |
 
 參考開發機(本文件指令的驗證環境):Windows 11 Pro 10.0.26200、Qt 6.8.3、CMake 3.30.5、Ninja 1.12.1、
-Visual Studio Community **18**(18.9.3,MSVC `cl` 19.51)、emsdk 3.1.56、nginx 1.30.5、Git 2.55。
+Visual Studio Community **18**(18.9.3,MSVC `cl` 19.51)、emsdk 3.1.56、nginx 1.30.5、Git 2.55、
+CLion 2026.2.3(內建 CMake 4.3.1、Ninja 1.13.2)。
 本專案的檢查、執行、打包腳本都是 PowerShell(`scripts\*.ps1`)或批次檔(w2-062 起沒有其他 Python 腳本)。
 
 ### 2.2 Qt 6.8.3(Qt Online Installer)
@@ -329,7 +339,9 @@ cd /d C:\tools\emsdk
 | `scripts\build-wasm.bat` | 23–25、31–32 | `C:\Qt\6.8.3`、`C:\Qt\Tools`、`C:\tools\emsdk`(+ emsdk 內的 Python 3.9.2-nuget / Node 16.20.0) | 設環境變數,**不用改檔** |
 | `CMakePresets.json` | 14、17 | desktop:Qt toolchain、Ninja | 建 `CMakeUserPresets.json`(下方範本),不要改這個檔 |
 | `CMakePresets.json` | 32–48 | wasm:Qt wasm toolchain、Ninja、Emscripten、`QT_HOST_PATH`、node、emsdk 的 `EMSDK`/`EM_CONFIG`/`EMSCRIPTEN`/`EMSDK_PYTHON`/`EMSDK_NODE`/`PATH` | 同上 |
-| `scripts\check-wasm-backend.ps1`、`scripts\check-version-shadow.ps1` | — | Ninja:`TAIDAFLOW_QT_TOOLS\Ninja\ninja.exe`,預設 `C:\Qt\Tools\Ninja\ninja.exe` | 設 `TAIDAFLOW_QT_TOOLS`,或給 `-Ninja <ninja.exe>` |
+| `scripts\check-wasm-backend.ps1`、`scripts\check-version-shadow.ps1` | — | Ninja:`TAIDAFLOW_QT_TOOLS\Ninja\ninja.exe`,預設 `C:\Qt\Tools\Ninja\ninja.exe` | 設 `TAIDAFLOW_QT_TOOLS`,或給 `-Ninja <ninja.exe>`(CLion 的建置資料夾也可給 CLion 內建的 `<CLion>\bin\ninja\win\x64\ninja.exe`,§7) |
+| `App\tests\run-app-tests.bat`(w2-077) | — | 與 `build-desktop.bat` 相同的預設(Qt、Qt Tools、VS 18 `vcvars64.bat`) | 設 `TAIDAFLOW_QT_ROOT` / `TAIDAFLOW_QT_TOOLS` / `TAIDAFLOW_VCVARS64`,**不用改檔** |
+| `Core\tests\run-core-tests.bat` | 9、10、15–17 | VS 18 `vcvars64.bat`、`C:\Qt\6.8.3\msvc2022_64`、`C:\Qt\Tools` | 改這幾行 |
 | `scripts\run-apphttpserver-tests.bat` | 9、10、12–14 | VS 18 `vcvars64.bat`、`C:\Qt\6.8.3\msvc2022_64`、`C:\Qt\Tools` | 改這幾行 |
 | `scripts\run-pack-tests.bat` | 8、9、14、15、18、19 | 同上 | 改這幾行 |
 | `docs\evidence\w2-049\tools\run-w2041-qtest.bat`、`docs\evidence\w2-045\tools\run-qtest.bat`、`docs\evidence\w2-052\tools\run-qtest.bat`、`docs\evidence\w2-053\tools\run-qtest.bat`、`docs\evidence\w2-067\tools\run-qtest.bat`、`docs\evidence\w2-062\tools\make-bench-db.bat`、`docs\evidence\w2-065\tools\run-app-tests.bat` | vcvars、PATH、cmake 那幾行 | 同上 | 改那幾行 |
@@ -337,7 +349,9 @@ cd /d C:\tools\emsdk
 | `scripts\run-desktop.ps1`、`verify-release-package.ps1`、`taidaflow-config.ps1` | | 執行時把 Qt 的 bin 加到 PATH:`TAIDAFLOW_QT_ROOT\msvc2022_64\bin`,預設 `C:\Qt\6.8.3\msvc2022_64\bin` | 設 `TAIDAFLOW_QT_ROOT`(執行用,不影響編譯) |
 | `scripts\run-simulator.ps1` | 51 | `C:\Qt\6.8.3\msvc2022_64\bin` 加到 PATH | 改那一行(執行用) |
 | `scripts\package-release.ps1` | | `-QtDir` 預設 `C:\Qt\6.8.3\msvc2022_64`、ninja `C:\Qt\Tools\Ninja`、要附上的 nginx `-NginxDir`(沒給時 = 開發設定 config.json 的 `nginx.exe` 所在資料夾,w2-065;再不行才找最新的 `C:\tools\nginx\nginx-<版本>`) | `-QtDir`、`-NginxDir` 參數(或改開發設定的 `nginx.exe`);ninja 那行要改 |
-| 根 `CMakeLists.txt`(桌面版的 nginx 資料夾,§4.5) | | nginx:快取變數 `TAIDAFLOW_NGINX_DIR`,預設 `C:\tools\nginx\nginx-<最新版本>` | configure 時 `-DTAIDAFLOW_NGINX_DIR=<資料夾>` |
+| 根 `CMakeLists.txt`(桌面版的 nginx 資料夾,§4.5) | | nginx:快取變數 `TAIDAFLOW_NGINX_DIR`,預設 `C:\tools\nginx\nginx-<最新版本>` | configure 時 `-DTAIDAFLOW_NGINX_DIR=<資料夾>`(CLion 寫在 profile 的 CMake options,§6A.8) |
+| `deploy\dev\config.dev.json`、`deploy\dev\config.simulator.json`(開發設定,§10) | 60 | `"nginx": { "exe": "C:\\tools\\nginx\\nginx-1.30.5\\nginx.exe" }` | **不要改 repo 內的檔**:複製一份到 `build\` 底下、改 `nginx.exe`,再用 `-Config` 指定(`run-desktop.ps1`、`nginx-web.ps1` 等,§10);`package-release.ps1` 另給 `-NginxDir`。只影響執行與打包,不影響編譯(§2.9) |
+| CLion 的 CMake profile(不在 repo,§6A) | — | 自訂 profile 的 CMake options `-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`;Toolchain 的 Visual Studio 資料夾 | 在 CLion 的 Settings 改(§6A.8);preset profile 照上面的 `CMakeUserPresets.json` |
 | `scripts\verify-release-package.ps1` | | emsdk 的 node 16.20.0(只用來算網頁的下載連結) | 改那一行 |
 
 (行號以本文件撰寫時的 `core` 為準。)
@@ -445,11 +459,106 @@ Node / Python 資料夾名稱照 `dir D:\emsdk\node`、`dir D:\emsdk\python` 看
 - [ ] `vcvars64.bat` 路徑已知;執行後 `cl` 印出 `for x64`(§2.3)
 - [ ] `emcc --version` = `3.1.56`;emsdk 資料夾可寫入;`dir <emsdk>\node`、`dir <emsdk>\python` 看得到版本資料夾(§2.4)
 - [ ] (選用)要重新產生網頁版字型才需要:`py -3 -c "import fontTools"` 成功(§2.5)
-- [ ] 工具不在預設位置 → `TAIDAFLOW_*` 環境變數已設(§2.6);要用 preset / Qt Creator → `CMakeUserPresets.json` 已建
+- [ ] (選用,要 `build\desktop\nginx` 可啟動或要打包)`C:\tools\nginx\nginx-1.30.5\nginx.exe -v` 印 `nginx version: nginx/1.30.5`;
+      zip 驗簽 `Good signature`、SHA-256 相符(§2.9);裝在別處時已照 §2.9 的「裝在別處」處理
+- [ ] (選用,用 CLion 時)CLion 的 Toolchains 有 **Visual Studio** 且排第一(或 profile 的 Toolchain 欄選它)、
+      自訂 profile 的 CMake options 有 `-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`;CMake 視窗看到
+      `The CXX compiler identification is MSVC`、reload exit 0(§6A.2、§6A.3)
+- [ ] 工具不在預設位置 → `TAIDAFLOW_*` 環境變數已設(§2.6);要用 preset / Qt Creator / CLion 的 preset profile → `CMakeUserPresets.json` 已建
 - [ ] `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-pack.ps1` exit 0(pack 24/24,§7)
 - [ ] `scripts\build-desktop.bat` exit 0、`build\desktop\TaidaFlowApp.exe` 存在(§4)
 - [ ] `scripts\build-wasm.bat` exit 0、`build\wasm-release\` 5 個網頁檔存在(§5)
 - [ ] §7 的檢查全部 exit 0
+
+### 2.8 WinSW(nginx 服務包裝程式,打包用)
+
+現場把 nginx 註冊成 Windows 服務(`DEPLOY_AND_STARTUP.md` §2A)要用 **WinSW**:`nginx.exe` 本身不是服務程式(直接 `sc create` 會出現錯誤 1053),
+WinSW 替它回應服務管理員,啟動時執行 `nginx -p <nginx 資料夾>`、停止時執行 `nginx -s quit`。打包時放進包內的 `nginx\nginx-service.exe`
+(WinSW 讀同名的 `nginx-service.xml`,那個檔在現場由 `scripts\install-nginx-service.ps1` 產生,不在包內)。
+**只有打包需要**;編譯、開發機執行都不需要,開發機也**不**安裝任何服務。和 nginx 一樣放在 repo 外、不進 git。
+
+**取得(開發機一次)**:
+
+1. 從 WinSW 官方 GitHub Releases 下載 **v2.12.0** 的 `WinSW-x64.exe`(約 17.4 MB,18,243,033 bytes):
+   <https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe>
+2. 存成 **`C:\tools\winsw\WinSW-x64-2.12.0.exe`**(檔名保留版本;`package-release.ps1` 預設找這個資料夾裡版本最新的 `WinSW-x64-<版本>.exe`)。
+3. 同一個資料夾放授權檔 **`LICENSE.txt`**(MIT):<https://raw.githubusercontent.com/winsw/winsw/v2.12.0/LICENSE.txt>(打包時複製成
+   `nginx\LICENSE-WinSW.txt`,沒有它打包會停止,exit 2)。
+4. 核對 SHA-256(cmd):`certutil -hashfile C:\tools\winsw\WinSW-x64-2.12.0.exe SHA256` 要是
+   `05b82d46ad331cc16bdc00de5c6332c1ef818df8ceefcd49c726553209b3a0da`。WinSW 官方**沒有**替這個版本簽章(Authenticode:NotSigned),
+   也沒有公布雜湊;上面的值是從官方網址下載的檔案算出來的(2026-09-29,紀錄在 `C:\tools\winsw\SOURCE.txt`),之後的複本以它為準。
+5. (參考用,選用)同資料夾放 `xmlConfigFile.md`(XML 欄位說明,<https://raw.githubusercontent.com/winsw/winsw/v2.12.0/doc/xmlConfigFile.md>)
+   與 `SOURCE.txt`(網址、版本、下載日期、SHA-256、簽章狀態)。
+
+參考機 `C:\tools\winsw\`:`WinSW-x64-2.12.0.exe`、`LICENSE.txt`、`SOURCE.txt`、`xmlConfigFile.md`、`sample-allOptions.xml`。
+`WinSW-x64.exe` 是 .NET 6 自帶執行環境的單一執行檔:只匯入 Windows 的 DLL 與 Windows 10/11 內建的 UCRT(`api-ms-win-crt-*`),
+**不需要安裝 .NET**;`scripts\check-package-deps.ps1` 會把它標成 `self-contained .NET single file` 並檢查匯入(missing 0)。
+
+**裝在別的位置時**:打包加參數 `-WinSW <exe 的完整路徑>`(`LICENSE.txt` 要在同一個資料夾),例如
+
+```bat
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1 -WinSW D:\tools\WinSW\WinSW-x64-2.12.0.exe
+```
+
+找不到 WinSW 或 `LICENSE.txt` 時 `package-release.ps1` 印出下載網址並以 exit 2 結束;檔案的產品名稱不是 `Windows Service Wrapper` 也會拒絕。
+打包結果:`nginx\nginx-service.exe`(原檔改名)、`nginx\LICENSE-WinSW.txt`、`nginx\SOURCE-WinSW.txt`(網址、版本、SHA-256、簽章狀態),
+`VERSION.txt` 有一行 `nginx service: WinSW <版本> ... (SHA-256 ...)`,`MANIFEST.txt` 有每個檔的 SHA-256。
+換版本時:下載新版的 `WinSW-x64.exe` 存成 `C:\tools\winsw\WinSW-x64-<新版本>.exe`(`package-release` 自動選最新版本),
+並先在測試機以系統管理員跑一次 DEPLOY §2A 的安裝 / 移除(本專案只核對過 2.12.0 的 XML 欄位與指令;其他版本,尤其 3.x,要重新核對)。
+
+### 2.9 nginx for Windows(選用;桌面版建置會複製、打包會附上)
+
+**沒有 nginx 也能編譯**:configure 只印 `CMake Warning ... [nginx] TAIDAFLOW_NGINX_DIR="..." holds no nginx.exe`,建置照常成功(§4.5)。
+需要它的情況:要讓桌面版建置產生可直接啟動的 `build\desktop\nginx`(80 port 網頁,§4.5)、開發機的 nginx 腳本
+(`scripts\nginx-web.ps1`)、或打包(`package-release.ps1` 把它附進包內)。和 WinSW 一樣放在 repo 外、不進 git。
+(本節取代 README 原本的「安裝 nginx」步驟;README 改為指向這裡。)
+
+**取得(開發機一次)**:
+
+1. 下載:<https://nginx.org/en/download.html> 的 **Stable version** 那一列 → `nginx/Windows-1.30.5`(zip)與旁邊的 `pgp`(`.asc`
+   簽章檔),也就是 <https://nginx.org/download/nginx-1.30.5.zip> 與 <https://nginx.org/download/nginx-1.30.5.zip.asc>。
+   本專案用 **1.30.5**(2,776,622 bytes);不要用 Mainline。簽章者的公鑰在 <https://nginx.org/keys/>:1.30.5 由
+   Sergey Kandaurov 簽(`pluknet.key`,指紋 `D678 6CE3 03D9 A902 2998 DC6C C846 4D54 9AF7 5C0A`)。三個檔都存到
+   `C:\tools\nginx\_download\`(參考機的做法;這個資料夾只是下載暫存,建置不會讀它)。
+2. 驗簽與 SHA-256(cmd;gpg 用 Git for Windows 內附的,不必另外安裝):
+   ```bat
+   cd /d C:\tools\nginx\_download
+   mkdir gnupg
+   set GNUPGHOME=gnupg
+   "C:\Program Files\Git\usr\bin\gpg.exe" --import pluknet.key
+   "C:\Program Files\Git\usr\bin\gpg.exe" --verify nginx-1.30.5.zip.asc nginx-1.30.5.zip
+   certutil -hashfile nginx-1.30.5.zip SHA256
+   ```
+   - `GNUPGHOME=gnupg` 讓金鑰只放在這個下載資料夾裡的 `gnupg\`,不動使用者自己的 gpg 金鑰圈。Git 的 gpg 是 MSYS 程式,
+     **不認 `C:\...` 形式的 `GNUPGHOME`**(會找不到金鑰圈,實測),所以用相對路徑(在 `cd` 之後)。
+   - 要看到 `Good signature from "Sergey Kandaurov <s.kandaurov@f5.com>"` 與 `Primary key fingerprint: D678 6CE3 03D9 A902 2998  DC6C C846 4D54 9AF7 5C0A`,
+     exit 0。同時出現的 `WARNING: The key's User ID is not certified with a trusted signature!` 是正常的(表示你沒有另外
+     替這把金鑰簽名);要確認的是指紋與上面相同。
+   - SHA-256 要是 `e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35`(參考機 2026-09-27 下載、驗簽後算出的值;
+     nginx.org 不公布雜湊,之後的複本以它為準)。驗簽失敗或雜湊不同:不要用,重新下載。
+3. 解壓:zip 裡最上層就是 `nginx-1.30.5\` 資料夾。在檔案總管對 zip 按右鍵「全部解壓縮」,目的地填 **`C:\tools\nginx`**
+   (不是 `C:\tools\nginx\nginx-1.30.5`,否則會多一層);或用 PowerShell:
+   `Expand-Archive C:\tools\nginx\_download\nginx-1.30.5.zip -DestinationPath C:\tools\nginx`。
+   結果是 `C:\tools\nginx\nginx-1.30.5\nginx.exe`,旁邊有 `conf\mime.types`、`docs\`(授權檔)、`html\`、`logs\`、`temp\`。
+4. 驗證:`C:\tools\nginx\nginx-1.30.5\nginx.exe -v` → `nginx version: nginx/1.30.5`(exit 0)。**不要**在這個資料夾
+   `start nginx`:開發機用 `build\desktop\nginx` 或 `scripts\nginx-web.ps1`(§4.5),安裝資料夾保持原樣,只被複製。
+
+參考機的實際狀態:`C:\tools\nginx\nginx-1.30.5\`(`nginx -v` = 1.30.5)、`C:\tools\nginx\_download\`(zip、`.asc`、`keys\`、`gnupg\`);
+下載與驗簽紀錄 `docs/evidence/w2-050/01-nginx-download-verify.txt`,w2-077 用上面的步驟重驗
+(`docs/evidence/w2-077/tools/verify-nginx-download.bat` → `docs/evidence/w2-077/d1-nginx-verify.log`,exit 0)。
+
+**寫死這個路徑的地方**(也列在 §2.6 表):
+
+| 位置 | 寫死的值 | 用途 | 裝在別處時 |
+|---|---|---|---|
+| 根 `CMakeLists.txt` | 找 `C:/tools/nginx/nginx-*` 裡版本最新、有 `nginx.exe` 的資料夾,當快取變數 `TAIDAFLOW_NGINX_DIR` 的預設 | 桌面版建置複製 `nginx.exe`、`conf\mime.types` 到 `<建置資料夾>\nginx`(§4.5) | configure 加 `-DTAIDAFLOW_NGINX_DIR=D:/tools/nginx-1.30.5`(腳本:`scripts\build-desktop.bat` 不帶這個參數,改用 §4.3 的手動指令加上它,或建好後 `cmake -DTAIDAFLOW_NGINX_DIR=... build\desktop` 再建一次;CLion:profile 的 CMake options) |
+| `deploy\dev\config.dev.json`、`deploy\dev\config.simulator.json` 第 60 行 | `"exe": "C:\\tools\\nginx\\nginx-1.30.5\\nginx.exe"` | 開發機腳本(`nginx-web.ps1`、`nginx-start.ps1` 等)啟動的 nginx;`package-release.ps1` 沒給 `-NginxDir` 時附上這個 nginx 所在的資料夾 | **不要改 repo 內的檔**:複製一份到 `build\` 底下(例如 `build\my-config.dev.json`)改 `nginx.exe`,再用 `-Config build\my-config.dev.json`(§10);注意 `dataDir` 是相對於設定檔所在資料夾,複製到 `build\` 後要改成 `runtime-cwd` 之類的相對路徑或絕對路徑 |
+| `scripts\package-release.ps1` | 沒給 `-NginxDir` 且開發設定的 `nginx.exe` 不存在時,找最新的 `C:\tools\nginx\nginx-<版本>` | 打包附上的 nginx | 打包加 `-NginxDir <資料夾>` |
+| `docs\DEPLOY_AND_STARTUP.md`(手動打包的範例指令) | `C:\tools\nginx\nginx-1.30.5\...` | 說明用 | 照實際位置改指令 |
+
+- 換 nginx 版本:照 1.~4. 下載新版到 `C:\tools\nginx\nginx-<新版本>\`(CMake 與 `package-release` 會自動選最新版本),
+  再把兩份開發設定的 `nginx.exe` 改成新版本(這是 repo 的修改,和程式一起提交),桌面版 `fresh` 建置(`TAIDAFLOW_NGINX_DIR`
+  是快取變數,已建過的資料夾不會自己換)。新版本要重跑 README「測試 / 驗證」與打包驗證(nginx 設定樣板只在 1.30.5 實測)。
 
 ---
 
@@ -497,6 +606,8 @@ CMake 結構:
   Qt 的內部函式 `_qt_internal_scan_qml_imports`:Qt 照常掃描後,用 Qt 寫好的同一份參數檔再掃一次,只把 `-rootPath` 換成 repo
   最上層的每個資料夾(不含 `build*`、`dist`、`cmake-build-*`、`.` 開頭的資料夾),結果取代 Qt 的。configure log 有一行
   `-- [qml-scan] QML import scan limited to the project folders (...): 45 import(s) (Qt's whole-folder scan: 59)`。
+  括號裡「Qt 全資料夾掃描」的數字會隨 repo 裡有哪些建置資料夾而變(w3-075 / w2-077 實測:有 CLion 的 `cmake-build-*` 與其他
+  `build\` 子資料夾時是 63、77、81 之類),**不必相同**;要看的是前面的 `45 import(s)`,以及 `TaidaFlowApp.wasm` 大小不變。
   Qt 版本不同、找不到那個函式或參數檔時只印 warning 並沿用 Qt 自己的結果。只影響網頁版。
 - **桌面版建置同時產生 nginx 資料夾**(w2-062,§4.5):根 `CMakeLists.txt` 的 target `taidaflow_nginx_conf`(`TaidaFlowApp`
   相依於它)產生 `build\desktop\nginx\`。
@@ -717,6 +828,183 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 
 ---
 
+## 6A. 用 CLion 開專案
+
+> 參考機:CLion 2026.2.3(build 262.10968.117)。下面每一種建置方式都有**等效命令列**實測(w3-075 在乾淨 clone、w2-077 在
+> core 工作目錄;exit code 與 log 在 `docs/evidence/w2-077/`,可重跑的工具在 `docs/evidence/w2-077/tools/`)。
+> CLion **畫面操作本身沒有實測**(不做 UI 操作),欄位名稱依 CLion 2026.2 的設定畫面撰寫。
+
+### 6A.1 要先裝好的東西
+
+- §2 的 Qt 6.8.3(`msvc2022_64`,網頁版另要 `wasm_singlethread`)與 7 個模組、Visual Studio(「使用 C++ 的桌面開發」)、
+  網頁版要 emsdk 3.1.56(§2.4)、nginx 選用(§2.9)。
+- **Qt 附的 Ninja(`C:\Qt\Tools\Ninja`)仍要裝**:`CMakePresets.json` 寫死 `C:/Qt/Tools/Ninja/ninja.exe`(preset profile 用它)。
+  Qt 附的 CMake 3.30.5 建議也裝(腳本用它;CLion 也可以改用它,§6A.4)。
+- CLion:<https://www.jetbrains.com/clion/download/> 下載 Windows 安裝程式(或用 JetBrains Toolbox 安裝);需要 JetBrains 帳號 /
+  授權(非商業使用有免費授權,依 JetBrains 當時的規定)。參考機裝在 `%LOCALAPPDATA%\Programs\CLion`(以下寫成 `<CLion>`;
+  裝給所有使用者時常見 `C:\Program Files\JetBrains\CLion <版本>`,位置不影響本專案)。CLion 內建:
+
+  | 內建工具 | 位置 | 版本(2026.2.3) | 本專案 |
+  |---|---|---|---|
+  | CMake(含 ctest) | `<CLion>\bin\cmake\win\x64\bin\cmake.exe` | 4.3.1 | 可用(§6A.4) |
+  | Ninja | `<CLion>\bin\ninja\win\x64\ninja.exe` | 1.13.2 | 可用(自訂 profile 用它;preset profile 用 Qt 的) |
+  | MinGW(GCC) | `<CLion>\bin\mingw\bin` | GCC 15.2.0 | **不能用**:Qt 是 MSVC 版,configure 會被根 `CMakeLists.txt` 擋下(§6A.2) |
+
+- 開專案:File → Open → 選 repo 資料夾(有 `CMakeLists.txt` 的最上層,不是 `TaidaFlow.qmlproject`)→ 以 CMake 專案開啟。
+  CLion 在 repo 裡建 `.idea\`(個人設定)與 `cmake-build-*\`(建置輸出),`.gitignore` 都已排除。
+
+### 6A.2 Toolchain:一定要選 Visual Studio
+
+Settings → Build, Execution, Deployment → **Toolchains** → `+` → **Visual Studio**:
+
+| 欄位 | 值 |
+|---|---|
+| Name | `Visual Studio`(預設名稱) |
+| Toolset | `C:\Program Files\Microsoft Visual Studio\18\Community`(VS 2022 為 `...\2022\Community`;Build Tools 為 `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools`;就是 §2.3 找到的 `vcvars64.bat` 路徑去掉最後的 `\VC\Auxiliary\Build\vcvars64.bat`) |
+| Architecture | `amd64` |
+| Build Tool | `Ninja`:用 CLion 內建的(預設)即可 |
+| CMake | `Bundled`(4.3.1)或 `C:\Qt\Tools\CMake_64\bin\cmake.exe`(3.30.5,§6A.4) |
+
+- 用箭頭把 Visual Studio 移到**第一個**(第一個 = 預設 toolchain);或每個 CMake profile 的 Toolchain 欄都明確選 `Visual Studio`。
+- **全新的 CLion 預設 toolchain 是內建 MinGW**。選錯時 configure 會在最前面停下(w2-077 起根 `CMakeLists.txt` 檢查,
+  桌面版的 C++ 編譯器不是 MSVC 就 `FATAL_ERROR`):
+  ```text
+  CMake Error at CMakeLists.txt:38 (message):
+    此專案桌面版只支援 MSVC(Qt 6.8.3 msvc2022_64)。目前的 C++ 編譯器是 GNU 15.2.0(.../CLion/bin/mingw/bin/g++.exe)。
+    CLion 請在 Settings > Build, Execution, Deployment > Toolchains 選 Visual Studio(...)然後 Tools > CMake > Reset Cache and Reload Project。...
+    The desktop build of this project supports MSVC only (Qt 6.8.3 msvc2022_64); the C++ compiler is GNU 15.2.0 (...).
+  ```
+  照訊息改 Toolchain,再 Tools → CMake → **Reset Cache and Reload Project**。網頁版(Emscripten)不受這個檢查影響。
+  (w2-077 以前沒有這個檢查:configure 會成功,build 到第 360/582 步才出現與原因無關的 g++ 錯誤,§6A.7 第一列。)
+- 確認:CMake 視窗(CLion 下方的 CMake 工具視窗)要看到 `The CXX compiler identification is MSVC 19.xx`。
+
+### 6A.3 CMake profile(A、B 擇一或都建)
+
+**A. 自訂 profile(開發 / 偵錯用,Debug)**:Settings → Build, Execution, Deployment → **CMake** → `+`:
+
+| 欄位 | 值 |
+|---|---|
+| Name | `Debug-Visual Studio`(CLion 依 Build type + Toolchain 自動命名) |
+| Build type | `Debug`(要與正式相同就用 `Release`) |
+| Toolchain | `Visual Studio` |
+| Generator | `Ninja`(預設 `Use default`,CLion 預設就是 Ninja) |
+| CMake options | `-G Ninja -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`(Qt 在別處就換成實際位置,§6A.8;`-G Ninja` 可省略) |
+| Build directory | 空白 = `cmake-build-debug-visual-studio`(在 repo 內,`.gitignore` 的 `cmake-build-*/` 已排除) |
+| Build options | 空白 |
+| Environment | 空白(Toolchain 已帶 MSVC 環境) |
+
+等效命令列(w2-077 實測 configure exit 0、`--clean-first` build exit 0,582 步,見 §11;工具 `docs\evidence\w2-077\tools\clion-debug.bat`):
+```bat
+call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
+cd /d C:\src\TaidaFlow
+"%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64 "-DCMAKE_MAKE_PROGRAM=%LOCALAPPDATA%/Programs/CLion/bin/ninja/win/x64/ninja.exe" -S . -B cmake-build-debug-visual-studio
+"%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" --build cmake-build-debug-visual-studio
+```
+
+**B. 用 `CMakePresets.json`(輸出與腳本相同;要部署 / 打包就用這個)**:CLion 開專案時會自動把 `desktop-release`、
+`wasm-debug`、`wasm-release`(以及 build preset)列成 profile,**預設是停用**(參考機 `.idea\workspace.xml` 裡 `ENABLED="false"`)。
+在 Settings → CMake 點該 profile、勾 **Enable profile**,**Toolchain 欄一樣選 `Visual Studio`**(preset 顯示名稱裡的
+「run inside a vcvars64 shell」在 CLion 就是指這個)。preset 的欄位(Generator、binaryDir、快取變數)是唯讀的,不用填。
+
+- `desktop-release` → `build\desktop\TaidaFlowApp.exe`;`deploy-web.ps1`、`package-release.ps1`、§7 檢查腳本直接可用。
+- `wasm-release` / `wasm-debug` → `build\wasm-release` / `build\wasm-debug`(完整建置約 3 分鐘)。preset 自帶 emsdk 環境
+  (`environment` 的 `PATH` 整個取代),CLion 裡不必先跑 `emsdk_env.bat`;Toolchain 選 Visual Studio 也可以
+  (w3-075 實測:在 vcvars64 環境下用 preset 建的 `TaidaFlowApp.wasm` 與 emsdk 環境建的大小相同)。
+- preset 用的是 `C:/Qt/Tools/Ninja/ninja.exe`,不是 CLion 內建的 ninja。工具不在預設位置:照 §2.6 建 `CMakeUserPresets.json`,
+  CLion 會一起列出(一樣要 Enable)。
+- 等效命令列(w2-077 實測 configure / build 各 exit 0;為了不動打包正在用的 `build\desktop`,實測時以 `-B` 把輸出換到
+  `build\w2-077-<preset>`,其他設定與 preset 相同;工具 `docs\evidence\w2-077\tools\clion-preset.bat`):
+  ```bat
+  :: desktop-release(先 vcvars64)
+  "%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" --preset desktop-release
+  "%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" --build --preset desktop-release
+  :: wasm-release(先 call C:\tools\emsdk\emsdk_env.bat,新的 cmd)
+  "%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" --preset wasm-release
+  "%LOCALAPPDATA%\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe" --build --preset wasm-release
+  ```
+- 同一個建置資料夾不要同時給 CLion 與腳本用不同的 CMake / 設定(會互相觸發重新 configure,或 `CMAKE_COMMAND` 不同);
+  換設定用 Tools → CMake → **Reset Cache and Reload Project**(等於 `fresh`)。
+
+### 6A.4 CMake 4.x(CLion 內建)與改用 Qt 的 CMake 3.30.5
+
+- CLion 2026.2 內建 CMake **4.3.1**,本專案實測可用:A(Debug)、B 的 `desktop-release`、`wasm-release` 都 configure + build exit 0
+  (`cmake_minimum_required(VERSION 3.21.1)` 在 4.x 仍被接受;CMake 4 移除的是 3.5 以前的相容性)。
+- 與 3.30.5 的差異只有警告:多出 **14 個** `CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284
+  (cmake_parse_arguments): The VERSION keyword was followed by an empty string ... Policy CMP0174 is not set`。這是 Qt 6.8.3 自己的
+  CMake 檔在 CMake 3.31 以後才會有的警告(w3-075 對照:3.30.5 為 0 個),不影響結果。不想看到:CMake options 加 `-Wno-dev`,
+  或改用 Qt 的 CMake(下一點)。
+- **改用 Qt 的 CMake 3.30.5**:Settings → Build, Execution, Deployment → Toolchains → 選 `Visual Studio` → **CMake** 欄從
+  `Bundled` 改成 `C:\Qt\Tools\CMake_64\bin\cmake.exe`(CLion 會顯示偵測到的版本)→ 套用後 Tools → CMake → Reset Cache and
+  Reload Project。只影響 CLion 用哪一個 cmake.exe,profile 的其他欄位不變。
+- 其他每次都有、可忽略的訊息與 §9 相同:`Qt policy QTP0001/QTP0004 is not set`、object 路徑長度提示
+  (`The object file directory ... has 175 characters`)、網頁版的 `Qt6ProtobufTools ... could not be found`、
+  `Manually-specified variables were not used by the project: BUILD_TESTING`;建置中數行 `Failed to run spirv-opt -O ...`
+  (Qt 的 shader 工具找不到 Vulkan SDK 的 spirv-opt,只是不做 shader 最佳化)。以 exit code 為準。
+
+### 6A.5 Debug 與 Release
+
+| | Debug(A 的 `Debug-Visual Studio`) | Release(B 的 `desktop-release` / `scripts\build-desktop.bat`) |
+|---|---|---|
+| 輸出 | `cmake-build-debug-visual-studio\TaidaFlowApp.exe`(約 10 MB) | `build\desktop\TaidaFlowApp.exe`(約 3.6 MB) |
+| 需要的 DLL | `Qt6Cored.dll` 等 `d` 結尾(都在 `C:\Qt\6.8.3\msvc2022_64\bin`)+ VC **Debug** runtime(`MSVCP140D`、`VCRUNTIME140D`、`ucrtbased`,只有裝了 VS 的電腦有) | `Qt6Core.dll` 等 |
+| 部署 / 打包(`deploy-web.ps1`、`package-release.ps1`) | 不適用(腳本看 `build\desktop`,只收 Release) | 適用 |
+| `check-wasm-backend.ps1` | **可用**(w2-077 起認得 `Qt6<模組>d.lib`;輸出多一行 `build_type: Debug`) | 可用 |
+| `check-version-shadow.ps1` | 可用 | 可用 |
+| 用途 | CLion 裡設中斷點、單步 | 部署、打包、效能 |
+
+兩種桌面建置都會產生 `<建置資料夾>\nginx`(§4.5);`nginx -t` 的訊息寫到 config.dev.json 的 log 資料夾 `build\runtime-cwd\logs`。
+網頁版一律用 Release(`wasm-release`);`wasm-debug` 只在要看 wasm 除錯資訊時用,大很多。
+
+### 6A.6 執行、偵錯與測試
+
+- **不要在 CLion 直接 Run / Debug `TaidaFlowApp` 連設備**(同 §6:不經安全探測,一啟動就連 `192.168.1.201~205` 並寫入輸出)。
+  開發機一律 `scripts\run-desktop.ps1`(接模擬器 `-DeviceProfile simulator`,README)。
+- 一定要在 CLion 裡啟動時(**未實測**,本專案不在自動化中啟動程式):Run → Edit Configurations → `TaidaFlowApp` →
+  **Environment variables** 加兩個:
+  - `PATH` = `C:\Qt\6.8.3\msvc2022_64\bin` 放在原本 PATH 的最前面(沒加就是 `找不到 Qt6Cored.dll`,0xc0000135);
+  - `TAIDAFLOW_CONFIG` = `<repo>\deploy\dev\config.simulator.json`(接模擬器;先照 README 起 `scripts\run-simulator.ps1`)
+    或 `<repo>\deploy\dev\config.dev.json`。
+  **沒設 `TAIDAFLOW_CONFIG` 時,程式會在 exe 旁(`cmake-build-debug-visual-studio\`)建立正式機預設的 config.json:
+  資料寫到 `C:\TaidaFlowData`、連廠區 `192.168.1.201~205` 的 ADAM 與 MS300 並寫入輸出(§10)。** 用 config.dev.json 時設備
+  位址也是廠區預設,只有在確定連不到廠區網路時才可以;不確定就用 config.simulator.json。
+- 另一種偵錯方式(同樣未實測):先用 `scripts\run-desktop.ps1 -DeviceProfile simulator`(會做安全探測)啟動,再在 CLion 用
+  Run → **Attach to Process** 附加到 `TaidaFlowApp.exe`;`run-desktop.ps1` 預設跑 `build\desktop`(Release),要偵錯 Debug 版時
+  依 README 的參數指定 exe。
+- 網頁版不能在 CLion 直接執行:照 §5.4 `deploy-web.ps1`,由桌面版或 nginx 提供。
+- 單元測試(QTest / CTest)是**獨立的 CMake 專案**,根專案的 CTest 會顯示 `No tests were found`(正常,根 `CMakeLists.txt` 沒有
+  `enable_testing`):命令列 `App\tests\run-app-tests.bat`、`Core\tests\run-core-tests.bat`(§7);或在 CLion 用 File → Open
+  另外開 `App\tests` 或 `Core\tests` 資料夾(同樣選 Visual Studio toolchain、CMake options `-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`),
+  用 CLion 的 CTest 執行設定跑(w3-075 以 CLion 的 cmake/ctest 4.3.1 實測 App/tests 3/3、Core/tests 6/6 通過)。
+
+### 6A.7 常見錯誤
+
+| 症狀 | 原因與解法 |
+|---|---|
+| configure 失敗:`CMake Error at CMakeLists.txt:38 (message): 此專案桌面版只支援 MSVC ...`(英文 `supports MSVC only`),`The CXX compiler identification is GNU ...` | 用了 CLion 預設的 **MinGW** toolchain(或其他非 MSVC 編譯器)。改成 Visual Studio toolchain(§6A.2)→ Tools → CMake → Reset Cache and Reload Project。 |
+| (w2-077 以前的 core,或把上面的檢查拿掉時)configure 成功、build 失敗:`Core/AppHttpServer/AppHttpServer.h:110:67: error: default member initializer for 'AppHttpServer::StaticOptions::redirectToIndex' required before the end of its enclosing class`(`core.cpp`、`AppHttpServer.cpp`、`HistoryExport.cpp` FAILED),編譯指令是 `...\CLion\bin\mingw\bin\g++.exe` | 同上,MinGW 搭配 MSVC 版 Qt(這個錯誤訊息跟真正原因無關)。附註:那兩行(巢狀 struct 的成員預設值當外層 class 的預設引數)只有 MSVC 接受;本專案只支援 MSVC,不影響,但移植到 GCC / Clang 時要改。 |
+| `No CMAKE_CXX_COMPILER could be found` / 找不到 `cl.exe` | Visual Studio toolchain 的 Toolset 路徑不對,或 VS 沒裝「使用 C++ 的桌面開發」(§2.3)。 |
+| `Could not find a package configuration file provided by "Qt6"` | 自訂 profile 的 CMake options 沒有 `-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`(或 Qt 不在 `C:\Qt`)。 |
+| 缺某個 Qt 模組(`Qt6HttpServer` 等) | 同 §9,用 Qt Maintenance Tool 補裝。 |
+| 一大堆 `Policy CMP0174 is not set` | CMake 4.x 正常(§6A.4)。 |
+| preset profile 看不到 / 灰色 | 預設停用:Settings → CMake → 點該 preset → 勾 Enable profile。 |
+| preset profile 出現上面的「只支援 MSVC」或找不到 `cl.exe` | preset profile 的 Toolchain 欄沒改成 Visual Studio。 |
+| preset 找不到 `C:/Qt/Tools/Ninja/ninja.exe` | 沒裝 Qt 附的 Ninja(§2.2 第 5 步),或用 `CMakeUserPresets.json` 改路徑(§2.6)。 |
+| `ninja: error: ... loading 'build.ninja'`、檢查腳本對 CLion 的建置資料夾失敗 | 用 CLion 內建的 ninja 讀:`-Ninja "%LOCALAPPDATA%\Programs\CLion\bin\ninja\win\x64\ninja.exe"`(§7;w2-077 實測 Qt 的 ninja 1.12.1 也讀得了 CLion 1.13.2 產生的資料夾)。 |
+| 執行時找不到 `Qt6Cored.dll` / `Qt6Core.dll`(0xc0000135) | 執行環境的 PATH 沒有 `C:\Qt\6.8.3\msvc2022_64\bin`(§6A.6)。 |
+| 在 CLion 按 Run 後 exe 旁邊多了 `config.json`、資料寫到 `C:\TaidaFlowData` | 沒設 `TAIDAFLOW_CONFIG`(§6A.6)。停掉程式、刪掉那個 config.json,設好再執行。 |
+
+### 6A.8 工具裝在別處時
+
+- Qt:自訂 profile 的 `CMAKE_PREFIX_PATH` 換成實際位置;preset 照 §2.6 建 `CMakeUserPresets.json`。
+- Visual Studio:Toolchain 的 Toolset 指到實際資料夾(與 §2.3 找到的 vcvars64.bat 同一個 VS)。
+- emsdk:照 §2.6 的 `CMakeUserPresets.json`(`my-wasm-release`)。
+- nginx:自訂 profile 的 CMake options 加 `-DTAIDAFLOW_NGINX_DIR=<資料夾>`(§2.9、§4.5);preset profile 在
+  `CMakeUserPresets.json` 的 `cacheVariables` 加 `"TAIDAFLOW_NGINX_DIR": "<資料夾>"`。
+- CLion 裝在別處:只影響 `<CLion>` 內建工具的位置;Toolchain 的 CMake 也可以改指 Qt 的 CMake,不依賴 CLion 安裝路徑。
+  `docs\evidence\w2-077\tools\*.bat` 以環境變數 `CLION` 指定 CLion 資料夾(預設 `%LOCALAPPDATA%\Programs\CLion`)。
+
+---
+
 ## 7. 編譯後必跑的檢查
 
 全部在 repo 資料夾的 cmd 執行,以 **exit code** 判定(0 = 通過)。
@@ -727,19 +1015,36 @@ C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\wasm-release --target TaidaFlow
 | 時機 | 指令 | 通過條件 |
 |---|---|---|
 | clone 後 / 更新 pack 後 | `PS scripts\verify-pack.ps1`(與來源比對:`-Source <pack 來源資料夾>`) | `MANIFEST` 24/24、exit 0 |
-| 每次兩邊都建完 | `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release` | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
+| 每次兩邊都建完 | `PS scripts\check-wasm-backend.ps1 build\desktop build\wasm-release`(Debug / CLion 的資料夾也可以,可加 `-Ninja`,見表下) | 桌面 `verdict: OK`(9 個後端來源都在)、wasm `backend_sources (0)`、`backend_qt_libs (0)`、`backend_strings (0)`、`check_wasm_backend exit=0` |
 | 每次兩邊都建完 | `PS scripts\check-version-shadow.ps1 build\desktop build\wasm-release` | 兩行都是 `version_shadow_hits=0`,exit 0 |
 | 改過 UI / C++ 中文字串或中文註解後(選用工具,§2.5) | `PS scripts\make-font-subset.ps1 --check` | exit 0;exit 1 = 有新字,或字元被移除(訊息 `0 new chars` 也算)→ 照 §2.5 (B) 重新產生 → 重建 wasm |
 | 改過 REST 相關程式後 | `PS scripts\check-rest-routes.ps1` | exit 0(log 的 route 表與實際註冊一致) |
 | 改過 `Core/AppHttpServer/` 後(或定期) | `scripts\run-apphttpserver-tests.bat` | CTest `100% tests passed`,exit 0(需約 2 GiB 暫存磁碟空間;輸出 `build\apphttpserver-qtest`) |
-| 改過 `App/appconfig.*`、`App/runtimeinfo.*`、`App/applog.*` 後 | 建置並執行 `App/tests`(CTest:`tst_appconfig`、`tst_runtimeinfo`、`tst_applog`,見 `App/tests/README.md` 與下方指令) | `100% tests passed`(3 個測試) |
+| 改過 `App/appconfig.*`、`App/runtimeinfo.*`、`App/applog.*` 後 | `App\tests\run-app-tests.bat`(CTest:`tst_appconfig`、`tst_runtimeinfo`、`tst_applog`,見 `App/tests/README.md` 與表下) | `100% tests passed`(3 個測試),exit 0 |
+| 改過 `Core/` 的 REST、SqlManager、HistoryExport、Modbus、MS300、Manager 後 | `Core\tests\run-core-tests.bat fresh` | `100% tests passed`(6 個測試),exit 0 |
 | 改過 `scripts\taidaflow-config.ps1`(腳本的 config.json 讀取器、log 資料夾與清理)後 | `PS docs\evidence\w2-065\tools\test-config-reader.ps1` | `=== 0 check(s) failed`,exit 0(只用 `build\desktop\TaidaFlowApp.exe --write-default-config`,不啟動程式) |
 | 改過 pack 或升級 Qt 後 | `scripts\run-pack-tests.bat` | exit 0(pack 自帶的 native tests;輸出 `build\pack-tests`) |
 | 改過 SqlManager / HistoryExport / HistoryViews / Proxy 後 | `docs\evidence\w2-062\tools\make-bench-db.bat`(C++ 測試資料產生器)→ `docs\evidence\w2-049\tools\run-w2041-qtest.bat`(需 8124 空著)、`docs\evidence\w2-045\tools\run-qtest.bat` 與 `docs\evidence\w2-052\tools\run-qtest.bat` | 各自 exit 0(資料量大,需要較長時間) |
 | 改過 Manager(DI 警報)或 SqlManager 後 | `docs\evidence\w2-053\tools\run-qtest.bat`(DI 警報跨重啟) | exit 0(不需要測試資料、設備或 port) |
 | 改過 `Core::shutdown` / `SqlManager::shutdown()`(關閉流程,w2-067)後 | `docs\evidence\w2-067\tools\run-qtest.bat`(`tst_w2067_sqlmanager_shutdown`) | exit 0(`Totals: 7 passed`;不需要測試資料、設備或 port);連設備時的實際關閉見 README「關閉流程」 |
 
-- `App/tests` 的建置與執行(桌面版 kit;輸出放 `build\` 底下,例如 `build\app-tests`):
+- **檢查腳本對 Debug / Release 都可用**(w2-077):`check-wasm-backend.ps1` 與 `check-version-shadow.ps1` 的參數可以是任何
+  單一設定的 Ninja 建置資料夾——腳本的 `build\desktop`(Release)、CLion 的 `cmake-build-debug-visual-studio`(Debug)、
+  Qt Creator 的資料夾,桌面版與網頁版各給一個即可。Debug 版連結的是 `Qt6<模組>d.lib`,`check-wasm-backend` 一樣算數
+  (輸出多一行 `build_type: Debug`,判定規則不變;w2-077 以前的版本會誤判 `verdict: FAIL`)。CLion 產生的資料夾可加
+  `-Ninja "%LOCALAPPDATA%\Programs\CLion\bin\ninja\win\x64\ninja.exe"` 用 CLion 自己的 ninja 讀(Qt 的 ninja 1.12.1 實測也讀得了):
+  ```bat
+  PS scripts\check-wasm-backend.ps1 -Ninja "%LOCALAPPDATA%\Programs\CLion\bin\ninja\win\x64\ninja.exe" cmake-build-debug-visual-studio build\wasm-release
+  PS scripts\check-version-shadow.ps1 -Ninja "%LOCALAPPDATA%\Programs\CLion\bin\ninja\win\x64\ninja.exe" cmake-build-debug-visual-studio build\wasm-release
+  ```
+  判定邏輯的測試(對真實建置資料夾與其複本做「拿掉後端 lib / 來源、在網頁版加入後端 lib / 來源」後必須 FAIL):
+  `PS docs\evidence\w2-077\tools\test-check-wasm-backend.ps1 -DebugDir <Debug> -ReleaseDir <Release> -WasmDir <wasm>`。
+- `App/tests` 的建置與執行(桌面版 kit,輸出 `build\app-tests`;w2-077 起有一行的腳本,與 `Core\tests\run-core-tests.bat` 同一種做法):
+  ```bat
+  App\tests\run-app-tests.bat            :: 增量;加 fresh 從頭建。exit 0 = 3 個測試通過
+  Core\tests\run-core-tests.bat fresh    :: Core 單元測試(6 個),輸出 build\core-tests
+  ```
+  `run-app-tests.bat` 等同於(在 repo 資料夾;工具不在預設位置時腳本讀 `TAIDAFLOW_QT_ROOT` / `TAIDAFLOW_QT_TOOLS` / `TAIDAFLOW_VCVARS64`):
   ```bat
   call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
   C:\Qt\Tools\CMake_64\bin\cmake.exe -S App\tests -B build\app-tests -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=C:/Qt/Tools/Ninja/ninja.exe -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64
@@ -837,6 +1142,17 @@ Qt 版本的內部函式不同,掃描又回到整個 repo(w2-063 的實測:`buil
 could not be found`、`Qt policy QTP0001/QTP0004 is not set`、`Manually-specified variables were not used by the project:
 BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與 `[wasm-shell]` 兩行為準。
 
+**configure 出現 14 個 `CMake Warning (dev) at .../Qt6QmlMacros.cmake:284 ... Policy CMP0174 is not set`**:用的是 CMake 3.31 以後
+(例如 CLion 內建的 4.3.1),Qt 6.8.3 自己的 CMake 檔觸發;不影響結果。用 Qt 的 CMake 3.30.5 就沒有(§6A.4)。
+
+**建置中出現數行 `Failed to run spirv-opt -O ... Process failed to start`**:Qt 的 shader 工具(qsb)找不到 Vulkan SDK 的
+`spirv-opt`,只是不做 shader 最佳化;參考機每次都有(`docs/evidence/w2-036` 的舊 log 也有),建置 exit 0 就沒問題。
+
+**configure 失敗:`CMake Error at CMakeLists.txt:38 (message): 此專案桌面版只支援 MSVC ...` / `supports MSVC only`**:
+桌面版用了非 MSVC 的編譯器(最常見:CLion 預設的 MinGW toolchain,或 PATH 上的 g++ / clang)。CLion 照 §6A.2 選 Visual Studio;
+命令列在同一個 cmd 先跑 `vcvars64.bat`(§4.2),或直接用 `scripts\build-desktop.bat`。已經建過的資料夾改完要 fresh
+(CLion:Reset Cache and Reload Project),因為編譯器記在 CMake 快取裡。
+
 **字型子集工具出現 `ModuleNotFoundError: No module named 'fontTools'` 或 `make-font-subset: no Python 3 found`(exit 9)**:
 只影響重新產生網頁版字型(§2.5 (B)),編譯不受影響。照 §2.5 安裝後再跑。
 
@@ -888,6 +1204,22 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 ---
 
 ## 11. 驗證紀錄與沒有驗證到的部分
+
+2026-09-29(w2-077,CLion 編譯、nginx 章節、檢查腳本支援 Debug、MSVC 檢查)在參考開發機的 core 工作目錄實際執行,
+log 與 exit code 在 `docs/evidence/w2-077/`(`d5-summary.txt` 是總表;全部步驟 `PS docs\evidence\w2-077\tools\run-d5.ps1` 可重跑):
+
+| 項目 | 結果 |
+|---|---|
+| §6A.3 A(CLion 內建 CMake 4.3.1 + Ninja 1.13.2 + vcvars64,Debug) | `cmake-build-debug-visual-studio`:`--fresh` configure exit 0(MSVC 19.51.36257、14 個 CMP0174 dev 警告)、`--clean-first` build exit 0(582/582),exe 9,972,224 bytes |
+| §6A.3 B preset(CLion 的 cmake 4.3.1) | `desktop-release`(輸出以 `-B` 換到 `build\w2-077-desktop-release`)configure / build exit 0,582/582、exe 3,598,336;`wasm-release`(emsdk 環境,`build\w2-077-wasm-release`)configure / build exit 0,568/568、`[qml-scan] ... 45 import(s) (Qt's whole-folder scan: 77)`、`TaidaFlowApp.wasm` 33,850,463 |
+| §6A.2 MinGW 被擋 | CLion 內建 MinGW(g++ 15.2.0)configure exit 1,訊息 `此專案桌面版只支援 MSVC ... / supports MSVC only ... Toolchains ... Visual Studio ... docs/BUILD.md §6A.2`(`d5-05-mingw-probe.log`,1 秒內) |
+| §7 檢查 | `check-wasm-backend`:Debug(CLion ninja 與 Qt ninja 各一次)、Release + wasm-release 各 exit 0;`check-version-shadow`(Debug、Release、wasm)、`check-rest-routes`、`verify-pack`、`make-font-subset --check` 各 exit 0;`test-check-wasm-backend.ps1`:舊版腳本對 Debug 仍 FAIL(重現 F1)、新舊版對 Release + wasm 輸出逐行相同、8 種「拿掉 / 加入後端」的複本各判定正確 |
+| §7 單元測試 | `App\tests\run-app-tests.bat fresh` 3/3、`Core\tests\run-core-tests.bat fresh` 6/6,各 exit 0 |
+| §2.9 nginx | 參考機下載檔以本節步驟重驗:gpg `Good signature`(`VALIDSIG D6786CE3...9AF75C0A`)、SHA-256 相符、`nginx -v` = 1.30.5(`d1-nginx-verify.log`) |
+| 根 `CMakeLists.txt` 合併 | `git merge-file` 模擬 5 種 main 的修改:加了 MSVC 檢查區塊前後的衝突數都相同(`d3-merge-sim.log`) |
+
+沒有驗證到(w2-077):CLion 的畫面操作(Toolchains / CMake profile / Run 設定的點選,§6A 依設定畫面撰寫)、在 CLion 裡
+Run / Debug `TaidaFlowApp`(§6A.6,規定不啟動程式)、nginx 從 nginx.org 重新下載(用的是參考機 2026-09-27 下載的檔案)。
 
 2026-09-29(w2-069,文件一致性檢查)在參考開發機上實際執行,輸出在 `docs/evidence/w2-069/`:
 

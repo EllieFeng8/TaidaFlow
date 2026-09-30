@@ -204,16 +204,15 @@ log 資料夾(w2-065)、nginx port、REST port、Mirror port)全部由 config.js
   另有 `-WebRoot`(預設 `<exe 資料夾>\web`)、`-ExeDir`、`-RuntimeDir`(預設 `build\nginx`)、`-TimeoutSec`(預設 20)。
   start / reload / test 時順便把網頁資料夾的 `runtime.json` 寫成 nginx 實際的 port。
 - `nginx.exe` 的位置:config.json 的 `nginx.exe`(相對路徑以 config.json 所在資料夾為準;沒寫時 `nginx\nginx.exe`,即打包附的那個)。
-  開發設定 `config.dev.json` 指向 `C:\tools\nginx\nginx-1.30.5\nginx.exe`,不同就複製一份改。
+  開發設定 `config.dev.json` 指向 `C:\tools\nginx\nginx-1.30.5\nginx.exe`,不同就複製一份改(docs/BUILD.md §2.9)。
 - 腳本 exit code(nginx-web.ps1):0 完成;1 沒有本腳本起的 nginx 在跑(stop/reload/status);2 找不到 nginx /
   網頁資料夾 / `TaidaFlowApp.html` / config.json 不能用,或路徑含設定檔不能用的字元;3 `nginx -t` 失敗(不啟動);4 port 已被
   占用(不啟動,也不關掉占用者)或已在跑;5 網頁資料夾或匯出資料夾是/含有符號連結、junction;6 起來但時限內沒 listen(已停掉);
   7 停止失敗。`install-nginx-config.ps1`:0 寫好且 `nginx -t` 通過;2 缺檔 / config.json 不能用;3 `nginx -t` 失敗;4 寫好但
   nginx.port 被別的程式占用(列出占用者,不關);5 有連結 / junction(不寫)。
-- **安裝 nginx**(開發機一次,repo 外):從 <https://nginx.org/en/download.html> 取 **Stable** 版 Windows zip
-  與 `.asc`,以 <https://nginx.org/keys/> 的金鑰用 gpg 驗簽(Git for Windows 內附
-  `C:\Program Files\Git\usr\bin\gpg.exe`,`gpg --verify nginx-<版本>.zip.asc nginx-<版本>.zip` 要是
-  `Good signature`),解壓到 `C:\tools\nginx\nginx-<版本>\`。目前用 **1.30.5**(SHA-256
+- **安裝 nginx**(開發機一次,repo 外):步驟(nginx.org 下載 **Stable** 版 Windows zip 與 `.asc`、以 Git for Windows 內附的 gpg
+  驗簽、SHA-256、解壓到 `C:\tools\nginx\nginx-<版本>\`、`nginx -v` 驗證)、寫死這個路徑的地方與裝在別處時怎麼改,
+  一律見 **[docs/BUILD.md §2.9](docs/BUILD.md)**(w2-077 起以那裡為準)。目前用 **1.30.5**(SHA-256
   `e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35`,2,776,622 bytes,
   簽章者 Sergey Kandaurov `D6786CE303D9A9022998DC6CC8464D549AF75C0A`;證據 `docs/evidence/w2-050/01-*`)。
   打包時 `package-release.ps1` 附上這一份(`-NginxDir` 可換)。
@@ -414,6 +413,14 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
     log 資料夾由 `taidaflow-app.json` 得知,`-LogDir` 通常不用給)。
   - `register-autostart.ps1` / `unregister-autostart.ps1`(工作排程器「使用者登入時」,排程只帶 start-taidaflow.ps1,設定都讀
     config.json;**先 `-WhatIf`**,本專案只做過乾跑)。
+  - **w2-076 現場標準做法**(DEPLOY §2A):`scripts\install-nginx-service.ps1` / `uninstall-nginx-service.ps1`(系統管理員;`-WhatIf` 不需要)
+    以包內 WinSW 2.12.0(`nginx\nginx-service.exe`,來源與 SHA-256 在 `nginx\SOURCE-WinSW.txt`,取得方式 BUILD.md §2.8)把 nginx 註冊成
+    Windows 服務 `TaidaFlowNginx`(`nginx -p <nginx 資料夾>`、停止 `nginx -s quit`、Automatic,XML `nginx\nginx-service.xml` 在現場產生);
+    `scripts\add-startup-shortcut.ps1` / `remove-startup-shortcut.ps1` 在開機啟動資料夾建立 / 移除捷徑「TaidaFlow」(與工作排程器擇一)。
+    `start-taidaflow.ps1` 以 `Win32_Service`(PathName = 本安裝的 `nginx-service.exe`)+ 行程父子關係認出服務的 nginx:port 80 視為正常、
+    不再 `start nginx`、服務停止時改啟動服務、`nginx.conf` 重產時非系統管理員不 reload(結果碼 3)。判斷函式在 `scripts\taidaflow-config.ps1`,
+    單元測試 `docs\evidence\w2-076\tools\test-nginx-service-logic.ps1`。**服務的安裝 / 開機啟動只在開發機做了乾跑與非管理員拒絕的驗證,
+    實際安裝要在現場(或測試機)以系統管理員實測。**
   - 舊的站台批次檔(以 `.bat` 設定資料夾與 nginx)機制已刪除,由 config.json 取代。
 - **開發機上驗證打包資料夾**:`powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<...>
   [-Mode ps1|bat] [-SeedDb <sensor_yyyyMM.sqlite>]`:打包內容(無 config.json、附 nginx、無 nginx.conf、無建置機路徑)→ 安全探測 SAFE →

@@ -1,0 +1,27 @@
+gpg (GnuPG) 2.4.9
+gpg: keybox '/d/repo/codex/qmlTester/taidaflow/build/w2-077-nginx-verify/gnupg/pubring.kbx' created
+gpg: /d/repo/codex/qmlTester/taidaflow/build/w2-077-nginx-verify/gnupg/trustdb.gpg: trustdb created
+gpg: key C8464D549AF75C0A: public key "Sergey Kandaurov <s.kandaurov@f5.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+import exit=0
+[GNUPG:] NEWSIG s.kandaurov@f5.com
+gpg: Signature made Tue Sep 15 21:42:40 2026    
+gpg:                using RSA key D6786CE303D9A9022998DC6CC8464D549AF75C0A
+gpg:                issuer "s.kandaurov@f5.com"
+[GNUPG:] KEY_CONSIDERED D6786CE303D9A9022998DC6CC8464D549AF75C0A 0
+[GNUPG:] SIG_ID l0gYhqLxI+3uBJXZSRzYT18TVMU 2026-09-15 1789479760
+[GNUPG:] GOODSIG C8464D549AF75C0A Sergey Kandaurov <s.kandaurov@f5.com>
+gpg: Good signature from "Sergey Kandaurov <s.kandaurov@f5.com>" [unknown]
+gpg:                 aka "Sergey Kandaurov <pluknet@nginx.com>" [unknown]
+[GNUPG:] VALIDSIG D6786CE303D9A9022998DC6CC8464D549AF75C0A 2026-09-15 1789479760 0 4 0 1 8 00 D6786CE303D9A9022998DC6CC8464D549AF75C0A
+[GNUPG:] TRUST_UNDEFINED 0 pgp s.kandaurov@f5.com
+gpg: WARNING: The key's User ID is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: D678 6CE3 03D9 A902 2998  DC6C C846 4D54 9AF7 5C0A
+verify exit=0
+SHA256 的 nginx-1.30.5.zip 雜湊:
+e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35
+CertUtil: -hashfile 命令成功完成。
+nginx version: nginx/1.30.5
+verify-nginx-download: FAIL=0

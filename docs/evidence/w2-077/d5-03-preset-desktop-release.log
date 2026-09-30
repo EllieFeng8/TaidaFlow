@@ -1,0 +1,199 @@
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+[clion-preset] vcvars64 exit=0
+cmake version 4.3.1
+[clion-preset] 週二 2026/09/29 17:28:30.91 configure start: cmake --preset desktop-release -B build\w2-077-desktop-release --fresh
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0001 is not set: ':/qt/qml/' is the default resource prefix
+  for QML modules.  Check https://doc.qt.io/qt-6/qt-cmake-policy-qtp0001.html
+  for policy details.  Use the qt_policy command to set the policy and
+  suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:719 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:1254 (qt6_add_qml_module)
+  Core/CMakeLists.txt:43 (qt_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:3409 (message):
+  Qt policy QTP0004 is not set: You need qmldir files for each extra
+  directory that contains .qml files for your module.  Check
+  https://doc.qt.io/qt-6/qt-cmake-policy-qtp0004.html for policy details.
+  Use the qt_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:3520 (__qt_internal_setup_policy)
+  C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:916 (qt6_target_qml_sources)
+  TaidaFlowContent/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/application/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/compat/Components/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/compat/Extras/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/compat/Layers/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/compat/Profiling/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/components/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/designeffects/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+shaders/dropShadow.frag -> shaders/dropShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadow.frag.qsb
+shaders/dropShadowClip.frag -> shaders/dropShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/dropShadowClip.frag.qsb
+shaders/gaussianBlur.frag -> shaders/gaussianBlur.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/gaussianBlur.frag.qsb
+shaders/innerShadow.frag -> shaders/innerShadow.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadow.frag.qsb
+shaders/innerShadowClip.frag -> shaders/innerShadowClip.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/innerShadowClip.frag.qsb
+shaders/opacityMask.frag -> shaders/opacityMask.frag.qsb exposed as :/qt-project.org/imports/QtQuick/Studio/DesignEffects/shaders/opacityMask.frag.qsb
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/effects_qt6/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/flowview/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/logichelper/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/multitext/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/tools/eventsimulator/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/tools/eventsystem/CMakeLists.txt:7 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake:284 (cmake_parse_arguments):
+  The VERSION keyword was followed by an empty string or no value at all.
+  Policy CMP0174 is not set, so cmake_parse_arguments() will unset the
+  arg_VERSION variable rather than setting it to an empty string.
+Call Stack (most recent call first):
+  Dependencies/Components/imports/utils/CMakeLists.txt:2 (qt6_add_qml_module)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- [nginx] <build>/nginx: nginx.exe from C:/tools/nginx/nginx-1.30.5, conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+-- Configuring done (6.3s)
+CMake Warning in Dependencies/Components/imports/compat/Components/CMakeLists.txt:
+  The object file directory
+
+    D:/repo/codex/qmlTester/taidaflow/build/w2-077-desktop-release/Dependencies/Components/imports/compat/Components/CMakeFiles/QuickUltraLiteStudioComponentsplugin.dir/./
+
+  has 167 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    QuickUltraLiteStudioComponentsplugin_QtQuickUltralite_Studio_ComponentsPlugin.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+-- Generating done (0.6s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-077-desktop-release
+[clion-preset] 週二 2026/09/29 17:28:37.93 configure exit=0
+[clion-preset] 週二 2026/09/29 17:28:37.93 build start: cmake --build build\w2-077-desktop-release --target TaidaFlowApp
+[1/13] Generating aggregate ProxyMirror event relay for Core
+[2/13] Building CXX object Core\CMakeFiles\Core.dir\generated\wasm_mirror\Core\proxy_event_relay_generated.cpp.obj
+[3/13] Linking CXX static library Core\Core.lib
+[4/13] Automatic MOC and UIC for target TaidaFlowApp
+[5/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\TaidaFlowApp_autogen\mocs_compilation.cpp.obj
+[6/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\build\w2-077-desktop-release\.qt\rcc\qrc_configuration.cpp.obj
+[7/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\.qt\rcc\qrc_embedded_fonts.cpp.obj
+[8/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\embeddedfonts.cpp.obj
+[9/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\runtimeinfo.cpp.obj
+[10/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\applog.cpp.obj
+[11/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\main.cpp.obj
+[12/13] Building CXX object CMakeFiles\TaidaFlowApp.dir\App\appconfig.cpp.obj
+[13/13] Linking CXX executable TaidaFlowApp.exe
+[clion-preset] 週二 2026/09/29 17:28:42.30 build exit=0

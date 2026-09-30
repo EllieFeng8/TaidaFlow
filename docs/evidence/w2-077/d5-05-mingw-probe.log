@@ -1,0 +1,34 @@
+[clion-mingw-probe] 週二 2026/09/29 17:31:07.86 configure start
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Users/TED/AppData/Local/Programs/CLion/bin/mingw/bin/g++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Error at CMakeLists.txt:38 (message):
+
+
+  此專案桌面版只支援 MSVC(Qt 6.8.3 msvc2022_64)。目前的 C++
+  編譯器是 GNU
+  15.2.0(C:/Users/TED/AppData/Local/Programs/CLion/bin/mingw/bin/g++.exe)。
+
+  CLion 請在 Settings > Build, Execution, Deployment > Toolchains 選
+  Visual Studio(並把它移到第一個,或在 CMake profile 的 Toolchain
+  欄選 Visual Studio),然後 Tools > CMake > Reset Cache and Reload
+  Project。命令列請先執行 vcvars64.bat 或用
+  scripts\build-desktop.bat。詳見 docs/BUILD.md §6A.2。
+
+  The desktop build of this project supports MSVC only (Qt 6.8.3
+  msvc2022_64); the C++ compiler is GNU 15.2.0
+  (C:/Users/TED/AppData/Local/Programs/CLion/bin/mingw/bin/g++.exe).
+
+  In CLion select Settings > Build, Execution, Deployment > Toolchains >
+  Visual Studio (move it to the top, or pick it in the CMake profile's
+  Toolchain field), then Tools > CMake > Reset Cache and Reload Project.  On
+  the command line run vcvars64.bat first or use scripts\build-desktop.bat.
+  See docs/BUILD.md section 6A.2.
+
+
+
+-- Configuring incomplete, errors occurred!
+[clion-mingw-probe] 週二 2026/09/29 17:31:08.62 configure exit=1

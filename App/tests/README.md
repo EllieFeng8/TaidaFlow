@@ -16,18 +16,26 @@
 `tst_applog` 唯一注入的是日期時間來源(可設定的時鐘),用來測換日;寫檔、刪檔、執行緒、Qt message handler 都是真的。
 
 ## 建置與執行(Windows,MSVC)
+在 repo 資料夾(或任何資料夾;腳本以自己的位置找 repo)開 cmd:
 ```bat
-D:\repo\codex\qmlTester\taidaflow-main\build\w2-064-tools\build-tests.bat
+App\tests\run-app-tests.bat          :: configure + build + CTest,輸出 build\app-tests(增量)
+App\tests\run-app-tests.bat fresh    :: 先刪 build\app-tests 再從頭建
 ```
-等同於:
+exit code 0 = 3 個測試全部通過(`100% tests passed, 0 tests failed out of 3`)。與 `Core\tests\run-core-tests.bat` 同一種做法。
+工具不在預設位置時設 `TAIDAFLOW_QT_ROOT`、`TAIDAFLOW_QT_TOOLS`、`TAIDAFLOW_VCVARS64`(與 `scripts\build-desktop.bat` 相同,
+`docs\BUILD.md` §2.6);`fresh` 之後的參數會交給 ctest(例如 `-R tst_applog`)。
+
+等同於(在 repo 資料夾的 cmd;VS / Qt 路徑依實際位置改):
 ```bat
 call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
-C:\Qt\Tools\CMake_64\bin\cmake.exe -S App\tests -B build\w2-064-tests -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+C:\Qt\Tools\CMake_64\bin\cmake.exe -S App\tests -B build\app-tests -G Ninja -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_MAKE_PROGRAM=C:/Qt/Tools/Ninja/ninja.exe -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64
-C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\w2-064-tests
-C:\Qt\Tools\CMake_64\bin\ctest.exe --test-dir build\w2-064-tests --output-on-failure
+C:\Qt\Tools\CMake_64\bin\cmake.exe --build build\app-tests
+C:\Qt\Tools\CMake_64\bin\ctest.exe --test-dir build\app-tests --output-on-failure
 ```
-CTest 會自動把 Qt 的 `bin` 加到 PATH;每個測試的 QTest 結果另存為 `build\w2-064-tests\tst_*.result.txt`。
+CTest 會自動把 Qt 的 `bin` 加到 PATH;每個測試的 QTest 結果另存為 `build\app-tests\tst_*.result.txt`。
+用 CLion 時可直接 File → Open `App\tests` 資料夾(Toolchain 選 Visual Studio、CMake options
+`-DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/msvc2022_64`,`docs\BUILD.md` §6A.6)。
 
 ## 應用程式端的相關開關
 - `TAIDAFLOW_CONFIG=<完整路徑>`:使用指定的 config.json(開發/測試用)。
@@ -37,9 +45,11 @@ CTest 會自動把 Qt 的 `bin` 加到 PATH;每個測試的 QTest 結果另存�
   `TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS=<毫秒>` 只供無人值守的檢查用,讓對話框在時間到後自動關閉。
 - log 檔(w2-064,僅桌面版):`<dataDir>\<log.dir>`(預設 `C:\TaidaFlowData\logs`)內每天
   `taidaflow-YYYY-MM-DD.log`(quiet,保留 `log.quiet.keepDays`=60 天)與 `taidaflow-YYYY-MM-DD-full.log`
-  (full,保留 `log.full.keepDays`=7 天),同時仍輸出到 stderr/除錯器。實跑驗證:
-  `powershell -ExecutionPolicy Bypass -File build\w2-064-tools\run-app.ps1`(先跑安全探測,SAFE 才啟動)。
+  (full,保留 `log.full.keepDays`=7 天),同時仍輸出到 stderr/除錯器。實跑驗證(會啟動程式,先跑安全探測,SAFE 才啟動):
+  `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-desktop-startup.ps1`(開發機,log 寫到開發設定的
+  `build\runtime-cwd\logs`);打包資料夾的當天 quiet / full log 由 `scripts\verify-release-package.ps1` 檢查(README「測試 / 驗證」5g)。
 - config.json 無法使用時(w2-064 A2):log 改寫到備援資料夾 `<config.json 所在資料夾>\logs`(同樣檔名、預設保留天數與清理),
   內容含緩衝的訊息與失敗原因(路徑、行列、錯誤),錯誤對話框與 stderr 註明 log 檔位置,仍以 exit code 2 結束、不改 config.json;
-  備援資料夾不可寫時只少了 log 檔,其餘處理不變。測試:`tst_applog` 的 `configFailure*`;實跑(對話框 3 秒自動關閉、無 UI 操作):
-  `powershell -ExecutionPolicy Bypass -File build\w2-064-tools\run-badjson.ps1`。
+  備援資料夾不可寫時只少了 log 檔,其餘處理不變。測試:`tst_applog` 的 `configFailure*`;實跑(壞 JSON → 啟動腳本與
+  `TaidaFlowApp.exe` 都 exit 2、備援 log 在打包資料夾 `logs\`、對話框以 `TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS` 自動關閉,無 UI 操作):
+  `scripts\verify-release-package.ps1` 的 D 項(README「測試 / 驗證」5g)。

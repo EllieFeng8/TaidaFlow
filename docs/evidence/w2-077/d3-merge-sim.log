@@ -1,0 +1,6 @@
+t0 main unchanged: conflicts without the w2-077 block=0, with the block=0 -> no new conflict
+t1 main adds a component to find_package(Qt6 ...): conflicts without the w2-077 block=0, with the block=0 -> no new conflict
+t2 main raises cmake_minimum_required: conflicts without the w2-077 block=0, with the block=0 -> no new conflict
+t3 main adds a line after the QML_IMPORT_PATH block: conflicts without the w2-077 block=0, with the block=0 -> no new conflict
+t4 main edits qt_standard_project_setup(): conflicts without the w2-077 block=1, with the block=1 -> no new conflict
+merge-sim: 0 case(s) where the block adds a conflict

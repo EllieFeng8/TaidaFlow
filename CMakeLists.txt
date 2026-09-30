@@ -28,6 +28,29 @@ else()
     message(FATAL_ERROR "TaidaFlow supports Windows Desktop and Qt WebAssembly only")
 endif()
 
+# ---------------------------------------------------------------------------------------------
+# w2-077 (F2): the desktop build supports MSVC only (the Qt 6.8.3 kit is msvc2022_64). Stop at
+# configure time with a clear hint instead of failing much later with an unrelated compiler error
+# (CLion's default MinGW toolchain configures fine and only fails at build step ~360/582 in
+# Core/AppHttpServer/AppHttpServer.h). WebAssembly (Emscripten) is not affected. Core-only block.
+# ---------------------------------------------------------------------------------------------
+if(TAIDAFLOW_IS_WINDOWS_DESKTOP AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    message(FATAL_ERROR
+        "\n"
+        "此專案桌面版只支援 MSVC(Qt 6.8.3 msvc2022_64)。"
+        "目前的 C++ 編譯器是 ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}(${CMAKE_CXX_COMPILER})。\n"
+        "CLion 請在 Settings > Build, Execution, Deployment > Toolchains 選 Visual Studio"
+        "(並把它移到第一個,或在 CMake profile 的 Toolchain 欄選 Visual Studio),"
+        "然後 Tools > CMake > Reset Cache and Reload Project。"
+        "命令列請先執行 vcvars64.bat 或用 scripts\\build-desktop.bat。詳見 docs/BUILD.md §6A.2。\n"
+        "The desktop build of this project supports MSVC only (Qt 6.8.3 msvc2022_64); "
+        "the C++ compiler is ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION} (${CMAKE_CXX_COMPILER}).\n"
+        "In CLion select Settings > Build, Execution, Deployment > Toolchains > Visual Studio "
+        "(move it to the top, or pick it in the CMake profile's Toolchain field), then "
+        "Tools > CMake > Reset Cache and Reload Project. On the command line run vcvars64.bat first "
+        "or use scripts\\build-desktop.bat. See docs/BUILD.md section 6A.2.\n")
+endif()
+
 # Desktop/WASM shared components; the WASM mirror client needs Network + WebSockets.
 find_package(Qt6 6.8 REQUIRED COMPONENTS
     Core Gui Widgets Qml Quick QuickTimeline ShaderTools

@@ -1,0 +1,219 @@
+===== [1] make-font-subset --check
+make-font-subset: C:\Users\TED\AppData\Local\Programs\Python\Launcher\py.exe -3 -B D:\repo\codex\qmlTester\taidaflow\scripts\make_font_subset.py --check
+scanned 200 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=895 size=191452 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=895 size=192136 missing=0
+chars: total=513 cjk=405 total_font_bytes=383588
+----- [1] exit=0
+===== [2] check-wasm-backend -Ninja CLion cmake-build-debug-visual-studio
+cmake-build-debug-visual-studio [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+  backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+  build_type: Debug
+  verdict: OK
+check_wasm_backend exit=0
+----- [2] exit=0
+===== [3] check-wasm-backend (Qt ninja) cmake-build-debug-visual-studio build\w2-077-wasm-release
+cmake-build-debug-visual-studio [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+  backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+  build_type: Debug
+  verdict: OK
+build\w2-077-wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+check_wasm_backend exit=0
+----- [3] exit=0
+===== [4] check-wasm-backend build\w2-077-desktop-release build\w2-077-wasm-release
+build\w2-077-desktop-release [desktop] target=TaidaFlowApp.exe binary_bytes=3598336 commands=582
+  backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+  backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+  backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+  verdict: OK
+build\w2-077-wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+  backend_sources (0): -
+  backend_qt_libs (0): -
+  backend_qt_found (1): Sql
+  backend_strings (0): -
+  verdict: OK
+check_wasm_backend exit=0
+----- [4] exit=0
+===== [5a] check-version-shadow -Ninja CLion cmake-build-debug-visual-studio
+cmake-build-debug-visual-studio: objects_with_deps=493 version_shadow_hits=0 std_version_deps=0
+----- [5a] exit=0
+===== [5b] check-version-shadow build\w2-077-desktop-release build\w2-077-wasm-release
+build\w2-077-desktop-release: objects_with_deps=493 version_shadow_hits=0 std_version_deps=0
+build\w2-077-wasm-release: objects_with_deps=481 version_shadow_hits=0 std_version_deps=167
+  <version> -> C:/tools/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/version (167 objects)
+----- [5b] exit=0
+===== [6] check-rest-routes
+RESTManager.cpp registrations: 29 (28 distinct method+path)
+  GET      /
+  GET      /api/device/sn
+  OPTIONS  /api/device/sn
+  GET      /api/holding/last
+  OPTIONS  /api/holding/last
+  GET      /api/holding/range
+  OPTIONS  /api/holding/range
+  GET      /api/holding/rangeDateTime
+  OPTIONS  /api/holding/rangeDateTime
+  GET      /api/holding/rangeDateTimePage
+  OPTIONS  /api/holding/rangeDateTimePage
+  GET      /api/modbus/mode
+  OPTIONS  /api/modbus/mode
+  PUT      /api/modbus/mode
+  GET      /api/sensor/last
+  OPTIONS  /api/sensor/last
+  GET      /api/sensor/range
+  OPTIONS  /api/sensor/range
+  GET      /api/sensor/rangeDateTime
+  OPTIONS  /api/sensor/rangeDateTime
+  GET      /api/sensor/rangeDateTimePage
+  OPTIONS  /api/sensor/rangeDateTimePage
+  GET      /api/settings/frequency
+  OPTIONS  /api/settings/frequency
+  PUT      /api/settings/frequency
+  GET      /api/settings/sensors
+  OPTIONS  /api/settings/sensors
+  PUT      /api/settings/sensors
+  note: OPTIONS /api/settings/frequency is registered 2 times (the first registration answers)
+core.cpp kRestRoutes: 28 method+path
+GET routes (13): / /api/device/sn /api/holding/last /api/holding/range /api/holding/rangeDateTime /api/holding/rangeDateTimePage /api/modbus/mode /api/sensor/last /api/sensor/range /api/sensor/rangeDateTime /api/sensor/rangeDateTimePage /api/settings/frequency /api/settings/sensors
+PUT routes (3): /api/modbus/mode /api/settings/frequency /api/settings/sensors
+check_rest_routes exit=0
+----- [6] exit=0
+===== [7] verify-pack
+manifest: 24/24 ok
+legacy_VERSION_present=False VERSION.txt=1.0.1
+verify_pack exit=0
+----- [7] exit=0
+===== [8] test-check-wasm-backend
+== 1. positive: real trees ==
+[PASS] debug: exit=0 (expected 0, output has 'verdict: OK')
+    cmake-build-debug-visual-studio [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      build_type: Debug
+      verdict: OK
+    check_wasm_backend exit=0
+[PASS] release+wasm: exit=0 (expected 0, output has 'check_wasm_backend exit=0')
+    build\w2-077-desktop-release [desktop] target=TaidaFlowApp.exe binary_bytes=3598336 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      verdict: OK
+    build\w2-077-wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+      backend_sources (0): -
+      backend_qt_libs (0): -
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: OK
+    check_wasm_backend exit=0
+[PASS] debug+wasm: exit=0 (expected 0, output has 'check_wasm_backend exit=0')
+    cmake-build-debug-visual-studio [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      build_type: Debug
+      verdict: OK
+    build\w2-077-wasm-release [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+      backend_sources (0): -
+      backend_qt_libs (0): -
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: OK
+    check_wasm_backend exit=0
+== 2. old (HEAD) vs new script ==
+[PASS] release+wasm: old exit=0, new exit=0, output identical=True (13 lines)
+[PASS] debug with the OLD script (F1 bug reproduced): exit=1 (expected 1, output has 'backend_qt_libs (0)')
+    cmake-build-debug-visual-studio [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (0): -
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      verdict: FAIL
+    check_wasm_backend exit=1
+== 3. mutation tests (copies under build\w2-077-cwb-test) ==
+[PASS] copy-debug (control): exit=0 (expected 0, output has 'verdict: OK')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\copy-debug [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      build_type: Debug
+      verdict: OK
+    check_wasm_backend exit=0
+[PASS] copy-wasm (control): exit=0 (expected 0, output has 'verdict: OK')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\copy-wasm [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+      backend_sources (0): -
+      backend_qt_libs (0): -
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: OK
+    check_wasm_backend exit=0
+[PASS] debug-no-qt-libs: exit=1 (expected 1, output has 'backend_qt_libs (0)')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\debug-no-qt-libs [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (0): -
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      build_type: Debug
+      verdict: FAIL
+    check_wasm_backend exit=1
+[PASS] debug-no-core-cpp: exit=1 (expected 1, output has 'backend_sources (8)')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\debug-no-core-cpp [desktop] target=TaidaFlowApp.exe binary_bytes=9972224 commands=582
+      backend_sources (8): manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      build_type: Debug
+      verdict: FAIL
+    check_wasm_backend exit=1
+[PASS] release-no-qt-libs: exit=1 (expected 1, output has 'backend_qt_libs (0)')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\release-no-qt-libs [desktop] target=TaidaFlowApp.exe binary_bytes=3598336 commands=582
+      backend_sources (9): core.cpp, manager.cpp, Modbus_Client.cpp, Modbus_Server.cpp, Ms300FaultReader.cpp, SqlManager.cpp, RESTManager.cpp, HistoryExport.cpp, AppHttpServer.cpp
+      backend_qt_libs (0): -
+      backend_qt_found (5): SerialBus, SerialPort, Sql, HttpServer, Concurrent
+      backend_strings (19): 192.168.1.201, 192.168.1.205, COM2, TaidaFlowSettings.ini, settings.sqlite, device_info.ini, [ModbusServer], [MS300], ModbusClient, SqlManager, RESTManager, QModbusTcpClient, HistoryExportManager, [AppHttpServer], AppHttpServerThread, TAIDAFLOW_WEB_DIR, [REST] REST API, [Config] Core, [Web] runtime.json
+      verdict: FAIL
+    check_wasm_backend exit=1
+[PASS] wasm-plus-lib-a: exit=1 (expected 1, output has 'backend_qt_libs (1): SerialBus')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\wasm-plus-lib-a [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+      backend_sources (0): -
+      backend_qt_libs (1): SerialBus
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: FAIL
+    check_wasm_backend exit=1
+[PASS] wasm-plus-lib-d: exit=1 (expected 1, output has 'backend_qt_libs (1): HttpServer')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\wasm-plus-lib-d [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=568
+      backend_sources (0): -
+      backend_qt_libs (1): HttpServer
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: FAIL
+    check_wasm_backend exit=1
+[PASS] wasm-plus-source: exit=1 (expected 1, output has 'backend_sources (1): SqlManager.cpp')
+    D:\repo\codex\qmlTester\taidaflow\build\w2-077-cwb-test\wasm-plus-source [wasm] target=TaidaFlowApp.js binary_bytes=33850463 commands=569
+      backend_sources (1): SqlManager.cpp
+      backend_qt_libs (0): -
+      backend_qt_found (1): Sql
+      backend_strings (0): -
+      verdict: FAIL
+    check_wasm_backend exit=1
+
+test-check-wasm-backend: 0 expectation(s) not met
+----- [8] exit=0
+===== run-checks failed steps: 0

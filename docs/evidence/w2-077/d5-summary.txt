@@ -1,0 +1,48 @@
+﻿2026-09-29 17:16:31 [wait-no-build] debug-configure 2026-09-29 17:16:31 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:16:31 step 01 debug-configure start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-debug.bat" configure fresh
+2026-09-29 17:16:40 step 01 debug-configure: exit=0 (9s) -> OK
+2026-09-29 17:16:40 [wait-no-build] debug-build 2026-09-29 17:16:40 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:16:40 step 02 debug-build start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-debug.bat" build clean
+2026-09-29 17:17:07 step 02 debug-build: exit=0 (27s) -> OK
+2026-09-29 17:17:07 [wait-no-build] preset-desktop-release 2026-09-29 17:17:07 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:17:07 step 03 preset-desktop-release start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-preset.bat" desktop-release fresh
+2026-09-29 17:17:41 step 03 preset-desktop-release: exit=0 (34s) -> OK
+2026-09-29 17:17:41 [wait-no-build] preset-wasm-release 2026-09-29 17:17:41 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:17:41 step 04 preset-wasm-release start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-preset.bat" wasm-release fresh
+2026-09-29 17:20:28 step 04 preset-wasm-release: exit=0 (166s) -> OK
+2026-09-29 17:20:28 [wait-no-build] mingw-probe 2026-09-29 17:20:28 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:20:28 step 05 mingw-probe start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-mingw-probe.bat"
+2026-09-29 17:20:29 step 05 mingw-probe: exit=1 (1s), hint in log=True -> as expected (configure refused)
+2026-09-29 17:20:29 step 06 checks start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\run-checks.bat"
+2026-09-29 17:20:47 step 06 checks: exit=0 (18s) -> OK
+2026-09-29 17:20:47 [wait-no-build] app-tests 2026-09-29 17:20:47 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:20:47 step 07 app-tests start: cmd /c "D:\repo\codex\qmlTester\taidaflow\App\tests\run-app-tests.bat" fresh
+2026-09-29 17:21:04 step 07 app-tests: exit=0 (16s) -> OK
+2026-09-29 17:21:04 [wait-no-build] core-tests 2026-09-29 17:21:04 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:21:04 step 08 core-tests start: cmd /c "D:\repo\codex\qmlTester\taidaflow\Core\tests\run-core-tests.bat" fresh
+2026-09-29 17:22:01 step 08 core-tests: exit=0 (57s) -> OK
+2026-09-29 17:22:01 run-d5: 0 step(s) not as expected
+2026-09-29 17:27:54 [wait-no-build] debug-configure 2026-09-29 17:27:54 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:27:54 step 01 debug-configure start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-debug.bat" configure fresh
+2026-09-29 17:28:02 step 01 debug-configure: exit=0 (8s) -> OK
+2026-09-29 17:28:02 [wait-no-build] debug-build 2026-09-29 17:28:02 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:28:02 step 02 debug-build start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-debug.bat" build clean
+2026-09-29 17:28:29 step 02 debug-build: exit=0 (27s) -> OK
+2026-09-29 17:28:29 [wait-no-build] preset-desktop-release 2026-09-29 17:28:29 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:28:29 step 03 preset-desktop-release start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-preset.bat" desktop-release fresh
+2026-09-29 17:28:42 step 03 preset-desktop-release: exit=0 (13s) -> OK
+2026-09-29 17:28:42 [wait-no-build] preset-wasm-release 2026-09-29 17:28:42 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:28:42 step 04 preset-wasm-release start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-preset.bat" wasm-release fresh
+2026-09-29 17:31:07 step 04 preset-wasm-release: exit=0 (145s) -> OK
+2026-09-29 17:31:07 [wait-no-build] mingw-probe 2026-09-29 17:31:07 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:31:07 step 05 mingw-probe start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\clion-mingw-probe.bat"
+2026-09-29 17:31:08 step 05 mingw-probe: exit=1 (1s), hint in log=True -> as expected (configure refused)
+2026-09-29 17:31:08 step 06 checks start: cmd /c "D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-077\tools\run-checks.bat"
+2026-09-29 17:31:26 step 06 checks: exit=0 (17s) -> OK
+2026-09-29 17:31:26 [wait-no-build] app-tests 2026-09-29 17:31:26 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:31:26 step 07 app-tests start: cmd /c "D:\repo\codex\qmlTester\taidaflow\App\tests\run-app-tests.bat" fresh
+2026-09-29 17:31:41 step 07 app-tests: exit=0 (16s) -> OK
+2026-09-29 17:31:42 [wait-no-build] core-tests 2026-09-29 17:31:42 no cl/clang++/clang/wasm-ld/ninja/cmake running (waited 0s)
+2026-09-29 17:31:42 step 08 core-tests start: cmd /c "D:\repo\codex\qmlTester\taidaflow\Core\tests\run-core-tests.bat" fresh
+2026-09-29 17:32:38 step 08 core-tests: exit=0 (57s) -> OK
+2026-09-29 17:32:38 run-d5: 0 step(s) not as expected

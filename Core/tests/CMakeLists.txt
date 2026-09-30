@@ -7,6 +7,7 @@
 #   w2-071: tst_rest_range_paging, tst_sqlmanager_schema_once, tst_historyexport_status
 #   w2-072: tst_modbusclient_offline, tst_ms300_offline, tst_manager_sv_guard
 #   w2-080: tst_alarm_views
+#   w2-084: tst_server_heartbeat
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -152,3 +153,18 @@ taidaflow_core_test(tst_alarm_views
         "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
         "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer)
+
+# ---------------------------------------------------------------------------------------------
+# w2-084: the Core's server heartbeat (ServerHeartbeat -> TaidaFlowProxy::serverHeartbeatMs every
+# 1 s on the main thread; stopped first in Core::shutdown). Real timer (1 s) and an injected clock
+# with a short interval; the wiring in core.cpp / Core/CMakeLists.txt is read from the sources.
+# No device, no port, no database.
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_server_heartbeat
+    SOURCES
+        tst_server_heartbeat.cpp
+        "${CORE_DIR}/ServerHeartbeat.h"
+        "${CORE_DIR}/ServerHeartbeat.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml)
+target_compile_definitions(tst_server_heartbeat PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")

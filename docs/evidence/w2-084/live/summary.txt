@@ -1,0 +1,45 @@
+﻿=== w2-084 live smoke 2026-10-01T01:58:02.8615195+08:00
+01:58:02.884 other TaidaFlowApp processes (not touched): none
+01:58:03.655 ports free: 502, 8244, 8245, 18195, 18245
+01:58:06.727 run-simulator exit=0: SIM_PID=66024 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-084-run-logs\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+01:58:09.937 safety_probe exit=0 (SAFE)
+01:58:09.960 app started pid=67360 (config D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-084\config.w2-084-sim.json, dataDir D:\repo\codex\qmlTester\taidaflow\build\w2-084-run)
+01:58:22.008 app listeners: TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       67360 | TCP    0.0.0.0:8244           0.0.0.0:0              LISTENING       67360 | TCP    0.0.0.0:8245           0.0.0.0:0              LISTENING       67360 | TCP    127.0.0.1:18195        0.0.0.0:0              LISTENING       67360 | TCP    127.0.0.1:18245        0.0.0.0:0              LISTENING       67360
+01:58:22.013 PASS app listens on its 5 service ports (502, 8244, 8245, 18195, 18245)
+01:58:22.051 PASS REST GET / -> {"status":"ok"}|200
+01:58:22.067 mirror client started pid=83288 -> ws://127.0.0.1:8245/mirror
+01:59:30.335 PASS uptime 80 s >= 60 s
+01:59:30.338 PASS mirror client still connected before the app is closed
+01:59:30.487 WM_CLOSE sent=True at 01:59:30.339 exited=True exit_code=0
+01:59:30.488 PASS app closed with exit code 0
+01:59:30.488 mirror client exited=True exit_code=0
+01:59:30.490 PASS mirror client exit 0 (>= 50 heartbeats, steps 900..1200 ms, gaps <= 2.5 s, disconnect seen)
+01:59:31.531 PASS no listener of the app left
+01:59:31.532 PASS other TaidaFlowApp processes still running: 0 of 0
+01:59:31.605 client: 01:58:22.083 contractHash=f88e7ee6f6141be746ae4a77816ee6b6a59e0b27f5d0ae582f83e5e3783aa014
+01:59:31.606 client: 70 BEAT lines; first: 01:58:22.122 BEAT #1 value=1790791101253 (2026-10-01 01:58:21.253) [snapshot]
+01:59:31.607 client: last: 01:59:30.246 BEAT #70 value=1790791170246 (2026-10-01 01:59:30.246) valueStep=1000 recvStep=999 [patch]
+01:59:31.607 client: 01:59:30.429 DISCONNECTED after 68.3 s: close code 1000  (last heartbeat 183 ms ago)
+01:59:31.607 client: 01:59:30.429 RESULT beats=70 firstValue=1790791101253 lastValue=1790791170246 valueStep[min..max]=988..1014 recvGapMax=1012 disconnected=yes -> OK
+01:59:31.609 PASS snapshot already carries a heartbeat (Core wrote it at start-up)
+01:59:31.611 PASS client saw the connection close after WM_CLOSE: 01:59:30.429 DISCONNECTED after 68.3 s: close code 1000  (last heartbeat 183 ms ago)
+01:59:31.630 PASS heartbeat value = epoch ms of the Core (max |receive time - value| = 869 ms over 70 beats)
+01:59:31.738   app log: 2026-10-01 01:58:10.251 [info] [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+01:59:31.740   app log: 2026-10-01 01:59:30.353 [info] [Heartbeat] server heartbeat stopped after 81 write(s)
+01:59:31.740   app log: 2026-10-01 01:59:30.353 [info] [Core] shutdown (aboutToQuit): stopping the backend
+01:59:31.741   app log: 2026-10-01 01:59:30.370 [info] [Core] shutdown complete in 17 ms
+01:59:31.741 PASS log: [Heartbeat] server heartbeat started ... every 1000 ms (main thread)
+01:59:31.743 PASS log: [Heartbeat] server heartbeat stopped after 81 write(s)
+01:59:31.746 PASS heartbeat writes 81 ~ one per second of uptime (80 s, init takes a few seconds)
+01:59:31.758 PASS log: heartbeat stopped BEFORE "[Core] shutdown (aboutToQuit): stopping the backend"
+01:59:31.759 PASS log: [Core] shutdown complete
+01:59:31.796   heartbeat stopped at 01:59:30.353; last heartbeat value received 01:59:30.246
+01:59:31.797 PASS the last heartbeat the client received was written before the Core stopped the heartbeat
+01:59:31.798 PASS the last heartbeat is the one written just before the stop (<= 1.1 s)
+01:59:31.832 PASS log: no QML error/warning lines (0)
+01:59:31.873 warning/error lines in the log: 2
+    [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-084-run\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+    [MS300] COM2: Referenced serial device does not exist. (not open for 61 s, 18 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)
+01:59:31.877 PASS log: no heartbeat warning
+01:59:31.951 simulator pid 66024 (started here) closed
+01:59:31.953 === all checks passed

@@ -10,6 +10,7 @@ class HistoryExportManager;
 class HistoryViewService;
 class AlarmViewService;
 class RESTManager;
+class ServerHeartbeat;
 
 class Core : public QObject
 {
@@ -52,5 +53,8 @@ private:
     HistoryExportManager* m_historyExport = nullptr;   // raw CSV export + download service
     RESTManager* m_rest = nullptr;                      // w2-060: REST API (loopback only)
     AlarmViewService* m_alarmViews = nullptr;           // w2-080: one alarm view per client
+    // w2-084: serverHeartbeatMs every 1 s on the main thread (ServerHeartbeat.h); started at the
+    // end of init(), stopped first in shutdown().
+    ServerHeartbeat* m_heartbeat = nullptr;
 
 };

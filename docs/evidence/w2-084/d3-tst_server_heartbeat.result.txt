@@ -1,0 +1,35 @@
+********* Start testing of TestServerHeartbeat *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+PASS   : TestServerHeartbeat::initTestCase()
+PASS   : TestServerHeartbeat::contractDefaults()
+QINFO  : TestServerHeartbeat::startWritesAtOnce() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+QINFO  : TestServerHeartbeat::startWritesAtOnce() [Heartbeat] server heartbeat stopped after 1 write(s)
+PASS   : TestServerHeartbeat::startWritesAtOnce()
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration() changes in 6.5 s: 7
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #0 at 0 ms value 1790790232465 (2026-10-01T01:43:52.465)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #1 at 1000 ms value 1790790233466 (2026-10-01T01:43:53.466)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #2 at 2008 ms value 1790790234474 (2026-10-01T01:43:54.474)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #3 at 3000 ms value 1790790235466 (2026-10-01T01:43:55.466)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #4 at 4004 ms value 1790790236469 (2026-10-01T01:43:56.469)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #5 at 5009 ms value 1790790237475 (2026-10-01T01:43:57.475)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration()   #6 at 6003 ms value 1790790238469 (2026-10-01T01:43:58.469)
+QINFO  : TestServerHeartbeat::everySecondWithTheCoreConfiguration() [Heartbeat] server heartbeat stopped after 7 write(s)
+PASS   : TestServerHeartbeat::everySecondWithTheCoreConfiguration()
+QINFO  : TestServerHeartbeat::injectedClockShortInterval() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 20 ms (main thread)
+QINFO  : TestServerHeartbeat::injectedClockShortInterval() [Heartbeat] server heartbeat stopped after 51 write(s)
+PASS   : TestServerHeartbeat::injectedClockShortInterval()
+QINFO  : TestServerHeartbeat::busyWorkerThreadDoesNotDelay() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+QINFO  : TestServerHeartbeat::busyWorkerThreadDoesNotDelay() [Heartbeat] server heartbeat stopped after 4 write(s)
+PASS   : TestServerHeartbeat::busyWorkerThreadDoesNotDelay()
+QINFO  : TestServerHeartbeat::startTwiceAndOffThread() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+QINFO  : TestServerHeartbeat::startTwiceAndOffThread() [Heartbeat] server heartbeat stopped after 1 write(s)
+PASS   : TestServerHeartbeat::startTwiceAndOffThread()
+QINFO  : TestServerHeartbeat::proxyDestroyedWhileRunning() [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 20 ms (main thread)
+QINFO  : TestServerHeartbeat::proxyDestroyedWhileRunning() [Heartbeat] server heartbeat stopped after 1 write(s)
+PASS   : TestServerHeartbeat::proxyDestroyedWhileRunning()
+QINFO  : TestServerHeartbeat::coreWiringInTheSources() files calling setServerHeartbeatMs(: Core/ServerHeartbeat.cpp, Core/TaidaFlowProxy.h
+PASS   : TestServerHeartbeat::coreWiringInTheSources()
+PASS   : TestServerHeartbeat::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 14758ms
+********* Finished testing of TestServerHeartbeat *********

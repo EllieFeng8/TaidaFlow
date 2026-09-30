@@ -1,0 +1,17 @@
+﻿=== w2-084 d4 sequence 2026-10-01T01:52:05.0133903+08:00
+01:52:05 font-check: exit=0 (1 s)
+01:52:05 [build-desktop-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+01:52:51 build-desktop-fresh: exit=0 (46 s)
+01:52:51 [build-wasm-release-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+01:56:05 build-wasm-release-fresh: exit=0 (194 s)
+01:56:05 shell-tests: exit=0 (0 s)
+01:56:06 check-wasm-backend: exit=0 (1 s)
+01:56:08 check-version-shadow: exit=0 (2 s)
+01:56:09 verify-pack: exit=0 (0 s)
+01:56:09 check-rest-routes: exit=0 (0 s)
+01:56:09 contract-hash: exit=0 (0 s)
+01:56:09 [core-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+01:57:43 core-tests-fresh: exit=0 (94 s)
+01:57:43 [app-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+01:58:02 app-tests-fresh: exit=0 (19 s)
+01:58:02 === all steps exit 0

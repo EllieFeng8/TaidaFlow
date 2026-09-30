@@ -1,0 +1,7 @@
+﻿build\desktop\TaidaFlowApp.exe (4025856 bytes): UTF-16 '[Heartbeat] server heartbeat started'=True; ASCII '[Heartbeat] start() not on the Proxy''s thread'=True; ASCII 'serverHeartbeatMs' (contract, both builds)=True
+build\wasm-release\TaidaFlowApp.wasm (34205495 bytes): UTF-16 '[Heartbeat] server heartbeat started'=False; ASCII '[Heartbeat] start() not on the Proxy''s thread'=False; ASCII 'serverHeartbeatMs' (contract, both builds)=True
+build\wasm-release\TaidaFlowApp.html: taidaflow-auto-reload=True tf-reload=True scheduleAutoReload=True entryFunction window.TaidaFlowApp_entry=True placeholders_left=False
+desktop build: [364/598] Building CXX object Core\CMakeFiles\Core.dir\ServerHeartbeat.cpp.obj
+desktop build: [376/598] Building CXX object Core\CMakeFiles\Core.dir\core.cpp.obj
+compile lines Core.dir/ServerHeartbeat.cpp + Core.dir/core.cpp: desktop 2, wasm 0 (desktop-only sources)
+compiler warnings in ServerHeartbeat/core.cpp (desktop): 0

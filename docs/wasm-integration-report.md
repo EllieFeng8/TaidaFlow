@@ -21,6 +21,7 @@
 | 2026-09-28 | w2-060:REST API(`RESTManager`)啟用,`127.0.0.1:18080`,區網經 nginx 80 的 `/api/`(§2.7);移除測試專用 PV 注入與 pack 1.0.0 的 zip 備份 |
 | 2026-09-28 | w2-062:所有現場設定改由 `config.json`(設備位址、各服務 port、nginx、資料資料夾);網頁同步 port 由同源 `/runtime.json` 取得,nginx 啟用時網頁同步也經 nginx 80 的 `/mirror`(正式機防火牆只開 80 與 502);nginx 隨包附上並以 `start nginx` 啟動;檢查腳本改為 PowerShell;網頁版 QML 匯入掃描只看專案資料夾(§2.8) |
 | 2026-09-29 | w2-069 依最終實作(core 0113799)修正:程式自寫 log 與 `nginx.exe` / `log.*` 鍵(w2-064 / w2-065,§2.8)、nginx 樣板改為六個值(加 log 資料夾);網頁載入頁轉場(w1-066);關閉流程 `Core::shutdown`(w2-067,§2.7);LanRelay(8125)定位為 nginx 未啟用時的備援、不再等待 pack 1.0.2(Mango 決定,DV-12、G-9、建議 19);§4.3 第 4、5、14 列、§4.6、建議 29 更新為現況 |
+| 2026-10-01 | w2-084:網頁斷線偵測與自動恢復(§2.9):Core 每秒寫 `serverHeartbeatMs`(w1-083 契約)、網頁 5 秒顯示連線中斷 / 15 秒自動重新整理、載入頁在程式當掉或載入失敗 10 秒後自動重新整理,兩者共用 sessionStorage 退避 |
 
 ---
 
@@ -308,6 +309,28 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
   `verify-pack.ps1`,新舊版對同一建置輸出逐行相同後才刪舊檔),`verify-desktop-startup.ps1` 以 `CloseMainWindow` 關程式;唯一例外是
   字型子集工具(§2.4)。
 
+### 2.9 網頁斷線偵測與自動恢復(w1-083 / w2-084,現況)
+
+起因(Mango 2026-10-01 現場):網頁「半開」連線——網路斷了但 WebSocket 沒有關閉事件,`transportReady` 仍為 `true`,數值停住、
+控制沒反應、沒有離線橫幅,F5 才恢復。pack 的 transport 狀態偵測不到這種情況,因此加上應用層心跳:
+
+- **契約(main w1-083)**:`TaidaFlowProxy` 新增鏡像屬性 `double serverHeartbeatMs`(預設 0 = 尚未收到)與
+  `kServerHeartbeatIntervalMs = 1000`。新屬性改變 contract hash:網頁檔與桌面必須是同一次建置(正常部署本來如此)。
+- **Core 寫心跳(core w2-084)**:`Core/ServerHeartbeat.*`,`Core::init()` 最後啟動,先立即寫一次,之後主執行緒 `QTimer` 每 1 秒寫
+  目前 epoch ms;不經過 SqlManager;`Core::shutdown()` 第一步停止。只編進桌面版(`Core/CMakeLists.txt` 桌面區塊),網頁端只讀。
+- **網頁偵測(main w1-083)**:`LinkWatchdog.qml/.js` 只在網頁執行,只看「值最後一次變化」的本機單調時間:5 秒沒有變化 →
+  橫幅「連線中斷,正在恢復…」、所有操作停用;15 秒 → 自動重新整理(`App/main.cpp` 的 `WebPageControl`,`location.reload()`)。
+  桌面真的關閉(WebSocket 關閉、`transportReady` false)時維持原本的離線橫幅,不重新整理。
+- **載入頁當機自動重新整理(core w2-084)**:`App/wasm/TaidaFlowApp.shell.html` 在 WebAssembly 程式中止 / 結束(qtLoad 的 `onExit`)、
+  未捕捉的 WebAssembly 執行錯誤(`RuntimeError`、Emscripten `Aborted(...)`)、下載失敗、不支援 WebAssembly 時,保留原本的紅字訊息,
+  下一行倒數,10 秒後自動重新整理。其他腳本錯誤(瀏覽器外掛、跨網域的 `Script error.`)不處理。w1-066 轉場與減少動態效果不變。
+- **退避(兩者共用,規則在 `LinkWatchdog.js`)**:`sessionStorage` 的 `taidaflow.autoReload.lastEpochMs` / `taidaflow.autoReload.streak`;
+  第一次立即(心跳 15 秒 / 當機 10 秒後),之後與上一次至少間隔 60 / 120 / 240 秒,最多 5 分鐘;連線正常 60 秒後歸零。
+  載入頁的函式以 node 測試逐一比對 `LinkWatchdog.js` 的結果(`App\wasm\tests\run-shell-tests.bat`)。`sessionStorage` 被封鎖時
+  載入頁改為 60 秒後才重新整理(無法記住次數,避免每 10 秒重整一次)。
+- 限制:偵測只在網頁看到第一次心跳變化後開始;分頁在背景被強力節流時,要回到前景才判定;多執行緒 WebAssembly 的 worker
+  錯誤若沒有以 `RuntimeError` 形式傳到主頁面,不會觸發載入頁的自動重新整理(仍會由心跳偵測處理)。
+
 ---
 
 ## 3. 驗證結果
@@ -333,6 +356,8 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 Noto Sans TC(OFL-1.1)子
 | 關閉流程(`SqlManager::shutdown`)QTest | `docs\evidence\w2-067\tools\run-qtest.bat` |
 | 打包資料夾(nginx、/mirror、REST、下載、搬移、壞 JSON、log 檔) | `scripts\verify-release-package.ps1 -Package dist\TaidaFlow-<...>` |
 | REST route 表一致 | `scripts\check-rest-routes.ps1` |
+| Core 單元測試(含伺服器心跳 `tst_server_heartbeat`) | `Core\tests\run-core-tests.bat fresh` |
+| 載入頁當機自動重新整理(node,不開瀏覽器) | `App\wasm\tests\run-shell-tests.bat build\wasm-release\TaidaFlowApp.html` |
 
 (`.ps1` 以 `powershell -NoProfile -ExecutionPolicy Bypass -File` 執行。)最近幾次實跑的結果見 `docs/evidence/w2-065/`、
 `docs/evidence/w2-067/`、`docs/evidence/w2-067-fix1/`(`w2-062/` 是更早的一輪)。

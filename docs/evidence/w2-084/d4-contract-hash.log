@@ -1,0 +1,10 @@
+moc_TaidaFlowProxy.cpp:
+  desktop build\desktop\Core\Core_autogen\EWIEGA46WW\moc_TaidaFlowProxy.cpp sha256=a56632069c3006bd4fa2aad24b51e34229baec4271480bb85f12ed831bc4d506 (61060 bytes, 2026-10-01T01:52:23)
+  wasm    build\wasm-release\Core\Core_autogen\EWIEGA46WW\moc_TaidaFlowProxy.cpp sha256=a56632069c3006bd4fa2aad24b51e34229baec4271480bb85f12ed831bc4d506 (61060 bytes, 2026-10-01T01:53:13)
+  identical=True serverHeartbeatMs/serverHeartbeatMsChanged in the meta-object=True
+moc_TaidaFlowProxy_*_for_relay.cpp:
+  desktop build\desktop\Core\generated\wasm_mirror\Core\moc_TaidaFlowProxy_548aca92baac_for_relay.cpp sha256=7abd8ab57e58b8f22e6e6a95d7986fbf3abbf53c78a96f3adec70f0a42d847f6 (61063 bytes, 2026-10-01T01:52:24)
+  wasm    build\wasm-release\Core\generated\wasm_mirror\Core\moc_TaidaFlowProxy_548aca92baac_for_relay.cpp sha256=7abd8ab57e58b8f22e6e6a95d7986fbf3abbf53c78a96f3adec70f0a42d847f6 (61063 bytes, 2026-10-01T01:53:14)
+  identical=True serverHeartbeatMs/serverHeartbeatMsChanged in the meta-object=True
+result: desktop and wasm meta-objects identical (same contract hash), serverHeartbeatMs included
+exit=0

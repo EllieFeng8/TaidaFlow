@@ -1,0 +1,7 @@
+charset before=771 after=777
+added(6)=執準瀏秒約首
+added code points: U+57F7 U+6E96 U+700F U+79D2 U+7D04 U+9996
+removed(0)=
+charset.txt: 2026 -> 2044 bytes (+18)
+TaidaFlowNotoSansTC-Regular.ttf: 242508 -> 244708 bytes (+2200)
+TaidaFlowNotoSansTC-Bold.ttf: 243168 -> 245364 bytes (+2196)

@@ -132,6 +132,7 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
 - **錯誤時**:載入失敗、瀏覽器不支援 WebAssembly、JavaScript 關閉與程式結束時停在載入頁顯示繁中訊息(紅字)。
   若錯誤發生在轉場等待中或播放中,轉場立即中止(計時器、rAF、事件監聽全部取消),載入層回到完全不透明、立方體停住並顯示
   紅字;轉場結束後才發生的程式結束與以前相同,載入頁重新出現在畫面上方顯示訊息。
+  w2-084 起,紅字下方多一行「N 秒後自動重新整理頁面…」,10 秒後(或退避規則要求的更久)自動重新整理,見「網頁斷線偵測與自動恢復」。
 - 套用:Qt 6.8 沒有自訂 HTML shell 的 CMake 參數,它在 CMake configure 時從自己的 `wasm_shell.html`
   產生 `build\<wasm preset>\TaidaFlowApp.html`。`App/CMakeLists.txt` 在同一次 configure、Qt 產生之後
   立刻呼叫 `App/wasm/apply_wasm_shell.cmake`,以 Qt 產生的頁面取 `@APPNAME@`/`@APPEXPORTNAME@`/
@@ -360,11 +361,44 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
 純本機的檢視控制(分頁切換、警報頁分頁)不受影響;歷史頁的日期篩選 / 顯示前一周 / 下載 CSV / 取消
 改由 desktop Core 執行(request signal 經 mirror),離線時由 HistoryPage.qml 停用。
 
+### 網頁斷線偵測與自動恢復(心跳,w1-083 / w2-084)
+
+起因:2026-10-01 現場網頁出現「半開」連線——網路斷了但瀏覽器沒收到 WebSocket 關閉,`transportReady` 仍是 `true`,
+數值停住、按了沒反應、也沒有離線橫幅,按 F5 才恢復。現在分三層處理:
+
+| 情況 | 網頁顯示 | 自動動作 |
+|---|---|---|
+| 5 秒沒收到桌面端心跳(連線看起來還在) | 橫幅「連線中斷,正在恢復…」+ 秒數倒數,所有操作停用,畫面保留最後狀態 | 心跳恢復立即解除 |
+| 15 秒仍沒有心跳(連線仍看起來還在) | 橫幅副標「正在重新整理頁面…」 | 自動重新整理頁面(同 F5),受下方退避限制 |
+| 網頁程式本身當掉(WebAssembly 中止 / 結束、未捕捉的 WebAssembly 執行錯誤)、載入失敗(下載失敗、瀏覽器不支援 WebAssembly) | 載入頁的紅字訊息 + 下一行「N 秒後自動重新整理頁面…」 | **10 秒**後自動重新整理,受下方退避限制 |
+| 桌面真的關閉(WebSocket 正常關閉) | 原本的紅色「離線」橫幅 | 不重新整理,由套件自動重連 |
+
+- **心跳(Core 端,w2-084)**:`Core/ServerHeartbeat.h/.cpp`。`Core::init()` 最後建立並啟動,先立即寫一次,之後在主執行緒以
+  `QTimer` 每 `TaidaFlowProxy::kServerHeartbeatIntervalMs`(1 秒)把 `QDateTime::currentMSecsSinceEpoch()` 寫進
+  `Td.serverHeartbeatMs`(鏡像到所有網頁,每秒一個很小的 patch)。不經過 SqlManager;刻意放在主事件迴圈:主執行緒卡住時心跳
+  也停,網頁會如實顯示中斷。`Core::shutdown()` 第一步就停止心跳(關閉過程中不再寫)。只編進桌面版;網頁端只讀。
+  log:`[Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)`,關閉時
+  `[Heartbeat] server heartbeat stopped after <n> write(s)`。
+- **偵測(網頁 QML,w1-083)**:`TaidaFlowContent/components/LinkWatchdog.qml/.js`,只在網頁執行;網頁不比較兩端時鐘,只用本機
+  單調時鐘記錄「值最後一次變化的時間」;收到第一次變化才開始偵測;分頁被凍結 / 背景節流的時間不算沉默。
+- **當機自動重新整理(載入頁,w2-084)**:`App/wasm/TaidaFlowApp.shell.html` 的 `taidaflow-auto-reload` 區塊。紅字訊息保留,
+  倒數 10 秒(或退避要求的更久)後 `location.reload()`。只有 WebAssembly 的執行錯誤(`RuntimeError`、`Aborted(...)`)
+  算當機;瀏覽器外掛等其他腳本錯誤不會重新整理。
+- **退避規則(兩者共用)**:存在瀏覽器分頁的 `sessionStorage`(key `taidaflow.autoReload.lastEpochMs` 與
+  `taidaflow.autoReload.streak`),重新整理後仍在。第一次自動重新整理不另等(心跳 15 秒 / 當機 10 秒後就做);之後每次與上一次
+  至少間隔 60 秒、120 秒、240 秒,最多 5 分鐘;連線正常 60 秒後次數歸零。`sessionStorage` 被封鎖時,當機後改為 60 秒才重新整理。
+- 改了 `TaidaFlowApp.shell.html` 要重新 configure 網頁版才會生效(`scripts\build-wasm.bat wasm-release fresh`;樣板是 configure
+  相依,一般建置也會自動重跑 configure),再 `deploy-web.ps1` 部署。`serverHeartbeatMs` 是新的鏡像屬性,contract hash 因此改變:
+  網頁檔與桌面必須是同一次建置(舊網頁快取連新桌面會被 contract mismatch 擋下)。
+- 測試:`Core/tests` 的 `tst_server_heartbeat`(見「測試 / 驗證」5j)、`App\wasm\tests\run-shell-tests.bat`(5k,node,不開瀏覽器)、
+  w1-083 的 Qt Quick Test(QtTester `qa/w1-083`)。
+
 ### 關閉流程(`Core::shutdown`,w2-067)
 
 - desktop 正常關閉(按視窗的 X、`stop-taidaflow` / `verify-desktop-startup.ps1` 送的 WM_CLOSE、`taskkill` 不加 `/F`)時,
   `QCoreApplication::aboutToQuit`(`Core::init()` 最先連接)呼叫 `Core::shutdown("aboutToQuit")`,在 application 物件還在時
   依序停止並釋放後端:
+  0. (w2-084)停止伺服器心跳 `serverHeartbeatMs`(關閉過程中不再寫);
   1. 中斷 SqlManager → Core 的歷史結果連線;
   2. Manager 停止(輪詢計時器、MS300、5 台 ADAM 的 Modbus TCP 連線)→ Modbus 伺服器停止 → 兩者刪除;
   3. REST API → 歷史檢視 → CSV 匯出(join 匯出執行緒)→ `AppHttpServer`(join 它的執行緒);
@@ -710,8 +744,16 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     tst_historyexport_status(匯出狀態表上限:不合法 id 不存、拒絕項目與完成項目一起清理、忙碌項目不遺失)、
 ::     tst_alarm_views(w2-080 警報頁各端檢視:跨兩個月份檔的總數 / 頁數 / 未處理數、新到舊排序(同時間依 id)、序號、換頁與頁數夾限、
 ::     空區間、rows 與 alarmRecords 同一筆比對、新增 / 解除警報後自動更新且範圍外不變、兩端互不影響、同端只留最新、
-::     不合法輸入、閒置 30 分鐘與最多 32 個的清理、5000 筆月份分步讀取)
+::     不合法輸入、閒置 30 分鐘與最多 32 個的清理、5000 筆月份分步讀取)、
+::     tst_server_heartbeat(w2-084 伺服器心跳:啟動立即寫一次、真實 1 秒計時器 6.5 秒內 7 個值且間隔約 1 秒、值 = 當下 epoch ms、
+::     在 Proxy 的執行緒寫、stop() 後 3.5 秒不再變化、注入時鐘 + 短間隔、其他執行緒忙碌不影響、非主執行緒 start 被拒、
+::     core.cpp 的接線(init 最後啟動、shutdown 第一步停止)與只編進桌面版、沒有其他程式寫 serverHeartbeatMs)
 Core\tests\run-core-tests.bat fresh
+:: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
+::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、
+::     以假 DOM 與假 qtLoad 執行頁面真正的 init():程式結束、下載失敗、不支援 WebAssembly、未捕捉 RuntimeError、
+::     一般腳本錯誤不動作、轉場中當機。加上建置好的頁面路徑時也檢查該頁(與樣板同一段程式)
+App\wasm\tests\run-shell-tests.bat build\wasm-release\TaidaFlowApp.html
 ```
 
 - 以前各輪的專用檢查工具(w2-043 區網轉發、w2-050 nginx / 1 GB Range、w2-060 REST 全表)在各自的 `docs/evidence/<輪次>/tools/`,

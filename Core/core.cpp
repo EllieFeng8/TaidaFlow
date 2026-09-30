@@ -14,6 +14,7 @@
 #include "HistoryViews.h"
 #include "Modbus_Server.h"
 #include "RESTManager.h"
+#include "ServerHeartbeat.h"
 #include "SqlManager.h"
 
 #include <QCoreApplication>
@@ -168,6 +169,12 @@ void Core::shutdown(const char *reason)
     if (m_shutDown)
         return;
     m_shutDown = true;
+    // w2-084: the server heartbeat first - no serverHeartbeatMs write while the backend is torn down.
+    if (m_heartbeat) {
+        m_heartbeat->stop();
+        delete m_heartbeat;
+        m_heartbeat = nullptr;
+    }
     QElapsedTimer elapsed;
     elapsed.start();
     qInfo().noquote() << QStringLiteral("[Core] shutdown (%1): stopping the backend").arg(QLatin1String(reason));
@@ -313,6 +320,10 @@ void Core::init()
     m_modbusServer->start(QHostAddress(serverSettings.bind), serverSettings.port, serverSettings.unitId);
     setHistoryTitleOnce();
     loadAlarmRecords();
+    // w2-084: server heartbeat (TaidaFlowProxy::serverHeartbeatMs, ServerHeartbeat.h): first value
+    // now, then every kServerHeartbeatIntervalMs on this (the main) thread.
+    m_heartbeat = new ServerHeartbeat(m_proxy, this);
+    m_heartbeat->start();
 }
 
 namespace {

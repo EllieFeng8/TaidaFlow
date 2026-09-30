@@ -1,0 +1,29 @@
+template: D:\repo\codex\qmlTester\taidaflow\App\wasm\TaidaFlowApp.shell.html
+LinkWatchdog.js: D:\repo\codex\qmlTester\taidaflow\TaidaFlowContent\components\LinkWatchdog.js
+node v16.20.0
+PASS   : syntax: every inline script of the template
+  built page D:\repo\codex\qmlTester\taidaflow\build\wasm-release\TaidaFlowApp.html: entryFunction window.TaidaFlowApp_entry, auto-reload block identical
+PASS   : syntax: configured page of the wasm build (--page)
+PASS   : back-off: same constants and keys as LinkWatchdog.js
+  409 results compared with LinkWatchdog.js
+PASS   : back-off: same results as LinkWatchdog.js over a grid of inputs
+PASS   : back-off: expected gaps 0 / 60 / 120 / 240 / 300 / 300 s and waits
+PASS   : schedule: first crash -> 10 s countdown, one reload, storage like LinkWatchdog
+PASS   : schedule: consecutive crashes follow the back-off (60 / 120 / 240 / 300 s)
+PASS   : schedule: invalid stored values, storage blocked, setItem failing
+PASS   : schedule: cancel, and timers that fire late (throttled tab)
+PASS   : isFatalRuntimeError: wasm trap / abort yes, other errors no
+PASS   : page: crash after the app was running (onExit) -> red message kept + reload after 10 s
+PASS   : page: onExit with an exit code keeps the existing message
+PASS   : page: download failure before onLoaded -> load-failed message + reload after 10 s
+PASS   : page: qtLoad throws without onExit (TaidaFlowApp.js missing) -> load-failed + reload
+PASS   : page: no WebAssembly support -> existing message + reload after 10 s (qtLoad not called)
+PASS   : page: uncaught RuntimeError while running -> error message + reload after 10 s
+PASS   : page: unhandled rejection with an Emscripten abort -> reload after 10 s
+PASS   : page: harmless script errors do nothing (no message, no reload in 10 min)
+PASS   : page: normal run without errors never reloads (10 min)
+PASS   : page: back-off from earlier reloads (streak 2, last reload 12 s before the crash -> 108 s)
+PASS   : page: sessionStorage blocked -> still reloads (after 60 s), no exception
+PASS   : page: crash during the w1-066 transition -> transition cancelled, loader back, reload
+Totals: 22 passed, 0 failed
+exit=0

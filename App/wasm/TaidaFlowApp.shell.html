@@ -19,6 +19,17 @@
   frames + 250 ms), then plays an 800 ms transition (cube spins faster and grows, a glow spreads
   and fades, the loader fades out while #screen fades in from 0.98 scale) and hides the loader.
   prefers-reduced-motion: a 200 ms cross-fade only. Only opacity / transform are animated.
+
+  w2-084: automatic recovery. Whenever the page shows an error (the WebAssembly program aborted
+  or exited, an uncaught WebAssembly runtime error, a failed download, no WebAssembly support),
+  the red message stays and a second line counts down; the page reloads itself after 10 s at the
+  earliest, later when the back-off says so. The back-off is the one of the in-app heartbeat
+  watchdog (TaidaFlowContent/components/LinkWatchdog.js, w1-083): same sessionStorage keys
+  (taidaflow.autoReload.lastEpochMs / taidaflow.autoReload.streak), first automatic reload at
+  once (here: after the 10 s countdown), then at least 60 s / 120 s / 240 s after the previous
+  one, never more than 5 min; the watchdog sets the streak back to 0 after 60 s of healthy link.
+  The rules are in the "taidaflow-auto-reload" script below (tested with node, no browser:
+  App/wasm/tests). The loading visuals and the w1-066 transition are unchanged.
   This file goes through configure_file(@ONLY): never write a word between two at-signs.
 -->
 <html lang="zh-Hant-TW">
@@ -303,10 +314,155 @@
       <div class="tf-text">
         <h1 class="tf-title">TAIDAFLOW</h1>
         <p id="tf-status" class="tf-status" role="status" aria-live="polite">系統載入中,首次開啟約需數秒…</p>
+        <p id="tf-reload" class="tf-status" aria-live="polite" hidden></p>
         <noscript><p class="tf-status tf-error" role="alert">請啟用 JavaScript 後重新整理頁面。</p></noscript>
       </div>
     </div>
     <div id="screen"></div>
+
+    <script type="text/javascript">
+        // ==== taidaflow-auto-reload (w2-084) =========================================================
+        // Automatic reload after a crash / load failure. The back-off rules and the sessionStorage
+        // keys are those of TaidaFlowContent/components/LinkWatchdog.js (w1-083); App/wasm/tests
+        // checks with node that both give the same results. Pure functions + schedule() with every
+        // browser dependency passed in (the tests run it with a fake clock and storage).
+        var TaidaFlowAutoReload = (function () {
+            'use strict';
+            // Countdown before a reload after a crash / load failure (the earliest reload).
+            var CRASH_RELOAD_AFTER_MS = 10000;
+            // Same values as LinkWatchdog.js: 60 s, doubling per consecutive reload, at most 5 min.
+            var RELOAD_BACKOFF_BASE_MS = 60000;
+            var RELOAD_BACKOFF_MAX_MS = 300000;
+            var STORAGE_LAST_RELOAD_KEY = 'taidaflow.autoReload.lastEpochMs';
+            var STORAGE_STREAK_KEY = 'taidaflow.autoReload.streak';
+            // sessionStorage blocked (the back-off cannot be remembered across reloads): wait one
+            // base back-off step instead, so a page that keeps failing reloads at most once a minute.
+            var NO_STORAGE_WAIT_MS = RELOAD_BACKOFF_BASE_MS;
+            var COUNTDOWN_STEP_MS = 1000;
+
+            // Stored text -> number; missing / invalid -> 0 (LinkWatchdog.js parseStoredNumber).
+            function parseStoredNumber(text) {
+                var value = Number(text);
+                return (text === undefined || text === null || text === '' || !isFinite(value)) ? 0 : value;
+            }
+            // LinkWatchdog.js reloadGapMs: 0 -> 0, 1 -> 60 s, 2 -> 120 s, 3 -> 240 s, 4+ -> 300 s.
+            function reloadGapMs(streak) {
+                if (!(streak > 0))
+                    return 0;
+                var gap = RELOAD_BACKOFF_BASE_MS * Math.pow(2, Math.min(streak, 20) - 1);
+                return Math.min(gap, RELOAD_BACKOFF_MAX_MS);
+            }
+            // LinkWatchdog.js reloadWaitMs (epoch ms; a previous reload "in the future" = just now).
+            function reloadWaitMs(nowEpochMs, lastReloadEpochMs, streak) {
+                var gap = reloadGapMs(streak);
+                if (gap <= 0 || !(lastReloadEpochMs > 0))
+                    return 0;
+                var elapsed = Math.max(0, nowEpochMs - lastReloadEpochMs);
+                return Math.max(0, gap - elapsed);
+            }
+            // Back-off state as LinkWatchdog.qml loadBackoffState() reads it. storage = sessionStorage
+            // or null; any exception (storage blocked) -> available false.
+            function readState(storage) {
+                try {
+                    if (!storage)
+                        return { available: false, lastEpochMs: 0, streak: 0 };
+                    return {
+                        available: true,
+                        lastEpochMs: parseStoredNumber(storage.getItem(STORAGE_LAST_RELOAD_KEY)),
+                        streak: Math.max(0, Math.floor(parseStoredNumber(storage.getItem(STORAGE_STREAK_KEY))))
+                    };
+                } catch (e) {
+                    return { available: false, lastEpochMs: 0, streak: 0 };
+                }
+            }
+            // As LinkWatchdog.qml recordReload(): last = now, streak + 1. Never throws.
+            function recordReload(storage, nowEpochMs, state) {
+                try {
+                    if (storage) {
+                        storage.setItem(STORAGE_LAST_RELOAD_KEY, String(nowEpochMs));
+                        storage.setItem(STORAGE_STREAK_KEY, String(state.streak + 1));
+                    }
+                } catch (e) {
+                }
+            }
+            // Delay (ms) from now to the automatic reload.
+            function reloadDelayMs(nowEpochMs, state) {
+                var backoff = state.available ? reloadWaitMs(nowEpochMs, state.lastEpochMs, state.streak)
+                                              : NO_STORAGE_WAIT_MS;
+                return Math.max(CRASH_RELOAD_AFTER_MS, backoff);
+            }
+            // The WebAssembly program is dead: a wasm trap or an Emscripten abort ("Aborted(...)",
+            // thrown as WebAssembly.RuntimeError). Other script errors (a browser extension, a
+            // cross-origin "Script error.") do not reload the page.
+            function isFatalRuntimeError(error, message) {
+                if (error && typeof error === 'object') {
+                    if (error.name === 'RuntimeError')
+                        return true;
+                    if (typeof WebAssembly === 'object' && typeof WebAssembly.RuntimeError === 'function'
+                            && error instanceof WebAssembly.RuntimeError)
+                        return true;
+                }
+                var text = message ? String(message)
+                                   : (error && typeof error === 'object') ? String(error.message || '')
+                                   : String(error || '');
+                return /Aborted\(/.test(text) || /^(Uncaught )?RuntimeError\b/.test(text);
+            }
+            // Starts the countdown and reloads when it ends. env: storage (sessionStorage or null),
+            // epochNow() (Date.now), monotonicNow() (performance.now), setTimeout, clearTimeout,
+            // reload() (location.reload), onCountdown(secondsLeft) (0 = reloading now).
+            // Returns { delayMs, streak, storageAvailable, cancel() }.
+            function schedule(env) {
+                var state = readState(env.storage);
+                var delay = reloadDelayMs(env.epochNow(), state);
+                var deadline = env.monotonicNow() + delay;
+                var timer = null;
+                var done = false;
+                var tick = function () {
+                    timer = null;
+                    if (done)
+                        return;
+                    var left = deadline - env.monotonicNow();
+                    if (left > 0) {
+                        env.onCountdown(Math.ceil(left / 1000));
+                        timer = env.setTimeout(tick, Math.min(COUNTDOWN_STEP_MS, left));
+                        return;
+                    }
+                    done = true;
+                    env.onCountdown(0);
+                    recordReload(env.storage, env.epochNow(), readState(env.storage));
+                    env.reload();
+                };
+                tick();
+                return {
+                    delayMs: delay,
+                    streak: state.streak,
+                    storageAvailable: state.available,
+                    cancel: function () {
+                        done = true;
+                        if (timer !== null)
+                            env.clearTimeout(timer);
+                        timer = null;
+                    }
+                };
+            }
+            return {
+                CRASH_RELOAD_AFTER_MS: CRASH_RELOAD_AFTER_MS,
+                RELOAD_BACKOFF_BASE_MS: RELOAD_BACKOFF_BASE_MS,
+                RELOAD_BACKOFF_MAX_MS: RELOAD_BACKOFF_MAX_MS,
+                STORAGE_LAST_RELOAD_KEY: STORAGE_LAST_RELOAD_KEY,
+                STORAGE_STREAK_KEY: STORAGE_STREAK_KEY,
+                NO_STORAGE_WAIT_MS: NO_STORAGE_WAIT_MS,
+                parseStoredNumber: parseStoredNumber,
+                reloadGapMs: reloadGapMs,
+                reloadWaitMs: reloadWaitMs,
+                readState: readState,
+                reloadDelayMs: reloadDelayMs,
+                isFatalRuntimeError: isFatalRuntimeError,
+                schedule: schedule
+            };
+        })();
+        // ==== end of taidaflow-auto-reload ==========================================================
+    </script>
 
     <script type="text/javascript">
         async function init()
@@ -411,9 +567,41 @@
                 t.timers.push(setTimeout(go, RAF_GUARD_MS));
             };
 
+            // ---- Automatic reload (w2-084) ---------------------------------------------------
+            // Started once, by the first error shown; the countdown line is under the red message.
+            const reloadLine = document.querySelector('#tf-reload');
+            let autoReload = null;
+            const scheduleAutoReload = () => {
+                if (autoReload)
+                    return;
+                let storage = null;
+                try {
+                    storage = window.sessionStorage;    // the getter throws when storage is blocked
+                } catch (e) {
+                    storage = null;
+                }
+                autoReload = TaidaFlowAutoReload.schedule({
+                    storage: storage,
+                    epochNow: () => Date.now(),
+                    monotonicNow: () => performance.now(),
+                    setTimeout: (fn, ms) => setTimeout(fn, ms),
+                    clearTimeout: (id) => clearTimeout(id),
+                    reload: () => window.location.reload(),
+                    onCountdown: (seconds) => {
+                        reloadLine.textContent = seconds > 0
+                            ? `${seconds} 秒後自動重新整理頁面…`
+                            : '正在重新整理頁面…';
+                        reloadLine.hidden = false;
+                    }
+                });
+                console.warn('[TaidaFlow] automatic reload in', autoReload.delayMs, 'ms (reloads in a row so far:',
+                             autoReload.streak, autoReload.storageAvailable ? ')' : '; sessionStorage unavailable)');
+            };
+
             // Error: stop the animation, keep the title, status in #FF5964; the loader is shown
             // again on top of the app (onExit after the app was running). A running or pending
             // transition is aborted and its classes / inline styles are removed first.
+            // w2-084: every error shown also starts the automatic reload.
             const showError = (text) => {
                 cancelTransition();
                 failed = true;
@@ -421,9 +609,28 @@
                 status.classList.add('tf-error');
                 loader.classList.add('tf-stopped');
                 loader.hidden = false;
+                try {
+                    scheduleAutoReload();
+                } catch (e) {
+                    console.error(e);
+                }
             };
             const loadFailed = () =>
                 showError('無法載入系統,請確認網路連線後重新整理頁面(F5)。');
+
+            // w2-084: an uncaught WebAssembly runtime error (trap, Emscripten abort) outside qtLoad's
+            // own reporting (e.g. in an event or timer callback of the running app) also ends the
+            // program. Other script errors are ignored here (TaidaFlowAutoReload.isFatalRuntimeError).
+            const onFatalRuntimeError = (error, message) => {
+                if (!TaidaFlowAutoReload.isFatalRuntimeError(error, message))
+                    return;
+                if (!loaded)
+                    loadFailed();
+                else
+                    showError('系統發生錯誤,已停止執行,請重新整理頁面(F5)。');
+            };
+            window.addEventListener('error', (e) => onFatalRuntimeError(e.error, e.message));
+            window.addEventListener('unhandledrejection', (e) => onFatalRuntimeError(e.reason, ''));
 
             if (typeof WebAssembly !== 'object'
                     || typeof WebAssembly.instantiate !== 'function') {

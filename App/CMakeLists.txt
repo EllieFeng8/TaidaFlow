@@ -22,8 +22,9 @@ target_sources(${CMAKE_PROJECT_NAME} PUBLIC
     "embeddedfonts.h"
 )
 
-# Embedded Noto Sans TC subset (OFL-1.1) for WebAssembly, which has no system
-# CJK fonts. Regenerate with scripts/make_font_subset.py.
+# Embedded Noto Sans TC subset (OFL-1.1): the interface font of BOTH the desktop and the
+# WebAssembly build (w2-082; WebAssembly also has no system CJK fonts). Regenerate only with
+# scripts/make-font-subset.ps1 (docs/BUILD.md, embedded font subset).
 qt_add_resources(${CMAKE_PROJECT_NAME} "embedded_fonts"
     PREFIX "/fonts"
     BASE "fonts"

@@ -1,0 +1,10 @@
+﻿original template: exit 0 (expected 0)
+M1-countdown-5s: exit 1 (Totals: 8 passed, 14 failed) -> caught
+M2-no-reload-call: exit 1 (Totals: 12 passed, 10 failed) -> caught
+M3-streak-not-counted: exit 1 (Totals: 18 passed, 4 failed) -> caught
+M4-backoff-max-10min: exit 1 (Totals: 18 passed, 4 failed) -> caught
+M5-abort-not-fatal: exit 1 (Totals: 21 passed, 1 failed) -> caught
+M6-showError-no-reload: exit 1 (Totals: 12 passed, 10 failed) -> caught
+M7-syntax-error: exit 1 (Totals: 1 passed, 21 failed) -> caught
+M8-other-storage-key: exit 1 (Totals: 17 passed, 5 failed) -> caught
+result: original passes, every mutant caught

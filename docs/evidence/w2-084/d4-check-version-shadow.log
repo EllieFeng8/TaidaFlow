@@ -1,0 +1,4 @@
+build\desktop: objects_with_deps=503 version_shadow_hits=0 std_version_deps=0
+build\wasm-release: objects_with_deps=487 version_shadow_hits=0 std_version_deps=173
+  <version> -> C:/tools/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/version (173 objects)
+exit=0

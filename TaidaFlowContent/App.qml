@@ -1,9 +1,18 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Templates as T
 import TaidaFlow
 
-Window {
+// w1-081: T.ApplicationWindow (the unstyled template, i.e. a Window plus font propagation;
+// no style colors or focus frames) so that every control and popup inherits the UI font.
+// Plain Text items get the same font as the application default (main.cpp applyUiFont()).
+T.ApplicationWindow {
     id: appWindow
+
+    // UI font from main.cpp (QGuiApplication::setFont). Only the family: the controls keep
+    // their own sizes. Controls do not follow the application font by themselves (the
+    // Universal style uses Segoe UI) and popups inherit only from an ApplicationWindow.
+    font.family: Application.font.family
 
     // =========================================================
     // Web-only global scaling (Qt.platform.os === "wasm"). Desktop: nothing below

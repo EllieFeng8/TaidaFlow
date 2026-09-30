@@ -781,7 +781,6 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             color: "white"
             font.pixelSize: 15
-            font.family: "Consolas"
         }
     }
 
@@ -997,7 +996,6 @@ Item {
                     text: "PV:"
                     color: "white"
                     font.pixelSize: 14
-                    font.family: "Consolas"
                 }
 
                 Text {
@@ -1253,7 +1251,6 @@ Item {
             rotation: 90
             color: "white"
             font.pixelSize: 15
-            font.family: "Consolas"
         }
     }
 
@@ -1293,7 +1290,6 @@ Item {
                 text: "FM"
                 color: "white"
                 font.pixelSize: 17
-                font.family: "Consolas"
             }
         }
 
@@ -1319,7 +1315,6 @@ Item {
                 text: "L/MIN"
                 color: "white"
                 font.pixelSize: 14
-                font.family: "Consolas"
             }
         }
     }
@@ -1342,7 +1337,6 @@ Item {
         text: "Leakage\nSensor"
         color: pipes.leakDetected ? pipes.leakColor : root.textColor
         font.pixelSize: 15
-        font.family: "Consolas"
         horizontalAlignment: Text.AlignHCenter
     }
     Dialog {

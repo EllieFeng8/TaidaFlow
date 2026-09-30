@@ -26,7 +26,6 @@ Item {
         text: parent.title
         color: valueTag.tagColor
         font.pixelSize: 14
-        font.family: "Consolas"
     }
 
     Rectangle {
@@ -69,7 +68,6 @@ Item {
             text: parent.parent.unit
             color: valueTag.tagColor
             font.pixelSize: 8
-            font.family: "Consolas"
         }
     }
 

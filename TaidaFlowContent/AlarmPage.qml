@@ -621,7 +621,6 @@ Item {
                                 color: model.alarmStatus === "未處理" ? "#FF8790" : root.lightBlue
                                 font.pixelSize: 15
                                 font.bold: true
-                                font.family: "Consolas"
                             }
                         }
 

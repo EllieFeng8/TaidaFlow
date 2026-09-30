@@ -139,7 +139,6 @@ Item {
                 text: "PV:"
                 color: "white"
                 font.pixelSize: 14
-                font.family: "Consolas"
             }
 
             Text {

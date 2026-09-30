@@ -91,14 +91,12 @@ Rectangle {
                 Text {
                     text: "Tel : +886-3487-1786"
                     color: root.textColor
-                    font.family: "Consolas"
                     font.pixelSize: 15
                 }
 
                 Text {
                     text: "Email : newyisun@gmail.com"
                     color: root.textColor
-                    font.family: "Consolas"
                     font.pixelSize: 15
                 }
             }
@@ -132,7 +130,6 @@ Rectangle {
                     anchors.centerIn: parent
 
                     text: "Main"
-                    font.family: "Consolas"
                     font.weight: Font.Bold
                     color: root.currentPage === 0
                            ? "#FFFFFF"
@@ -195,7 +192,6 @@ Rectangle {
                     anchors.centerIn: parent
 
                     text: "Alarm"
-                    font.family: "Consolas"
                     font.weight: Font.Bold
                     color: root.currentPage === 1
                            ? "#FF7881"
@@ -257,7 +253,6 @@ Rectangle {
                     anchors.centerIn: parent
 
                     text: "History"
-                    font.family: "Consolas"
                     font.weight: Font.Bold
                     color: root.currentPage === 2
                            ? "#FFFFFF"

@@ -22,6 +22,7 @@ qt6_add_qml_module(TaidaFlowContent
         "components/NumberFormat.js"
         "components/ValueTag.qml"
     RESOURCES
+        "assets/logo_8TFs7.png"
         "assets/center.png"
         "assets/Group 121.png"
         "assets/Group 164.png"

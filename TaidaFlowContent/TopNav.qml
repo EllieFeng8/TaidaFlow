@@ -59,6 +59,41 @@ Rectangle {
         }
 
         Row {
+            anchors.left: parent.left
+            anchors.leftMargin: 24
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 20
+
+            Image {
+                anchors.verticalCenter: parent.verticalCenter
+                width: 300
+                height: 42
+                source: "assets/logo_8TFs7.png"
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 4
+
+                Text {
+                    text: "Tel : +886-3487-1786"
+                    color: root.textColor
+                    font.family: "Consolas"
+                    font.pixelSize: 15
+                }
+
+                Text {
+                    text: "Email : newyisun@gmail.com"
+                    color: root.textColor
+                    font.family: "Consolas"
+                    font.pixelSize: 15
+                }
+            }
+        }
+
+        Row {
             anchors.centerIn: parent
             spacing: 15
 

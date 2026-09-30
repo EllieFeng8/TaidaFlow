@@ -1,0 +1,80 @@
+=== w2-076 Startup shortcut test 2026-09-29T16:58:44.5431386+08:00; package D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+real Startup folders (only listed): user C:\Users\TED\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup = [desktop.ini|174|639175096816134375]; all users C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup = [AnyDesk.lnk|2005|639197918557830334;CodeMeter Control Center.lnk|2252|639175661389244596;desktop.ini|174|638475530440587624;安控中介軟體服務程式.lnk|1679|639188622710683265]
+  > add-startup-shortcut.ps1 -WhatIf -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 0)
+  | === TaidaFlow Startup shortcut - -WhatIf: nothing is changed
+  | shortcut    : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk (-ShortcutDir (test folder))
+  | target      : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  | arguments   : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+  | start in    : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+  | run         : minimized (WindowStyle 7); icon D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe,0
+  | existing    : none
+  | other automatic start: none found (Task Scheduler, the other Startup folder)
+  | What if: Performing the operation "create the Startup shortcut" on target "D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk".
+  | -WhatIf: NOTHING changed (no shortcut written).
+[PASS] 1 add -WhatIf: exit 0, prints target / arguments, NO shortcut written
+  > add-startup-shortcut.ps1 -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 0)
+  | === TaidaFlow Startup shortcut - add
+  | shortcut    : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk (-ShortcutDir (test folder))
+  | target      : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  | arguments   : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+  | start in    : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+  | run         : minimized (WindowStyle 7); icon D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe,0
+  | existing    : none
+  | other automatic start: none found (Task Scheduler, the other Startup folder)
+  | written: D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk
+  |   read back: target C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe | arguments -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1" | start in D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e | window 7
+  | TaidaFlow starts at the next log on (test now: double-click the shortcut). Remove: scripts\remove-startup-shortcut.ps1
+[PASS] 2 add: exit 0, TaidaFlow.lnk written in the test folder
+  read back: TargetPath=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe | Arguments=-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1" | WorkingDirectory=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e | WindowStyle=7 | IconLocation=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe,0
+[PASS] 3 read back: target = powershell.exe (System32, full path) - C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+[PASS] 4 read back: arguments = -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "<package>\start-taidaflow.ps1" - -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+[PASS] 5 read back: start in = the installation (package) folder - D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+[PASS] 6 read back: run minimized (WindowStyle 7) - 7
+  > add-startup-shortcut.ps1 -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 0)
+  | === TaidaFlow Startup shortcut - add
+  | shortcut    : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk (-ShortcutDir (test folder))
+  | target      : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  | arguments   : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+  | start in    : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+  | run         : minimized (WindowStyle 7); icon D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe,0
+  | existing    : yes, identical - nothing to do
+  | other automatic start: none found (Task Scheduler, the other Startup folder)
+  | the shortcut is already up to date - nothing changed
+[PASS] 7 add again (idempotent): exit 0, "already up to date"
+[PASS] 8 add reports the other automatic start (Task Scheduler / other Startup folder) - none on this PC
+  > add-startup-shortcut.ps1 -AllUsers   (exit 5)
+  | REFUSED: -AllUsers writes into the Startup folder of all users and needs an administrator - nothing changed.
+  |   Without -AllUsers the shortcut goes into YOUR Startup folder (no administrator needed).
+[PASS] 9 add -AllUsers without administrator: exit 5, all-users Startup folder unchanged
+  > remove-startup-shortcut.ps1 -WhatIf -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 0)
+  | shortcut  : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk
+  | target    : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  | arguments : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+  | start in  : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+  | What if: Performing the operation "remove the Startup shortcut" on target "D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk".
+  | -WhatIf: NOTHING removed.
+[PASS] 10 remove -WhatIf: exit 0, shortcut still there
+  > remove-startup-shortcut.ps1 -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 0)
+  | shortcut  : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk
+  | target    : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+  | arguments : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+  | start in  : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+  | removed: D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk (TaidaFlow no longer starts from this Startup folder; the running app was not touched)
+[PASS] 11 remove: exit 0, shortcut gone
+  > remove-startup-shortcut.ps1 -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 1)
+  | no shortcut D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk - nothing to remove
+[PASS] 12 remove again: exit 1 (no shortcut)
+  > remove-startup-shortcut.ps1 -ShortcutDir D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup   (exit 4)
+  | shortcut  : D:\repo\codex\qmlTester\taidaflow\build\w2-076-startup-test\Startup\TaidaFlow.lnk
+  | target    : C:\Windows\System32\notepad.exe
+  | arguments : 
+  | start in  : 
+  | this shortcut does not run start-taidaflow.ps1 - not removed (-Force removes it anyway)
+[PASS] 13 a TaidaFlow.lnk that does not run start-taidaflow.ps1: exit 4, not removed
+[PASS] 14 real Startup folders unchanged (user and all users) - user [desktop.ini|174|639175096816134375] all [AnyDesk.lnk|2005|639197918557830334;CodeMeter Control Center.lnk|2252|639175661389244596;desktop.ini|174|638475530440587624;安控中介軟體服務程式.lnk|1679|639188622710683265]
+=== 14 check(s), 0 failed
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\test-startup-shortcut.ps1 -Package dist\TaidaFlow-20260929-49b0d8e
+started : 2026-09-29T16:58:44.2657871+08:00
+elapsed : 5s
+EXIT=0

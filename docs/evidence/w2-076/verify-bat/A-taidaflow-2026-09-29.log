@@ -1,0 +1,3 @@
+2026-09-29 17:00:44.542 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-076-verify-data/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 17:00:44.593 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+2026-09-29 17:00:46.595 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.

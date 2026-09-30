@@ -74,6 +74,21 @@
 #      ("nginx -s quit" in its folder). If nginx is not available, the app is still started with
 #      nginx.enabled=false (download links and runtime.json then use http.port / mirror.publicPort of
 #      the app itself) and the script ends with exit 8.
+#      w2-076 - nginx as a Windows SERVICE (scripts\install-nginx-service.ps1: service TaidaFlowNginx, WinSW
+#      wrapper nginx\nginx-service.exe, LocalSystem, session 0). Whether it exists and belongs to THIS
+#      installation is read from Win32_Service (PathName = <this folder>\nginx\nginx-service.exe; readable by a
+#      normal user, unlike the path of the service's nginx processes). Then:
+#        * port check: the listener of nginx.port is fine when it is an nginx.exe whose parent chain reaches
+#          the service's process (Win32_Process ParentProcessId) - not "in use by another program";
+#        * nginx is NEVER started a second time with "start nginx": a running service is left as it is, a
+#          stopped one is started as a service (the service grants "start" to interactive users; if that
+#          fails -> exit 8 as above, an administrator starts it: nginx\nginx-service.exe start);
+#        * a regenerated nginx.conf cannot be applied with "nginx -s reload" (session-0 nginx of LocalSystem):
+#          as administrator the service is restarted; otherwise nothing is reloaded, the launcher log and the
+#          screen say "run scripts\install-nginx-service.ps1 (or nginx\nginx-service.exe restart) as
+#          administrator", the app is started as usual and the script ends with exit 3.
+#        A service TaidaFlowNginx of ANOTHER folder is only reported (the port check decides as before).
+#      Without the service (not installed) everything above behaves exactly as before w2-076.
 #   5. Starts TaidaFlowApp.exe in the data folder without a console window (the app writes its own log
 #      files; w2-065) and waits until the app listens on http.port and mirror.publicPort (the others are
 #      reported too). What the app writes straight to stderr/stdout during these seconds (normally
@@ -83,7 +98,9 @@
 #
 # Exit codes: 0 started; 2 package incomplete / folder not usable / config.json unusable; 4 refused
 # (already running or port in use); 6 the app exited during start-up, or its ports were not listening
-# in time (the app is left running if it is alive - see the log); 8 app started but nginx did not.
+# in time (the app is left running if it is alive - see the log); 8 app started but nginx did not;
+# 3 (w2-076) app and nginx started, but nginx.conf was regenerated and the nginx SERVICE still uses the old
+# one (not an administrator - see step 4).
 param(
     [string]$Config = "",
     [string]$DataDir = "",
@@ -225,11 +242,27 @@ foreach ($p in $running) {
 }
 $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $ports -contains $_.LocalPort })
 $cfgNginxExe = Resolve-TaidaFlowNginxExe $cfg
+# w2-076: nginx as the Windows service TaidaFlowNginx (scripts\install-nginx-service.ps1). 'none' = not
+# installed (everything below as before), 'ours' = its wrapper is <this folder>\nginx\nginx-service.exe,
+# 'other' = the service of another installation folder (only reported).
+$wrapperExe = Join-Path $install 'nginx\nginx-service.exe'
+$svc = Get-TaidaFlowNginxServiceInfo
+$svcMode = Get-TaidaFlowNginxServiceMode $svc $wrapperExe
+if ($svc.Error) { Log "WARNING: $($svc.Error) - handled as 'no nginx service'" }
+if ($svcMode -eq 'ours') { Log "nginx service: $($svc.Name) of this installation ($($svc.PathName); state $($svc.State), start mode $($svc.StartMode), wrapper pid $($svc.ProcessId))" }
+elseif ($svcMode -eq 'other') { Log "WARNING: a service $($svc.Name) exists but runs $($svc.ExePath) (another installation folder, state $($svc.State)) - not used by this start" }
+$procTable = $null
 foreach ($l in $listeners) {
     $ownerPath = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).Path } catch { '' }
     if ($useNginxNow -and $l.LocalPort -eq [int]$v['nginx.port'] -and [string]::Equals($ownerPath, $cfgNginxExe, [System.StringComparison]::OrdinalIgnoreCase)) {
         Log "port $($l.LocalPort) = the configured nginx, already running (pid $($l.OwningProcess)) - fine"
         continue
+    }
+    if ($useNginxNow -and $l.LocalPort -eq [int]$v['nginx.port'] -and $svcMode -eq 'ours') {
+        if ($null -eq $procTable) { $procTable = Get-TaidaFlowProcessTable }
+        $own = Test-TaidaFlowNginxServiceOwner -Service $svc -WrapperExe $wrapperExe -OwningPid ([int]$l.OwningProcess) -Processes $procTable
+        if ($own.Ours) { Log "port $($l.LocalPort) = the nginx service $($svc.Name) of this installation ($($own.Reason)) - fine"; continue }
+        Log "  port $($l.LocalPort): not the nginx service of this installation ($($own.Reason))"
     }
     $owner = try { $pp = Get-Process -Id $l.OwningProcess -ErrorAction Stop; "$($pp.ProcessName) $($pp.Path)".Trim() } catch { '?' }
     if ($l.OwningProcess -eq 4) { $owner = 'System = Windows HTTP.sys (IIS, WinRM, WebDAV, a URL reservation ...; check: netsh http show servicestate)' }
@@ -274,9 +307,20 @@ Set-AppConfigFile
 # nginx is independent of the app: started the standard way ("cd <nginx folder>" + "start nginx", no
 # arguments) with <nginx folder>\conf\nginx.conf written once by scripts\install-nginx-config.ps1.
 # Already running -> left as it is. stop-taidaflow.ps1 does not stop it ("nginx -s quit").
+# w2-076: when the Windows service TaidaFlowNginx of this installation exists ($svcMode 'ours'), Windows
+# runs nginx: it is never started here with "start nginx" (a stopped service is started as a service),
+# and a regenerated nginx.conf is applied by restarting the service (administrator only; otherwise
+# exit 3 with a message). The decisions are Get-TaidaFlowNginxConfAction / Get-TaidaFlowNginxStartAction.
 $nginxOk = $false
 $nginxStartedNow = $false
 $nginxProblem = ''
+$nginxConfNotApplied = $false
+function Wait-NginxService([string]$name, [string]$status, [int]$seconds) {
+    $sc = New-Object System.ServiceProcess.ServiceController $name
+    $sc.WaitForStatus($status, [TimeSpan]::FromSeconds($seconds))
+    $sc.Refresh()
+    return [string]$sc.Status
+}
 if ($useNginxNow) {
     $nginxExe = Resolve-TaidaFlowNginxExe $cfg
     $nginxDir = Split-Path -Parent $nginxExe
@@ -284,6 +328,14 @@ if ($useNginxNow) {
     $nginxPort = [int]$v['nginx.port']
     Log "nginx: $nginxExe (config.json nginx.exe = $($v['nginx.exe']), $($cfg.Sources['nginx.exe']); relative = to the folder of config.json)"
     $mine = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } })
+    if ($svcMode -eq 'ours') {
+        Add-Type -AssemblyName System.ServiceProcess
+        Log "nginx runs as the Windows service $($svc.Name) (state $($svc.State)): started / stopped by Windows, never started here with 'start nginx'"
+        $xmlExe = Get-TaidaFlowNginxServiceXmlExecutable (Join-Path $install 'nginx\nginx-service.xml')
+        if ($xmlExe -and -not [string]::Equals($xmlExe, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase)) {
+            Log "WARNING: the service runs $xmlExe (nginx\nginx-service.xml), config.json nginx.exe is $nginxExe - run scripts\install-nginx-service.ps1 as administrator to update the service"
+        }
+    }
     $confOk = $false
     if (-not (Test-Path $nginxExe -PathType Leaf)) {
         $nginxProblem = "nginx.exe not found: $nginxExe"
@@ -299,36 +351,86 @@ if ($useNginxNow) {
         if ($genRc -eq 0 -or $genRc -eq 4) {
             $confOk = $true
             if ($written) { Log "nginx.conf regenerated for this installation / config.json (see above)" }
-            if ($written -and $mine.Count) {
+            if ($genRc -eq 4 -and $svcMode -eq 'ours') { Log "  (install-nginx-config.ps1 cannot read the path of the service's nginx, so it reports 'ANOTHER program' above - the port $nginxPort listener was checked against the service instead)" }
+            $isAdmin = Test-TaidaFlowIsAdministrator
+            $confAction = Get-TaidaFlowNginxConfAction $written $svcMode $svc.State $isAdmin ($mine.Count -gt 0)
+            if ($confAction -eq 'reload') {
                 Log "nginx is running with the old file - applying the new one: nginx -s reload (from $nginxDir)"
                 $rp = Start-Process -FilePath $nginxExe -ArgumentList @('-s', 'reload') -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
                 $null = $rp.Handle
                 if (-not $rp.WaitForExit(20000) -or $rp.ExitCode -ne 0) { Log "WARNING: nginx -s reload did not succeed (exit $(try { $rp.ExitCode } catch { '?' }))" }
+            } elseif ($confAction -eq 'restart-service') {
+                Log "the nginx service $($svc.Name) runs with the old file - applying the new one: restarting the service (administrator)"
+                try {
+                    $sc = New-Object System.ServiceProcess.ServiceController $svc.Name
+                    $sc.Stop()
+                    $st = Wait-NginxService $svc.Name 'Stopped' 60
+                    $sc.Refresh(); $sc.Start()
+                    $st = Wait-NginxService $svc.Name 'Running' 30
+                    Log "service $($svc.Name) restarted (state $st)"
+                } catch {
+                    Log "WARNING: restarting the service $($svc.Name) failed: $($_.Exception.Message) - open web pages with live synchronisation can keep nginx busy; see DEPLOY.md (nginx service, common errors)"
+                }
+                $svc = Get-TaidaFlowNginxServiceInfo
+            } elseif ($confAction -eq 'tell-admin') {
+                $nginxConfNotApplied = $true
+                $msg = @(
+                    "NOT APPLIED: nginx.conf was regenerated, but nginx runs as the Windows service $($svc.Name) (LocalSystem) and this start",
+                    "  is not an administrator, so the new file is NOT applied (no 'nginx -s reload': it cannot reach the service's nginx).",
+                    "  nginx keeps serving with the OLD nginx.conf. Apply it as an administrator (right-click cmd: Run as administrator):",
+                    "    powershell -NoProfile -ExecutionPolicy Bypass -File `"$install\scripts\install-nginx-service.ps1`"",
+                    "  or   `"$install\nginx\nginx-service.exe`" restart",
+                    "  The app is started as usual (exit 3 at the end).")
+                foreach ($m in $msg) { Log $m }
             }
         } else {
             $nginxProblem = "nginx.conf could not be generated / checked (install-nginx-config.ps1 exit $genRc)"
         }
     }
     if ($confOk) {
-        if ($mine.Count) {
-            Log "nginx is already running (pid $(($mine | ForEach-Object { $_.Id }) -join ', ')) - left as it is"
+        $startAction = Get-TaidaFlowNginxStartAction $svcMode $svc.State ($mine.Count -gt 0)
+        if ($startAction -eq 'leave') {
+            if ($svcMode -eq 'ours') { Log "nginx service $($svc.Name) is $($svc.State) - left as it is" }
+            else { Log "nginx is already running (pid $(($mine | ForEach-Object { $_.Id }) -join ', ')) - left as it is" }
+        } elseif ($startAction -eq 'start-service') {
+            Log "nginx service $($svc.Name) is $($svc.State) - starting the SERVICE (not 'start nginx')"
+            try {
+                $sc = New-Object System.ServiceProcess.ServiceController $svc.Name
+                $sc.Start()
+                $st = Wait-NginxService $svc.Name 'Running' 30
+                Log "service $($svc.Name) started (state $st)"
+                $nginxStartedNow = $true
+            } catch {
+                $nginxProblem = "the nginx service $($svc.Name) is $($svc.State) and could not be started ($($_.Exception.Message)) - an administrator starts it: `"$install\nginx\nginx-service.exe`" start (or services.msc), see $LogDir\nginx-service.wrapper.log"
+            }
+            $svc = Get-TaidaFlowNginxServiceInfo
         } else {
             Log "starting nginx like 'cd $nginxDir' + 'start nginx' (no arguments)"
             $np = Start-Process -FilePath $nginxExe -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
             $null = $np.Handle
             $nginxStartedNow = $true
         }
-        $t0 = Get-Date
-        do {
-            Start-Sleep -Milliseconds 250
-            $ids = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } } | ForEach-Object { $_.Id })
-            $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue | Where-Object { $ids -contains $_.OwningProcess })
-        } while ($l.Count -eq 0 -and ((Get-Date) - $t0).TotalSeconds -lt 20)
-        if ($l.Count -gt 0) { $nginxOk = $true; Log "nginx listening on $($l[0].LocalAddress):$nginxPort (pid $($l[0].OwningProcess)); logs: $LogDir\nginx-access-YYYY-MM-DD.log, nginx-error.log" }
-        else {
-            $nginxProblem = "nginx does not listen on port $nginxPort within 20 s (see $LogDir\nginx-error.log and $nginxDir\logs\error.log)"
-            foreach ($err in (Join-Path $LogDir 'nginx-error.log'), (Join-Path $nginxDir 'logs\error.log')) {
-                if (Test-Path $err) { Get-Content -LiteralPath $err -Tail 5 | ForEach-Object { Log "  $(Split-Path -Leaf $err) | $_" } }
+        if (-not $nginxProblem) {
+            $t0 = Get-Date
+            do {
+                Start-Sleep -Milliseconds 250
+                if ($svcMode -eq 'ours') {
+                    # the service's nginx: owner = nginx.exe under the wrapper process (path not readable)
+                    $svcNow = Get-TaidaFlowNginxServiceInfo
+                    $table = Get-TaidaFlowProcessTable
+                    $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue |
+                           Where-Object { (Test-TaidaFlowNginxServiceOwner -Service $svcNow -WrapperExe $wrapperExe -OwningPid ([int]$_.OwningProcess) -Processes $table).Ours })
+                } else {
+                    $ids = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } } | ForEach-Object { $_.Id })
+                    $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue | Where-Object { $ids -contains $_.OwningProcess })
+                }
+            } while ($l.Count -eq 0 -and ((Get-Date) - $t0).TotalSeconds -lt 20)
+            if ($l.Count -gt 0) { $nginxOk = $true; Log "nginx listening on $($l[0].LocalAddress):$nginxPort (pid $($l[0].OwningProcess)$(if ($svcMode -eq 'ours') { ", service $($svc.Name)" })); logs: $LogDir\nginx-access-YYYY-MM-DD.log, nginx-error.log" }
+            else {
+                $nginxProblem = "nginx does not listen on port $nginxPort within 20 s (see $LogDir\nginx-error.log and $nginxDir\logs\error.log$(if ($svcMode -eq 'ours') { ", $LogDir\nginx-service.wrapper.log" }))"
+                foreach ($err in (Join-Path $LogDir 'nginx-error.log'), (Join-Path $nginxDir 'logs\error.log')) {
+                    if (Test-Path $err) { Get-Content -LiteralPath $err -Tail 5 | ForEach-Object { Log "  $(Split-Path -Leaf $err) | $_" } }
+                }
             }
         }
     }
@@ -387,6 +489,7 @@ $state = [ordered]@{
     pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks; startTime = $p.StartTime.ToString('o')
     config = $env:TAIDAFLOW_CONFIG; dataDir = $DataDir; logDir = $LogDir; appLog = $fullLog; appQuietLog = $quietLog
     useNginx = $useNginxNow; nginxAvailable = $nginxOk; nginxStartedByThisScript = $nginxStartedNow
+    nginxService = $(if ($svcMode -eq 'ours') { $svc.Name } else { '' }); nginxConfNotApplied = $nginxConfNotApplied
     nginxPort = $(if ($useNginxNow) { [int]$v['nginx.port'] } else { 0 }); downloadPort = (Get-TaidaFlowDownloadPort $cfg)
     httpPort = [int]$v['http.port']; mirrorPublicPort = [int]$v['mirror.publicPort']; mirrorInternalPort = [int]$v['mirror.internalPort']
     restPort = [int]$v['rest.port']; modbusServerPort = [int]$v['modbusServer.port']
@@ -455,5 +558,6 @@ foreach ($ip in @($ips) + @('127.0.0.1')) {
     else { Log "web page: http://${ip}:$($v['http.port'])/TaidaFlowApp.html  (mirror ${ip}:$($v['mirror.publicPort']))" }
 }
 if ($useNginxNow -and -not $nginxOk) { Log "started WITHOUT nginx (exit 8)"; exit 8 }
+if ($nginxConfNotApplied) { Log "started - but the regenerated nginx.conf is NOT applied to the nginx service (see NOT APPLIED above; run scripts\install-nginx-service.ps1 as administrator) (exit 3)"; exit 3 }
 Log "started (exit 0)"
 exit 0

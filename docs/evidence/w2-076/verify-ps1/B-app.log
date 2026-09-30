@@ -1,0 +1,281 @@
+2026-09-29 16:59:22.562 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\config.effective.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\config.effective.json)
+2026-09-29 16:59:22.562 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-09-29 16:59:22.562 [info] [Config]   version = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   dataDir = "D:\\repo\\codex\\qmlTester\\taidaflow\\build\\w2-076-verify-data" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6256.host = "192.168.1.201" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217a.host = "192.168.1.202" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217b.host = "192.168.1.203" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6224.host = "192.168.1.204" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6022.host = "192.168.1.205" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   modbusServer.bind = "0.0.0.0" (file)
+2026-09-29 16:59:22.562 [info] [Config]   modbusServer.port = 502 (file)
+2026-09-29 16:59:22.562 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-09-29 16:59:22.562 [info] [Config]   http.bind = "0.0.0.0" (file)
+2026-09-29 16:59:22.562 [info] [Config]   http.port = 8124 (file)
+2026-09-29 16:59:22.562 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-09-29 16:59:22.562 [info] [Config]   rest.port = 18080 (file)
+2026-09-29 16:59:22.562 [info] [Config]   mirror.internalPort = 18125 (file)
+2026-09-29 16:59:22.562 [info] [Config]   mirror.publicBind = "0.0.0.0" (file)
+2026-09-29 16:59:22.562 [info] [Config]   mirror.publicPort = 8125 (file)
+2026-09-29 16:59:22.562 [info] [Config]   nginx.enabled = false (file)
+2026-09-29 16:59:22.562 [info] [Config]   nginx.port = 80 (file)
+2026-09-29 16:59:22.562 [info] [Config]   nginx.exe = "D:\\repo\\codex\\qmlTester\\taidaflow\\dist\\TaidaFlow-20260929-49b0d8e\\nginx\\nginx.exe" (file)
+2026-09-29 16:59:22.562 [info] [Config]   log.dir = "logs" (file)
+2026-09-29 16:59:22.562 [info] [Config]   log.quiet.enabled = true (file)
+2026-09-29 16:59:22.562 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-09-29 16:59:22.562 [info] [Config]   log.full.enabled = true (file)
+2026-09-29 16:59:22.562 [info] [Config]   log.full.keepDays = 7 (file)
+2026-09-29 16:59:22.562 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data
+2026-09-29 16:59:22.562 [info] [Config]   nginx.exe (resolved) = D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+2026-09-29 16:59:22.562 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs
+2026-09-29 16:59:22.562 [info] [Config]   downloadPort = 8124 (derived: nginx.enabled ? nginx.port : http.port)
+2026-09-29 16:59:22.562 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data
+2026-09-29 16:59:22.562 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs for 2026-09-29: 1 file(s) examined, 0 expired log file(s) deleted (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-09-29 16:59:22.564 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-09-29 16:59:22.569 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-29 16:59:22.569 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/w2-076-verify-data/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-09-29 16:59:22.572 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-076-verify-data/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 16:59:22.581 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 192.168.1.201:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:22.581 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 192.168.1.202:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:22.581 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 192.168.1.203:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:22.581 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 192.168.1.204:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:22.581 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 192.168.1.205:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:22.581 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-09-29 16:59:22.582 [info] [Modbus] device profile=default
+2026-09-29 16:59:22.582 [info] [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:22.582 [info] [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:22.582 [info] [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:22.582 [info] [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:22.582 [info] [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:22.582 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-09-29 16:59:22.585 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-09-29 16:59:22.585 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-09-29 16:59:22.585 [info] [Config] Core download links -> port 8124 (file; nginx.enabled false file, nginx.port 80 file, http.port 8124 file)
+2026-09-29 16:59:22.589 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports (max 20 files / 2147483648 bytes), download links -> port 8124
+2026-09-29 16:59:22.589 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports
+2026-09-29 16:59:22.589 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports: mounted on AppHttpServer
+2026-09-29 16:59:22.589 [info] [Config] Core HTTP service (http) -> 0.0.0.0:8124 (bind file, port file)
+2026-09-29 16:59:22.589 [info] [Web] TAIDAFLOW_WEB_DIR is not set
+2026-09-29 16:59:22.589 [info] [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web -> has TaidaFlowApp.html, used
+2026-09-29 16:59:22.591 [info] [Web] runtime.json written: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web\runtime.json = {"mirrorPublicPort":8125,"version":1} (nginx.enabled false -> mirror.publicPort file (LanRelay))
+2026-09-29 16:59:22.591 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-09-29 16:59:22.591 [info] [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web -> http://<host>:8124/TaidaFlowApp.html
+2026-09-29 16:59:22.599 [info] apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-09-29 16:59:22.600 [info] [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+2026-09-29 16:59:22.600 [info] [Config] Core REST API (rest) -> 127.0.0.1:18080 (bind file, port file)
+2026-09-29 16:59:22.603 [info] Device SN: "sn000000"
+2026-09-29 16:59:22.603 [info] Running on http://127.0.0.1: 18080 /
+2026-09-29 16:59:22.603 [info] [REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-09-29 16:59:22.604 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-29 16:59:22.604 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-29 16:59:22.604 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-29 16:59:22.604 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-09-29 16:59:22.604 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-09-29 16:59:22.620 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=1
+2026-09-29 16:59:22.620 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:22.620 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-29 16:59:22.623 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-09-29 16:59:22.623 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+2026-09-29 16:59:22.623 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:22.623 [info] [Config] Core Modbus server (modbusServer) -> 0.0.0.0:502 unit 1 (bind file, port file, unitId file)
+2026-09-29 16:59:22.623 [info] [ModbusServer] listening on 0.0.0.0:502 unit=1
+2026-09-29 16:59:22.623 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:22.624 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-09-29 16:59:22.624 [info] WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+2026-09-29 16:59:22.624 [info] LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+2026-09-29 16:59:24.620 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-09-29 16:59:24.706 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 127.0.0.1 -> 200 (application/json, 37 byte(s) streamed)
+2026-09-29 16:59:24.732 [info] apphttpserver: [AppHttpServer] GET /TaidaFlowApp.html from 127.0.0.1 -> 200 (text/html; charset=utf-8, 21871 byte(s) streamed)
+2026-09-29 16:59:24.757 [info] LAN relay: accepted 127.0.0.1:53352 -> 127.0.0.1:18125
+2026-09-29 16:59:25.633 [info] [MS300] COM2 connection attempt #2 (not open for 3.0 s)
+2026-09-29 16:59:25.633 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:25.633 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:27.769 [info] LAN relay: closed 127.0.0.1:53352
+2026-09-29 16:59:28.823 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-09-29 16:59:28.823 [info] [ModbusServer] stopped
+2026-09-29 16:59:28.824 [info] [REST] REST API stopped
+2026-09-29 16:59:28.826 [info] apphttpserver: [AppHttpServer] unmounted /exports
+2026-09-29 16:59:28.826 [info] [Export] stopped (export thread; /exports unmounted).
+2026-09-29 16:59:28.827 [info] apphttpserver: [AppHttpServer] stopped (was port 8124)
+2026-09-29 16:59:28.829 [info] [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202609, settings).
+2026-09-29 16:59:28.829 [info] [Core] shutdown complete in 7 ms
+2026-09-29 16:59:35.931 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json)
+2026-09-29 16:59:35.931 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-09-29 16:59:35.931 [info] [Config]   version = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   dataDir = "D:\\repo\\codex\\qmlTester\\taidaflow\\build\\w2-076-verify-data" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6256.host = "192.168.1.201" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217a.host = "192.168.1.202" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217b.host = "192.168.1.203" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6224.host = "192.168.1.204" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6022.host = "192.168.1.205" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   modbusServer.bind = "0.0.0.0" (file)
+2026-09-29 16:59:35.931 [info] [Config]   modbusServer.port = 502 (file)
+2026-09-29 16:59:35.931 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-09-29 16:59:35.931 [info] [Config]   http.bind = "0.0.0.0" (file)
+2026-09-29 16:59:35.931 [info] [Config]   http.port = 8124 (file)
+2026-09-29 16:59:35.931 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-09-29 16:59:35.931 [info] [Config]   rest.port = 18080 (file)
+2026-09-29 16:59:35.931 [info] [Config]   mirror.internalPort = 18125 (file)
+2026-09-29 16:59:35.931 [info] [Config]   mirror.publicBind = "0.0.0.0" (file)
+2026-09-29 16:59:35.931 [info] [Config]   mirror.publicPort = 8125 (file)
+2026-09-29 16:59:35.932 [info] [Config]   nginx.enabled = true (file)
+2026-09-29 16:59:35.932 [info] [Config]   nginx.port = 80 (file)
+2026-09-29 16:59:35.932 [info] [Config]   nginx.exe = "nginx\\nginx.exe" (file)
+2026-09-29 16:59:35.932 [info] [Config]   log.dir = "logs" (file)
+2026-09-29 16:59:35.932 [info] [Config]   log.quiet.enabled = true (file)
+2026-09-29 16:59:35.932 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-09-29 16:59:35.932 [info] [Config]   log.full.enabled = true (file)
+2026-09-29 16:59:35.932 [info] [Config]   log.full.keepDays = 7 (file)
+2026-09-29 16:59:35.932 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data
+2026-09-29 16:59:35.932 [info] [Config]   nginx.exe (resolved) = D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+2026-09-29 16:59:35.932 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs
+2026-09-29 16:59:35.932 [info] [Config]   downloadPort = 80 (derived: nginx.enabled ? nginx.port : http.port)
+2026-09-29 16:59:35.932 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data
+2026-09-29 16:59:35.932 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs for 2026-09-29: 4 file(s) examined, 0 expired log file(s) deleted (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-09-29 16:59:35.932 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-09-29 16:59:35.937 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-09-29 16:59:35.937 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/w2-076-verify-data/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-09-29 16:59:35.939 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-076-verify-data/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-09-29 16:59:35.940 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 192.168.1.201:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:35.940 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 192.168.1.202:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:35.940 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 192.168.1.203:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:35.940 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 192.168.1.204:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:35.940 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 192.168.1.205:502 unit 1 (host file, port file, unitId file)
+2026-09-29 16:59:35.940 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-09-29 16:59:35.940 [info] [Modbus] device profile=default
+2026-09-29 16:59:35.940 [info] [Modbus] device ADAM-6256 -> 192.168.1.201:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:35.940 [info] [Modbus] device ADAM-6217 A -> 192.168.1.202:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:35.940 [info] [Modbus] device ADAM-6217 B -> 192.168.1.203:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:35.940 [info] [Modbus] device ADAM-6224 -> 192.168.1.204:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:35.940 [info] [Modbus] device ADAM-6022 -> 192.168.1.205:502 unit=1 timeout=1000ms retries=2
+2026-09-29 16:59:35.940 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-09-29 16:59:35.943 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-09-29 16:59:35.943 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-09-29 16:59:35.943 [info] [Config] Core download links -> port 80 (file; nginx.enabled true file, nginx.port 80 file, http.port 8124 file)
+2026-09-29 16:59:35.945 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports (max 20 files / 2147483648 bytes), download links -> port 80
+2026-09-29 16:59:35.945 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports
+2026-09-29 16:59:35.945 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports: mounted on AppHttpServer
+2026-09-29 16:59:35.945 [info] [Config] Core HTTP service (http) -> 0.0.0.0:8124 (bind file, port file)
+2026-09-29 16:59:35.945 [info] [Web] TAIDAFLOW_WEB_DIR is not set
+2026-09-29 16:59:35.945 [info] [Web] candidate <exe folder>/web: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web -> has TaidaFlowApp.html, used
+2026-09-29 16:59:35.945 [info] [Web] runtime.json unchanged: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web\runtime.json = {"mirrorPublicPort":80,"version":1} (nginx.enabled true -> nginx.port file, /mirror proxied by nginx)
+2026-09-29 16:59:35.945 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-09-29 16:59:35.945 [info] [Web] web page folder (<exe folder>/web): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web -> http://<host>:8124/TaidaFlowApp.html
+2026-09-29 16:59:35.951 [info] apphttpserver: [AppHttpServer] listening on 0.0.0.0:8124 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-09-29 16:59:35.951 [info] [Web] HTTP service listening on 0.0.0.0:8124 (web page served, /exports downloads)
+2026-09-29 16:59:35.951 [info] [Config] Core REST API (rest) -> 127.0.0.1:18080 (bind file, port file)
+2026-09-29 16:59:35.951 [info] Device SN: "sn000000"
+2026-09-29 16:59:35.952 [info] Running on http://127.0.0.1: 18080 /
+2026-09-29 16:59:35.952 [info] [REST] REST API listening on 127.0.0.1:18080 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-09-29 16:59:35.952 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-09-29 16:59:35.952 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-09-29 16:59:35.952 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-09-29 16:59:35.952 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-09-29 16:59:35.952 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-09-29 16:59:35.955 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=141
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=141 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=140 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=139 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=138 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=137 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=136 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=135 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [Alarm][UI] id=134 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.956 [info] [SQL] Loaded 39 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=39; severity 嚴重=10 警告=29; unknown core status=0).
+2026-09-29 16:59:35.958 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-09-29 16:59:35.958 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+2026-09-29 16:59:35.958 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:35.958 [info] [Config] Core Modbus server (modbusServer) -> 0.0.0.0:502 unit 1 (bind file, port file, unitId file)
+2026-09-29 16:59:35.958 [info] [ModbusServer] listening on 0.0.0.0:502 unit=1
+2026-09-29 16:59:35.958 [info] [Alarm][UI] id=141 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.958 [info] [Alarm][UI] id=140 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=139 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=138 sensor=DI0 message=相位異常（DI0=0） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=137 sensor=DI1 message=漏液檢出（DI1=1） coreStatus=異常 resolved=true -> alarmStatus=已解除 severity=嚴重
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=136 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=135 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.959 [info] [Alarm][UI] id=134 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-09-29 16:59:35.959 [info] [SQL] Loaded 39 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=39; severity 嚴重=10 警告=29; unknown core status=0).
+2026-09-29 16:59:35.959 [info] WASM Mirror endpoint: ws://127.0.0.1:18125/mirror
+2026-09-29 16:59:35.959 [info] LAN relay listening: 0.0.0.0:8125 -> 127.0.0.1:18125
+2026-09-29 16:59:37.956 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-09-29 16:59:38.959 [info] [MS300] COM2 connection attempt #2 (not open for 3.0 s)
+2026-09-29 16:59:38.959 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:38.960 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:41.735 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 127.0.0.1 -> 200 (application/json, 35 byte(s) streamed)
+2026-09-29 16:59:41.964 [info] [MS300] COM2 connection attempt #3 (not open for 6.0 s)
+2026-09-29 16:59:41.964 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:41.964 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:44.787 [info] LAN relay: accepted 127.0.0.1:61456 -> 127.0.0.1:18125
+2026-09-29 16:59:45.954 [info] [MS300] COM2 connection attempt #4 (not open for 10.0 s)
+2026-09-29 16:59:45.954 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:45.954 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:47.798 [info] LAN relay: closed 127.0.0.1:61456
+2026-09-29 16:59:48.230 [info] apphttpserver: [AppHttpServer] GET /runtime.json from 192.168.0.125 -> 200 (application/json, 35 byte(s) streamed)
+2026-09-29 16:59:48.958 [info] [MS300] COM2 connection attempt #5 (not open for 13.0 s)
+2026-09-29 16:59:48.958 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:48.958 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:51.302 [info] LAN relay: accepted 192.168.0.125:61472 -> 127.0.0.1:18125
+2026-09-29 16:59:51.962 [info] [MS300] COM2 connection attempt #6 (not open for 16.0 s)
+2026-09-29 16:59:51.962 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:51.962 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:54.318 [info] LAN relay: closed 192.168.0.125:61472
+2026-09-29 16:59:55.952 [info] [MS300] COM2 connection attempt #7 (not open for 20.0 s)
+2026-09-29 16:59:55.952 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:55.952 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:58.604 [info] [Export] #1 queued: session w2062verify, web (export folder), range 1790668799 .. 1790672398 s, file D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports\w2062verify_20260929_165958.csv
+2026-09-29 16:59:58.605 [info] [Export] #1 running: session w2062verify (0 still queued)
+2026-09-29 16:59:58.606 [info] [Export] #1 0 row(s) to write
+2026-09-29 16:59:58.616 [info] [Export] #1 done: session w2062verify, 11.0 ms; 0 row(s), 228 byte(s), 1 month file(s), count 0.9 ms, total 10.5 ms, 0 chunk(s) of <= 2000 rows, longest chunk read 0.00 ms; cleanup: removed 0 [], failed 0 [], left 1 file(s) / 228 byte(s); 228 byte(s) -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\exports\w2062verify_20260929_165958.csv
+2026-09-29 16:59:58.963 [info] [MS300] COM2 connection attempt #8 (not open for 23.0 s)
+2026-09-29 16:59:58.963 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:58.963 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-09-29 16:59:59.068 [info] apphttpserver: [AppHttpServer] GET /exports/w2062verify_20260929_165958.csv from 127.0.0.1 -> 200, 228 byte(s) streamed from disk

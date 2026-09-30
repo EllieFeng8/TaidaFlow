@@ -15,6 +15,7 @@ echo.
 echo start-taidaflow exit code %RC%
 echo   0 = started   4 = already running or a port is in use (nothing started)
 echo   6 = the app did not come up (see the log)   8 = started WITHOUT nginx
+echo   3 = started, but the nginx SERVICE still uses the old nginx.conf (run scripts\install-nginx-service.ps1 as administrator)
 echo   2 = package, folder or config.json problem (see the message above)
 echo   settings: %~dp0config.json   log folder: config.json log.dir (default C:\TaidaFlowData\logs)
 if not defined TAIDAFLOW_NOPAUSE pause

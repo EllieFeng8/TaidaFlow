@@ -1,0 +1,14 @@
+2026-09-29 17:01:23 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data from D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json dataDir (file)) ===
+2026-09-29 17:01:23 [stop]  log folder: D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs (taidaflow-app.json)
+2026-09-29 17:01:23 [stop]  nginx keeps running (pid 4352, 139404; stop it with: cd <nginx folder> ; nginx -s quit)
+2026-09-29 17:01:23 [stop]  closing TaidaFlowApp pid 136016 (WM_CLOSE to its window, like closing it by hand)
+2026-09-29 17:01:23 [stop]  TaidaFlowApp pid 136016 exited (exit code 0)
+2026-09-29 17:01:24 [stop]  listeners of pid 136016 left: 0
+2026-09-29 17:01:24 [stop]  stopped (exit 0)
+
+stop-taidaflow exit code 0
+  0 = stopped   1 = nothing started by start-taidaflow was running
+  7 = the app did not close in time (NOT killed - close the window by hand)
+  2 = config.json problem (see the message above)
+  nginx keeps running. To stop it too:  cd /d "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx"  then  nginx -s quit
+  log: launcher-YYYY-MM-DD.log in the log folder (config.json log.dir, default C:\TaidaFlowData\logs)

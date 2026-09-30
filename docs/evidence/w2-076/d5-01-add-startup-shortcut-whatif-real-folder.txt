@@ -1,0 +1,15 @@
+=== TaidaFlow Startup shortcut - -WhatIf: nothing is changed
+shortcut    : C:\Users\TED\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\TaidaFlow.lnk (user LAPTOP-0B3CPPED\TED (shell:startup))
+target      : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+arguments   : -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\start-taidaflow.ps1"
+start in    : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+run         : minimized (WindowStyle 7); icon D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe,0
+existing    : none
+other automatic start: none found (Task Scheduler, the other Startup folder)
+What if: Performing the operation "create the Startup shortcut" on target "C:\Users\TED\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\TaidaFlow.lnk".
+-WhatIf: NOTHING changed (no shortcut written).
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File dist\TaidaFlow-20260929-49b0d8e\scripts\add-startup-shortcut.ps1 -WhatIf
+started : 2026-09-29T17:02:54.5409479+08:00
+elapsed : 1s
+EXIT=0

@@ -1,0 +1,75 @@
+package: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+--- nginx\ (top level)
+  conf                   <dir>
+  docs                   <dir>
+  LICENSE-WinSW.txt      1158 bytes  SHA-256 1CDF703C10A70E5973BF3ACF2A5EEABE7746237155B92DB2034AEAE26FDF7802
+  nginx-service.exe      18243033 bytes  SHA-256 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA
+  nginx.exe              6628864 bytes  SHA-256 40E2A8E9040A1C874FED9EBB5AB99EA853C35246EB433A2B61D38E2D9E338C0E
+  SOURCE-WinSW.txt       1143 bytes  SHA-256 36F7DADD728F60A60B89D03147BCD5C0B951BA269B465BBCE07FD0C14DC89C43
+  SOURCE.txt             909 bytes  SHA-256 A930FAA5AF462AA4EDB2E349326CFCA261612646FD3BDF486F2B50AC281AF94E
+--- scripts\
+  add-startup-shortcut.ps1       8226 bytes
+  install-nginx-config.ps1       17223 bytes
+  install-nginx-service.ps1      19140 bytes
+  remove-startup-shortcut.ps1    3002 bytes
+  taidaflow-config.ps1           41197 bytes
+  uninstall-nginx-service.ps1    5591 bytes
+nginx-service.exe identical to C:\tools\winsw\WinSW-x64-2.12.0.exe : True
+LICENSE-WinSW.txt identical to C:\tools\winsw\LICENSE.txt : True
+nginx\nginx-service.xml NOT in the package : True
+--- nginx\SOURCE-WinSW.txt
+  nginx-service.exe = WinSW (Windows Service Wrapper) 2.12.0, WinSW-x64.exe of the official GitHub release, unchanged:
+    https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe   (renamed: WinSW reads <its name>.xml)
+    file version 2.12.0.0, product version 2.12.0+eef5bade59fca0254e387ac73ed7625ba6aa7147
+    SHA-256 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA ; Authenticode: NotSigned (the project does not sign this release)
+    self-contained .NET 6 single-file program (no .NET installation needed), 64-bit Windows 10 / 11.
+  Licence: MIT, LICENSE-WinSW.txt (copyright Kohsuke Kawaguchi, Sun Microsystems, CloudBees, Oleg Nenashev and contributors).
+  Used by scripts\install-nginx-service.ps1 (administrator): writes nginx-service.xml here (service TaidaFlowNginx:
+  nginx.exe -p <this folder>, stop: nginx -s quit, start mode Automatic) and runs  nginx-service.exe install / start.
+  Commands (administrator cmd, in this folder): nginx-service.exe status | start | stop | restart | uninstall.
+  Removal: scripts\uninstall-nginx-service.ps1. Details: DEPLOY.md section 2A (nginx service + Startup folder).
+--- VERSION.txt
+  TaidaFlow field package TaidaFlow-20260929-49b0d8e
+  created      : 2026-09-29T16:58:02.8426236+08:00 on LAPTOP-0B3CPPED
+  git          : 49b0d8eb0e7831cd592ed42fedae83e387d52470 (2026-09-29T14:02:56+08:00)
+  Qt           : 6.8.3 msvc2022_64 (windeployqt, Release)
+  exe          : TaidaFlowApp.exe built 2026-09-29T15:55:19 (desktop-release)
+  MSVC runtime : app-local DLLs, Microsoft.VC145.CRT 14.51.36231
+  web page     : WebAssembly build of 2026-09-29T15:58:19 (wasm-release)
+  nginx        : nginx-1.30.5 bundled in nginx\ (start: cd nginx + start nginx); conf\nginx.conf written on the plant PC by scripts\install-nginx-config.ps1
+  nginx service: WinSW 2.12.0 as nginx\nginx-service.exe (SHA-256 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA, MIT, LICENSE-WinSW.txt); optional, administrator: scripts\install-nginx-service.ps1 (service TaidaFlowNginx)
+  log-on start : scripts\add-startup-shortcut.ps1 (Startup folder) or register-autostart.ps1 (Task Scheduler) - one of the two
+  config.json  : not included - created at the first start with the defaults (TaidaFlowApp.exe --write-default-config); never overwritten by an update
+  start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md
+  ports        : config.json; plant firewall inbound only 80 (nginx: page, /mirror, /exports, /api/) and 502 (Modbus server)
+--- MANIFEST.txt lines of the w2-076 files
+  nginx\nginx-service.exe	18243033	05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA
+  nginx\LICENSE-WinSW.txt	1158	1CDF703C10A70E5973BF3ACF2A5EEABE7746237155B92DB2034AEAE26FDF7802
+  nginx\SOURCE-WinSW.txt	1143	36F7DADD728F60A60B89D03147BCD5C0B951BA269B465BBCE07FD0C14DC89C43
+  scripts\install-nginx-service.ps1	19140	718A2568A2A86C29DC3B8CCDAE5DB9324295140BCB8B9615FFA85EC541B2DBCC
+  scripts\uninstall-nginx-service.ps1	5591	DCD33C19D4AE088E1DA627E442F89D6BF757A54C33B13189BB9D85AE995CE113
+  scripts\add-startup-shortcut.ps1	8226	37FED10EBADB31EFC421155DBEF10E8FB9DF5FCCE12DBB6E8B646C6DA22E9B15
+  scripts\remove-startup-shortcut.ps1	3002	56FA32E0CC9CE7A99DDC0D127796796E3AD33CE4CD5730464147AAD487BD2C6B
+  start-taidaflow.ps1	40197	142B043D24952CD67E075AA998C3671A1B530FF17FA7320FC374494466E72D02
+  start-taidaflow.bat	1623	3D1CCCB5FFD8F5B4678A8AF72BB1B16B896BDD2B004D2BA87958CA25DA9B97F1
+  stop-taidaflow.ps1	9253	90A3F62A6DD3832F1E8E3D8B9103E325D46C1803A8B5B10E1BB840C8DDD9469C
+  register-autostart.ps1	9666	8DEB1CFA485EE593DEC6175FD2AD0454BF54CF734BFBAC3AAB925D58833ABD28
+  scripts\taidaflow-config.ps1	41197	00DE5A3E68BF1451A86C260ACCFFC9536D727CD136CFC8B251B3CB53AB59A825
+  DEPLOY.md	84242	6D5B0A0C438E2F4F82C4983933EC93378D65D272F90E05C4FFC928F77CE35708
+VERSION.txt records WinSW 2.12.0 and SHA-256 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA
+package start-taidaflow.ps1 = deploy\release\start-taidaflow.ps1 : True
+package stop-taidaflow.ps1 = deploy\release\stop-taidaflow.ps1 : True
+package register-autostart.ps1 = deploy\release\register-autostart.ps1 : True
+package start-taidaflow.bat = deploy\release\start-taidaflow.bat : True
+package scripts\install-nginx-service.ps1 = scripts\install-nginx-service.ps1 : True
+package scripts\uninstall-nginx-service.ps1 = scripts\uninstall-nginx-service.ps1 : True
+package scripts\add-startup-shortcut.ps1 = scripts\add-startup-shortcut.ps1 : True
+package scripts\remove-startup-shortcut.ps1 = scripts\remove-startup-shortcut.ps1 : True
+package scripts\taidaflow-config.ps1 = scripts\taidaflow-config.ps1 : True
+package DEPLOY.md = docs\DEPLOY_AND_STARTUP.md : True
+problems: 0
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\show-package-winsw.ps1 -Package dist\TaidaFlow-20260929-49b0d8e
+started : 2026-09-29T16:58:11.4057212+08:00
+elapsed : 1s
+EXIT=0

@@ -3,9 +3,14 @@
 > 給操作人員與現場安裝人員看。不需要會 PowerShell:每個動作都寫明「開哪個檔、怎麼開」,
 > 也有**完全不用腳本**的手動部署(§5)。
 > 這份文件在打包時會複製成打包資料夾裡的 `DEPLOY.md`(內容相同)。
-> 來源:`taidaflow/docs/DEPLOY_AND_STARTUP.md`(w2-057 起,w2-062 改為 config.json 與隨包 nginx,w2-065 改為程式自己寫 log,§13)。
+> 來源:`taidaflow/docs/DEPLOY_AND_STARTUP.md`(w2-057 起,w2-062 改為 config.json 與隨包 nginx,w2-065 改為程式自己寫 log,§13;
+> w2-076 加入現場標準做法「nginx 註冊成 Windows 服務 + 程式放開機啟動資料夾」,§2A)。
 > 文中的 `<安裝資料夾>` 是放打包資料夾的地方(建議 `C:\TaidaFlow`),`<資料資料夾>` 是 config.json 的 `dataDir`
 > (預設 `C:\TaidaFlowData`),`<repo>` 是開發機上的原始碼資料夾。
+
+**目錄**:§0 先看這裡 → §1 打包資料夾裡有什麼 → §2 第一次部署 → **§2A 現場部署:nginx 服務 + 開機啟動資料夾(標準做法)** →
+§3 日常操作 → §4 更新版本 → §5 手動部署 → §6 config.json 欄位 → §7 port 與防火牆 → §8 REST API →
+§9 測試機與網頁版 → §10 常見問題 → §11 開發機 / 正式機腳本差異 → §12 決定事項 → §13 log
 
 ## 0. 先看這裡:五件最重要的事
 
@@ -14,8 +19,11 @@
    (預設 `COM2`),並開 Modbus 伺服器給外部 HMI(預設 port `502`)。
 2. **所有設定都在 `<安裝資料夾>\config.json`**:資料資料夾、設備位址、各服務 port、nginx。第一次啟動時自動用預設值建立;
    用記事本修改;更新版本時**不會被覆蓋**(打包資料夾裡沒有這個檔)。欄位表見 §6。
-3. **nginx 隨包附在 `<安裝資料夾>\nginx\`**,用 nginx 的標準做法啟動:`cd <安裝資料夾>\nginx` 然後 `start nginx`。
-   `start-taidaflow.bat` 在 nginx 沒執行時也會這樣把它帶起來;`stop-taidaflow.bat` **不會**停 nginx。
+3. **nginx 隨包附在 `<安裝資料夾>\nginx\`**。**現場標準做法(Mango 2026-09-29)**:nginx 以系統管理員執行
+   `scripts\install-nginx-service.ps1` **註冊成 Windows 服務 `TaidaFlowNginx`**(開機自動啟動,不必登入),TaidaFlow 程式用
+   `scripts\add-startup-shortcut.ps1` 放進**開機啟動資料夾**(使用者登入時啟動),步驟見 **§2A**。
+   沒註冊服務時,nginx 用它的標準做法啟動:`cd <安裝資料夾>\nginx` 然後 `start nginx`(`start-taidaflow.bat` 在 nginx 沒執行時
+   也會這樣把它帶起來)。`stop-taidaflow.bat` **不會**停 nginx(服務或手動啟動的都不會)。
 4. **網址**:網頁 `http://<電腦的 IP>/`(nginx,port 80;網頁同步、下載、REST API 全部經 port 80)。
    正式機防火牆**只開 80 與 502**(§7)。
 5. **正式機用打包資料夾裡的檔**(`start-taidaflow.bat` 等);**開發機用 repo 的 `scripts\`**
@@ -37,6 +45,9 @@
 | `vcruntime140*.dll`、`msvcp140*.dll` … | MSVC 執行環境(隨程式放,app-local,**不用安裝 vc_redist**) |
 | `web\` | 網頁版(WebAssembly)+ 預先壓縮的 `.gz` + `runtime.json`(程式每次啟動會依 config.json 重寫) |
 | `nginx\` | nginx for Windows 1.30.5:`nginx.exe`、`docs\`(授權檔)、`conf\`(`mime.types` 等,**沒有** `nginx.conf`,由 §2 的步驟產生)、`SOURCE.txt` |
+| `nginx\nginx-service.exe`、`nginx\LICENSE-WinSW.txt`、`nginx\SOURCE-WinSW.txt` | 服務包裝程式 WinSW 2.12.0(官方 `WinSW-x64.exe` 改名,MIT 授權,內含 .NET 執行環境,**不用另外安裝 .NET**):把 nginx 註冊成 Windows 服務用(§2A);來源網址、版本、SHA-256 在 `SOURCE-WinSW.txt` |
+| `scripts\install-nginx-service.ps1` / `scripts\uninstall-nginx-service.ps1` | 把 nginx 註冊成 / 移除 Windows 服務 `TaidaFlowNginx`(**系統管理員**;`-WhatIf` 只印出不做,§2A) |
+| `scripts\add-startup-shortcut.ps1` / `scripts\remove-startup-shortcut.ps1` | 在開機啟動資料夾建立 / 移除捷徑「TaidaFlow」(登入時啟動 `start-taidaflow.ps1`,§2A) |
 | `start-taidaflow.bat` / `.ps1` | 啟動(雙擊 `.bat`) |
 | `stop-taidaflow.bat` / `.ps1` | 停止 TaidaFlow(不停 nginx) |
 | `register-autostart.ps1` / `unregister-autostart.ps1` | 登入時自動啟動(工作排程器) |
@@ -46,7 +57,8 @@
 | `DEPLOY.md` | 本文件 |
 | `VERSION.txt`、`MANIFEST.txt` | 版本資訊;每個檔的大小與 SHA-256 |
 
-**不在打包裡**:`config.json`(第一次啟動時建立,§2)、`nginx\conf\nginx.conf`(§2 產生)、資料庫、設定 ini、log、測試或開發檔。
+**不在打包裡**:`config.json`(第一次啟動時建立,§2)、`nginx\conf\nginx.conf`(§2 產生)、`nginx\nginx-service.xml`(§2A 產生)、
+資料庫、設定 ini、log、測試或開發檔。
 
 ---
 
@@ -86,7 +98,8 @@
    (可以跳過這一步:第 6 步的 `start-taidaflow.bat` 發現 nginx 沒執行時,會用同樣的方式啟動它。)
 6. **啟動 TaidaFlow**:雙擊 `<安裝資料夾>\start-taidaflow.bat`(§3.1)。
 7. **防火牆**:由管理員開 80 與 502(§7)。
-8. **開機自動啟動**(需要時):§3.5。停電後要自動回到畫面,電腦要設定 Windows 自動登入(現場自行設定,§12)。
+8. **開機自動啟動**:現場標準做法是 **§2A**(nginx 服務 + 開機啟動資料夾);另一種是工作排程器(§3.5),兩者擇一。
+   停電後要自動回到畫面,電腦要設定 Windows 自動登入(現場自行設定,§12)。
 9. 確認:瀏覽器開 `http://127.0.0.1/`(或別台電腦開 `http://<IP>/`),畫面上方沒有紅色「離線」橫幅即同步成功。
 
 第一次啟動後,資料資料夾裡會出現:
@@ -103,6 +116,188 @@
 | `config.effective.json` | 只有啟動時用了單次覆寫參數(§3.1)才有:當次實際使用的完整設定 |
 
 (`settings_schema.sql` / `data_schema.sql` 不需要:找不到時 app 用內建結構,log 有一行 `Schema file not found`,屬正常。)
+
+---
+
+## 2A. 現場部署:nginx 服務 + 開機啟動資料夾(標準做法)
+
+Mango 2026-09-29 決定的現場做法:**程式解壓縮到安裝資料夾,nginx 註冊成 Windows 服務自動啟動,TaidaFlow 程式放進開機啟動資料夾。**
+
+| 誰 | 怎麼啟動 | 什麼時候 | 以什麼身分 |
+|---|---|---|---|
+| nginx(port 80:網頁、同步、下載、REST) | Windows 服務 **`TaidaFlowNginx`**:`<安裝資料夾>\nginx\nginx-service.exe`(WinSW 2.12.0)讀同資料夾的 `nginx-service.xml`,執行 `nginx.exe -p <安裝資料夾>\nginx`;停止時執行 `nginx -s quit` | **開機時**(自動,不必登入) | LocalSystem(看不到視窗) |
+| TaidaFlowApp(操作畫面 + 設備連線) | 開機啟動資料夾的捷徑 **「TaidaFlow」** → `start-taidaflow.ps1`(保留重複執行與 port 檢查) | **使用者登入時** | 登入的使用者 |
+
+- TaidaFlowApp 有操作畫面,**不能**當服務(服務在看不到畫面的 session 0 執行),所以用登入時啟動。
+- 開機啟動資料夾與工作排程器(§3.5 `register-autostart.ps1`)**擇一**:腳本發現另一種已設定時會提示,但不會自動移除。
+- 停電復電後要自動回到操作畫面,電腦要設定 Windows 自動登入(現場自行設定,§12)。
+- `start-taidaflow` 會認出這個服務(依 Windows 服務資料 `Win32_Service` 的路徑判斷是不是**這個安裝資料夾**的服務):port 80 由服務的
+  nginx 在聽視為正常,**不會**再用 `start nginx` 另開一個;服務停止時改為啟動**服務**。沒有註冊服務時,行為與以前完全相同。
+
+### 2A.1 用腳本(建議)
+
+前提:已完成 §2 的第 1~4 步(複製到 `C:\TaidaFlow`、建立並修改 config.json、產生 nginx 設定)。
+
+1. **先停止 TaidaFlow**(若在執行):雙擊 `C:\TaidaFlow\stop-taidaflow.bat`。開著的網頁(即時同步連線)會讓 nginx 停不下來。
+2. **乾跑**(不需要系統管理員,什麼都不改;印出將寫的 `nginx-service.xml` 與將執行的每一個指令):
+   ```bat
+   powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\install-nginx-service.ps1 -WhatIf
+   ```
+3. **註冊 nginx 服務**:開始 → 輸入 `cmd` → 右鍵「**以系統管理員身分執行**」,執行同一行但**拿掉 `-WhatIf`**:
+   ```bat
+   powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\install-nginx-service.ps1
+   ```
+   它依序:確認 `nginx\conf\nginx.conf`(沒有或過期就用 `install-nginx-config.ps1` 產生)並執行 `nginx -p C:\TaidaFlow\nginx -t`;
+   用 `start nginx` 手動開著的本包 nginx 先 `nginx -s quit`;寫 `C:\TaidaFlow\nginx\nginx-service.xml`;`nginx-service.exe install`
+   (已註冊過 → 更新 XML 並重新啟動服務,可以重複執行);啟動服務並確認 port 80 在聽。最後一行是 `DONE: ...`。
+   不是系統管理員時會拒絕(結果碼 5),**什麼都不改**。
+
+   | 結果碼 | 意思 |
+   |---|---|
+   | 0 | 完成(或 `-WhatIf` 已印出) |
+   | 2 | 缺檔、config.json 有誤、路徑含 `% " < > &` |
+   | 3 | nginx 設定產生失敗或 `nginx -t` 失敗(服務沒有註冊) |
+   | 4 | 拒絕:服務 `TaidaFlowNginx` 已由**別的資料夾**註冊,或 port 80 被別的程式占用(列出占用者,不會關掉它) |
+   | 5 | 不是系統管理員(什麼都沒改) |
+   | 6 | 服務註冊 / 啟動失敗,或 20 秒內 port 80 沒有在聽(看 log 資料夾的 `nginx-service.wrapper.log`、`nginx-error.log`) |
+   | 7 | nginx 在 60 秒內停不下來(`-StopTimeoutSec` 可改;先停 TaidaFlow 再試,§2A.6) |
+4. **程式放進開機啟動資料夾**(用**操作員自己的帳號**執行,不需要系統管理員;先加 `-WhatIf` 看):
+   ```bat
+   powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\add-startup-shortcut.ps1 -WhatIf
+   powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\add-startup-shortcut.ps1
+   ```
+   在 `shell:startup`(目前使用者的開機啟動資料夾)建立捷徑「TaidaFlow」:目標
+   `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\TaidaFlow\start-taidaflow.ps1"`,
+   開始位置 `C:\TaidaFlow`,執行方式「最小化」(不會留下視窗)。要讓**每個**使用者登入都啟動:加 `-AllUsers`
+   (`shell:common startup`,需要系統管理員)。已經有一樣的捷徑時不做任何事(可以重複執行)。
+   結果碼:`0` 完成;`2` 參數或資料夾有誤;`3` 建立失敗;`5` `-AllUsers` 但不是系統管理員。
+5. 之前用 `register-autostart.ps1` 設過工作排程器的話,移除它(擇一):
+   `powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\unregister-autostart.ps1`。
+6. **確認**:重新開機。登入**前**(或登入後馬上)在 cmd:`sc query TaidaFlowNginx` 要是 `RUNNING`,
+   `netstat -ano | findstr ":80 "` 有 `LISTENING`;登入後 TaidaFlow 畫面自動出現;別台電腦開 `http://<IP>/`,上方沒有紅色「離線」橫幅。
+   log 資料夾的 `launcher-<日期>.log` 會有 `nginx service: TaidaFlowNginx of this installation` 與
+   `port 80 = the nginx service TaidaFlowNginx of this installation (...) - fine`。
+
+### 2A.2 完全手動(不用 .ps1 腳本)
+
+**(a) nginx 服務**(先照 §2 第 4 步或 §5.4 做好 `C:\TaidaFlow\nginx\conf\nginx.conf`)。以系統管理員開 cmd:
+
+```bat
+cd /d C:\TaidaFlow\nginx
+nginx -t
+nginx -s quit
+notepad nginx-service.xml
+```
+
+(`nginx -s quit` 只在之前用 `start nginx` 開過時需要;沒有在執行時它會顯示錯誤,可忽略。)記事本貼上下面的內容,把路徑改成實際的
+安裝資料夾與 log 資料夾(config.json 的 `log.dir`,預設 `C:\TaidaFlowData\logs`,要先存在),**編碼選 UTF-8** 存檔:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+  <id>TaidaFlowNginx</id>
+  <name>TaidaFlow nginx (web, port 80)</name>
+  <description>TaidaFlow web front end: nginx for Windows C:\TaidaFlow\nginx\nginx.exe</description>
+  <executable>C:\TaidaFlow\nginx\nginx.exe</executable>
+  <startarguments>-p "C:\TaidaFlow\nginx"</startarguments>
+  <stopexecutable>C:\TaidaFlow\nginx\nginx.exe</stopexecutable>
+  <stoparguments>-p "C:\TaidaFlow\nginx" -s quit</stoparguments>
+  <workingdirectory>C:\TaidaFlow\nginx</workingdirectory>
+  <startmode>Automatic</startmode>
+  <onfailure action="restart" delay="10 sec"/>
+  <resetfailure>1 hour</resetfailure>
+  <securityDescriptor>D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)</securityDescriptor>
+  <logpath>C:\TaidaFlowData\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>8</keepFiles>
+  </log>
+</service>
+```
+
+各欄位(WinSW 2.12.0 的 XML 設定):`id` 服務名稱;`name` 服務管理員顯示的名稱;`executable` + `startarguments` 啟動
+`nginx.exe -p <nginx 資料夾>`(`-p` 讓 nginx 在這個資料夾找 `conf\nginx.conf`、`logs\`、`temp\`);`stopexecutable` + `stoparguments`
+停止服務時執行 `nginx -s quit`(用了 `stoparguments` 就必須用 `startarguments`,不能用 `arguments`);`workingdirectory` 工作目錄;
+`startmode` Automatic = 開機自動啟動;`onfailure` / `resetfailure` nginx 異常結束時 10 秒後重新啟動;`securityDescriptor` = Windows
+服務的預設權限,再加上「互動登入的使用者可以**啟動**這個服務」(讓 `start-taidaflow` 在服務停止時能把它啟動;一般使用者**不能**停止或
+修改它);`logpath` + `log` WinSW 自己的紀錄(`nginx-service.wrapper.log`、`nginx-service.out.log`、`nginx-service.err.log`,超過 10 MB
+換檔、保留 8 個)。路徑裡不能有 `%`(WinSW 會當成環境變數展開)。
+
+```bat
+nginx-service.exe install
+nginx-service.exe start
+nginx-service.exe status
+sc qc TaidaFlowNginx
+netstat -ano | findstr ":80 "
+```
+
+`status` 要顯示 `Started`;`sc qc` 要看到 `START_TYPE : 2 AUTO_START` 與 `BINARY_PATH_NAME : "C:\TaidaFlow\nginx\nginx-service.exe"`;
+`netstat` 要有 `0.0.0.0:80 ... LISTENING`。(`nginx-service.exe` 不是系統管理員執行時會跳出 UAC 詢問視窗。)
+
+**(b) 開機啟動資料夾的捷徑**(用操作員的帳號):
+
+1. `Win + R` → 輸入 `shell:startup` → 確定(開啟目前使用者的開機啟動資料夾;所有使用者用 `shell:common startup`,需要系統管理員)。
+2. 在資料夾空白處右鍵 → 新增 → 捷徑 → 項目位置輸入(一行):
+   `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\TaidaFlow\start-taidaflow.ps1"`
+   → 下一步 → 名稱 `TaidaFlow` → 完成。
+3. 在捷徑上右鍵 → 內容:「開始位置」改成 `C:\TaidaFlow`,「執行」選「最小化」→ 確定。
+4. 雙擊捷徑測試一次(TaidaFlow 畫面出現;log 資料夾有新的 `launcher-<日期>.log` 行)。
+
+不要把 `start-taidaflow.bat` 放進開機啟動資料夾:它結束時會停住等按鍵(黑色視窗留在畫面上)。
+
+### 2A.3 改了 config.json 之後
+
+- 改的是 **nginx 相關**的欄位(`nginx.port`、`rest.port`、`mirror.internalPort`、`dataDir`、`log.dir`、`nginx.exe`)或搬了安裝資料夾:
+  以**系統管理員**再執行一次 `install-nginx-service.ps1`(§2A.1 第 3 步):它重新產生 `nginx.conf`、更新 `nginx-service.xml`,再重新啟動服務。
+  手動做法:`powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\install-nginx-config.ps1`,再以系統管理員
+  `C:\TaidaFlow\nginx\nginx-service.exe restart`(改了 `log.dir` 或 `nginx.exe` 時也要改 `nginx-service.xml`)。
+- 忘了也不會壞:`start-taidaflow` 發現 `nginx.conf` 過期時照樣重新產生,但**服務版的 nginx 不能由一般使用者 `nginx -s reload`**,
+  所以它**不 reload**,在畫面與 `launcher-<日期>.log` 顯示 `NOT APPLIED: ... run install-nginx-service.ps1 (or nginx-service.exe restart) as administrator`,
+  照常啟動 TaidaFlow,結果碼 **3**。在系統管理員執行上面的步驟之前,nginx 仍用舊的設定。
+  (`start-taidaflow` 本身以系統管理員執行時,會直接重新啟動服務套用。)
+- 只改了設備位址、log 保留天數等**程式**的設定:重新啟動 TaidaFlow(`stop-taidaflow.bat` → `start-taidaflow.bat`)即可,服務不用動。
+
+### 2A.4 更新到新的打包版本(有 nginx 服務時)
+
+1. 雙擊 `stop-taidaflow.bat`。
+2. 以系統管理員:`C:\TaidaFlow\nginx\nginx-service.exe stop`(服務執行中 `nginx.exe`、`nginx-service.exe` 被占用,不先停就無法覆蓋)。
+3. 把新打包資料夾的所有檔案複製到 `C:\TaidaFlow` 覆蓋(新包沒有 `config.json`、`nginx\conf\nginx.conf`、`nginx\nginx-service.xml`,
+   現場的設定不會被蓋掉)。要保留舊版時照 §4 第 2 步的改名做法(服務停止後才能改名)。
+4. 以系統管理員再執行 `install-nginx-service.ps1`(重新產生 nginx 設定、更新 XML、啟動服務);或只 `nginx-service.exe start`。
+5. 雙擊 `start-taidaflow.bat`(或登出再登入)。開機啟動資料夾的捷徑指向 `C:\TaidaFlow\start-taidaflow.ps1`,路徑沒變就不用重建。
+
+### 2A.5 移除
+
+- **開機啟動捷徑**:`powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\remove-startup-shortcut.ps1`
+  (所有使用者的加 `-AllUsers`,需要系統管理員;先加 `-WhatIf` 看)。只刪會執行 `start-taidaflow.ps1` 的「TaidaFlow」捷徑,
+  不會關掉執行中的程式。手動:`shell:startup` 裡刪掉「TaidaFlow」。
+- **nginx 服務**(系統管理員):`powershell -NoProfile -ExecutionPolicy Bypass -File C:\TaidaFlow\scripts\uninstall-nginx-service.ps1`
+  (先加 `-WhatIf` 看)。先停止服務再移除;**不刪** nginx、`nginx.conf`、`nginx-service.xml`、config.json 與 log。之後 `start-taidaflow`
+  會再用 `start nginx` 的方式啟動 nginx。手動:`cd /d C:\TaidaFlow\nginx`、`nginx-service.exe stop`、`nginx-service.exe uninstall`
+  (或 `sc stop TaidaFlowNginx`、`sc delete TaidaFlowNginx`)。
+  結果碼:`0` 已移除(或本來就沒有);`4` 服務屬於別的資料夾(不動;`-Force` 才移除);`5` 不是系統管理員(什麼都沒改);
+  `6` 移除失敗;`7` 服務在 60 秒內停不下來。
+
+### 2A.6 常見錯誤
+
+- **錯誤 1053「服務沒有及時回應啟動或控制要求」**:直接用 `sc create` 把 `nginx.exe` 註冊成服務就會這樣——`nginx.exe` 不是服務程式。
+  一定要用 `nginx-service.exe`(WinSW)包裝(§2A.1 / §2A.2)。用 WinSW 仍出現時:看 log 資料夾的 `nginx-service.wrapper.log`、
+  `nginx-service.err.log` 與 `nginx-error.log`;常見原因是 `nginx.conf` 有誤(`cd /d C:\TaidaFlow\nginx` 後 `nginx -t`)、
+  `nginx-service.xml` 的路徑打錯、或 `logpath` 的資料夾不存在。事件檢視器 → Windows 記錄 → 應用程式(來源 `TaidaFlowNginx`)也有紀錄。
+- **port 80 被占用**:`install-nginx-service.ps1` 列出占用者並拒絕(結果碼 4,不會關掉它)。占用者是 pid 4「System」→ HTTP.sys
+  (§10 第一則);是另一個 `nginx.exe`:本包用 `start nginx` 開的會先被 `nginx -s quit`,其他資料夾的 nginx 要由它的管理者處理。
+  服務啟動後 port 80 被占用 → 服務會一直重新啟動失敗,`nginx-error.log` 有 `bind() ... failed`。
+- **不是系統管理員**:`install-` / `uninstall-nginx-service.ps1` 結果碼 5,什麼都沒改——用「以系統管理員身分執行」的 cmd 再執行。
+  `start-taidaflow` 結果碼 3:nginx 設定改了但服務還沒套用(§2A.3)。
+- **服務停不下來(一直是「正在停止」)**:`nginx -s quit` 會等傳送中的下載與**開著的網頁同步連線**結束。先 `stop-taidaflow.bat`
+  (TaidaFlow 關閉後同步連線就會結束)再停服務;仍然卡住時系統管理員執行 `taskkill /F /IM nginx.exe`(服務隨即變成已停止)。
+- **登出後網頁連不上**:nginx 收到 Windows 的「使用者登出」通知時會結束(nginx for Windows 的設計),服務因此變成「已停止」。
+  下次任何使用者登入時,開機啟動資料夾的 `start-taidaflow` 會發現服務停止並**啟動服務**(服務權限允許互動使用者啟動);
+  不想等的話由系統管理員 `C:\TaidaFlow\nginx\nginx-service.exe start`。現場電腦平常請用「鎖定」而不是「登出」。重新開機不受影響。
+- **服務名稱 `TaidaFlowNginx` 已被別的資料夾註冊**(例如舊的 `C:\TaidaFlow.old`):`install-nginx-service.ps1` 結果碼 4。
+  先用那個資料夾的 `uninstall-nginx-service.ps1` 移除(或 `sc stop TaidaFlowNginx`、`sc delete TaidaFlowNginx`),再重新執行。
+- **開機後 TaidaFlow 沒有出現**:確認捷徑在 `shell:startup`(或 `shell:common startup`)、目標與開始位置正確(§2A.2 (b));
+  看 log 資料夾的 `launcher-<日期>.log`(結果碼 4 = 已在執行或 port 被占用,例如工作排程器與捷徑兩種都設了)。
 
 ---
 
@@ -123,11 +318,15 @@
    nginx 執行中就 `nginx -s reload`;
    nginx 沒執行就以 `start nginx` 的方式啟動,已執行就不動它。nginx 起不來時 TaidaFlow 仍會啟動,網頁改走 app 自己的
    `:8124` / `:8125`(結果碼 8)。
+   **nginx 已註冊成服務 `TaidaFlowNginx`(§2A)時**:port 80 由服務的 nginx 在聽視為正常;不會用 `start nginx` 另開一個;服務停止時
+   改為啟動服務;`nginx.conf` 重新產生時不 reload,而是提示以系統管理員套用(結果碼 3,§2A.3)。
 5. 啟動 `TaidaFlowApp.exe`(工作目錄 = 資料資料夾;**沒有黑色的主控台視窗**,程式自己寫 log 檔),等 8124、8125 開始聽,
    顯示網址與結果碼,按任意鍵關閉這個黑色視窗(TaidaFlow 會繼續執行;關掉這個視窗也不會關掉 TaidaFlow)。
 
 結果碼:`0` 成功;`4` 已經在執行或 port 被占用(**什麼都沒啟動**,也不會關掉別的程式);`6` app 沒起來(`launcher-<日期>.log`
 會抄錄程式 log 的最後幾行;完整內容看 `taidaflow-<日期>-full.log`,§13);`8` app 已啟動但 nginx 沒起來;
+`3` app 與 nginx 都已啟動,但 `nginx.conf` 重新產生了、nginx **服務**還在用舊的(不是系統管理員,不能套用;以系統管理員執行
+`scripts\install-nginx-service.ps1` 或 `nginx\nginx-service.exe restart`,§2A.3);
 `2` 打包資料夾不完整、資料夾不能寫或 config.json 有誤。
 
 單次覆寫(只影響這一次,config.json 不改;寫成 `<資料資料夾>\config.effective.json` 交給程式):在 cmd 執行
@@ -169,6 +368,18 @@ tasklist /fi "imagename eq nginx.exe"   :: 看有沒有在執行(一個 master +
 一定要**先 `cd` 到 nginx 資料夾**:nginx 用目前資料夾找 `conf\nginx.conf`、`logs\`、`temp\`。
 `cd` 之後打 `nginx -t` 仍出現「不是內部或外部命令」時,改打 `.\nginx.exe -t`、`.\nginx.exe -s quit`(§10 最後幾則)。
 
+**nginx 已註冊成服務 `TaidaFlowNginx`(§2A)時**:不要再 `start nginx`,也不能用 `nginx -s reload` / `nginx -s quit` 控制服務的 nginx
+(它以 LocalSystem 在另一個工作階段執行)。改用(系統管理員的 cmd,在 `C:\TaidaFlow\nginx`):
+
+```bat
+nginx-service.exe status     :: Started / Stopped / NonExistent
+nginx-service.exe restart    :: 套用新的 nginx.conf
+nginx-service.exe stop
+nginx-service.exe start
+```
+
+(或「服務」管理員 `services.msc` 裡的「TaidaFlow nginx (web, port 80)」;`sc query TaidaFlowNginx` 一般使用者也能看狀態。)
+
 ### 3.4 什麼時候要重新產生 nginx 設定
 
 改了 config.json 的 `nginx.port`、`rest.port`、`mirror.internalPort`、`dataDir`、`log.dir`、`nginx.exe`,搬了安裝資料夾,或更新成新的打包版本之後:
@@ -184,8 +395,13 @@ nginx -s reload
 
 ### 3.5 登入時自動啟動
 
-TaidaFlow 有操作畫面,所以採「**使用者登入時**」由工作排程器執行 `start-taidaflow.ps1`(不用 Windows 服務:服務跑在看不到
-畫面的 session 0)。nginx 由 `start-taidaflow` 一起帶起來。
+TaidaFlow 有操作畫面,所以採「**使用者登入時**」執行 `start-taidaflow.ps1`(不用 Windows 服務:服務跑在看不到
+畫面的 session 0)。有兩種做法,**擇一**:
+
+- **開機啟動資料夾的捷徑**(現場標準做法,搭配 nginx 服務):§2A(`scripts\add-startup-shortcut.ps1`)。
+- **工作排程器**(本節):nginx 沒有註冊成服務時,由 `start-taidaflow` 一起帶起來。
+
+兩種都設的話登入時會執行兩次(第二次以結果碼 4 拒絕);`add-startup-shortcut.ps1` 與 `register-autostart.ps1` 發現另一種時會提示。
 
 - **先乾跑**(不會註冊任何東西,只印出將要建立的排程與它會用的 config.json 設定):
   ```bat
@@ -208,6 +424,8 @@ TaidaFlow 有操作畫面,所以採「**使用者登入時**」由工作排程�
 ---
 
 ## 4. 更新到新的打包版本
+
+**nginx 已註冊成服務時照 §2A.4**(要先以系統管理員停止服務)。沒有服務時:
 
 1. 雙擊 `stop-taidaflow.bat`;再到 `<安裝資料夾>\nginx` 執行 `nginx -s quit`(新版可能換了 nginx.exe)。
 2. 把新打包資料夾裡的**所有檔案**複製到 `<安裝資料夾>`,覆蓋舊檔(新包沒有 `config.json`、沒有 `nginx\conf\nginx.conf`,
@@ -768,6 +986,8 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-release-package.ps1 -Pac
 
 ## 10. 常見問題
 
+nginx 服務與開機啟動資料夾的問題(錯誤 1053、服務停不下來、登出後網頁斷線、非系統管理員)見 **§2A.6**。
+
 **port 80 被占用(`start-taidaflow` 結果碼 4 / `install-nginx-config` 結果碼 4 / log 資料夾的 `nginx-error.log` 有 `bind() ... failed`)**:
 畫面與 `logs\launcher-<日期>.log` 會列出占用者(port、pid、程式路徑),不會關掉它。
 - 占用者是 **pid 4「System」**:Windows 的 HTTP.sys(IIS 的 World Wide Web 發佈服務、SQL Server Reporting Services、
@@ -838,6 +1058,19 @@ log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀�
 | 設備 | 可用 `-DeviceProfile simulator` 或 `config.simulator.json` 改連模擬器 | **一律清除** `TAIDAFLOW_DEVICE_PROFILE`(不能進測試模式) |
 | nginx | `build\desktop\nginx` 的 `start nginx`,或 `nginx-start.ps1`(`build\nginx` 前綴) | `<安裝資料夾>\nginx` 的 `start nginx`(`start-taidaflow` 會帶起) |
 | log | 程式自己寫到 config.dev.json 的 log 資料夾(`build\runtime-cwd\logs`);`run-desktop.ps1` 另外把輸出存到 `build\runtime-logs\`(開發用) | 程式自己寫到 config.json 的 `log.dir`(預設 `<資料資料夾>\logs\`):quiet 保留 60 天、full 保留 7 天;`launcher-<日期>.log`、nginx log 在同一個資料夾(§13) |
+| nginx 服務 | **不註冊服務**(開發機不裝任何 Windows 服務) | `scripts\install-nginx-service.ps1` / `uninstall-nginx-service.ps1`(系統管理員;服務 `TaidaFlowNginx`,WinSW `nginx\nginx-service.exe`,§2A) |
+| 登入時自動啟動 | 不設定 | `scripts\add-startup-shortcut.ps1` / `remove-startup-shortcut.ps1`(開機啟動資料夾,§2A)**或** `register-autostart.ps1` / `unregister-autostart.ps1`(工作排程器,§3.5),擇一 |
+
+正式機腳本一覽(打包資料夾):
+
+| 腳本 | 用途 | 需要系統管理員 | 先乾跑 |
+|---|---|---|---|
+| `start-taidaflow.bat` / `.ps1` | 啟動(§3.1) | 否 | — |
+| `stop-taidaflow.bat` / `.ps1` | 停止 TaidaFlow(不停 nginx)(§3.2) | 否 | — |
+| `scripts\install-nginx-config.ps1` | 產生 `nginx\conf\nginx.conf`(§2、§3.4) | 否 | — |
+| `scripts\install-nginx-service.ps1` / `scripts\uninstall-nginx-service.ps1` | nginx 註冊 / 移除 Windows 服務 `TaidaFlowNginx`(§2A) | **是** | `-WhatIf`(不需管理員) |
+| `scripts\add-startup-shortcut.ps1` / `scripts\remove-startup-shortcut.ps1` | 開機啟動資料夾捷徑「TaidaFlow」(§2A) | 否(`-AllUsers` 才需要) | `-WhatIf` |
+| `register-autostart.ps1` / `unregister-autostart.ps1` | 工作排程器「登入時」(§3.5) | 否(替別的使用者註冊才需要) | `-WhatIf` |
 
 在正式機跑開發機腳本:安全探測一定判定不安全,app 不會啟動。在開發機跑正式機腳本:**沒有保護**,
 若開發機連得到設備位址就會控制真設備——開發機請只用 `scripts\` 的腳本(或 §9.2 的手動步驟)。
@@ -856,12 +1089,15 @@ log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀�
    `install-nginx-config.ps1` 產生、隨設定變更自動重產。**已決定。**
 5. **VC++ 執行環境**:維持隨程式放 DLL(app-local),現場不安裝 `vc_redist`。**已決定。**
 6. **開機自動啟動與自動登入**:登入時由工作排程器啟動;Windows 自動登入由現場自行設定,本專案的腳本不處理。**已決定。**
+   (2026-09-29 起現場標準改為第 11 項:開機啟動資料夾 + nginx 服務;工作排程器仍可用,兩者擇一。)
 7. **防火牆**:只開 80(nginx:網頁、同步、下載、REST)與 502(Modbus,不限來源)。**已決定。**
 8. **存取控管**:80(含 REST API 的 PUT)與 502 不做登入或來源限制(內網)。任何連得到的人都能操作(含急停)。**已決定。**
 9. **log**:程式自己寫檔(不再由啟動腳本轉存輸出);quiet(警告與錯誤)保留 60 天 + full(全部訊息)保留 7 天,兩者預設都開、
    檔名帶日期、換日時清理;log 資料夾預設也在 config.json(`log.dir`,預設 `C:\TaidaFlowData\logs`);config.json 讀不到時也要有
    log(寫到 config.json 旁的 `logs\`);不刪減原本的 log 訊息、舊版的 log 檔不刪。**已決定,已實作(w2-064、w2-065,§13)。**
 10. **現場電腦設定**(睡眠、Windows Update 自動重開機時段、螢幕保護)與**備份**的頻率與位置(§3.6):由 IT / 現場決定。
+11. **現場部署方式**(2026-09-29):程式解壓縮到安裝資料夾;nginx 以 **WinSW 2.12.0**(官方 GitHub Releases,MIT)註冊成 Windows 服務、
+    開機自動啟動;TaidaFlow 程式放進**開機啟動資料夾**(登入時啟動)。**已決定,已實作(w2-076,§2A);服務安裝需在現場以系統管理員實測。**
 
 ---
 

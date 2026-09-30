@@ -1,0 +1,5 @@
+=== TaidaFlow nginx service - -WhatIf: nothing is changed
+installation folder : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+service TaidaFlowNginx is not installed - nothing to do
+----
+EXIT=0

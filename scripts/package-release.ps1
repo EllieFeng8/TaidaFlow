@@ -25,6 +25,14 @@
 #                                        nginx.exe), else the newest C:\tools\nginx\nginx-<version> (the build PC's
 #                                        convention, as CMake TAIDAFLOW_NGINX_DIR). The PACKAGE never names that
 #                                        folder: its config.json default is nginx\nginx.exe (the bundled copy).
+#   nginx\nginx-service.exe,             (w2-076) WinSW v2.12.0 (self-contained .NET single file, MIT) = the
+#   nginx\LICENSE-WinSW.txt,             service wrapper of scripts\install-nginx-service.ps1 (service
+#   nginx\SOURCE-WinSW.txt               TaidaFlowNginx); from -WinSW <WinSW-x64-<version>.exe>, default the newest
+#                                        C:\tools\winsw\WinSW-x64-<version>.exe (the build PC's convention, like
+#                                        C:\tools\nginx); LICENSE.txt must be in the same folder. nginx-service.xml
+#                                        is NOT in the package (written on the plant PC by install-nginx-service.ps1).
+#   scripts\install-nginx-service.ps1, scripts\uninstall-nginx-service.ps1,
+#   scripts\add-startup-shortcut.ps1, scripts\remove-startup-shortcut.ps1        (w2-076, field scripts)
 #   DEPLOY.md                            = docs\DEPLOY_AND_STARTUP.md
 #   VERSION.txt, MANIFEST.txt            build information; every file with size and SHA-256
 # w2-062: NO config.json (created on the plant PC at the first start by TaidaFlowApp.exe
@@ -34,15 +42,17 @@
 # config.json, Python files, __pycache__ (checked at the end; any hit fails the packaging).
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1
-#            [-NginxDir <nginx folder>] [-OutDir dist] [-BuildDir build\desktop] [-WebSource build\wasm-release] [-Force] [-AllowStale]
+#            [-NginxDir <nginx folder>] [-WinSW <WinSW-x64-<version>.exe>] [-OutDir dist] [-BuildDir build\desktop]
+#            [-WebSource build\wasm-release] [-Force] [-AllowStale]
 #   -Force      : replace an existing package folder of the same name (only below -OutDir)
 #   -AllowStale : package even when ninja reports that build\desktop or build\wasm-release is not
 #                 up to date (not recommended: the folder name carries the current git hash)
-# Exit codes: 0 packaged; 2 missing input (build, web, CRT, windeployqt); 3 build not up to
+# Exit codes: 0 packaged; 2 missing input (build, web, CRT, windeployqt, nginx, WinSW); 3 build not up to
 # date; 4 package folder exists (use -Force); 5 windeployqt / deploy-web failed; 6 forbidden file
 # found in the package.
 param(
     [string]$NginxDir = "",
+    [string]$WinSW = "",
     [string]$OutDir = "dist",
     [string]$BuildDir = "build\desktop",
     [string]$WebSource = "build\wasm-release",
@@ -106,9 +116,33 @@ foreach ($required in 'TaidaFlowApp.html', 'TaidaFlowApp.js', 'TaidaFlowApp.wasm
 foreach ($f in 'deploy\release\start-taidaflow.ps1', 'deploy\release\stop-taidaflow.ps1', 'deploy\release\start-taidaflow.bat',
                'deploy\release\stop-taidaflow.bat', 'deploy\release\register-autostart.ps1', 'deploy\release\unregister-autostart.ps1',
                'deploy\nginx\taidaflow.conf',
-               'scripts\install-nginx-config.ps1', 'scripts\taidaflow-config.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md') {
+               'scripts\install-nginx-config.ps1', 'scripts\taidaflow-config.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md',
+               'scripts\install-nginx-service.ps1', 'scripts\uninstall-nginx-service.ps1',
+               'scripts\add-startup-shortcut.ps1', 'scripts\remove-startup-shortcut.ps1') {
     if (-not (Test-Path (Join-Path $root $f) -PathType Leaf)) { Say "missing: $f"; exit 2 }
 }
+# WinSW (w2-076): -WinSW, else the newest C:\tools\winsw\WinSW-x64-<version>.exe; LICENSE.txt beside it.
+$winswFrom = '-WinSW'
+if ($WinSW -eq "") {
+    $winswFrom = 'newest C:\tools\winsw\WinSW-x64-<version>.exe'
+    $bestW = $null; $bestWVer = $null
+    foreach ($f in @(Get-ChildItem 'C:\tools\winsw' -File -Filter 'WinSW-x64-*.exe' -ErrorAction SilentlyContinue)) {
+        $wv = $null
+        if ([version]::TryParse($f.BaseName.Substring(10), [ref]$wv) -and ($null -eq $bestWVer -or $wv -gt $bestWVer)) { $bestW = $f.FullName; $bestWVer = $wv }
+    }
+    $WinSW = $bestW
+}
+if (-not $WinSW -or -not (Test-Path -LiteralPath $WinSW -PathType Leaf)) {
+    Say "WinSW not found (-WinSW '$WinSW'): download https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe to C:\tools\winsw\WinSW-x64-2.12.0.exe with LICENSE.txt (docs\BUILD.md, WinSW)"
+    exit 2
+}
+$WinSW = [System.IO.Path]::GetFullPath($WinSW)
+$winswLicense = Join-Path (Split-Path -Parent $WinSW) 'LICENSE.txt'
+if (-not (Test-Path -LiteralPath $winswLicense -PathType Leaf)) { Say "WinSW licence not found: $winswLicense (LICENSE.txt of the same release, beside the exe)"; exit 2 }
+$winswInfo = (Get-Item -LiteralPath $WinSW).VersionInfo
+$winswVer = (("$($winswInfo.ProductVersion)" -split '\+')[0]).Trim()
+if ($winswInfo.ProductName -ne 'Windows Service Wrapper' -or -not $winswVer) { Say "$WinSW is not WinSW (product '$($winswInfo.ProductName)', version '$($winswInfo.ProductVersion)')"; exit 2 }
+Say "WinSW to bundle: $WinSW ($winswVer, from $winswFrom)"
 # nginx for Windows to bundle (Mango A7). w2-065: first the nginx.exe of the development config.json.
 function Test-NginxDir([string]$d) { return ($d -and (Test-Path (Join-Path $d 'nginx.exe')) -and (Test-Path (Join-Path $d 'docs\LICENSE')) -and (Test-Path (Join-Path $d 'conf\mime.types'))) }
 $nginxFrom = '-NginxDir'
@@ -205,6 +239,9 @@ foreach ($f in 'start-taidaflow.ps1', 'stop-taidaflow.ps1', 'start-taidaflow.bat
 New-Item -ItemType Directory -Force (Join-Path $pkg 'scripts'), (Join-Path $pkg 'deploy\nginx') | Out-Null
 Copy-Item -LiteralPath (Join-Path $root 'scripts\install-nginx-config.ps1') -Destination (Join-Path $pkg 'scripts')
 Copy-Item -LiteralPath (Join-Path $root 'scripts\taidaflow-config.ps1') -Destination (Join-Path $pkg 'scripts')
+foreach ($f in 'install-nginx-service.ps1', 'uninstall-nginx-service.ps1', 'add-startup-shortcut.ps1', 'remove-startup-shortcut.ps1') {
+    Copy-Item -LiteralPath (Join-Path $root "scripts\$f") -Destination (Join-Path $pkg 'scripts')
+}
 Copy-Item -LiteralPath (Join-Path $root 'deploy\nginx\taidaflow.conf') -Destination (Join-Path $pkg 'deploy\nginx')
 Copy-Item -LiteralPath (Join-Path $root 'docs\DEPLOY_AND_STARTUP.md') -Destination (Join-Path $pkg 'DEPLOY.md')
 
@@ -230,6 +267,26 @@ $nginxHash = (Get-FileHash -Algorithm SHA256 (Join-Path $nDir 'nginx.exe')).Hash
     "the request / error logs are written to config.json log.dir (nginx-access-YYYY-MM-DD.log, nginx-error.log)."))
 Say "nginx: $nginxVer bundled (nginx.exe + docs\ + conf\ without nginx.conf)"
 
+# --- 5b. WinSW = nginx\nginx-service.exe (w2-076) ------------------------------------------------------------
+# Copied unchanged under the name the service uses (WinSW reads <its own name>.xml = nginx-service.xml, written
+# on the plant PC by scripts\install-nginx-service.ps1 - never shipped).
+Copy-Item -LiteralPath $WinSW -Destination (Join-Path $nDir 'nginx-service.exe')
+Copy-Item -LiteralPath $winswLicense -Destination (Join-Path $nDir 'LICENSE-WinSW.txt')
+$winswHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $nDir 'nginx-service.exe')).Hash
+$winswSig = (Get-AuthenticodeSignature -LiteralPath (Join-Path $nDir 'nginx-service.exe')).Status
+[System.IO.File]::WriteAllLines((Join-Path $nDir 'SOURCE-WinSW.txt'), [string[]]@(
+    "nginx-service.exe = WinSW (Windows Service Wrapper) $winswVer, WinSW-x64.exe of the official GitHub release, unchanged:",
+    "  https://github.com/winsw/winsw/releases/download/v$winswVer/WinSW-x64.exe   (renamed: WinSW reads <its name>.xml)",
+    "  file version $($winswInfo.FileVersion), product version $($winswInfo.ProductVersion)",
+    "  SHA-256 $winswHash ; Authenticode: $winswSig (the project does not sign this release)",
+    "  self-contained .NET 6 single-file program (no .NET installation needed), 64-bit Windows 10 / 11.",
+    "Licence: MIT, LICENSE-WinSW.txt (copyright Kohsuke Kawaguchi, Sun Microsystems, CloudBees, Oleg Nenashev and contributors).",
+    "Used by scripts\install-nginx-service.ps1 (administrator): writes nginx-service.xml here (service TaidaFlowNginx:",
+    "nginx.exe -p <this folder>, stop: nginx -s quit, start mode Automatic) and runs  nginx-service.exe install / start.",
+    "Commands (administrator cmd, in this folder): nginx-service.exe status | start | stop | restart | uninstall.",
+    "Removal: scripts\uninstall-nginx-service.ps1. Details: DEPLOY.md section 2A (nginx service + Startup folder)."))
+Say "WinSW: $winswVer bundled as nginx\nginx-service.exe (SHA-256 $winswHash, Authenticode $winswSig) + LICENSE-WinSW.txt + SOURCE-WinSW.txt"
+
 # --- 6. forbidden content ------------------------------------------------------------------------
 $all = @(Get-ChildItem -LiteralPath $pkg -Recurse -Force)
 $forbidden = @($all | Where-Object {
@@ -238,7 +295,7 @@ $forbidden = @($all | Where-Object {
     ($_.PSIsContainer -and ($n -in '__pycache__', 'cmakefiles', 'exports', 'data', 'runtime', 'logs', 'logging', 'temp', 'tests', '.qt', '.rcc')) -or
     (-not $_.PSIsContainer -and ($n -match '\.(sqlite|sqlite3|db|py|pyc|pdb|lib|exp|ilk|obj|ninja|cmake|log|csv)$' -or
                                  $n -in 'cmakecache.txt', 'taidaflowsettings.ini', 'device_info.ini',
-                                        'config.json', 'config.effective.json', 'taidaflow-app.json', 'nginx.conf'))
+                                        'config.json', 'config.effective.json', 'taidaflow-app.json', 'nginx.conf', 'nginx-service.xml'))
 })
 if ($forbidden.Count) {
     Say "FORBIDDEN content in the package:"
@@ -282,6 +339,8 @@ $gitDate = (& git -C $root log -1 --format=%cI).Trim()
     "MSVC runtime : app-local DLLs, $(Split-Path -Leaf $crtDir) $(Split-Path -Leaf (Split-Path -Parent (Split-Path -Parent $crtDir)))",
     "web page     : WebAssembly build of $((Get-Item (Join-Path $WebSource 'TaidaFlowApp.wasm')).LastWriteTime.ToString('s')) (wasm-release)",
     "nginx        : $nginxVer bundled in nginx\ (start: cd nginx + start nginx); conf\nginx.conf written on the plant PC by scripts\install-nginx-config.ps1",
+    "nginx service: WinSW $winswVer as nginx\nginx-service.exe (SHA-256 $winswHash, MIT, LICENSE-WinSW.txt); optional, administrator: scripts\install-nginx-service.ps1 (service TaidaFlowNginx)",
+    "log-on start : scripts\add-startup-shortcut.ps1 (Startup folder) or register-autostart.ps1 (Task Scheduler) - one of the two",
     "config.json  : not included - created at the first start with the defaults (TaidaFlowApp.exe --write-default-config); never overwritten by an update",
     "start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md",
     "ports        : config.json; plant firewall inbound only 80 (nginx: page, /mirror, /exports, /api/) and 502 (Modbus server)"))

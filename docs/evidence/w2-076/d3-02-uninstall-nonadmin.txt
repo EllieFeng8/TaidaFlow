@@ -1,0 +1,6 @@
+REFUSED: uninstall-nginx-service.ps1 removes the Windows service TaidaFlowNginx and needs an administrator.
+  This PowerShell is not elevated - NOTHING was changed (the service, if any, was not stopped or removed).
+  Start cmd with right-click > 'Run as administrator' and run the same command again,
+  or add -WhatIf to only print what would be done (no administrator needed).
+----
+EXIT=5

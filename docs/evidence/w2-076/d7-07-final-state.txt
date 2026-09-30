@@ -1,0 +1,41 @@
+time: 2026-09-29T17:02:17.3806255+08:00
+--- dist\
+  TaidaFlow-20260929-49b0d8e  1398 files
+  TaidaFlow-20260929-49b0d8e.zip  76762661 bytes SHA-256 0CC80A33BC038C760E7D33812F8C36873F8B36B5ED5C69C3B7B6BA668AB3E958
+--- build\w2-076-retired-dist\ (old package, moved - not deleted)
+  TaidaFlow-20260929-49b0d8e
+  TaidaFlow-20260929-49b0d8e.zip
+--- processes TaidaFlowApp / nginx / Adam60xxSimulator
+  none
+--- listeners on 80 502 8124 8125 18080 18125
+  none
+--- Windows service TaidaFlowNginx: 0 (0 = not installed)
+--- real Startup folders
+  C:\Users\TED\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup : desktop.ini
+  C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup : AnyDesk.lnk, CodeMeter Control Center.lnk, desktop.ini, 安控中介軟體服務程式.lnk
+--- scheduled task \TaidaFlow: none
+--- git (taidaflow) HEAD 49b0d8e, branch core
+   M README.md
+   M deploy/release/register-autostart.ps1
+   M deploy/release/start-taidaflow.bat
+   M deploy/release/start-taidaflow.ps1
+   M deploy/release/stop-taidaflow.ps1
+   M docs/BUILD.md
+   M docs/DEPLOY_AND_STARTUP.md
+   M docs/evidence/wasm-v4-sim/safety-probe.log
+   M docs/evidence/wasm-v4/safety-probe.log
+   M scripts/check-package-deps.ps1
+   M scripts/package-release.ps1
+   M scripts/taidaflow-config.ps1
+   M scripts/verify-release-package.ps1
+  ?? docs/evidence/w2-074/
+  ?? docs/evidence/w2-076/
+  ?? scripts/add-startup-shortcut.ps1
+  ?? scripts/install-nginx-service.ps1
+  ?? scripts/remove-startup-shortcut.ps1
+  ?? scripts/uninstall-nginx-service.ps1
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\final-state.ps1
+started : 2026-09-29T17:02:16.8298648+08:00
+elapsed : 3s
+EXIT=0

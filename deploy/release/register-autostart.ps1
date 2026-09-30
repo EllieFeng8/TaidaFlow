@@ -19,12 +19,10 @@
 #   For an unattended restart after a power failure the PC must log that user on automatically
 #   (Windows automatic sign-in) - set up on site by the plant (decided, see DEPLOY.md section 7);
 #   this script does not touch it.
-#   If a headless service is ever wanted (web page only, no local HMI): wrap the exe with a service
-#   wrapper such as WinSW (XML: <executable>C:\TaidaFlow\...\TaidaFlowApp.exe</executable>, the
-#   settings in config.json next to it, <stopparentprocessfirst>, logs) or NSSM ("nssm install TaidaFlow <exe>", then
-#   AppDirectory, AppEnvironmentExtra, AppStdout/AppStderr, AppStopMethodWindow). nginx can be
-#   wrapped the same way (arguments -p <runtime>/ -c conf/taidaflow.conf, stop: -s quit). This is
-#   NOT done or tested in this project; a service in session 0 has no local window at all.
+#   w2-076: nginx (no window) CAN be a Windows service: scripts\install-nginx-service.ps1 registers it with
+#   the bundled WinSW (service TaidaFlowNginx); start-taidaflow.ps1 then leaves nginx to Windows. The app
+#   stays a log-on start - by this task OR by the Startup folder shortcut of scripts\add-startup-shortcut.ps1
+#   (use one of the two; this script reports a TaidaFlow.lnk it finds, it never removes it).
 #
 # The task: action = powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden
 #   -File "<this folder>\start-taidaflow.ps1" [-Config "<config.json>"] [-LogDir "<LogDir>"],
@@ -112,6 +110,13 @@ Say "  action arguments  : $($action.Arguments)"
 Say "  working directory : $($action.WorkingDirectory)"
 Say "  settings          : MultipleInstances=$($settings.MultipleInstances) ExecutionTimeLimit=$($settings.ExecutionTimeLimit) StartWhenAvailable=$($settings.StartWhenAvailable) DisallowStartIfOnBatteries=$($settings.DisallowStartIfOnBatteries) StopIfGoingOnBatteries=$($settings.StopIfGoingOnBatteries)"
 Say "  existing task     : $(if ($existing) { "YES (state $($existing.State)) - $(if ($Replace) { 'would be replaced (-Replace)' } else { 'refused without -Replace' })" } else { 'none' })"
+# w2-076: the other automatic start (Startup folder shortcut of scripts\add-startup-shortcut.ps1) - report only.
+foreach ($sd in @([Environment]::GetFolderPath('Startup'), [Environment]::GetFolderPath('CommonStartup'))) {
+    if ($sd -and (Test-Path -LiteralPath (Join-Path $sd 'TaidaFlow.lnk') -PathType Leaf)) {
+        Say "  NOTE: a Startup folder shortcut also starts TaidaFlow: $(Join-Path $sd 'TaidaFlow.lnk') - use only ONE automatic start"
+        Say "        (not removed automatically; remove it with scripts\remove-startup-shortcut.ps1$(if ($sd -eq [Environment]::GetFolderPath('CommonStartup')) { ' -AllUsers' }))"
+    }
+}
 
 if (-not $PSCmdlet.ShouldProcess("\$TaskName (Task Scheduler, user $User)", 'Register-ScheduledTask')) {
     Say "-WhatIf: NOTHING registered."

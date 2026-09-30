@@ -1,0 +1,47 @@
+=== w2-076 nginx service logic 2026-09-29T16:58:27.8838481+08:00; admin=False
+[PASS] A1 quoted PathName
+[PASS] A2 quoted PathName with arguments
+[PASS] A3 unquoted PathName with arguments
+[PASS] A4 empty PathName
+[PASS] B1 no service -> none
+[PASS] B2 PathName = this package wrapper -> ours
+[PASS] B3 same path, other letter case -> ours
+[PASS] B4 PathName of another folder -> other
+[PASS] C1 service of this package, listener = nginx worker below the wrapper -> fine (not "port in use") - nginx pid 2001 is started by the service TaidaFlowNginx (wrapper pid 1000; chain 2001 -> 2000 -> 1000)
+[PASS] C2 service of this package, listener = nginx master below the wrapper -> fine - nginx pid 2000 is started by the service TaidaFlowNginx (wrapper pid 1000; chain 2000 -> 1000)
+[PASS] C3 service PathName points to ANOTHER folder -> refused (not ours) - service TaidaFlowNginx runs D:\OldTaidaFlow\nginx\nginx-service.exe, not C:\TaidaFlow\nginx\nginx-service.exe
+[PASS] C4 no service -> not ours (start-taidaflow keeps its old path check) - no service TaidaFlowNginx
+[PASS] C5 service stopped -> not ours - service TaidaFlowNginx is Stopped (pid 0)
+[PASS] C6 listener is not nginx.exe (httpd below the wrapper) -> not ours - process 3000 is httpd.exe, not nginx.exe
+[PASS] C7 an nginx.exe NOT below the service (started from explorer) -> not ours - nginx pid 2100 is not a child of the service TaidaFlowNginx (wrapper pid 1000; chain 2100 -> 5000)
+[PASS] C8 pid 4 System (HTTP.sys) -> not ours - process 4 is System, not nginx.exe
+[PASS] C9 unknown pid -> not ours - process 9999 not found
+[PASS] D1 no service, nginx started by hand runs -> nginx -s reload (as before) - got reload
+[PASS] D2 no service, no nginx running -> nothing (it starts with the new file) - got none
+[PASS] D3 file unchanged -> nothing - got none
+[PASS] D4 OUR service runs, NOT administrator -> no reload, message (exit 3) - got tell-admin
+[PASS] D5 OUR service runs, not admin, even if nginx paths look "manual" -> no reload - got tell-admin
+[PASS] D6 OUR service runs, administrator -> restart the service - got restart-service
+[PASS] D7 OUR service stopped -> nothing (it reads the new file when started) - got none
+[PASS] D8 service of ANOTHER folder is ignored -> old behaviour (reload own nginx) - got reload
+[PASS] E1 no service, nginx running -> left as it is (as before) - got leave
+[PASS] E2 no service, nginx not running -> start nginx (as before) - got start-process
+[PASS] E3 OUR service running -> left as it is, NO second "start nginx" - got leave
+[PASS] E4 OUR service running (admin sees the paths) -> left as it is - got leave
+[PASS] E5 OUR service starting -> wait, no "start nginx" - got leave
+[PASS] E6 OUR service stopped -> start the SERVICE, not "start nginx" - got start-service
+[PASS] E7 service of another folder -> old behaviour (port check decides) - got start-process
+[PASS] F1 real nginx (package nginx.exe, -p test prefix) listens on 127.0.0.1:18976 - master pid 127864
+     listener owner pid 45760 (nginx.exe), parent 127864; this PowerShell pid 149828
+[PASS] F2 real process tree: the listener is an nginx.exe below the "wrapper" process (this PowerShell) -> ours - nginx pid 45760 is started by the service TaidaFlowNginx (wrapper pid 149828; chain 45760 -> 127864 -> 149828)
+[PASS] F3 real process tree: service pid = another process (14676) -> not ours - nginx pid 45760 is not a child of the service TaidaFlowNginx (wrapper pid 14676; chain 45760 -> 127864 -> 149828)
+[PASS] F4 real process tree, service PathName of another folder -> not ours - service TaidaFlowNginx runs D:\x\nginx\nginx-service.exe, not C:\TaidaFlow\nginx\nginx-service.exe
+[PASS] F5 nginx -p <prefix> -s quit stops it, port 18976 free again - quit exit 0
+[PASS] G1 Win32_Service of a LocalSystem service (Schedule) readable without administrator: PathName + ProcessId - PathName C:\Windows\system32\svchost.exe -k netsvcs -p, pid 2512, Get-Process .Path = ''
+[PASS] G2 TaidaFlowNginx is not installed on this development PC (no service was installed by this task) - Exists=False 
+=== 39 check(s), 0 failed
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\test-nginx-service-logic.ps1 -Package dist\TaidaFlow-20260929-49b0d8e
+started : 2026-09-29T16:58:27.6170145+08:00
+elapsed : 6s
+EXIT=0

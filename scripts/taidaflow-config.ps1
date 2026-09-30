@@ -45,8 +45,25 @@
 #                                                     deletes <prefix>YYYY-MM-DD<suffix> files older than
 #                                                     keepDays days (today included); nothing else
 #   Get-TaidaFlowNginxConf <template> <values>        the complete TaidaFlow nginx configuration text
+# w2-076 (nginx as a Windows service with WinSW, <installation folder>\nginx\nginx-service.exe):
+#   Test-TaidaFlowIsAdministrator                     $true when this process runs elevated (administrator)
+#   ConvertFrom-TaidaFlowServicePathName <PathName>   the exe of a Win32_Service PathName ("C:\x\a.exe" args)
+#   Get-TaidaFlowNginxServiceInfo [-Name TaidaFlowNginx]
+#                                                     Win32_Service facts a normal user can read: Exists, State,
+#                                                     StartMode, PathName, ExePath, ProcessId (+ Error)
+#   Get-TaidaFlowNginxServiceMode $svc <wrapper exe>  'none' (no service) | 'ours' (PathName = this wrapper)
+#                                                     | 'other' (the service runs another folder's wrapper)
+#   Get-TaidaFlowProcessTable                         pid -> @{ Name; ParentProcessId } (Win32_Process)
+#   Test-TaidaFlowNginxServiceOwner -Service -WrapperExe -OwningPid -Processes
+#                                                     is a listener's process an nginx started by OUR service
+#                                                     (nginx.exe whose parent chain reaches the service pid)
+#   Get-TaidaFlowNginxConfAction / Get-TaidaFlowNginxStartAction
+#                                                     what start-taidaflow.ps1 does with nginx (pure decisions,
+#                                                     unit-tested: docs\evidence\w2-076\tools\test-nginx-service-logic.ps1)
+#   Get-TaidaFlowNginxServiceXml <values>             the WinSW XML (nginx\nginx-service.xml) for this installation
 
 $script:TaidaFlowDefaultCache = @{}
+$script:TaidaFlowNginxServiceName = 'TaidaFlowNginx'
 
 function Get-TaidaFlowKeyKind([string]$key) {
     switch -Regex ($key) {
@@ -435,4 +452,196 @@ function Format-TaidaFlowConfig($cfg) {
     $lines.Add("  nginx.exe (resolved) = $(Resolve-TaidaFlowNginxExe $cfg)")
     $lines.Add("  log.dir (resolved) = $(Resolve-TaidaFlowLogDir $cfg)")
     return $lines.ToArray()
+}
+
+# --- w2-076: nginx as a Windows service (WinSW) ------------------------------------------------------------
+# The service (id TaidaFlowNginx) is registered by <installation folder>\scripts\install-nginx-service.ps1:
+# the wrapper <installation folder>\nginx\nginx-service.exe (WinSW v2.12.0) reads nginx\nginx-service.xml and
+# runs nginx.exe -p <nginx folder> as LocalSystem in session 0. A normal user cannot read the image path of
+# those processes (Get-Process .Path is empty), but can read Win32_Service (PathName, ProcessId, State) and
+# Win32_Process (Name, ParentProcessId) - the functions below use only that.
+
+function Test-TaidaFlowIsAdministrator {
+    try {
+        $id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+        return (New-Object System.Security.Principal.WindowsPrincipal($id)).IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+    } catch { return $false }
+}
+
+# "C:\TaidaFlow\nginx\nginx-service.exe" / C:\x\a.exe arg / "C:\x y\a.exe" arg -> full exe path ('' when empty).
+function ConvertFrom-TaidaFlowServicePathName([string]$PathName) {
+    $p = "$PathName".Trim()
+    if ($p -eq '') { return '' }
+    if ($p.StartsWith('"')) {
+        $end = $p.IndexOf('"', 1)
+        $exe = if ($end -gt 1) { $p.Substring(1, $end - 1) } else { $p.Trim('"') }
+    } else {
+        $m = [regex]::Match($p, '^(.+?\.exe)(\s|$)', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+        $exe = if ($m.Success) { $m.Groups[1].Value } else { ($p -split '\s+')[0] }
+    }
+    try { return [System.IO.Path]::GetFullPath($exe) } catch { return $exe }
+}
+
+function Get-TaidaFlowNginxServiceInfo([string]$Name = $script:TaidaFlowNginxServiceName) {
+    $info = [pscustomobject]@{ Name = $Name; Exists = $false; State = ''; StartMode = ''; PathName = ''; ExePath = ''; ProcessId = 0; Error = '' }
+    try {
+        $s = @(Get-CimInstance -ClassName Win32_Service -Filter ("Name='" + $Name.Replace("'", "''") + "'") -ErrorAction Stop)
+        if ($s.Count -gt 0) {
+            $info.Exists = $true
+            $info.State = [string]$s[0].State
+            $info.StartMode = [string]$s[0].StartMode
+            $info.PathName = [string]$s[0].PathName
+            $info.ExePath = ConvertFrom-TaidaFlowServicePathName $info.PathName
+            $info.ProcessId = [int]$s[0].ProcessId
+        }
+    } catch { $info.Error = "Win32_Service query failed: $($_.Exception.Message)" }
+    return $info
+}
+
+# 'none' = no such service; 'ours' = its PathName is exactly this installation's wrapper exe;
+# 'other' = the service exists but runs a wrapper somewhere else (another installation folder).
+function Get-TaidaFlowNginxServiceMode($Service, [string]$WrapperExe) {
+    if (-not $Service -or -not $Service.Exists) { return 'none' }
+    $w = try { [System.IO.Path]::GetFullPath($WrapperExe) } catch { $WrapperExe }
+    if ([string]::Equals([string]$Service.ExePath, $w, [System.StringComparison]::OrdinalIgnoreCase)) { return 'ours' }
+    return 'other'
+}
+
+# pid -> @{ Name; ParentProcessId } of every process (a normal user gets these two for all processes).
+function Get-TaidaFlowProcessTable {
+    $t = @{}
+    foreach ($p in @(Get-CimInstance -ClassName Win32_Process -ErrorAction SilentlyContinue)) {
+        $t[[int]$p.ProcessId] = @{ Name = [string]$p.Name; ParentProcessId = [int]$p.ParentProcessId }
+    }
+    return $t
+}
+
+# Is the process $OwningPid (e.g. the owner of the port 80 listener) an nginx of OUR service?
+# Yes when: the service is ours (PathName = $WrapperExe) and running with a process id, the owning
+# process is nginx.exe, and its parent chain (nginx worker -> nginx master -> WinSW wrapper, at most
+# 4 steps, every step an nginx.exe until the wrapper) reaches the service's process id.
+# $Processes: table of Get-TaidaFlowProcessTable (or test data). Returns @{ Ours; Reason }.
+function Test-TaidaFlowNginxServiceOwner {
+    param($Service, [string]$WrapperExe, [int]$OwningPid, [hashtable]$Processes)
+    $mode = Get-TaidaFlowNginxServiceMode $Service $WrapperExe
+    if ($mode -eq 'none') { return [pscustomobject]@{ Ours = $false; Reason = "no service $($script:TaidaFlowNginxServiceName)" } }
+    if ($mode -eq 'other') { return [pscustomobject]@{ Ours = $false; Reason = "service $($Service.Name) runs $($Service.ExePath), not $WrapperExe" } }
+    if ([string]$Service.State -ne 'Running' -or [int]$Service.ProcessId -le 0) { return [pscustomobject]@{ Ours = $false; Reason = "service $($Service.Name) is $($Service.State) (pid $($Service.ProcessId))" } }
+    if (-not $Processes -or -not $Processes.ContainsKey($OwningPid)) { return [pscustomobject]@{ Ours = $false; Reason = "process $OwningPid not found" } }
+    if (-not [string]::Equals([string]$Processes[$OwningPid].Name, 'nginx.exe', [System.StringComparison]::OrdinalIgnoreCase)) {
+        return [pscustomobject]@{ Ours = $false; Reason = "process $OwningPid is $($Processes[$OwningPid].Name), not nginx.exe" }
+    }
+    $cur = $OwningPid
+    $chain = @($cur)
+    for ($i = 0; $i -lt 4; $i++) {
+        if (-not $Processes.ContainsKey($cur)) { break }
+        $parent = [int]$Processes[$cur].ParentProcessId
+        if ($parent -le 0 -or $chain -contains $parent) { break }
+        $chain += $parent
+        if ($parent -eq [int]$Service.ProcessId) {
+            return [pscustomobject]@{ Ours = $true; Reason = "nginx pid $OwningPid is started by the service $($Service.Name) (wrapper pid $($Service.ProcessId); chain $($chain -join ' -> '))" }
+        }
+        if (-not $Processes.ContainsKey($parent) -or -not [string]::Equals([string]$Processes[$parent].Name, 'nginx.exe', [System.StringComparison]::OrdinalIgnoreCase)) { break }
+        $cur = $parent
+    }
+    return [pscustomobject]@{ Ours = $false; Reason = "nginx pid $OwningPid is not a child of the service $($Service.Name) (wrapper pid $($Service.ProcessId); chain $($chain -join ' -> '))" }
+}
+
+# What start-taidaflow.ps1 does after nginx.conf was checked (install-nginx-config.ps1 -IfChanged):
+#   'none'             nothing to apply (file unchanged, or no nginx running)
+#   'reload'           nginx started by hand / by start-taidaflow runs with the old file: nginx -s reload
+#                      (the behaviour without a service, unchanged)
+#   'restart-service'  OUR service runs with the old file and this is an administrator: restart the service
+#   'tell-admin'       OUR service runs with the old file, not an administrator: no reload (the session-0
+#                      nginx of LocalSystem cannot be signalled by a normal user), launcher log + screen
+#                      message, the app is started as usual (start-taidaflow exit 3)
+function Get-TaidaFlowNginxConfAction([bool]$Written, [string]$ServiceMode, [string]$ServiceState, [bool]$IsAdmin, [bool]$ManualRunning) {
+    if (-not $Written) { return 'none' }
+    if ($ServiceMode -eq 'ours') {
+        if ($ServiceState -ne 'Running') { return 'none' }      # a stopped service reads the new file when it starts
+        if ($IsAdmin) { return 'restart-service' }
+        return 'tell-admin'
+    }
+    if ($ManualRunning) { return 'reload' }
+    return 'none'
+}
+
+# How start-taidaflow.ps1 gets nginx running:
+#   'leave'          already running (our manual nginx, or our service running / starting): left as it is
+#   'start-service'  our service exists but is stopped: start the SERVICE (never a second nginx by hand)
+#   'start-process'  no service of this installation: "cd <nginx folder>" + "start nginx" (unchanged behaviour)
+function Get-TaidaFlowNginxStartAction([string]$ServiceMode, [string]$ServiceState, [bool]$ManualRunning) {
+    if ($ServiceMode -eq 'ours') {
+        if ($ServiceState -eq 'Running' -or $ServiceState -eq 'Start Pending') { return 'leave' }
+        return 'start-service'
+    }
+    if ($ManualRunning) { return 'leave' }
+    return 'start-process'
+}
+
+# XML text of a value (element content).
+function ConvertTo-TaidaFlowXmlText([string]$s) { return [System.Security.SecurityElement]::Escape($s) }
+
+# The service's security descriptor (SDDL, DACL only): the Windows default for a new service plus RP (start)
+# for INTERACTIVE users (IU), so that start-taidaflow.ps1 of the logged-on operator can start a stopped
+# service (nginx ends with the service when any user logs off - nginx treats CTRL_LOGOFF_EVENT as "exit").
+# No stop / change / delete rights for normal users.
+$script:TaidaFlowNginxServiceSddl = 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)'
+
+# The WinSW v2.12.0 configuration nginx\nginx-service.xml (element names: WinSW doc/xmlConfigFile.md).
+# $values: NginxExe (nginx.exe, full path), LogDir (log folder, full path), InstallDir, ConfigPath, Port,
+# WrapperVersion. Paths must not contain % (WinSW expands %VAR%), a double quote, < > or &.
+function Get-TaidaFlowNginxServiceXml($values) {
+    foreach ($k in 'NginxExe', 'LogDir', 'InstallDir', 'ConfigPath') {
+        $v = [string]$values[$k]
+        if ($v -eq '') { throw "Get-TaidaFlowNginxServiceXml: $k missing" }
+        if ($v -match '[%"<>&]' -or $v -match '[\x00-\x1f]') { throw "path cannot be used in the service configuration (% `" < > & not allowed): $k = $v" }
+    }
+    $exe = [System.IO.Path]::GetFullPath([string]$values.NginxExe)
+    $dir = Split-Path -Parent $exe
+    $log = [System.IO.Path]::GetFullPath([string]$values.LogDir).TrimEnd('\')
+    $port = [string]$values.Port
+    $lines = @(
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<!-- TAIDAFLOW NGINX SERVICE - GENERATED by scripts\install-nginx-service.ps1 (w2-076). Run that script again',
+        ('     instead of editing this file. Read by nginx-service.exe (WinSW ' + [string]$values.WrapperVersion + ') in the same folder.'),
+        ('     install folder : ' + [string]$values.InstallDir),
+        ('     config.json    : ' + [string]$values.ConfigPath),
+        ('     nginx folder   : ' + $dir + ' (prefix -p; conf\nginx.conf from scripts\install-nginx-config.ps1)'),
+        ('     port           : ' + $port + ' (config.json nginx.port, written into conf\nginx.conf)'),
+        ('     log folder     : ' + $log + ' (config.json log.dir: nginx-service.wrapper.log, .out.log, .err.log)'),
+        '     securityDescriptor: Windows default for services + RP (start) for INTERACTIVE users. -->',
+        '<service>',
+        ('  <id>' + $script:TaidaFlowNginxServiceName + '</id>'),
+        ('  <name>TaidaFlow nginx (web, port ' + $port + ')</name>'),
+        ('  <description>' + (ConvertTo-TaidaFlowXmlText ('TaidaFlow web front end: nginx for Windows ' + $exe + ' (web page, /mirror, /exports, /api/ on port ' + $port + '). Installed by scripts\install-nginx-service.ps1 of ' + [string]$values.InstallDir + '.')) + '</description>'),
+        ('  <executable>' + (ConvertTo-TaidaFlowXmlText $exe) + '</executable>'),
+        ('  <startarguments>-p "' + (ConvertTo-TaidaFlowXmlText $dir) + '"</startarguments>'),
+        ('  <stopexecutable>' + (ConvertTo-TaidaFlowXmlText $exe) + '</stopexecutable>'),
+        ('  <stoparguments>-p "' + (ConvertTo-TaidaFlowXmlText $dir) + '" -s quit</stoparguments>'),
+        ('  <workingdirectory>' + (ConvertTo-TaidaFlowXmlText $dir) + '</workingdirectory>'),
+        '  <startmode>Automatic</startmode>',
+        '  <onfailure action="restart" delay="10 sec"/>',
+        '  <resetfailure>1 hour</resetfailure>',
+        ('  <securityDescriptor>' + $script:TaidaFlowNginxServiceSddl + '</securityDescriptor>'),
+        ('  <logpath>' + (ConvertTo-TaidaFlowXmlText $log) + '</logpath>'),
+        '  <log mode="roll-by-size">',
+        '    <sizeThreshold>10240</sizeThreshold>',
+        '    <keepFiles>8</keepFiles>',
+        '  </log>',
+        '</service>'
+    )
+    return (($lines -join "`r`n") + "`r`n")
+}
+
+# Reads <executable> of an existing nginx-service.xml ('' when missing / unreadable).
+function Get-TaidaFlowNginxServiceXmlExecutable([string]$XmlPath) {
+    try {
+        if (-not (Test-Path -LiteralPath $XmlPath -PathType Leaf)) { return '' }
+        $doc = New-Object System.Xml.XmlDocument
+        $doc.Load($XmlPath)
+        $n = $doc.SelectSingleNode('//executable')
+        if ($n) { return [string]$n.InnerText }
+    } catch { }
+    return ''
 }

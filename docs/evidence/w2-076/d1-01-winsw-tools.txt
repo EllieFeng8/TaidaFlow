@@ -1,0 +1,42 @@
+LICENSE.txt                      1158 bytes  SHA-256 1CDF703C10A70E5973BF3ACF2A5EEABE7746237155B92DB2034AEAE26FDF7802
+sample-allOptions.xml           10310 bytes  SHA-256 08B8C0692699D00EE9AE37B636B52A3B5655E5D486A20CEBE60CD26C50D86E46
+SOURCE.txt                       2029 bytes  SHA-256 F8B6222429520C6EE7CE43489ED3C9DFC4240E62D012D355F42F2EB46E52AD61
+WinSW-x64-2.12.0.exe         18243033 bytes  SHA-256 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA
+xmlConfigFile.md                15338 bytes  SHA-256 B41ECE3F8F9A4B40B7CA7A85332BA548193F5B978FF7AA16890A6F9E1E4468A4
+Authenticode : NotSigned (The file C:\tools\winsw\WinSW-x64-2.12.0.exe is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170)
+version info : ProductName 'Windows Service Wrapper', FileVersion 2.12.0.0, ProductVersion 2.12.0+eef5bade59fca0254e387ac73ed7625ba6aa7147, CompanyName 'CloudBees, Inc.', LegalCopyright 'Copyright (c) 2008-2020 Kohsuke Kawaguchi, Sun Microsystems, Inc., CloudBees, Inc., Oleg Nenashev and other contributors'
+expected SHA-256 (SOURCE.txt): 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA -> MATCH
+--- C:\tools\winsw\SOURCE.txt
+  WinSW (Windows Service Wrapper) for the TaidaFlow field package (w2-076)
+  ======================================================================
+  
+  File        : WinSW-x64-2.12.0.exe   (downloaded as WinSW-x64.exe, renamed to keep the version)
+  Version     : 2.12.0  (file version 2.12.0.0, product version 2.12.0+eef5bade59fca0254e387ac73ed7625ba6aa7147)
+  Kind        : self-contained .NET 6.0.13 single-file executable, win-x64 (no .NET installation needed;
+                imports only Windows DLLs and the UCRT api-ms-win-crt-* API sets of Windows 10/11)
+  Source      : official GitHub release of the winsw/winsw project
+                https://github.com/winsw/winsw/releases/tag/v2.12.0   (published 2023-01-28T16:22:38Z)
+                https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe
+  Downloaded  : 2026-09-29 (curl, HTTP 200, 18,243,033 bytes = size listed by the GitHub API for the asset)
+  SHA-256     : 05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA
+  Authenticode: NOT signed (Get-AuthenticodeSignature: NotSigned). The project publishes no signature and no
+                checksum for v2.12.0 (GitHub API "digest": null); the SHA-256 above is the one of the file
+                downloaded from the official release URL and is the reference for later copies.
+  Licence     : MIT - LICENSE.txt in this folder
+                (https://raw.githubusercontent.com/winsw/winsw/v2.12.0/LICENSE.txt)
+  Reference   : xmlConfigFile.md   (https://raw.githubusercontent.com/winsw/winsw/v2.12.0/doc/xmlConfigFile.md)
+                sample-allOptions.xml (https://github.com/winsw/winsw/releases/download/v2.12.0/sample-allOptions.xml)
+  Used by     : taidaflow\scripts\package-release.ps1 (default: the newest WinSW-x64-<version>.exe in this folder,
+                or -WinSW <exe>) copies it into the package as nginx\nginx-service.exe, with LICENSE.txt as
+                nginx\LICENSE-WinSW.txt and a generated nginx\SOURCE-WinSW.txt.
+  Not in git  : like nginx (C:\tools\nginx), this folder is outside the repository.
+--- C:\tools\winsw\LICENSE.txt (first 3 lines)
+  MIT License
+  
+  Copyright (c) 2008-2020 Kohsuke Kawaguchi, Sun Microsystems, Inc., CloudBees, Inc., Oleg Nenashev and other contributors
+git: files named *winsw* / nginx-service.exe|xml tracked: 0; pending (status): 0  (C:\tools\winsw is outside the repository)
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\show-winsw-tools.ps1
+started : 2026-09-29T16:56:32.9393178+08:00
+elapsed : 1s
+EXIT=0

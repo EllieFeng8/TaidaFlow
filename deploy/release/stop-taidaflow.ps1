@@ -13,7 +13,9 @@
 #
 # What it does:
 #   * nginx is NOT stopped (w2-062, Mango A6: nginx is independent of the app; stop it by hand with
-#     "cd <nginx folder>" + "nginx -s quit"). A running nginx is only reported.
+#     "cd <nginx folder>" + "nginx -s quit"). A running nginx is only reported. w2-076: nginx installed as
+#     the Windows service TaidaFlowNginx (scripts\install-nginx-service.ps1) is not stopped either
+#     (administrator: nginx\nginx-service.exe stop).
 #   * TaidaFlowApp - only the process recorded in <DataDir>\taidaflow-app.json (pid + image path +
 #      start time must match). It is closed like a user closing the window (WM_CLOSE to its main
 #      window), so the app runs its normal shutdown (HTTP service stop, SQLite close). The script
@@ -94,7 +96,11 @@ if ($script:launcherDir) { Log "log folder: $LogDir ($logDirNote)" } else { Log 
 # start-taidaflow.ps1). Stop it by hand when needed:  cd <nginx folder>  then  nginx -s quit
 $nginxFailed = $false
 $running = @(Get-Process nginx -ErrorAction SilentlyContinue)
-if ($running.Count) { Log ("nginx keeps running (pid {0}; stop it with: cd <nginx folder> ; nginx -s quit)" -f (($running | ForEach-Object { $_.Id }) -join ', ')) }
+# w2-076: nginx as the Windows service TaidaFlowNginx of this installation (scripts\install-nginx-service.ps1)
+$svc = Get-TaidaFlowNginxServiceInfo
+if ((Get-TaidaFlowNginxServiceMode $svc (Join-Path $install 'nginx\nginx-service.exe')) -eq 'ours') {
+    Log "nginx runs as the Windows service $($svc.Name) (state $($svc.State)) and keeps running - it is stopped only by an administrator: `"$install\nginx\nginx-service.exe`" stop"
+} elseif ($running.Count) { Log ("nginx keeps running (pid {0}; stop it with: cd <nginx folder> ; nginx -s quit)" -f (($running | ForEach-Object { $_.Id }) -join ', ')) }
 
 # --- the app (ours only) -------------------------------------------------------------------------
 $ours = $null

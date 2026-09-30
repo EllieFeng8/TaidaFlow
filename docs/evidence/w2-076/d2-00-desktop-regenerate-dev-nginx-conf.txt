@@ -1,0 +1,21 @@
+ninja: Entering directory `build\desktop'
+[1/1] Generating nginx/conf/nginx.conf from D:/repo/codex/qmlTester/taidaflow/deploy/dev/config.dev.json
+config.json: D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\build\desktop\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd)
+log folder : D:\repo\codex\qmlTester\taidaflow\build\runtime-cwd\logs (config.json log.dir = logs, file; nginx-error.log, nginx-access-YYYY-MM-DD.log)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+note: D:\repo\codex\qmlTester\taidaflow\build\desktop\web\TaidaFlowApp.html not deployed yet (scripts\deploy-web.ps1)
+nginx.conf is up to date: D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\conf\nginx.conf
+NGINX_CONF=unchanged
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf syntax is ok
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx/conf/nginx.conf test is successful
+----
+cmd     : C:\Qt\Tools\Ninja\ninja.exe -C build\desktop TaidaFlowApp
+started : 2026-09-29T16:46:54.7278305+08:00
+elapsed : 1s
+EXIT=0
+TaidaFlowApp.exe SHA-256 before: 5004EE71E118828E2D0476267328962B998265A4833A5AA9030CEDC34AB42162
+TaidaFlowApp.exe SHA-256 after : 5004EE71E118828E2D0476267328962B998265A4833A5AA9030CEDC34AB42162
+same: True

@@ -1,0 +1,44 @@
+[PASS] X1 well-formed XML - D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-076\d3-05-nginx-service.whatif.xml
+[PASS] X2 root element <service> - service
+[PASS] X3 <id> is a WinSW v2.12.0 element - value: TaidaFlowNginx
+[PASS] X3 <name> is a WinSW v2.12.0 element - value: TaidaFlow nginx (web, port 80)
+[PASS] X3 <description> is a WinSW v2.12.0 element - value: TaidaFlow web front end: nginx for Windows D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe (web page, /mirror, /exports, /api/ on port 80). Installed by scripts\install-nginx-service.ps1 of D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e.
+[PASS] X3 <executable> is a WinSW v2.12.0 element - value: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+[PASS] X3 <startarguments> is a WinSW v2.12.0 element - value: -p "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx"
+[PASS] X3 <stopexecutable> is a WinSW v2.12.0 element - value: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+[PASS] X3 <stoparguments> is a WinSW v2.12.0 element - value: -p "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx" -s quit
+[PASS] X3 <workingdirectory> is a WinSW v2.12.0 element - value: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx
+[PASS] X3 <startmode> is a WinSW v2.12.0 element - value: Automatic
+[PASS] X3 <onfailure> is a WinSW v2.12.0 element - value: action=restart delay=10 sec
+[PASS] X3 <resetfailure> is a WinSW v2.12.0 element - value: 1 hour
+[PASS] X3 <securityDescriptor> is a WinSW v2.12.0 element - value: D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)
+[PASS] X3 <logpath> is a WinSW v2.12.0 element - value: D:\repo\codex\qmlTester\taidaflow\build\w2-076-svc-test\data\logs
+[PASS] X3 <log> is a WinSW v2.12.0 element - value: mode=roll-by-size
+[PASS] X4 <log mode> is a WinSW mode - roll-by-size
+[PASS] X5 <log><sizeThreshold> is a WinSW log setting (integer) - 10240
+[PASS] X5 <log><keepFiles> is a WinSW log setting (integer) - 8
+[PASS] X6 <stoparguments> is used with <startarguments>, no <arguments> (WinSW appends <arguments> to the stop command)
+[PASS] X7 <startmode> is a ServiceStartMode name (Boot, System, Automatic, Manual, Disabled) - Automatic
+[PASS] X8 <onfailure action> restart|none|reboot - restart
+[PASS] X9 <securityDescriptor> accepted by RawSecurityDescriptor (as WinSW install does) - D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)
+     ACE NT AUTHORITY\SYSTEM                      access mask 0x201FD
+     ACE BUILTIN\Administrators                   access mask 0xF01FF
+     ACE NT AUTHORITY\INTERACTIVE                 access mask 0x2019D
+     ACE NT AUTHORITY\SERVICE                     access mask 0x2018D
+[PASS] X10 INTERACTIVE users may start (0x10) but not stop (0x20), change (0x2) or delete (0x10000) the service - 0x2019D
+[PASS] X11 <id> TaidaFlowNginx - TaidaFlowNginx
+[PASS] X12 <executable> = nginx.exe (full path) - D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+[PASS] X13 <startarguments> = -p "<nginx folder>" - -p "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx"
+[PASS] X14 <stopexecutable> = the same nginx.exe, <stoparguments> = -p "<nginx folder>" -s quit - -p "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx" -s quit
+[PASS] X15 <workingdirectory> = nginx folder - D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx
+[PASS] X16 <startmode> Automatic - Automatic
+[PASS] X17 <logpath> is an absolute folder (config.json log.dir) - D:\repo\codex\qmlTester\taidaflow\build\w2-076-svc-test\data\logs
+[PASS] X18 no % in any value (WinSW would expand %VAR%)
+     nginx-service.exe status (copy in D:\repo\codex\qmlTester\taidaflow\build\w2-076-svc-test\winsw-parse, logpath -> D:\repo\codex\qmlTester\taidaflow\build\w2-076-svc-test\winsw-parse\logs): exit 0 : NonExistent
+[PASS] X19 the real WinSW 2.12.0 loads the XML and answers "status" = NonExistent (nothing installed) - exit 0
+     wrapper.log | 2026-09-29 17:07:53,282 DEBUG - Starting WinSW in console mode
+[PASS] X20 WinSW version = 2.12.0 - WinSW 2.12.0.0
+[PASS] X21 still no service TaidaFlowNginx
+=== 35 check(s), 0 failed
+----
+EXIT=0

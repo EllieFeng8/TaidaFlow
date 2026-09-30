@@ -6,6 +6,9 @@
 #      conf\mime.types, no conf\nginx.conf), no path of the build machine in any text file or in
 #      TaidaFlowApp.exe (Mango A9); scripts\safety_probe.ps1 SAFE for the app defaults
 #      (192.168.1.201..205:502 unreachable, no COM2, ports free), otherwise nothing is started (exit 3).
+#      w2-076: nginx\nginx-service.exe (WinSW, SHA-256 in SOURCE-WinSW.txt + VERSION.txt), LICENSE-WinSW.txt, the
+#      four scripts install-/uninstall-nginx-service.ps1, add-/remove-startup-shortcut.ps1, no nginx-service.xml;
+#      whether the service TaidaFlowNginx exists on this PC is noted (not installed = the starts take the old path).
 #   A. FIRST START (nginx off): start -DataDir <data> -NoNginx. config.json is CREATED in the package
 #      by TaidaFlowApp.exe --write-default-config (same bytes as a fresh default file) and the data
 #      folder is created. The default dataDir is C:\TaidaFlowData - on this development PC the check
@@ -253,6 +256,21 @@ foreach ($want in 'nginx\nginx.exe', 'nginx\docs\LICENSE', 'nginx\conf\mime.type
     Check "package has $want" (Test-Path (Join-Path $Package $want) -PathType Leaf) ''
 }
 Check 'package has no nginx\conf\nginx.conf (written on the plant PC)' (-not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf'))) ''
+# w2-076: WinSW service wrapper + the field scripts for the nginx service and the Startup folder shortcut
+foreach ($want in 'nginx\nginx-service.exe', 'nginx\LICENSE-WinSW.txt', 'nginx\SOURCE-WinSW.txt', 'scripts\install-nginx-service.ps1',
+                  'scripts\uninstall-nginx-service.ps1', 'scripts\add-startup-shortcut.ps1', 'scripts\remove-startup-shortcut.ps1') {
+    Check "package has $want (w2-076)" (Test-Path (Join-Path $Package $want) -PathType Leaf) ''
+}
+$wsw = Join-Path $Package 'nginx\nginx-service.exe'
+if (Test-Path $wsw) {
+    $wswInfo = (Get-Item -LiteralPath $wsw).VersionInfo
+    $wswHash = Get-Sha $wsw
+    $wswSrc = [System.IO.File]::ReadAllText((Join-Path $Package 'nginx\SOURCE-WinSW.txt'))
+    Check 'nginx\nginx-service.exe = WinSW (Windows Service Wrapper), SHA-256 recorded in SOURCE-WinSW.txt and VERSION.txt' ($wswInfo.ProductName -eq 'Windows Service Wrapper' -and $wswSrc.Contains($wswHash) -and [System.IO.File]::ReadAllText((Join-Path $Package 'VERSION.txt')).Contains($wswHash)) "$($wswInfo.ProductVersion) $wswHash"
+}
+Check 'package has no nginx\nginx-service.xml (written on the plant PC by install-nginx-service.ps1)' (-not (Test-Path (Join-Path $Package 'nginx\nginx-service.xml'))) ''
+$svcHere = Get-TaidaFlowNginxServiceInfo
+Note "nginx service TaidaFlowNginx on this PC: $(if ($svcHere.Exists) { "EXISTS ($($svcHere.PathName), $($svcHere.State)) - the starts below may use it" } else { 'not installed - the starts below take the path without a service (start nginx), as before w2-076' })"
 Check 'package has no logging\quiet.ini and no logs\ (w2-065: the app writes its own log files)' (-not (Test-Path (Join-Path $Package 'logging')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
 Test-NoMachinePaths $Package '0.'
 $defaults = Get-TaidaFlowConfig -Path $pkgConfig -Exe $pkgExe
@@ -557,6 +575,7 @@ $webRt = Join-Path $Package 'web\runtime.json'
 [System.IO.File]::WriteAllText($webRt, (Get-TaidaFlowRuntimeJson (Get-TaidaFlowPagePort $defaults)), (New-Object System.Text.UTF8Encoding($false)))
 Note "package restored: config.json, nginx\conf\nginx.conf*, nginx\logs, nginx\temp, logs\ (fallback log of D) removed; web\runtime.json = the default one"
 Check 'E. package without config.json / nginx.conf / logs\ again' (-not (Test-Path $pkgConfig) -and -not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
+Check 'E. package without nginx\nginx-service.xml (w2-076)' (-not (Test-Path (Join-Path $Package 'nginx\nginx-service.xml'))) ''
 Test-NoMachinePaths $Package 'E.'
 $leftProc = @(Get-Process TaidaFlowApp, nginx -ErrorAction SilentlyContinue | Where-Object { -not ($pre | Where-Object Id -eq $_.Id) })
 Check 'E. no TaidaFlowApp / nginx of this check left' ($leftProc.Count -eq 0) (($leftProc | ForEach-Object { "$($_.ProcessName) $($_.Id)" }) -join ', ')

@@ -1,0 +1,6 @@
+2026-09-29 16:59:28 [stop]  === TaidaFlow stop (data folder D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data) ===
+2026-09-29 16:59:28 [stop]  log folder: D:\repo\codex\qmlTester\taidaflow\build\w2-076-verify-data\logs (taidaflow-app.json)
+2026-09-29 16:59:28 [stop]  closing TaidaFlowApp pid 77756 (WM_CLOSE to its window, like closing it by hand)
+2026-09-29 16:59:28 [stop]  TaidaFlowApp pid 77756 exited (exit code 0)
+2026-09-29 16:59:29 [stop]  listeners of pid 77756 left: 0
+2026-09-29 16:59:29 [stop]  stopped (exit 0)

@@ -1,0 +1,46 @@
+w2-076 D3/D7 - 人工核對:install-nginx-service.ps1 -WhatIf 產生的 nginx-service.xml(d3-05-nginx-service.whatif.xml)
+對照 WinSW v2.12.0 的欄位定義。依據(皆為 v2.12.0 tag):
+  [DOC] doc/xmlConfigFile.md(C:\tools\winsw\xmlConfigFile.md)
+  [SRC] src/WinSW.Core/Configuration/XmlServiceConfig.cs、src/WinSW/WrapperService.cs、src/WinSW/Program.cs
+        (從 https://raw.githubusercontent.com/winsw/winsw/v2.12.0/... 讀取,只用來核對,未放進 repo)
+自動檢查結果:d3-06-check-winsw-xml.txt(35 項 PASS,含真的 WinSW 2.12.0 讀這份 XML 回答 status = NonExistent)。
+
+元素                    產生的值                                   WinSW 定義 / 核對結果
+----------------------  -----------------------------------------  ------------------------------------------------------------
+<id>                    TaidaFlowNginx                             [DOC] id:服務內部名稱,英數字。[SRC] Name => SingleElement("id")。OK
+<name>                  TaidaFlow nginx (web, port 80)             [DOC] name:顯示名稱。[SRC] DisplayName => "name"。OK
+<description>           TaidaFlow web front end: ...               [DOC] description。install 時 sc.SetDescription。OK
+<executable>            <安裝>\nginx\nginx.exe(完整路徑)          [DOC] executable:可為絕對路徑。OK
+<startarguments>        -p "<安裝>\nginx"                          [DOC] stopargument/stopexecutable 節:有 <stoparguments> 時必須用
+                                                                   <startarguments> 而不是 <arguments>。[SRC] DoStart:startArguments +=
+                                                                   " " + Arguments(Arguments 預設空字串)。引號包住路徑,結尾不是反斜線
+                                                                   (避免 \" 跳脫)。nginx -p 會自動補 "/"(ngx_process_options)。OK
+<stopexecutable>        <安裝>\nginx\nginx.exe                     [DOC] 同上。[SRC] DoStop:executable = StopExecutable ?? Executable。OK
+<stoparguments>         -p "<安裝>\nginx" -s quit                  [SRC] DoStop:另起一個行程執行 stopexecutable + stoparguments,再等
+                                                                   主行程與停止行程結束(WaitForProcessToExit,不設上限;期間
+                                                                   RequestAdditionalTime)。-s quit 在 SYSTEM / session 0 內執行,可開到
+                                                                   nginx 的 Global\ngx_quit_<pid> 事件。OK(開著的 WebSocket 會讓它
+                                                                   一直等,已寫進 DEPLOY §2A.6 與腳本的 -StopTimeoutSec 提示)
+<workingdirectory>      <安裝>\nginx                               [DOC] workingdirectory。OK
+<startmode>             Automatic                                  [DOC] Boot/System/Automatic/Manual。[SRC] Enum.Parse(ServiceStartMode)。OK
+<onfailure>             action="restart" delay="10 sec"            [DOC] onfailure:restart/reboot/none,delay 後綴 sec/min/hour/day。
+                                                                   [SRC] install 時 SetFailureActions。OK(nginx 以 exit code 0 結束時
+                                                                   WinSW 回報 Stopped,不觸發,見 DEPLOY §2A.6「登出後」)
+<resetfailure>          1 hour                                     [DOC] resetfailure,預設 1 day。OK
+<securityDescriptor>    D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)             [DOC] Security descriptor(SDDL)。[SRC] install:
+                        (A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)       sc.SetSecurityDescriptor(new RawSecurityDescriptor(sddl))。
+                        (A;;CCLCSWRPLOCRRC;;;IU)                   RawSecurityDescriptor 解析通過(d3-06 X9);INTERACTIVE = 0x2019D:
+                        (A;;CCLCSWLOCRRC;;;SU)                     有 SERVICE_START(0x10),沒有 STOP(0x20)/CHANGE_CONFIG(0x2)/
+                                                                   DELETE(0x10000)(d3-06 X10)。只有 DACL(沒有 S: 部分,不需要
+                                                                   SeSecurityPrivilege)。SY/BA/SU 與 Windows 新服務的預設相同。OK
+<logpath>               config.json log.dir(完整路徑)              [DOC] logging 節:logpath。[SRC] LoadConfigAndInitLoggers:
+                                                                   <logpath>\<exe 名稱>.wrapper.log。OK
+<log mode>              roll-by-size, sizeThreshold 10240,         [DOC] loggingAndErrorReporting:roll-by-size(sizeThreshold KB、
+                        keepFiles 8                                keepFiles)。[SRC] XmlLogSettings SizeThreshold / KeepFiles。OK
+(沒有的元素)            arguments、serviceaccount、interactive、    arguments 不能與 stoparguments 並用;帳號用預設 LocalSystem;
+                        env、download、depend                      不需要互動桌面、環境變數、下載、相依服務。
+值裡的 %               無                                          [SRC] SingleElement 對每個值做 Environment.ExpandEnvironmentVariables,
+                                                                   路徑有 % 會被展開 → 產生器拒絕含 % " < > & 的路徑(d3-06 X18)。
+
+指令(Program.cs):install / uninstall / start / stop / restart / test 需要系統管理員,未提權時 Elevate()(跳出 UAC);
+status / version 不需要。本任務只在開發機執行過 status 與 version(d3-06 X19、X20),沒有執行 install / start。

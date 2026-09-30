@@ -1,0 +1,755 @@
+diff --git a/deploy/release/register-autostart.ps1 b/deploy/release/register-autostart.ps1
+index bce6f7b..45cc10b 100644
+--- a/deploy/release/register-autostart.ps1
++++ b/deploy/release/register-autostart.ps1
+@@ -19,12 +19,10 @@
+ #   For an unattended restart after a power failure the PC must log that user on automatically
+ #   (Windows automatic sign-in) - set up on site by the plant (decided, see DEPLOY.md section 7);
+ #   this script does not touch it.
+-#   If a headless service is ever wanted (web page only, no local HMI): wrap the exe with a service
+-#   wrapper such as WinSW (XML: <executable>C:\TaidaFlow\...\TaidaFlowApp.exe</executable>, the
+-#   settings in config.json next to it, <stopparentprocessfirst>, logs) or NSSM ("nssm install TaidaFlow <exe>", then
+-#   AppDirectory, AppEnvironmentExtra, AppStdout/AppStderr, AppStopMethodWindow). nginx can be
+-#   wrapped the same way (arguments -p <runtime>/ -c conf/taidaflow.conf, stop: -s quit). This is
+-#   NOT done or tested in this project; a service in session 0 has no local window at all.
++#   w2-076: nginx (no window) CAN be a Windows service: scripts\install-nginx-service.ps1 registers it with
++#   the bundled WinSW (service TaidaFlowNginx); start-taidaflow.ps1 then leaves nginx to Windows. The app
++#   stays a log-on start - by this task OR by the Startup folder shortcut of scripts\add-startup-shortcut.ps1
++#   (use one of the two; this script reports a TaidaFlow.lnk it finds, it never removes it).
+ #
+ # The task: action = powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden
+ #   -File "<this folder>\start-taidaflow.ps1" [-Config "<config.json>"] [-LogDir "<LogDir>"],
+@@ -112,6 +110,13 @@ Say "  action arguments  : $($action.Arguments)"
+ Say "  working directory : $($action.WorkingDirectory)"
+ Say "  settings          : MultipleInstances=$($settings.MultipleInstances) ExecutionTimeLimit=$($settings.ExecutionTimeLimit) StartWhenAvailable=$($settings.StartWhenAvailable) DisallowStartIfOnBatteries=$($settings.DisallowStartIfOnBatteries) StopIfGoingOnBatteries=$($settings.StopIfGoingOnBatteries)"
+ Say "  existing task     : $(if ($existing) { "YES (state $($existing.State)) - $(if ($Replace) { 'would be replaced (-Replace)' } else { 'refused without -Replace' })" } else { 'none' })"
++# w2-076: the other automatic start (Startup folder shortcut of scripts\add-startup-shortcut.ps1) - report only.
++foreach ($sd in @([Environment]::GetFolderPath('Startup'), [Environment]::GetFolderPath('CommonStartup'))) {
++    if ($sd -and (Test-Path -LiteralPath (Join-Path $sd 'TaidaFlow.lnk') -PathType Leaf)) {
++        Say "  NOTE: a Startup folder shortcut also starts TaidaFlow: $(Join-Path $sd 'TaidaFlow.lnk') - use only ONE automatic start"
++        Say "        (not removed automatically; remove it with scripts\remove-startup-shortcut.ps1$(if ($sd -eq [Environment]::GetFolderPath('CommonStartup')) { ' -AllUsers' }))"
++    }
++}
+ 
+ if (-not $PSCmdlet.ShouldProcess("\$TaskName (Task Scheduler, user $User)", 'Register-ScheduledTask')) {
+     Say "-WhatIf: NOTHING registered."
+diff --git a/deploy/release/start-taidaflow.bat b/deploy/release/start-taidaflow.bat
+index 78964e1..77e0925 100644
+--- a/deploy/release/start-taidaflow.bat
++++ b/deploy/release/start-taidaflow.bat
+@@ -15,6 +15,7 @@ echo.
+ echo start-taidaflow exit code %RC%
+ echo   0 = started   4 = already running or a port is in use (nothing started)
+ echo   6 = the app did not come up (see the log)   8 = started WITHOUT nginx
++echo   3 = started, but the nginx SERVICE still uses the old nginx.conf (run scripts\install-nginx-service.ps1 as administrator)
+ echo   2 = package, folder or config.json problem (see the message above)
+ echo   settings: %~dp0config.json   log folder: config.json log.dir (default C:\TaidaFlowData\logs)
+ if not defined TAIDAFLOW_NOPAUSE pause
+diff --git a/deploy/release/start-taidaflow.ps1 b/deploy/release/start-taidaflow.ps1
+index 7f99e2b..5936e7b 100644
+--- a/deploy/release/start-taidaflow.ps1
++++ b/deploy/release/start-taidaflow.ps1
+@@ -74,6 +74,21 @@
+ #      ("nginx -s quit" in its folder). If nginx is not available, the app is still started with
+ #      nginx.enabled=false (download links and runtime.json then use http.port / mirror.publicPort of
+ #      the app itself) and the script ends with exit 8.
++#      w2-076 - nginx as a Windows SERVICE (scripts\install-nginx-service.ps1: service TaidaFlowNginx, WinSW
++#      wrapper nginx\nginx-service.exe, LocalSystem, session 0). Whether it exists and belongs to THIS
++#      installation is read from Win32_Service (PathName = <this folder>\nginx\nginx-service.exe; readable by a
++#      normal user, unlike the path of the service's nginx processes). Then:
++#        * port check: the listener of nginx.port is fine when it is an nginx.exe whose parent chain reaches
++#          the service's process (Win32_Process ParentProcessId) - not "in use by another program";
++#        * nginx is NEVER started a second time with "start nginx": a running service is left as it is, a
++#          stopped one is started as a service (the service grants "start" to interactive users; if that
++#          fails -> exit 8 as above, an administrator starts it: nginx\nginx-service.exe start);
++#        * a regenerated nginx.conf cannot be applied with "nginx -s reload" (session-0 nginx of LocalSystem):
++#          as administrator the service is restarted; otherwise nothing is reloaded, the launcher log and the
++#          screen say "run scripts\install-nginx-service.ps1 (or nginx\nginx-service.exe restart) as
++#          administrator", the app is started as usual and the script ends with exit 3.
++#        A service TaidaFlowNginx of ANOTHER folder is only reported (the port check decides as before).
++#      Without the service (not installed) everything above behaves exactly as before w2-076.
+ #   5. Starts TaidaFlowApp.exe in the data folder without a console window (the app writes its own log
+ #      files; w2-065) and waits until the app listens on http.port and mirror.publicPort (the others are
+ #      reported too). What the app writes straight to stderr/stdout during these seconds (normally
+@@ -83,7 +98,9 @@
+ #
+ # Exit codes: 0 started; 2 package incomplete / folder not usable / config.json unusable; 4 refused
+ # (already running or port in use); 6 the app exited during start-up, or its ports were not listening
+-# in time (the app is left running if it is alive - see the log); 8 app started but nginx did not.
++# in time (the app is left running if it is alive - see the log); 8 app started but nginx did not;
++# 3 (w2-076) app and nginx started, but nginx.conf was regenerated and the nginx SERVICE still uses the old
++# one (not an administrator - see step 4).
+ param(
+     [string]$Config = "",
+     [string]$DataDir = "",
+@@ -225,12 +242,28 @@ foreach ($p in $running) {
+ }
+ $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $ports -contains $_.LocalPort })
+ $cfgNginxExe = Resolve-TaidaFlowNginxExe $cfg
++# w2-076: nginx as the Windows service TaidaFlowNginx (scripts\install-nginx-service.ps1). 'none' = not
++# installed (everything below as before), 'ours' = its wrapper is <this folder>\nginx\nginx-service.exe,
++# 'other' = the service of another installation folder (only reported).
++$wrapperExe = Join-Path $install 'nginx\nginx-service.exe'
++$svc = Get-TaidaFlowNginxServiceInfo
++$svcMode = Get-TaidaFlowNginxServiceMode $svc $wrapperExe
++if ($svc.Error) { Log "WARNING: $($svc.Error) - handled as 'no nginx service'" }
++if ($svcMode -eq 'ours') { Log "nginx service: $($svc.Name) of this installation ($($svc.PathName); state $($svc.State), start mode $($svc.StartMode), wrapper pid $($svc.ProcessId))" }
++elseif ($svcMode -eq 'other') { Log "WARNING: a service $($svc.Name) exists but runs $($svc.ExePath) (another installation folder, state $($svc.State)) - not used by this start" }
++$procTable = $null
+ foreach ($l in $listeners) {
+     $ownerPath = try { (Get-Process -Id $l.OwningProcess -ErrorAction Stop).Path } catch { '' }
+     if ($useNginxNow -and $l.LocalPort -eq [int]$v['nginx.port'] -and [string]::Equals($ownerPath, $cfgNginxExe, [System.StringComparison]::OrdinalIgnoreCase)) {
+         Log "port $($l.LocalPort) = the configured nginx, already running (pid $($l.OwningProcess)) - fine"
+         continue
+     }
++    if ($useNginxNow -and $l.LocalPort -eq [int]$v['nginx.port'] -and $svcMode -eq 'ours') {
++        if ($null -eq $procTable) { $procTable = Get-TaidaFlowProcessTable }
++        $own = Test-TaidaFlowNginxServiceOwner -Service $svc -WrapperExe $wrapperExe -OwningPid ([int]$l.OwningProcess) -Processes $procTable
++        if ($own.Ours) { Log "port $($l.LocalPort) = the nginx service $($svc.Name) of this installation ($($own.Reason)) - fine"; continue }
++        Log "  port $($l.LocalPort): not the nginx service of this installation ($($own.Reason))"
++    }
+     $owner = try { $pp = Get-Process -Id $l.OwningProcess -ErrorAction Stop; "$($pp.ProcessName) $($pp.Path)".Trim() } catch { '?' }
+     if ($l.OwningProcess -eq 4) { $owner = 'System = Windows HTTP.sys (IIS, WinRM, WebDAV, a URL reservation ...; check: netsh http show servicestate)' }
+     Log ("REFUSED: port {0} ({4}) already in use ({1}:{0}, pid {2}, {3}) - the owner is not stopped" -f $l.LocalPort, $l.LocalAddress, $l.OwningProcess, $owner, $portNames["$($l.LocalPort)"])
+@@ -274,9 +307,20 @@ Set-AppConfigFile
+ # nginx is independent of the app: started the standard way ("cd <nginx folder>" + "start nginx", no
+ # arguments) with <nginx folder>\conf\nginx.conf written once by scripts\install-nginx-config.ps1.
+ # Already running -> left as it is. stop-taidaflow.ps1 does not stop it ("nginx -s quit").
++# w2-076: when the Windows service TaidaFlowNginx of this installation exists ($svcMode 'ours'), Windows
++# runs nginx: it is never started here with "start nginx" (a stopped service is started as a service),
++# and a regenerated nginx.conf is applied by restarting the service (administrator only; otherwise
++# exit 3 with a message). The decisions are Get-TaidaFlowNginxConfAction / Get-TaidaFlowNginxStartAction.
+ $nginxOk = $false
+ $nginxStartedNow = $false
+ $nginxProblem = ''
++$nginxConfNotApplied = $false
++function Wait-NginxService([string]$name, [string]$status, [int]$seconds) {
++    $sc = New-Object System.ServiceProcess.ServiceController $name
++    $sc.WaitForStatus($status, [TimeSpan]::FromSeconds($seconds))
++    $sc.Refresh()
++    return [string]$sc.Status
++}
+ if ($useNginxNow) {
+     $nginxExe = Resolve-TaidaFlowNginxExe $cfg
+     $nginxDir = Split-Path -Parent $nginxExe
+@@ -284,6 +328,14 @@ if ($useNginxNow) {
+     $nginxPort = [int]$v['nginx.port']
+     Log "nginx: $nginxExe (config.json nginx.exe = $($v['nginx.exe']), $($cfg.Sources['nginx.exe']); relative = to the folder of config.json)"
+     $mine = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } })
++    if ($svcMode -eq 'ours') {
++        Add-Type -AssemblyName System.ServiceProcess
++        Log "nginx runs as the Windows service $($svc.Name) (state $($svc.State)): started / stopped by Windows, never started here with 'start nginx'"
++        $xmlExe = Get-TaidaFlowNginxServiceXmlExecutable (Join-Path $install 'nginx\nginx-service.xml')
++        if ($xmlExe -and -not [string]::Equals($xmlExe, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase)) {
++            Log "WARNING: the service runs $xmlExe (nginx\nginx-service.xml), config.json nginx.exe is $nginxExe - run scripts\install-nginx-service.ps1 as administrator to update the service"
++        }
++    }
+     $confOk = $false
+     if (-not (Test-Path $nginxExe -PathType Leaf)) {
+         $nginxProblem = "nginx.exe not found: $nginxExe"
+@@ -299,36 +351,86 @@ if ($useNginxNow) {
+         if ($genRc -eq 0 -or $genRc -eq 4) {
+             $confOk = $true
+             if ($written) { Log "nginx.conf regenerated for this installation / config.json (see above)" }
+-            if ($written -and $mine.Count) {
++            if ($genRc -eq 4 -and $svcMode -eq 'ours') { Log "  (install-nginx-config.ps1 cannot read the path of the service's nginx, so it reports 'ANOTHER program' above - the port $nginxPort listener was checked against the service instead)" }
++            $isAdmin = Test-TaidaFlowIsAdministrator
++            $confAction = Get-TaidaFlowNginxConfAction $written $svcMode $svc.State $isAdmin ($mine.Count -gt 0)
++            if ($confAction -eq 'reload') {
+                 Log "nginx is running with the old file - applying the new one: nginx -s reload (from $nginxDir)"
+                 $rp = Start-Process -FilePath $nginxExe -ArgumentList @('-s', 'reload') -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
+                 $null = $rp.Handle
+                 if (-not $rp.WaitForExit(20000) -or $rp.ExitCode -ne 0) { Log "WARNING: nginx -s reload did not succeed (exit $(try { $rp.ExitCode } catch { '?' }))" }
++            } elseif ($confAction -eq 'restart-service') {
++                Log "the nginx service $($svc.Name) runs with the old file - applying the new one: restarting the service (administrator)"
++                try {
++                    $sc = New-Object System.ServiceProcess.ServiceController $svc.Name
++                    $sc.Stop()
++                    $st = Wait-NginxService $svc.Name 'Stopped' 60
++                    $sc.Refresh(); $sc.Start()
++                    $st = Wait-NginxService $svc.Name 'Running' 30
++                    Log "service $($svc.Name) restarted (state $st)"
++                } catch {
++                    Log "WARNING: restarting the service $($svc.Name) failed: $($_.Exception.Message) - open web pages with live synchronisation can keep nginx busy; see DEPLOY.md (nginx service, common errors)"
++                }
++                $svc = Get-TaidaFlowNginxServiceInfo
++            } elseif ($confAction -eq 'tell-admin') {
++                $nginxConfNotApplied = $true
++                $msg = @(
++                    "NOT APPLIED: nginx.conf was regenerated, but nginx runs as the Windows service $($svc.Name) (LocalSystem) and this start",
++                    "  is not an administrator, so the new file is NOT applied (no 'nginx -s reload': it cannot reach the service's nginx).",
++                    "  nginx keeps serving with the OLD nginx.conf. Apply it as an administrator (right-click cmd: Run as administrator):",
++                    "    powershell -NoProfile -ExecutionPolicy Bypass -File `"$install\scripts\install-nginx-service.ps1`"",
++                    "  or   `"$install\nginx\nginx-service.exe`" restart",
++                    "  The app is started as usual (exit 3 at the end).")
++                foreach ($m in $msg) { Log $m }
+             }
+         } else {
+             $nginxProblem = "nginx.conf could not be generated / checked (install-nginx-config.ps1 exit $genRc)"
+         }
+     }
+     if ($confOk) {
+-        if ($mine.Count) {
+-            Log "nginx is already running (pid $(($mine | ForEach-Object { $_.Id }) -join ', ')) - left as it is"
++        $startAction = Get-TaidaFlowNginxStartAction $svcMode $svc.State ($mine.Count -gt 0)
++        if ($startAction -eq 'leave') {
++            if ($svcMode -eq 'ours') { Log "nginx service $($svc.Name) is $($svc.State) - left as it is" }
++            else { Log "nginx is already running (pid $(($mine | ForEach-Object { $_.Id }) -join ', ')) - left as it is" }
++        } elseif ($startAction -eq 'start-service') {
++            Log "nginx service $($svc.Name) is $($svc.State) - starting the SERVICE (not 'start nginx')"
++            try {
++                $sc = New-Object System.ServiceProcess.ServiceController $svc.Name
++                $sc.Start()
++                $st = Wait-NginxService $svc.Name 'Running' 30
++                Log "service $($svc.Name) started (state $st)"
++                $nginxStartedNow = $true
++            } catch {
++                $nginxProblem = "the nginx service $($svc.Name) is $($svc.State) and could not be started ($($_.Exception.Message)) - an administrator starts it: `"$install\nginx\nginx-service.exe`" start (or services.msc), see $LogDir\nginx-service.wrapper.log"
++            }
++            $svc = Get-TaidaFlowNginxServiceInfo
+         } else {
+             Log "starting nginx like 'cd $nginxDir' + 'start nginx' (no arguments)"
+             $np = Start-Process -FilePath $nginxExe -WorkingDirectory $nginxDir -WindowStyle Hidden -PassThru
+             $null = $np.Handle
+             $nginxStartedNow = $true
+         }
+-        $t0 = Get-Date
+-        do {
+-            Start-Sleep -Milliseconds 250
+-            $ids = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } } | ForEach-Object { $_.Id })
+-            $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue | Where-Object { $ids -contains $_.OwningProcess })
+-        } while ($l.Count -eq 0 -and ((Get-Date) - $t0).TotalSeconds -lt 20)
+-        if ($l.Count -gt 0) { $nginxOk = $true; Log "nginx listening on $($l[0].LocalAddress):$nginxPort (pid $($l[0].OwningProcess)); logs: $LogDir\nginx-access-YYYY-MM-DD.log, nginx-error.log" }
+-        else {
+-            $nginxProblem = "nginx does not listen on port $nginxPort within 20 s (see $LogDir\nginx-error.log and $nginxDir\logs\error.log)"
+-            foreach ($err in (Join-Path $LogDir 'nginx-error.log'), (Join-Path $nginxDir 'logs\error.log')) {
+-                if (Test-Path $err) { Get-Content -LiteralPath $err -Tail 5 | ForEach-Object { Log "  $(Split-Path -Leaf $err) | $_" } }
++        if (-not $nginxProblem) {
++            $t0 = Get-Date
++            do {
++                Start-Sleep -Milliseconds 250
++                if ($svcMode -eq 'ours') {
++                    # the service's nginx: owner = nginx.exe under the wrapper process (path not readable)
++                    $svcNow = Get-TaidaFlowNginxServiceInfo
++                    $table = Get-TaidaFlowProcessTable
++                    $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue |
++                           Where-Object { (Test-TaidaFlowNginxServiceOwner -Service $svcNow -WrapperExe $wrapperExe -OwningPid ([int]$_.OwningProcess) -Processes $table).Ours })
++                } else {
++                    $ids = @(Get-Process nginx -ErrorAction SilentlyContinue | Where-Object { try { [string]::Equals($_.Path, $nginxExe, [System.StringComparison]::OrdinalIgnoreCase) } catch { $false } } | ForEach-Object { $_.Id })
++                    $l = @(Get-NetTCPConnection -State Listen -LocalPort $nginxPort -ErrorAction SilentlyContinue | Where-Object { $ids -contains $_.OwningProcess })
++                }
++            } while ($l.Count -eq 0 -and ((Get-Date) - $t0).TotalSeconds -lt 20)
++            if ($l.Count -gt 0) { $nginxOk = $true; Log "nginx listening on $($l[0].LocalAddress):$nginxPort (pid $($l[0].OwningProcess)$(if ($svcMode -eq 'ours') { ", service $($svc.Name)" })); logs: $LogDir\nginx-access-YYYY-MM-DD.log, nginx-error.log" }
++            else {
++                $nginxProblem = "nginx does not listen on port $nginxPort within 20 s (see $LogDir\nginx-error.log and $nginxDir\logs\error.log$(if ($svcMode -eq 'ours') { ", $LogDir\nginx-service.wrapper.log" }))"
++                foreach ($err in (Join-Path $LogDir 'nginx-error.log'), (Join-Path $nginxDir 'logs\error.log')) {
++                    if (Test-Path $err) { Get-Content -LiteralPath $err -Tail 5 | ForEach-Object { Log "  $(Split-Path -Leaf $err) | $_" } }
++                }
+             }
+         }
+     }
+@@ -387,6 +489,7 @@ $state = [ordered]@{
+     pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks; startTime = $p.StartTime.ToString('o')
+     config = $env:TAIDAFLOW_CONFIG; dataDir = $DataDir; logDir = $LogDir; appLog = $fullLog; appQuietLog = $quietLog
+     useNginx = $useNginxNow; nginxAvailable = $nginxOk; nginxStartedByThisScript = $nginxStartedNow
++    nginxService = $(if ($svcMode -eq 'ours') { $svc.Name } else { '' }); nginxConfNotApplied = $nginxConfNotApplied
+     nginxPort = $(if ($useNginxNow) { [int]$v['nginx.port'] } else { 0 }); downloadPort = (Get-TaidaFlowDownloadPort $cfg)
+     httpPort = [int]$v['http.port']; mirrorPublicPort = [int]$v['mirror.publicPort']; mirrorInternalPort = [int]$v['mirror.internalPort']
+     restPort = [int]$v['rest.port']; modbusServerPort = [int]$v['modbusServer.port']
+@@ -455,5 +558,6 @@ foreach ($ip in @($ips) + @('127.0.0.1')) {
+     else { Log "web page: http://${ip}:$($v['http.port'])/TaidaFlowApp.html  (mirror ${ip}:$($v['mirror.publicPort']))" }
+ }
+ if ($useNginxNow -and -not $nginxOk) { Log "started WITHOUT nginx (exit 8)"; exit 8 }
++if ($nginxConfNotApplied) { Log "started - but the regenerated nginx.conf is NOT applied to the nginx service (see NOT APPLIED above; run scripts\install-nginx-service.ps1 as administrator) (exit 3)"; exit 3 }
+ Log "started (exit 0)"
+ exit 0
+diff --git a/deploy/release/stop-taidaflow.ps1 b/deploy/release/stop-taidaflow.ps1
+index 7549550..7c7fa06 100644
+--- a/deploy/release/stop-taidaflow.ps1
++++ b/deploy/release/stop-taidaflow.ps1
+@@ -13,7 +13,9 @@
+ #
+ # What it does:
+ #   * nginx is NOT stopped (w2-062, Mango A6: nginx is independent of the app; stop it by hand with
+-#     "cd <nginx folder>" + "nginx -s quit"). A running nginx is only reported.
++#     "cd <nginx folder>" + "nginx -s quit"). A running nginx is only reported. w2-076: nginx installed as
++#     the Windows service TaidaFlowNginx (scripts\install-nginx-service.ps1) is not stopped either
++#     (administrator: nginx\nginx-service.exe stop).
+ #   * TaidaFlowApp - only the process recorded in <DataDir>\taidaflow-app.json (pid + image path +
+ #      start time must match). It is closed like a user closing the window (WM_CLOSE to its main
+ #      window), so the app runs its normal shutdown (HTTP service stop, SQLite close). The script
+@@ -94,7 +96,11 @@ if ($script:launcherDir) { Log "log folder: $LogDir ($logDirNote)" } else { Log
+ # start-taidaflow.ps1). Stop it by hand when needed:  cd <nginx folder>  then  nginx -s quit
+ $nginxFailed = $false
+ $running = @(Get-Process nginx -ErrorAction SilentlyContinue)
+-if ($running.Count) { Log ("nginx keeps running (pid {0}; stop it with: cd <nginx folder> ; nginx -s quit)" -f (($running | ForEach-Object { $_.Id }) -join ', ')) }
++# w2-076: nginx as the Windows service TaidaFlowNginx of this installation (scripts\install-nginx-service.ps1)
++$svc = Get-TaidaFlowNginxServiceInfo
++if ((Get-TaidaFlowNginxServiceMode $svc (Join-Path $install 'nginx\nginx-service.exe')) -eq 'ours') {
++    Log "nginx runs as the Windows service $($svc.Name) (state $($svc.State)) and keeps running - it is stopped only by an administrator: `"$install\nginx\nginx-service.exe`" stop"
++} elseif ($running.Count) { Log ("nginx keeps running (pid {0}; stop it with: cd <nginx folder> ; nginx -s quit)" -f (($running | ForEach-Object { $_.Id }) -join ', ')) }
+ 
+ # --- the app (ours only) -------------------------------------------------------------------------
+ $ours = $null
+diff --git a/scripts/check-package-deps.ps1 b/scripts/check-package-deps.ps1
+index 540267c..d3b2d5a 100644
+--- a/scripts/check-package-deps.ps1
++++ b/scripts/check-package-deps.ps1
+@@ -6,6 +6,11 @@
+ # same process), %SystemRoot%\System32, or an API set (api-ms-win-* / ext-ms-*, resolved by
+ # Windows). Delay-load imports are listed separately (optional at run time) and not required.
+ # A Qt install on PATH is NOT used, so a DLL that only exists in C:\Qt\... counts as missing.
++# w2-076: a self-contained .NET single-file program (nginx\nginx-service.exe = WinSW v2.12.0, .NET 6) carries
++# the .NET runtime INSIDE the exe (bundle marker with a header offset inside the file): its import table is all
++# it needs from outside and is checked like any other PE (Windows DLLs + the UCRT api-ms-win-crt-* API sets of
++# Windows 10/11). Such a file is labelled "self-contained .NET single file"; a .NET apphost that is NOT a
++# bundle (it would need a .NET installation or runtime DLLs beside it) counts as missing ".NET runtime".
+ #
+ # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-package-deps.ps1 -Package <folder> [-Dumpbin <dumpbin.exe>]
+ # Exit codes: 0 all imports resolved; 1 at least one import missing; 2 package / dumpbin not found.
+@@ -31,6 +36,27 @@ Get-ChildItem -LiteralPath $Package -File -Filter '*.dll' | ForEach-Object { $lo
+ $pe = @(Get-ChildItem -LiteralPath $Package -Recurse -File | Where-Object { $_.Extension -in '.exe', '.dll' } | Sort-Object FullName)
+ $missingTotal = 0
+ $delayed = @{}
++# .NET single-file bundle marker (dotnet/runtime corehost bundle_marker: 8-byte header offset + SHA-256 of
++# ".net core bundle"); the offset is 0 in a plain apphost and points inside the file in a bundle.
++$bundleSig = [byte[]](0x8b, 0x12, 0x02, 0xb9, 0x6a, 0x61, 0x20, 0x38, 0x72, 0x7b, 0x93, 0x02, 0x14, 0xd7, 0xa0, 0x32,
++                      0x13, 0xf5, 0xb9, 0xe6, 0xef, 0xae, 0x33, 0x18, 0xee, 0x3b, 0x2d, 0xce, 0x24, 0xb3, 0x6a, 0xae)
++$latin1 = [System.Text.Encoding]::GetEncoding(28591)
++$bundleSigText = $latin1.GetString($bundleSig)
++function Get-DotNetKind([string]$path) {
++    $bytes = [System.IO.File]::ReadAllBytes($path)
++    $text = $latin1.GetString($bytes)
++    $i = $text.IndexOf($bundleSigText, [System.StringComparison]::Ordinal)
++    if ($i -lt 8) {
++        if ($text.IndexOf('hostfxr', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $text.IndexOf('.NETCoreApp', [System.StringComparison]::Ordinal) -ge 0) { return 'apphost' }
++        return ''
++    }
++    $offset = [BitConverter]::ToInt64($bytes, $i - 8)
++    if ($offset -gt 0 -and $offset -lt $bytes.Length) {
++        $rt = [regex]::Match($text, 'Microsoft\.NETCore\.App\.Runtime\.win-[a-z0-9]+/([0-9.]+)')
++        return "bundle$(if ($rt.Success) { " .NET $($rt.Groups[1].Value)" })"
++    }
++    return 'apphost'
++}
+ $ErrorActionPreference = 'Continue'
+ foreach ($f in $pe) {
+     $out = & $Dumpbin /nologo /dependents $f.FullName 2>&1 | ForEach-Object { "$_" }
+@@ -54,11 +80,17 @@ foreach ($f in $pe) {
+         $missing += $d
+     }
+     foreach ($d in $delay) { $delayed[$d.ToLowerInvariant()] = $true }
++    $netNote = ''
++    if ($f.Extension -eq '.exe') {
++        $kind = Get-DotNetKind $f.FullName
++        if ($kind -like 'bundle*') { $netNote = "; self-contained .NET single file ($($kind.Substring(6).Trim()), runtime inside the exe)" }
++        elseif ($kind -eq 'apphost') { $missing += '.NET runtime (framework-dependent .NET apphost, not a self-contained single file)' }
++    }
+     if ($missing.Count) {
+         Say ("MISSING  {0}: {1}" -f $rel, ($missing -join ', '))
+         $missingTotal += $missing.Count
+     } else {
+-        Say ("ok       {0} ({1} import(s){2})" -f $rel, $deps.Count, $(if ($delay.Count) { ", delay-load: " + ($delay -join ', ') } else { '' }))
++        Say ("ok       {0} ({1} import(s){2}{3})" -f $rel, $deps.Count, $(if ($delay.Count) { ", delay-load: " + ($delay -join ', ') } else { '' }), $netNote)
+     }
+ }
+ $ErrorActionPreference = 'Stop'
+diff --git a/scripts/package-release.ps1 b/scripts/package-release.ps1
+index 97033ba..c4d3310 100644
+--- a/scripts/package-release.ps1
++++ b/scripts/package-release.ps1
+@@ -25,6 +25,14 @@
+ #                                        nginx.exe), else the newest C:\tools\nginx\nginx-<version> (the build PC's
+ #                                        convention, as CMake TAIDAFLOW_NGINX_DIR). The PACKAGE never names that
+ #                                        folder: its config.json default is nginx\nginx.exe (the bundled copy).
++#   nginx\nginx-service.exe,             (w2-076) WinSW v2.12.0 (self-contained .NET single file, MIT) = the
++#   nginx\LICENSE-WinSW.txt,             service wrapper of scripts\install-nginx-service.ps1 (service
++#   nginx\SOURCE-WinSW.txt               TaidaFlowNginx); from -WinSW <WinSW-x64-<version>.exe>, default the newest
++#                                        C:\tools\winsw\WinSW-x64-<version>.exe (the build PC's convention, like
++#                                        C:\tools\nginx); LICENSE.txt must be in the same folder. nginx-service.xml
++#                                        is NOT in the package (written on the plant PC by install-nginx-service.ps1).
++#   scripts\install-nginx-service.ps1, scripts\uninstall-nginx-service.ps1,
++#   scripts\add-startup-shortcut.ps1, scripts\remove-startup-shortcut.ps1        (w2-076, field scripts)
+ #   DEPLOY.md                            = docs\DEPLOY_AND_STARTUP.md
+ #   VERSION.txt, MANIFEST.txt            build information; every file with size and SHA-256
+ # w2-062: NO config.json (created on the plant PC at the first start by TaidaFlowApp.exe
+@@ -34,15 +42,17 @@
+ # config.json, Python files, __pycache__ (checked at the end; any hit fails the packaging).
+ #
+ # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1
+-#            [-NginxDir <nginx folder>] [-OutDir dist] [-BuildDir build\desktop] [-WebSource build\wasm-release] [-Force] [-AllowStale]
++#            [-NginxDir <nginx folder>] [-WinSW <WinSW-x64-<version>.exe>] [-OutDir dist] [-BuildDir build\desktop]
++#            [-WebSource build\wasm-release] [-Force] [-AllowStale]
+ #   -Force      : replace an existing package folder of the same name (only below -OutDir)
+ #   -AllowStale : package even when ninja reports that build\desktop or build\wasm-release is not
+ #                 up to date (not recommended: the folder name carries the current git hash)
+-# Exit codes: 0 packaged; 2 missing input (build, web, CRT, windeployqt); 3 build not up to
++# Exit codes: 0 packaged; 2 missing input (build, web, CRT, windeployqt, nginx, WinSW); 3 build not up to
+ # date; 4 package folder exists (use -Force); 5 windeployqt / deploy-web failed; 6 forbidden file
+ # found in the package.
+ param(
+     [string]$NginxDir = "",
++    [string]$WinSW = "",
+     [string]$OutDir = "dist",
+     [string]$BuildDir = "build\desktop",
+     [string]$WebSource = "build\wasm-release",
+@@ -106,9 +116,33 @@ foreach ($required in 'TaidaFlowApp.html', 'TaidaFlowApp.js', 'TaidaFlowApp.wasm
+ foreach ($f in 'deploy\release\start-taidaflow.ps1', 'deploy\release\stop-taidaflow.ps1', 'deploy\release\start-taidaflow.bat',
+                'deploy\release\stop-taidaflow.bat', 'deploy\release\register-autostart.ps1', 'deploy\release\unregister-autostart.ps1',
+                'deploy\nginx\taidaflow.conf',
+-               'scripts\install-nginx-config.ps1', 'scripts\taidaflow-config.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md') {
++               'scripts\install-nginx-config.ps1', 'scripts\taidaflow-config.ps1', 'scripts\deploy-web.ps1', 'docs\DEPLOY_AND_STARTUP.md',
++               'scripts\install-nginx-service.ps1', 'scripts\uninstall-nginx-service.ps1',
++               'scripts\add-startup-shortcut.ps1', 'scripts\remove-startup-shortcut.ps1') {
+     if (-not (Test-Path (Join-Path $root $f) -PathType Leaf)) { Say "missing: $f"; exit 2 }
+ }
++# WinSW (w2-076): -WinSW, else the newest C:\tools\winsw\WinSW-x64-<version>.exe; LICENSE.txt beside it.
++$winswFrom = '-WinSW'
++if ($WinSW -eq "") {
++    $winswFrom = 'newest C:\tools\winsw\WinSW-x64-<version>.exe'
++    $bestW = $null; $bestWVer = $null
++    foreach ($f in @(Get-ChildItem 'C:\tools\winsw' -File -Filter 'WinSW-x64-*.exe' -ErrorAction SilentlyContinue)) {
++        $wv = $null
++        if ([version]::TryParse($f.BaseName.Substring(10), [ref]$wv) -and ($null -eq $bestWVer -or $wv -gt $bestWVer)) { $bestW = $f.FullName; $bestWVer = $wv }
++    }
++    $WinSW = $bestW
++}
++if (-not $WinSW -or -not (Test-Path -LiteralPath $WinSW -PathType Leaf)) {
++    Say "WinSW not found (-WinSW '$WinSW'): download https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe to C:\tools\winsw\WinSW-x64-2.12.0.exe with LICENSE.txt (docs\BUILD.md, WinSW)"
++    exit 2
++}
++$WinSW = [System.IO.Path]::GetFullPath($WinSW)
++$winswLicense = Join-Path (Split-Path -Parent $WinSW) 'LICENSE.txt'
++if (-not (Test-Path -LiteralPath $winswLicense -PathType Leaf)) { Say "WinSW licence not found: $winswLicense (LICENSE.txt of the same release, beside the exe)"; exit 2 }
++$winswInfo = (Get-Item -LiteralPath $WinSW).VersionInfo
++$winswVer = (("$($winswInfo.ProductVersion)" -split '\+')[0]).Trim()
++if ($winswInfo.ProductName -ne 'Windows Service Wrapper' -or -not $winswVer) { Say "$WinSW is not WinSW (product '$($winswInfo.ProductName)', version '$($winswInfo.ProductVersion)')"; exit 2 }
++Say "WinSW to bundle: $WinSW ($winswVer, from $winswFrom)"
+ # nginx for Windows to bundle (Mango A7). w2-065: first the nginx.exe of the development config.json.
+ function Test-NginxDir([string]$d) { return ($d -and (Test-Path (Join-Path $d 'nginx.exe')) -and (Test-Path (Join-Path $d 'docs\LICENSE')) -and (Test-Path (Join-Path $d 'conf\mime.types'))) }
+ $nginxFrom = '-NginxDir'
+@@ -205,6 +239,9 @@ foreach ($f in 'start-taidaflow.ps1', 'stop-taidaflow.ps1', 'start-taidaflow.bat
+ New-Item -ItemType Directory -Force (Join-Path $pkg 'scripts'), (Join-Path $pkg 'deploy\nginx') | Out-Null
+ Copy-Item -LiteralPath (Join-Path $root 'scripts\install-nginx-config.ps1') -Destination (Join-Path $pkg 'scripts')
+ Copy-Item -LiteralPath (Join-Path $root 'scripts\taidaflow-config.ps1') -Destination (Join-Path $pkg 'scripts')
++foreach ($f in 'install-nginx-service.ps1', 'uninstall-nginx-service.ps1', 'add-startup-shortcut.ps1', 'remove-startup-shortcut.ps1') {
++    Copy-Item -LiteralPath (Join-Path $root "scripts\$f") -Destination (Join-Path $pkg 'scripts')
++}
+ Copy-Item -LiteralPath (Join-Path $root 'deploy\nginx\taidaflow.conf') -Destination (Join-Path $pkg 'deploy\nginx')
+ Copy-Item -LiteralPath (Join-Path $root 'docs\DEPLOY_AND_STARTUP.md') -Destination (Join-Path $pkg 'DEPLOY.md')
+ 
+@@ -230,6 +267,26 @@ $nginxHash = (Get-FileHash -Algorithm SHA256 (Join-Path $nDir 'nginx.exe')).Hash
+     "the request / error logs are written to config.json log.dir (nginx-access-YYYY-MM-DD.log, nginx-error.log)."))
+ Say "nginx: $nginxVer bundled (nginx.exe + docs\ + conf\ without nginx.conf)"
+ 
++# --- 5b. WinSW = nginx\nginx-service.exe (w2-076) ------------------------------------------------------------
++# Copied unchanged under the name the service uses (WinSW reads <its own name>.xml = nginx-service.xml, written
++# on the plant PC by scripts\install-nginx-service.ps1 - never shipped).
++Copy-Item -LiteralPath $WinSW -Destination (Join-Path $nDir 'nginx-service.exe')
++Copy-Item -LiteralPath $winswLicense -Destination (Join-Path $nDir 'LICENSE-WinSW.txt')
++$winswHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $nDir 'nginx-service.exe')).Hash
++$winswSig = (Get-AuthenticodeSignature -LiteralPath (Join-Path $nDir 'nginx-service.exe')).Status
++[System.IO.File]::WriteAllLines((Join-Path $nDir 'SOURCE-WinSW.txt'), [string[]]@(
++    "nginx-service.exe = WinSW (Windows Service Wrapper) $winswVer, WinSW-x64.exe of the official GitHub release, unchanged:",
++    "  https://github.com/winsw/winsw/releases/download/v$winswVer/WinSW-x64.exe   (renamed: WinSW reads <its name>.xml)",
++    "  file version $($winswInfo.FileVersion), product version $($winswInfo.ProductVersion)",
++    "  SHA-256 $winswHash ; Authenticode: $winswSig (the project does not sign this release)",
++    "  self-contained .NET 6 single-file program (no .NET installation needed), 64-bit Windows 10 / 11.",
++    "Licence: MIT, LICENSE-WinSW.txt (copyright Kohsuke Kawaguchi, Sun Microsystems, CloudBees, Oleg Nenashev and contributors).",
++    "Used by scripts\install-nginx-service.ps1 (administrator): writes nginx-service.xml here (service TaidaFlowNginx:",
++    "nginx.exe -p <this folder>, stop: nginx -s quit, start mode Automatic) and runs  nginx-service.exe install / start.",
++    "Commands (administrator cmd, in this folder): nginx-service.exe status | start | stop | restart | uninstall.",
++    "Removal: scripts\uninstall-nginx-service.ps1. Details: DEPLOY.md section 2A (nginx service + Startup folder)."))
++Say "WinSW: $winswVer bundled as nginx\nginx-service.exe (SHA-256 $winswHash, Authenticode $winswSig) + LICENSE-WinSW.txt + SOURCE-WinSW.txt"
++
+ # --- 6. forbidden content ------------------------------------------------------------------------
+ $all = @(Get-ChildItem -LiteralPath $pkg -Recurse -Force)
+ $forbidden = @($all | Where-Object {
+@@ -238,7 +295,7 @@ $forbidden = @($all | Where-Object {
+     ($_.PSIsContainer -and ($n -in '__pycache__', 'cmakefiles', 'exports', 'data', 'runtime', 'logs', 'logging', 'temp', 'tests', '.qt', '.rcc')) -or
+     (-not $_.PSIsContainer -and ($n -match '\.(sqlite|sqlite3|db|py|pyc|pdb|lib|exp|ilk|obj|ninja|cmake|log|csv)$' -or
+                                  $n -in 'cmakecache.txt', 'taidaflowsettings.ini', 'device_info.ini',
+-                                        'config.json', 'config.effective.json', 'taidaflow-app.json', 'nginx.conf'))
++                                        'config.json', 'config.effective.json', 'taidaflow-app.json', 'nginx.conf', 'nginx-service.xml'))
+ })
+ if ($forbidden.Count) {
+     Say "FORBIDDEN content in the package:"
+@@ -282,6 +339,8 @@ $gitDate = (& git -C $root log -1 --format=%cI).Trim()
+     "MSVC runtime : app-local DLLs, $(Split-Path -Leaf $crtDir) $(Split-Path -Leaf (Split-Path -Parent (Split-Path -Parent $crtDir)))",
+     "web page     : WebAssembly build of $((Get-Item (Join-Path $WebSource 'TaidaFlowApp.wasm')).LastWriteTime.ToString('s')) (wasm-release)",
+     "nginx        : $nginxVer bundled in nginx\ (start: cd nginx + start nginx); conf\nginx.conf written on the plant PC by scripts\install-nginx-config.ps1",
++    "nginx service: WinSW $winswVer as nginx\nginx-service.exe (SHA-256 $winswHash, MIT, LICENSE-WinSW.txt); optional, administrator: scripts\install-nginx-service.ps1 (service TaidaFlowNginx)",
++    "log-on start : scripts\add-startup-shortcut.ps1 (Startup folder) or register-autostart.ps1 (Task Scheduler) - one of the two",
+     "config.json  : not included - created at the first start with the defaults (TaidaFlowApp.exe --write-default-config); never overwritten by an update",
+     "start        : start-taidaflow.bat (double-click) or start-taidaflow.ps1 - see DEPLOY.md",
+     "ports        : config.json; plant firewall inbound only 80 (nginx: page, /mirror, /exports, /api/) and 502 (Modbus server)"))
+diff --git a/scripts/taidaflow-config.ps1 b/scripts/taidaflow-config.ps1
+index f888426..5ff66d7 100644
+--- a/scripts/taidaflow-config.ps1
++++ b/scripts/taidaflow-config.ps1
+@@ -45,8 +45,25 @@
+ #                                                     deletes <prefix>YYYY-MM-DD<suffix> files older than
+ #                                                     keepDays days (today included); nothing else
+ #   Get-TaidaFlowNginxConf <template> <values>        the complete TaidaFlow nginx configuration text
++# w2-076 (nginx as a Windows service with WinSW, <installation folder>\nginx\nginx-service.exe):
++#   Test-TaidaFlowIsAdministrator                     $true when this process runs elevated (administrator)
++#   ConvertFrom-TaidaFlowServicePathName <PathName>   the exe of a Win32_Service PathName ("C:\x\a.exe" args)
++#   Get-TaidaFlowNginxServiceInfo [-Name TaidaFlowNginx]
++#                                                     Win32_Service facts a normal user can read: Exists, State,
++#                                                     StartMode, PathName, ExePath, ProcessId (+ Error)
++#   Get-TaidaFlowNginxServiceMode $svc <wrapper exe>  'none' (no service) | 'ours' (PathName = this wrapper)
++#                                                     | 'other' (the service runs another folder's wrapper)
++#   Get-TaidaFlowProcessTable                         pid -> @{ Name; ParentProcessId } (Win32_Process)
++#   Test-TaidaFlowNginxServiceOwner -Service -WrapperExe -OwningPid -Processes
++#                                                     is a listener's process an nginx started by OUR service
++#                                                     (nginx.exe whose parent chain reaches the service pid)
++#   Get-TaidaFlowNginxConfAction / Get-TaidaFlowNginxStartAction
++#                                                     what start-taidaflow.ps1 does with nginx (pure decisions,
++#                                                     unit-tested: docs\evidence\w2-076\tools\test-nginx-service-logic.ps1)
++#   Get-TaidaFlowNginxServiceXml <values>             the WinSW XML (nginx\nginx-service.xml) for this installation
+ 
+ $script:TaidaFlowDefaultCache = @{}
++$script:TaidaFlowNginxServiceName = 'TaidaFlowNginx'
+ 
+ function Get-TaidaFlowKeyKind([string]$key) {
+     switch -Regex ($key) {
+@@ -436,3 +453,195 @@ function Format-TaidaFlowConfig($cfg) {
+     $lines.Add("  log.dir (resolved) = $(Resolve-TaidaFlowLogDir $cfg)")
+     return $lines.ToArray()
+ }
++
++# --- w2-076: nginx as a Windows service (WinSW) ------------------------------------------------------------
++# The service (id TaidaFlowNginx) is registered by <installation folder>\scripts\install-nginx-service.ps1:
++# the wrapper <installation folder>\nginx\nginx-service.exe (WinSW v2.12.0) reads nginx\nginx-service.xml and
++# runs nginx.exe -p <nginx folder> as LocalSystem in session 0. A normal user cannot read the image path of
++# those processes (Get-Process .Path is empty), but can read Win32_Service (PathName, ProcessId, State) and
++# Win32_Process (Name, ParentProcessId) - the functions below use only that.
++
++function Test-TaidaFlowIsAdministrator {
++    try {
++        $id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
++        return (New-Object System.Security.Principal.WindowsPrincipal($id)).IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
++    } catch { return $false }
++}
++
++# "C:\TaidaFlow\nginx\nginx-service.exe" / C:\x\a.exe arg / "C:\x y\a.exe" arg -> full exe path ('' when empty).
++function ConvertFrom-TaidaFlowServicePathName([string]$PathName) {
++    $p = "$PathName".Trim()
++    if ($p -eq '') { return '' }
++    if ($p.StartsWith('"')) {
++        $end = $p.IndexOf('"', 1)
++        $exe = if ($end -gt 1) { $p.Substring(1, $end - 1) } else { $p.Trim('"') }
++    } else {
++        $m = [regex]::Match($p, '^(.+?\.exe)(\s|$)', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
++        $exe = if ($m.Success) { $m.Groups[1].Value } else { ($p -split '\s+')[0] }
++    }
++    try { return [System.IO.Path]::GetFullPath($exe) } catch { return $exe }
++}
++
++function Get-TaidaFlowNginxServiceInfo([string]$Name = $script:TaidaFlowNginxServiceName) {
++    $info = [pscustomobject]@{ Name = $Name; Exists = $false; State = ''; StartMode = ''; PathName = ''; ExePath = ''; ProcessId = 0; Error = '' }
++    try {
++        $s = @(Get-CimInstance -ClassName Win32_Service -Filter ("Name='" + $Name.Replace("'", "''") + "'") -ErrorAction Stop)
++        if ($s.Count -gt 0) {
++            $info.Exists = $true
++            $info.State = [string]$s[0].State
++            $info.StartMode = [string]$s[0].StartMode
++            $info.PathName = [string]$s[0].PathName
++            $info.ExePath = ConvertFrom-TaidaFlowServicePathName $info.PathName
++            $info.ProcessId = [int]$s[0].ProcessId
++        }
++    } catch { $info.Error = "Win32_Service query failed: $($_.Exception.Message)" }
++    return $info
++}
++
++# 'none' = no such service; 'ours' = its PathName is exactly this installation's wrapper exe;
++# 'other' = the service exists but runs a wrapper somewhere else (another installation folder).
++function Get-TaidaFlowNginxServiceMode($Service, [string]$WrapperExe) {
++    if (-not $Service -or -not $Service.Exists) { return 'none' }
++    $w = try { [System.IO.Path]::GetFullPath($WrapperExe) } catch { $WrapperExe }
++    if ([string]::Equals([string]$Service.ExePath, $w, [System.StringComparison]::OrdinalIgnoreCase)) { return 'ours' }
++    return 'other'
++}
++
++# pid -> @{ Name; ParentProcessId } of every process (a normal user gets these two for all processes).
++function Get-TaidaFlowProcessTable {
++    $t = @{}
++    foreach ($p in @(Get-CimInstance -ClassName Win32_Process -ErrorAction SilentlyContinue)) {
++        $t[[int]$p.ProcessId] = @{ Name = [string]$p.Name; ParentProcessId = [int]$p.ParentProcessId }
++    }
++    return $t
++}
++
++# Is the process $OwningPid (e.g. the owner of the port 80 listener) an nginx of OUR service?
++# Yes when: the service is ours (PathName = $WrapperExe) and running with a process id, the owning
++# process is nginx.exe, and its parent chain (nginx worker -> nginx master -> WinSW wrapper, at most
++# 4 steps, every step an nginx.exe until the wrapper) reaches the service's process id.
++# $Processes: table of Get-TaidaFlowProcessTable (or test data). Returns @{ Ours; Reason }.
++function Test-TaidaFlowNginxServiceOwner {
++    param($Service, [string]$WrapperExe, [int]$OwningPid, [hashtable]$Processes)
++    $mode = Get-TaidaFlowNginxServiceMode $Service $WrapperExe
++    if ($mode -eq 'none') { return [pscustomobject]@{ Ours = $false; Reason = "no service $($script:TaidaFlowNginxServiceName)" } }
++    if ($mode -eq 'other') { return [pscustomobject]@{ Ours = $false; Reason = "service $($Service.Name) runs $($Service.ExePath), not $WrapperExe" } }
++    if ([string]$Service.State -ne 'Running' -or [int]$Service.ProcessId -le 0) { return [pscustomobject]@{ Ours = $false; Reason = "service $($Service.Name) is $($Service.State) (pid $($Service.ProcessId))" } }
++    if (-not $Processes -or -not $Processes.ContainsKey($OwningPid)) { return [pscustomobject]@{ Ours = $false; Reason = "process $OwningPid not found" } }
++    if (-not [string]::Equals([string]$Processes[$OwningPid].Name, 'nginx.exe', [System.StringComparison]::OrdinalIgnoreCase)) {
++        return [pscustomobject]@{ Ours = $false; Reason = "process $OwningPid is $($Processes[$OwningPid].Name), not nginx.exe" }
++    }
++    $cur = $OwningPid
++    $chain = @($cur)
++    for ($i = 0; $i -lt 4; $i++) {
++        if (-not $Processes.ContainsKey($cur)) { break }
++        $parent = [int]$Processes[$cur].ParentProcessId
++        if ($parent -le 0 -or $chain -contains $parent) { break }
++        $chain += $parent
++        if ($parent -eq [int]$Service.ProcessId) {
++            return [pscustomobject]@{ Ours = $true; Reason = "nginx pid $OwningPid is started by the service $($Service.Name) (wrapper pid $($Service.ProcessId); chain $($chain -join ' -> '))" }
++        }
++        if (-not $Processes.ContainsKey($parent) -or -not [string]::Equals([string]$Processes[$parent].Name, 'nginx.exe', [System.StringComparison]::OrdinalIgnoreCase)) { break }
++        $cur = $parent
++    }
++    return [pscustomobject]@{ Ours = $false; Reason = "nginx pid $OwningPid is not a child of the service $($Service.Name) (wrapper pid $($Service.ProcessId); chain $($chain -join ' -> '))" }
++}
++
++# What start-taidaflow.ps1 does after nginx.conf was checked (install-nginx-config.ps1 -IfChanged):
++#   'none'             nothing to apply (file unchanged, or no nginx running)
++#   'reload'           nginx started by hand / by start-taidaflow runs with the old file: nginx -s reload
++#                      (the behaviour without a service, unchanged)
++#   'restart-service'  OUR service runs with the old file and this is an administrator: restart the service
++#   'tell-admin'       OUR service runs with the old file, not an administrator: no reload (the session-0
++#                      nginx of LocalSystem cannot be signalled by a normal user), launcher log + screen
++#                      message, the app is started as usual (start-taidaflow exit 3)
++function Get-TaidaFlowNginxConfAction([bool]$Written, [string]$ServiceMode, [string]$ServiceState, [bool]$IsAdmin, [bool]$ManualRunning) {
++    if (-not $Written) { return 'none' }
++    if ($ServiceMode -eq 'ours') {
++        if ($ServiceState -ne 'Running') { return 'none' }      # a stopped service reads the new file when it starts
++        if ($IsAdmin) { return 'restart-service' }
++        return 'tell-admin'
++    }
++    if ($ManualRunning) { return 'reload' }
++    return 'none'
++}
++
++# How start-taidaflow.ps1 gets nginx running:
++#   'leave'          already running (our manual nginx, or our service running / starting): left as it is
++#   'start-service'  our service exists but is stopped: start the SERVICE (never a second nginx by hand)
++#   'start-process'  no service of this installation: "cd <nginx folder>" + "start nginx" (unchanged behaviour)
++function Get-TaidaFlowNginxStartAction([string]$ServiceMode, [string]$ServiceState, [bool]$ManualRunning) {
++    if ($ServiceMode -eq 'ours') {
++        if ($ServiceState -eq 'Running' -or $ServiceState -eq 'Start Pending') { return 'leave' }
++        return 'start-service'
++    }
++    if ($ManualRunning) { return 'leave' }
++    return 'start-process'
++}
++
++# XML text of a value (element content).
++function ConvertTo-TaidaFlowXmlText([string]$s) { return [System.Security.SecurityElement]::Escape($s) }
++
++# The service's security descriptor (SDDL, DACL only): the Windows default for a new service plus RP (start)
++# for INTERACTIVE users (IU), so that start-taidaflow.ps1 of the logged-on operator can start a stopped
++# service (nginx ends with the service when any user logs off - nginx treats CTRL_LOGOFF_EVENT as "exit").
++# No stop / change / delete rights for normal users.
++$script:TaidaFlowNginxServiceSddl = 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)'
++
++# The WinSW v2.12.0 configuration nginx\nginx-service.xml (element names: WinSW doc/xmlConfigFile.md).
++# $values: NginxExe (nginx.exe, full path), LogDir (log folder, full path), InstallDir, ConfigPath, Port,
++# WrapperVersion. Paths must not contain % (WinSW expands %VAR%), a double quote, < > or &.
++function Get-TaidaFlowNginxServiceXml($values) {
++    foreach ($k in 'NginxExe', 'LogDir', 'InstallDir', 'ConfigPath') {
++        $v = [string]$values[$k]
++        if ($v -eq '') { throw "Get-TaidaFlowNginxServiceXml: $k missing" }
++        if ($v -match '[%"<>&]' -or $v -match '[\x00-\x1f]') { throw "path cannot be used in the service configuration (% `" < > & not allowed): $k = $v" }
++    }
++    $exe = [System.IO.Path]::GetFullPath([string]$values.NginxExe)
++    $dir = Split-Path -Parent $exe
++    $log = [System.IO.Path]::GetFullPath([string]$values.LogDir).TrimEnd('\')
++    $port = [string]$values.Port
++    $lines = @(
++        '<?xml version="1.0" encoding="UTF-8"?>',
++        '<!-- TAIDAFLOW NGINX SERVICE - GENERATED by scripts\install-nginx-service.ps1 (w2-076). Run that script again',
++        ('     instead of editing this file. Read by nginx-service.exe (WinSW ' + [string]$values.WrapperVersion + ') in the same folder.'),
++        ('     install folder : ' + [string]$values.InstallDir),
++        ('     config.json    : ' + [string]$values.ConfigPath),
++        ('     nginx folder   : ' + $dir + ' (prefix -p; conf\nginx.conf from scripts\install-nginx-config.ps1)'),
++        ('     port           : ' + $port + ' (config.json nginx.port, written into conf\nginx.conf)'),
++        ('     log folder     : ' + $log + ' (config.json log.dir: nginx-service.wrapper.log, .out.log, .err.log)'),
++        '     securityDescriptor: Windows default for services + RP (start) for INTERACTIVE users. -->',
++        '<service>',
++        ('  <id>' + $script:TaidaFlowNginxServiceName + '</id>'),
++        ('  <name>TaidaFlow nginx (web, port ' + $port + ')</name>'),
++        ('  <description>' + (ConvertTo-TaidaFlowXmlText ('TaidaFlow web front end: nginx for Windows ' + $exe + ' (web page, /mirror, /exports, /api/ on port ' + $port + '). Installed by scripts\install-nginx-service.ps1 of ' + [string]$values.InstallDir + '.')) + '</description>'),
++        ('  <executable>' + (ConvertTo-TaidaFlowXmlText $exe) + '</executable>'),
++        ('  <startarguments>-p "' + (ConvertTo-TaidaFlowXmlText $dir) + '"</startarguments>'),
++        ('  <stopexecutable>' + (ConvertTo-TaidaFlowXmlText $exe) + '</stopexecutable>'),
++        ('  <stoparguments>-p "' + (ConvertTo-TaidaFlowXmlText $dir) + '" -s quit</stoparguments>'),
++        ('  <workingdirectory>' + (ConvertTo-TaidaFlowXmlText $dir) + '</workingdirectory>'),
++        '  <startmode>Automatic</startmode>',
++        '  <onfailure action="restart" delay="10 sec"/>',
++        '  <resetfailure>1 hour</resetfailure>',
++        ('  <securityDescriptor>' + $script:TaidaFlowNginxServiceSddl + '</securityDescriptor>'),
++        ('  <logpath>' + (ConvertTo-TaidaFlowXmlText $log) + '</logpath>'),
++        '  <log mode="roll-by-size">',
++        '    <sizeThreshold>10240</sizeThreshold>',
++        '    <keepFiles>8</keepFiles>',
++        '  </log>',
++        '</service>'
++    )
++    return (($lines -join "`r`n") + "`r`n")
++}
++
++# Reads <executable> of an existing nginx-service.xml ('' when missing / unreadable).
++function Get-TaidaFlowNginxServiceXmlExecutable([string]$XmlPath) {
++    try {
++        if (-not (Test-Path -LiteralPath $XmlPath -PathType Leaf)) { return '' }
++        $doc = New-Object System.Xml.XmlDocument
++        $doc.Load($XmlPath)
++        $n = $doc.SelectSingleNode('//executable')
++        if ($n) { return [string]$n.InnerText }
++    } catch { }
++    return ''
++}
+diff --git a/scripts/verify-release-package.ps1 b/scripts/verify-release-package.ps1
+index 7f48dcf..ba86497 100644
+--- a/scripts/verify-release-package.ps1
++++ b/scripts/verify-release-package.ps1
+@@ -6,6 +6,9 @@
+ #      conf\mime.types, no conf\nginx.conf), no path of the build machine in any text file or in
+ #      TaidaFlowApp.exe (Mango A9); scripts\safety_probe.ps1 SAFE for the app defaults
+ #      (192.168.1.201..205:502 unreachable, no COM2, ports free), otherwise nothing is started (exit 3).
++#      w2-076: nginx\nginx-service.exe (WinSW, SHA-256 in SOURCE-WinSW.txt + VERSION.txt), LICENSE-WinSW.txt, the
++#      four scripts install-/uninstall-nginx-service.ps1, add-/remove-startup-shortcut.ps1, no nginx-service.xml;
++#      whether the service TaidaFlowNginx exists on this PC is noted (not installed = the starts take the old path).
+ #   A. FIRST START (nginx off): start -DataDir <data> -NoNginx. config.json is CREATED in the package
+ #      by TaidaFlowApp.exe --write-default-config (same bytes as a fresh default file) and the data
+ #      folder is created. The default dataDir is C:\TaidaFlowData - on this development PC the check
+@@ -253,6 +256,21 @@ foreach ($want in 'nginx\nginx.exe', 'nginx\docs\LICENSE', 'nginx\conf\mime.type
+     Check "package has $want" (Test-Path (Join-Path $Package $want) -PathType Leaf) ''
+ }
+ Check 'package has no nginx\conf\nginx.conf (written on the plant PC)' (-not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf'))) ''
++# w2-076: WinSW service wrapper + the field scripts for the nginx service and the Startup folder shortcut
++foreach ($want in 'nginx\nginx-service.exe', 'nginx\LICENSE-WinSW.txt', 'nginx\SOURCE-WinSW.txt', 'scripts\install-nginx-service.ps1',
++                  'scripts\uninstall-nginx-service.ps1', 'scripts\add-startup-shortcut.ps1', 'scripts\remove-startup-shortcut.ps1') {
++    Check "package has $want (w2-076)" (Test-Path (Join-Path $Package $want) -PathType Leaf) ''
++}
++$wsw = Join-Path $Package 'nginx\nginx-service.exe'
++if (Test-Path $wsw) {
++    $wswInfo = (Get-Item -LiteralPath $wsw).VersionInfo
++    $wswHash = Get-Sha $wsw
++    $wswSrc = [System.IO.File]::ReadAllText((Join-Path $Package 'nginx\SOURCE-WinSW.txt'))
++    Check 'nginx\nginx-service.exe = WinSW (Windows Service Wrapper), SHA-256 recorded in SOURCE-WinSW.txt and VERSION.txt' ($wswInfo.ProductName -eq 'Windows Service Wrapper' -and $wswSrc.Contains($wswHash) -and [System.IO.File]::ReadAllText((Join-Path $Package 'VERSION.txt')).Contains($wswHash)) "$($wswInfo.ProductVersion) $wswHash"
++}
++Check 'package has no nginx\nginx-service.xml (written on the plant PC by install-nginx-service.ps1)' (-not (Test-Path (Join-Path $Package 'nginx\nginx-service.xml'))) ''
++$svcHere = Get-TaidaFlowNginxServiceInfo
++Note "nginx service TaidaFlowNginx on this PC: $(if ($svcHere.Exists) { "EXISTS ($($svcHere.PathName), $($svcHere.State)) - the starts below may use it" } else { 'not installed - the starts below take the path without a service (start nginx), as before w2-076' })"
+ Check 'package has no logging\quiet.ini and no logs\ (w2-065: the app writes its own log files)' (-not (Test-Path (Join-Path $Package 'logging')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
+ Test-NoMachinePaths $Package '0.'
+ $defaults = Get-TaidaFlowConfig -Path $pkgConfig -Exe $pkgExe
+@@ -557,6 +575,7 @@ $webRt = Join-Path $Package 'web\runtime.json'
+ [System.IO.File]::WriteAllText($webRt, (Get-TaidaFlowRuntimeJson (Get-TaidaFlowPagePort $defaults)), (New-Object System.Text.UTF8Encoding($false)))
+ Note "package restored: config.json, nginx\conf\nginx.conf*, nginx\logs, nginx\temp, logs\ (fallback log of D) removed; web\runtime.json = the default one"
+ Check 'E. package without config.json / nginx.conf / logs\ again' (-not (Test-Path $pkgConfig) -and -not (Test-Path (Join-Path $Package 'nginx\conf\nginx.conf')) -and -not (Test-Path (Join-Path $Package 'logs'))) ''
++Check 'E. package without nginx\nginx-service.xml (w2-076)' (-not (Test-Path (Join-Path $Package 'nginx\nginx-service.xml'))) ''
+ Test-NoMachinePaths $Package 'E.'
+ $leftProc = @(Get-Process TaidaFlowApp, nginx -ErrorAction SilentlyContinue | Where-Object { -not ($pre | Where-Object Id -eq $_.Id) })
+ Check 'E. no TaidaFlowApp / nginx of this check left' ($leftProc.Count -eq 0) (($leftProc | ForEach-Object { "$($_.ProcessName) $($_.Id)" }) -join ', ')

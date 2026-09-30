@@ -1,0 +1,29 @@
+ok       deploy\release\start-taidaflow.ps1 (4062 tokens, 40197 bytes, ASCII)
+ok       deploy\release\stop-taidaflow.ps1 (1082 tokens, 9253 bytes, ASCII)
+ok       deploy\release\register-autostart.ps1 (828 tokens, 9666 bytes, ASCII)
+ok       scripts\taidaflow-config.ps1 (5843 tokens, 41197 bytes, ASCII)
+ok       scripts\install-nginx-service.ps1 (1984 tokens, 19140 bytes, ASCII)
+ok       scripts\uninstall-nginx-service.ps1 (510 tokens, 5591 bytes, ASCII)
+ok       scripts\add-startup-shortcut.ps1 (967 tokens, 8226 bytes, ASCII)
+ok       scripts\remove-startup-shortcut.ps1 (364 tokens, 3002 bytes, ASCII)
+ok       scripts\package-release.ps1 (2883 tokens, 26702 bytes, ASCII)
+ok       scripts\verify-release-package.ps1 (6692 tokens, 50527 bytes, ASCII)
+ok       scripts\check-package-deps.ps1 (932 tokens, 6069 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\run-step.ps1 (132 tokens, 1180 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\parse-check.ps1 (278 tokens, 2369 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\test-nginx-service-logic.ps1 (1763 tokens, 13703 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\test-startup-shortcut.ps1 (874 tokens, 5784 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\test-service-scripts-nonadmin.ps1 (1355 tokens, 9333 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\check-winsw-xml.ps1 (1245 tokens, 8445 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\make-zip.ps1 (166 tokens, 1186 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\check-manifest.ps1 (557 tokens, 3238 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\show-winsw-tools.ps1 (285 tokens, 2270 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\retire-dist.ps1 (265 tokens, 1886 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\show-package-winsw.ps1 (619 tokens, 3823 bytes, ASCII)
+ok       docs\evidence\w2-076\tools\final-state.ps1 (267 tokens, 2295 bytes, ASCII)
+checked 23 file(s), 0 with problems
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-076\tools\parse-check.ps1
+started : 2026-09-29T17:03:14.2787037+08:00
+elapsed : 2s
+EXIT=0

@@ -8,6 +8,11 @@ import "components" as Components
 
 Pane {
     id: settingsPage
+
+    // w1-083: controls are enabled only while the link to the Core is alive; TopNav.qml binds
+    // it to root.linkAlive (Td.transportReady and, on the web page, no heartbeat silence).
+    // Default true only when this page is loaded without TopNav.
+    property bool linkAlive: true
     padding: 0
     Universal.theme: Universal.Dark
     Universal.accent: "#4CD7FF"
@@ -68,7 +73,7 @@ Pane {
                     objectName: "pressureUnitBox"
                     model: ["kPa", "psi", "bar"]
                     currentIndex: model.indexOf(Td.pressureUnitSv)
-                    enabled: Td.transportReady
+                    enabled: settingsPage.linkAlive
                     onActivated: Td.pressureUnitSv = currentText
                     Layout.preferredWidth: 150
                 }
@@ -113,6 +118,7 @@ Pane {
                         title: modelData.name
                         note: modelData.note || ""
                         hasOffset: sensorId !== "filter"
+                        linkAlive: settingsPage.linkAlive
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: settingsPage.cardWidth

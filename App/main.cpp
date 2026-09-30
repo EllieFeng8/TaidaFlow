@@ -185,6 +185,99 @@ QString applyUiFont(const QString &requested)
 
 } // namespace
 
+// ===== Web page control (w1-083) =============================================
+// Small helper for the heartbeat watchdog of the web page
+// (TaidaFlowContent/components/LinkWatchdog.qml): main() passes one instance to App.qml as
+// the initial property "webPage" (App.qml -> TopNav.webPage -> LinkWatchdog.pageControl).
+//  - isWebPage: true only on WebAssembly; the watchdog is inactive on the desktop.
+//  - monotonicMs(): local monotonic clock (QElapsedTimer; performance.now() in the browser),
+//    used to measure how long Td.serverHeartbeatMs has not changed. Never compared with the
+//    Core's clock.
+//  - epochMs(): wall clock (epoch ms) for the reload back-off, which must survive a reload.
+//  - sessionValue() / setSessionValue(): the browser's sessionStorage (per tab, survives the
+//    reload) for the back-off state; "" when missing or when storage is blocked.
+//  - reloadPage(): location.reload() (same as F5).
+// Desktop: storage and reload do nothing (the desktop never reloads).
+#include <QElapsedTimer>
+#include <QDateTime>
+
+namespace {
+
+#if defined(Q_OS_WASM)
+// Calls `function (key, value) { <body> }` in JavaScript. Every body below catches its own
+// exceptions, so a blocked sessionStorage never throws into the WebAssembly code.
+emscripten::val callWebPageScript(const char *body, const QString &key, const QString &value = {})
+{
+    const emscripten::val function = emscripten::val::global("Function").new_(
+        emscripten::val("key"), emscripten::val("value"), emscripten::val(body));
+    return function(emscripten::val(key.toStdString()), emscripten::val(value.toStdString()));
+}
+#endif
+
+class WebPageControl : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool isWebPage READ isWebPage CONSTANT)
+public:
+    explicit WebPageControl(QObject *parent = nullptr) : QObject(parent) { m_clock.start(); }
+
+    bool isWebPage() const
+    {
+#if defined(Q_OS_WASM)
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    Q_INVOKABLE double monotonicMs() const { return static_cast<double>(m_clock.elapsed()); }
+    Q_INVOKABLE double epochMs() const
+    {
+        return static_cast<double>(QDateTime::currentMSecsSinceEpoch());
+    }
+
+    Q_INVOKABLE QString sessionValue(const QString &key) const
+    {
+#if defined(Q_OS_WASM)
+        const emscripten::val result = callWebPageScript(
+            "try { var v = globalThis.sessionStorage.getItem(key);"
+            " return v === null ? '' : String(v); } catch (e) { return ''; }",
+            key);
+        return result.isString() ? QString::fromStdString(result.as<std::string>()) : QString();
+#else
+        Q_UNUSED(key);
+        return {};
+#endif
+    }
+
+    Q_INVOKABLE void setSessionValue(const QString &key, const QString &value) const
+    {
+#if defined(Q_OS_WASM)
+        callWebPageScript(
+            "try { globalThis.sessionStorage.setItem(key, value); } catch (e) {}", key, value);
+#else
+        Q_UNUSED(key);
+        Q_UNUSED(value);
+#endif
+    }
+
+    Q_INVOKABLE void reloadPage() const
+    {
+#if defined(Q_OS_WASM)
+        qWarning().noquote() << "[WebPage] reloading the page (no server heartbeat)";
+        callWebPageScript("try { globalThis.location.reload(); } catch (e) {}", {});
+#else
+        qInfo().noquote() << "[WebPage] reloadPage() ignored on the desktop";
+#endif
+    }
+
+private:
+    QElapsedTimer m_clock;
+};
+
+} // namespace
+// ===== end of web page control ===============================================
+
 int main(int argc, char *argv[])
 {
 #if !defined(Q_OS_WASM)
@@ -362,7 +455,15 @@ int main(int argc, char *argv[])
     applyUiFont(uiFontFamilyRequest); // QML reads the result as Application.font.family
     // ===== end of UI font ========================================================
 
+    // ===== Web page control (w1-083), see WebPageControl above ==================
+    // Declared before the engine: destroyed after it. App.qml reads it as the initial
+    // property "webPage".
+    WebPageControl webPage;
+    // ===== end of web page control ===============================================
+
     QQmlApplicationEngine engine;
+    engine.setInitialProperties({{QStringLiteral("webPage"),
+                                  QVariant::fromValue(static_cast<QObject *>(&webPage))}}); // w1-083
     const QUrl url(mainQmlFile);
     QObject::connect(
                 &engine, &QQmlApplicationEngine::objectCreated, &app,
@@ -380,3 +481,6 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
+// w1-083: moc output of WebPageControl (Q_OBJECT class defined in this file).
+#include "main.moc"

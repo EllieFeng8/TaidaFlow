@@ -611,4 +611,40 @@ private:
     bool m_temperatureIncreasing = false;
     QTimer m_processTimer;
 
+    // ===== Server heartbeat (w1-083, 2026-10-01) ================================
+    // Mirrored (Core -> all clients), written ONLY by the Core: every
+    // kServerHeartbeatIntervalMs (1 s) the Core writes the current epoch ms
+    // (QDateTime::currentMSecsSinceEpoch()), so the value changes once per second.
+    // Purpose: the web page (WASM) detects a "half-open" Mirror connection - the network
+    // dropped or the tab was frozen, no WebSocket close event arrived, transportReady stays
+    // true and the page would keep showing the last values with working controls. The page
+    // never compares this value with its own clock (the two clocks may differ); it only
+    // notes, with its own monotonic clock, WHEN the value last changed
+    // (TaidaFlowContent/components/LinkWatchdog.qml): no change for more than 5 s -> the
+    // link is treated as broken (banner, controls disabled); still no change after 15 s
+    // while transportReady is true -> the page reloads itself (with back-off).
+    // Default 0 = "no heartbeat received yet": main alone or a Core that does not write it
+    // never makes the page detect anything (detection starts only after the first change).
+    // Writing 0 again (e.g. on an orderly shutdown) stops the detection the same way.
+    // The desktop UI ignores this property.
+    Q_PROPERTY(double serverHeartbeatMs READ serverHeartbeatMs WRITE setServerHeartbeatMs NOTIFY serverHeartbeatMsChanged)
+public:
+    // Core side: interval of the serverHeartbeatMs writes (the page's thresholds are in
+    // TaidaFlowContent/components/LinkWatchdog.js).
+    static constexpr int kServerHeartbeatIntervalMs = 1000;
+    double serverHeartbeatMs() const { return m_serverHeartbeatMs; }
+    // Called only by the Core (every kServerHeartbeatIntervalMs, on the Proxy's thread).
+    void setServerHeartbeatMs(double epochMs)
+    {
+        if (m_serverHeartbeatMs == epochMs)
+            return;
+        m_serverHeartbeatMs = epochMs;
+        emit serverHeartbeatMsChanged();
+    }
+signals:
+    void serverHeartbeatMsChanged();
+private:
+    double m_serverHeartbeatMs = 0.0;
+    // ===== end of server heartbeat ===============================================
+
 };

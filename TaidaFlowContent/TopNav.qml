@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import TaidaFlowBackend 1.0
+import "components" as Components
 
 Rectangle {
     id: root
@@ -8,6 +9,25 @@ Rectangle {
     height: 1080
     visible: true
     color: "#0F192D"
+
+    // ===== Link state (w1-083) ===============================================
+    // webPage: WebPageControl from App/main.cpp, passed in by App.qml (null when TopNav is
+    // loaded alone, e.g. Core/tests/Preview.qml: no heartbeat detection then).
+    property var webPage: null
+    // THE flag for every control that writes to the Core: transportReady (the pack's
+    // offline state) AND, on the web page, no heartbeat silence (LinkWatchdog). Desktop:
+    // equals Td.transportReady (always true). Each page gets it as its own `linkAlive`
+    // property (see the page instances below) and uses it where it used Td.transportReady
+    // for `enabled` (Main.qml: controlsEnabled).
+    readonly property bool linkAlive: linkWatchdog.linkAlive
+
+    Components.LinkWatchdog {
+        id: linkWatchdog
+        objectName: "linkWatchdog"
+        backend: Td
+        pageControl: root.webPage
+    }
+    // ===== end of link state ==================================================
     property color mainBlue: "#0087DC"
     property color lightBlue: "#19B8FF"
     property color textColor: "#E8F4FF"
@@ -357,16 +377,20 @@ Rectangle {
     }
     Main{
         visible: root.currentPage === 0
+        linkAlive: root.linkAlive
     }
     AlarmPage{
         visible: root.currentPage === 1
+        linkAlive: root.linkAlive
     }
     HistoryPage{
         visible: root.currentPage === 2
+        linkAlive: root.linkAlive
     }
     SettingsPage {
         id: sensorSettingsPage
         visible: root.currentPage === 3
+        linkAlive: root.linkAlive
     }
 
     Dialog {
@@ -434,6 +458,10 @@ Rectangle {
     // is unreachable / synchronizing. All write controls are disabled meanwhile
     // (Main.qml controlsEnabled, HistoryPage paging); the page keeps the last
     // synchronized state.
+    // w1-083: the banner also shows (with its own text) while the web page gets no
+    // server heartbeat (LinkWatchdog: transportReady true, no change of
+    // Td.serverHeartbeatMs for > 5 s); visible = !root.linkAlive, the same flag that
+    // disables the controls. It disappears with the next heartbeat.
     // Layout: the banner never covers page content. It takes space only while it
     // is shown: AlarmPage / HistoryPage anchor their top to offlineBanner.bottom,
     // so the banner pushes them down (titles, filter bar and "下載 CSV" stay fully
@@ -450,7 +478,9 @@ Rectangle {
         anchors.right: parent.right
         height: visible ? 64 : 0
         z: 200
-        visible: !Td.transportReady
+        visible: !root.linkAlive
+        // true: heartbeat silence (half-open connection) rather than the pack's offline state.
+        readonly property bool heartbeatLost: linkWatchdog.heartbeatStale
 
         // Opaque: the banner now sits in its own row (nothing is drawn behind it).
         color: "#B3261E"
@@ -470,7 +500,7 @@ Rectangle {
 
                 Text {
                     anchors.centerIn: parent
-                    text: "離線"
+                    text: offlineBanner.heartbeatLost ? "中斷" : "離線"
                     color: "#B3261E"
                     font.pixelSize: 22
                     font.bold: true
@@ -482,14 +512,23 @@ Rectangle {
                 spacing: 2
 
                 Text {
-                    text: "未連線到桌面端，所有操作已停用（畫面保留最後同步的狀態）"
+                    objectName: "offlineBannerTitle"
+                    text: offlineBanner.heartbeatLost
+                          ? "連線中斷，正在恢復…所有操作已停用（畫面保留最後收到的狀態）"
+                          : "未連線到桌面端，所有操作已停用（畫面保留最後同步的狀態）"
                     color: "white"
                     font.pixelSize: 22
                     font.bold: true
                 }
 
                 Text {
-                    text: Td.transportMessage
+                    objectName: "offlineBannerDetail"
+                    text: offlineBanner.heartbeatLost
+                          ? "已 " + Math.floor(linkWatchdog.silentMs / 1000) + " 秒未收到桌面端心跳；"
+                            + (linkWatchdog.reloadInMs > 0
+                               ? "約 " + Math.ceil(linkWatchdog.reloadInMs / 1000) + " 秒後自動重新整理頁面"
+                               : "正在重新整理頁面…")
+                          : Td.transportMessage
                     color: "#FFE0DC"
                     font.pixelSize: 15
                 }

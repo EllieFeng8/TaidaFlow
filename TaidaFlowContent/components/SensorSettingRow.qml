@@ -23,6 +23,9 @@ Rectangle {
     // 取代 Offset 行的小字說明（Filter 用）。
     property string note: ""
     property bool hasOffset: true
+    // w1-083: SettingsPage passes its linkAlive (TopNav root.linkAlive); the edit controls use
+    // it instead of Td.transportReady. Default true when the card is loaded alone.
+    property bool linkAlive: true
     property string editUnit: "kPa"
     property string errorText: ""
     property bool dirty: false
@@ -159,7 +162,7 @@ Rectangle {
             id: memberField
             objectName: "offsetField-" + memberCell.modelData.id
             Layout.preferredWidth: row.fieldWidth
-            enabled: Td.transportReady && row.hasOffset
+            enabled: row.linkAlive && row.hasOffset
             placeholderText: "Offset"
             selectByMouse: true
             onTextEdited: row.dirty = true
@@ -247,7 +250,7 @@ Rectangle {
                     id: offsetField
                     objectName: "offsetField"
                     Layout.preferredWidth: row.fieldWidth
-                    enabled: Td.transportReady && row.hasOffset
+                    enabled: row.linkAlive && row.hasOffset
                     placeholderText: "Offset"
                     selectByMouse: true
                     onTextEdited: row.dirty = true
@@ -280,7 +283,7 @@ Rectangle {
                     id: lowerField
                     objectName: "lowerField"
                     Layout.preferredWidth: row.fieldWidth
-                    enabled: Td.transportReady
+                    enabled: row.linkAlive
                     placeholderText: "未設定下限"
                     selectByMouse: true
                     onTextEdited: row.dirty = true
@@ -295,7 +298,7 @@ Rectangle {
                     id: upperField
                     objectName: "upperField"
                     Layout.preferredWidth: row.fieldWidth
-                    enabled: Td.transportReady
+                    enabled: row.linkAlive
                     placeholderText: "未設定上限"
                     selectByMouse: true
                     onTextEdited: row.dirty = true
@@ -338,7 +341,7 @@ Rectangle {
                 objectName: "applyButton"
                 text: "套用"
                 Layout.preferredWidth: row.buttonWidth
-                enabled: Td.transportReady && (row.dirty || row.limitsMismatch)
+                enabled: row.linkAlive && (row.dirty || row.limitsMismatch)
                 onClicked: row.save()
             }
             Button {

@@ -20,6 +20,7 @@ qt6_add_qml_module(TaidaFlowContent
         "components/DateTimeField.qml"
         "components/DateTimeUtil.js"
         "components/HistoryViewUtil.js"
+        "components/AlarmViewUtil.js"
         "components/InterfaceBox.qml"
         "components/MotorIcon.qml"
         "components/NumberFormat.js"

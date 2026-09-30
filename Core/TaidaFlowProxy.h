@@ -111,6 +111,36 @@ class TaidaFlowProxy : public QObject
     // Core's download port, spec §3.5 revised). Written only by the Core; each client's QML
     // reads only its own key.
     Q_PROPERTY(QVariantMap historyExportStatus READ historyExportStatus WRITE setHistoryExportStatus NOTIFY historyExportStatusChanged)
+
+    // ---- Per-client alarm views (w1-078, 2026-09-30; same pattern as historyViews) ----
+    // Mirrored (Core -> all clients), written only by the Core. Key = the client's
+    // clientSessionId ("desktop", "web-xxxx"); value = map
+    //   { fromMs, toMs,   // this client's range, local-epoch ms, both ends inclusive
+    //                     //   (from = start minute :00.000, to = end minute :59.999)
+    //     page,           // current page, 1-based, within 1..totalPages
+    //     pageSize,       // 9 (rows per page of the alarm page)
+    //     totalCount,     // alarms in the whole range
+    //     totalPages,     // >= 1 (1 when totalCount is 0)
+    //     activeCount,    // alarms in the whole range whose alarmStatus is "未處理"
+    //     rows,           // this page (<= pageSize rows), each map with the alarmRecords fields
+    //                     //   timestampMs, alarmTime ("yyyy/MM/dd HH:mm"), equipment, sensorName,
+    //                     //   alarmMessage, severity ("嚴重"/"警告"), alarmStatus ("未處理"/"已解除")
+    //                     //   plus serialNumber = 1-based position in the whole range
+    //                     //   ((page - 1) * pageSize + index + 1)
+    //     state,          // "ready", or "error" when the range could not be read
+    //     message,        // error text when state is "error" (the page shows it), else ""
+    //     revision }      // number; changes whenever this entry's content changes
+    // Order of the range (and so of the pages): newest first = timestampMs descending, equal
+    // times by alarm id descending - the order alarmRecords has today (Core::loadAlarmRecords).
+    // The Core (re)writes a client's entry on its alarmViewRequested, when a new alarm inside
+    // the entry's range is saved and when an alarm inside it is resolved (rows / activeCount),
+    // keeping the client's range and page (page clamped to the new totalPages). Cleanup as
+    // historyViews: web entries idle for 30 min are removed (never "desktop"), at most 32 kept
+    // (least recently used removed); a removed client's next request rebuilds its entry.
+    // AlarmPage.qml reads only alarmViews[clientSessionId] and redraws only when that entry's
+    // revision changes. Without its entry (Core without alarm views, main alone, or removed)
+    // the page filters alarmRecords itself; alarmRecords itself is unchanged.
+    Q_PROPERTY(QVariantMap alarmViews READ alarmViews WRITE setAlarmViews NOTIFY alarmViewsChanged)
     // Local only (STORED false, never mirrored): this client's id, "desktop" on the desktop,
     // "web-xxxx" per browser tab (set by main.cpp before the mirror is created, spec §1).
     // QML sends it with history view / export requests and uses it as the key into
@@ -299,6 +329,17 @@ public:
         m_historyExportStatus = status;
         emit historyExportStatusChanged(status);
     }
+
+    // Per-client alarm views (w1-078): written only by the Core, always the whole map; an
+    // unchanged map is not re-sent (same as setHistoryViews).
+    QVariantMap alarmViews() const { return m_alarmViews; }
+    void setAlarmViews(const QVariantMap &views)
+    {
+        if (m_alarmViews == views)
+            return;
+        m_alarmViews = views;
+        emit alarmViewsChanged(views);
+    }
     // Called only by the composition root (main.cpp) before the mirror is created.
     void setClientSessionId(const QString &sessionId)
     {
@@ -386,6 +427,20 @@ signals:
     void historyExportRequested(QString sessionId, double fromMs, double toMs);
     // Request (UI -> Core, WASM relayed): cancel this client's queued or running export (spec §3.1).
     void historyExportCancelRequested(QString sessionId);
+
+    // Per-client alarm views (w1-078). NOTIFY of alarmViews.
+    void alarmViewsChanged(const QVariantMap &views);
+    // Request (not a property NOTIFY; UI -> Core, WASM relayed to the Desktop by the mirror):
+    // the only alarm range request. AlarmPage.qml sends its own sessionId (= clientSessionId)
+    // with its own range and page: when the page is shown and when the WASM transport comes back
+    // while it is shown (current range and page), on "篩選" / "顯示前一周" (page 1), on previous /
+    // next page (page -/+ 1), and - while the range is still the default "最近 24 小時" - with a
+    // fresh last-24-hours range, page 1, whenever alarmRecords changes. fromMs/toMs are
+    // local-epoch ms, both ends inclusive (start minute :00.000 .. end minute :59.999), may span
+    // months, and are the client's range: the Core pages exactly this range (newest first,
+    // pageSize 9) and writes the result to alarmViews[sessionId]; a page beyond the last one is
+    // clamped. One sessionId's requests never make another sessionId's request stale.
+    void alarmViewRequested(QString sessionId, double fromMs, double toMs, int page);
 
 private:
     // 預設無校正、上下限皆停用；lower / upper 的 0 只是初始值，不代表已啟用限制。
@@ -541,6 +596,8 @@ private:
     // Per-client history views keyed by clientSessionId (spec §2.1); only the Core writes it.
     QVariantMap m_historyViews;
     QVariantMap m_historyExportStatus;
+    // Per-client alarm views keyed by clientSessionId (w1-078); only the Core writes it.
+    QVariantMap m_alarmViews;
     // Desktop default (spec §1); only the WASM composition root replaces it with "web-xxxx".
     QString m_clientSessionId = QStringLiteral("desktop");
     // Only the WASM composition root sets it (location.hostname); desktop stays empty.

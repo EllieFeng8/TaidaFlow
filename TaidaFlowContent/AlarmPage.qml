@@ -1,6 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import TaidaFlowBackend 1.0
+import "components" as Components
+import "components/DateTimeUtil.js" as DateTimeUtil
+import "components/HistoryViewUtil.js" as HistoryViewUtil
+import "components/AlarmViewUtil.js" as AlarmViewUtil
 
 // =========================================================
 // 異常警告頁面
@@ -24,178 +28,222 @@ Item {
     property color successColor: "#22C55E"
     property int activeAlarmCount: 0
     property int currentPage: 1
-    property int pageSize: 9
+    property int pageSize: AlarmViewUtil.pageSize
     property string filterMessage: ""
-    readonly property int totalPages: Math.max(1, Math.ceil(filteredAlarmModel.count / pageSize))
+    property int totalPages: 1
+    // Alarms in the shown range (all pages).
+    property int totalCount: 0
+    // Scale of TopNav (root), for the date/time picker popups (same as HistoryPage.qml).
+    readonly property real designScale: parent ? parent.scale : 1
+    readonly property int dateFieldWidth: 280
 
-    ListModel { id: alarmListModel }
-    ListModel { id: filteredAlarmModel }
+    // ---- Range and data source (w1-078, 2026-09-30) ------------------------------
+    // Input like the history page (components/DateTimeField.qml + DateTimeUtil.js):
+    // from = the start minute's :00.000, to = the end minute's :59.999, both inclusive.
+    // Default = the last 24 hours (AlarmViewUtil.defaultRange), as before.
+    //
+    // Data: our own entry of Td.alarmViews (keyed by clientSessionId, written by the Core,
+    // format in Core/TaidaFlowProxy.h) when there is one; until then (Core without alarm
+    // views, main alone) or after the Core removed it, the page filters Td.alarmRecords
+    // itself (AlarmViewUtil.localView, the former filter / 9 rows per page / 未處理 count).
+    // Every filter, "顯示前一周", page change, page show and transport return sends
+    // Td.alarmViewRequested(clientSessionId, fromMs, toMs, page), so a Core with alarm views
+    // answers with our entry and the page switches to it; nothing waits for it.
+    //
+    // true while our own alarmViews entry is shown; false = alarmRecords fallback.
+    property bool viewLoaded: false
+    // Revision of the entry shown; null = none (fallback).
+    property var appliedRevision: null
+    // Error of our entry (state "error"), shown in the status text.
+    property string viewErrorMessage: ""
+    // Range of the rows shown.
+    property double shownFromMs: 0
+    property double shownToMs: 0
+    // Our current range / page as last requested (or last shown).
+    property double requestFromMs: 0
+    property double requestToMs: 0
+    property int requestPage: 1
+    // true until 篩選 / 顯示前一周: the range is the last 24 hours and moves on with the
+    // clock - recomputed when the page is shown and when alarmRecords changes (a new or
+    // resolved alarm; page 1 then, like the former reload). A chosen range stays as it is.
+    property bool rangeIsDefault: true
+
     ListModel { id: pagedAlarmModel }
 
-    function twoDigits(value) {
-        return value < 10 ? "0" + value : String(value)
+    // Rows / counts of one view (our entry, or the fallback) into the table and pager.
+    function showView(view) {
+        shownFromMs = view.fromMs
+        shownToMs = view.toMs
+        currentPage = view.page
+        totalPages = view.totalPages
+        totalCount = view.totalCount
+        activeAlarmCount = view.activeCount
+        viewErrorMessage = view.state === "error" ? view.message : ""
+        pagedAlarmModel.clear()
+        for (var i = 0; i < view.rows.length; ++i)
+            pagedAlarmModel.append(view.rows[i])
+        alarmList.positionViewAtBeginning()
     }
 
-    function formatDateTime(date) {
-        return date.getFullYear() + "/"
-                + twoDigits(date.getMonth() + 1) + "/"
-                + twoDigits(date.getDate()) + " "
-                + twoDigits(date.getHours()) + ":"
-                + twoDigits(date.getMinutes())
+    // Fallback: filter Td.alarmRecords in QML (no own entry).
+    function showLocalView(fromMs, toMs, page) {
+        showView(AlarmViewUtil.localView(Td.alarmRecords, fromMs, toMs, page, pageSize))
+        // The fallback clamps the page (e.g. fewer rows after a reload).
+        requestPage = currentPage
     }
 
-    function parseDateTime(value) {
-        var match = value.match(/^(\d{4})[\/-](\d{2})[\/-](\d{2})\s+(\d{2}):(\d{2})$/)
-        if (!match)
-            return null
-
-        var date = new Date(Number(match[1]), Number(match[2]) - 1,
-                            Number(match[3]), Number(match[4]), Number(match[5]), 0, 0)
-        if (date.getFullYear() !== Number(match[1])
-                || date.getMonth() !== Number(match[2]) - 1
-                || date.getDate() !== Number(match[3])
-                || date.getHours() !== Number(match[4])
-                || date.getMinutes() !== Number(match[5]))
-            return null
-
-        return date
-    }
-
-    function reloadAlarmData() {
-        alarmListModel.clear()
-        activeAlarmCount = 0
-        var records = Td.alarmRecords
-        for (var i = 0; i < records.length; ++i) {
-            var row = records[i]
-            alarmListModel.append({
-                "serialNumber": i + 1,
-                "timestampMs": Number(row.timestampMs),
-                "alarmTime": String(row.alarmTime),
-                "equipment": String(row.equipment),
-                "sensorName": String(row.sensorName),
-                "alarmMessage": String(row.alarmMessage),
-                "severity": String(row.severity),
-                "alarmStatus": String(row.alarmStatus)
-            })
-        }
-
-        var now = new Date()
-        var oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-        startTimeField.text = formatDateTime(oneDayAgo)
-        endTimeField.text = formatDateTime(now)
-        applyFilter()
-    }
-
-    function applyFilter() {
-        var startDate = parseDateTime(startTimeField.text)
-        var endDate = parseDateTime(endTimeField.text)
-
-        if (!startDate || !endDate) {
-            filterMessage = "請輸入正確時間（YYYY/MM/DD HH:MM）"
+    // Show our own entry of Td.alarmViews when its revision changed (same rules as
+    // HistoryPage.applyOwnView). "lost" (the Core removed our entry) goes back to the
+    // alarmRecords fallback with the same range and page, so the table never goes blank.
+    function applyOwnView() {
+        var change = AlarmViewUtil.viewChange(Td.alarmViews, Td.clientSessionId, appliedRevision)
+        if (change.kind === "lost") {
+            appliedRevision = null
+            viewLoaded = false
+            showLocalView(requestFromMs, requestToMs, requestPage)
             return
         }
-        if (startDate.getTime() > endDate.getTime()) {
+        if (change.kind !== "apply")
+            return
+
+        var view = change.view
+        var rangeChanged = !viewLoaded || view.fromMs !== shownFromMs || view.toMs !== shownToMs
+        appliedRevision = view.revision
+        viewLoaded = true
+        requestFromMs = view.fromMs
+        requestToMs = view.toMs
+        requestPage = view.page
+        showView(view)
+        // Fields follow only a new range (not paging), so text being typed is kept.
+        if (rangeChanged)
+            setRangeFields(view.fromMs, view.toMs)
+    }
+
+    function setRangeFields(fromMs, toMs) {
+        startTimeField.text = DateTimeUtil.formatDateTime(new Date(fromMs))
+        endTimeField.text = DateTimeUtil.formatDateTime(new Date(toMs))
+    }
+
+    function rangeText() {
+        return DateTimeUtil.formatDateTime(new Date(shownFromMs)) + " – "
+                + DateTimeUtil.formatDateTime(new Date(shownToMs))
+    }
+
+    // The only alarm range request: our own session id, range and page. Without an own
+    // entry the fallback shows the same range / page at once. Sent only while the page is
+    // shown and the transport is ready (offline: remembered, sent when it comes back).
+    function requestView(fromMs, toMs, page) {
+        requestFromMs = fromMs
+        requestToMs = toMs
+        requestPage = page
+        if (!viewLoaded)
+            showLocalView(fromMs, toMs, page)
+        if (!Td.transportReady || !visible)
+            return
+        Td.alarmViewRequested(Td.clientSessionId, fromMs, toMs, page)
+    }
+
+    // The last 24 hours up to now, in the fields and as our range.
+    function useDefaultRange(page) {
+        var range = AlarmViewUtil.defaultRange(new Date())
+        setRangeFields(range.fromMs, range.toMs)
+        requestView(range.fromMs, range.toMs, page)
+    }
+
+    // Page shown (or transport back while shown): ask for our current range and page again;
+    // the default range first moves on to the last 24 hours up to now.
+    function requestOwnView() {
+        if (rangeIsDefault) {
+            useDefaultRange(requestPage)
+            return
+        }
+        requestView(requestFromMs, requestToMs, requestPage)
+    }
+
+    // alarmRecords changed (new / resolved alarm, or the Core reloaded it).
+    function handleAlarmRecordsChanged() {
+        if (rangeIsDefault) {
+            // As the former page: back to the last 24 hours up to now, page 1.
+            useDefaultRange(1)
+            return
+        }
+        if (!viewLoaded)
+            showLocalView(requestFromMs, requestToMs, requestPage)
+    }
+
+    // "篩選": same input rules and messages as HistoryPage.applyFilter (fields
+    // YYYY/MM/DD HH:mm or the date only -> start 00:00 / end 23:59; page 1).
+    function applyFilter() {
+        if (!Td.transportReady)
+            return
+
+        var start = DateTimeUtil.parseDateTime(startTimeField.text, false)
+        var end = DateTimeUtil.parseDateTime(endTimeField.text, true)
+
+        if (!start || !end) {
+            filterMessage = "請輸入正確日期時間（YYYY/MM/DD HH:mm）"
+            return
+        }
+        var fromMs = DateTimeUtil.startMs(start)
+        var toMs = DateTimeUtil.endMs(end)
+        if (fromMs > toMs) {
             filterMessage = "起始時間不可晚於結束時間"
             return
         }
 
-        // The fields are minute-granular (HH:MM, seconds = 0) while timestampMs keeps
-        // seconds/ms, so include the whole end minute: [start, end + 1 min).
-        filterByRange(startDate.getTime(), endDate.getTime() + 60 * 1000)
-    }
-
-    function filterByRange(startMs, endExclusiveMs) {
         filterMessage = ""
-        activeAlarmCount = 0
-        filteredAlarmModel.clear()
-
-        for (var i = 0; i < alarmListModel.count; ++i) {
-            var row = alarmListModel.get(i)
-            if (row.timestampMs >= startMs
-                    && row.timestampMs < endExclusiveMs) {
-                if (row.alarmStatus === "未處理")
-                    activeAlarmCount += 1
-
-                filteredAlarmModel.append({
-                    "serialNumber": filteredAlarmModel.count + 1,
-                    "timestampMs": row.timestampMs,
-                    "alarmTime": row.alarmTime,
-                    "equipment": row.equipment,
-                    "sensorName": row.sensorName,
-                    "alarmMessage": row.alarmMessage,
-                    "severity": row.severity,
-                    "alarmStatus": row.alarmStatus
-                })
-            }
-        }
-
-        currentPage = 1
-        refreshPagedModel()
+        rangeIsDefault = false
+        requestView(fromMs, toMs, 1)
+        // Normalize the fields (a date-only entry shows its 00:00 / 23:59).
+        setRangeFields(fromMs, toMs)
     }
 
-    function showAllRecords() {
-        if (alarmListModel.count === 0)
+    // "顯示前一周" (was "顯示全部"): the last 7 local calendar days including today,
+    // (today - 6 days) 00:00:00.000 .. today 23:59:59.999, page 1 - the history page's
+    // range (HistoryViewUtil.lastWeekRange).
+    function showLastWeek() {
+        if (!Td.transportReady)
             return
 
-        // Fill the fields with the oldest/newest record for display only; the
-        // filter itself is unbounded so no record is cut off by minute truncation.
-        var oldest = alarmListModel.get(0)
-        var newest = oldest
-        for (var i = 1; i < alarmListModel.count; ++i) {
-            var row = alarmListModel.get(i)
-            if (row.timestampMs < oldest.timestampMs)
-                oldest = row
-            if (row.timestampMs > newest.timestampMs)
-                newest = row
-        }
-        startTimeField.text = oldest.alarmTime
-        endTimeField.text = newest.alarmTime
-        filterByRange(-Infinity, Infinity)
+        filterMessage = ""
+        rangeIsDefault = false
+        var range = HistoryViewUtil.lastWeekRange(new Date())
+        requestView(range.fromMs, range.toMs, 1)
+        setRangeFields(range.fromMs, range.toMs)
     }
 
-    function refreshPagedModel() {
-        pagedAlarmModel.clear()
-
-        if (filteredAlarmModel.count === 0) {
-            currentPage = 1
-            return
-        }
-
-        currentPage = Math.max(1, Math.min(currentPage, totalPages))
-        var startIndex = (currentPage - 1) * pageSize
-        var endIndex = Math.min(startIndex + pageSize, filteredAlarmModel.count)
-
-        for (var i = startIndex; i < endIndex; ++i) {
-            var row = filteredAlarmModel.get(i)
-            pagedAlarmModel.append({
-                "serialNumber": row.serialNumber,
-                "timestampMs": row.timestampMs,
-                "alarmTime": row.alarmTime,
-                "equipment": row.equipment,
-                "sensorName": row.sensorName,
-                "alarmMessage": row.alarmMessage,
-                "severity": row.severity,
-                "alarmStatus": row.alarmStatus
-            })
-        }
-
-        alarmList.positionViewAtBeginning()
-    }
-
+    // Previous / next page of the shown range (a request like the history page's paging).
     function goToPage(page) {
-        if (page < 1 || page > totalPages || page === currentPage)
+        if (!Td.transportReady || page < 1 || page > totalPages || page === currentPage)
             return
 
-        currentPage = page
-        refreshPagedModel()
+        requestView(shownFromMs, shownToMs, page)
     }
 
-    Component.onCompleted: reloadAlarmData()
+    Component.onCompleted: {
+        useDefaultRange(1)
+        applyOwnView()
+    }
+
+    // TopNav.qml keeps this page instantiated and switches pages with `visible`.
+    onVisibleChanged: {
+        if (visible)
+            requestOwnView()
+    }
 
     Connections {
         target: Td
         function onAlarmRecordsChanged() {
-            reloadAlarmData()
+            alarmPage.handleAlarmRecordsChanged()
+        }
+        function onAlarmViewsChanged() {
+            alarmPage.applyOwnView()
+        }
+        // WASM: the mirror (re)connected while the page is shown - a request made
+        // while offline was not sent. The desktop's transportReady never changes.
+        function onTransportReadyChanged() {
+            if (Td.transportReady && alarmPage.visible)
+                alarmPage.requestOwnView()
         }
     }
 
@@ -208,6 +256,7 @@ Item {
         spacing: 22
 
         Row {
+            id: headerRow
             width: parent.width
             height: 54
 
@@ -260,157 +309,181 @@ Item {
             }
         }
 
+        // Range filter like the history page: the format hint, then the date/time fields
+        // and buttons with the current range (or the input error) to their right.
+        // Height follows the content, so wrapped text is never cut off.
         Rectangle {
+            id: filterPanel
             width: parent.width
-            height: 124
+            height: filterContent.height + 26
             radius: 10
             color: "#111D32"
-            border.color: dividerColor
+            border.color: alarmPage.dividerColor
             border.width: 1
 
-            Row {
+            Column {
+                id: filterContent
                 anchors.left: parent.left
                 anchors.leftMargin: 24
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 14
-
-                Column {
-                    spacing: 8
-
-                    Text {
-                        text: "起始時間"
-                        color: mutedTextColor
-                        font.pixelSize: 13
-                    }
-
-                    TextField {
-                        id: startTimeField
-                        width: 260
-                        height: 46
-                        color: "white"
-                        font.pixelSize: 16
-                        font.family: "Consolas"
-                        selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
-                        placeholderTextColor: "#5F7890"
-
-                        background: Rectangle {
-                            radius: 6
-                            color: "#0B1527"
-                            border.color: startTimeField.activeFocus ? root.mainBlue : dividerColor
-                            border.width: 1
-                        }
-
-                        onAccepted: applyFilter()
-                    }
-                }
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    text: "—"
-                    color: mutedTextColor
-                    font.pixelSize: 20
-                }
-
-                Column {
-                    spacing: 8
-
-                    Text {
-                        text: "結束時間"
-                        color: mutedTextColor
-                        font.pixelSize: 13
-                    }
-
-                    TextField {
-                        id: endTimeField
-                        width: 260
-                        height: 46
-                        color: "white"
-                        font.pixelSize: 16
-                        font.family: "Consolas"
-                        selectByMouse: true
-                        placeholderText: "YYYY/MM/DD HH:MM"
-                        placeholderTextColor: "#5F7890"
-
-                        background: Rectangle {
-                            radius: 6
-                            color: "#0B1527"
-                            border.color: endTimeField.activeFocus ? root.mainBlue : dividerColor
-                            border.width: 1
-                        }
-
-                        onAccepted: applyFilter()
-                    }
-                }
-
-                Button {
-                    id: filterButton
-                    width: 110
-                    height: 46
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        radius: 6
-                        color: filterButton.hovered ? "#FF7881" : dangerColor
-                    }
-
-                    contentItem: Text {
-                        text: "篩選"
-                        color: "white"
-                        font.pixelSize: 16
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    onClicked: applyFilter()
-                }
-
-                Button {
-                    id: allButton
-                    width: 110
-                    height: 46
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 14
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        radius: 6
-                        color: allButton.hovered ? "#3A2932" : "transparent"
-                        border.color: dividerColor
-                        border.width: 1
-                    }
-
-                    contentItem: Text {
-                        text: "顯示全部"
-                        color: root.textColor
-                        font.pixelSize: 15
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    onClicked: showAllRecords()
-                }
-            }
-
-            Text {
                 anchors.right: parent.right
                 anchors.rightMargin: 24
-                anchors.verticalCenter: parent.verticalCenter
-                text: filterMessage.length > 0
-                      ? filterMessage
-                      : "共 " + filteredAlarmModel.count + " 筆"
-                color: filterMessage.length > 0 ? dangerColor : mutedTextColor
-                font.pixelSize: 14
+                anchors.top: parent.top
+                anchors.topMargin: 12
+                spacing: 10
+
+                Text {
+                    width: parent.width
+                    text: "日期時間格式：YYYY/MM/DD HH:mm（例如：2026/09/24 08:30），可直接輸入或按欄位右側的日曆圖示選擇；"
+                          + "只輸入日期時，起始為 00:00、結束為 23:59；結束時間包含該分鐘；"
+                          + "預設顯示最近 24 小時；篩選可跨月，「顯示前一周」為今天往前 7 天（含今天，00:00 至 23:59）"
+                    color: alarmPage.mutedTextColor
+                    font.pixelSize: 12
+                    wrapMode: Text.Wrap
+                }
+
+                Item {
+                    width: parent.width
+                    height: filterRow.height
+
+                    Row {
+                        id: filterRow
+                        spacing: 14
+
+                        Column {
+                            spacing: 8
+
+                            Text {
+                                text: "起始日期時間"
+                                color: alarmPage.mutedTextColor
+                                font.pixelSize: 13
+                            }
+
+                            // Type YYYY/MM/DD HH:mm (or the date only -> 00:00) or pick it with
+                            // the calendar button; Enter runs the filter, picking does not.
+                            Components.DateTimeField {
+                                id: startTimeField
+                                width: alarmPage.dateFieldWidth
+                                height: 46
+                                isEnd: false
+                                popupScale: alarmPage.designScale
+                                borderColor: alarmPage.dividerColor
+                                mutedTextColor: alarmPage.mutedTextColor
+                                onAccepted: alarmPage.applyFilter()
+                            }
+                        }
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            text: "—"
+                            color: alarmPage.mutedTextColor
+                            font.pixelSize: 20
+                        }
+
+                        Column {
+                            spacing: 8
+
+                            Text {
+                                text: "結束日期時間"
+                                color: alarmPage.mutedTextColor
+                                font.pixelSize: 13
+                            }
+
+                            // Date only -> 23:59 (the whole end day).
+                            Components.DateTimeField {
+                                id: endTimeField
+                                width: alarmPage.dateFieldWidth
+                                height: 46
+                                isEnd: true
+                                popupScale: alarmPage.designScale
+                                borderColor: alarmPage.dividerColor
+                                mutedTextColor: alarmPage.mutedTextColor
+                                onAccepted: alarmPage.applyFilter()
+                            }
+                        }
+
+                        Button {
+                            id: filterButton
+                            width: 110
+                            height: 46
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            // The range query is a request to the Core: disabled while offline
+                            // (as on the history page).
+                            enabled: Td.transportReady
+                            hoverEnabled: true
+
+                            background: Rectangle {
+                                radius: 6
+                                color: !filterButton.enabled ? "#16243A"
+                                     : filterButton.hovered ? "#FF7881" : alarmPage.dangerColor
+                            }
+
+                            contentItem: Text {
+                                text: "篩選"
+                                color: filterButton.enabled ? "white" : "#536A80"
+                                font.pixelSize: 16
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: alarmPage.applyFilter()
+                        }
+
+                        Button {
+                            id: lastWeekButton
+                            width: 110
+                            height: 46
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 14
+                            enabled: Td.transportReady
+                            hoverEnabled: true
+
+                            background: Rectangle {
+                                radius: 6
+                                color: !lastWeekButton.enabled ? "#16243A"
+                                     : lastWeekButton.hovered ? "#223D5A" : "transparent"
+                                border.color: lastWeekButton.enabled ? alarmPage.dividerColor : "transparent"
+                                border.width: 1
+                            }
+
+                            contentItem: Text {
+                                text: "顯示前一周"
+                                color: lastWeekButton.enabled ? root.textColor : "#536A80"
+                                font.pixelSize: 15
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: alarmPage.showLastWeek()
+                        }
+                    }
+
+                    // Current range and count (or the input / read error), level with the fields.
+                    Text {
+                        id: statusText
+                        anchors.left: filterRow.right
+                        anchors.leftMargin: 24
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        height: 46
+                        text: alarmPage.filterMessage.length > 0 ? alarmPage.filterMessage
+                            : alarmPage.viewErrorMessage.length > 0 ? "讀取警報失敗：" + alarmPage.viewErrorMessage
+                            : "區間：" + alarmPage.rangeText() + " · 共 " + alarmPage.totalCount + " 筆"
+                        color: alarmPage.filterMessage.length > 0 || alarmPage.viewErrorMessage.length > 0 ? alarmPage.dangerColor : alarmPage.mutedTextColor
+                        font.pixelSize: 14
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.Wrap
+                    }
+                }
             }
         }
 
         Rectangle {
             width: parent.width
-            height: parent.height - 222
+            height: parent.height - headerRow.height - filterPanel.height - 2 * parent.spacing
             radius: 10
             color: "#111D32"
             border.color: dividerColor
@@ -614,6 +687,14 @@ Item {
                 }
             }
 
+            Text {
+                anchors.centerIn: alarmList
+                visible: pagedAlarmModel.count === 0 && alarmPage.viewErrorMessage.length === 0
+                text: "此日期區間沒有警報紀錄"
+                color: alarmPage.mutedTextColor
+                font.pixelSize: 18
+            }
+
             Rectangle {
                 id: paginationBar
                 anchors.left: parent.left
@@ -638,7 +719,9 @@ Item {
                         id: previousPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage > 1
+                        // Paging is a request (alarmViewRequested): disabled while offline,
+                        // as on the history page.
+                        enabled: alarmPage.currentPage > 1 && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -674,7 +757,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: currentPage < totalPages
+                        enabled: alarmPage.currentPage < alarmPage.totalPages && Td.transportReady
                         hoverEnabled: true
 
                         background: Rectangle {

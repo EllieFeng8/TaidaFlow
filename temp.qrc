@@ -9,6 +9,7 @@
         <file>TaidaFlowContent/AlarmPage.qml</file>
         <file>TaidaFlowContent/App.qml</file>
         <file>TaidaFlowContent/assets/center.png</file>
+        <file>TaidaFlowContent/assets/logo_8TFs7.png</file>
         <file>TaidaFlowContent/assets/Group 121.png</file>
         <file>TaidaFlowContent/assets/Group 164.png</file>
         <file>TaidaFlowContent/assets/motor.png</file>
@@ -18,6 +19,9 @@
         <file>TaidaFlowContent/components/MotorIcon.qml</file>
         <file>TaidaFlowContent/components/ValueTag.qml</file>
         <file>TaidaFlowContent/HistoryPage.qml</file>
+        <file>TaidaFlowContent/SettingsPage.qml</file>
+        <file>TaidaFlowContent/components/SensorSettingRow.qml</file>
+        <file>TaidaFlowContent/components/SensorUnits.js</file>
         <file>TaidaFlowContent/Main.qml</file>
         <file>TaidaFlowContent/TopNav.qml</file>
     </qresource>

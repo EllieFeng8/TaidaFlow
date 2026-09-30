@@ -111,3 +111,20 @@ taidaflow_core_test(tst_manager_sv_guard
         "${CORE_DIR}/SqlManager.cpp"
         "${CORE_DIR}/TaidaFlowProxy.h"
     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::SerialBus Qt6::SerialPort)
+
+# ---------------------------------------------------------------------------------------------
+# main (f05e0a4, elliefeng): sensor settings contract of TaidaFlowProxy (sensorSettingsSv /
+# pressureUnitSv) and the settings page preview (Preview.qml). Merged into core's test project.
+# ---------------------------------------------------------------------------------------------
+find_package(Qt6 6.8 REQUIRED COMPONENTS Quick)
+qt_add_executable(tst_sensor_settings tst_sensor_settings.cpp ../TaidaFlowProxy.h)
+set_target_properties(tst_sensor_settings PROPERTIES WIN32_EXECUTABLE FALSE MACOSX_BUNDLE FALSE)
+target_link_libraries(tst_sensor_settings PRIVATE Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::Test)
+target_compile_definitions(tst_sensor_settings PRIVATE SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}/../..")
+if(MSVC)
+    target_compile_options(tst_sensor_settings PRIVATE /utf-8)
+endif()
+add_test(NAME sensor_settings COMMAND tst_sensor_settings)
+set_tests_properties(sensor_settings PROPERTIES
+    ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_QUICK_BACKEND=set:software;QT_QUICK_CONTROLS_STYLE=set:Universal"
+    TIMEOUT 300)

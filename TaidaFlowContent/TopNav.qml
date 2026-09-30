@@ -15,6 +15,17 @@ Rectangle {
     property color panelColor: "#111D32"
 
     property int currentPage: 0
+    property int pendingPage: -1
+
+    function navigateTo(page) {
+        if (page === currentPage) return
+        if (currentPage === 3 && sensorSettingsPage.hasUnsavedChanges) {
+            pendingPage = page
+            unsavedSettingsDialog.open()
+            return
+        }
+        currentPage = page
+    }
     // 0 = 主程式
     // 1 = 異常警告
     // 2 = 歷史紀錄
@@ -56,6 +67,41 @@ Rectangle {
 
             height: 1
             color: "#284766"
+        }
+
+        Row {
+            anchors.left: parent.left
+            anchors.leftMargin: 24
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 20
+
+            Image {
+                anchors.verticalCenter: parent.verticalCenter
+                width: 300
+                height: 42
+                source: "assets/logo_8TFs7.png"
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 4
+
+                Text {
+                    text: "Tel : +886-3487-1786"
+                    color: root.textColor
+                    font.family: "Consolas"
+                    font.pixelSize: 15
+                }
+
+                Text {
+                    text: "Email : newyisun@gmail.com"
+                    color: root.textColor
+                    font.family: "Consolas"
+                    font.pixelSize: 15
+                }
+            }
         }
 
         Row {
@@ -120,7 +166,7 @@ Rectangle {
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
-                        root.currentPage = 0
+                        root.navigateTo(0)
                     }
                 }
             }
@@ -182,7 +228,7 @@ Rectangle {
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
-                        root.currentPage = 1
+                        root.navigateTo(1)
                     }
                 }
             }
@@ -244,11 +290,36 @@ Rectangle {
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
-                        root.currentPage = 2
+                        root.navigateTo(2)
                     }
                 }
             }
 
+        }
+        Button {
+            id: settingsNavButton
+            anchors.right: parent.right
+            anchors.rightMargin: 240
+            anchors.verticalCenter: parent.verticalCenter
+            width: 120
+            height: 48
+            text: "設定"
+            highlighted: root.currentPage === 3
+            background: Rectangle {
+                radius: 6
+                color: root.currentPage === 3 ? "#203F5D" : settingsNavButton.hovered ? "#182C45" : "transparent"
+                border.width: 1
+                border.color: root.currentPage === 3 ? root.mainBlue : "#284766"
+            }
+            contentItem: Text {
+                text: settingsNavButton.text
+                color: root.currentPage === 3 ? "white" : "#AFC5D8"
+                font.pixelSize: 18
+                font.bold: root.currentPage === 3
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+            onClicked: root.navigateTo(3)
         }
         // =========================
        // 右側時間
@@ -297,6 +368,68 @@ Rectangle {
     }
     HistoryPage{
         visible: root.currentPage === 2
+    }
+    SettingsPage {
+        id: sensorSettingsPage
+        visible: root.currentPage === 3
+    }
+
+    Dialog {
+        id: unsavedSettingsDialog
+        objectName: "unsavedSettingsDialog"
+        parent: Overlay.overlay
+        modal: true
+        closePolicy: Popup.CloseOnEscape
+        width: 540
+        scale: root.scale
+        transformOrigin: Item.TopLeft
+        x: (parent.width - width * scale) / 2
+        y: (parent.height - height * scale) / 2
+        padding: 24
+        background: Rectangle {
+            color: "#111D32"
+            border.color: "#FFD166"
+            border.width: 1
+            radius: 8
+        }
+        header: Label {
+            text: "尚未保存"
+            color: "#FFD166"
+            font.pixelSize: 24
+            font.bold: true
+            padding: 24
+            bottomPadding: 0
+        }
+        contentItem: Label {
+            text: "設定已修改，但尚未按「套用」。\n要繼續編輯，還是放棄未保存的修改並離開？"
+            color: "#E8F4FF"
+            font.pixelSize: 18
+            wrapMode: Text.WordWrap
+        }
+        footer: DialogButtonBox {
+            padding: 16
+            spacing: 12
+            background: Rectangle { color: "transparent" }
+            Button {
+                text: "繼續編輯"
+                implicitHeight: 44
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                contentItem: Text { text: parent.text; font.pixelSize: 18; color: "#E8F4FF"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+                background: Rectangle { color: "#203F5D"; radius: 4 }
+            }
+            Button {
+                text: "放棄修改並離開"
+                implicitHeight: 44
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                contentItem: Text { text: parent.text; font.pixelSize: 18; color: "#FFD166"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+                background: Rectangle { color: "#3B3022"; radius: 4 }
+            }
+        }
+        onAccepted: {
+            sensorSettingsPage.discardChanges()
+            root.currentPage = root.pendingPage
+        }
+        onClosed: root.pendingPage = -1
     }
 
     // =========================================================

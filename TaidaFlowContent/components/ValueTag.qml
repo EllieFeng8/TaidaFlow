@@ -5,7 +5,8 @@ Item {
 
     property string title: "PT-01"
     property string value: "2.5"
-    property string unit: "Pa"
+    property string unit: "kPa"
+    property color tagColor: title.indexOf("TT-") === 0 ? "#FF9F43" : root.borderColor
 
     width: 62
     height: 54
@@ -13,7 +14,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        border.color: root.borderColor
+        border.color: valueTag.tagColor
         border.width: 1
         radius: 2
     }
@@ -23,7 +24,7 @@ Item {
         anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         text: parent.title
-        color: root.textColor
+        color: valueTag.tagColor
         font.pixelSize: 14
         font.family: "Consolas"
     }
@@ -48,22 +49,25 @@ Item {
             // anchors.bottomMargin: 2
             // anchors.horizontalCenter: parent.horizontalCenter
 
-            width: 42
+            width: Math.max(24, valueTag.width - unitField.implicitWidth - 6)
             height: 25
 
             text: parent.parent.value
-            color: root.mainBlue
+            color: valueTag.tagColor
             font.pixelSize: 18
             font.family: "Consolas"
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 10
 
             horizontalAlignment: TextInput.AlignHCenter
             verticalAlignment: TextInput.AlignVCenter
         }
         Text {
+            id: unitField
             anchors.verticalCenter: parent.verticalCenter
 
             text: parent.parent.unit
-            color: root.textColor
+            color: valueTag.tagColor
             font.pixelSize: 8
             font.family: "Consolas"
         }

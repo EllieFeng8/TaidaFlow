@@ -7,7 +7,7 @@ Window {
 
     // =========================================================
     // Web-only global scaling (Qt.platform.os === "wasm"). Desktop: nothing below
-    // applies - the window is sized by topScreen (1920x1080) exactly as before and
+    // applies - the normal window is sized by topScreen (1920x1080) and
     // topScreen stays a direct child of the window, unscaled.
     // Web: the window fills the browser page (full-screen in the page container,
     // which follows the browser size), the 1920x1080 design (TopNav root) is scaled
@@ -26,10 +26,26 @@ Window {
     height: webScaling ? designHeight : topScreen.height
 
     visible: true
+    visibility: webScaling ? Window.Windowed : Window.FullScreen
     title: "TaidaFlow"
+    color: "#0f192d"
+
+    Shortcut {
+        sequence: "F11"
+        enabled: !appWindow.webScaling
+        context: Qt.WindowShortcut
+        autoRepeat: false
+        onActivated: {
+            if (appWindow.visibility === Window.FullScreen)
+                appWindow.showNormal()
+            else
+                appWindow.showFullScreen()
+        }
+    }
 
     TopNav {
         id: topScreen
+        // anchors.centerIn: appWindow.webScaling ? undefined : parent
     }
 
     // Instantiated only on the web (see Component.onCompleted), so the desktop

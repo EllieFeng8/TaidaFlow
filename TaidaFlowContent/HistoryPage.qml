@@ -4,6 +4,7 @@ import TaidaFlowBackend 1.0
 import "components" as Components
 import "components/DateTimeUtil.js" as DateTimeUtil
 import "components/HistoryViewUtil.js" as HistoryViewUtil
+import "components/SensorUnits.js" as SensorUnits
 
 // =========================================================
 // 歷史紀錄頁面
@@ -101,7 +102,13 @@ Item {
                                         : ""
     readonly property bool exportPanelShown: myExport !== null
                                              && (exportActive || exportKey !== dismissedExportKey)
-    readonly property var columnTitles: Td.historyTitle
+    readonly property var columnTitles: {
+        var result = []
+        for (var title of Td.historyTitle)
+            result.push(/^PT-\d+\s*\((kPa|psi|bar|Pa)\)$/.test(title)
+                        ? title.replace(/\([^)]*\)/, "(" + Td.pressureUnitSv + ")") : title)
+        return result
+    }
     // The Core already pages our range (spec §2.1): this is the records of our
     // own entry (10 rows), newest first, no local filtering.
     property var historySourceModel: []
@@ -131,6 +138,14 @@ Item {
     function cellText(value) {
         return value === undefined || value === null ? "—"
              : typeof value === "number" ? value.toFixed(2) : String(value)
+    }
+    function historyCellText(value, index) {
+        var match = /^PT-\d+\s*\((kPa|psi|bar|Pa)\)$/.exec(String(Td.historyTitle[index]))
+        if (match && typeof value === "number") {
+            var sourceFactor = match[1] === "Pa" ? 1000 : SensorUnits.pressureFactor(match[1])
+            return (value / sourceFactor * SensorUnits.pressureFactor(Td.pressureUnitSv)).toFixed(2)
+        }
+        return cellText(value)
     }
 
     // Same font as the table header titles below (14 px bold, default family).
@@ -898,7 +913,7 @@ Item {
                                     Text {
                                         anchors.fill: parent
                                         anchors.rightMargin: 12
-                                        text: historyPage.cellText(recordRow.modelData.values[index])
+                                        text: historyPage.historyCellText(recordRow.modelData.values[index], index)
                                         color: text === "ON" ? historyPage.dangerColor
                                              : text === "OFF" ? historyPage.successColor
                                              : index < 2 ? root.textColor : "#A7D9F5"

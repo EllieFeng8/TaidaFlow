@@ -1,0 +1,411 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:340
++ ... \taidaflow; cmd /c "Core\tests\run-core-tests.bat fresh" *> docs\evid ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (3.7s)
+-- Generating done (0.3s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/core-tests
+[1/55] Running qmlimportscanner for tst_historyexport_status
+[2/55] Running qmlimportscanner for tst_manager_sv_guard
+[3/55] Running qmlimportscanner for tst_sensor_settings
+[4/55] Running qmlimportscanner for tst_alarm_views
+[5/55] Automatic MOC and UIC for target tst_manager_sv_guard
+[6/55] Automatic MOC and UIC for target tst_sensor_settings
+[7/55] Automatic MOC and UIC for target tst_alarm_views
+[8/55] Automatic MOC and UIC for target tst_historyexport_status
+[9/55] Automatic MOC and UIC for target tst_sqlmanager_schema_once
+[10/55] Automatic MOC and UIC for target tst_rest_range_paging
+[11/55] Automatic MOC and UIC for target tst_modbusclient_offline
+[12/55] Automatic MOC and UIC for target tst_ms300_offline
+[13/55] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\tst_sqlmanager_schema_once_autogen\mocs_compilation.cpp.obj
+[14/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmRecordFormat.cpp.obj
+[15/55] Building CXX object CMakeFiles\tst_rest_range_paging.dir\tst_rest_range_paging_autogen\mocs_compilation.cpp.obj
+[16/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[17/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[18/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManagerAlarms.cpp.obj
+[19/55] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\tst_sqlmanager_schema_once.cpp.obj
+[20/55] Building CXX object CMakeFiles\tst_sensor_settings.dir\tst_sensor_settings_autogen\mocs_compilation.cpp.obj
+[21/55] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[22/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmViews.cpp.obj
+[23/55] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[24/55] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[25/55] Building CXX object CMakeFiles\tst_rest_range_paging.dir\tst_rest_range_paging.cpp.obj
+[26/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[27/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\tst_manager_sv_guard_autogen\mocs_compilation.cpp.obj
+[28/55] Building CXX object CMakeFiles\tst_historyexport_status.dir\tst_historyexport_status.cpp.obj
+[29/55] Building CXX object CMakeFiles\tst_historyexport_status.dir\tst_historyexport_status_autogen\mocs_compilation.cpp.obj
+[30/55] Building CXX object CMakeFiles\tst_alarm_views.dir\tst_alarm_views.cpp.obj
+[31/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[32/55] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\tst_modbusclient_offline_autogen\mocs_compilation.cpp.obj
+[33/55] Building CXX object CMakeFiles\tst_alarm_views.dir\tst_alarm_views_autogen\mocs_compilation.cpp.obj
+[34/55] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[35/55] Building CXX object CMakeFiles\tst_rest_range_paging.dir\D_\repo\codex\qmlTester\taidaflow\Core\RESTManager.cpp.obj
+[36/55] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[37/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\tst_manager_sv_guard.cpp.obj
+[38/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\manager.cpp.obj
+[39/55] Linking CXX executable tst_sqlmanager_schema_once.exe
+[40/55] Building CXX object CMakeFiles\tst_ms300_offline.dir\tst_ms300_offline_autogen\mocs_compilation.cpp.obj
+[41/55] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[42/55] Linking CXX executable tst_historyexport_status.exe
+[43/55] Linking CXX executable tst_alarm_views.exe
+[44/55] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[45/55] Linking CXX executable tst_manager_sv_guard.exe
+[46/55] Building CXX object CMakeFiles\tst_sensor_settings.dir\tst_sensor_settings.cpp.obj
+[47/55] Building CXX object CMakeFiles\tst_rest_range_paging.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[48/55] Linking CXX executable tst_sensor_settings.exe
+[49/55] Linking CXX executable tst_rest_range_paging.exe
+[50/55] Building CXX object CMakeFiles\tst_ms300_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[51/55] Building CXX object CMakeFiles\tst_ms300_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[52/55] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\tst_modbusclient_offline.cpp.obj
+[53/55] Linking CXX executable tst_modbusclient_offline.exe
+[54/55] Building CXX object CMakeFiles\tst_ms300_offline.dir\tst_ms300_offline.cpp.obj
+[55/55] Linking CXX executable tst_ms300_offline.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/core-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/core-tests
+    Start 1: tst_rest_range_paging
+1/8 Test #1: tst_rest_range_paging ............   Passed    5.31 sec
+    Start 2: tst_sqlmanager_schema_once
+2/8 Test #2: tst_sqlmanager_schema_once .......   Passed    1.12 sec
+    Start 3: tst_historyexport_status
+3/8 Test #3: tst_historyexport_status .........   Passed    0.80 sec
+    Start 4: tst_modbusclient_offline
+4/8 Test #4: tst_modbusclient_offline .........   Passed   16.29 sec
+    Start 5: tst_ms300_offline
+5/8 Test #5: tst_ms300_offline ................   Passed   20.87 sec
+    Start 6: tst_manager_sv_guard
+6/8 Test #6: tst_manager_sv_guard .............   Passed    2.90 sec
+    Start 7: sensor_settings
+7/8 Test #7: sensor_settings ..................   Passed    1.57 sec
+    Start 8: tst_alarm_views
+8/8 Test #8: tst_alarm_views ..................***Failed   42.41 sec
+********* Start testing of TestAlarmViews *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+QWARN  : TestAlarmViews::initTestCase() Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/core-tests/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+PASS   : TestAlarmViews::initTestCase()
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #1 (new view) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross #1 applied: page 1 (requested 1), 9 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.43 ms); request-to-apply 6.00 ms.
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross entry written: state ready, page 1/2, 9 row(s), total 13, active 8, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #2 (request) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross #2 applied: page 2 (requested 2), 4 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.37 ms); request-to-apply 13.32 ms.
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross entry written: state ready, page 2/2, 4 row(s), total 13, active 8, revision 2; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #3 (request) page 99, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross #3 applied: page 2 (requested 99), 4 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.36 ms); request-to-apply 15.28 ms.
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross entry unchanged (page 2/2, revision 2); alarmViews not written.
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() 'revision(sid) > before' returned FALSE. ()
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(214) : failure location
+QWARN  : TestAlarmViews::rangeAcrossTwoMonths() request web-cross page 99 got no new entry
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #4 (request) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() 'revision(sid) > before' returned FALSE. ()
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(214) : failure location
+QWARN  : TestAlarmViews::rangeAcrossTwoMonths() request web-cross page 0 got no new entry
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() Compared values are not the same
+   Actual   (e.value("page").toInt()): 2
+   Expected (page)                   : 1
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(229) : failure location
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #5 (request) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() 'revision(sid) > before' returned FALSE. ()
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(214) : failure location
+QWARN  : TestAlarmViews::rangeAcrossTwoMonths() request web-cross page 2 got no new entry
+QINFO  : TestAlarmViews::rangeAcrossTwoMonths() [Alarm] web-cross request #6 (request) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() 'revision(sid) > before' returned FALSE. ()
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(214) : failure location
+QWARN  : TestAlarmViews::rangeAcrossTwoMonths() request web-cross page -5 got no new entry
+FAIL!  : TestAlarmViews::rangeAcrossTwoMonths() Compared values are not the same
+   Actual   (e.value("page").toInt()): 2
+   Expected (page)                   : 1
+D:\repo\codex\qmlTester\taidaflow\Core\tests\tst_alarm_views.cpp(229) : failure location
+QINFO  : TestAlarmViews::boundaries() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound request #1 (new view) page 1, range 1769302800000 .. 1769302800000 ms (1769302800 .. 1769302800 s), 1 session(s).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-cross result #4 dropped: no such session here (removed).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-cross result #6 dropped: no such session here (removed).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound #1 applied: page 1 (requested 1), 3 row(s), total 3, active 1, 1 month file(s); SqlManager 2 step(s) (longest 0.74 ms); request-to-apply 14.01 ms.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound entry written: state ready, page 1/1, 3 row(s), total 3, active 1, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound request #2 (request) page 1, range 1769302800001 .. 1769302860000 ms (1769302801 .. 1769302860 s), 1 session(s).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound #2 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 1 month file(s); SqlManager 2 step(s) (longest 0.51 ms); request-to-apply 15.65 ms.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 2; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound request #3 (request) page 1, range 1769302740000 .. 1769302799999 ms (1769302740 .. 1769302799 s), 1 session(s).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound #3 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 1 month file(s); SqlManager 2 step(s) (longest 0.45 ms); request-to-apply 15.58 ms.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 3; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound request #4 (request) page 3, range 1769302740000 .. 1769302800999 ms (1769302740 .. 1769302800 s), 1 session(s).
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound #4 applied: page 1 (requested 3), 3 row(s), total 3, active 1, 1 month file(s); SqlManager 2 step(s) (longest 0.57 ms); request-to-apply 15.54 ms.
+QINFO  : TestAlarmViews::boundaries() [Alarm] web-bound entry written: state ready, page 1/1, 3 row(s), total 3, active 1, revision 4; alarmViews has 1 entry.
+PASS   : TestAlarmViews::boundaries()
+QINFO  : TestAlarmViews::emptyRange() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::emptyRange() [Alarm] web-empty request #1 (new view) page 4, range 1740758400000 .. 1743436799000 ms (1740758400 .. 1743436799 s), 1 session(s).
+QINFO  : TestAlarmViews::emptyRange() [Alarm] web-empty #1 applied: page 1 (requested 4), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.40 ms); request-to-apply 14.75 ms.
+QINFO  : TestAlarmViews::emptyRange() [Alarm] web-empty entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 1; alarmViews has 1 entry.
+PASS   : TestAlarmViews::emptyRange()
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=8 sensor=DI6 message=m6 coreStatus=���` -> alarmStatus=���B�z severity=�Y��
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=7 sensor=DI5 message=m5 coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=6 sensor=DI4 message=m4 coreStatus=���` -> alarmStatus=���B�z severity=�Y��
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=5 sensor=DI3 message=m3 coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=4 sensor=DI2 message=m2 coreStatus=���` -> alarmStatus=���B�z severity=�Y��
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=3 sensor=DI1 message=m1 coreStatus=���` -> alarmStatus=�w�Ѱ� severity=ĵ�i
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=2 sensor=DI0 message=m0 coreStatus=���` -> alarmStatus=���B�z severity=�Y��
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm][UI] id=1 sensor=MS300 message=warning coreStatus=ĵ�i -> alarmStatus=���B�z severity=ĵ�i
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same request #1 (new view) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same #1 applied: page 1 (requested 1), 9 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.78 ms); request-to-apply 13.25 ms.
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same entry written: state ready, page 1/2, 9 row(s), total 13, active 8, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same request #2 (request) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same #2 applied: page 2 (requested 2), 4 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.48 ms); request-to-apply 15.75 ms.
+QINFO  : TestAlarmViews::rowsSameAsAlarmRecords() [Alarm] web-same entry written: state ready, page 2/2, 4 row(s), total 13, active 8, revision 2; alarmViews has 1 entry.
+PASS   : TestAlarmViews::rowsSameAsAlarmRecords()
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #1 (new view) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676000 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #2 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676060 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #3 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676120 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #4 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676180 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #5 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676240 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #6 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676300 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #7 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676360 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #8 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676420 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #9 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676480 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #10 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1772676540 s: 1 of 1 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #11 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 1 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #2 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #3 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #4 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #5 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #6 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #7 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #8 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #9 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #10 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA result #1 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA #11 applied: page 2 (requested 2), 1 row(s), total 10, active 10, 1 month file(s); SqlManager 2 step(s) (longest 0.24 ms); request-to-apply 25.59 ms.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA entry written: state ready, page 2/2, 1 row(s), total 10, active 10, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveB request #12 (new view) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 2 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveB #12 applied: page 1 (requested 1), 9 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.48 ms); request-to-apply 15.49 ms.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveB entry written: state ready, page 1/2, 9 row(s), total 13, active 8, revision 2; alarmViews has 2 entries.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1773964800 s: 1 of 2 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #13 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 2 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA #13 applied: page 2 (requested 2), 2 row(s), total 11, active 11, 1 month file(s); SqlManager 2 step(s) (longest 0.41 ms); request-to-apply 10.52 ms.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA entry written: state ready, page 2/2, 2 row(s), total 11, active 11, revision 3; alarmViews has 2 entries.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] alarm row written at 1773964800 s: 1 of 2 view(s) hold that time, read again: web-liveA
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA request #14 (alarm changed) page 2, range 1772294400000 .. 1774972799999 ms (1772294400 .. 1774972799 s), 2 session(s).
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA #14 applied: page 2 (requested 2), 2 row(s), total 11, active 10, 1 month file(s); SqlManager 2 step(s) (longest 0.40 ms); request-to-apply 10.57 ms.
+QINFO  : TestAlarmViews::liveUpdates() [Alarm] web-liveA entry written: state ready, page 2/2, 2 row(s), total 11, active 10, revision 4; alarmViews has 2 entries.
+PASS   : TestAlarmViews::liveUpdates()
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 request #1 (new view) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] desktop request #2 (new view) page 1, range 1772294400000 .. 1774972799000 ms (1772294400 .. 1774972799 s), 2 session(s).
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] desktop #2 applied: page 1 (requested 1), 9 row(s), total 11, active 10, 1 month file(s); SqlManager 2 step(s) (longest 0.30 ms); request-to-apply 14.41 ms.
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] desktop entry written: state ready, page 1/2, 9 row(s), total 11, active 10, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 #1 applied: page 2 (requested 2), 4 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.60 ms); request-to-apply 14.68 ms.
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 entry written: state ready, page 2/2, 4 row(s), total 13, active 8, revision 2; alarmViews has 2 entries.
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 request #3 (request) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 2 session(s).
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 #3 applied: page 1 (requested 1), 9 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.55 ms); request-to-apply 15.47 ms.
+QINFO  : TestAlarmViews::sessionsIndependent() [Alarm] web-ind1 entry written: state ready, page 1/2, 9 row(s), total 13, active 8, revision 3; alarmViews has 2 entries.
+PASS   : TestAlarmViews::sessionsIndependent()
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest request #1 (new view) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest request #2 (request) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest request #3 (request) page 1, range 1769302800000 .. 1769302800999 ms (1769302800 .. 1769302800 s), 1 session(s).
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest result #1 dropped: stale, newest request of this session is #3 (not finished by SqlManager).
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest result #2 dropped: stale, newest request of this session is #3 (not finished by SqlManager).
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest #3 applied: page 1 (requested 1), 3 row(s), total 3, active 1, 1 month file(s); SqlManager 2 step(s) (longest 0.22 ms); request-to-apply 14.88 ms.
+QINFO  : TestAlarmViews::newestRequestOnly() [Alarm] web-newest entry written: state ready, page 1/1, 3 row(s), total 3, active 1, revision 1; alarmViews has 1 entry.
+PASS   : TestAlarmViews::newestRequestOnly()
+QINFO  : TestAlarmViews::invalidInput() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QWARN  : TestAlarmViews::invalidInput() [Alarm] view request with an invalid session id "" (0 chars) ignored, not stored (logged at most once per 60 s)
+QWARN  : TestAlarmViews::invalidInput() [Alarm] view request with an invalid session id "x y" (3 chars) ignored, not stored; 299 more since the previous message (logged at most once per 60 s)
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range nan .. 1 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 1; alarmViews has 1 entry.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range 0 .. nan ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 2; alarmViews has 1 entry.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range -inf .. 0 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry unchanged (page 1/1, revision 2); alarmViews not written.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range 0 .. inf ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry unchanged (page 1/1, revision 2); alarmViews not written.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range 2000 .. 1000 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 3; alarmViews has 1 entry.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range -1 .. 1000 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 4; alarmViews has 1 entry.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range 0 .. 253402300800000 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 5; alarmViews has 1 entry.
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range 1000000000000000052504760255204420248704468581108159154915854115511802457988908195786371375080447864043704443832883878176942523235360430575644792184786706982848387200926575803737830233794788090059368953234970799945081119038967640880074652742780142494579258788820056842838115669472196386865459400540160 .. 10000000000000000525047602552044202487044685811081591549158541155118024579889081957863713750804478640437044438328838781769425232353604305756447921847867069828483872009265758037378302337947880900593689532349707999450811190389676408800746527427801424945792587888200568428381156694721963868654594005401600 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 6; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid request #9 (request) page 1, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid #9 applied: page 1 (requested 1), 9 row(s), total 13, active 8, 2 month file(s); SqlManager 3 step(s) (longest 0.46 ms); request-to-apply 14.88 ms.
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state ready, page 1/2, 9 row(s), total 13, active 8, revision 7; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid request #10 (request) page 2, range 1768838400000 .. 1770739199999 ms (1768838400 .. 1770739199 s), 1 session(s).
+QWARN  : TestAlarmViews::invalidInput() [Alarm] web-invalid view request refused: invalid range nan .. nan ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 8; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid result #10 dropped: stale, newest request of this session is #11 (not finished by SqlManager).
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid request #12 (request) page 1, range 0 .. 253402300799999 ms (0 .. 253402300799 s), 1 session(s).
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid #12 applied: page 1 (requested 1), 9 row(s), total 26, active 20, 3 month file(s); SqlManager 4 step(s) (longest 0.61 ms); request-to-apply 16.09 ms.
+QINFO  : TestAlarmViews::invalidInput() [Alarm] web-invalid entry written: state ready, page 1/3, 9 row(s), total 26, active 20, revision 9; alarmViews has 1 entry.
+PASS   : TestAlarmViews::invalidInput()
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] desktop request #1 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 1 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] desktop #1 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.58 ms); request-to-apply 14.63 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] desktop entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle request #2 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 2 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle #2 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.57 ms); request-to-apply 15.69 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 2; alarmViews has 2 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-busy request #3 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 3 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-busy #3 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.45 ms); request-to-apply 15.52 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-busy entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 3; alarmViews has 3 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] removed 1 view session(s) (idle): web-idle; 2 session(s) left, alarmViews written once.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] removed 1 view session(s) (idle): web-busy; 1 session(s) left, alarmViews written once.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle request #4 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 2 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle #4 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.45 ms); request-to-apply 15.39 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-idle entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 4; alarmViews has 2 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 request #5 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 3 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 #5 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.46 ms); request-to-apply 15.59 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 5; alarmViews has 3 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru01 request #6 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 4 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru01 #6 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.49 ms); request-to-apply 15.64 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru01 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 6; alarmViews has 4 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru02 request #7 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 5 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru02 #7 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.50 ms); request-to-apply 15.14 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru02 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 7; alarmViews has 5 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru03 request #8 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 6 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru03 #8 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.41 ms); request-to-apply 15.27 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru03 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 8; alarmViews has 6 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru04 request #9 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 7 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru04 #9 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.42 ms); request-to-apply 15.57 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru04 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 9; alarmViews has 7 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru05 request #10 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 8 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru05 #10 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.65 ms); request-to-apply 16.06 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru05 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 10; alarmViews has 8 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru06 request #11 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 9 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru06 #11 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.49 ms); request-to-apply 16.05 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru06 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 11; alarmViews has 9 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru07 request #12 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 10 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru07 #12 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.48 ms); request-to-apply 15.57 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru07 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 12; alarmViews has 10 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru08 request #13 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 11 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru08 #13 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.52 ms); request-to-apply 15.54 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru08 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 13; alarmViews has 11 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru09 request #14 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 12 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru09 #14 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.45 ms); request-to-apply 15.40 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru09 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 14; alarmViews has 12 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru10 request #15 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 13 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru10 #15 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.70 ms); request-to-apply 15.56 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru10 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 15; alarmViews has 13 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru11 request #16 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 14 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru11 #16 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.50 ms); request-to-apply 15.36 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru11 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 16; alarmViews has 14 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru12 request #17 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 15 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru12 #17 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.46 ms); request-to-apply 15.62 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru12 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 17; alarmViews has 15 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru13 request #18 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 16 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru13 #18 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 1.29 ms); request-to-apply 15.57 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru13 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 18; alarmViews has 16 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru14 request #19 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 17 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru14 #19 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 1.32 ms); request-to-apply 15.56 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru14 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 19; alarmViews has 17 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru15 request #20 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 18 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru15 #20 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.41 ms); request-to-apply 15.28 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru15 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 20; alarmViews has 18 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru16 request #21 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 19 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru16 #21 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.63 ms); request-to-apply 15.45 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru16 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 21; alarmViews has 19 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru17 request #22 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 20 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru17 #22 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.44 ms); request-to-apply 15.17 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru17 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 22; alarmViews has 20 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru18 request #23 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 21 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru18 #23 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.44 ms); request-to-apply 15.48 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru18 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 23; alarmViews has 21 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru19 request #24 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 22 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru19 #24 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.48 ms); request-to-apply 1.16 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru19 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 24; alarmViews has 22 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru20 request #25 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 23 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru20 #25 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.47 ms); request-to-apply 15.48 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru20 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 25; alarmViews has 23 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru21 request #26 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 24 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru21 #26 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.46 ms); request-to-apply 15.56 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru21 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 26; alarmViews has 24 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru22 request #27 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 25 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru22 #27 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.46 ms); request-to-apply 15.57 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru22 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 27; alarmViews has 25 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru23 request #28 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 26 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru23 #28 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.47 ms); request-to-apply 15.52 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru23 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 28; alarmViews has 26 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru24 request #29 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 27 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru24 #29 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.66 ms); request-to-apply 15.59 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru24 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 29; alarmViews has 27 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru25 request #30 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 28 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru25 #30 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.46 ms); request-to-apply 15.50 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru25 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 30; alarmViews has 28 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru26 request #31 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 29 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru26 #31 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.45 ms); request-to-apply 15.40 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru26 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 31; alarmViews has 29 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru27 request #32 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 30 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru27 #32 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.54 ms); request-to-apply 15.54 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru27 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 32; alarmViews has 30 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru28 request #33 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 31 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru28 #33 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.53 ms); request-to-apply 16.06 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru28 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 33; alarmViews has 31 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru29 request #34 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 32 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru29 #34 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.55 ms); request-to-apply 15.48 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru29 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 34; alarmViews has 32 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 request #35 (request) page 1, range 1735660800000 .. 1735747201000 ms (1735660800 .. 1735747201 s), 32 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 #35 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.45 ms); request-to-apply 15.47 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-lru00 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 35; alarmViews has 32 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] removed 1 view session(s) (entry limit): web-idle; 31 session(s) left, alarmViews written once.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra request #36 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 32 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra #36 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.47 ms); request-to-apply 15.60 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 36; alarmViews has 32 entries.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] removed 1 view session(s) (entry limit): web-lru01; 31 session(s) left, alarmViews written once.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra2 request #37 (new view) page 1, range 1735660800000 .. 1735747200000 ms (1735660800 .. 1735747200 s), 32 session(s).
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra2 #37 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.47 ms); request-to-apply 15.26 ms.
+QINFO  : TestAlarmViews::cleanupIdleAndLimit() [Alarm] web-extra2 entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 37; alarmViews has 32 entries.
+PASS   : TestAlarmViews::cleanupIdleAndLimit()
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big request #1 (new view) page 300, range 1748707200000 .. 1751299199999 ms (1748707200 .. 1751299199 s), 1 session(s).
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big #1 applied: page 300 (requested 300), 9 row(s), total 5000, active 4000, 1 month file(s); SqlManager 4 step(s) (longest 2.78 ms); request-to-apply 12.09 ms.
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big entry written: state ready, page 300/556, 9 row(s), total 5000, active 4000, revision 1; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big request #2 (request) page 1000, range 1748707200000 .. 1751299199999 ms (1748707200 .. 1751299199 s), 1 session(s).
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big #2 applied: page 556 (requested 1000), 5 row(s), total 5000, active 4000, 1 month file(s); SqlManager 4 step(s) (longest 2.71 ms); request-to-apply 15.48 ms.
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [Alarm] web-big entry written: state ready, page 556/556, 5 row(s), total 5000, active 4000, revision 2; alarmViews has 1 entry.
+QINFO  : TestAlarmViews::bigMonthNotBlocking() [test] request call returned in 0.080 ms
+PASS   : TestAlarmViews::bigMonthNotBlocking()
+QINFO  : TestAlarmViews::cleanupTestCase() [SQL] SqlManager stopped: worker thread finished, 5 SQLite connection(s) closed (data_202601, data_202602, data_202603, data_202506, settings).
+PASS   : TestAlarmViews::cleanupTestCase()
+Totals: 11 passed, 1 failed, 0 skipped, 0 blacklisted, 42067ms
+********* Finished testing of TestAlarmViews *********
+
+
+88% tests passed, 1 tests failed out of 8
+
+Total Test time (real) =  91.28 sec
+
+The following tests FAILED:
+	  8 - tst_alarm_views (Failed)
+Errors while running CTest

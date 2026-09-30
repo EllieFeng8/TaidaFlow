@@ -1,0 +1,26 @@
+﻿=== w2-080 live smoke 2026-09-30T21:05:46.7883098+08:00
+21:05:50 run-simulator exit=0: SIM_PID=67832 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-080-run-logs\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+21:05:52 safety_probe exit=0 (SAFE)
+21:05:56 app started pid=25396
+21:06:11 app listeners: TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       25396 | TCP    0.0.0.0:8224           0.0.0.0:0              LISTENING       25396 | TCP    0.0.0.0:8225           0.0.0.0:0              LISTENING       25396 | TCP    127.0.0.1:18180        0.0.0.0:0              LISTENING       25396 | TCP    127.0.0.1:18225        0.0.0.0:0              LISTENING       25396
+21:06:11 PASS app listens on its 5 service ports (502, 8224, 8225, 18180, 18225)
+21:06:11 PASS REST GET / -> {"status":"ok"}|200
+21:06:11 PASS GET runtime.json -> {"mirrorPublicPort":8225,"version":1}|200
+21:06:26 PASS mirror client exit=0
+21:06:26 PASS alarmViews entry (ready, rows) read back through the mirror
+21:06:26 PASS page past the end -> clamped, identical entry keeps its revision
+21:06:26 PASS from > to -> state error with a message
+21:07:36 PASS sensor data saved while running: /api/sensor/last ts 1790773570 -> 1790773656
+21:07:36 uptime 101 s; WM_CLOSE sent=True exited=True exit_code=0
+21:07:36 PASS app closed with exit code 0
+21:07:37 PASS no listener of the app left
+21:07:38 PASS log: [Core] shutdown complete
+21:07:38 PASS log: alarm view service started
+21:07:38 PASS log: alarm view request applied
+21:07:38 warning/error lines in the log: 4
+    [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-080-run\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+    [Alarm] web-w2080live view request refused: invalid range 2000 .. 1000 ms (must be finite, 0 <= from <= to <= 253402300799999); state "error".
+    [Alarm] web-w2080live entry written: state error, page 1/1, 0 row(s), total 0, active 0, revision 3; alarmViews has 1 entry.
+    [MS300] COM2: Referenced serial device does not exist. (not open for 61 s, 17 connection attempt(s); next attempt in 3 s) (47 similar warning(s) held back since the previous one; at most one per 60 s)
+21:07:38 simulator pid 67832 (started here) closed
+21:07:38 === all checks passed

@@ -58,6 +58,39 @@ struct SensorHistoryPageResult
 };
 Q_DECLARE_METATYPE(SensorHistoryPageResult)
 
+// w2-080: one alarm_history row of an alarm range page (raw, as stored).
+struct AlarmRangeRow
+{
+    QString monthKey;          // yyyyMM of the data file that holds the row
+    qint64 id = -1;            // row id inside that file
+    qint64 occurrenceTime = 0; // alarm_history.occurrence_time (epoch seconds)
+    QString reason;            // reason as stored (JSON or legacy text)
+};
+
+// w2-080: result of SqlManager::requestAlarmRangePage, produced on the SqlManager thread and
+// delivered through alarmRangePageReady (connect queued).
+struct AlarmRangePageResult
+{
+    QString sessionKey;
+    quint64 requestId = 0;
+    qint64 from = 0;           // requested range, epoch seconds, both inclusive
+    qint64 to = 0;
+    int requestedPage = 1;     // as requested (values < 1 were taken as 1)
+    int page = 1;              // requestedPage clamped to 1..totalPages
+    int pageSize = 0;
+    qint64 totalCount = 0;     // rows in [from, to]
+    qint64 activeCount = 0;    // rows in [from, to] for which the predicate returned true
+    QList<AlarmRangeRow> rows; // this page, newest first (occurrence_time DESC, id DESC)
+    bool ok = false;
+    bool superseded = false;   // dropped: a newer request of the same session exists, or released
+    QString errorMessage;
+    int months = 0;            // month files in the range (directory listing)
+    int steps = 0;             // queued steps on the SqlManager thread
+    double maxStepMs = 0.0;
+    double totalMs = 0.0;      // from the request to the result
+};
+Q_DECLARE_METATYPE(AlarmRangePageResult)
+
 class SqlManager : public QObject
 {
     Q_OBJECT
@@ -197,8 +230,37 @@ public:
     // when called from another thread.
     QStringList sensorDataFilesInRange(qint64 from, qint64 to);
 
+    // w2-080 (per-client alarm views): asynchronous alarm range page.  [from, to] epoch seconds,
+    // both inclusive, any number of months: only the month files that exist in the data
+    // directory are visited (directory listing, sensorMonthFilesInRange), newest month first, at
+    // most 2000 rows of one month file per queued step on the SqlManager thread (keyset on
+    // occurrence_time, id between the steps); inside a file
+    //   SELECT id, occurrence_time, reason FROM alarm_history
+    //   WHERE occurrence_time >= :from AND occurrence_time <= :to
+    //   ORDER BY occurrence_time DESC, id DESC
+    // (read only: no file, table or schema is created; a file without alarm_history counts 0).
+    // totalCount = rows in the range; activeCount = rows for which isActive(reason) is true
+    // (called on the SqlManager thread; must be thread-safe, e.g. a pure function); rows = the
+    // page (page < 1 is taken as 1, a page past the last one is clamped to the last page).
+    // Returns immediately; the result comes through alarmRangePageReady.  Stale rule per
+    // sessionKey (as requestSensorHistoryRangePage(sessionKey, ...)): before each step the job
+    // is dropped (superseded = true) when a newer requestId of the same sessionKey exists or the
+    // session was released; other sessions never make it stale.  Ignored after shutdown().
+    using AlarmRowPredicate = bool (*)(const QString& reason);
+    void requestAlarmRangePage(const QString& sessionKey, quint64 requestId, qint64 from, qint64 to,
+                               int page, int pageSize, AlarmRowPredicate isActive);
+    // w2-080: forgets the newest request id of sessionKey; a job of it still running is dropped
+    // at its next step.  Returns immediately.
+    void releaseAlarmSession(const QString& sessionKey);
+
 signals:
     void sensorHistoryPageReady(const SensorHistoryPageResult& result);
+    // w2-080: result of requestAlarmRangePage (emitted on the SqlManager thread).
+    void alarmRangePageReady(const AlarmRangePageResult& result);
+    // w2-080: emitted on the SqlManager thread after insertAlarm() or updateAlarmReason()
+    // succeeded, with the occurrence time (epoch seconds) of the row written, so that the alarm
+    // views whose range holds that time are read again.  Nothing else changes in those functions.
+    void alarmHistoryChanged(qint64 occurrenceTime);
 
 private:
     explicit SqlManager(QObject* parent = nullptr);
@@ -302,6 +364,13 @@ private:
                           qint64 lo, qint64 hi, bool ascending, HistoryKeyset keyset,
                           const HistoryAnchorRow& anchor, qint64 offset, qint64 limit,
                           QList<HistoryRow>* rows, QString* errMsg);
+
+    // w2-080 (alarm range pages): newest request id per session (guarded by m_alarmSessionMutex;
+    // written by the requesting thread, read by the steps on the SqlManager thread).
+    struct AlarmRangeJob;
+    mutable QMutex m_alarmSessionMutex;
+    QHash<QString, quint64> m_alarmSessionLatestIds;
+    void runAlarmRangeStep(const std::shared_ptr<AlarmRangeJob>& job);
 
     QString monthKey(const QDate& date) const;
     QString dataFileForKey(const QString& key) const;

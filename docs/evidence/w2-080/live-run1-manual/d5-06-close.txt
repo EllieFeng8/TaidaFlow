@@ -1,0 +1,8 @@
+﻿uptime_s=102 wm_close_sent=True exited=True exit_code= at 2026-09-30T20:54:13.3179444+08:00
+listeners after close:
+TCP    127.0.0.201:502        0.0.0.0:0              LISTENING       74956
+TCP    127.0.0.202:502        0.0.0.0:0              LISTENING       74956
+TCP    127.0.0.203:502        0.0.0.0:0              LISTENING       74956
+TCP    127.0.0.204:502        0.0.0.0:0              LISTENING       74956
+TCP    127.0.0.205:502        0.0.0.0:0              LISTENING       74956
+simulator pid 74956 (started by this task) closed via CloseMainWindow (wm_close_sent=True) at 2026-09-30T20:54:29.5248373+08:00

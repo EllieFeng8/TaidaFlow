@@ -151,6 +151,18 @@ nginx 的網頁根目錄是 `build\desktop\web`,desktop 也是啟動時才決定
   過時判定與 keyset 錨點改為依 sessionId 分開,一端的請求不會讓另一端的請求作廢。細節見 `README.md`
   「歷史資料」與 `docs/evidence/w2-052/`。
 
+**各連線端獨立的警報頁檢視(2026-09-30)——已完成(main w1-078 + Core w2-080)**
+- 契約(main w1-078,`Core/TaidaFlowProxy.h` 的 `alarmViews` 區塊,Mango 核准):同步屬性 `alarmViews`(key =
+  `clientSessionId`,值 `{fromMs, toMs, page, pageSize, totalCount, totalPages, activeCount, rows, state, message,
+  revision}`)+ 唯一請求 `alarmViewRequested(sessionId, fromMs, toMs, page)`;`alarmRecords`(最近 3 天)不變,
+  沒有自己的 entry 時警報頁照舊自己過濾 `alarmRecords`。
+- Core(w2-080):`Core/AlarmViews.cpp` 的 `AlarmViewService` 依 sessionId 各自處理並寫整個 map,查詢在 SqlManager
+  執行緒非同步分步執行(`Core/SqlManagerAlarms.cpp`,只讀實際存在的月份檔、每步最多 2000 筆);每頁 9 筆、新到舊
+  (同一秒依 id)、`serialNumber` 為整個區間中的位置、`activeCount` 為區間內「未處理」筆數;`rows` 與 `alarmRecords`
+  用同一個轉換函式(`Core/AlarmRecordFormat.cpp`)。警報寫入或解除後,重新查詢區間涵蓋該時間的 entry(保留區間與頁)。
+  `revision` 內容變才換;網頁端閒置 30 分鐘移除、最多 32 個、`desktop` 不移除。細節見 `README.md`
+  「警報頁:各連線端獨立的時間區間與分頁」與 `docs/evidence/w2-080/`。
+
 **匯出(spec §3)**
 - 觸發 `Td.historyExportRequested(sessionId, fromMs, toMs)`(區間 = 目前查詢區間),取消
   `Td.historyExportCancelRequested(sessionId)`。`sessionId` = `clientSessionId`(桌面 `desktop`,網頁分頁

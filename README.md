@@ -15,7 +15,7 @@ TaidaFlow 是 Qt Design Studio 產生的 Qt Quick HMI(主畫面 / 警報 / 歷�
 改連本機模擬器 `127.0.0.201~205`,見「接 Adam60xxSimulator」)、`Modbus_Server`(config.json `modbusServer`,預設 `0.0.0.0:502`)、
 `Ms300FaultReader`(Modbus RTU,config.json `devices.ms300`,預設 `COM2`)、`RESTManager`(REST API:config.json `rest`,
 預設 `127.0.0.1:18080`,區網經 nginx `http://<IP>/api/...`,見「REST API」)、`SqlManager`(SQLite)、
-`HistoryViews`(各連線端獨立的歷史檢視)與 `HistoryExport`(歷史 CSV 匯出佇列,兩者見「歷史資料:時間區間與匯出」)、`AppHttpServer`(可重用的
+`HistoryViews`(各連線端獨立的歷史檢視)與 `HistoryExport`(歷史 CSV 匯出佇列,兩者見「歷史資料:時間區間與匯出」)、`AlarmViews`(各連線端獨立的警報頁檢視,見「警報頁:各連線端獨立的時間區間與分頁」)、`AppHttpServer`(可重用的
 HTTP 伺服器單例,config.json `http`(預設 `0.0.0.0:8124`)同時提供**網頁**與 **CSV 下載**,見「網頁與下載(HTTP 8124)」)。
 
 **設定檔 config.json(w2-062)**:所有現場會不一樣的設定(資料資料夾、設備位址、各服務 port、nginx)都在程式旁的
@@ -591,11 +591,50 @@ Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(
   `TaidaFlowProxy.h` 移除,已合併進本分支);CSV 一律走上述匯出佇列。`docs/wasm-integration-report.md`
   中關於它的段落是歷史紀錄。
 
+## 警報頁:各連線端獨立的時間區間與分頁(w2-080)
+
+介面契約在 `Core/TaidaFlowProxy.h` 的 `alarmViews` 區塊(main w1-078,Mango 核准);做法與歷史頁的 `historyViews` 相同。
+
+- 每個連線端(桌面 `desktop`、每個網頁分頁 `web-xxxx`,即 `Td.clientSessionId`)有**自己的區間與頁碼**;
+  一端篩選或翻頁,其他端的畫面不變。
+- 唯一的請求:`Td.alarmViewRequested(sessionId, fromMs, toMs, page)`(WASM 經 mirror relay 到 desktop)。
+  警報頁顯示時、「篩選」/「顯示前一周」(page 1)、上/下一頁,以及預設的「最近 24 小時」在 `alarmRecords` 變動時
+  (新的最近 24 小時、page 1)送出。`fromMs/toMs` 為本機時區 epoch 毫秒、兩端都含
+  (起始分鐘 :00.000 .. 結束分鐘 :59.999),可跨月份。
+- 處理者:`Core/AlarmViews.{h,cpp}` 的 `AlarmViewService`(`Core::init` 建立)。查詢在 SqlManager 執行緒非同步分步執行
+  (`SqlManager::requestAlarmRangePage`,`Core/SqlManagerAlarms.cpp`):只列出資料夾裡實際存在且與區間相交的
+  `sensor_YYYYMM.sqlite`(不逐月走),新月份在前,每步最多讀一個月份檔的 2000 筆,步驟之間每秒存檔可插隊;
+  過時判定依 sessionId 分開,只有同一端較新的請求會讓自己的舊請求作廢,A 端不會讓 B 端的請求作廢。
+- 結果寫到同步屬性 `Td.alarmViews[sessionId] = {fromMs, toMs, page, pageSize, totalCount, totalPages, activeCount,
+  rows, state, message, revision}`:
+  - 排序新到舊(`occurrence_time` 由新到舊,同一秒依 id 由大到小,與 `alarmRecords` 相同);每頁 9 筆(`pageSize` 9);
+  - `totalCount` = 整個區間的警報數;`totalPages` 至少 1(沒有警報時為 1);`activeCount` = 區間內 `alarmStatus`
+    為「未處理」的筆數;
+  - `rows` 每筆的欄位與格式和 `alarmRecords` 完全相同(`id`、`timestampMs`、`alarmTime`、`equipment`、`sensorName`、
+    `alarmMessage`、`severity`、`alarmStatus`),另加 `serialNumber` = 在整個區間中的位置(從 1 起算)。兩者用同一個轉換函式
+    (`Core/AlarmRecordFormat.{h,cpp}`,由 `core.cpp` 原樣搬出,`Core::loadAlarmRecords` 也改呼叫它,`alarmRecords`
+    本身與「最近 3 天」的載入不變);
+  - `page` 超過最後一頁時夾到最後一頁、小於 1 時為 1;
+  - `state` 為 `ready`;區間讀不到時為 `error`,`message` 是頁面顯示的錯誤文字。
+  - 每次都以 `setAlarmViews` 寫**整個 map**;`revision` 取自服務的遞增計數,只有該 entry 內容變了才換
+    (同一請求結果相同就不寫)。各端 QML 只讀自己的 key,revision 變了才重畫。
+- 即時更新:警報寫入(`SqlManager::insertAlarm`)或解除(`SqlManager::updateAlarmReason`)成功後,Core 重新查詢
+  所有「區間涵蓋這筆警報時間」的 entry,保留該端的區間與目前頁(頁數夾到新的總頁數);區間外的 entry 不動、revision 不變。
+- 不合法的請求:sessionId 不是 `[A-Za-z0-9_-]{1,40}` → 不寫任何東西,warning 每分鐘最多一行(附略過的次數);
+  sessionId 合法但區間不是有限數值、from > to、或超出 `0 .. 253402300799999`(9999-12-31 結束)→ 該端 entry 寫
+  `state: "error"` 與 `message`(不查詢)。查詢失敗同樣寫 `state: "error"`。
+- 生命週期(與 `historyViews` 相同):網頁端超過 30 分鐘沒有請求就移除其 entry(每分鐘檢查一次);最多同時 32 個 entry
+  (含 `desktop`),新的一端進來時先移除最久未用的網頁端;`desktop` 永不移除;被移除的一端下次請求會重建。
+  關閉時在 `Core::shutdown` 的第 2 步(SqlManager 關閉之前)停止。
+- 測試:`Core\tests\run-core-tests.bat` 的 `tst_alarm_views`(見「測試 / 驗證」5j)。不經瀏覽器的連線測試工具:
+  `docs\evidence\w2-080\tools\build-mirror-alarm-client.bat`(Proxy Mirror 用戶端,送 `alarmViewRequested` 並印出
+  `alarmViews[sessionId]`;由 w2-050 的匯出用戶端改寫)。
+
 ## 測試 / 驗證(全部以 exit code 判定)
 
 QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表);
+SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視);
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -659,7 +698,10 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     REST 測試用系統挑的空 port,不用設備;輸出 build\core-tests):
 ::     tst_rest_range_paging(6 個 range 路由分頁格式、page/pageSize > 2147483647 → 400、from/to 超界 1 秒內 400)、
 ::     tst_sqlmanager_schema_once(每個月份連線只跑一次 schema、「Schema file not found」整個執行期間最多一行)、
-::     tst_historyexport_status(匯出狀態表上限:不合法 id 不存、拒絕項目與完成項目一起清理、忙碌項目不遺失)
+::     tst_historyexport_status(匯出狀態表上限:不合法 id 不存、拒絕項目與完成項目一起清理、忙碌項目不遺失)、
+::     tst_alarm_views(w2-080 警報頁各端檢視:跨兩個月份檔的總數 / 頁數 / 未處理數、新到舊排序(同時間依 id)、序號、換頁與頁數夾限、
+::     空區間、rows 與 alarmRecords 同一筆比對、新增 / 解除警報後自動更新且範圍外不變、兩端互不影響、同端只留最新、
+::     不合法輸入、閒置 30 分鐘與最多 32 個的清理、5000 筆月份分步讀取)
 Core\tests\run-core-tests.bat fresh
 ```
 

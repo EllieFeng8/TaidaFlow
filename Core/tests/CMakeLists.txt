@@ -6,6 +6,7 @@
 #
 #   w2-071: tst_rest_range_paging, tst_sqlmanager_schema_once, tst_historyexport_status
 #   w2-072: tst_modbusclient_offline, tst_ms300_offline, tst_manager_sv_guard
+#   w2-080: tst_alarm_views
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -128,3 +129,26 @@ add_test(NAME sensor_settings COMMAND tst_sensor_settings)
 set_tests_properties(sensor_settings PROPERTIES
     ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_QUICK_BACKEND=set:software;QT_QUICK_CONTROLS_STYLE=set:Universal"
     TIMEOUT 300)
+
+# ---------------------------------------------------------------------------------------------
+# w2-080: per-client alarm views (AlarmViewService -> TaidaFlowProxy::alarmViews): ranges across
+# month files, order / paging / counts, rows = alarmRecords records, live updates on new and
+# resolved alarms, sessions independent, invalid input, idle / 32-entry cleanup (injected clock).
+# Real SqlManager on a temporary data folder; no device, no port.
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_alarm_views
+    SOURCES
+        tst_alarm_views.cpp
+        "${CORE_DIR}/AlarmViews.h"
+        "${CORE_DIR}/AlarmViews.cpp"
+        "${CORE_DIR}/AlarmRecordFormat.h"
+        "${CORE_DIR}/AlarmRecordFormat.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/SqlManagerAlarms.cpp"
+        "${CORE_DIR}/HistoryExport.h"
+        "${CORE_DIR}/HistoryExport.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer)

@@ -1,0 +1,17 @@
+﻿Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/core-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/core-tests
+    Start 8: tst_alarm_views
+    Test #8: tst_alarm_views ..................   Passed    5.15 sec
+    Start 8: tst_alarm_views
+    Test #8: tst_alarm_views ..................   Passed    5.11 sec
+    Start 8: tst_alarm_views
+    Test #8: tst_alarm_views ..................   Passed    5.14 sec
+    Start 8: tst_alarm_views
+    Test #8: tst_alarm_views ..................   Passed    5.12 sec
+    Start 8: tst_alarm_views
+1/1 Test #8: tst_alarm_views ..................   Passed    5.16 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  25.69 sec
+exit=0

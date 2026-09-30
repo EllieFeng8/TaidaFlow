@@ -1,0 +1,24 @@
+﻿20:53:02.385 contractHash=abe787e36f957187e5e3f4e8694071694012d1819bde694c13048e589326976f
+20:53:02.426 connected to ws://127.0.0.1:8225/mirror (origin http://127.0.0.1:8224)
+20:53:02.427 welcome, connectionSessionId=628b75ca-5d07-4ecd-81a3-ecb14fa9f964
+20:53:02.427 snapshot: alarmViews has 0 entries (); alarmRecords 1 row(s)
+20:53:02.427 SENT alarmViewRequested("web-w2080live", 1790686380000, 1790772839999, 1) = 2026-09-29 20:53:00.000 .. 2026-09-30 20:53:59.999
+20:53:02.429 ENTRY rev=1 state=ready page=1/1 total=1 active=0 rows=1 range=1790686380000..1790772839999 message=
+20:53:02.429 ROW 1 2026/09/30 20:52 100 已解除 警告 設備啟動
+20:53:02.429 JSON {"activeCount":0,"fromMs":1790686380000,"message":"","page":1,"pageSize":9,"revision":1,"rows":[{"alarmMessage":"設備啟動","alarmStatus":"已解除","alarmTime":"2026/09/30 20:52","equipment":"系統","id":1,"sensorName":"100","serialNumber":1,"severity":"警告","timestampMs":1790772751000}],"state":"ready","toMs":1790772839999,"totalCount":1,"totalPages":1}
+20:53:02.429 SENT alarmViewRequested("web-w2080live", 0, 1790776382008, 1) = 1970-01-01 08:00:00.000 .. 2026-09-30 21:53:02.008
+20:53:02.430 ENTRY rev=2 state=ready page=1/1 total=1 active=0 rows=1 range=0..1790776382008 message=
+20:53:02.430 ROW 1 2026/09/30 20:52 100 已解除 警告 設備啟動
+20:53:02.430 JSON {"activeCount":0,"fromMs":0,"message":"","page":1,"pageSize":9,"revision":2,"rows":[{"alarmMessage":"設備啟動","alarmStatus":"已解除","alarmTime":"2026/09/30 20:52","equipment":"系統","id":1,"sensorName":"100","serialNumber":1,"severity":"警告","timestampMs":1790772751000}],"state":"ready","toMs":1790776382008,"totalCount":1,"totalPages":1}
+20:53:02.430 SENT alarmViewRequested("web-w2080live", 0, 1790776382008, 99) = 1970-01-01 08:00:00.000 .. 2026-09-30 21:53:02.008
+20:53:07.426 no change of the entry within 5 s (identical content keeps its revision)
+20:53:07.426 SENT alarmViewRequested("web-w2080live", 2000, 1000, 1) = 1970-01-01 08:00:02.000 .. 1970-01-01 08:00:01.000
+20:53:07.427 ENTRY rev=3 state=error page=1/1 total=0 active=0 rows=0 range=2000..1000 message=查詢區間不正確
+20:53:07.427 JSON {"activeCount":0,"fromMs":2000,"message":"查詢區間不正確","page":1,"pageSize":9,"revision":3,"rows":[],"state":"error","toMs":1000,"totalCount":0,"totalPages":1}
+20:53:07.427 SENT alarmViewRequested("web-w2080live", 1790686380000, 1790772839999, 1) = 2026-09-29 20:53:00.000 .. 2026-09-30 20:53:59.999
+20:53:07.429 ENTRY rev=4 state=ready page=1/1 total=1 active=0 rows=1 range=1790686380000..1790772839999 message=
+20:53:07.429 ROW 1 2026/09/30 20:52 100 已解除 警告 設備啟動
+20:53:07.429 JSON {"activeCount":0,"fromMs":1790686380000,"message":"","page":1,"pageSize":9,"revision":4,"rows":[{"alarmMessage":"設備啟動","alarmStatus":"已解除","alarmTime":"2026/09/30 20:52","equipment":"系統","id":1,"sensorName":"100","serialNumber":1,"severity":"警告","timestampMs":1790772751000}],"state":"ready","toMs":1790772839999,"totalCount":1,"totalPages":1}
+20:53:07.429 all 5 request(s) sent; listening 15 s for live updates
+20:53:22.426 RESULT entries=4
+exit=0

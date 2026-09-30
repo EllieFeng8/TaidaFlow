@@ -1,0 +1,32 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:340
++ ... \taidaflow; cmd /c "Core\tests\run-core-tests.bat -R tst_alarm_views" ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (0.8s)
+-- Generating done (0.3s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/core-tests
+[1/26] Automatic MOC and UIC for target tst_rest_range_paging
+[2/24] Automatic MOC and UIC for target tst_sqlmanager_schema_once
+[3/22] Automatic MOC and UIC for target tst_historyexport_status
+[4/20] Automatic MOC and UIC for target tst_modbusclient_offline
+[5/18] Automatic MOC and UIC for target tst_ms300_offline
+[6/16] Automatic MOC and UIC for target tst_sensor_settings
+[7/14] Automatic MOC and UIC for target tst_manager_sv_guard
+[8/12] Automatic MOC and UIC for target tst_alarm_views
+[9/11] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmViews.cpp.obj
+[10/11] Building CXX object CMakeFiles\tst_alarm_views.dir\tst_alarm_views.cpp.obj
+[11/11] Linking CXX executable tst_alarm_views.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/core-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/core-tests
+    Start 8: tst_alarm_views
+1/1 Test #8: tst_alarm_views ..................   Passed    6.26 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   6.27 sec

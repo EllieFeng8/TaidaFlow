@@ -8,6 +8,8 @@
 #include "runtimeinfo.h"
 
 #include "AppHttpServer/AppHttpServer.h"
+#include "AlarmRecordFormat.h"
+#include "AlarmViews.h"
 #include "HistoryExport.h"
 #include "HistoryViews.h"
 #include "Modbus_Server.h"
@@ -34,62 +36,8 @@ namespace {
 constexpr auto kHmiInputSettingsFile = "TaidaFlowSettings.ini";
 constexpr auto kHmiInputSettingsGroup = "HmiInput";
 
-// Alarm vocabulary: Core status (stored in alarm.reason JSON 'status') ->
-// UI contract fields of Td.alarmRecords (AlarmPage.qml counts and colours
-// alarmStatus === "未處理"; severity === "嚴重" is red, anything else amber).
-//
-//  Core status   | produced by                                  | alarmStatus | severity
-//  --------------+----------------------------------------------+-------------+---------
-//  異常          | DI0 相位異常 / DI1 漏液檢出 / DI2 補水泵 OL    | 未處理      | 嚴重
-//                | (Manager::checkDigitalInputAlarm), MS300     |             |
-//                | fault code != 0 (Ms300FaultReader)           |             |
-//  警告          | MS300 warning code only (fault code == 0)    | 未處理      | 警告
-//  數值異常      | AI >= high limit (Manager::checkHighInputAlarm) | 未處理   | 警告
-//  正常          | 設備啟動 (Core::init) - informational record  | 已解除      | 警告
-//  未處理/已解除 | already UI vocabulary (pass-through)         | same        | 警告
-//  (missing)     | legacy plain-text reason / JSON w/o status   | 未處理      | 警告
-//  anything else | unknown                                      | 未處理      | 警告
-//
-// 設備啟動 is not a fault: 已解除 keeps it out of the page's "未處理" count and
-// shows it green; the UI has no info level, so it takes the lower level 警告.
-// Unknown or missing statuses default to 未處理 so that nothing that might
-// need attention is hidden.  A valid 'severity' stored in the JSON (嚴重/警告)
-// overrides the table (no producer writes one today).  The database is not
-// migrated: the conversion runs on every read, so existing rows are covered.
-//
-// w2-037: a DI alarm row (DI0/DI1/DI2) is updated in place when the input
-// returns to normal: Manager keeps 'status' (異常) and adds "resolved": true,
-// "resolvedAt" (epoch s) and "resolvedDetail" (e.g. 漏液檢出 解除（DI1=0）).
-// A row with resolved == true reads as alarmStatus 已解除; its severity still
-// comes from 'status', so a resolved 異常 row stays 嚴重.
-struct AlarmUiFields {
-    QString alarmStatus;
-    QString severity;
-    bool known = true;
-};
-
-AlarmUiFields alarmUiFieldsForStatus(const QString &coreStatus, bool hasStatus, bool isResolved)
-{
-    const QString unhandled = QStringLiteral("未處理");
-    const QString resolved = QStringLiteral("已解除");
-    const QString critical = QStringLiteral("嚴重");
-    const QString warning = QStringLiteral("警告");
-
-    AlarmUiFields fields{unhandled, warning, false};
-    if (!hasStatus)
-        fields = {unhandled, warning, true};
-    else if (coreStatus == QStringLiteral("異常"))
-        fields = {unhandled, critical, true};
-    else if (coreStatus == QStringLiteral("警告") || coreStatus == QStringLiteral("數值異常"))
-        fields = {unhandled, warning, true};
-    else if (coreStatus == QStringLiteral("正常"))
-        fields = {resolved, warning, true};
-    else if (coreStatus == unhandled || coreStatus == resolved)
-        fields = {coreStatus, warning, true};
-    if (isResolved)
-        fields.alarmStatus = resolved;
-    return fields;
-}
+// Alarm vocabulary (Core status -> alarmStatus / severity) and the row conversion: moved
+// unchanged to AlarmRecordFormat.h/.cpp (w2-080), shared with the per-client alarm views.
 
 // ---- w2-062: backend values from config.json (docs/taidaflow_config_spec.md §2) -----------
 // AppConfig::instance() was loaded by main() before Core::init() (App/main.cpp). Every value
@@ -247,6 +195,8 @@ void Core::shutdown(const char *reason)
     stopRestServer();
     delete m_historyViews;
     m_historyViews = nullptr;
+    delete m_alarmViews;            // w2-080: before SqlManager::shutdown (step 3)
+    m_alarmViews = nullptr;
     delete m_historyExport;
     m_historyExport = nullptr;
     AppHttpServer::instance().stop();
@@ -297,6 +247,9 @@ void Core::init()
     // sessionId) and writes historyViews[sessionId].  Nothing is loaded at
     // start-up and nothing on saved samples: a client's page asks when shown.
     m_historyViews = new HistoryViewService(m_proxy, m_sqlManager, HistoryViewService::Options{}, this);
+    // w2-080: one alarm view per client (alarmViewRequested -> alarmViews[sessionId]), read on the
+    // SqlManager thread; rewritten when an alarm inside its range is saved or resolved.
+    m_alarmViews = new AlarmViewService(m_proxy, m_sqlManager, AlarmViewService::Options{}, this);
     // w2-041 (spec §3): raw CSV export queue/engine (export folder <working
     // directory>/exports); it mounts GET /exports/<file> on the AppHttpServer
     // singleton, which also serves the web page (w2-049, startHttpServer).
@@ -625,86 +578,19 @@ void Core::loadAlarmRecords()
         return;
     }
 
-    records.reserve(history.size());
-    // Only the newest rows are logged field by field, the rest are counted.
-    constexpr qsizetype kLoggedAlarmRows = 8;
-    int unhandledCount = 0;
-    int resolvedCount = 0;
-    int criticalCount = 0;
-    int warningCount = 0;
-    int unknownStatusCount = 0;
-    // SqlManager returns oldest first. AlarmPage expects newest first when it
-    // constructs its default date range and its "show all" range.
-    for (qsizetype index = history.size(); index > 0; --index) {
-        const QJsonObject alarm = history.at(index - 1).toObject();
-        const qint64 occurrence = static_cast<qint64>(
-                alarm.value(QStringLiteral("occurrence_time")).toDouble());
-        const QString storedReason = alarm.value(QStringLiteral("reason")).toString();
-        QJsonParseError parseError;
-        const QJsonDocument reasonDocument = QJsonDocument::fromJson(
-                storedReason.toUtf8(), &parseError);
-        const QJsonObject reasonObject = parseError.error == QJsonParseError::NoError
-                && reasonDocument.isObject()
-                ? reasonDocument.object()
-                : QJsonObject();
-
-        // reason remains a QString in SqlManager.  New records carry JSON;
-        // legacy plain text is kept as the warning message with defaults.
-        const QString sensor = reasonObject.value(QStringLiteral("sensor"))
-                .toString(QStringLiteral("—"));
-        const QString alarmMessage = reasonObject.contains(QStringLiteral("alarmMessage"))
-                ? reasonObject.value(QStringLiteral("alarmMessage")).toString()
-                : reasonObject.value(QStringLiteral("message")).toString(storedReason);
-        const bool hasStatus = reasonObject.value(QStringLiteral("status")).isString();
-        const QString coreStatus = reasonObject.value(QStringLiteral("status")).toString();
-        const bool isResolved = reasonObject.value(QStringLiteral("resolved")).toBool(false);
-        AlarmUiFields ui = alarmUiFieldsForStatus(coreStatus, hasStatus, isResolved);
-        const QString storedSeverity = reasonObject.value(QStringLiteral("severity")).toString();
-        if (storedSeverity == QStringLiteral("嚴重") || storedSeverity == QStringLiteral("警告"))
-            ui.severity = storedSeverity;
-        if (!ui.known)
-            ++unknownStatusCount;
-        if (ui.alarmStatus == QStringLiteral("未處理"))
-            ++unhandledCount;
-        else
-            ++resolvedCount;
-        if (ui.severity == QStringLiteral("嚴重"))
-            ++criticalCount;
-        else
-            ++warningCount;
-
-        const qint64 alarmId = static_cast<qint64>(alarm.value(QStringLiteral("id")).toDouble());
-        if (records.size() < kLoggedAlarmRows) {
-            qInfo().noquote()
-                    << QStringLiteral("[Alarm][UI] id=%1 sensor=%2 message=%3 coreStatus=%4%5 -> alarmStatus=%6 severity=%7")
-                               .arg(alarmId)
-                               .arg(sensor, alarmMessage,
-                                    hasStatus ? coreStatus : QStringLiteral("(none)"),
-                                    isResolved ? QStringLiteral(" resolved=true") : QString(),
-                                    ui.alarmStatus, ui.severity);
-        }
-        records.append(QVariantMap{
-            {QStringLiteral("id"), static_cast<qint64>(
-                    alarm.value(QStringLiteral("id")).toDouble())},
-            {QStringLiteral("timestampMs"), occurrence * 1000},
-            {QStringLiteral("alarmTime"), QDateTime::fromSecsSinceEpoch(occurrence)
-                     .toString(QStringLiteral("yyyy/MM/dd HH:mm"))},
-            {QStringLiteral("equipment"), QStringLiteral("系統")},
-            {QStringLiteral("sensorName"), sensor},
-            {QStringLiteral("alarmMessage"), alarmMessage},
-            {QStringLiteral("severity"), ui.severity},
-            {QStringLiteral("alarmStatus"), ui.alarmStatus},
-        });
-    }
+    // w2-080: the per-row conversion (and its log lines) is AlarmRecordFormat::recordsFromHistory,
+    // the same code that builds the rows of the per-client alarm views; output unchanged.
+    AlarmRecordFormat::LoadStats stats;
+    records = AlarmRecordFormat::recordsFromHistory(history, &stats);
 
     qInfo().noquote()
             << QStringLiteral("[SQL] Loaded %1 alarm-history records from the last 3 days into the UI "
                               "(alarmStatus 未處理=%2 已解除=%3; severity 嚴重=%4 警告=%5; unknown core status=%6).")
                        .arg(records.size())
-                       .arg(unhandledCount)
-                       .arg(resolvedCount)
-                       .arg(criticalCount)
-                       .arg(warningCount)
-                       .arg(unknownStatusCount);
+                       .arg(stats.unhandledCount)
+                       .arg(stats.resolvedCount)
+                       .arg(stats.criticalCount)
+                       .arg(stats.warningCount)
+                       .arg(stats.unknownStatusCount);
     m_proxy->setAlarmRecords(records);
 }

@@ -1783,6 +1783,7 @@ bool SqlManager::insertAlarm(const QDateTime& occurrence, const QString& reason,
             const QVariant id = query.lastInsertId();
             *insertedId = id.isValid() ? id.toLongLong() : -1;
         }
+        emit alarmHistoryChanged(occurrence.toSecsSinceEpoch());   // w2-080: alarm views
         return true;
     });
 }
@@ -1818,6 +1819,7 @@ bool SqlManager::updateAlarmReason(const QDateTime& occurrence, qint64 id, const
             if (errMsg) *errMsg = QStringLiteral("no alarm_history row id=%1 in %2").arg(id).arg(key);
             return false;
         }
+        emit alarmHistoryChanged(occurrence.toSecsSinceEpoch());   // w2-080: alarm views
         return true;
     });
 }

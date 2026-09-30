@@ -33,6 +33,13 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
         # w2-052: one History view per client (historyViewRequested -> historyViews)
         HistoryViews.h
         HistoryViews.cpp
+        # w2-080: one alarm view per client (alarmViewRequested -> alarmViews), the alarm row
+        # conversion shared with alarmRecords, and SqlManager's alarm range read
+        AlarmViews.h
+        AlarmViews.cpp
+        AlarmRecordFormat.h
+        AlarmRecordFormat.cpp
+        SqlManagerAlarms.cpp
         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
         AppHttpServer/AppHttpServer.h

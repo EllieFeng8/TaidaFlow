@@ -107,7 +107,7 @@ UI 修改先進 `main`,再把 `main` 合併進 `core`(合併後要做的事見 �
 | emsdk | **3.1.56**(Qt 6.8 對應版,不能換) | `C:\tools\emsdk` | Emscripten 編譯器(網頁版) |
 | nginx for Windows | 1.30.x(參考機 1.30.5)| `C:\tools\nginx\nginx-<版本>` | 選用:桌面版建置時複製到 `build\desktop\nginx`(§4.5)、打包時隨包附上;沒有也能編譯。取得、驗簽、寫死此路徑的地方與換位置見 §2.9 |
 | WinSW(Windows Service Wrapper) | **2.12.0**(`WinSW-x64.exe`,.NET 6 自帶執行環境的單檔)| `C:\tools\winsw\WinSW-x64-2.12.0.exe` + `LICENSE.txt` | **打包需要**:`package-release.ps1` 把它放進包內 `nginx\nginx-service.exe`(把 nginx 註冊成 Windows 服務,DEPLOY §2A);編譯不需要。取得與換位置見 §2.8 |
-| Python + fonttools | 3.x + `fonttools` | 任意 | **選用**:只有「重新產生網頁版內嵌字型」需要(§2.5);一般桌面版 / 網頁版編譯、所有檢查腳本與部署都**不需要** |
+| Python + fonttools | 3.x + `fonttools` | 任意 | **選用**:只有「重新產生內嵌字型」需要(§2.5);一般桌面版 / 網頁版編譯、所有檢查腳本與部署都**不需要** |
 | Git | 任意 | 任意 | clone、安裝 emsdk;附的 `gpg.exe` 用來驗 nginx 的簽章(§2.9) |
 | CLion | **選用**,2026.2.x(參考機 2026.2.3) | 參考機 `%LOCALAPPDATA%\Programs\CLion`(JetBrains Toolbox / 只裝給目前使用者時的位置);裝給所有使用者時常見 `C:\Program Files\JetBrains\CLion <版本>`。本專案不依賴它的位置(§6A.1) | 想用 CLion 編輯 / 編譯 / 偵錯時才需要(§6A);Toolchain 要選 **Visual Studio**(內建 MinGW 不能用)。腳本與命令列建置都不需要它 |
 
@@ -293,15 +293,31 @@ cd /d C:\tools\emsdk
   資料夾,下次編譯會自動重建。
 - 本專案的建置輸出不含 emsdk 的東西;換 / 重裝 emsdk 後網頁版要 `scripts\build-wasm.bat wasm-release fresh`。
 
-### 2.5 網頁版內嵌字型(字型子集)
+### 2.5 內嵌字型(桌面與網頁的介面字型;字型子集)
 
-網頁版(WebAssembly)沒有系統中文字型,所以把 Noto Sans TC 的**子集**(只含程式用到的字)編進 exe / wasm:
+**桌面版與網頁版都使用內嵌的 Noto Sans TC(思源黑體)作為介面字型**,會跳動或需要對齊的數值、日期時間與數值輸入框
+保留 Consolas(w2-082)。Noto Sans TC 的**子集**(只含程式用到的字)編進 exe / wasm:
 `App/fonts/TaidaFlowNotoSansTC-Regular.ttf`、`App/fonts/TaidaFlowNotoSansTC-Bold.ttf` 與字元清單 `App/fonts/charset.txt`。
 這三個檔**已經在 git 裡**,建置時直接使用;CMake 不會產生它們,也不會呼叫任何外部程式。
 
+- 字型名稱:`TaidaFlow Noto Sans TC`(Regular 400 / Bold 700 兩個靜態字型)。
+- 套用方式(`App/main.cpp`):兩平台都先以 `TaidaFlowFonts::loadEmbeddedCjkFont()` 載入,再由 HOOK 那一行
+  `uiFontFamilyRequest = cjkFamily.isEmpty() ? "Microsoft JhengHei UI" : cjkFamily` 交給 `applyUiFont()`:設成應用程式字型
+  (`QGuiApplication::setFont`)、`App.qml` 的 ApplicationWindow 以 `Application.font.family` 取用(所有 Controls 與彈出視窗
+  跟著繼承),並把它加到 `Consolas` 的替代清單,讓 Consolas 數值中的中文也用 Noto Sans TC。內嵌字型載入失敗時退回微軟正黑體 UI。
+- 網頁版另外有 fallback 鏈(`App/embeddedfonts.cpp` 的 `installCjkFallbackChain`,只在 WebAssembly 執行,在 `applyUiFont()` 之前):
+  其他可能被指定的字型(Segoe UI、Arial…)與 Han / Common 文字都退回 Noto Sans TC;`Consolas`(網頁沒有這個字型)先用
+  Qt 網頁版內附的等寬字型 DejaVu Sans Mono 顯示數字,中文再退回 Noto Sans TC。桌面版不需要這條鏈。
+- 子集內容:原始碼(`App/ Core/ TaidaFlow/ TaidaFlowContent/ Dependencies/` 的 QML / JS / C++)用到的非 ASCII 字元、
+  可列印 ASCII(U+0020–U+007E)、常用全形標點,以及 w2-082 起固定加入的 Latin-1 補充(U+00A0–U+00FF,例如 ± µ ² ³ × ÷)、
+  全形數字與標點、常用單位 / 箭頭 / 比較 / 引號符號(清單見 `scripts\make_font_subset.py` 的 `EXTRA`、`EXTRA_RANGES`、
+  `EXTRA_SYMBOLS`),英文、數字與符號不會逐字換成別的字型。
+- 檢查:`App\tests` 的 `tst_uifont`(桌面的字型設定)與 `tst_uifont_wasmpath`(把 `main.cpp` 的 WebAssembly 分支
+  在桌面字型資料庫上執行),兩者直接編譯 `main.cpp` 裡的程式碼(`App\tests\README.md`)。
+
 **(A)使用 repo 內現成的字型(一般情況)**:什麼都不用做。clone 下來就能編桌面版與網頁版,不需要安裝 Python。
 
-**(B)自己重新產生**(只有 UI / C++ 加了新的中文字、網頁出現方框時):這是整個專案**唯一**用到 Python 的地方
+**(B)自己重新產生**(只有 UI / C++ 加了新的中文字、網頁出現方框或桌面有字換成別的字型時):這是整個專案**唯一**用到 Python 的地方
 (`scripts\make_font_subset.py`,用 fonttools 子集化字型)。
 
 1. 需要:
@@ -1204,6 +1220,16 @@ BUILD_TESTING`)**:正常,參考機每次都有,不影響結果;以 exit code 與
 ---
 
 ## 11. 驗證紀錄與沒有驗證到的部分
+
+2026-10-01(w2-082,桌面與網頁都以內嵌 Noto Sans TC 為介面字型)在參考開發機的 core 工作目錄實際執行,
+log 與 exit code 在 `docs/evidence/w2-082/`:
+
+| 項目 | 結果 |
+|---|---|
+| §2.5 字型 | 子集加入 Latin-1 補充、全形數字與標點、常用符號:`make-font-subset.ps1 --check` exit 1(138 個新字、0 個移除)→ 重新產生 exit 0 → `--check` exit 0;`charset.txt` 633 → 771 字、Regular 225,164 → 242,508 bytes、Bold 225,796 → 243,168 bytes;UI 字串掃描(`tools\scan-ui-symbols.ps1`)20 種非漢字符號、335 個漢字、可列印 ASCII 全部在子集內 |
+| §4.1 / §5.1 全新建置 | `build-desktop.bat fresh`(593 步)、`build-wasm.bat wasm-release fresh`(576 步)依序各 exit 0;`TaidaFlowApp.wasm` 34,129,883(改前同一 HEAD 全新建置)→ 34,163,343 bytes,新字型檔的 `head` 表在 .wasm 內、舊字型的不在(`tools\check-wasm-fonts.ps1`) |
+| §7 檢查與單元測試 | `check-wasm-backend`、`check-version-shadow`、`check-rest-routes`、`verify-pack` 各 exit 0;`App\tests\run-app-tests.bat fresh` 5/5(新增 `tst_uifont`、`tst_uifont_wasmpath`,各 20 passed)、`Core\tests\run-core-tests.bat fresh` 8/8 |
+| 實跑 | 接模擬器、安全探測 SAFE 後啟動桌面版 75 秒,log `[UiFont] interface font: TaidaFlow Noto Sans TC \| Consolas -> taidaflow noto sans tc`,WM_CLOSE exit 0(`tools\live-smoke.ps1`) |
 
 2026-09-29(w2-077,CLion 編譯、nginx 章節、檢查腳本支援 Debug、MSVC 檢查)在參考開發機的 core 工作目錄實際執行,
 log 與 exit code 在 `docs/evidence/w2-077/`(`d5-summary.txt` 是總表;全部步驟 `PS docs\evidence\w2-077\tools\run-d5.ps1` 可重跑):

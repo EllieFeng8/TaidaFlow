@@ -229,9 +229,13 @@ int main(int argc, char *argv[])
     const AppConfig::MirrorSettings mirrorPorts = AppConfig::instance().mirror();
 #endif
 
-    // (core only) WebAssembly has no system CJK fonts: register the embedded
-    // Noto Sans TC subset and make it the fallback for every UI font. The desktop
-    // keeps the platform's own fallback chain so its rendering is unchanged.
+    // (core only) Register the embedded Noto Sans TC subset (App/fonts, OFL-1.1) on every
+    // platform: it is the interface font of the desktop AND the web page (HOOK below ->
+    // applyUiFont(): application font, ApplicationWindow font, CJK of "Consolas" numbers).
+    // WebAssembly has no system fonts, so there it is also made the fallback of every other
+    // family the UI may name (Segoe UI, Arial, ..., Han / Common script) and "Consolas" becomes
+    // DejaVu Sans Mono (monospace digits, bundled with Qt for WebAssembly) -> Noto Sans TC;
+    // applyUiFont() runs after it and only adds the application font. The desktop needs no chain.
     const QString cjkFamily = TaidaFlowFonts::loadEmbeddedCjkFont();
 #if defined(Q_OS_WASM)
     TaidaFlowFonts::installCjkFallbackChain(cjkFamily);
@@ -354,7 +358,7 @@ int main(int argc, char *argv[])
     // changes ONLY this line to its embedded Noto Sans TC family, i.e.
     //   const QString uiFontFamilyRequest = cjkFamily.isEmpty() ? QStringLiteral("Microsoft JhengHei UI") : cjkFamily;
     // (cjkFamily = TaidaFlowFonts::loadEmbeddedCjkFont(), already loaded earlier in core).
-    const QString uiFontFamilyRequest = QStringLiteral("Microsoft JhengHei UI");
+    const QString uiFontFamilyRequest = cjkFamily.isEmpty() ? QStringLiteral("Microsoft JhengHei UI") : cjkFamily;
     applyUiFont(uiFontFamilyRequest); // QML reads the result as Application.font.family
     // ===== end of UI font ========================================================
 

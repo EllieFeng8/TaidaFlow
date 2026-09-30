@@ -1,0 +1,28 @@
+﻿=== w2-082 live smoke 2026-10-01T00:58:45.4799475+08:00
+00:58:45 other TaidaFlowApp processes (not touched): 72604 D:\repo\codex\qmlTester\taidaflow-main\build\pm-main-ui\TaidaFlowApp.exe
+00:58:46 ports free: 502, 8234, 8235, 18190, 18235
+00:58:48 run-simulator exit=0: SIM_PID=75688 CWD=D:\repo\codex\qmlTester\taidaflow\build\sim-cwd LOG=D:\repo\codex\qmlTester\taidaflow\build\w2-082-run-logs\simulator.log endpoints=127.0.0.201,127.0.0.202,127.0.0.203,127.0.0.204,127.0.0.205
+00:58:56 safety_probe exit=0 (SAFE)
+00:58:56 app started pid=43316 (config D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-082\config.w2-082-sim.json, dataDir D:\repo\codex\qmlTester\taidaflow\build\w2-082-run)
+00:59:11 app listeners: TCP    0.0.0.0:502            0.0.0.0:0              LISTENING       43316 | TCP    0.0.0.0:8234           0.0.0.0:0              LISTENING       43316 | TCP    0.0.0.0:8235           0.0.0.0:0              LISTENING       43316 | TCP    127.0.0.1:18190        0.0.0.0:0              LISTENING       43316 | TCP    127.0.0.1:18235        0.0.0.0:0              LISTENING       43316
+00:59:11 PASS app listens on its 5 service ports (502, 8234, 8235, 18190, 18235)
+00:59:11 PASS REST GET / -> {"status":"ok"}|200
+01:00:12 PASS sensor data saved while running: /api/sensor/last ts 1790787551 -> 1790787611
+01:00:12 PASS uptime 75 s >= 60 s
+01:00:12 WM_CLOSE sent=True exited=True exit_code=0
+01:00:12 PASS app closed with exit code 0
+01:00:13 PASS no listener of the app left
+01:00:13 PASS other TaidaFlowApp processes still running: 1 of 1
+01:00:13   log: Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+01:00:13   log: [UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> taidaflow noto sans tc
+01:00:13 PASS log: Embedded CJK font loaded: TaidaFlow Noto Sans TC (Regular, Bold)
+01:00:13 PASS log: [UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> taidaflow noto sans tc
+01:00:13 PASS log: no "[UiFont] ... is not available"
+01:00:13 PASS log: no CJK fallback chain on the desktop (WebAssembly only)
+01:00:13 PASS log: no QML error/warning lines (0)
+01:00:13 PASS log: [Core] shutdown complete
+01:00:13 warning/error lines in the log: 2
+    [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-082-run\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+    [MS300] COM2: Referenced serial device does not exist. (not open for 61 s, 18 connection attempt(s); next attempt in 3 s) (50 similar warning(s) held back since the previous one; at most one per 60 s)
+01:00:13 simulator pid 75688 (started here) closed
+01:00:13 === all checks passed

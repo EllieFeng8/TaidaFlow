@@ -3,7 +3,8 @@
 ## 目的
 測試 `App/appconfig.{h,cpp}`(桌面版 config.json 讀取器,規格 `docs/taidaflow_config_spec.md` §1/§2)
 與 `App/runtimeinfo.{h,cpp}`(網頁版讀 `/runtime.json` 取得同步 port,規格 §3),
-以及 `App/applog.{h,cpp}`(w2-064:桌面版程式自己寫 log 檔,規格 §2 `log`)。
+以及 `App/applog.{h,cpp}`(w2-064:桌面版程式自己寫 log 檔,規格 §2 `log`),
+和介面字型(w2-082:`App/main.cpp` 的 `applyUiFont()` 與 HOOK、`App/embeddedfonts.cpp`、`App/fonts/*.ttf`)。
 這是獨立的小 CTest 專案,直接編譯 `App/` 裡的原始檔,不改動 Qt Design Studio 產生的主 CMake。
 
 | 測試 | 內容 |
@@ -13,6 +14,19 @@
 | `tst_applog` | config.json 無法使用時寫到備援資料夾(A2:壞 JSON、路徑是資料夾、備援資料夾不可寫仍 exit 2 且不改 config.json)、檔名 `taidaflow-YYYY-MM-DD.log`(quiet:warning/critical/fatal)與 `-full.log`(全部)同時寫與層級過濾、每行格式(時間戳毫秒、層級、category)、UTF-8 無 BOM + CRLF、log 資料夾自動建立、同日重啟接續寫、換日(往後與系統時間往回調)、保留天數邊界(1/7/60,含今天)、只刪完全符合命名的檔(舊版啟動腳本 log、nginx log、子資料夾等不動)、啟動與換日清理、`enabled=false`、寫檔失敗(資料夾是檔案、唯讀檔、非法字元)不當機且 60 秒/換日重試、8 執行緒同時寫不交錯、真實 message handler(安裝前緩衝重放、category、轉送原 handler、多執行緒)、清理耗時、緩衝上限 |
 
 全部使用 `QTemporaryDir` 內的真實檔案與真實 TCP 連線,沒有模擬物件。
+`tst_uifont` / `tst_uifont_wasmpath`(w2-082)測的程式碼**不是複本**:configure 時 `CMakeLists.txt` 從 `App/main.cpp` 切出
+`applyUiFont()` 整個函式,以及 `main()` 裡「(core only)」區塊(`loadEmbeddedCjkFont`、WebAssembly 才執行的 `installCjkFallbackChain`)
+與 HOOK 區塊(`uiFontFamilyRequest` 那一行 + `applyUiFont(...)`),產生 `build\app-tests\uifont_gen\*.inc` 後編譯
+(`main.cpp` 是 configure 相依檔,改了就重新產生;找不到標記時 configure 失敗)。`tst_uifont` 是桌面版編譯出的順序;
+`tst_uifont_wasmpath` 把同一段文字的 `#if defined(Q_OS_WASM)` 打開(網頁版的順序:先 fallback 鏈再 `applyUiFont`),
+在桌面的字型資料庫上執行(沒有開瀏覽器;網頁上 `Consolas` 的第一個替代是 DejaVu Sans Mono,這裡是桌面的等寬字型 Courier New)。
+兩者檢查:`main.cpp` 只有一行 HOOK 且內容正確、呼叫順序(QApplication → 載入內嵌字型 → [WASM fallback 鏈] → HOOK → `applyUiFont`
+→ QML engine);應用程式字型、`QFontInfo`、`QRawFont`(一般 400 / 粗體 700 都是內嵌檔)都是 `TaidaFlow Noto Sans TC`;
+log 有 `[UiFont] interface font: TaidaFlow Noto Sans TC`;`Consolas` 替代清單(桌面只有內嵌字型、網頁順序內嵌字型在最後);
+真實 UI 字串(中英文、數字、°、·、−、全形標點)的每個字形都來自內嵌字型;Consolas 數值裡的中文來自內嵌字型(桌面的數字仍是 Consolas);
+兩個 TTF 都含可列印 ASCII、UI 符號、Latin-1 補充與 `charset.txt` 全部字元;`App.qml` 根物件是 `T.ApplicationWindow`、
+其 `font.family` 綁定(從 `App.qml` 讀出,不是寫死)在 Universal style 下讓視窗、Label、Text、Button 與 Popup 裡的 Label
+都是內嵌字型(`App.qml` 其餘內容與頁面不載入;全頁面逐元件的檢查見 main 的 w1-081)。預設 Windows 平台外掛,不顯示任何視窗。
 `tst_applog` 唯一注入的是日期時間來源(可設定的時鐘),用來測換日;寫檔、刪檔、執行緒、Qt message handler 都是真的。
 
 ## 建置與執行(Windows,MSVC)
@@ -21,7 +35,7 @@
 App\tests\run-app-tests.bat          :: configure + build + CTest,輸出 build\app-tests(增量)
 App\tests\run-app-tests.bat fresh    :: 先刪 build\app-tests 再從頭建
 ```
-exit code 0 = 3 個測試全部通過(`100% tests passed, 0 tests failed out of 3`)。與 `Core\tests\run-core-tests.bat` 同一種做法。
+exit code 0 = 5 個測試全部通過(`100% tests passed, 0 tests failed out of 5`)。與 `Core\tests\run-core-tests.bat` 同一種做法。
 工具不在預設位置時設 `TAIDAFLOW_QT_ROOT`、`TAIDAFLOW_QT_TOOLS`、`TAIDAFLOW_VCVARS64`(與 `scripts\build-desktop.bat` 相同,
 `docs\BUILD.md` §2.6);`fresh` 之後的參數會交給 ctest(例如 `-R tst_applog`)。
 

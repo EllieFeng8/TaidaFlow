@@ -4,8 +4,10 @@
 What it does
   1. Scans the project's QML / JS / C++ sources (App, Core, TaidaFlow, TaidaFlowContent,
      Dependencies) and collects every non-ASCII character that appears in them.
-  2. Adds printable ASCII (U+0020..U+007E) and a small fixed set of common CJK
-     punctuation so that numbers / labels / later edits keep rendering.
+  2. Adds printable ASCII (U+0020..U+007E), a small fixed set of common CJK
+     punctuation and (w2-082, the subset is the interface font) Latin-1 Supplement,
+     fullwidth digits / punctuation and common unit / typographic symbols, so that
+     numbers / labels / later edits keep rendering in this one font.
   3. Instantiates the Noto Sans TC variable font (OFL-1.1) at wght=400 and wght=700
      and subsets both instances to that character set (static TTF, no hinting).
   4. Verifies that every collected character supported by the source font is present
@@ -43,6 +45,13 @@ SCAN_DIRS = ["App", "Core", "TaidaFlow", "TaidaFlowContent", "Dependencies"]
 SCAN_EXTS = {".qml", ".js", ".mjs", ".cpp", ".cc", ".cxx", ".h", ".hpp"}
 # Common CJK / fullwidth punctuation and symbols kept even if not (yet) used in sources.
 EXTRA = "，。、：；！？（）「」『』《》〈〉【】…—～％＋－／＝　·°℃"
+# w2-082: the subset is now the INTERFACE font of the desktop and the web page (App/main.cpp
+# applyUiFont), not only a CJK fallback, so a Latin / unit / typographic symbol missing from it
+# would switch that character to another font. Kept even if not (yet) used in sources:
+# Latin-1 Supplement (U+00A0..U+00FF: ± µ ² ³ × ÷ ° · « » © ® accented letters ...), fullwidth
+# digits and punctuation, and common unit / arrow / comparison / quote symbols.
+EXTRA_RANGES = [(0x00A0, 0x00FF), (0xFF01, 0xFF20), (0xFF3B, 0xFF40), (0xFF5B, 0xFF5E)]
+EXTRA_SYMBOLS = "‘’“”•‧‰′″←↑→↓≤≥≠≈∞℉Ωμ〔〕"
 INSTANCES = [("Regular", 400), ("Bold", 700)]
 
 
@@ -78,6 +87,9 @@ def collect_chars() -> tuple[set[str], list[Path]]:
                     chars.add(ch)
     chars.update(chr(c) for c in range(0x20, 0x7F))
     chars.update(EXTRA)
+    for first, last in EXTRA_RANGES:
+        chars.update(chr(c) for c in range(first, last + 1))
+    chars.update(EXTRA_SYMBOLS)
     return chars, files
 
 

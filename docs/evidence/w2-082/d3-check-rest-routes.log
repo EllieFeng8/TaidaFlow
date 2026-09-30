@@ -1,0 +1,35 @@
+﻿RESTManager.cpp registrations: 29 (28 distinct method+path)
+  GET      /
+  GET      /api/device/sn
+  OPTIONS  /api/device/sn
+  GET      /api/holding/last
+  OPTIONS  /api/holding/last
+  GET      /api/holding/range
+  OPTIONS  /api/holding/range
+  GET      /api/holding/rangeDateTime
+  OPTIONS  /api/holding/rangeDateTime
+  GET      /api/holding/rangeDateTimePage
+  OPTIONS  /api/holding/rangeDateTimePage
+  GET      /api/modbus/mode
+  OPTIONS  /api/modbus/mode
+  PUT      /api/modbus/mode
+  GET      /api/sensor/last
+  OPTIONS  /api/sensor/last
+  GET      /api/sensor/range
+  OPTIONS  /api/sensor/range
+  GET      /api/sensor/rangeDateTime
+  OPTIONS  /api/sensor/rangeDateTime
+  GET      /api/sensor/rangeDateTimePage
+  OPTIONS  /api/sensor/rangeDateTimePage
+  GET      /api/settings/frequency
+  OPTIONS  /api/settings/frequency
+  PUT      /api/settings/frequency
+  GET      /api/settings/sensors
+  OPTIONS  /api/settings/sensors
+  PUT      /api/settings/sensors
+  note: OPTIONS /api/settings/frequency is registered 2 times (the first registration answers)
+core.cpp kRestRoutes: 28 method+path
+GET routes (13): / /api/device/sn /api/holding/last /api/holding/range /api/holding/rangeDateTime /api/holding/rangeDateTimePage /api/modbus/mode /api/sensor/last /api/sensor/range /api/sensor/rangeDateTime /api/sensor/rangeDateTimePage /api/settings/frequency /api/settings/sensors
+PUT routes (3): /api/modbus/mode /api/settings/frequency /api/settings/sensors
+check_rest_routes exit=0
+check_rest_routes exit=0

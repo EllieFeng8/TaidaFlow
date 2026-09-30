@@ -1,0 +1,57 @@
+********* Start testing of TstUiFont *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+QINFO  : TstUiFont::initTestCase() variant: wasm path (Q_OS_WASM branch of main.cpp)
+QINFO  : TstUiFont::initTestCase() platform: windows
+QINFO  : TstUiFont::initTestCase() Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+QINFO  : TstUiFont::initTestCase() CJK fallback chain: Microsoft JhengHei UI,Segoe UI,Arial,Verdana,Sans Serif -> TaidaFlow Noto Sans TC | Consolas -> Courier New,TaidaFlow Noto Sans TC
+QINFO  : TstUiFont::initTestCase() [UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> courier new,taidaflow noto sans tc
+QINFO  : TstUiFont::initTestCase() cjkFamily = TaidaFlow Noto Sans TC | uiFontFamilyRequest = TaidaFlow Noto Sans TC
+PASS   : TstUiFont::initTestCase()
+QINFO  : TstUiFont::mainCppSource() offsets: app 8364 load 10914 chain 11006 hook 17649 apply 17768 engine 17943
+PASS   : TstUiFont::mainCppSource()
+QINFO  : TstUiFont::embeddedFontLoaded() styles QList("Regular", "Bold")
+PASS   : TstUiFont::embeddedFontLoaded()
+QINFO  : TstUiFont::hookRequestsEmbeddedFamily() log: Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+QINFO  : TstUiFont::hookRequestsEmbeddedFamily() log: CJK fallback chain: Microsoft JhengHei UI,Segoe UI,Arial,Verdana,Sans Serif -> TaidaFlow Noto Sans TC | Consolas -> Courier New,TaidaFlow Noto Sans TC
+QINFO  : TstUiFont::hookRequestsEmbeddedFamily() log: [UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> courier new,taidaflow noto sans tc
+PASS   : TstUiFont::hookRequestsEmbeddedFamily()
+QINFO  : TstUiFont::applicationFont() regular raw: Regular 400 | bold raw: Bold 700 | point size 9
+PASS   : TstUiFont::applicationFont()
+QINFO  : TstUiFont::consolasSubstitutes() Consolas -> courier new,taidaflow noto sans tc
+PASS   : TstUiFont::consolasSubstitutes()
+QINFO  : TstUiFont::otherFamiliesFallback() Segoe UI -> taidaflow noto sans tc
+PASS   : TstUiFont::otherFamiliesFallback()
+QINFO  : TstUiFont::uiTextGlyphs(PT-01 設備接口出口) regular PT-01 設備接口出口壓力 101.3 kPa -> TaidaFlow Noto Sans TC:24
+QINFO  : TstUiFont::uiTextGlyphs(PT-01 設備接口出口) bold PT-01 設備接口出口壓力 101.3 kPa -> TaidaFlow Noto Sans TC:24
+PASS   : TstUiFont::uiTextGlyphs(PT-01 設備接口出口)
+QINFO  : TstUiFont::uiTextGlyphs(設備接口入口溫度 23.) regular 設備接口入口溫度 23.5 °C -> TaidaFlow Noto Sans TC:16
+QINFO  : TstUiFont::uiTextGlyphs(設備接口入口溫度 23.) bold 設備接口入口溫度 23.5 °C -> TaidaFlow Noto Sans TC:16
+PASS   : TstUiFont::uiTextGlyphs(設備接口入口溫度 23.)
+QINFO  : TstUiFont::uiTextGlyphs(流量計 FM 12.0 ) regular 流量計 FM 12.0 L/MIN -> TaidaFlow Noto Sans TC:17
+QINFO  : TstUiFont::uiTextGlyphs(流量計 FM 12.0 ) bold 流量計 FM 12.0 L/MIN -> TaidaFlow Noto Sans TC:17
+PASS   : TstUiFont::uiTextGlyphs(流量計 FM 12.0 )
+QINFO  : TstUiFont::uiTextGlyphs(匯出完成 · 1200 ) regular 匯出完成 · 1200 筆 · 已儲存：history.csv -> TaidaFlow Noto Sans TC:31
+QINFO  : TstUiFont::uiTextGlyphs(匯出完成 · 1200 ) bold 匯出完成 · 1200 筆 · 已儲存：history.csv -> TaidaFlow Noto Sans TC:31
+PASS   : TstUiFont::uiTextGlyphs(匯出完成 · 1200 )
+QINFO  : TstUiFont::uiTextGlyphs(此日期區間沒有警報紀錄（) regular 此日期區間沒有警報紀錄（?5 ? 0 → ?） -> TaidaFlow Noto Sans TC:23
+QINFO  : TstUiFont::uiTextGlyphs(此日期區間沒有警報紀錄（) bold 此日期區間沒有警報紀錄（?5 ? 0 → ?） -> TaidaFlow Noto Sans TC:23
+PASS   : TstUiFont::uiTextGlyphs(此日期區間沒有警報紀錄（)
+QINFO  : TstUiFont::uiTextGlyphs(2026/10/01 1) regular 2026/10/01 13:45:00 – 2026/10/01 14:45:00 Main Alarm History -> TaidaFlow Noto Sans TC:60
+QINFO  : TstUiFont::uiTextGlyphs(2026/10/01 1) bold 2026/10/01 13:45:00 – 2026/10/01 14:45:00 Main Alarm History -> TaidaFlow Noto Sans TC:60
+PASS   : TstUiFont::uiTextGlyphs(2026/10/01 1)
+QINFO  : TstUiFont::consolasNumbersKeepChineseInEmbedded(value) Consolas 12.5 設定值 CJK -> TaidaFlow Noto Sans TC | runs TaidaFlow Noto Sans TC:3 | Consolas:5
+PASS   : TstUiFont::consolasNumbersKeepChineseInEmbedded(value)
+QINFO  : TstUiFont::consolasNumbersKeepChineseInEmbedded(date) Consolas 2026/10/01（三）13:45 CJK -> TaidaFlow Noto Sans TC | runs TaidaFlow Noto Sans TC:3 | Consolas:15
+PASS   : TstUiFont::consolasNumbersKeepChineseInEmbedded(date)
+QINFO  : TstUiFont::consolasNumbersKeepChineseInEmbedded(units) Consolas 101.3 壓力 kPa CJK -> TaidaFlow Noto Sans TC | runs TaidaFlow Noto Sans TC:2 | Consolas:10
+PASS   : TstUiFont::consolasNumbersKeepChineseInEmbedded(units)
+QINFO  : TstUiFont::subsetCoverage(Regular) Regular : checked 1054 code points (ASCII 95 , charset.txt 770 ), missing 0 
+PASS   : TstUiFont::subsetCoverage(Regular)
+QINFO  : TstUiFont::subsetCoverage(Bold) Bold : checked 1054 code points (ASCII 95 , charset.txt 770 ), missing 0 
+PASS   : TstUiFont::subsetCoverage(Bold)
+QINFO  : TstUiFont::applicationWindowFont() App.qml root font.family: Application.font.family
+QINFO  : TstUiFont::applicationWindowFont() window TaidaFlow Noto Sans TC | Label TaidaFlow Noto Sans TC | Text TaidaFlow Noto Sans TC | Button TaidaFlow Noto Sans TC | Popup Label TaidaFlow Noto Sans TC
+PASS   : TstUiFont::applicationWindowFont()
+PASS   : TstUiFont::cleanupTestCase()
+Totals: 20 passed, 0 failed, 0 skipped, 0 blacklisted, 1303ms
+********* Finished testing of TstUiFont *********

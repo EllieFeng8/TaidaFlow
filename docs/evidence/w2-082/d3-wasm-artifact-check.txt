@@ -1,0 +1,11 @@
+build\wasm-release\TaidaFlowApp.wasm : 34163343 bytes, 2026-10-01T01:11:44
+PASS App\fonts\TaidaFlowNotoSansTC-Regular.ttf (242508 bytes, sha256 CB183A91D41D4F10...): head table in .wasm at 24909583
+     HEAD:App/fonts/TaidaFlowNotoSansTC-Regular.ttf (225164 bytes, sha256 D839760949069C70...): head table in .wasm at -1 (expected -1: previous subset not in this build)
+PASS App\fonts\TaidaFlowNotoSansTC-Bold.ttf (243168 bytes, sha256 0E96025459FA5DA4...): head table in .wasm at 25149306
+     HEAD:App/fonts/TaidaFlowNotoSansTC-Bold.ttf (225796 bytes, sha256 15CE3A58A6CC0E4D...): head table in .wasm at -1 (expected -1: previous subset not in this build)
+PASS '[UiFont] interface font:' hits=1
+PASS 'is not available; keeping the default font' hits=1
+PASS 'Embedded CJK font loaded:' hits=1
+PASS 'CJK fallback chain:' hits=1
+PASS 'DejaVu Sans Mono' hits=3
+result: all checks passed

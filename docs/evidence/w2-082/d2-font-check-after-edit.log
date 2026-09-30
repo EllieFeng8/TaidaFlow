@@ -1,0 +1,3 @@
+﻿make-font-subset: C:\Users\TED\AppData\Local\Programs\Python\Launcher\py.exe -3 -B D:\repo\codex\qmlTester\taidaflow\scripts\make_font_subset.py --check
+scanned 213 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+charset changed since last build (138 new chars:  ¡¢£¤¥¦¨©ª«¬­®¯±²³´µ¶¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß) -> re-run without --check

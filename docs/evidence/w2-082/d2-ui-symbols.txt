@@ -1,0 +1,29 @@
+w2-082 scan of UI string literals: 58 files (TaidaFlowContent, TaidaFlow *.qml/*.js; App, Core *.cpp/*.h without tests)
+charset.txt: 771 characters
+
+== non-Han characters in UI string literals: 20 (code point, char, count, first location, in charset.txt)
+U+00B0 °  x13   TaidaFlowContent\components\SensorUnits.js:10           yes
+U+00B7 ·  x12   TaidaFlowContent\AlarmPage.qml:473                      yes
+U+00D7 ×  x1    TaidaFlowContent\HistoryPage.qml:599                    yes
+U+0394 Δ  x3    TaidaFlowContent\Main.qml:1261                          yes
+U+2013 –  x2    TaidaFlowContent\AlarmPage.qml:128                      yes
+U+2014 —  x10   TaidaFlowContent\components\NumberFormat.js:12          yes
+U+2039 ‹  x3    TaidaFlowContent\components\DateTimeField.qml:281       yes
+U+203A ›  x3    TaidaFlowContent\components\DateTimeField.qml:311       yes
+U+2193 ↓  x1    TaidaFlowContent\HistoryPage.qml:629                    yes
+U+2212 −  x1    TaidaFlowContent\SettingsPage.qml:103                   yes
+U+3001 、  x3    TaidaFlowContent\AlarmPage.qml:275                      yes
+U+3002 。  x7    TaidaFlowContent\components\SensorSettingRow.qml:109    yes
+U+300C 「  x4    TaidaFlowContent\AlarmPage.qml:338                      yes
+U+300D 」  x4    TaidaFlowContent\AlarmPage.qml:338                      yes
+U+FF08 （  x14   TaidaFlowContent\AlarmPage.qml:184                      yes
+U+FF09 ）  x14   TaidaFlowContent\AlarmPage.qml:184                      yes
+U+FF0C ，  x16   TaidaFlowContent\components\SensorSettingRow.qml:312    yes
+U+FF1A ：  x14   TaidaFlowContent\components\MotorIcon.qml:261           yes
+U+FF1B ；  x11   TaidaFlowContent\components\SensorSettingRow.qml:109    yes
+U+FF1F ？  x5    TaidaFlowContent\Main.qml:1372                          yes
+
+== Han characters in UI string literals: 335, missing from charset.txt: 0
+== printable ASCII U+0020..U+007E: 95, missing from charset.txt: 0
+
+result: 0 missing 

@@ -474,22 +474,30 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -DeviceProfile 
   外部程式的輸出);直接執行,或在 **cmd** 以 `>` 導向檔案即可(w2-069 以同樣的 `Start-Process` 啟動方式實測,
   `docs/evidence/w2-069/03-pipe-redirect-test.txt`)。
 
-## 中文字型(WebAssembly)
+## 介面字型(桌面與網頁:內嵌 Noto Sans TC)
 
-Qt for WebAssembly 沒有系統 CJK 字型,因此內嵌 **Noto Sans TC 子集**(OFL-1.1):
+**桌面版與網頁版都使用內嵌的 Noto Sans TC(思源黑體)子集作為介面字型**(字型名稱 `TaidaFlow Noto Sans TC`),
+會跳動或需要對齊的數值、日期時間與數值輸入框保留 **Consolas**(w1-081 的清單),Consolas 數值中的中文同樣用 Noto Sans TC(w2-082)。
+Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體、Segoe UI 與新細明體,所以兩邊統一用同一份內嵌字型(OFL-1.1):
 
 - `App/fonts/TaidaFlowNotoSansTC-{Regular,Bold}.ttf` 與 `App/fonts/charset.txt` **已在 git 裡**,建置直接使用
   (CMake 不產生、不呼叫外部程式);clone 下來、部署都**不需要 Python**。
 - 加了新的中文字串、網頁出現方框時才要重新產生:這是專案唯一的 Python 工具(`scripts\make_font_subset.py`,用 fonttools;
   以 `scripts\make-font-subset.ps1` 執行,`--check` 只檢查)。刪掉中文字串或註解、有字不再使用時 `--check` 也是 exit 1
   (訊息 `0 new chars`,不缺字),同樣重新產生即可(w2-067-fix1)。需求、步驟與提交方式見 [docs/BUILD.md §2.5](docs/BUILD.md)。
-  它掃描 `App/ Core/ TaidaFlow/ TaidaFlowContent/ Dependencies/` 的 QML/JS/C++ 非 ASCII 字元 + 可列印 ASCII + 常用全形標點,
-  實體化 wght 400/700 並子集化。
+  它掃描 `App/ Core/ TaidaFlow/ TaidaFlowContent/ Dependencies/` 的 QML/JS/C++ 非 ASCII 字元 + 可列印 ASCII + 常用全形標點
+  + Latin-1 補充(U+00A0–U+00FF)、全形數字與標點、常用單位 / 箭頭 / 比較 / 引號符號(w2-082,因為它是介面字型,英文、數字與符號
+  不能逐字換成別的字型),實體化 wght 400/700 並子集化。
 - 來源字型:`C:\Windows\Fonts\NotoSansTC-VF.ttf`(Noto Sans TC 2.004,Windows 11 內附;亦可從
   <https://fonts.google.com/noto/specimen/Noto+Sans+TC> 下載 `NotoSansTC[wght].ttf` 以 `--source` 指定)。
   授權 SIL Open Font License 1.1,宣告保留於字型 name table。
-- 載入:`App/embeddedfonts.cpp`。兩平台都 `addApplicationFont`;**只有 WASM** 建 fallback 鏈
-  (`QFont::insertSubstitutions` + Han/Common script fallback)。desktop 顯示不變。
+- 載入與套用:`App/embeddedfonts.cpp` 在兩平台都 `addApplicationFont`;`App/main.cpp` 的 HOOK 那一行把它交給 `applyUiFont()`
+  (應用程式字型、`App.qml` 的 ApplicationWindow `font.family: Application.font.family`、`Consolas` 的替代字型;
+  載入失敗時退回微軟正黑體 UI),log 一行 `[UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> taidaflow noto sans tc`。
+  **只有 WASM** 另外先建 fallback 鏈(`QFont::insertSubstitutions` + Han/Common script fallback):其他字型名稱都退回 Noto Sans TC,
+  `Consolas` 先用 Qt 網頁版內附的等寬 DejaVu Sans Mono 顯示數字、中文再退回 Noto Sans TC。
+- 測試:`App\tests` 的 `tst_uifont` / `tst_uifont_wasmpath`(直接編譯 `main.cpp` 的字型程式碼,桌面 / WebAssembly 兩種順序;
+  應用程式字型、QFontInfo、Consolas 替代清單、實際字形來源、子集涵蓋、ApplicationWindow 與 Controls 的字型),見 `App/tests/README.md`。
 
 ## 開發用工具(dev-only)
 
@@ -668,7 +676,8 @@ docs\evidence\w2-045\tools\run-qtest.bat
 ::     下載掛載、自訂路由、綁定失敗、多執行緒註冊、1 GiB 串流記憶體、w2-062 單檔 Cache-Control;需約 2 GiB 暫存磁碟空間)
 scripts\run-apphttpserver-tests.bat
 :: 5d. (w2-062/w2-064) config.json 讀取器、/runtime.json 與程式 log 檔的 QTest(App/tests:tst_appconfig、
-::     tst_runtimeinfo、tst_applog,見 App\tests\README.md;建置 + CTest 的一行指令:)
+::     tst_runtimeinfo、tst_applog;w2-082 加上介面字型的 tst_uifont、tst_uifont_wasmpath,見 App\tests\README.md;
+::     建置 + CTest 的一行指令,或 App\tests\run-app-tests.bat fresh:)
 docs\evidence\w2-065\tools\run-app-tests.bat
 :: 5d2. (w2-065) 腳本的 config.json 讀取器(含 nginx.exe / log.* 鍵、log 資料夾解析、launcher / nginx access log 清理規則)
 PS docs\evidence\w2-065\tools\test-config-reader.ps1

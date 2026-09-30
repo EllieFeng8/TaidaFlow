@@ -1,0 +1,12 @@
+config.json: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json
+nginx      : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx
+web root   : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web
+exports    : D:\repo\codex\qmlTester\taidaflow\build\w2-074-verify-data\exports (config.json dataDir D:\repo\codex\qmlTester\taidaflow\build\w2-074-verify-data)
+log folder : D:\repo\codex\qmlTester\taidaflow\build\w2-074-verify-data\logs (config.json log.dir = logs, file; nginx-error.log, nginx-access-YYYY-MM-DD.log)
+ports      : listen 80 (nginx.port), /api/ -> 127.0.0.1:18080 (rest.port), /mirror -> 127.0.0.1:18125 (mirror.internalPort)
+written: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\conf\nginx.conf
+NGINX_CONF=written
+  runtime.json written: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web\runtime.json = {"mirrorPublicPort":80,"version":1}
+  nginx -t | nginx: the configuration file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx/conf/nginx.conf syntax is ok
+  nginx -t | nginx: configuration file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx/conf/nginx.conf test is successful
+nginx is not running: start-taidaflow.ps1 starts it, or by hand:   cd "D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx"   start nginx

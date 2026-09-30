@@ -1,0 +1,9 @@
+PATH=C:\Windows\System32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0
+--- where Qt6Core.dll (expect: not found on PATH)
+INFO: Could not find files for the given pattern(s).
+--- where vcruntime140_1.dll / msvcp140_2.dll on PATH (System32 copies are allowed but the package has its own)
+C:\Windows\System32\msvcp140_2.dll
+wrote the default configuration to D:\repo\codex\qmlTester\taidaflow\build\w2-074-cleanenv\config.cleanenv.json
+TaidaFlowApp.exe exit=0
+written: D:\repo\codex\qmlTester\taidaflow\build\w2-074-cleanenv\config.cleanenv.json
+EXIT=0 

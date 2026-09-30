@@ -1,0 +1,12 @@
+﻿before: dist\
+  TaidaFlow-20260929-0113799
+  TaidaFlow-20260929-49b0d8e
+  TaidaFlow-20260929-49b0d8e.zip
+old package: dist\TaidaFlow-20260929-0113799  1392 files 156609605 bytes
+TaidaFlow field package TaidaFlow-20260929-0113799
+created      : 2026-09-29T01:46:05.0037681+08:00 on LAPTOP-0B3CPPED
+git          : 011379975c606ef9d3c22190cf9cee568ac33135 (2026-09-29T01:42:00+08:00)
+moved to build\w2-074-retired-dist\TaidaFlow-20260929-0113799 (git-ignored; delete when no longer needed)
+after: dist\
+  TaidaFlow-20260929-49b0d8e  
+  TaidaFlow-20260929-49b0d8e.zip  68984012

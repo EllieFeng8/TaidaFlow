@@ -1,0 +1,8 @@
+manifest: 24/24 ok
+legacy_VERSION_present=False VERSION.txt=1.0.1
+verify_pack exit=0
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-pack.ps1
+started : 2026-09-29T15:58:24.1762110+08:00
+elapsed : 0s
+EXIT=0

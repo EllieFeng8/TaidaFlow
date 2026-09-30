@@ -1,0 +1,14 @@
+zip     : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e.zip (68984012 bytes)
+SHA-256 : D02627DF2666BB83E2D8832388C0B9EDC02622152D1A1C723BCAECD36FFDF03F
+entries : 1428 (1391 file(s)); root folder(s): TaidaFlow-20260929-49b0d8e; entries with '\' separators: 1428
+  expand-archive | D:\repo\codex\qmlTester\taidaflow\build\w2-074-zipcheck\expand-archive\TaidaFlow-20260929-49b0d8e: MANIFEST entries ok 1390, problems 0; folder 1391 file(s) 156,650,393 bytes; residue: none
+Expand-Archive copy: check-manifest exit 0
+  explorer-shell | D:\repo\codex\qmlTester\taidaflow\build\w2-074-zipcheck\explorer-shell\TaidaFlow-20260929-49b0d8e: MANIFEST entries ok 1390, problems 0; folder 1391 file(s) 156,650,393 bytes; residue: none
+Explorer (Shell.Application) copy: 1391 file(s), check-manifest exit 0
+extracted copies removed (D:\repo\codex\qmlTester\taidaflow\build\w2-074-zipcheck)
+=== 0 check(s) failed
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-074\tools\verify-zip.ps1 -Zip dist\TaidaFlow-20260929-49b0d8e.zip
+started : 2026-09-29T16:05:42.6106912+08:00
+elapsed : 35s
+EXIT=0

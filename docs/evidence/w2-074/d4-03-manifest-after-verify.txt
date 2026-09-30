@@ -1,0 +1,6 @@
+D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e: MANIFEST entries ok 1390, problems 0; folder 1391 file(s) 156,650,393 bytes; residue: none
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-074\tools\check-manifest.ps1 -Package dist\TaidaFlow-20260929-49b0d8e
+started : 2026-09-29T16:02:27.7989001+08:00
+elapsed : 4s
+EXIT=0

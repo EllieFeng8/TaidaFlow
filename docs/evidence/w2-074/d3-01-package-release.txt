@@ -1,0 +1,106 @@
+compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe
+ninja -n D:\repo\codex\qmlTester\taidaflow\build\desktop: no work to do (up to date)
+ninja -n D:\repo\codex\qmlTester\taidaflow\build\wasm-release: no work to do (up to date)
+MSVC runtime: C:\Program Files\Microsoft Visual Studio\18\Community\VC\Redist\MSVC\14.51.36231\x64\Microsoft.VC145.CRT (toolset 14.51.36231)
+nginx to bundle: C:\tools\nginx\nginx-1.30.5 (from nginx.exe of D:\repo\codex\qmlTester\taidaflow\deploy\dev\config.dev.json)
+package: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+old package folder removed (-Force)
+windeployqt --release --no-compiler-runtime --no-translations --skip-plugin-types qmltooling,canbus --exclude-plugins qsqlmimer,qsqlodbc,qsqlpsql --verbose 1 --qmldir D:\repo\codex\qmlTester\taidaflow\TaidaFlowContent --qmldir D:\repo\codex\qmlTester\taidaflow\TaidaFlow --qmldir D:\repo\codex\qmlTester\taidaflow\Dependencies D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\TaidaFlowApp.exe
+windeployqt exit 0 (log D:\repo\codex\qmlTester\taidaflow\build\package-logs\TaidaFlow-20260929-49b0d8e.windeployqt.log)
+MSVC runtime: 10 DLL(s) copied (concrt140.dll, msvcp140.dll, msvcp140_1.dll, msvcp140_2.dll, msvcp140_atomic_wait.dll, msvcp140_codecvt_ids.dll, vccorlib140.dll, vcruntime140.dll, vcruntime140_1.dll, vcruntime140_threads.dll)
+  web | qtloader.js                     12354 bytes  -> .gz         4014 bytes (32%)
+  web | qtlogo.svg                       1686 bytes  -> .gz          901 bytes (53%)
+  web | TaidaFlowApp.html               21871 bytes  -> .gz         6252 bytes (29%)
+  web | TaidaFlowApp.js                304976 bytes  -> .gz        70011 bytes (23%)
+  web | TaidaFlowApp.wasm            33850463 bytes  -> .gz     12459378 bytes (37%)
+  web | config.json: (-NoConfig: the app defaults) -> nginx.enabled True (default), nginx.port 80 (default), mirror.publicPort 8125 (default)
+  web | runtime.json written: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web\runtime.json = {"mirrorPublicPort":80,"version":1}
+  web | deployed 5 file(s), 34191350 bytes (+12540556 bytes .gz) from D:\repo\codex\qmlTester\taidaflow\build\wasm-release to D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web
+  web | no symbolic links / junctions in D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\web
+  web | the desktop app serves them at http://<host>:8124/TaidaFlowApp.html (config.json http.port; restart it if it is running)
+  web | nginx serves them at http://<host>:80/ (config.json nginx.port, scripts\nginx-start.ps1; run scripts\nginx-web.ps1 -Action reload if it is running)
+nginx: nginx-1.30.5 bundled (nginx.exe + docs\ + conf\ without nginx.conf)
+no build-machine path (repository, user profile) in the package's text files or TaidaFlowApp.exe
+
+top level of D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e :
+  deploy\                                      1 file(s)         16,988 bytes
+  generic\                                     1 file(s)        102,024 bytes
+  iconengines\                                 1 file(s)         77,448 bytes
+  imageformats\                                9 file(s)      1,828,552 bytes
+  networkinformation\                          1 file(s)         71,304 bytes
+  nginx\                                      21 file(s)      7,571,246 bytes
+  platforminputcontexts\                       1 file(s)         33,928 bytes
+  platforms\                                   1 file(s)        907,912 bytes
+  qml\                                      1278 file(s)      9,722,328 bytes
+  scripts\                                     2 file(s)         44,505 bytes
+  sqldrivers\                                  1 file(s)      1,978,504 bytes
+  styles\                                      1 file(s)        215,688 bytes
+  tls\                                         2 file(s)        356,624 bytes
+  web\                                        11 file(s)     46,731,941 bytes
+  concrt140.dll                                                 374,200 bytes
+  D3Dcompiler_47.dll                                          4,173,928 bytes
+  DEPLOY.md                                                      64,114 bytes
+  MANIFEST.txt                                                  190,186 bytes
+  msvcp140.dll                                                  643,512 bytes
+  msvcp140_1.dll                                                 35,768 bytes
+  msvcp140_2.dll                                                274,872 bytes
+  msvcp140_atomic_wait.dll                                       57,792 bytes
+  msvcp140_codecvt_ids.dll                                       31,160 bytes
+  opengl32sw.dll                                             20,639,888 bytes
+  Qt6Core.dll                                                 6,159,496 bytes
+  Qt6Gui.dll                                                  9,285,768 bytes
+  Qt6HttpServer.dll                                             188,552 bytes
+  Qt6LabsQmlModels.dll                                          174,728 bytes
+  Qt6Network.dll                                              1,755,784 bytes
+  Qt6OpenGL.dll                                               1,970,824 bytes
+  Qt6Qml.dll                                                  5,250,184 bytes
+  Qt6QmlMeta.dll                                                150,152 bytes
+  Qt6QmlModels.dll                                              739,464 bytes
+  Qt6QmlWorkerScript.dll                                         75,400 bytes
+  Qt6Quick.dll                                                6,281,352 bytes
+  Qt6QuickControls2.dll                                          97,928 bytes
+  Qt6QuickControls2Basic.dll                                  1,351,304 bytes
+  Qt6QuickControls2BasicStyleImpl.dll                            62,600 bytes
+  Qt6QuickControls2FluentWinUI3StyleImpl.dll                      129,160 bytes
+  Qt6QuickControls2Fusion.dll                                 1,168,520 bytes
+  Qt6QuickControls2FusionStyleImpl.dll                          161,416 bytes
+  Qt6QuickControls2Imagine.dll                                2,545,288 bytes
+  Qt6QuickControls2ImagineStyleImpl.dll                          47,752 bytes
+  Qt6QuickControls2Impl.dll                                     288,904 bytes
+  Qt6QuickControls2Material.dll                               1,347,208 bytes
+  Qt6QuickControls2MaterialStyleImpl.dll                        268,424 bytes
+  Qt6QuickControls2Universal.dll                              1,071,752 bytes
+  Qt6QuickControls2UniversalStyleImpl.dll                       106,632 bytes
+  Qt6QuickControls2WindowsStyleImpl.dll                          70,280 bytes
+  Qt6QuickEffects.dll                                           389,256 bytes
+  Qt6QuickLayouts.dll                                           205,448 bytes
+  Qt6QuickShapes.dll                                            330,888 bytes
+  Qt6QuickTemplates2.dll                                      1,868,936 bytes
+  Qt6QuickTimeline.dll                                           95,368 bytes
+  Qt6SerialBus.dll                                              422,024 bytes
+  Qt6SerialPort.dll                                             133,768 bytes
+  Qt6ShaderTools.dll                                          4,008,072 bytes
+  Qt6Sql.dll                                                    307,848 bytes
+  Qt6Svg.dll                                                    528,520 bytes
+  Qt6VirtualKeyboard.dll                                        483,976 bytes
+  Qt6WebSockets.dll                                             211,592 bytes
+  Qt6Widgets.dll                                              6,500,488 bytes
+  register-autostart.ps1                                          9,210 bytes
+  start-taidaflow.bat                                             1,493 bytes
+  start-taidaflow.ps1                                            31,327 bytes
+  stop-taidaflow.bat                                                979 bytes
+  stop-taidaflow.ps1                                              8,637 bytes
+  TaidaFlowApp.exe                                            3,598,336 bytes
+  unregister-autostart.ps1                                        1,731 bytes
+  vccorlib140.dll                                               350,648 bytes
+  vcruntime140.dll                                              178,616 bytes
+  vcruntime140_1.dll                                             50,112 bytes
+  vcruntime140_threads.dll                                       38,840 bytes
+  VERSION.txt                                                       996 bytes
+PACKAGED: 1391 file(s), 156,650,393 bytes (149.4 MB) -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+file list with sizes and SHA-256: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\MANIFEST.txt
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File scripts\package-release.ps1 -Force
+started : 2026-09-29T15:58:37.0650930+08:00
+elapsed : 10s
+EXIT=0

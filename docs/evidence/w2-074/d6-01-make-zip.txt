@@ -1,0 +1,9 @@
+Compress-Archive (Microsoft.PowerShell.Archive 1.0.1.0) D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e.zip
+zip     : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e.zip
+bytes   : 68984012 (65.8 MB)
+SHA-256 : D02627DF2666BB83E2D8832388C0B9EDC02622152D1A1C723BCAECD36FFDF03F
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-074\tools\make-zip.ps1 -Package dist\TaidaFlow-20260929-49b0d8e
+started : 2026-09-29T16:05:20.5782801+08:00
+elapsed : 17s
+EXIT=0

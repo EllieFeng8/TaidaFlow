@@ -1,0 +1,8 @@
+﻿verification shell elevated (Administrator role active): False
+whoami /groups Mandatory Label: Mandatory Label\Medium Mandatory Level Label S-1-16-8192 
+--- admin/elevation/python/Qt related commands in package scripts (.bat/.ps1):
+  start-taidaflow.ps1:235: if ($l.OwningProcess -eq 4) { $owner = 'System = Windows HTTP.sys (IIS, WinRM, WebDAV, a URL reservation ...; check: netsh http show servicestate)' }
+  install-nginx-config.ps1:244: if ($l.OwningProcess -eq 4) { $owner = 'System = Windows HTTP.sys (IIS, WinRM, WebDAV, a URL reservation ...; netsh http show servicestate)' }
+--- start-taidaflow.bat invocation line:
+  12: "%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-taidaflow.ps1" %*
+  20: if not defined TAIDAFLOW_NOPAUSE pause

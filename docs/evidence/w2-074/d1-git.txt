@@ -1,0 +1,6 @@
+﻿49b0d8eb0e7831cd592ed42fedae83e387d52470
+49b0d8eb0e7831cd592ed42fedae83e387d52470
+49b0d8e
+ M docs/evidence/wasm-v4-sim/safety-probe.log
+ M docs/evidence/wasm-v4/safety-probe.log
+49b0d8eb0e7831cd592ed42fedae83e387d52470 2026-09-29T14:02:56+08:00 docs(core): 區間路由改為分頁後的說明同步(wasm-integration-report、core.cpp 路由說明)

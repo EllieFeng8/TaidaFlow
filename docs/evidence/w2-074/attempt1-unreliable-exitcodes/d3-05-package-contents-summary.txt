@@ -1,0 +1,41 @@
+﻿package: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+total: 1391 files, 156,650,388 bytes (149.4 MB)
+top-level DLLs: 50 (83,084,392 bytes)
+  Qt: Qt6Core.dll, Qt6Gui.dll, Qt6HttpServer.dll, Qt6LabsQmlModels.dll, Qt6Network.dll, Qt6OpenGL.dll, Qt6Qml.dll, Qt6QmlMeta.dll, Qt6QmlModels.dll, Qt6QmlWorkerScript.dll, Qt6Quick.dll, Qt6QuickControls2.dll, Qt6QuickControls2Basic.dll, Qt6QuickControls2BasicStyleImpl.dll, Qt6QuickControls2FluentWinUI3StyleImpl.dll, Qt6QuickControls2Fusion.dll, Qt6QuickControls2FusionStyleImpl.dll, Qt6QuickControls2Imagine.dll, Qt6QuickControls2ImagineStyleImpl.dll, Qt6QuickControls2Impl.dll, Qt6QuickControls2Material.dll, Qt6QuickControls2MaterialStyleImpl.dll, Qt6QuickControls2Universal.dll, Qt6QuickControls2UniversalStyleImpl.dll, Qt6QuickControls2WindowsStyleImpl.dll, Qt6QuickEffects.dll, Qt6QuickLayouts.dll, Qt6QuickShapes.dll, Qt6QuickTemplates2.dll, Qt6QuickTimeline.dll, Qt6SerialBus.dll, Qt6SerialPort.dll, Qt6ShaderTools.dll, Qt6Sql.dll, Qt6Svg.dll, Qt6VirtualKeyboard.dll, Qt6WebSockets.dll, Qt6Widgets.dll
+  MSVC runtime: concrt140.dll, msvcp140.dll, msvcp140_1.dll, msvcp140_2.dll, msvcp140_atomic_wait.dll, msvcp140_codecvt_ids.dll, vccorlib140.dll, vcruntime140.dll, vcruntime140_1.dll, vcruntime140_threads.dll
+  other: D3Dcompiler_47.dll, opengl32sw.dll
+deploy\              1 files         16,988 bytes  dll=0
+generic\             1 files        102,024 bytes  dll=1
+    generic\qtuiotouchplugin.dll
+iconengines\         1 files         77,448 bytes  dll=1
+    iconengines\qsvgicon.dll
+imageformats\        9 files      1,828,552 bytes  dll=9
+    imageformats\qgif.dll
+    imageformats\qicns.dll
+    imageformats\qico.dll
+    imageformats\qjpeg.dll
+    imageformats\qsvg.dll
+    imageformats\qtga.dll
+    imageformats\qtiff.dll
+    imageformats\qwbmp.dll
+    imageformats\qwebp.dll
+networkinformation\     1 files         71,304 bytes  dll=1
+    networkinformation\qnetworklistmanager.dll
+nginx\              21 files      7,571,246 bytes  dll=0
+platforminputcontexts\     1 files         33,928 bytes  dll=1
+    platforminputcontexts\qtvirtualkeyboardplugin.dll
+platforms\           1 files        907,912 bytes  dll=1
+    platforms\qwindows.dll
+qml\              1278 files      9,722,328 bytes  dll=30
+scripts\             2 files         44,505 bytes  dll=0
+sqldrivers\          1 files      1,978,504 bytes  dll=1
+    sqldrivers\qsqlite.dll
+styles\              1 files        215,688 bytes  dll=1
+    styles\qmodernwindowsstyle.dll
+tls\                 2 files        356,624 bytes  dll=2
+    tls\qcertonlybackend.dll
+    tls\qschannelbackend.dll
+web\                11 files     46,731,936 bytes  dll=0
+qml\ modules: QML, Qt, Qt5Compat, QtQml, QtQuick
+qml\ plugin DLLs: 30
+PE files (exe+dll) total: 100

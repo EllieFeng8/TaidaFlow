@@ -1,0 +1,35 @@
+=== verify-release-package 2026-09-29T15:53:30.6513524+08:00 mode=ps1
+package   : D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e
+data      : D:\repo\codex\qmlTester\taidaflow\build\w2-074-verify-data
+[PASS] package contains no config.json (never shipped) - D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json
+[PASS] package has nginx\nginx.exe
+[PASS] package has nginx\docs\LICENSE
+[PASS] package has nginx\conf\mime.types
+[PASS] package has nginx\SOURCE.txt
+[PASS] package has scripts\install-nginx-config.ps1
+[PASS] package has scripts\taidaflow-config.ps1
+[PASS] package has deploy\nginx\taidaflow.conf
+[PASS] package has no nginx\conf\nginx.conf (written on the plant PC)
+[PASS] package has no logging\quiet.ini and no logs\ (w2-065: the app writes its own log files)
+[PASS] 0. no build-machine path (D:\repo\codex\qmlTester\taidaflow | D:/repo/codex/qmlTester/taidaflow | D:\repo\codex\qmlTester | D:/repo/codex/qmlTester | C:\Users\TED | C:/Users/TED) in 494 text file(s) + TaidaFlowApp.exe
+[PASS] default config.json: nginx.exe nginx\nginx.exe = the bundled nginx of the package (w2-065 D3) - nginx\nginx.exe -> D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\nginx\nginx.exe
+[PASS] default config.json: log.dir logs, quiet on 60 days, full on 7 days (TaidaFlowApp.exe --write-default-config)
+  probe | === safety probe 2026-09-29T15:53:31.393+08:00 reason="verify-release-package (ps1) before launch" host=LAPTOP-0B3CPPED
+  probe |   config: D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json (does not exist - app defaults)
+  probe |   config note: config.json D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json does not exist - the default values are used (the application creates the file at its first start)
+  probe |   local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  probe |   tcp 192.168.1.201:502 [effective devices.adam6256 (default)] -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.202:502 [effective devices.adam6217a (default)] -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.203:502 [effective devices.adam6217b (default)] -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.204:502 [effective devices.adam6224 (default)] -> unreachable timeout 1500ms
+  probe |   tcp 192.168.1.205:502 [effective devices.adam6022 (default)] -> unreachable timeout 1500ms
+  probe |   serial GetPortNames: <none>
+  probe |   serial SERIALCOMM  : <none>
+  probe |   serial PnP (COMx)  : <none>
+  probe |   COM2 (devices.ms300.serialPort, default) not present
+  probe |   service ports: 502=modbusServer.port (Modbus server); 8124=http.port (web page + CSV downloads); 8125=mirror.publicPort (LAN relay); 18125=mirror.internalPort (internal mirror); 18080=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  probe |   listeners on the service ports: <none>
+  probe |   verdict: SAFE
+ports busy - nothing started
+EXIT=0 
+elapsed=12s

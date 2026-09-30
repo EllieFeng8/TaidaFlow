@@ -1,0 +1,9 @@
+﻿== intact
+D:\repo\codex\qmlTester\taidaflow\build\w2-074-cleanenv\manifest-selftest: MANIFEST entries ok 1, problems 0; folder 2 file(s) 86 bytes; residue: none
+rc=0 (expect 0)
+== one byte changed + config.json added
+DIFFERS  a.txt (size 7 vs 7, sha CC640354410F9DF4DD7B2DC2377C317D6CC0F91FFB40031015DB3E4FCE3E5505 vs CD2ECA3535741F27A8AE40C31B0C41D4057A7A7B912B33B9AED86485D1C84676)
+EXTRA    config.json
+RESIDUE  config.json
+D:\repo\codex\qmlTester\taidaflow\build\w2-074-cleanenv\manifest-selftest: MANIFEST entries ok 0, problems 3; folder 3 file(s) 90 bytes; residue: config.json
+rc=1 (expect 1)

@@ -1,0 +1,14 @@
+HIT [C:\Qt] DEPLOY.md:234: set "QT=C:\Qt\6.8.3\msvc2022_64"
+HIT [C:\tools] DEPLOY.md:265: copy "C:\tools\nginx\nginx-1.30.5\nginx.exe" "%OUT%\nginx\"
+HIT [C:\tools] DEPLOY.md:266: xcopy /e /i "C:\tools\nginx\nginx-1.30.5\docs" "%OUT%\nginx\docs"
+HIT [C:\tools] DEPLOY.md:267: copy "C:\tools\nginx\nginx-1.30.5\conf\mime.types" "%OUT%\nginx\conf\"
+HIT [C:\Qt] DEPLOY.md:673: set "PATH=C:\Qt\6.8.3\msvc2022_64\bin;%PATH%"
+HIT [computer name LAPTOP-0B3CPPED] VERSION.txt:2: created      : 2026-09-29T15:58:43.6336782+08:00 on LAPTOP-0B3CPPED
+HIT [C:\Qt] scripts\taidaflow-config.ps1:148: # folder, set by the desktop build; else TAIDAFLOW_QT_ROOT\msvc2022_64\bin; else C:\Qt\6.8.3).
+HIT [C:\Qt] scripts\taidaflow-config.ps1:151: else { 'C:\Qt\6.8.3\msvc2022_64\bin' }
+scanned 494 text file(s); hits: 8
+----
+cmd     : powershell -NoProfile -ExecutionPolicy Bypass -File docs\evidence\w2-074\tools\check-dev-paths.ps1 -Package dist\TaidaFlow-20260929-49b0d8e -DefaultConfig build\w2-074-cleanenv\config.cleanenv.json
+started : 2026-09-29T16:04:06.2560588+08:00
+elapsed : 2s
+EXIT=1

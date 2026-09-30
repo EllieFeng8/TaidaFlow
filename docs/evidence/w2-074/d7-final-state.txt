@@ -1,0 +1,11 @@
+﻿--- git
+49b0d8eb0e7831cd592ed42fedae83e387d52470
+49b0d8eb0e7831cd592ed42fedae83e387d52470
+ M docs/evidence/wasm-v4-sim/safety-probe.log
+ M docs/evidence/wasm-v4/safety-probe.log
+?? docs/evidence/w2-074/
+--- processes (TaidaFlowApp/nginx)
+--- listeners 80/502/8124/8125/18080/18125
+--- dist
+TaidaFlow-20260929-49b0d8e 
+TaidaFlow-20260929-49b0d8e.zip 68984012

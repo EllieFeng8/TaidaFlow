@@ -1,0 +1,8 @@
+2026-09-29 16:00:43.684 [warning] [Config] config file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json cannot be used: JSON syntax error: unterminated object (line 46, column 18) - the file is left unchanged and the program exits (fix config.json or delete it to recreate the defaults)
+2026-09-29 16:00:43.685 [critical] [Config] config file D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\config.json cannot be used: JSON syntax error: unterminated object (line 46, column 18) - the program exits with code 2; log files (fallback folder beside config.json): D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\logs\taidaflow-2026-09-29-full.log, D:\repo\codex\qmlTester\taidaflow\dist\TaidaFlow-20260929-49b0d8e\logs\taidaflow-2026-09-29.log
+2026-09-29 16:00:43.693 [warning] QFontDatabase: Cannot find font directory D:/repo/codex/qmlTester/taidaflow/dist/TaidaFlow-20260929-49b0d8e/lib/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+2026-09-29 16:00:43.706 [warning] [Config] showing the config.json error dialog
+2026-09-29 16:00:43.711 [warning] This plugin does not support propagateSizeHints()
+2026-09-29 16:00:43.715 [warning] This plugin does not support propagateSizeHints()
+2026-09-29 16:00:45.205 [warning] [Config] error dialog closed automatically after 1500 ms (TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS)

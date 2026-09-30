@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QApplication>
+#include <QFont>
+#include <QFontDatabase>
 #include <QQmlApplicationEngine>
 #include <QRandomGenerator>
 #include <cstdlib>
@@ -150,6 +152,36 @@ std::unique_ptr<WasmMirrorProxy> createMirror(TaidaFlowProxy *Td, const QString 
     });
     return mirror;
 }
+
+// ===== UI font (w1-081) ======================================================
+// One interface font for all text. QGuiApplication::setFont() makes it the default font of
+// every Text / TextInput / FontMetrics that does not name a family. QML reads the same value
+// as Application.font.family: App.qml puts it in its (template) ApplicationWindow font, from
+// which every Qt Quick Control and popup inherits it (the Universal style alone would use
+// Segoe UI), and HistoryPage names it for its text column. Only changing / aligned numbers
+// keep font.family "Consolas" in QML; the family is also put first in the substitution list
+// of "Consolas", so Chinese inside those numbers is drawn with the same Chinese font instead
+// of the platform's monospace CJK fallback.
+// Returns the family in use: `requested` when it is installed; otherwise the platform
+// default is kept unchanged and returned (e.g. main on WebAssembly, which has no
+// Microsoft JhengHei UI and no embedded font).
+QString applyUiFont(const QString &requested)
+{
+    if (requested.isEmpty() || !QFontDatabase::hasFamily(requested)) {
+        const QString current = QGuiApplication::font().family();
+        qWarning().noquote() << "[UiFont]" << requested
+                             << "is not available; keeping the default font" << current;
+        return current;
+    }
+    QFont uiFont = QGuiApplication::font(); // keeps the platform point size
+    uiFont.setFamilies({requested});
+    QGuiApplication::setFont(uiFont);
+    QFont::insertSubstitution(QStringLiteral("Consolas"), requested);
+    qInfo().noquote() << "[UiFont] interface font:" << requested << "| Consolas ->"
+                      << QFont::substitutes(QStringLiteral("Consolas")).join(QLatin1Char(','));
+    return requested;
+}
+// ===== end of UI font ========================================================
 
 } // namespace
 
@@ -316,6 +348,15 @@ int main(int argc, char *argv[])
     };
     QObject::connect(Td, &TaidaFlowProxy::transportReadyChanged, &app, logTransportOverlay);
     QObject::connect(Td, &TaidaFlowProxy::transportMessageChanged, &app, logTransportOverlay);
+
+    // ===== UI font (w1-081), before QML loads; see applyUiFont() =================
+    // HOOK (core): main has no font file, so it asks for the Windows font below. core
+    // changes ONLY this line to its embedded Noto Sans TC family, i.e.
+    //   const QString uiFontFamilyRequest = cjkFamily.isEmpty() ? QStringLiteral("Microsoft JhengHei UI") : cjkFamily;
+    // (cjkFamily = TaidaFlowFonts::loadEmbeddedCjkFont(), already loaded earlier in core).
+    const QString uiFontFamilyRequest = QStringLiteral("Microsoft JhengHei UI");
+    applyUiFont(uiFontFamilyRequest); // QML reads the result as Application.font.family
+    // ===== end of UI font ========================================================
 
     QQmlApplicationEngine engine;
     const QUrl url(mainQmlFile);

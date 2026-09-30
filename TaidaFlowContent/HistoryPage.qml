@@ -918,7 +918,7 @@ Item {
                                              : text === "OFF" ? historyPage.successColor
                                              : index < 2 ? root.textColor : "#A7D9F5"
                                         font.pixelSize: 14
-                                        font.family: index === 1 ? "Microsoft JhengHei" : "Consolas"
+                                        font.family: index === 1 ? Application.font.family : "Consolas"
                                         verticalAlignment: Text.AlignVCenter
                                         // Safety net only: every cell text fits its column
                                         // (time "yyyy/MM/dd HH:mm:ss" in >= 198 px, values at

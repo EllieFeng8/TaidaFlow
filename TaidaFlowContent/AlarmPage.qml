@@ -12,6 +12,11 @@ import "components/AlarmViewUtil.js" as AlarmViewUtil
 Item {
     id: alarmPage
 
+    // w1-083: controls are enabled only while the link to the Core is alive; TopNav.qml binds
+    // it to root.linkAlive (Td.transportReady and, on the web page, no heartbeat silence).
+    // Default true only when this page is loaded without TopNav.
+    property bool linkAlive: true
+
     // Below the offline banner (TopNav.qml): the banner pushes this page down
     // while shown; hidden it has height 0, i.e. this equals topNavBar.bottom.
     anchors.top: offlineBanner.bottom
@@ -410,7 +415,7 @@ Item {
                             anchors.verticalCenterOffset: 14
                             // The range query is a request to the Core: disabled while offline
                             // (as on the history page).
-                            enabled: Td.transportReady
+                            enabled: alarmPage.linkAlive
                             hoverEnabled: true
 
                             background: Rectangle {
@@ -437,7 +442,7 @@ Item {
                             height: 46
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: 14
-                            enabled: Td.transportReady
+                            enabled: alarmPage.linkAlive
                             hoverEnabled: true
 
                             background: Rectangle {
@@ -720,7 +725,7 @@ Item {
                         height: 34
                         // Paging is a request (alarmViewRequested): disabled while offline,
                         // as on the history page.
-                        enabled: alarmPage.currentPage > 1 && Td.transportReady
+                        enabled: alarmPage.currentPage > 1 && alarmPage.linkAlive
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -756,7 +761,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: alarmPage.currentPage < alarmPage.totalPages && Td.transportReady
+                        enabled: alarmPage.currentPage < alarmPage.totalPages && alarmPage.linkAlive
                         hoverEnabled: true
 
                         background: Rectangle {

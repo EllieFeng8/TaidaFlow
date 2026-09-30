@@ -25,6 +25,8 @@ qt6_add_qml_module(TaidaFlowContent
         "components/MotorIcon.qml"
         "components/NumberFormat.js"
         "components/ValueTag.qml"
+        "components/LinkWatchdog.qml"
+        "components/LinkWatchdog.js"
     RESOURCES
         "assets/logo_8TFs7.png"
         "assets/center.png"

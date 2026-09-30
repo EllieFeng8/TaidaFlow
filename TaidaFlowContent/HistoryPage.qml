@@ -12,6 +12,11 @@ import "components/SensorUnits.js" as SensorUnits
 Item {
     id: historyPage
 
+    // w1-083: controls are enabled only while the link to the Core is alive; TopNav.qml binds
+    // it to root.linkAlive (Td.transportReady and, on the web page, no heartbeat silence).
+    // Default true only when this page is loaded without TopNav.
+    property bool linkAlive: true
+
     // Below the offline banner (TopNav.qml): the banner pushes this page down
     // while shown; hidden it has height 0, i.e. this equals topNavBar.bottom.
     anchors.top: offlineBanner.bottom
@@ -560,7 +565,7 @@ Item {
                         height: 32
                         visible: historyPage.exportActive
                         // Cancel is a request relayed to the Core, so it needs the transport.
-                        enabled: Td.transportReady
+                        enabled: historyPage.linkAlive
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -614,7 +619,7 @@ Item {
                 height: 48
                 // Export is a request to the Core: needs the transport, and only one
                 // export per client at a time (spec §3.3).
-                enabled: Td.transportReady && !historyPage.exportActive
+                enabled: historyPage.linkAlive && !historyPage.exportActive
                 hoverEnabled: true
 
                 background: Rectangle {
@@ -742,7 +747,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: 14
                             // The range query is a request to the Core: disabled while offline.
-                            enabled: Td.transportReady
+                            enabled: historyPage.linkAlive
                             hoverEnabled: true
 
                             background: Rectangle {
@@ -769,7 +774,7 @@ Item {
                             height: 46
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: 14
-                            enabled: Td.transportReady
+                            enabled: historyPage.linkAlive
                             hoverEnabled: true
 
                             background: Rectangle {
@@ -972,7 +977,7 @@ Item {
                         height: 34
                         // Paging is a request to the Core (historyViewRequested, spec
                         // §2.1), so it is disabled while the WASM transport is offline.
-                        enabled: historyPage.viewLoaded && historyPage.viewPage > 1 && Td.transportReady
+                        enabled: historyPage.viewLoaded && historyPage.viewPage > 1 && historyPage.linkAlive
                         hoverEnabled: true
 
                         background: Rectangle {
@@ -1012,7 +1017,7 @@ Item {
                         id: nextPageButton
                         width: 96
                         height: 34
-                        enabled: historyPage.viewLoaded && historyPage.viewPage < historyPage.viewTotalPages && Td.transportReady
+                        enabled: historyPage.viewLoaded && historyPage.viewPage < historyPage.viewTotalPages && historyPage.linkAlive
                         hoverEnabled: true
 
                         background: Rectangle {

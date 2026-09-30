@@ -11,7 +11,11 @@ Item {
     // desktop Core is unreachable / synchronizing. Every control that writes a
     // mirrored property is disabled then, and any open write dialog is closed, so
     // the page keeps showing the last authoritative snapshot. Always true on desktop.
-    readonly property bool controlsEnabled: Td.transportReady
+    // w1-083: linkAlive (set by TopNav.qml = Td.transportReady and, on the web page, no
+    // server heartbeat silence > 5 s) replaces Td.transportReady here; default true only
+    // for Main loaded without TopNav.
+    property bool linkAlive: true
+    readonly property bool controlsEnabled: mainPage.linkAlive
     onControlsEnabledChanged: {
         if (!controlsEnabled) {
             motor2ValueDialog.close()

@@ -52,8 +52,14 @@ T.ApplicationWindow {
         }
     }
 
+    // w1-083: WebPageControl (App/main.cpp, initial property "webPage"): monotonic clock,
+    // sessionStorage and page reload for the heartbeat watchdog (TopNav.qml). null when
+    // App.qml is loaded without it: no heartbeat detection then.
+    property var webPage: null
+
     TopNav {
         id: topScreen
+        webPage: appWindow.webPage
         // anchors.centerIn: appWindow.webScaling ? undefined : parent
     }
 

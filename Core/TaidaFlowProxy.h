@@ -21,9 +21,31 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QTimer>
+#include <cmath>
 class TaidaFlowProxy : public QObject
 {
     Q_OBJECT
+
+    // Sensor 設定（SV）：設定頁按「套用」後寫入，透過 Mirror 同步。
+    // 外層 key 與分組：
+    //   pt04 / pt05：設備接口出口壓力；tt01 / tt02：設備接口出口溫度。
+    //   pt06 / pt07：設備接口入口壓力；tt03 / tt04：設備接口入口溫度。
+    //   pt01、pt02、pt03、flowMeter（流量計）、filter（過濾器壓差）各自一組。
+    // 每個 key 對應一個 QVariantMap，各 sensor 獨立設定：
+    //   offset (double)：加在原始 PV 上的校正值，可為負數。
+    //   lower / upper (double)：下限 / 上限。
+    //   lowerEnabled / upperEnabled (bool)：是否啟用對應限制；UI 留空表示停用。
+    // 儲存單位固定為：PT 與 filter 使用 kPa、TT 使用 °C、flowMeter 使用 L/min。
+    // filter 比較含各自 offset 的 PT-02 − PT-03；UI 不提供 filter 獨立 offset。
+    // 例如 filter 下限 10、上限 20 kPa：
+    //   {offset: 0, lower: 10, upper: 20, lowerEnabled: true, upperEnabled: true}
+    // 漏水感測器不在此 Map 內，仍由 leakDetectedPv 提供狀態。
+    // 修改時須複製目前整份 Map、更新指定項目，再寫回；此 Proxy 本身不負責持久化。
+    Q_PROPERTY(QVariantMap sensorSettingsSv READ sensorSettingsSv WRITE setSensorSettingsSv NOTIFY sensorSettingsSvChanged)
+
+    // 壓力顯示單位（SV）：下拉選單立即寫入，只接受 "kPa" / "psi" / "bar"，預設 kPa。
+    // UI 換算顯示數值與設定欄位；原始壓力 PV、offset、上下限仍以 kPa 儲存。
+    Q_PROPERTY(QString pressureUnitSv READ pressureUnitSv WRITE setPressureUnitSv NOTIFY pressureUnitSvChanged)
 
     // Writable set values (SV): edited by TextField / switch controls.
     Q_PROPERTY(double m1ValueSv READ m1ValueSv WRITE setM1ValueSv NOTIFY m1ValueSvChanged)
@@ -108,6 +130,57 @@ class TaidaFlowProxy : public QObject
     Q_PROPERTY(QString transportMessage READ transportMessage NOTIFY transportMessageChanged STORED false)
 
 public:
+    // 回傳目前設定的副本；呼叫端更新後需透過 setter 寫回才會通知 UI / Mirror。
+    QVariantMap sensorSettingsSv() const { return m_sensorSettingsSv; }
+    QString pressureUnitSv() const { return m_pressureUnitSv; }
+
+    // 忽略不支援或未改變的單位；不修改 sensorSettingsSv 或任何 PV 數值。
+    void setPressureUnitSv(const QString &unit)
+    {
+        if (unit != QStringLiteral("kPa") && unit != QStringLiteral("psi") && unit != QStringLiteral("bar"))
+            return;
+        if (m_pressureUnitSv == unit)
+            return;
+        m_pressureUnitSv = unit;
+        emit pressureUnitSvChanged();
+    }
+
+    // 整份驗證通過後才一次更新：sensor key 與欄位必須完整且不可多出未知項目。
+    // 數值必須可轉成有限 double，啟用旗標必須為 bool；上下限皆啟用時須 lower <= upper。
+    // 任一項無效就保留原設定；內容沒有改變時不發出通知。
+    void setSensorSettingsSv(const QVariantMap &settings)
+    {
+        if (settings.keys() != m_sensorSettingsSv.keys())
+            return;
+        QVariantMap normalized;
+        for (auto it = settings.cbegin(); it != settings.cend(); ++it) {
+            const auto entry = it.value().toMap();
+            if (entry.keys() != m_sensorSettingsSv.value(it.key()).toMap().keys())
+                return;
+            QVariantMap clean;
+            for (const auto &key : {QStringLiteral("offset"), QStringLiteral("lower"), QStringLiteral("upper")}) {
+                bool ok = false;
+                const double value = entry.value(key).toDouble(&ok);
+                if (!ok || !std::isfinite(value))
+                    return;
+                clean.insert(key, value);
+            }
+            for (const auto &key : {QStringLiteral("lowerEnabled"), QStringLiteral("upperEnabled")}) {
+                if (entry.value(key).metaType().id() != QMetaType::Bool)
+                    return;
+                clean.insert(key, entry.value(key));
+            }
+            if (clean.value("lowerEnabled").toBool() && clean.value("upperEnabled").toBool()
+                && clean.value("lower").toDouble() > clean.value("upper").toDouble())
+                return;
+            normalized.insert(it.key(), clean);
+        }
+        if (m_sensorSettingsSv == normalized)
+            return;
+        m_sensorSettingsSv = normalized;
+        emit sensorSettingsSvChanged();
+    }
+
     explicit TaidaFlowProxy(QObject *parent = nullptr)
         : QObject(parent)
     {
@@ -253,6 +326,10 @@ public:
         emit motorRunningPvChanged(value);
     }
 signals:
+    // 設定 Map 實際更新後通知；接收端可重新讀取 sensorSettingsSv()。
+    void sensorSettingsSvChanged();
+    // 顯示單位實際更新後通知，讓 UI 重新換算數值與單位標籤。
+    void pressureUnitSvChanged();
     void m1ValueSvChanged(double value);
     void m2ValueSvChanged(double value);
     void m3ValueSvChanged(double value);
@@ -311,6 +388,21 @@ signals:
     void historyExportCancelRequested(QString sessionId);
 
 private:
+    // 預設無校正、上下限皆停用；lower / upper 的 0 只是初始值，不代表已啟用限制。
+    static QVariantMap defaultSensorSettings()
+    {
+        QVariantMap settings;
+        for (const auto &id : {"pt01", "pt02", "pt03", "pt04", "pt05", "pt06", "pt07",
+                              "tt01", "tt02", "tt03", "tt04", "flowMeter", "filter"}) {
+            settings.insert(QString::fromLatin1(id), QVariantMap{
+                {"offset", 0.0}, {"lower", 0.0}, {"upper", 0.0},
+                {"lowerEnabled", false}, {"upperEnabled", false}});
+        }
+        return settings;
+    }
+    QVariantMap m_sensorSettingsSv = defaultSensorSettings();
+    QString m_pressureUnitSv = QStringLiteral("kPa");
+
     using ValueSignal = void (TaidaFlowProxy::*)(double);
 
     void setWritableValue(double &target, double value, ValueSignal signal)
@@ -349,10 +441,10 @@ private:
             QStringLiteral("時間"), QStringLiteral("設備"),
             QStringLiteral("TT-01 (°C)"), QStringLiteral("TT-02 (°C)"),
             QStringLiteral("TT-03 (°C)"), QStringLiteral("TT-04 (°C)"),
-            QStringLiteral("PT-01 (bar)"), QStringLiteral("PT-02 (bar)"),
-            QStringLiteral("PT-03 (bar)"), QStringLiteral("PT-04 (bar)"),
-            QStringLiteral("PT-05 (bar)"), QStringLiteral("PT-06 (bar)"),
-            QStringLiteral("PT-07 (bar)"), QStringLiteral("FM-01 (L/min)"),
+            QStringLiteral("PT-01 (kPa)"), QStringLiteral("PT-02 (kPa)"),
+            QStringLiteral("PT-03 (kPa)"), QStringLiteral("PT-04 (kPa)"),
+            QStringLiteral("PT-05 (kPa)"), QStringLiteral("PT-06 (kPa)"),
+            QStringLiteral("PT-07 (kPa)"), QStringLiteral("FM-01 (L/min)"),
             QStringLiteral("M1 (%)"), QStringLiteral("M2 (%)"),
             QStringLiteral("M3 (%)"), QStringLiteral("M4 (%)"),
             QStringLiteral("泵浦頻率 (Hz)"), QStringLiteral("漏水 (ON/OFF)")};
@@ -436,8 +528,8 @@ private:
     double m_tt03ValuePv = 0.0;
     double m_tt04ValuePv = 0.0;
     double m_pt01ValuePv = 0.0;
-    double m_pt02ValuePv = 0.0;
-    double m_pt03ValuePv = 0.0;
+    double m_pt02ValuePv = 9.0;
+    double m_pt03ValuePv = 1.0;
     double m_pt04ValuePv = 0.0;
     double m_pt05ValuePv = 0.0;
     double m_pt06ValuePv = 0.0;

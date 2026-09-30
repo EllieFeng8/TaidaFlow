@@ -19,6 +19,9 @@
         <file>TaidaFlowContent/components/MotorIcon.qml</file>
         <file>TaidaFlowContent/components/ValueTag.qml</file>
         <file>TaidaFlowContent/HistoryPage.qml</file>
+        <file>TaidaFlowContent/SettingsPage.qml</file>
+        <file>TaidaFlowContent/components/SensorSettingRow.qml</file>
+        <file>TaidaFlowContent/components/SensorUnits.js</file>
         <file>TaidaFlowContent/Main.qml</file>
         <file>TaidaFlowContent/TopNav.qml</file>
     </qresource>

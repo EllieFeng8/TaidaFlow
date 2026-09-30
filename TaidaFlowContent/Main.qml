@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import "components" as Components
 import "components/NumberFormat.js" as NumberFormat
+import "components/SensorUnits.js" as SensorUnits
 import TaidaFlowBackend 1.0
 Item {
     id: mainPage
@@ -511,7 +512,7 @@ Item {
     }
 
     // =========================================================
-    // 左側泵浦
+    // 左側補水泵
     // =========================================================
     Item {
         x: 197
@@ -519,6 +520,13 @@ Item {
         width: 76
         height: 74
 
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 122
+            text: "補水泵"
+            color: root.textColor
+            font.pixelSize: 16
+        }
 
         Image {
             id: motor1
@@ -656,8 +664,8 @@ Item {
         x: 578
         y: 436
         title: "PT-01"
-        value: Td.pt01ValuePv.toFixed(1)
-        unit: "Pa"
+        value: SensorUnits.display(Td.pt01ValuePv, "pt01", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+        unit: Td.pressureUnitSv
     }
 
     // 小型管件
@@ -673,34 +681,40 @@ Item {
     // 上方溫度、壓力
     // =========================================================
     Row {
-        x: 506
-        y: 118
+        x: 644
+        y: 190
         spacing: 7
 
         Components.ValueTag {
             id: tt01
             title: "TT-01"
-            value: Td.tt01ValuePv.toFixed(1)
+            value: SensorUnits.display(Td.tt01ValuePv, "tt01", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt02
             title: "TT-02"
-            value: Td.tt02ValuePv.toFixed(1)
+            value: SensorUnits.display(Td.tt02ValuePv, "tt02", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
             unit: "°C"
         }
+    }
+
+    Row {
+        x: 644
+        y: 118
+        spacing: 7
 
         Components.ValueTag {
             title: "PT-04"
-            value: Td.pt04ValuePv.toFixed(1)
-            unit: "Pa"
+            value: SensorUnits.display(Td.pt04ValuePv, "pt04", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            unit: Td.pressureUnitSv
         }
 
         Components.ValueTag {
             title: "PT-05"
-            value: Td.pt05ValuePv.toFixed(1)
-            unit: "Pa"
+            value: SensorUnits.display(Td.pt05ValuePv, "pt05", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            unit: Td.pressureUnitSv
         }
     }
 
@@ -718,14 +732,14 @@ Item {
         Components.ValueTag {
             id: tt03
             title: "TT-03"
-            value: Td.tt03ValuePv.toFixed(1)
+            value: SensorUnits.display(Td.tt03ValuePv, "tt03", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt04
             title: "TT-04"
-            value: Td.tt04ValuePv.toFixed(1)
+            value: SensorUnits.display(Td.tt04ValuePv, "tt04", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
             unit: "°C"
         }
     }
@@ -736,15 +750,15 @@ Item {
     Components.ValueTag {
 
         title: "PT-07"
-        value: Td.pt07ValuePv.toFixed(1)
-        unit: "Pa"
+        value: SensorUnits.display(Td.pt07ValuePv, "pt07", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+        unit: Td.pressureUnitSv
     }
 
     Components.ValueTag {
 
         title: "PT-06"
-        value: Td.pt06ValuePv.toFixed(1)
-        unit: "Pa"
+        value: SensorUnits.display(Td.pt06ValuePv, "pt06", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+        unit: Td.pressureUnitSv
     }
     }
 
@@ -879,7 +893,7 @@ Item {
     }
 
     // =========================================================
-    // 下方泵浦
+    // 下方循環泵
     // =========================================================
     Item {
         id: motor2Item
@@ -888,6 +902,8 @@ Item {
         y: 547
         width: 73
         height: 74
+
+
 
         readonly property real value: Td.pump2HzSv
         // Allowed pump frequency, both ends included (w1-070: 0 ~ 60 Hz).
@@ -910,7 +926,14 @@ Item {
             Qt.inputMethod.hide()
             motor2ValueDialog.close()
         }
-
+        Text {
+            anchors.horizontalCenter: motorValueBox.horizontalCenter
+            anchors.top: motor2.top
+            anchors.topMargin: 25
+            text: "循環泵"
+            color: root.textColor
+            font.pixelSize: 16
+        }
         Image {
             id: motor2
             x: -55
@@ -1035,7 +1058,7 @@ Item {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    text: "修改馬達頻率"
+                    text: "修改循環泵頻率"
 
                     color: "white"
                     font.pixelSize: 24
@@ -1190,30 +1213,38 @@ Item {
         x: 732
         y: 523
         title: "PT-02"
-        value: Td.pt02ValuePv.toFixed(1)
-        unit: "Pa"
+        value: SensorUnits.display(Td.pt02ValuePv, "pt02", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+        unit: Td.pressureUnitSv
     }
 
     Components.ValueTag {
         x: 897
         y: 523
         title: "PT-03"
-        value: Td.pt03ValuePv.toFixed(1)
-        unit: "Pa"
+        value: SensorUnits.display(Td.pt03ValuePv, "pt03", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+        unit: Td.pressureUnitSv
     }
 
     // =========================================================
     // Filter
     // =========================================================
     Rectangle {
+        id: filterBody
+        objectName: "filterBody"
+        readonly property real deltaKpa: SensorUnits.adjusted(Td.pt02ValuePv, "pt02", Td.sensorSettingsSv)
+                                      - SensorUnits.adjusted(Td.pt03ValuePv, "pt03", Td.sensorSettingsSv)
+        readonly property var limits: Td.sensorSettingsSv.filter
+        // Compare unrounded kPa; equality with either limit remains normal.
+        readonly property int limitState: limits && limits.upperEnabled && deltaKpa > limits.upper ? 1
+                                        : limits && limits.lowerEnabled && deltaKpa < limits.lower ? -1 : 0
         x: 818
         y: 475
         width: 40
         height: 168
         radius: 20
 
-        color: "#858B94"
-        border.color: "#8FE8E6"
+        color: limitState > 0 ? "#D64550" : limitState < 0 ? "#D98A32" : "#858B94"
+        border.color: limitState > 0 ? "#FF8A80" : limitState < 0 ? "#FFD166" : "#8FE8E6"
         border.width: 3
 
         Text {
@@ -1226,6 +1257,16 @@ Item {
         }
     }
 
+    Components.ValueTag {
+        anchors.horizontalCenter: filterBody.horizontalCenter
+        anchors.top: filterBody.bottom
+        anchors.topMargin: 8
+        title: "ΔP"
+        tagColor: "#B8A4FF"
+        value: (filterBody.deltaKpa * SensorUnits.pressureFactor(Td.pressureUnitSv)).toFixed(2)
+        unit: Td.pressureUnitSv
+    }
+
     // =========================================================
     // Flow Meter
     // =========================================================
@@ -1235,7 +1276,7 @@ Item {
         width: 60
         height: 97
         id: flowMeter
-        readonly property real value: Td.flowMeterValuePv
+        readonly property real value: SensorUnits.adjusted(Td.flowMeterValuePv, "flowMeter", Td.sensorSettingsSv)
 
 
         Rectangle {
@@ -1434,8 +1475,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 text: Td.motorRunningSv
-                      ? "是否關閉泵浦？"
-                      : "是否開啟泵浦？"
+                      ? "是否關閉補水泵？"
+                      : "是否開啟補水泵？"
 
                 color: "white"
                 font.pixelSize: 24

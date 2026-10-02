@@ -52,3 +52,32 @@ This repository supplies the Proxy/UI: settings are in-memory values available
 to the backend. Backend alarm generation, hardware calibration, and persistent
 storage are not implemented here. A backend consuming the thresholds should use
 corrected values and honor each enabled flag.
+
+## 後端超限警報規則(core 分支,w2-085)
+
+core 分支的桌面後端依本契約產生警報(`Core/LimitAlarms.{h,cpp}` 的 `LimitAlarmMonitor`,由 `Manager` 建立;
+上一段「Backend alarm generation … not implemented here」指的是 main 分支只提供 Proxy/UI)。規則:
+
+- 判斷對象:`pt01`–`pt07`、`tt01`–`tt04`、`flowMeter`、`filter` 共 13 個 key,**每個 key 各自判斷、各自記錄**
+  (同組 PT-04/PT-05 等雖在設定頁共用一組上下限,仍是兩支感測器、兩筆各自的警報)。
+- 判斷值 = 校正後數值 = 原始 PV + 該 key 的 `offset`(PV 本身保持原始值);`filter` = 校正後 PT-02 − 校正後 PT-03,
+  用 `filter` 的上下限。壓力與上下限一律以 kPa 比較,與顯示單位 `pressureUnitSv` 無關;溫度 °C、流量 L/min。
+- 超上限:`upperEnabled && 值 > upper`;低於下限:`lowerEnabled && 值 < lower`。**等於上下限屬正常**;
+  停用的上下限不判斷。與主畫面 Filter 變色(`Main.qml` `filterBody.limitState`)同一個運算式
+  (`Core/tests/tst_limit_alarms` 直接執行 UI 的 JavaScript 逐一比對)。
+- 上限與下限是同一感測器的兩種狀態,各自新增、各自解除。超限時**立即**新增一筆警報(alarm_history,
+  `status` = 「警告」→ 警報頁嚴重程度「警告」、狀態「未處理」);未解除前同一感測器同一方向不重複新增。
+- 回到範圍內(含上下限被停用)**持續 2 秒**(單調時鐘、計時器,不受 PV 更新頻率影響)才把**同一筆**改為已解除
+  (`resolved` / `resolvedAt` / `resolvedDetail`,與漏水 DI1 相同);2 秒內又超限 → 不解除、不新增。
+- `sensorSettingsSv` 變動(含停用)時立即以新設定重新評估所有已有讀值的感測器。
+- 一支感測器在本次執行中第一次收到後端寫入的 PV 之後才判斷(`filter` 需 PT-02 與 PT-03 都有);同一個
+  Modbus 回覆裡的多個 PV 寫完後才一起判斷,所以 `filter` 不會用到「新 PT-02 + 舊 PT-03」。
+- 警報文字:`超過上限：<值> <單位>（上限 <上限> <單位>）`、`低於下限：<值> <單位>（下限 <下限> <單位>）`,
+  數值兩位小數;`sensorName` 用畫面上的名稱:`PT-01`…`PT-07`、`TT-01`…`TT-04`、`流量計`、`Filter 壓差`。
+  reason JSON 另存 `"limit": "upper"|"lower"` 與 `"sensorKey"`(供重啟辨識;`alarmRecords` 欄位不變)。
+- 重啟(比照 w2-053 的 DI):每支感測器第一次判斷時查本月與上月資料檔中該名稱、`status` 為「警告」且未解除的列;
+  每個方向最新的一筆接手為進行中的警報(仍超限 → 不新增;已恢復 → 2 秒後解除),較舊的重複列立即解除。
+  查詢失敗時該感測器不新增警報、下次更新重試(其他感測器在失敗後 500 ms 內延後);所有感測器共用 5 次失敗,
+  用完後尚未查過的感測器都回到一般邏輯(資料檔被鎖住時最多 5 次等待,不會讓畫面卡住數分鐘)。
+- 不影響:原本「量程 90% 高限」警報(`數值異常`,用原始 raw 值)、DI/漏水/MS300 警報、設定儲存與 Modbus server
+  HR 寫入行為都不變。

@@ -13,6 +13,7 @@
 #include "HistoryExport.h"
 #include "HistoryViews.h"
 #include "Modbus_Server.h"
+#include "ModbusServerBridgeMapping.h"
 #include "RESTManager.h"
 #include "ServerHeartbeat.h"
 #include "SqlManager.h"
@@ -32,6 +33,9 @@
 #include <QStringList>
 #include <QTime>
 #include <QVariantMap>
+
+#include <cmath>
+#include <limits>
 
 namespace {
 constexpr auto kHmiInputSettingsFile = "TaidaFlowSettings.ini";
@@ -67,6 +71,71 @@ QStringList settingsPageCardSensors(const SettingsPageCard &card)
     if (card.secondSensor)
         sensors.append(QLatin1String(card.secondSensor));
     return sensors;
+}
+
+enum class SensorSettingField {
+    Offset,
+    Lower,
+    Upper,
+};
+
+struct SettingsHoldingValue {
+    const char *sensor;
+    SensorSettingField field;
+};
+
+// HR11..HR40, in the same card order used by SettingsPage.qml. A two-sensor
+// card stores its two offsets, followed by its shared lower and upper limits.
+constexpr SettingsHoldingValue kSettingsHoldingValues[] = {
+    {"pt04", SensorSettingField::Offset}, {"pt05", SensorSettingField::Offset},
+    {"pt04", SensorSettingField::Lower},  {"pt04", SensorSettingField::Upper},
+    {"tt01", SensorSettingField::Offset}, {"tt02", SensorSettingField::Offset},
+    {"tt01", SensorSettingField::Lower},  {"tt01", SensorSettingField::Upper},
+    {"pt06", SensorSettingField::Offset}, {"pt07", SensorSettingField::Offset},
+    {"pt06", SensorSettingField::Lower},  {"pt06", SensorSettingField::Upper},
+    {"tt03", SensorSettingField::Offset}, {"tt04", SensorSettingField::Offset},
+    {"tt03", SensorSettingField::Lower},  {"tt03", SensorSettingField::Upper},
+    {"pt01", SensorSettingField::Offset}, {"pt01", SensorSettingField::Lower},
+    {"pt01", SensorSettingField::Upper},
+    {"pt02", SensorSettingField::Offset}, {"pt02", SensorSettingField::Lower},
+    {"pt02", SensorSettingField::Upper},
+    {"pt03", SensorSettingField::Offset}, {"pt03", SensorSettingField::Lower},
+    {"pt03", SensorSettingField::Upper},
+    {"flowMeter", SensorSettingField::Offset}, {"flowMeter", SensorSettingField::Lower},
+    {"flowMeter", SensorSettingField::Upper},
+    {"filter", SensorSettingField::Lower}, {"filter", SensorSettingField::Upper},
+};
+
+constexpr qsizetype kSettingsHoldingValueCount = sizeof(kSettingsHoldingValues) / sizeof(kSettingsHoldingValues[0]);
+static_assert(kSettingsHoldingValueCount == ModbusServerBridgeMapping::ServerSettingsNumericValueCount);
+
+double settingsValue(const QVariantMap &settings, const char *sensor, SensorSettingField field)
+{
+    const QVariantMap entry = settings.value(QLatin1String(sensor)).toMap();
+    switch (field) {
+    case SensorSettingField::Offset: return entry.value(QStringLiteral("offset")).toDouble();
+    case SensorSettingField::Lower: return entry.value(QStringLiteral("lower")).toDouble();
+    case SensorSettingField::Upper: return entry.value(QStringLiteral("upper")).toDouble();
+    }
+    return 0.0;
+}
+
+quint16 encodeSettingsFixedPoint(double value, const char *sensor, SensorSettingField field)
+{
+    const char *fieldName = field == SensorSettingField::Offset ? "offset"
+                          : field == SensorSettingField::Lower ? "lower" : "upper";
+    const double scaled = std::round(value * ModbusServerBridgeMapping::ServerSettingsFixedPointScale);
+    const double minimum = std::numeric_limits<qint16>::min();
+    const double maximum = std::numeric_limits<qint16>::max();
+    const double bounded = !std::isfinite(scaled) ? 0.0 : qBound(minimum, scaled, maximum);
+    if (!std::isfinite(scaled) || bounded != scaled) {
+        qWarning().noquote()
+                << QStringLiteral("[SettingsPage->ModbusServer] %1.%2=%3 cannot fit signed int16 x%4; clamped.")
+                           .arg(QLatin1String(sensor), QLatin1String(fieldName))
+                           .arg(value, 0, 'f', 3)
+                           .arg(ModbusServerBridgeMapping::ServerSettingsFixedPointScale);
+    }
+    return static_cast<quint16>(static_cast<qint16>(bounded));
 }
 
 // Alarm vocabulary (Core status -> alarmStatus / severity) and the row conversion: moved
@@ -351,6 +420,8 @@ void Core::init()
             m_modbusServer, &ModbusServer::setInputRegister);
     connect(m_manager, &Manager::serverHoldingRegisterUpdated,
             m_modbusServer, &ModbusServer::setHoldingRegister);
+    connect(m_proxy, &TaidaFlowProxy::sensorSettingsSvChanged,
+            this, &Core::mirrorSettingsPageToModbusServer);
 
     m_manager->start();
     const AppConfig::ModbusServerSettings serverSettings = config.modbusServer();
@@ -360,6 +431,7 @@ void Core::init()
                                                     {QStringLiteral("bind"), QStringLiteral("port"),
                                                      QStringLiteral("unitId")}));
     m_modbusServer->start(QHostAddress(serverSettings.bind), serverSettings.port, serverSettings.unitId);
+    mirrorSettingsPageToModbusServer();
     setHistoryTitleOnce();
     loadAlarmRecords();
     // w2-084: server heartbeat (TaidaFlowProxy::serverHeartbeatMs, ServerHeartbeat.h): first value
@@ -744,6 +816,27 @@ void Core::savePressureUnitSetting()
     qInfo().noquote()
             << QStringLiteral("[SettingsPage] Saved pressureUnit=%1 to %2.")
                        .arg(m_proxy->pressureUnitSv(), settings.fileName());
+}
+
+void Core::mirrorSettingsPageToModbusServer()
+{
+    if (!m_proxy || !m_modbusServer)
+        return;
+
+    const QVariantMap settings = m_proxy->sensorSettingsSv();
+    for (qsizetype index = 0; index < kSettingsHoldingValueCount; ++index) {
+        const SettingsHoldingValue &binding = kSettingsHoldingValues[index];
+        const quint16 encoded = encodeSettingsFixedPoint(
+                settingsValue(settings, binding.sensor, binding.field), binding.sensor, binding.field);
+        m_modbusServer->setHoldingRegister(
+                static_cast<quint16>(ModbusServerBridgeMapping::ServerSettingsHoldingStart + index), encoded);
+    }
+
+    qInfo().noquote()
+            << QStringLiteral("[SettingsPage->ModbusServer] HR%1..HR%2 updated: 30 signed values x%3.")
+                       .arg(ModbusServerBridgeMapping::ServerSettingsHoldingStart)
+                       .arg(ModbusServerBridgeMapping::ServerSettingsHoldingEnd)
+                       .arg(ModbusServerBridgeMapping::ServerSettingsFixedPointScale);
 }
 
 void Core::setHistoryTitleOnce()

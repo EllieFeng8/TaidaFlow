@@ -39,6 +39,7 @@ private:
     void loadSettingsPageSettings();
     void saveChangedSensorSettingsCards();
     void savePressureUnitSetting();
+    void mirrorSettingsPageToModbusServer();
     void setHistoryTitleOnce();
     void loadAlarmRecords();
     // w2-049/w2-062: web page + /exports on the AppHttpServer singleton (config.json http, default 0.0.0.0:8124); writes <web folder>/runtime.json.

@@ -15,7 +15,11 @@ class ModbusServer final : public QObject
     Q_OBJECT
 
 public:
-    static constexpr quint16 RegisterCount = 20;
+    // Coils and Input Registers retain 20 positions.  Settings are mirrored
+    // to Holding Registers 11..40, so that table exposes 51 positions.
+    static constexpr quint16 CoilCount = 20;
+    static constexpr quint16 InputRegisterCount = 20;
+    static constexpr quint16 HoldingRegisterCount = 51;
 
     explicit ModbusServer(QObject *parent = nullptr);
     ~ModbusServer() override;
@@ -45,6 +49,7 @@ signals:
 private:
     bool setValue(QModbusDataUnit::RegisterType table, quint16 offset, quint16 value);
     static bool isSupportedTable(QModbusDataUnit::RegisterType table);
+    static quint16 tableRegisterCount(QModbusDataUnit::RegisterType table);
 
     std::unique_ptr<BridgeModbusTcpServer> m_server;
     bool m_applyingLocalValue = false;

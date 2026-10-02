@@ -82,11 +82,11 @@ ModbusServer::ModbusServer(QObject *parent)
 {
     QModbusDataUnitMap registerMap;
     registerMap.insert(QModbusDataUnit::Coils,
-                       {QModbusDataUnit::Coils, 0, RegisterCount});
+                       {QModbusDataUnit::Coils, 0, CoilCount});
     registerMap.insert(QModbusDataUnit::InputRegisters,
-                       {QModbusDataUnit::InputRegisters, 0, RegisterCount});
+                       {QModbusDataUnit::InputRegisters, 0, InputRegisterCount});
     registerMap.insert(QModbusDataUnit::HoldingRegisters,
-                       {QModbusDataUnit::HoldingRegisters, 0, RegisterCount});
+                       {QModbusDataUnit::HoldingRegisters, 0, HoldingRegisterCount});
 
     if (!m_server->setMap(registerMap)) {
         const QString message = m_server->errorString();
@@ -203,7 +203,7 @@ bool ModbusServer::value(QModbusDataUnit::RegisterType table,
                          quint16 offset,
                          quint16 *result) const
 {
-    return isSupportedTable(table) && offset < RegisterCount
+    return isSupportedTable(table) && offset < tableRegisterCount(table)
             && m_server->data(table, offset, result);
 }
 
@@ -211,7 +211,7 @@ bool ModbusServer::setValue(QModbusDataUnit::RegisterType table,
                             quint16 offset,
                             quint16 value)
 {
-    if (!isSupportedTable(table) || offset >= RegisterCount) {
+    if (!isSupportedTable(table) || offset >= tableRegisterCount(table)) {
         const QString message = QStringLiteral("Invalid register table or offset: %1")
                                         .arg(offset);
         qWarning().noquote() << "[ModbusServer]" << message;
@@ -239,4 +239,18 @@ bool ModbusServer::isSupportedTable(QModbusDataUnit::RegisterType table)
     return table == QModbusDataUnit::Coils
             || table == QModbusDataUnit::InputRegisters
             || table == QModbusDataUnit::HoldingRegisters;
+}
+
+quint16 ModbusServer::tableRegisterCount(QModbusDataUnit::RegisterType table)
+{
+    switch (table) {
+    case QModbusDataUnit::Coils:
+        return CoilCount;
+    case QModbusDataUnit::InputRegisters:
+        return InputRegisterCount;
+    case QModbusDataUnit::HoldingRegisters:
+        return HoldingRegisterCount;
+    default:
+        return 0;
+    }
 }

@@ -672,11 +672,47 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
   `docs\evidence\w2-080\tools\build-mirror-alarm-client.bat`(Proxy Mirror 用戶端,送 `alarmViewRequested` 並印出
   `alarmViews[sessionId]`;由 w2-050 的匯出用戶端改寫)。
 
+## 設定頁上下限超限警報(w2-085)
+
+設定頁每支感測器的上限 / 下限(`Td.sensorSettingsSv`,契約與完整規則見 `Core/SensorSettings.md`「後端超限警報規則」)
+由桌面後端判斷並寫進警報紀錄,做法與漏水感測器(DI1)相同:超限時**立即新增**一筆,回到範圍內**持續 2 秒**後把**同一筆**
+改為「已解除」。
+
+- 程式:`Core/LimitAlarms.{h,cpp}`(`LimitAlarmMonitor`,新檔),`Manager` 只做接線:建構時建立、`updateProcessPoint`
+  寫完 PV 後通知、`alarmSaved` 轉給 `Core::loadAlarmRecords`;警報頁各端檢視(`alarmViews`)由 SqlManager 的
+  `alarmHistoryChanged` 自動更新。只編進桌面版(WASM 不含)。
+- 判斷:校正後數值(原始 PV + offset;Filter 壓差 = 校正後 PT-02 − 校正後 PT-03)> 啟用的上限、或 < 啟用的下限;
+  等於上下限屬正常;壓力一律 kPa(與顯示單位無關)。PT-04/PT-05 等同組感測器各自判斷、各自記錄;上限與下限各自一筆。
+- 紀錄:`sensorName` 用畫面名稱(`PT-04`、`TT-01`、`流量計`、`Filter 壓差`),訊息例如
+  `超過上限：612.35 kPa（上限 600.00 kPa）`、`低於下限：18.20 °C（下限 20.00 °C）`;嚴重程度一律「警告」。
+  未解除前同一感測器同一方向不重複新增;回到範圍又在 2 秒內再超限 → 不解除、不新增。
+- 設定改變(套用、停用)時立即以新設定重新判斷;停用視為回到範圍(2 秒後解除)。
+- 重啟:比照 w2-053 的 DI,第一次讀到值時查本月與上月未解除的同名「警告」列:仍超限 → 沿用原列(不新增),
+  已恢復 → 2 秒後解除;查詢失敗時重試,所有感測器共用 5 次,用完後回到一般邏輯。
+- 原本的「量程 90% 高限」警報(`數值異常`)、DI / 漏水 / MS300 警報、設定儲存與 Modbus server HR 寫入都不變。
+- log:`[LimitAlarm] …`(回到範圍 / 2 秒內再超限 / 重啟接手)、`[SQL] Alarm inserted: … (limit alarm pt04 upper)`、
+  `[SQL] Alarm resolved: …`。
+
+**給 Mango 的測試方法**(模擬器或實機皆可,不需改程式):
+
+1. 開桌面版(或網頁),在主畫面記下某支感測器目前的值,例如 PT-04 = 120.00 kPa。
+2. 到設定頁「設備接口出口壓力」把上限設成比目前值小(例如 100)後套用 → 主畫面的值超過上限;
+   警報頁立刻出現 `PT-04`、`超過上限：120.00 kPa（上限 100.00 kPa）`、嚴重程度「警告」、狀態「未處理」
+   (PT-05 若也超過,另外一筆 `PT-05`)。Filter 壓差可用「Filter 壓差」的上下限測,主畫面 Filter 會變紅(超上限)/ 橘(低於下限)。
+3. 等幾秒:同一筆不會重複出現。
+4. 把上限改回比目前值大(或清空 = 停用)後套用 → 約 2 秒後該筆變成「已解除」(綠色)。
+5. 下限同理(設成比目前值大 → 「低於下限：…」)。
+6. 重啟測試:保持超限時關閉程式再開 → 警報頁仍是原來那一筆「未處理」,不會多一筆;恢復後 2 秒變「已解除」。
+
+測試:`Core/tests` 的 `tst_limit_alarms`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:
+`docs\evidence\w2-085\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端與資料庫列印工具,`live-run.ps1`
+用自己的設定檔 / port / 資料資料夾啟動桌面版兩次並逐項檢查)。
+
 ## 測試 / 驗證(全部以 exit code 判定)
 
 QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視);
+SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報);
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -747,7 +783,12 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     不合法輸入、閒置 30 分鐘與最多 32 個的清理、5000 筆月份分步讀取)、
 ::     tst_server_heartbeat(w2-084 伺服器心跳:啟動立即寫一次、真實 1 秒計時器 6.5 秒內 7 個值且間隔約 1 秒、值 = 當下 epoch ms、
 ::     在 Proxy 的執行緒寫、stop() 後 3.5 秒不再變化、注入時鐘 + 短間隔、其他執行緒忙碌不影響、非主執行緒 start 被拒、
-::     core.cpp 的接線(init 最後啟動、shutdown 第一步停止)與只編進桌面版、沒有其他程式寫 serverHeartbeatMs)
+::     core.cpp 的接線(init 最後啟動、shutdown 第一步停止)與只編進桌面版、沒有其他程式寫 serverHeartbeatMs)、
+::     tst_limit_alarms(w2-085 設定頁上下限超限警報:超限立即新增、等於上下限與停用不判斷、回到範圍 1.9 秒內再超限不解除不新增、
+::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
+::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
+::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
+::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)
 Core\tests\run-core-tests.bat fresh
 :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
 ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、

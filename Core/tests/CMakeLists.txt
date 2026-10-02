@@ -8,6 +8,7 @@
 #   w2-072: tst_modbusclient_offline, tst_ms300_offline, tst_manager_sv_guard
 #   w2-080: tst_alarm_views
 #   w2-084: tst_server_heartbeat
+#   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -102,6 +103,8 @@ taidaflow_core_test(tst_manager_sv_guard
     SOURCES
         tst_manager_sv_guard.cpp
         "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/LimitAlarms.h"
+        "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
         "${CORE_DIR}/manager.cpp"
         "${CORE_DIR}/Modbus_Client.h"
         "${CORE_DIR}/Modbus_Client.cpp"
@@ -168,3 +171,40 @@ taidaflow_core_test(tst_server_heartbeat
         "${CORE_DIR}/TaidaFlowProxy.h"
     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml)
 target_compile_definitions(tst_server_heartbeat PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+
+# ---------------------------------------------------------------------------------------------
+# w2-085: settings-page upper / lower limit alarms (LimitAlarmMonitor, Core/LimitAlarms.h): insert
+# at once, equal = normal, disabled limits, 2 s back in range (injected clock and the real timer),
+# groups judged per sensor, filter = corrected PT-02 - PT-03, offsets, settings changes, restart
+# hand-over and lookup failures, alarmRecords / alarmViews, the UI's own JavaScript rule (read from
+# TaidaFlowContent), the real Manager against two Modbus TCP servers of the test on 127.0.0.1
+# (ports picked by the OS) incl. the unchanged 90 % alarm, and the wiring in the sources.
+# Real SqlManager on a temporary data folder; no device, no fixed port.
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_limit_alarms
+    SOURCES
+        tst_limit_alarms.cpp
+        "${CORE_DIR}/LimitAlarms.h"
+        "${CORE_DIR}/LimitAlarms.cpp"
+        "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/manager.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/ModbusMapping.h"
+        "${CORE_DIR}/ModbusServerBridgeMapping.h"
+        "${CORE_DIR}/AlarmViews.h"
+        "${CORE_DIR}/AlarmViews.cpp"
+        "${CORE_DIR}/AlarmRecordFormat.h"
+        "${CORE_DIR}/AlarmRecordFormat.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/SqlManagerAlarms.cpp"
+        "${CORE_DIR}/HistoryExport.h"
+        "${CORE_DIR}/HistoryExport.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
+target_compile_definitions(tst_limit_alarms PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")

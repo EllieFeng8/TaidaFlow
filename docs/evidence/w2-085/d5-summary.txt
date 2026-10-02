@@ -1,0 +1,16 @@
+﻿=== w2-085 d5 sequence 2026-10-02T19:09:08.4593317+08:00
+19:09:09 font-check: exit=0 (1 s)
+19:09:09 [build-desktop-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+19:10:03 build-desktop-fresh: exit=0 (54 s)
+19:10:03 [build-wasm-release-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+19:13:40 build-wasm-release-fresh: exit=0 (217 s)
+19:13:41 check-wasm-backend: exit=0 (1 s)
+19:13:43 check-version-shadow: exit=0 (2 s)
+19:13:44 verify-pack: exit=0 (0 s)
+19:13:44 check-rest-routes: exit=0 (0 s)
+19:13:44 limitalarms-desktop-only: exit=0 (0 s)
+19:13:44 [core-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+19:15:53 core-tests-fresh: exit=0 (129 s)
+19:15:53 [app-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+19:16:14 app-tests-fresh: exit=0 (20 s)
+19:16:14 === all steps exit 0

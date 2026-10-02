@@ -14,6 +14,7 @@
 
 class TaidaFlowProxy;
 class SqlManager;
+class LimitAlarmMonitor;    // w2-085: settings-page limit alarms (Core/LimitAlarms.h)
 
 class Manager final : public QObject
 {
@@ -181,4 +182,6 @@ private:
     QHash<int, double> m_lastAcceptedSv;
     QHash<int, RepeatedWarningLimiter> m_nonFiniteWarnings;
     bool m_restoringSv = false;
+    // w2-085: judged after every PV update (updateProcessPoint); its alarmSaved -> alarmSaved.
+    LimitAlarmMonitor *m_limitAlarms = nullptr;
 };

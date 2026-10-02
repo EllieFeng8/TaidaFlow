@@ -1,0 +1,16 @@
+﻿=== safety probe 2026-10-02T19:18:46.143+08:00 reason="w2-085 live without devices" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-085\config.w2-085-nodevice.json
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  tcp 192.0.2.201:502 [effective devices.adam6256 (file)] -> unreachable timeout 1500ms
+  tcp 192.0.2.202:502 [effective devices.adam6217a (file)] -> unreachable timeout 1500ms
+  tcp 192.0.2.203:502 [effective devices.adam6217b (file)] -> unreachable timeout 1500ms
+  tcp 192.0.2.204:502 [effective devices.adam6224 (file)] -> unreachable timeout 1500ms
+  tcp 192.0.2.205:502 [effective devices.adam6022 (file)] -> unreachable timeout 1500ms
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 5385=modbusServer.port (Modbus server); 8385=http.port (web page + CSV downloads); 8386=mirror.publicPort (LAN relay); 18386=mirror.internalPort (internal mirror); 18385=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listener 0.0.0.0:80 pid=103012 (nginx) = nginx.port (nginx web front end, information only)
+    nginx.port 80 = web front end -> information only, does not block the launch
+  verdict: SAFE

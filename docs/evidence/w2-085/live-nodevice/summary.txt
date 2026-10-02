@@ -1,0 +1,28 @@
+﻿=== w2-085 live run without devices 2026-10-02T19:18:43.1475327+08:00
+19:18:43.253 other TaidaFlowApp / nginx / simulator processes (not touched): Adam60xxSimulator 100316 D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe; nginx 98768 D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe; nginx 103012 D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe; TaidaFlowApp 2104 D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+19:18:56.986 safety_probe (default profile) exit=0 (SAFE)
+19:18:57.059 app started pid=99924
+19:19:08.011 app listeners: 127.0.0.1:5385 | 127.0.0.1:8385 | 127.0.0.1:8386 | 127.0.0.1:18385 | 127.0.0.1:18386
+19:19:08.057 PASS app listens on its 5 ports, loopback only
+19:19:18.614   client: 19:19:08.846 PASS snapshot (55 ms)
+19:19:18.615   client: 19:19:08.847 value pt04 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:18.617   client: 19:19:08.847 value pt05 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:18.618   client: 19:19:08.848 value tt01 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:18.620   client: 19:19:08.848 value filter = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:18.621   client: 19:19:08.908 WRITE sensorSettingsSv.pt04 = {"lower":0,"lowerEnabled":false,"offset":0,"upper":-500,"upperEnabled":true}
+19:19:18.622   client: 19:19:15.092 PASS nodevice: no PT-04 limit row (no PV from the backend yet)
+19:19:18.623   client: 19:19:15.092 WRITE sensorSettingsSv.pt04 = {"lower":0,"lowerEnabled":false,"offset":0,"upper":-500,"upperEnabled":false}
+19:19:18.625   client: 19:19:18.283 PASS nodevice: still no limit row of any sensor
+19:19:18.626   client: 19:19:18.284 RESULT OK (0 failure(s)) - scenario done
+19:19:18.628 PASS mirror client scenario nodevice exit=0
+19:20:32.475 PASS app ran 95 s (>= 95 s)
+19:20:32.477 PASS app closed with exit code 0
+19:20:34.138 PASS no listener of the app left
+19:20:34.165 PASS log: monitor active for 13 sensors in the real exe
+19:20:34.176 PASS log: settings changes re-evaluated (no sensor has a value yet)
+19:20:34.179 PASS log: the pt04 card saved twice (settings save path unchanged)
+19:20:34.181 PASS log: no limit alarm and no 90 % alarm without device values
+19:20:34.184 PASS log: [Core] shutdown complete
+19:20:34.186 PASS log: no QML error
+19:20:34.262 PASS other processes still running: 4 of 4
+19:20:34.264 === all checks passed

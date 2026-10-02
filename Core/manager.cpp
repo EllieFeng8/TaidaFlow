@@ -1,5 +1,6 @@
 #include "manager.h"
 
+#include "LimitAlarms.h"
 #include "ModbusServerBridgeMapping.h"
 #include "SqlManager.h"
 #include "TaidaFlowProxy.h"
@@ -137,6 +138,9 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
     , m_serverInputRegisters(ModbusServerBridgeMapping::ServerInputRegisterCount, 0)
 {
     loadAiHighAlarmPercentSetting();
+    // w2-085: settings-page upper/lower limit alarms (the 90 % high alarm below is unchanged).
+    m_limitAlarms = new LimitAlarmMonitor(proxy, sql, this);
+    connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
     m_pollTimer.setInterval(kPollIntervalMs);
     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
 
@@ -1228,6 +1232,7 @@ void Manager::updateProcessPoint(ModbusMapping::ProcessPoint point, double value
     case ModbusMapping::ProcessPoint::Mv3Position: m_proxy->setM3ValuePv(value); break;
     case ModbusMapping::ProcessPoint::Mv4Position: m_proxy->setM4ValuePv(value); break;
     }
+    m_limitAlarms->processPointUpdated(point);   // w2-085
 }
 
 void Manager::writeServerData(QModbusDataUnit::RegisterType table,

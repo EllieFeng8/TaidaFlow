@@ -48,7 +48,8 @@ QString readSource(const QString &relative)
     QFile file(QDir(QStringLiteral(CORE_SOURCE_DIR)).filePath(relative));
     if (!file.open(QIODevice::ReadOnly))
         return QString();
-    return QString::fromUtf8(file.readAll());
+    // w2-085: a checkout with core.autocrlf=true has CRLF in the working copy; compare as LF.
+    return QString::fromUtf8(file.readAll()).replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
 }
 
 // Body of "void Core::<name>(" up to the next "\n}\n" (functions of core.cpp end with a column-0 brace).

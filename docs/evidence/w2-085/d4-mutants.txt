@@ -1,0 +1,9 @@
+﻿=== w2-085 negative controls 2026-10-02T19:20:44.6587762+08:00
+19:21:24 original : test exit 0 - Totals: 16 passed, 0 failed, 0 skipped, 0 blacklisted, 24206ms -> passes
+19:22:01 M1-equal-is-alarm : test exit 2 - Totals: 14 passed, 2 failed, 0 skipped, 0 blacklisted, 24055ms; failed: TestLimitAlarms::equalIsNormal() TestLimitAlarms::uiRuleEquivalence() -> caught
+19:22:33 M2-no-2s-wait : test exit 6 - Totals: 10 passed, 6 failed, 0 skipped, 0 blacklisted, 17688ms; failed: TestLimitAlarms::resolveAfterTwoSeconds() TestLimitAlarms::realClockTimerResolves() TestLimitAlarms::offsetApplied() TestLimitAlarms::settingsChangeReevaluates() TestLimitAlarms::restartNoDuplicate() TestLimitAlarms::managerIntegration() -> caught
+19:23:11 M3-offset-ignored : test exit 5 - Totals: 11 passed, 5 failed, 0 skipped, 0 blacklisted, 24057ms; failed: TestLimitAlarms::equalIsNormal() TestLimitAlarms::groupSensorsSeparately() TestLimitAlarms::filterUsesCorrectedDifference() TestLimitAlarms::offsetApplied() TestLimitAlarms::uiRuleEquivalence() -> caught
+19:23:49 M4-reviolation-keeps-countdown : test exit 1 - Totals: 15 passed, 1 failed, 0 skipped, 0 blacklisted, 24225ms; failed: TestLimitAlarms::resolveAfterTwoSeconds() -> caught
+19:24:27 M5-no-restart-takeover : test exit 2 - Totals: 14 passed, 2 failed, 0 skipped, 0 blacklisted, 24245ms; failed: TestLimitAlarms::restartNoDuplicate() TestLimitAlarms::restartLookupFailure() -> caught
+19:24:58 M6-duplicates : test exit 6 - Totals: 10 passed, 6 failed, 0 skipped, 0 blacklisted, 16842ms; failed: TestLimitAlarms::upperAndLowerInsertAtOnce() TestLimitAlarms::resolveAfterTwoSeconds() TestLimitAlarms::groupSensorsSeparately() TestLimitAlarms::settingsChangeReevaluates() TestLimitAlarms::restartNoDuplicate() TestLimitAlarms::restartLookupFailure() -> caught
+19:24:58 === original passes, every mutant caught

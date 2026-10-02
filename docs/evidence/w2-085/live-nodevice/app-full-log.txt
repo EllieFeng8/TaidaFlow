@@ -1,0 +1,254 @@
+2026-10-02 19:18:57.420 [info] [Config] config file D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-085\config.w2-085-nodevice.json (TAIDAFLOW_CONFIG=D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-085\config.w2-085-nodevice.json)
+2026-10-02 19:18:57.422 [info] [Config] configuration source: TAIDAFLOW_CONFIG
+2026-10-02 19:18:57.423 [info] [Config]   version = 1 (file)
+2026-10-02 19:18:57.425 [info] [Config]   dataDir = "../../../build/w2-085-run/live-nodevice" (file)
+2026-10-02 19:18:57.427 [info] [Config]   devices.adam6256.host = "192.0.2.201" (file)
+2026-10-02 19:18:57.428 [info] [Config]   devices.adam6256.port = 502 (file)
+2026-10-02 19:18:57.431 [info] [Config]   devices.adam6256.unitId = 1 (file)
+2026-10-02 19:18:57.432 [info] [Config]   devices.adam6217a.host = "192.0.2.202" (file)
+2026-10-02 19:18:57.434 [info] [Config]   devices.adam6217a.port = 502 (file)
+2026-10-02 19:18:57.437 [info] [Config]   devices.adam6217a.unitId = 1 (file)
+2026-10-02 19:18:57.438 [info] [Config]   devices.adam6217b.host = "192.0.2.203" (file)
+2026-10-02 19:18:57.438 [info] [Config]   devices.adam6217b.port = 502 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6217b.unitId = 1 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6224.host = "192.0.2.204" (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6224.port = 502 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6224.unitId = 1 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6022.host = "192.0.2.205" (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6022.port = 502 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.adam6022.unitId = 1 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.ms300.serialPort = "COM2" (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.ms300.baudRate = 9600 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.ms300.dataBits = 8 (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.ms300.parity = "none" (file)
+2026-10-02 19:18:57.439 [info] [Config]   devices.ms300.stopBits = 1 (file)
+2026-10-02 19:18:57.440 [info] [Config]   devices.ms300.unitId = 1 (file)
+2026-10-02 19:18:57.441 [info] [Config]   modbusServer.bind = "127.0.0.1" (file)
+2026-10-02 19:18:57.441 [info] [Config]   modbusServer.port = 5385 (file)
+2026-10-02 19:18:57.441 [info] [Config]   modbusServer.unitId = 1 (file)
+2026-10-02 19:18:57.441 [info] [Config]   http.bind = "127.0.0.1" (file)
+2026-10-02 19:18:57.441 [info] [Config]   http.port = 8385 (file)
+2026-10-02 19:18:57.441 [info] [Config]   rest.bind = "127.0.0.1" (file)
+2026-10-02 19:18:57.441 [info] [Config]   rest.port = 18385 (file)
+2026-10-02 19:18:57.441 [info] [Config]   mirror.internalPort = 18386 (file)
+2026-10-02 19:18:57.442 [info] [Config]   mirror.publicBind = "127.0.0.1" (file)
+2026-10-02 19:18:57.442 [info] [Config]   mirror.publicPort = 8386 (file)
+2026-10-02 19:18:57.442 [info] [Config]   nginx.enabled = false (file)
+2026-10-02 19:18:57.443 [info] [Config]   nginx.port = 80 (file)
+2026-10-02 19:18:57.443 [info] [Config]   nginx.exe = "C:\tools\nginx\nginx-1.30.5\nginx.exe" (file)
+2026-10-02 19:18:57.443 [info] [Config]   log.dir = "logs" (file)
+2026-10-02 19:18:57.443 [info] [Config]   log.quiet.enabled = true (file)
+2026-10-02 19:18:57.443 [info] [Config]   log.quiet.keepDays = 60 (file)
+2026-10-02 19:18:57.443 [info] [Config]   log.full.enabled = true (file)
+2026-10-02 19:18:57.444 [info] [Config]   log.full.keepDays = 7 (file)
+2026-10-02 19:18:57.444 [info] [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice
+2026-10-02 19:18:57.444 [info] [Config]   nginx.exe (resolved) = C:	ools
+ginx
+ginx-1.30.5
+ginx.exe
+2026-10-02 19:18:57.444 [info] [Config]   log.dir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\logs
+2026-10-02 19:18:57.444 [info] [Config]   downloadPort = 8385 (derived: nginx.enabled ? nginx.port : http.port)
+2026-10-02 19:18:57.444 [info] [Config] working directory (dataDir): D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice
+2026-10-02 19:18:57.444 [info] [AppLog] clean-up of D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\logs for 2026-10-02: 0 file(s) examined, 0 expired log file(s) deleted (quiet keeps 60 day(s), full keeps 7 day(s), today included), took 0 ms
+2026-10-02 19:18:57.446 [info] [AppLog] log folder D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\logs; quiet taidaflow-YYYY-MM-DD.log (warning, critical, fatal): on, keepDays 60; full taidaflow-YYYY-MM-DD-full.log (every message): on, keepDays 7
+2026-10-02 19:18:57.453 [info] Embedded CJK font loaded: TaidaFlow Noto Sans TC styles: Regular,Bold
+2026-10-02 19:18:57.453 [info] [HmiInput] SVs are not restored from D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/TaidaFlowSettings.ini; they are taken from the first successful device read.
+2026-10-02 19:18:57.481 [warning] Schema file not found "D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+2026-10-02 19:18:57.493 [info] [Config] Core ADAM-6256 (devices.adam6256) -> 192.0.2.201:502 unit 1 (host file, port file, unitId file)
+2026-10-02 19:18:57.494 [info] [Config] Core ADAM-6217 A (devices.adam6217a) -> 192.0.2.202:502 unit 1 (host file, port file, unitId file)
+2026-10-02 19:18:57.494 [info] [Config] Core ADAM-6217 B (devices.adam6217b) -> 192.0.2.203:502 unit 1 (host file, port file, unitId file)
+2026-10-02 19:18:57.494 [info] [Config] Core ADAM-6224 (devices.adam6224) -> 192.0.2.204:502 unit 1 (host file, port file, unitId file)
+2026-10-02 19:18:57.494 [info] [Config] Core ADAM-6022 (devices.adam6022) -> 192.0.2.205:502 unit 1 (host file, port file, unitId file)
+2026-10-02 19:18:57.495 [info] [Config] Core MS300 (devices.ms300) -> COM2 9600 baud, data bits 8, parity none, stop bits 1, unit 1 (serialPort file, baudRate file, dataBits file, parity file, stopBits file, unitId file)
+2026-10-02 19:18:57.495 [info] [Modbus] device profile=default
+2026-10-02 19:18:57.496 [info] [Modbus] device ADAM-6256 -> 192.0.2.201:502 unit=1 timeout=1000ms retries=2
+2026-10-02 19:18:57.496 [info] [Modbus] device ADAM-6217 A -> 192.0.2.202:502 unit=1 timeout=1000ms retries=2
+2026-10-02 19:18:57.496 [info] [Modbus] device ADAM-6217 B -> 192.0.2.203:502 unit=1 timeout=1000ms retries=2
+2026-10-02 19:18:57.496 [info] [Modbus] device ADAM-6224 -> 192.0.2.204:502 unit=1 timeout=1000ms retries=2
+2026-10-02 19:18:57.496 [info] [Modbus] device ADAM-6022 -> 192.0.2.205:502 unit=1 timeout=1000ms retries=2
+2026-10-02 19:18:57.497 [info] [MS300] COM2, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+2026-10-02 19:18:57.501 [info] [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+2026-10-02 19:18:57.501 [info] [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+2026-10-02 19:18:57.501 [info] [History] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 10 rows per page
+2026-10-02 19:18:57.501 [info] [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+2026-10-02 19:18:57.502 [info] [Config] Core download links -> port 8385 (file; nginx.enabled false file, nginx.port 80 file, http.port 8385 file)
+2026-10-02 19:18:57.510 [info] [Export] web export folder D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\exports (max 20 files / 2147483648 bytes), download links -> port 8385
+2026-10-02 19:18:57.510 [info] apphttpserver: [AppHttpServer] downloads /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\exports
+2026-10-02 19:18:57.510 [info] [Export] download mount GET /exports/<file> -> D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live-nodevice\exports: mounted on AppHttpServer
+2026-10-02 19:18:57.511 [info] [Config] Core HTTP service (http) -> 127.0.0.1:8385 (bind file, port file)
+2026-10-02 19:18:57.511 [info] [Web] candidate TAIDAFLOW_WEB_DIR: D:\repo\codex\qmlTester\taidaflow\build\w2-085-wasm -> has TaidaFlowApp.html, used
+2026-10-02 19:18:57.513 [info] [Web] runtime.json written: D:\repo\codex\qmlTester\taidaflow\build\w2-085-wasm\runtime.json = {"mirrorPublicPort":8386,"version":1} (nginx.enabled false -> mirror.publicPort file (LanRelay))
+2026-10-02 19:18:57.513 [info] apphttpserver: [AppHttpServer] static / -> D:\repo\codex\qmlTester\taidaflow\build\w2-085-wasm (index "TaidaFlowApp.html", COOP/COEP on, CORP on, gzip variants on)
+2026-10-02 19:18:57.513 [info] [Web] web page folder (TAIDAFLOW_WEB_DIR): D:\repo\codex\qmlTester\taidaflow\build\w2-085-wasm -> http://<host>:8385/TaidaFlowApp.html
+2026-10-02 19:18:57.525 [info] apphttpserver: [AppHttpServer] listening on 127.0.0.1:8385 (thread AppHttpServerThread); mounts: /exports, /; routes: 
+2026-10-02 19:18:57.526 [info] [Web] HTTP service listening on 127.0.0.1:8385 (web page served, /exports downloads)
+2026-10-02 19:18:57.526 [info] [Config] Core REST API (rest) -> 127.0.0.1:18385 (bind file, port file)
+2026-10-02 19:18:57.530 [info] Device SN: "sn000000"
+2026-10-02 19:18:57.531 [info] Running on http://127.0.0.1: 18385 /
+2026-10-02 19:18:57.531 [info] [REST] REST API listening on 127.0.0.1:18385 (loopback only; LAN: http://<host>/api/... through nginx; config.json rest.port file)
+2026-10-02 19:18:57.531 [info] [REST] route GET              / - status {"status": "ok"} (via nginx: /api/)
+2026-10-02 19:18:57.531 [info] [REST] route GET,PUT,OPTIONS  /api/settings/sensors - sensor key/name map (settings.sqlite sensor_config)
+2026-10-02 19:18:57.531 [info] [REST] route GET,PUT,OPTIONS  /api/settings/frequency - read_frequency (settings.sqlite app_settings)
+2026-10-02 19:18:57.531 [info] [REST] route GET,PUT,OPTIONS  /api/modbus/mode - mode network|standalone (in memory only)
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/sensor/range - sensor rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/holding/range - holding register rows paged (page, pageSize <= 1000), from/to epoch seconds
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/device/sn - device serial number (device_info.ini)
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/sensor/last - newest sensor row of the current month
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/holding/last - newest holding register row of the current month
+2026-10-02 19:18:57.532 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTime - sensor rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-10-02 19:18:57.533 [info] [REST] route GET,OPTIONS      /api/sensor/rangeDateTimePage - sensor rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-10-02 19:18:57.533 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTime - holding register rows paged (page, pageSize <= 1000), from/to ISO date-time or epoch seconds
+2026-10-02 19:18:57.533 [info] [REST] route GET,OPTIONS      /api/holding/rangeDateTimePage - holding register rows paged (page, pageSize <= 1000), same as rangeDateTime (former name)
+2026-10-02 19:18:57.555 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=1
+2026-10-02 19:18:57.556 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-10-02 19:18:57.556 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-10-02 19:18:57.577 [info] [MS300] Disconnected from COM2, Unit ID 1: disconnected
+2026-10-02 19:18:57.577 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+2026-10-02 19:18:57.577 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:18:57.577 [info] [Config] Core Modbus server (modbusServer) -> 127.0.0.1:5385 unit 1 (bind file, port file, unitId file)
+2026-10-02 19:18:57.578 [info] [ModbusServer] listening on 127.0.0.1:5385 unit=1
+2026-10-02 19:18:57.579 [info] [SettingsPage->ModbusServer] HR11..HR40 updated: 30 signed values x10.
+2026-10-02 19:18:57.580 [info] [Alarm][UI] id=1 sensor=100 message=設備啟動 coreStatus=正常 -> alarmStatus=已解除 severity=警告
+2026-10-02 19:18:57.580 [info] [SQL] Loaded 1 alarm-history records from the last 3 days into the UI (alarmStatus 未處理=0 已解除=1; severity 嚴重=0 警告=1; unknown core status=0).
+2026-10-02 19:18:57.635 [info] [Heartbeat] server heartbeat started: serverHeartbeatMs = epoch ms every 1000 ms (main thread)
+2026-10-02 19:18:57.636 [info] WASM Mirror endpoint: ws://127.0.0.1:18386/mirror
+2026-10-02 19:18:57.637 [info] LAN relay listening: 127.0.0.1:8386 -> 127.0.0.1:18386
+2026-10-02 19:18:57.637 [info] [UiFont] interface font: TaidaFlow Noto Sans TC | Consolas -> taidaflow noto sans tc
+2026-10-02 19:18:58.976 [info] [Alarm] alarm row written at 1790939937 s: 0 of 0 view(s) hold that time
+2026-10-02 19:19:00.590 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (1 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-10-02 19:19:00.590 [info] [MS300] COM2 connection attempt #2 (not open for 3.0 s)
+2026-10-02 19:19:00.590 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:00.590 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:04.562 [info] [MS300] COM2 connection attempt #3 (not open for 7.0 s)
+2026-10-02 19:19:04.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:04.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:07.564 [info] [MS300] COM2 connection attempt #4 (not open for 10.0 s)
+2026-10-02 19:19:07.564 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:07.565 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:08.769 [info] LAN relay: accepted 127.0.0.1:55366 -> 127.0.0.1:18386
+2026-10-02 19:19:08.914 [info] [SettingsPage] Saved card 'pt04' (pt04, pt05) to D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/TaidaFlowSettings.ini.
+2026-10-02 19:19:08.914 [info] [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+2026-10-02 19:19:08.914 [info] [ModbusServer][Local update] type=4 offset=14 count=1
+2026-10-02 19:19:08.914 [info] [SettingsPage->ModbusServer] HR11..HR40 updated: 30 signed values x10.
+2026-10-02 19:19:10.566 [info] [MS300] COM2 connection attempt #5 (not open for 13.0 s)
+2026-10-02 19:19:10.566 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:10.567 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:13.568 [info] [MS300] COM2 connection attempt #6 (not open for 16.0 s)
+2026-10-02 19:19:13.568 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:13.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:15.098 [info] [SettingsPage] Saved card 'pt04' (pt04, pt05) to D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/TaidaFlowSettings.ini.
+2026-10-02 19:19:15.099 [info] [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+2026-10-02 19:19:15.099 [info] [SettingsPage->ModbusServer] HR11..HR40 updated: 30 signed values x10.
+2026-10-02 19:19:16.569 [info] [MS300] COM2 connection attempt #7 (not open for 19.0 s)
+2026-10-02 19:19:16.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:16.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:18.285 [info] LAN relay: closed 127.0.0.1:55366
+2026-10-02 19:19:20.561 [info] [MS300] COM2 connection attempt #8 (not open for 23.0 s)
+2026-10-02 19:19:20.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:20.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:23.562 [info] [MS300] COM2 connection attempt #9 (not open for 26.0 s)
+2026-10-02 19:19:23.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:23.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:26.563 [info] [MS300] COM2 connection attempt #10 (not open for 29.0 s)
+2026-10-02 19:19:26.563 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:26.563 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:29.561 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (30 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-10-02 19:19:30.567 [info] [MS300] COM2 connection attempt #11 (not open for 33.0 s)
+2026-10-02 19:19:30.568 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:30.568 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:34.562 [info] [MS300] COM2 connection attempt #12 (not open for 37.0 s)
+2026-10-02 19:19:34.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:34.562 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:37.567 [info] [MS300] COM2 connection attempt #13 (not open for 40.0 s)
+2026-10-02 19:19:37.567 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:37.567 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:39.638 [info] ADAM-6256 (192.0.2.201) disconnected 
+2026-10-02 19:19:39.641 [warning] ADAM-6256 (192.0.2.201) TCP socket error (連線逾時). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-10-02 19:19:39.643 [info] ADAM-6217 A (192.0.2.202) disconnected 
+2026-10-02 19:19:39.643 [warning] ADAM-6217 A (192.0.2.202) TCP socket error (連線逾時). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-10-02 19:19:39.643 [info] ADAM-6217 B (192.0.2.203) disconnected 
+2026-10-02 19:19:39.643 [warning] ADAM-6217 B (192.0.2.203) TCP socket error (連線逾時). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-10-02 19:19:39.644 [info] ADAM-6224 (192.0.2.204) disconnected 
+2026-10-02 19:19:39.644 [warning] ADAM-6224 (192.0.2.204) TCP socket error (連線逾時). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-10-02 19:19:39.644 [info] ADAM-6022 (192.0.2.205) disconnected 
+2026-10-02 19:19:39.645 [warning] ADAM-6022 (192.0.2.205) TCP socket error (連線逾時). (offline for 0 s, 0 reconnect attempt(s) so far; one every 3 s)
+2026-10-02 19:19:40.568 [warning] ADAM-6217 A (192.0.2.202) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-10-02 19:19:40.568 [warning] ADAM-6217 B (192.0.2.203) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-10-02 19:19:40.568 [warning] ADAM-6224 (192.0.2.204) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-10-02 19:19:40.569 [warning] ADAM-6256 (192.0.2.201) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-10-02 19:19:40.569 [warning] ADAM-6022 (192.0.2.205) Device is not connected; reads are skipped until it is connected again (reconnect attempt every 3 s).
+2026-10-02 19:19:40.569 [info] [MS300] COM2 connection attempt #14 (not open for 43.0 s)
+2026-10-02 19:19:40.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:40.569 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:42.653 [info] [Modbus] ADAM-6022 (192.0.2.205) reconnect attempt #1 (offline for 3.0 s)
+2026-10-02 19:19:42.655 [info] [Modbus] ADAM-6224 (192.0.2.204) reconnect attempt #1 (offline for 3.0 s)
+2026-10-02 19:19:42.656 [info] [Modbus] ADAM-6217 B (192.0.2.203) reconnect attempt #1 (offline for 3.0 s)
+2026-10-02 19:19:42.657 [info] [Modbus] ADAM-6217 A (192.0.2.202) reconnect attempt #1 (offline for 3.0 s)
+2026-10-02 19:19:42.657 [info] [Modbus] ADAM-6256 (192.0.2.201) reconnect attempt #1 (offline for 3.0 s)
+2026-10-02 19:19:43.572 [info] [MS300] COM2 connection attempt #15 (not open for 46.0 s)
+2026-10-02 19:19:43.572 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:43.573 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:46.572 [info] [MS300] COM2 connection attempt #16 (not open for 49.0 s)
+2026-10-02 19:19:46.572 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:46.573 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:50.563 [info] [MS300] COM2 connection attempt #17 (not open for 53.0 s)
+2026-10-02 19:19:50.563 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:50.564 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:53.566 [info] [MS300] COM2 connection attempt #18 (not open for 56.0 s)
+2026-10-02 19:19:53.566 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:53.566 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:56.580 [info] [MS300] COM2 connection attempt #19 (not open for 59.0 s)
+2026-10-02 19:19:56.580 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:56.582 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:19:59.578 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (60 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-10-02 19:20:00.577 [info] [MS300] COM2 connection attempt #20 (not open for 63.0 s)
+2026-10-02 19:20:00.577 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:00.577 [warning] [MS300] COM2: Referenced serial device does not exist. (not open for 63 s, 20 connection attempt(s); next attempt in 3 s) (56 similar warning(s) held back since the previous one; at most one per 60 s)
+2026-10-02 19:20:00.577 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:03.580 [info] [MS300] COM2 connection attempt #21 (not open for 66.0 s)
+2026-10-02 19:20:03.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:03.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:07.579 [info] [MS300] COM2 connection attempt #22 (not open for 70.0 s)
+2026-10-02 19:20:07.579 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:07.580 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:10.581 [info] [MS300] COM2 connection attempt #23 (not open for 73.0 s)
+2026-10-02 19:20:10.583 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:10.583 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:14.578 [info] [MS300] COM2 connection attempt #24 (not open for 77.0 s)
+2026-10-02 19:20:14.578 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:14.578 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:17.580 [info] [MS300] COM2 connection attempt #25 (not open for 80.0 s)
+2026-10-02 19:20:17.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:17.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:20.580 [info] [MS300] COM2 connection attempt #26 (not open for 83.0 s)
+2026-10-02 19:20:20.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:20.581 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:23.581 [info] [MS300] COM2 connection attempt #27 (not open for 86.0 s)
+2026-10-02 19:20:23.582 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:23.582 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:24.725 [info] ADAM-6022 (192.0.2.205) disconnected TCP socket error (連線逾時).
+2026-10-02 19:20:24.726 [info] ADAM-6224 (192.0.2.204) disconnected TCP socket error (連線逾時).
+2026-10-02 19:20:24.726 [info] ADAM-6217 B (192.0.2.203) disconnected TCP socket error (連線逾時).
+2026-10-02 19:20:24.726 [info] ADAM-6217 A (192.0.2.202) disconnected TCP socket error (連線逾時).
+2026-10-02 19:20:24.726 [info] ADAM-6256 (192.0.2.201) disconnected TCP socket error (連線逾時).
+2026-10-02 19:20:27.580 [info] [MS300] COM2 connection attempt #28 (not open for 90.0 s)
+2026-10-02 19:20:27.580 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:27.580 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:27.729 [info] [Modbus] ADAM-6256 (192.0.2.201) reconnect attempt #2 (offline for 48.1 s)
+2026-10-02 19:20:27.730 [info] [Modbus] ADAM-6217 A (192.0.2.202) reconnect attempt #2 (offline for 48.1 s)
+2026-10-02 19:20:27.731 [info] [Modbus] ADAM-6217 B (192.0.2.203) reconnect attempt #2 (offline for 48.1 s)
+2026-10-02 19:20:27.732 [info] [Modbus] ADAM-6224 (192.0.2.204) reconnect attempt #2 (offline for 48.1 s)
+2026-10-02 19:20:27.733 [info] [Modbus] ADAM-6022 (192.0.2.205) reconnect attempt #2 (offline for 48.1 s)
+2026-10-02 19:20:29.579 [warning] [Pump2Hz feedback] ADAM-6022 HR10 read had no successful reply (90 consecutive poll(s)); pump2HzPv kept at 0.000 Hz.
+2026-10-02 19:20:30.582 [info] [MS300] COM2 connection attempt #29 (not open for 93.0 s)
+2026-10-02 19:20:30.583 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:30.583 [info] [MS300] Disconnected from COM2, Unit ID 1: 系統找不到指定的檔案。
+2026-10-02 19:20:32.353 [info] [Heartbeat] server heartbeat stopped after 95 write(s)
+2026-10-02 19:20:32.353 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-10-02 19:20:32.354 [info] [ModbusServer] stopped
+2026-10-02 19:20:32.356 [info] [REST] REST API stopped
+2026-10-02 19:20:32.358 [info] apphttpserver: [AppHttpServer] unmounted /exports
+2026-10-02 19:20:32.358 [info] [Export] stopped (export thread; /exports unmounted).
+2026-10-02 19:20:32.361 [info] apphttpserver: [AppHttpServer] stopped (was port 8385)
+2026-10-02 19:20:32.364 [info] [SQL] SqlManager stopped: worker thread finished, 2 SQLite connection(s) closed (data_202610, settings).
+2026-10-02 19:20:32.364 [info] [Core] shutdown complete in 11 ms

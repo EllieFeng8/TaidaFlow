@@ -1,0 +1,8 @@
+﻿2026-10-02 19:18:57.501 [info] [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+2026-10-02 19:18:57.555 [info] [SQL] Alarm inserted: sensor=100 message=設備啟動 status=正常 id=1
+2026-10-02 19:19:08.914 [info] [SettingsPage] Saved card 'pt04' (pt04, pt05) to D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/TaidaFlowSettings.ini.
+2026-10-02 19:19:08.914 [info] [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+2026-10-02 19:19:15.098 [info] [SettingsPage] Saved card 'pt04' (pt04, pt05) to D:/repo/codex/qmlTester/taidaflow/build/w2-085-run/live-nodevice/TaidaFlowSettings.ini.
+2026-10-02 19:19:15.099 [info] [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+2026-10-02 19:20:32.353 [info] [Core] shutdown (aboutToQuit): stopping the backend
+2026-10-02 19:20:32.364 [info] [Core] shutdown complete in 11 ms

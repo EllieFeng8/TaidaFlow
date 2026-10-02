@@ -1,0 +1,6 @@
+﻿=== w2-085 live run 2026-10-02T19:16:42.8945348+08:00
+19:16:42.939 other TaidaFlowApp / nginx processes (not touched): nginx 98768 D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe; nginx 103012 D:\repo\codex\qmlTester\taidaflow\build\desktop\nginx\nginx.exe; TaidaFlowApp 2104 D:\repo\codex\qmlTester\taidaflow\build\desktop\TaidaFlowApp.exe
+19:16:42.967 Adam60xxSimulator running (pid 100316) - shared, not stopped
+19:16:44.066 ports free: 5385, 8385, 8386, 18385, 18386
+19:16:44.069 data folder (fresh): D:\repo\codex\qmlTester\taidaflow\build\w2-085-run\live
+19:16:47.505 safety_probe (run1) exit=3 (NOT SAFE)

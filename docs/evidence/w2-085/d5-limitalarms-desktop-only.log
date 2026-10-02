@@ -1,0 +1,3 @@
+desktop: LimitAlarms.cpp compile commands=2, log string in TaidaFlowApp.exe=True
+wasm   : LimitAlarms.cpp compile commands=0, log string in TaidaFlowApp.wasm=False
+exit=0

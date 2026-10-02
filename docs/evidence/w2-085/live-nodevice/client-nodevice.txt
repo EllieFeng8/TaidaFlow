@@ -1,0 +1,24 @@
+19:19:08.746 contractHash=f88e7ee6f6141be746ae4a77816ee6b6a59e0b27f5d0ae582f83e5e3783aa014 scenario=nodevice
+19:19:08.791 STEP 1: snapshot
+19:19:08.813 connected to ws://127.0.0.1:8386/mirror (origin http://127.0.0.1:8385)
+19:19:08.814 welcome, connectionSessionId=c4f2cf6b-d908-4916-b335-a839cde47b88
+19:19:08.815 snapshot applied (alarmRecords 1 rows)
+19:19:08.846 PASS snapshot (55 ms)
+19:19:08.846 STEP 2: initial state
+19:19:08.847 value pt04 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:08.847 value pt05 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:08.848 value tt01 = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:08.848 value filter = 0.000 (corrected, kPa / °C); settings {"lower":0,"lowerEnabled":false,"offset":0,"upper":0,"upperEnabled":false}
+19:19:08.848 alarmRecords at start: 1 rows
+19:19:08.907 STEP 3: nodevice: PT-04 upper -500 enabled
+19:19:08.908 WRITE sensorSettingsSv.pt04 = {"lower":0,"lowerEnabled":false,"offset":0,"upper":-500,"upperEnabled":true}
+19:19:08.970 STEP 4: nodevice: 6 s
+19:19:15.033 STEP 5: nodevice: no PT-04 limit row (no PV from the backend yet)
+19:19:15.092 PASS nodevice: no PT-04 limit row (no PV from the backend yet)
+19:19:15.092 STEP 6: nodevice: upper disabled again
+19:19:15.092 WRITE sensorSettingsSv.pt04 = {"lower":0,"lowerEnabled":false,"offset":0,"upper":-500,"upperEnabled":false}
+19:19:15.159 STEP 7: nodevice: 3 s
+19:19:18.218 STEP 8: nodevice: still no limit row of any sensor
+19:19:18.283 PASS nodevice: still no limit row of any sensor
+19:19:18.284 RESULT OK (0 failure(s)) - scenario done
+19:19:18.285 DISCONNECTED: close code 1000 

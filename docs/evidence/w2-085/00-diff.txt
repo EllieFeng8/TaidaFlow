@@ -1,0 +1,254 @@
+﻿diff --git a/Core/CMakeLists.txt b/Core/CMakeLists.txt
+index 6b96d81..f9c85a6 100644
+--- a/Core/CMakeLists.txt
++++ b/Core/CMakeLists.txt
+@@ -43,6 +43,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         # w2-084: serverHeartbeatMs every 1 s on the main thread (the web page only reads it)
+         ServerHeartbeat.h
+         ServerHeartbeat.cpp
++        # w2-085: settings-page upper/lower limit alarms (owned by Manager)
++        LimitAlarms.h
++        LimitAlarms.cpp
+         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
+         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
+         AppHttpServer/AppHttpServer.h
+diff --git a/Core/SensorOffset.md b/Core/SensorOffset.md
+index 681bb83..ff0b95e 100644
+--- a/Core/SensorOffset.md
++++ b/Core/SensorOffset.md
+@@ -36,6 +36,6 @@
+ 
+ - 已生效:主畫面數值、Filter 壓差、流量計、主畫面超限變色。
+ - 實作中(core 分支):
+-  - 超限警報(超過上限或低於下限立即記錄、嚴重程度「警告」,回到範圍內持續 2 秒才改為已解除)。
++  - 超限警報(超過上限或低於下限立即記錄、嚴重程度「警告」,回到範圍內持續 2 秒才改為已解除):**已生效**(w2-085,2026-10-02)。
+   - 資料庫存檔時套用 offset;完成後歷史頁、CSV、REST 隨之一致。
+ - 上列完成後更新本節。
+diff --git a/Core/SensorSettings.md b/Core/SensorSettings.md
+index 78dec2e..3c7f8dc 100644
+--- a/Core/SensorSettings.md
++++ b/Core/SensorSettings.md
+@@ -52,3 +52,32 @@ This repository supplies the Proxy/UI: settings are in-memory values available
+ to the backend. Backend alarm generation, hardware calibration, and persistent
+ storage are not implemented here. A backend consuming the thresholds should use
+ corrected values and honor each enabled flag.
++
++## 後端超限警報規則(core 分支,w2-085)
++
++core 分支的桌面後端依本契約產生警報(`Core/LimitAlarms.{h,cpp}` 的 `LimitAlarmMonitor`,由 `Manager` 建立;
++上一段「Backend alarm generation … not implemented here」指的是 main 分支只提供 Proxy/UI)。規則:
++
++- 判斷對象:`pt01`–`pt07`、`tt01`–`tt04`、`flowMeter`、`filter` 共 13 個 key,**每個 key 各自判斷、各自記錄**
++  (同組 PT-04/PT-05 等雖在設定頁共用一組上下限,仍是兩支感測器、兩筆各自的警報)。
++- 判斷值 = 校正後數值 = 原始 PV + 該 key 的 `offset`(PV 本身保持原始值);`filter` = 校正後 PT-02 − 校正後 PT-03,
++  用 `filter` 的上下限。壓力與上下限一律以 kPa 比較,與顯示單位 `pressureUnitSv` 無關;溫度 °C、流量 L/min。
++- 超上限:`upperEnabled && 值 > upper`;低於下限:`lowerEnabled && 值 < lower`。**等於上下限屬正常**;
++  停用的上下限不判斷。與主畫面 Filter 變色(`Main.qml` `filterBody.limitState`)同一個運算式
++  (`Core/tests/tst_limit_alarms` 直接執行 UI 的 JavaScript 逐一比對)。
++- 上限與下限是同一感測器的兩種狀態,各自新增、各自解除。超限時**立即**新增一筆警報(alarm_history,
++  `status` = 「警告」→ 警報頁嚴重程度「警告」、狀態「未處理」);未解除前同一感測器同一方向不重複新增。
++- 回到範圍內(含上下限被停用)**持續 2 秒**(單調時鐘、計時器,不受 PV 更新頻率影響)才把**同一筆**改為已解除
++  (`resolved` / `resolvedAt` / `resolvedDetail`,與漏水 DI1 相同);2 秒內又超限 → 不解除、不新增。
++- `sensorSettingsSv` 變動(含停用)時立即以新設定重新評估所有已有讀值的感測器。
++- 一支感測器在本次執行中第一次收到後端寫入的 PV 之後才判斷(`filter` 需 PT-02 與 PT-03 都有);同一個
++  Modbus 回覆裡的多個 PV 寫完後才一起判斷,所以 `filter` 不會用到「新 PT-02 + 舊 PT-03」。
++- 警報文字:`超過上限：<值> <單位>（上限 <上限> <單位>）`、`低於下限：<值> <單位>（下限 <下限> <單位>）`,
++  數值兩位小數;`sensorName` 用畫面上的名稱:`PT-01`…`PT-07`、`TT-01`…`TT-04`、`流量計`、`Filter 壓差`。
++  reason JSON 另存 `"limit": "upper"|"lower"` 與 `"sensorKey"`(供重啟辨識;`alarmRecords` 欄位不變)。
++- 重啟(比照 w2-053 的 DI):每支感測器第一次判斷時查本月與上月資料檔中該名稱、`status` 為「警告」且未解除的列;
++  每個方向最新的一筆接手為進行中的警報(仍超限 → 不新增;已恢復 → 2 秒後解除),較舊的重複列立即解除。
++  查詢失敗時該感測器不新增警報、下次更新重試(其他感測器在失敗後 500 ms 內延後);所有感測器共用 5 次失敗,
++  用完後尚未查過的感測器都回到一般邏輯(資料檔被鎖住時最多 5 次等待,不會讓畫面卡住數分鐘)。
++- 不影響:原本「量程 90% 高限」警報(`數值異常`,用原始 raw 值)、DI/漏水/MS300 警報、設定儲存與 Modbus server
++  HR 寫入行為都不變。
+diff --git a/Core/manager.cpp b/Core/manager.cpp
+index a3f85fa..7e35d37 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -1,5 +1,6 @@
+ #include "manager.h"
+ 
++#include "LimitAlarms.h"
+ #include "ModbusServerBridgeMapping.h"
+ #include "SqlManager.h"
+ #include "TaidaFlowProxy.h"
+@@ -137,6 +138,9 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
+     , m_serverInputRegisters(ModbusServerBridgeMapping::ServerInputRegisterCount, 0)
+ {
+     loadAiHighAlarmPercentSetting();
++    // w2-085: settings-page upper/lower limit alarms (the 90 % high alarm below is unchanged).
++    m_limitAlarms = new LimitAlarmMonitor(proxy, sql, this);
++    connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
+     m_pollTimer.setInterval(kPollIntervalMs);
+     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
+ 
+@@ -1228,6 +1232,7 @@ void Manager::updateProcessPoint(ModbusMapping::ProcessPoint point, double value
+     case ModbusMapping::ProcessPoint::Mv3Position: m_proxy->setM3ValuePv(value); break;
+     case ModbusMapping::ProcessPoint::Mv4Position: m_proxy->setM4ValuePv(value); break;
+     }
++    m_limitAlarms->processPointUpdated(point);   // w2-085
+ }
+ 
+ void Manager::writeServerData(QModbusDataUnit::RegisterType table,
+diff --git a/Core/manager.h b/Core/manager.h
+index 6194ddc..69d07d8 100644
+--- a/Core/manager.h
++++ b/Core/manager.h
+@@ -14,6 +14,7 @@
+ 
+ class TaidaFlowProxy;
+ class SqlManager;
++class LimitAlarmMonitor;    // w2-085: settings-page limit alarms (Core/LimitAlarms.h)
+ 
+ class Manager final : public QObject
+ {
+@@ -181,4 +182,6 @@ private:
+     QHash<int, double> m_lastAcceptedSv;
+     QHash<int, RepeatedWarningLimiter> m_nonFiniteWarnings;
+     bool m_restoringSv = false;
++    // w2-085: judged after every PV update (updateProcessPoint); its alarmSaved -> alarmSaved.
++    LimitAlarmMonitor *m_limitAlarms = nullptr;
+ };
+diff --git a/Core/tests/CMakeLists.txt b/Core/tests/CMakeLists.txt
+index 06f0a26..94b6e8a 100644
+--- a/Core/tests/CMakeLists.txt
++++ b/Core/tests/CMakeLists.txt
+@@ -8,6 +8,7 @@
+ #   w2-072: tst_modbusclient_offline, tst_ms300_offline, tst_manager_sv_guard
+ #   w2-080: tst_alarm_views
+ #   w2-084: tst_server_heartbeat
++#   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
+ cmake_minimum_required(VERSION 3.21)
+ project(TaidaFlowCoreTests LANGUAGES CXX)
+ 
+@@ -102,6 +103,8 @@ taidaflow_core_test(tst_manager_sv_guard
+     SOURCES
+         tst_manager_sv_guard.cpp
+         "${CORE_DIR}/manager.h"
++        "${CORE_DIR}/LimitAlarms.h"
++        "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
+         "${CORE_DIR}/manager.cpp"
+         "${CORE_DIR}/Modbus_Client.h"
+         "${CORE_DIR}/Modbus_Client.cpp"
+@@ -168,3 +171,40 @@ taidaflow_core_test(tst_server_heartbeat
+         "${CORE_DIR}/TaidaFlowProxy.h"
+     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml)
+ target_compile_definitions(tst_server_heartbeat PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
++
++# ---------------------------------------------------------------------------------------------
++# w2-085: settings-page upper / lower limit alarms (LimitAlarmMonitor, Core/LimitAlarms.h): insert
++# at once, equal = normal, disabled limits, 2 s back in range (injected clock and the real timer),
++# groups judged per sensor, filter = corrected PT-02 - PT-03, offsets, settings changes, restart
++# hand-over and lookup failures, alarmRecords / alarmViews, the UI's own JavaScript rule (read from
++# TaidaFlowContent), the real Manager against two Modbus TCP servers of the test on 127.0.0.1
++# (ports picked by the OS) incl. the unchanged 90 % alarm, and the wiring in the sources.
++# Real SqlManager on a temporary data folder; no device, no fixed port.
++# ---------------------------------------------------------------------------------------------
++taidaflow_core_test(tst_limit_alarms
++    SOURCES
++        tst_limit_alarms.cpp
++        "${CORE_DIR}/LimitAlarms.h"
++        "${CORE_DIR}/LimitAlarms.cpp"
++        "${CORE_DIR}/manager.h"
++        "${CORE_DIR}/manager.cpp"
++        "${CORE_DIR}/Modbus_Client.h"
++        "${CORE_DIR}/Modbus_Client.cpp"
++        "${CORE_DIR}/Ms300FaultReader.h"
++        "${CORE_DIR}/Ms300FaultReader.cpp"
++        "${CORE_DIR}/ModbusMapping.h"
++        "${CORE_DIR}/ModbusServerBridgeMapping.h"
++        "${CORE_DIR}/AlarmViews.h"
++        "${CORE_DIR}/AlarmViews.cpp"
++        "${CORE_DIR}/AlarmRecordFormat.h"
++        "${CORE_DIR}/AlarmRecordFormat.cpp"
++        "${CORE_DIR}/SqlManager.h"
++        "${CORE_DIR}/SqlManager.cpp"
++        "${CORE_DIR}/SqlManagerAlarms.cpp"
++        "${CORE_DIR}/HistoryExport.h"
++        "${CORE_DIR}/HistoryExport.cpp"
++        "${CORE_DIR}/TaidaFlowProxy.h"
++        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
++        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
++    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
++target_compile_definitions(tst_limit_alarms PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+diff --git a/Core/tests/tst_server_heartbeat.cpp b/Core/tests/tst_server_heartbeat.cpp
+index b645978..d25a01e 100644
+--- a/Core/tests/tst_server_heartbeat.cpp
++++ b/Core/tests/tst_server_heartbeat.cpp
+@@ -48,7 +48,8 @@ QString readSource(const QString &relative)
+     QFile file(QDir(QStringLiteral(CORE_SOURCE_DIR)).filePath(relative));
+     if (!file.open(QIODevice::ReadOnly))
+         return QString();
+-    return QString::fromUtf8(file.readAll());
++    // w2-085: a checkout with core.autocrlf=true has CRLF in the working copy; compare as LF.
++    return QString::fromUtf8(file.readAll()).replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
+ }
+ 
+ // Body of "void Core::<name>(" up to the next "\n}\n" (functions of core.cpp end with a column-0 brace).
+diff --git a/README.md b/README.md
+index 0b95d5c..6319e36 100644
+--- a/README.md
++++ b/README.md
+@@ -672,11 +672,47 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
+   `docs\evidence\w2-080\tools\build-mirror-alarm-client.bat`(Proxy Mirror 用戶端,送 `alarmViewRequested` 並印出
+   `alarmViews[sessionId]`;由 w2-050 的匯出用戶端改寫)。
+ 
++## 設定頁上下限超限警報(w2-085)
++
++設定頁每支感測器的上限 / 下限(`Td.sensorSettingsSv`,契約與完整規則見 `Core/SensorSettings.md`「後端超限警報規則」)
++由桌面後端判斷並寫進警報紀錄,做法與漏水感測器(DI1)相同:超限時**立即新增**一筆,回到範圍內**持續 2 秒**後把**同一筆**
++改為「已解除」。
++
++- 程式:`Core/LimitAlarms.{h,cpp}`(`LimitAlarmMonitor`,新檔),`Manager` 只做接線:建構時建立、`updateProcessPoint`
++  寫完 PV 後通知、`alarmSaved` 轉給 `Core::loadAlarmRecords`;警報頁各端檢視(`alarmViews`)由 SqlManager 的
++  `alarmHistoryChanged` 自動更新。只編進桌面版(WASM 不含)。
++- 判斷:校正後數值(原始 PV + offset;Filter 壓差 = 校正後 PT-02 − 校正後 PT-03)> 啟用的上限、或 < 啟用的下限;
++  等於上下限屬正常;壓力一律 kPa(與顯示單位無關)。PT-04/PT-05 等同組感測器各自判斷、各自記錄;上限與下限各自一筆。
++- 紀錄:`sensorName` 用畫面名稱(`PT-04`、`TT-01`、`流量計`、`Filter 壓差`),訊息例如
++  `超過上限：612.35 kPa（上限 600.00 kPa）`、`低於下限：18.20 °C（下限 20.00 °C）`;嚴重程度一律「警告」。
++  未解除前同一感測器同一方向不重複新增;回到範圍又在 2 秒內再超限 → 不解除、不新增。
++- 設定改變(套用、停用)時立即以新設定重新判斷;停用視為回到範圍(2 秒後解除)。
++- 重啟:比照 w2-053 的 DI,第一次讀到值時查本月與上月未解除的同名「警告」列:仍超限 → 沿用原列(不新增),
++  已恢復 → 2 秒後解除;查詢失敗時重試,所有感測器共用 5 次,用完後回到一般邏輯。
++- 原本的「量程 90% 高限」警報(`數值異常`)、DI / 漏水 / MS300 警報、設定儲存與 Modbus server HR 寫入都不變。
++- log:`[LimitAlarm] …`(回到範圍 / 2 秒內再超限 / 重啟接手)、`[SQL] Alarm inserted: … (limit alarm pt04 upper)`、
++  `[SQL] Alarm resolved: …`。
++
++**給 Mango 的測試方法**(模擬器或實機皆可,不需改程式):
++
++1. 開桌面版(或網頁),在主畫面記下某支感測器目前的值,例如 PT-04 = 120.00 kPa。
++2. 到設定頁「設備接口出口壓力」把上限設成比目前值小(例如 100)後套用 → 主畫面的值超過上限;
++   警報頁立刻出現 `PT-04`、`超過上限：120.00 kPa（上限 100.00 kPa）`、嚴重程度「警告」、狀態「未處理」
++   (PT-05 若也超過,另外一筆 `PT-05`)。Filter 壓差可用「Filter 壓差」的上下限測,主畫面 Filter 會變紅(超上限)/ 橘(低於下限)。
++3. 等幾秒:同一筆不會重複出現。
++4. 把上限改回比目前值大(或清空 = 停用)後套用 → 約 2 秒後該筆變成「已解除」(綠色)。
++5. 下限同理(設成比目前值大 → 「低於下限：…」)。
++6. 重啟測試:保持超限時關閉程式再開 → 警報頁仍是原來那一筆「未處理」,不會多一筆;恢復後 2 秒變「已解除」。
++
++測試:`Core/tests` 的 `tst_limit_alarms`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:
++`docs\evidence\w2-085\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端與資料庫列印工具,`live-run.ps1`
++用自己的設定檔 / port / 資料資料夾啟動桌面版兩次並逐項檢查)。
++
+ ## 測試 / 驗證(全部以 exit code 判定)
+ 
+ QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
+ 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
+-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視);
++SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報);
+ 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
+ 
+ ```bat
+@@ -747,7 +783,12 @@ docs\evidence\w2-067\tools\run-qtest.bat
+ ::     不合法輸入、閒置 30 分鐘與最多 32 個的清理、5000 筆月份分步讀取)、
+ ::     tst_server_heartbeat(w2-084 伺服器心跳:啟動立即寫一次、真實 1 秒計時器 6.5 秒內 7 個值且間隔約 1 秒、值 = 當下 epoch ms、
+ ::     在 Proxy 的執行緒寫、stop() 後 3.5 秒不再變化、注入時鐘 + 短間隔、其他執行緒忙碌不影響、非主執行緒 start 被拒、
+-::     core.cpp 的接線(init 最後啟動、shutdown 第一步停止)與只編進桌面版、沒有其他程式寫 serverHeartbeatMs)
++::     core.cpp 的接線(init 最後啟動、shutdown 第一步停止)與只編進桌面版、沒有其他程式寫 serverHeartbeatMs)、
++::     tst_limit_alarms(w2-085 設定頁上下限超限警報:超限立即新增、等於上下限與停用不判斷、回到範圍 1.9 秒內再超限不解除不新增、
++::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
++::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
++::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
++::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)
+ Core\tests\run-core-tests.bat fresh
+ :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
+ ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、

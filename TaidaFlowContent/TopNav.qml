@@ -541,7 +541,7 @@ Rectangle {
     // 設備離線提示 (w1-087)
     // Td.deviceStatus (Core/TaidaFlowProxy.h "Device status", mirrored, written only by the
     // Core): any device with online === false -> orange banner
-    // "設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）" (fixed key order, see
+    // "設備離線：ADAM-6217（192.168.x.y）、MS300（COMx）" (fixed key order, see
     // components/DeviceStatusUtil.js). Empty map / missing fields -> nothing shown.
     // Same on the desktop and the web page; it never disables any control (the other
     // devices stay operable) and disappears as soon as the Core reports the device online.

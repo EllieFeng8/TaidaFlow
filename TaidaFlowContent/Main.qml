@@ -30,6 +30,8 @@ Item {
     // stays anchored at topNavBar.bottom (pushing it down would cut its bottom row,
     // "Leakage Sensor", off the 1080 px window); AlarmPage/HistoryPage, which start
     // right under the nav bar, anchor to offlineBanner.bottom and are pushed down.
+    // w1-087: the device-offline banner (TopNav.qml, also 64 px) uses the same band and is
+    // never shown together with the offline banner, so this holds for it too.
     anchors.top: topNavBar.bottom
     anchors.left: parent.left
     anchors.right: parent.right

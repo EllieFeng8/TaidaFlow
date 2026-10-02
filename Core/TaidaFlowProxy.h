@@ -647,4 +647,66 @@ private:
     double m_serverHeartbeatMs = 0.0;
     // ===== end of server heartbeat ===============================================
 
+    // ===== Device status (w1-087, 2026-10-02) ===================================
+    // Mirrored (Core -> all clients), written ONLY by the Core (desktop and web pages only
+    // read it). Connection state of the field devices, shown by every client as the orange
+    // banner "設備離線：<name>（<address>）、…" below the nav bar
+    // (TaidaFlowContent/TopNav.qml deviceOfflineBanner, components/DeviceStatusUtil.js).
+    // Keys (fixed, also the banner order; deviceStatusKeys()):
+    //   adam6256  - ADAM-6256 (Modbus TCP, default 192.168.1.201)
+    //   adam6217a - ADAM-6217 (Modbus TCP, default 192.168.1.202)
+    //   adam6217b - ADAM-6217 (Modbus TCP, default 192.168.1.203)
+    //   adam6224  - ADAM-6224 (Modbus TCP, default 192.168.1.204)
+    //   adam6022  - ADAM-6022 (Modbus TCP, default 192.168.1.205)
+    //   ms300     - MS300 inverter (serial port, default COM2)
+    // Value of each key: a map (deviceStatusEntry())
+    //   { name,     // QString, shown as is, e.g. "ADAM-6217" (no address in it)
+    //     address,  // QString, the address actually used (config.json), e.g.
+    //               //   "192.168.1.203" or "COM2"
+    //     online,   // bool: false = the banner lists this device
+    //     sinceMs } // double, epoch ms of the last change of `online`
+    // An entry is shown only when online is exactly false and name and address are
+    // non-empty strings; a missing key / field means "unknown" and is not shown.
+    // Empty map (the default) = "unknown": main alone or a Core that does not write it ->
+    // no device banner at all.
+    // When the Core writes it: once all devices are known (after the first connection
+    // attempt of each device has finished - a device whose first attempt is still running is
+    // NOT reported offline), then on every change of a device's connection state (online
+    // changes -> new sinceMs). Always the whole map; an unchanged map is not re-sent.
+    // The banner never disables controls (the other devices stay operable). On the web page
+    // a broken link to the Core (offline / heartbeat banner) takes precedence: the device
+    // banner is hidden then, because the mirrored map may be outdated.
+    Q_PROPERTY(QVariantMap deviceStatus READ deviceStatus WRITE setDeviceStatus NOTIFY deviceStatusChanged)
+public:
+    // The keys of deviceStatus, in banner order.
+    static QStringList deviceStatusKeys()
+    {
+        return { QStringLiteral("adam6256"), QStringLiteral("adam6217a"),
+                 QStringLiteral("adam6217b"), QStringLiteral("adam6224"),
+                 QStringLiteral("adam6022"), QStringLiteral("ms300") };
+    }
+    // One value of deviceStatus (Core side helper).
+    static QVariantMap deviceStatusEntry(const QString &name, const QString &address,
+                                         bool online, double sinceMs)
+    {
+        return QVariantMap{ { QStringLiteral("name"), name },
+                            { QStringLiteral("address"), address },
+                            { QStringLiteral("online"), online },
+                            { QStringLiteral("sinceMs"), sinceMs } };
+    }
+    QVariantMap deviceStatus() const { return m_deviceStatus; }
+    // Called only by the Core (on the Proxy's thread), always with the whole map.
+    void setDeviceStatus(const QVariantMap &status)
+    {
+        if (m_deviceStatus == status)
+            return;
+        m_deviceStatus = status;
+        emit deviceStatusChanged();
+    }
+signals:
+    void deviceStatusChanged();
+private:
+    QVariantMap m_deviceStatus;
+    // ===== end of device status ===================================================
+
 };

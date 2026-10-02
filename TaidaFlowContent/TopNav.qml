@@ -113,12 +113,6 @@ Rectangle {
                     color: root.textColor
                     font.pixelSize: 15
                 }
-
-                Text {
-                    text: "Email : newyisun@gmail.com"
-                    color: root.textColor
-                    font.pixelSize: 15
-                }
             }
         }
 

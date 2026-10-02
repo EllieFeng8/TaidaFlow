@@ -583,8 +583,8 @@ private:
     double m_tt03ValuePv = 0.0;
     double m_tt04ValuePv = 0.0;
     double m_pt01ValuePv = 0.0;
-    double m_pt02ValuePv = 9.0;
-    double m_pt03ValuePv = 1.0;
+    double m_pt02ValuePv = 0.0;
+    double m_pt03ValuePv = 0.0;
     double m_pt04ValuePv = 0.0;
     double m_pt05ValuePv = 0.0;
     double m_pt06ValuePv = 0.0;

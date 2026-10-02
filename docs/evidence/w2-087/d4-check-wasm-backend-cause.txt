@@ -1,0 +1,10 @@
+=== w2-087: cause of check-wasm-backend exit 1 (2026-10-02T21:17:48.5710854+08:00)
+backend_strings hit in build\w2-087-wasm\TaidaFlowApp.wasm: only 'COM2', occurrences: 1
+context (non-printable -> .): ry.address })..    }..    return list..}....// Banner text, e.g. "...............ADAM-6217...192.168.1.203......MS300...COM2..."; "" when no device..// is offline (the banner is hi
+
+source of that text (main w1-087, not changed by w2-087):
+TaidaFlowContent\components\DeviceStatusUtil.js:41: // Banner text, e.g. "設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）"; "" when no device
+TaidaFlowContent\TopNav.qml:544: // "設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）" (fixed key order, see
+git log -1 of DeviceStatusUtil.js: 2f4eed3 feat(ui): 設備離線提示(deviceStatus 介面 + 設備離線橫幅)
+git diff --quiet -- TaidaFlowContent scripts\check-wasm-backend.ps1 -> exit 0 (0 = unchanged by w2-087)
+DeviceStatusPublisher in wasm: see d4-devicestatus-desktop-only.log (compile commands 0, log string False)

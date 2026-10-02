@@ -10,6 +10,7 @@
 #   w2-084: tst_server_heartbeat
 #   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
 #   w2-086: tst_offset_storage (and SensorOffsetStorage.cpp in tst_manager_sv_guard / tst_limit_alarms)
+#   w2-087: tst_device_status (and DeviceStatusPublisher.cpp wherever manager.cpp is compiled)
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -108,6 +109,8 @@ taidaflow_core_test(tst_manager_sv_guard
         "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
         "${CORE_DIR}/SensorOffsetStorage.h"
         "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
+        "${CORE_DIR}/DeviceStatusPublisher.h"
+        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
         "${CORE_DIR}/manager.cpp"
         "${CORE_DIR}/Modbus_Client.h"
         "${CORE_DIR}/Modbus_Client.cpp"
@@ -191,6 +194,8 @@ taidaflow_core_test(tst_limit_alarms
         "${CORE_DIR}/LimitAlarms.cpp"
         "${CORE_DIR}/SensorOffsetStorage.h"
         "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
+        "${CORE_DIR}/DeviceStatusPublisher.h"
+        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
         "${CORE_DIR}/manager.h"
         "${CORE_DIR}/manager.cpp"
         "${CORE_DIR}/Modbus_Client.h"
@@ -228,6 +233,8 @@ taidaflow_core_test(tst_offset_storage
         tst_offset_storage.cpp
         "${CORE_DIR}/SensorOffsetStorage.h"
         "${CORE_DIR}/SensorOffsetStorage.cpp"
+        "${CORE_DIR}/DeviceStatusPublisher.h"
+        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
         "${CORE_DIR}/LimitAlarms.h"
         "${CORE_DIR}/LimitAlarms.cpp"
         "${CORE_DIR}/manager.h"
@@ -254,3 +261,42 @@ taidaflow_core_test(tst_offset_storage
         "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
 target_compile_definitions(tst_offset_storage PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+
+# ---------------------------------------------------------------------------------------------
+# w2-087: TaidaFlowProxy::deviceStatus (DeviceStatusPublisher, Core/DeviceStatusPublisher.h): empty map
+# at start, a key per device only after its first connection attempt, one write per state change (the
+# repeated reconnect attempts of an outage write nothing), lost / restored connection, name / address,
+# empty map after stop, the MS300 port / read rule, the real Manager (start -> keys, stop -> {}) and
+# the wiring in the sources. Real ModbusClient against Modbus TCP servers of the test (QModbusTcpServer,
+# loopback, ports picked by the OS) and a refused loopback address; real Ms300FaultReader with a serial
+# port name that does not exist. Run twice: with the configured hosts and with
+# TAIDAFLOW_DEVICE_PROFILE=simulator (hosts replaced by 127.0.0.201..205, the test's own ports - the
+# shared simulator's port 502 is never used).
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_device_status
+    SOURCES
+        tst_device_status.cpp
+        "${CORE_DIR}/DeviceStatusPublisher.h"
+        "${CORE_DIR}/DeviceStatusPublisher.cpp"
+        "${CORE_DIR}/LimitAlarms.h"
+        "${CORE_DIR}/LimitAlarms.cpp"
+        "${CORE_DIR}/SensorOffsetStorage.h"
+        "${CORE_DIR}/SensorOffsetStorage.cpp"
+        "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/manager.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/ModbusMapping.h"
+        "${CORE_DIR}/ModbusServerBridgeMapping.h"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::SerialBus Qt6::SerialPort)
+target_compile_definitions(tst_device_status PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+add_test(NAME tst_device_status_simulator_profile
+         COMMAND tst_device_status -o "${CMAKE_CURRENT_BINARY_DIR}/tst_device_status_simulator_profile.result.txt,txt" -o "-,txt")
+set_tests_properties(tst_device_status_simulator_profile PROPERTIES
+    ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_FORCE_STDERR_LOGGING=set:1;TAIDAFLOW_DEVICE_PROFILE=set:simulator"
+    TIMEOUT 300)

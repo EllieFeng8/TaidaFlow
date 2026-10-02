@@ -1,0 +1,6 @@
+make-font-subset: C:\Users\TED\AppData\Local\Programs\Python\Launcher\py.exe -3 -B D:\repo\codex\qmlTester\taidaflow\scripts\make_font_subset.py --check
+scanned 229 source files under App, Core, TaidaFlow, TaidaFlowContent, Dependencies
+verify TaidaFlowNotoSansTC-Regular.ttf: family='TaidaFlow Noto Sans TC' style='Regular' weight=400 glyphs=1154 size=245368 missing=0
+verify TaidaFlowNotoSansTC-Bold.ttf: family='TaidaFlow Noto Sans TC' style='Bold' weight=700 glyphs=1154 size=246028 missing=0
+chars: total=779 cjk=558 total_font_bytes=491396
+exit=0

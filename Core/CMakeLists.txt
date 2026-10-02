@@ -49,6 +49,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
         # w2-086: settings-page offsets applied to sensor_data and the Modbus server PVs (owned by Manager)
         SensorOffsetStorage.h
         SensorOffsetStorage.cpp
+        # w2-087: device connection states -> TaidaFlowProxy::deviceStatus (owned by Manager)
+        DeviceStatusPublisher.h
+        DeviceStatusPublisher.cpp
         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
         AppHttpServer/AppHttpServer.h

@@ -1,0 +1,67 @@
+﻿=== w2-087 live run 2026-10-02T21:16:00.3078669+08:00
+21:16:00.349 other TaidaFlowApp / nginx processes (not touched): TaidaFlowApp 105468 D:\repo\codex\qmlTester\taidaflow-main\build\pm-main-ui\TaidaFlowApp.exe
+21:16:00.375 Adam60xxSimulator running (pid 91076) - shared, not stopped
+21:16:01.344 ports free: 5397, 8397, 8398, 18397, 18398
+21:16:01.390 test config D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-087\config.w2-087-offline.json device hosts: 127.0.0.201, 127.0.0.202, 127.0.0.210, 127.0.0.204, 127.0.0.205; ms300 COM2
+21:16:01.403 PASS test config: every device host is 127.x
+21:16:01.405 PASS test config: devices.adam6217b.host = 127.0.0.210 (sim config 127.0.0.203)
+21:16:01.415 PASS test config: other devices and ports as the sim config; Modbus server port 5397 (not 502); nginx off
+21:16:04.507 PASS gate 1: safety_probe config.w2-087-sim.json -DeviceProfile simulator -> exit 0 (expected 0 SAFE)
+21:16:07.172 PASS gate 2: safety_probe test config -> exit 5 (expected 5); not-ready:   device 127.0.0.210:502 [effective devices.adam6217b (file)] -> loopback, nobody listening -> SIMULATOR NOT READY (start scripts\run-simulator.ps1 first); UNSAFE/BUSY lines: 0
+21:16:07.175 data folder (fresh): D:\repo\codex\qmlTester\taidaflow\build\w2-087-run\live
+21:16:07.197 app started pid=91684 (TAIDAFLOW_CONFIG=config.w2-087-offline.json, no TAIDAFLOW_DEVICE_PROFILE)
+21:16:10.764 app listeners: 127.0.0.1:5397 | 127.0.0.1:8397 | 127.0.0.1:8398 | 127.0.0.1:18397 | 127.0.0.1:18398
+21:16:10.767 PASS app listens on its 5 ports (5397, 8397, 8398, 18397, 18398), loopback only
+21:17:16.278 client exit=0
+21:17:16.280 PASS mirror client: final deviceStatus as expected (4 ADAM online, ADAM-6217 127.0.0.210 and MS300 COM2 offline, names / addresses)
+21:17:16.292   client: 21:16:11.234 contractHash=8eb166a8f25d49394afd75e6bb99d4e5939cd47e64e82957d2297e65ab60286a
+21:17:16.294   client: 21:16:11.284 welcome, connectionSessionId=8ad4ec49-ea50-4a07-bf45-f467b302232e
+21:17:16.296   client: 21:16:11.285 DEVICESTATUS #0 [snapshot] {"adam6022":{"address":"127.0.0.205","name":"ADAM-6022","online":true,"sinceMs":1790946968105},"adam6217a":{"address":"127.0.0.202","name":"ADAM-6217","online":true,"sinceMs":1790946968105},"adam6224":{"address":"127.0.0.204","name":"ADAM-6224","online":true,"sinceMs":1790946968104},"adam6256":{"address":"127.0.0.201","name":"ADAM-6256","online":true,"sinceMs":1790946968106},"ms300":{"address":"COM2","name":"MS300","online":false,"sinceMs":1790946967530}}
+21:17:16.297   client: 21:16:11.285 BANNER 設備離線：MS300（COM2）
+21:17:16.298   client: 21:16:11.600 DEVICESTATUS #1 [patch] {"adam6022":{"address":"127.0.0.205","name":"ADAM-6022","online":true,"sinceMs":1790946968105},"adam6217a":{"address":"127.0.0.202","name":"ADAM-6217","online":true,"sinceMs":1790946968105},"adam6217b":{"address":"127.0.0.210","name":"ADAM-6217","online":false,"sinceMs":1790946971599},"adam6224":{"address":"127.0.0.204","name":"ADAM-6224","online":true,"sinceMs":1790946968104},"adam6256":{"address":"127.0.0.201","name":"ADAM-6256","online":true,"sinceMs":1790946968106},"ms300":{"address":"COM2","name":"MS300","online":false,"sinceMs":1790946967530}}
+21:17:16.300   client: 21:16:11.600 BANNER 設備離線：ADAM-6217（127.0.0.210）、MS300（COM2）
+21:17:16.302   client: 21:17:16.269 FINAL BANNER 設備離線：ADAM-6217（127.0.0.210）、MS300（COM2）
+21:17:16.303   client: 21:17:16.269 PASS snapshot received
+21:17:16.304   client: 21:17:16.269 PASS keys adam6022,adam6217a,adam6217b,adam6224,adam6256,ms300 (expected adam6022,adam6217a,adam6217b,adam6224,adam6256,ms300)
+21:17:16.305   client: 21:17:16.269 PASS adam6022 = name ADAM-6022, address 127.0.0.205, online true, sinceMs 1790946968105 (21:16:08.105)
+21:17:16.370   client: 21:17:16.269 PASS adam6217a = name ADAM-6217, address 127.0.0.202, online true, sinceMs 1790946968105 (21:16:08.105)
+21:17:16.374   client: 21:17:16.269 PASS adam6217b = name ADAM-6217, address 127.0.0.210, online false, sinceMs 1790946971599 (21:16:11.599)
+21:17:16.375   client: 21:17:16.269 PASS adam6224 = name ADAM-6224, address 127.0.0.204, online true, sinceMs 1790946968104 (21:16:08.104)
+21:17:16.377   client: 21:17:16.269 PASS adam6256 = name ADAM-6256, address 127.0.0.201, online true, sinceMs 1790946968106 (21:16:08.106)
+21:17:16.378   client: 21:17:16.270 PASS ms300 = name MS300, address COM2, online false, sinceMs 1790946967530 (21:16:07.530)
+21:17:16.379   client: 21:17:16.270 PASS changes after the snapshot 1 <= 6
+21:17:16.379   client: 21:17:16.270 RESULT updates=2 changesAfterSnapshot=1 failures=0 -> OK
+21:17:22.591 uptime 75 s; WM_CLOSE sent=True exited=True exit_code=0
+21:17:22.594 PASS app ran 75 s (>= 60 s)
+21:17:22.595 PASS app closed with exit code 0
+21:17:24.159 PASS no listener of the app left
+21:17:24.231   log: 2026-10-02 21:16:07.483 [info] [DeviceStatus] started (empty map until each device's first connection attempt has a result): adam6256 ADAM-6256 127.0.0.201, adam6217a ADAM-6217 127.0.0.202, adam6217b ADAM-6217 127.0.0.210, adam6224 ADAM-6224 127.0.0.204, adam6022 ADAM-6022 127.0.0.205, ms300 MS300 COM2
+21:17:24.232   log: 2026-10-02 21:16:07.483 [info] [DeviceStatus] write #1: {}
+21:17:24.234   log: 2026-10-02 21:16:07.530 [info] [DeviceStatus] MS300 COM2 (ms300): OFFLINE (serial port not open, first result)
+21:17:24.234   log: 2026-10-02 21:16:07.530 [info] [DeviceStatus] write #2: {ms300=OFFLINE}
+21:17:24.236   log: 2026-10-02 21:16:08.104 [info] [DeviceStatus] ADAM-6224 127.0.0.204 (adam6224): online (connected, first result)
+21:17:24.237   log: 2026-10-02 21:16:08.104 [info] [DeviceStatus] write #3: {adam6224=online, ms300=OFFLINE}
+21:17:24.238   log: 2026-10-02 21:16:08.105 [info] [DeviceStatus] ADAM-6022 127.0.0.205 (adam6022): online (connected, first result)
+21:17:24.239   log: 2026-10-02 21:16:08.105 [info] [DeviceStatus] write #4: {adam6022=online, adam6224=online, ms300=OFFLINE}
+21:17:24.240   log: 2026-10-02 21:16:08.105 [info] [DeviceStatus] ADAM-6217 127.0.0.202 (adam6217a): online (connected, first result)
+21:17:24.241   log: 2026-10-02 21:16:08.105 [info] [DeviceStatus] write #5: {adam6022=online, adam6217a=online, adam6224=online, ms300=OFFLINE}
+21:17:24.242   log: 2026-10-02 21:16:08.106 [info] [DeviceStatus] ADAM-6256 127.0.0.201 (adam6256): online (connected, first result)
+21:17:24.243   log: 2026-10-02 21:16:08.106 [info] [DeviceStatus] write #6: {adam6022=online, adam6217a=online, adam6224=online, adam6256=online, ms300=OFFLINE}
+21:17:24.244   log: 2026-10-02 21:16:11.599 [info] [DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)
+21:17:24.245   log: 2026-10-02 21:16:11.599 [info] [DeviceStatus] write #7: {adam6022=online, adam6217a=online, adam6217b=OFFLINE, adam6224=online, adam6256=online, ms300=OFFLINE}
+21:17:24.246   log: 2026-10-02 21:17:22.454 [info] [DeviceStatus] stopped: deviceStatus = {} (unknown)
+21:17:24.247   log: 2026-10-02 21:17:22.454 [info] [DeviceStatus] write #8: {}
+21:17:24.256 PASS log: one first-result line per device (6 of 6)
+21:17:24.279 PASS log: ADAM-6217 B OFFLINE written once (1) while 10 reconnect attempts failed
+21:17:24.314 PASS log: MS300 OFFLINE written once (1) while 21 open attempts failed
+21:17:24.325 PASS log: ADAM-6256 127.0.0.201 (adam6256) online once, never OFFLINE
+21:17:24.326 PASS log: ADAM-6217 127.0.0.202 (adam6217a) online once, never OFFLINE
+21:17:24.328 PASS log: ADAM-6224 127.0.0.204 (adam6224) online once, never OFFLINE
+21:17:24.329 PASS log: ADAM-6022 127.0.0.205 (adam6022) online once, never OFFLINE
+21:17:24.338 PASS log: writes = start {} + 6 first results + shutdown {} (8 writes, last: 2026-10-02 21:17:22.454 [info] [DeviceStatus] write #8: {})
+21:17:24.378 PASS log: shutdown writes {} inside Core::shutdown (lines 2411 < 2412 < 2424)
+21:17:24.388 PASS log: no device state written after the stop (0)
+21:17:24.408 PASS log: no QML error/warning lines (0)
+21:17:24.426 PASS other TaidaFlowApp / nginx processes still running: 1 of 1
+21:17:24.445 PASS Adam60xxSimulator pid 91076 still running
+21:17:24.446 === all checks passed

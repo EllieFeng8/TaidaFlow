@@ -1,0 +1,3 @@
+desktop: DeviceStatusPublisher.cpp compile commands=2, log string in TaidaFlowApp.exe=True, deviceStatusChanged=True
+wasm   : DeviceStatusPublisher.cpp compile commands=0, log string in TaidaFlowApp.wasm=False, deviceStatusChanged=True
+exit=0

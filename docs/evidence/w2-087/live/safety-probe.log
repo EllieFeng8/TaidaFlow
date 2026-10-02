@@ -1,0 +1,30 @@
+﻿=== safety probe 2026-10-02T21:16:01.698+08:00 reason="w2-087 live gate 1" host=LAPTOP-0B3CPPED profile=simulator
+  config: D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-087\config.w2-087-sim.json
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.203:502 [effective devices.adam6217b (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 5397=modbusServer.port (Modbus server); 8397=http.port (web page + CSV downloads); 8398=mirror.publicPort (LAN relay); 18398=mirror.internalPort (internal mirror); 18397=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SAFE
+=== safety probe 2026-10-02T21:16:04.795+08:00 reason="w2-087 live gate 2 (test config)" host=LAPTOP-0B3CPPED
+  config: D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-087\config.w2-087-offline.json
+  local IPv4: 192.168.83.1/24, 192.168.158.1/24, 192.168.0.125/24
+  device 127.0.0.201:502 [effective devices.adam6256 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.202:502 [effective devices.adam6217a (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.210:502 [effective devices.adam6217b (file)] -> loopback, nobody listening -> SIMULATOR NOT READY (start scripts\run-simulator.ps1 first)
+  device 127.0.0.204:502 [effective devices.adam6224 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  device 127.0.0.205:502 [effective devices.adam6022 (file)] -> Adam60xxSimulator (D:\repo\codex\qmlTester\Adam60xxSimulator\build\Adam60xxSimulator.exe) pid=91076 -> accepted
+  serial GetPortNames: <none>
+  serial SERIALCOMM  : <none>
+  serial PnP (COMx)  : <none>
+  COM2 (devices.ms300.serialPort, file) not present
+  service ports: 5397=modbusServer.port (Modbus server); 8397=http.port (web page + CSV downloads); 8398=mirror.publicPort (LAN relay); 18398=mirror.internalPort (internal mirror); 18397=rest.port (REST API); 80=nginx.port (nginx web front end, information only)
+  listeners on the service ports: <none>
+  verdict: SIMULATOR-NOT-READY

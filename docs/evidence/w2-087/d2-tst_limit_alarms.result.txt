@@ -1,0 +1,769 @@
+********* Start testing of TestLimitAlarms *********
+Config: Using QtTest library 6.8.3, Qt 6.8.3 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2022), windows 11
+QWARN  : TestLimitAlarms::initTestCase() Schema file not found "C:/Users/TED/AppData/Local/Temp/tst_limit_alarms-nsyQmM/settings_schema.sql" - the built-in schema is used (logged once per run; later missing schema files are not logged)
+PASS   : TestLimitAlarms::initTestCase()
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop request #1 (new view) page 1, range 1790943167081 .. 1790950367081 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop #1 applied: page 1 (requested 1), 0 row(s), total 0, active 0, 0 month file(s); SqlManager 1 step(s) (longest 0.19 ms); request-to-apply 19.81 ms.
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop entry written: state ready, page 1/1, 0 row(s), total 0, active 0, revision 1; alarmViews has 1 entry.
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [LimitAlarm][Restart] PT-04 first value after start: 150.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.1 ms)
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [SQL] Alarm inserted: sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） status=警告 id=1 (limit alarm pt04 upper)
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [LimitAlarm][Restart] TT-01 first value after start: 12.50 °C (below the lower limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [SQL] Alarm inserted: sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） status=警告 id=2 (limit alarm tt01 lower)
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] alarm row written at 1790946767 s: 1 of 1 view(s) hold that time, read again: desktop
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop request #2 (alarm changed) page 1, range 1790943167081 .. 1790950367081 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] alarm row written at 1790946767 s: 1 of 1 view(s) hold that time, read again: desktop
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop request #3 (alarm changed) page 1, range 1790943167081 .. 1790950367081 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop result #2 dropped: stale, newest request of this session is #3 (not finished by SqlManager).
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop #3 applied: page 1 (requested 1), 2 row(s), total 2, active 2, 1 month file(s); SqlManager 2 step(s) (longest 0.13 ms); request-to-apply 17.42 ms.
+QINFO  : TestLimitAlarms::upperAndLowerInsertAtOnce() [Alarm] desktop entry written: state ready, page 1/1, 2 row(s), total 2, active 2, revision 2; alarmViews has 1 entry.
+PASS   : TestLimitAlarms::upperAndLowerInsertAtOnce()
+QINFO  : TestLimitAlarms::equalIsNormal() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm][Restart] PT-01 first value after start: 100.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm][Restart] 流量計 first value after start: 5.00 L/min (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::equalIsNormal() [LimitAlarm] sensor settings changed: re-evaluating 2 sensor(s) with a value (pt01,flowMeter).
+QINFO  : TestLimitAlarms::equalIsNormal() [SQL] Alarm inserted: sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） status=警告 id=3 (limit alarm pt01 upper)
+QINFO  : TestLimitAlarms::equalIsNormal() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::equalIsNormal() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::equalIsNormal() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::equalIsNormal()
+QINFO  : TestLimitAlarms::disabledNotJudged() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::disabledNotJudged() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::disabledNotJudged() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::disabledNotJudged() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::disabledNotJudged() [LimitAlarm][Restart] PT-02 first value after start: 30.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::disabledNotJudged() [LimitAlarm][Restart] TT-04 first value after start: 5.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.1 ms)
+QINFO  : TestLimitAlarms::disabledNotJudged() [SQL] Alarm inserted: sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） status=警告 id=4 (limit alarm tt04 upper)
+QINFO  : TestLimitAlarms::disabledNotJudged() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::disabledNotJudged() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::disabledNotJudged() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::disabledNotJudged() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::disabledNotJudged()
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop request #1 (new view) page 1, range 1790943167254 .. 1790950367254 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop #1 applied: page 1 (requested 1), 4 row(s), total 4, active 0, 1 month file(s); SqlManager 2 step(s) (longest 0.24 ms); request-to-apply 17.14 ms.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop entry written: state ready, page 1/1, 4 row(s), total 4, active 0, revision 1; alarmViews has 1 entry.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm][Restart] PT-06 first value after start: 250.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.7 ms)
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [SQL] Alarm inserted: sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） status=警告 id=5 (limit alarm pt06 upper)
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] alarm row written at 1790946767 s: 1 of 1 view(s) hold that time, read again: desktop
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop request #2 (alarm changed) page 1, range 1790943167254 .. 1790950367254 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop #2 applied: page 1 (requested 1), 5 row(s), total 5, active 1, 1 month file(s); SqlManager 2 step(s) (longest 0.31 ms); request-to-apply 21.89 ms.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop entry written: state ready, page 1/1, 5 row(s), total 5, active 1, revision 2; alarmViews has 1 entry.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm] PT-06 超過上限 back in range (150.00 kPa; 上限 200.00 kPa): id=5 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm] PT-06 超過上限 again (201.00 kPa, 上限 200.00 kPa) 1900 ms after it was back in range: id=5 stays unresolved, no new row.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [LimitAlarm] PT-06 超過上限 back in range (199.99 kPa; 上限 200.00 kPa): id=5 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [SQL] Alarm resolved: id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） status=警告 detail=超過上限 解除（PT-06=180.00 kPa，上限 200.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:47
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] alarm row written at 1790946767 s: 1 of 1 view(s) hold that time, read again: desktop
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop request #3 (alarm changed) page 1, range 1790943167254 .. 1790950367254 ms (1790943168 .. 1790950367 s), 1 session(s).
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop #3 applied: page 1 (requested 1), 5 row(s), total 5, active 0, 1 month file(s); SqlManager 2 step(s) (longest 0.35 ms); request-to-apply 22.29 ms.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm] desktop entry written: state ready, page 1/1, 5 row(s), total 5, active 0, revision 3; alarmViews has 1 entry.
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [SQL] Alarm inserted: sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） status=警告 id=6 (limit alarm pt06 upper)
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::resolveAfterTwoSeconds() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::resolveAfterTwoSeconds()
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::realClockTimerResolves() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::realClockTimerResolves() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::realClockTimerResolves() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::realClockTimerResolves() [LimitAlarm][Restart] PT-07 first value after start: 120.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::realClockTimerResolves() [SQL] Alarm inserted: sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） status=警告 id=7 (limit alarm pt07 upper)
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [LimitAlarm] PT-07 超過上限 back in range (90.00 kPa; 上限 100.00 kPa): id=7 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm] alarm row written at 1790946767 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::realClockTimerResolves() [SQL] Alarm resolved: id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（PT-07=90.00 kPa，上限 100.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::realClockTimerResolves() [Alarm] alarm row written at 1790946767 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::realClockTimerResolves() [w2-085 test] resolved 2028 ms after the value went back in range (no PV update)
+PASS   : TestLimitAlarms::realClockTimerResolves()
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm][Restart] PT-04 first value after start: 121.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [SQL] Alarm inserted: sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） status=警告 id=8 (limit alarm pt04 upper)
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=1 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm][Restart] PT-05 first value after start: 59.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [SQL] Alarm inserted: sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） status=警告 id=9 (limit alarm pt05 upper)
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm] PT-04 超過上限 back in range (51.00 kPa; 上限 100.00 kPa): id=8 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [SQL] Alarm resolved: id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（PT-04=51.00 kPa，上限 100.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=2 sensor=TT-01 message=低於下限：12.50 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [LimitAlarm] PT-05 超過上限 back in range (9.00 kPa; 上限 100.00 kPa): id=9 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [SQL] Alarm inserted: sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） status=警告 id=10 (limit alarm pt05 lower)
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [SQL] Alarm resolved: id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（PT-05=9.00 kPa，上限 100.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::groupSensorsSeparately() [Alarm][UI] id=3 sensor=PT-01 message=超過上限：100.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::groupSensorsSeparately()
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm][Restart] PT-02 first value after start: 310.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm][Restart] PT-03 first value after start: 245.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm][Restart] Filter 壓差 first value after start: 65.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.1 ms)
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [SQL] Alarm inserted: sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） status=警告 id=11 (limit alarm filter upper)
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [LimitAlarm] Filter 壓差 超過上限 back in range (55.00 kPa; 上限 60.00 kPa): id=11 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [SQL] Alarm resolved: id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） status=警告 detail=超過上限 解除（Filter 壓差=55.00 kPa，上限 60.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=4 sensor=TT-04 message=超過上限：95.00 °C（上限 90.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm] alarm row written at 1790946769 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm] alarm row written at 1790946769 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [SQL] Alarm inserted: sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） status=警告 id=12 (limit alarm filter lower)
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::filterUsesCorrectedDifference() [Alarm][UI] id=5 sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::filterUsesCorrectedDifference()
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm][Restart] PT-01 first value after start: 105.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::offsetApplied() [SQL] Alarm inserted: sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） status=警告 id=13 (limit alarm pt01 upper)
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (pt01).
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm] PT-01 超過上限 back in range (95.00 kPa; 上限 100.00 kPa): id=13 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::offsetApplied() [SQL] Alarm resolved: id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（PT-01=95.00 kPa，上限 100.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=6 sensor=PT-06 message=超過上限：300.00 kPa（上限 200.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (pt01).
+QINFO  : TestLimitAlarms::offsetApplied() [LimitAlarm][Restart] TT-02 first value after start: 25.00 °C (below the lower limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.1 ms)
+QINFO  : TestLimitAlarms::offsetApplied() [SQL] Alarm inserted: sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） status=警告 id=14 (limit alarm tt02 lower)
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::offsetApplied() [Alarm][UI] id=7 sensor=PT-07 message=超過上限：120.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::offsetApplied()
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm][Restart] TT-03 first value after start: 50.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (tt03).
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [SQL] Alarm inserted: sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） status=警告 id=15 (limit alarm tt03 upper)
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=8 sensor=PT-04 message=超過上限：121.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (tt03).
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] TT-03 超過上限 back in range (50.00 °C; 上限 disabled): id=15 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [SQL] Alarm inserted: sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） status=警告 id=16 (limit alarm tt03 lower)
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [SQL] Alarm resolved: id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） status=警告 detail=超過上限 解除（上限已停用，TT-03=50.00 °C） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (tt03).
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] TT-03 低於下限 back in range (50.00 °C; 下限 disabled): id=16 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [SQL] Alarm resolved: id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） status=警告 detail=低於下限 解除（下限已停用，TT-03=50.00 °C） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [Alarm][UI] id=9 sensor=PT-05 message=超過上限：129.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::settingsChangeReevaluates() [LimitAlarm] sensor settings changed: re-evaluating 1 sensor(s) with a value (tt03).
+PASS   : TestLimitAlarms::settingsChangeReevaluates()
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-04 first value after start: 150.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm inserted: sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） status=警告 id=17 (limit alarm pt04 upper)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=10 sensor=PT-05 message=低於下限：9.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] TT-01 first value after start: 10.00 °C (below the lower limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.1 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm inserted: sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） status=警告 id=18 (limit alarm tt01 lower)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-04 first value after start: 151.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 3 id=17(202610 2026-10-02 21:12:49) id=19(202610 2026-10-02 21:10:49) id=1(202609 2026-09-02 21:12:49) (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-04 超過上限: took over id=17 (2026-10-02 21:12:49) as the active alarm row; still violated, no new row.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-04 超過上限: resolving id=19 (2026-10-02 21:10:49): older duplicate of id=17.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-04 超過上限: resolving id=1 (2026-09-02 21:12:49): older duplicate of id=17.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm resolved: id=19 sensor=PT-04 message=超過上限：140.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（重啟後由 id=17 接手） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm resolved: id=1 sensor=PT-04 message=超過上限：140.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（重啟後由 id=17 接手） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] TT-01 first value after start: 25.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 1 id=18(202610 2026-10-02 21:12:49) (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] TT-01 低於下限: took over id=18 (2026-10-02 21:12:49) as the active alarm row; now in range, resolved after 2000 ms in range.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] TT-01 低於下限 back in range (25.00 °C; 下限 20.00 °C): id=18 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-02 first value after start: 30.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 1 id=22(202610 2026-10-02 21:12:19) (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-02 超過上限: took over id=22 (2026-10-02 21:12:19) as the active alarm row; now in range, resolved after 2000 ms in range.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] PT-02 超過上限 back in range (30.00 kPa; 上限 60.00 kPa): id=22 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-03 first value after start: 0.50 kPa (below the lower limit); unresolved 警告 rows from earlier runs in 202610+202609: 1 id=23(202610 2026-10-02 21:12:19) (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] PT-03 低於下限: took over id=23 (2026-10-02 21:12:19) as the active alarm row; still violated, no new row.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm][Restart] Filter 壓差 first value after start: 29.50 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm resolved: id=22 sensor=PT-02 message=超過上限：70.00 kPa（上限 60.00 kPa） status=警告 detail=超過上限 解除（PT-02=30.00 kPa，上限 60.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm resolved: id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） status=警告 detail=低於下限 解除（TT-01=25.00 °C，下限 20.00 °C，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [LimitAlarm] PT-04 超過上限 back in range (80.00 kPa; 上限 100.00 kPa): id=17 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::restartNoDuplicate() [SQL] Alarm resolved: id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） status=警告 detail=超過上限 解除（PT-04=80.00 kPa，上限 100.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:12:49
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartNoDuplicate() [Alarm][UI] id=11 sensor=Filter 壓差 message=超過上限：65.00 kPa（上限 60.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+PASS   : TestLimitAlarms::restartNoDuplicate()
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm] sensor settings changed: re-evaluating 0 sensor(s) with a value (none yet).
+QWARN  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-06 lookup of unresolved rows from earlier runs failed (attempt 1/5, 7350.9 ms): database is locked Unable to fetch row (202609); retrying, no new PT-06 row until then.
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-07 lookup deferred (a lookup failed 0 ms ago); no new PT-07 row until then.
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-06 first value after start: 250.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 1 id=24(202610 2026-10-02 21:12:19) (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-06 超過上限: took over id=24 (2026-10-02 21:12:19) as the active alarm row; still violated, no new row.
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-07 first value after start: 250.00 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::restartLookupFailure() [SQL] Alarm inserted: sensor=PT-07 message=超過上限：250.00 kPa（上限 200.00 kPa） status=警告 id=25 (limit alarm pt07 upper)
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=25 sensor=PT-07 message=超過上限：250.00 kPa（上限 200.00 kPa） coreStatus=警告 -> alarmStatus=未處理 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=18 sensor=TT-01 message=低於下限：10.00 °C（下限 20.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=17 sensor=PT-04 message=超過上限：150.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=16 sensor=TT-03 message=低於下限：50.00 °C（下限 60.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=15 sensor=TT-03 message=超過上限：50.00 °C（上限 40.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=14 sensor=TT-02 message=低於下限：25.00 °C（下限 30.00 °C） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=13 sensor=PT-01 message=超過上限：105.00 kPa（上限 100.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [Alarm][UI] id=12 sensor=Filter 壓差 message=低於下限：15.00 kPa（下限 20.00 kPa） coreStatus=警告 resolved=true -> alarmStatus=已解除 severity=警告
+QINFO  : TestLimitAlarms::restartLookupFailure() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QWARN  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-06 lookup failed 1 times (database is locked Unable to fetch row (202609)); giving up: rows of earlier runs stay as they are and the normal limit logic runs.
+QINFO  : TestLimitAlarms::restartLookupFailure() [SQL] Alarm inserted: sensor=PT-06 message=超過上限：250.00 kPa（上限 200.00 kPa） status=警告 id=27 (limit alarm pt06 upper)
+QWARN  : TestLimitAlarms::restartLookupFailure() [LimitAlarm][Restart] PT-07: restart lookups were given up after 1 failures; rows of earlier runs stay as they are and the normal limit logic runs.
+QINFO  : TestLimitAlarms::restartLookupFailure() [SQL] Alarm inserted: sensor=PT-07 message=超過上限：250.00 kPa（上限 200.00 kPa） status=警告 id=28 (limit alarm pt07 upper)
+PASS   : TestLimitAlarms::restartLookupFailure()
+QINFO  : TestLimitAlarms::uiRuleEquivalence() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::uiRuleEquivalence() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::uiRuleEquivalence() [w2-085 test] Main.qml limitState: limitState(deltaKpa, limits)
+QINFO  : TestLimitAlarms::uiRuleEquivalence() [w2-085 test] UI rule vs limitState(): 7488 cases equal (2732 violated, 4756 normal)
+PASS   : TestLimitAlarms::uiRuleEquivalence()
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device profile=default
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device ADAM-6256 -> 127.0.0.1:49921 unit=1 timeout=1000ms retries=2
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device ADAM-6217 A -> 127.0.0.1:49920 unit=1 timeout=1000ms retries=2
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device ADAM-6217 B -> 127.0.0.1:49921 unit=1 timeout=1000ms retries=2
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device ADAM-6224 -> 127.0.0.1:49921 unit=1 timeout=1000ms retries=2
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus] device ADAM-6022 -> 127.0.0.1:49921 unit=1 timeout=1000ms retries=2
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT, 9600 baud, data bits 8, parity none, stop bits 1, unit 1, timeout 1000 ms, retries 1, poll 1000 ms
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm] AI high-alarm setting loaded: 90.0% (raw >= 58982).
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+QINFO  : TestLimitAlarms::managerIntegration() [SensorOffset] offsets are applied to sensor_data and the Modbus server input registers (stored = round(raw + offset / scale), clamped 0..65535); 12 columns: tt01=s1/IR0 x0.00152590219 °C, tt02=s2/IR1 x0.00152590219 °C, tt03=s3/IR2 x0.00152590219 °C, tt04=s4/IR3 x0.00152590219 °C, pt01=s5/IR4 x0.0152590219 kPa, pt02=s6/IR5 x0.0152590219 kPa, pt03=s7/IR6 x0.0152590219 kPa, pt04=s8/IR7 x0.0152590219 kPa, pt05=s9/IR8 x0.0152590219 kPa, pt06=s10/IR9 x0.0152590219 kPa, pt07=s11/IR10 x0.0152590219 kPa, flowMeter=s12/IR11 x1 L/min
+QINFO  : TestLimitAlarms::managerIntegration() [SensorOffset] offsets in use from the next sample: none (raw counts are stored)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] started (empty map until each device's first connection attempt has a result): adam6256 ADAM-6256 127.0.0.1, adam6217a ADAM-6217 127.0.0.1, adam6217b ADAM-6217 127.0.0.1, adam6224 ADAM-6224 127.0.0.1, adam6022 ADAM-6022 127.0.0.1, ms300 MS300 TAIDAFLOW_TEST_NO_SUCH_PORT
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #1: {}
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: disconnected
+QWARN  : TestLimitAlarms::managerIntegration() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT: Referenced serial device does not exist. (not open for 0 s, 1 connection attempt(s); next attempt in 3 s)
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: 系統找不到指定的檔案。
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] MS300 TAIDAFLOW_TEST_NO_SUCH_PORT (ms300): OFFLINE (serial port not open, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #2: {ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] ADAM-6217 127.0.0.1 (adam6217b): online (connected, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #3: {adam6217b=online, ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6217 B (127.0.0.1) connected 
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] ADAM-6022 127.0.0.1 (adam6022): online (connected, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #4: {adam6022=online, adam6217b=online, ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6022 (127.0.0.1) connected 
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] ADAM-6217 127.0.0.1 (adam6217a): online (connected, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #5: {adam6022=online, adam6217a=online, adam6217b=online, ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6217 A (127.0.0.1) connected 
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] ADAM-6224 127.0.0.1 (adam6224): online (connected, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #6: {adam6022=online, adam6217a=online, adam6217b=online, adam6224=online, ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6224 (127.0.0.1) connected 
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] ADAM-6256 127.0.0.1 (adam6256): online (connected, first result)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #7: {adam6022=online, adam6217a=online, adam6217b=online, adam6224=online, adam6256=online, ms300=OFFLINE}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6256 (127.0.0.1) connected 
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] motorRunningSv <- false from ADAM-6256 DO3 (coil 19) = 0 (was false)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] wayValveOpenSv <- false from ADAM-6256 DO4 (coil 20) = 0 (was false)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] emergencyStopSv <- true from ADAM-6256 DO2 (coil 18) = 0, active-low (was false)
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm][Restart] DI0 first read after start: DI0=1 (normal); unresolved 異常 rows from earlier runs in 202610+202609: 0 (lookup 0.8 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm][Restart] DI1 first read after start: DI1=0 (normal); unresolved 異常 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Leak] ADAM-6224 DI1=0 -> leakDetectedPv=false
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm][Restart] DI2 first read after start: DI2=0 (normal); unresolved 異常 rows from earlier runs in 202610+202609: 0 (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] m1ValueSv <- 0.00 % from ADAM-6224 HR0 raw=0 (was 0.00)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] m2ValueSv <- 0.00 % from ADAM-6224 HR1 raw=0 (was 0.00)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] m3ValueSv <- 0.00 % from ADAM-6224 HR2 raw=0 (was 0.00)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] m4ValueSv <- 0.00 % from ADAM-6224 HR3 raw=0 (was 0.00)
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Alarm inserted: sensor=PT-03 message=輸入值達到設定高限 90.0%（raw=65535，threshold=58982） status=數值異常 id=29
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=32768 server=32768
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=32768 value=500.008
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] pump2HzSv <- 0.00 Hz from ADAM-6022 HR10 raw=0 (was 0.00)
+QINFO  : TestLimitAlarms::managerIntegration() [SV sync] Startup device sync complete (ADAM-6224 HR0..3, ADAM-6022 HR10, ADAM-6256 DO2..DO4): SV-triggered writes suppressed=0, Modbus write requests since start=0.
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-01 first value after start: 0.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-02 first value after start: 0.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-03 first value after start: 1000.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-04 first value after start: 500.01 kPa (above the upper limit); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Alarm inserted: sensor=PT-04 message=超過上限：500.01 kPa（上限 400.00 kPa） status=警告 id=30 (limit alarm pt04 upper)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-05 first value after start: 0.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-06 first value after start: 0.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] PT-07 first value after start: 0.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] TT-01 first value after start: 0.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.4 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] TT-02 first value after start: 0.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] TT-03 first value after start: 0.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.3 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] TT-04 first value after start: 0.00 °C (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] 流量計 first value after start: 0.00 L/min (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm][Restart] Filter 壓差 first value after start: -1000.00 kPa (in range); unresolved 警告 rows from earlier runs in 202610+202609: 0 (lookup 0.2 ms)
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm] alarm row written at 1790946785 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm] alarm row written at 1790946785 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=16384 server=16384
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=16384 value=250.004
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [LimitAlarm] PT-04 超過上限 back in range (250.00 kPa; 上限 400.00 kPa): id=30 is resolved in 2000 ms unless it leaves the range again.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=16384 server=16384
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=16384 value=250.004
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] TAIDAFLOW_TEST_NO_SUCH_PORT connection attempt #2 (not open for 4.0 s)
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: 系統找不到指定的檔案。
+QINFO  : TestLimitAlarms::managerIntegration() [MS300] Disconnected from TAIDAFLOW_TEST_NO_SUCH_PORT, Unit ID 1: 系統找不到指定的檔案。
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=16384 server=16384
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=16384 value=250.004
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Alarm resolved: id=30 sensor=PT-04 message=超過上限：500.01 kPa（上限 400.00 kPa） status=警告 detail=超過上限 解除（PT-04=250.00 kPa，上限 400.00 kPa，回到範圍內 2 秒） resolvedAt=2026-10-02 21:13:08
+QINFO  : TestLimitAlarms::managerIntegration() [Alarm] alarm row written at 1790946785 s: 0 of 0 view(s) hold that time
+QINFO  : TestLimitAlarms::managerIntegration() [w2-085 test] Manager path: resolved 2974 ms after the register changed (poll 1 s + 2 s)
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=16384 server=16384
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=16384 value=250.004
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO0 offset=16 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO1 offset=17 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO2 offset=18 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO3 offset=19 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO4 offset=20 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO5 offset=21 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO6 offset=22 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO7 offset=23 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6256 (127.0.0.1) point=DO8 offset=24 raw=0 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=10 device=ADAM-6224 (127.0.0.1) DI=0 value=1
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=11 device=ADAM-6224 (127.0.0.1) DI=1 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] coil=12 device=ADAM-6224 (127.0.0.1) DI=2 value=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=8 device=ADAM-6217 B (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=9 device=ADAM-6217 B (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=10 device=ADAM-6217 B (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=11 device=ADAM-6217 B (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=12 device=ADAM-6217 B (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=13 device=ADAM-6217 B (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=14 device=ADAM-6217 B (127.0.0.1) AI=6 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=15 device=ADAM-6217 B (127.0.0.1) AI=7 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-05 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-06 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=PT-07 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=FlowMeter offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV1 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV2 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV3 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 B (127.0.0.1) point=MV4 Position offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=0 device=ADAM-6217 A (127.0.0.1) AI=0 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=1 device=ADAM-6217 A (127.0.0.1) AI=1 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=2 device=ADAM-6217 A (127.0.0.1) AI=2 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=3 device=ADAM-6217 A (127.0.0.1) AI=3 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=4 device=ADAM-6217 A (127.0.0.1) AI=4 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=5 device=ADAM-6217 A (127.0.0.1) AI=5 raw=0 server=0
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=6 device=ADAM-6217 A (127.0.0.1) AI=6 raw=65535 server=65535
+QINFO  : TestLimitAlarms::managerIntegration() [ModbusServer][Mirror] inputRegister=7 device=ADAM-6217 A (127.0.0.1) AI=7 raw=16384 server=16384
+QINFO  : TestLimitAlarms::managerIntegration() [SQL] Saved Server Input Registers 0..19 to sensor_data.
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-03 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=TT-04 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-01 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-02 offset=0 raw=0 value=0.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-03 offset=0 raw=65535 value=1000.000
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6217 A (127.0.0.1) point=PT-04 offset=0 raw=16384 value=250.004
+QINFO  : TestLimitAlarms::managerIntegration() [Modbus][Read] device=ADAM-6022 (127.0.0.1) point=Pump2Hz(AO0 read-back) offset=10 raw=0 value=0.000 -> pump2HzPv
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] stopped: deviceStatus = {} (unknown)
+QINFO  : TestLimitAlarms::managerIntegration() [DeviceStatus] write #8: {}
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6256 (127.0.0.1) disconnected 
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6217 A (127.0.0.1) disconnected 
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6217 B (127.0.0.1) disconnected 
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6224 (127.0.0.1) disconnected 
+QINFO  : TestLimitAlarms::managerIntegration() ADAM-6022 (127.0.0.1) disconnected 
+PASS   : TestLimitAlarms::managerIntegration()
+QINFO  : TestLimitAlarms::sourceWiring() [Alarm] per-client views: idle removal after 1800.0 s (never "desktop"), at most 32 entries, 9 rows per page
+QINFO  : TestLimitAlarms::sourceWiring() [LimitAlarm] settings-page limit alarms active for 13 sensors (status 警告, resolved after 2000 ms back in range).
+PASS   : TestLimitAlarms::sourceWiring()
+QINFO  : TestLimitAlarms::cleanupTestCase() [SQL] SqlManager stopped: worker thread finished, 3 SQLite connection(s) closed (data_202610, data_202609, settings).
+PASS   : TestLimitAlarms::cleanupTestCase()
+Totals: 16 passed, 0 failed, 0 skipped, 0 blacklisted, 24151ms
+********* Finished testing of TestLimitAlarms *********

@@ -1,0 +1,21 @@
+21:16:11.234 contractHash=8eb166a8f25d49394afd75e6bb99d4e5939cd47e64e82957d2297e65ab60286a
+21:16:11.282 connected to ws://127.0.0.1:8398/mirror (origin http://127.0.0.1:8397)
+21:16:11.284 welcome, connectionSessionId=8ad4ec49-ea50-4a07-bf45-f467b302232e
+21:16:11.285 DEVICESTATUS #0 [snapshot] {"adam6022":{"address":"127.0.0.205","name":"ADAM-6022","online":true,"sinceMs":1790946968105},"adam6217a":{"address":"127.0.0.202","name":"ADAM-6217","online":true,"sinceMs":1790946968105},"adam6224":{"address":"127.0.0.204","name":"ADAM-6224","online":true,"sinceMs":1790946968104},"adam6256":{"address":"127.0.0.201","name":"ADAM-6256","online":true,"sinceMs":1790946968106},"ms300":{"address":"COM2","name":"MS300","online":false,"sinceMs":1790946967530}}
+21:16:11.285 BANNER 設備離線：MS300（COM2）
+21:16:11.600 DEVICESTATUS #1 [patch] {"adam6022":{"address":"127.0.0.205","name":"ADAM-6022","online":true,"sinceMs":1790946968105},"adam6217a":{"address":"127.0.0.202","name":"ADAM-6217","online":true,"sinceMs":1790946968105},"adam6217b":{"address":"127.0.0.210","name":"ADAM-6217","online":false,"sinceMs":1790946971599},"adam6224":{"address":"127.0.0.204","name":"ADAM-6224","online":true,"sinceMs":1790946968104},"adam6256":{"address":"127.0.0.201","name":"ADAM-6256","online":true,"sinceMs":1790946968106},"ms300":{"address":"COM2","name":"MS300","online":false,"sinceMs":1790946967530}}
+21:16:11.600 BANNER 設備離線：ADAM-6217（127.0.0.210）、MS300（COM2）
+21:17:16.263 finished: --duration-sec reached
+21:17:16.269 FINAL {"adam6022":{"address":"127.0.0.205","name":"ADAM-6022","online":true,"sinceMs":1790946968105},"adam6217a":{"address":"127.0.0.202","name":"ADAM-6217","online":true,"sinceMs":1790946968105},"adam6217b":{"address":"127.0.0.210","name":"ADAM-6217","online":false,"sinceMs":1790946971599},"adam6224":{"address":"127.0.0.204","name":"ADAM-6224","online":true,"sinceMs":1790946968104},"adam6256":{"address":"127.0.0.201","name":"ADAM-6256","online":true,"sinceMs":1790946968106},"ms300":{"address":"COM2","name":"MS300","online":false,"sinceMs":1790946967530}}
+21:17:16.269 FINAL BANNER 設備離線：ADAM-6217（127.0.0.210）、MS300（COM2）
+21:17:16.269 PASS snapshot received
+21:17:16.269 PASS keys adam6022,adam6217a,adam6217b,adam6224,adam6256,ms300 (expected adam6022,adam6217a,adam6217b,adam6224,adam6256,ms300)
+21:17:16.269 PASS adam6022 = name ADAM-6022, address 127.0.0.205, online true, sinceMs 1790946968105 (21:16:08.105)
+21:17:16.269 PASS adam6217a = name ADAM-6217, address 127.0.0.202, online true, sinceMs 1790946968105 (21:16:08.105)
+21:17:16.269 PASS adam6217b = name ADAM-6217, address 127.0.0.210, online false, sinceMs 1790946971599 (21:16:11.599)
+21:17:16.269 PASS adam6224 = name ADAM-6224, address 127.0.0.204, online true, sinceMs 1790946968104 (21:16:08.104)
+21:17:16.269 PASS adam6256 = name ADAM-6256, address 127.0.0.201, online true, sinceMs 1790946968106 (21:16:08.106)
+21:17:16.270 PASS ms300 = name MS300, address COM2, online false, sinceMs 1790946967530 (21:16:07.530)
+21:17:16.270 PASS changes after the snapshot 1 <= 6
+21:17:16.270 RESULT updates=2 changesAfterSnapshot=1 failures=0 -> OK
+21:17:16.270 DISCONNECTED: close code 1000 

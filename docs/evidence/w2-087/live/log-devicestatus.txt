@@ -1,0 +1,16 @@
+﻿2026-10-02 21:16:07.483 [info] [DeviceStatus] started (empty map until each device's first connection attempt has a result): adam6256 ADAM-6256 127.0.0.201, adam6217a ADAM-6217 127.0.0.202, adam6217b ADAM-6217 127.0.0.210, adam6224 ADAM-6224 127.0.0.204, adam6022 ADAM-6022 127.0.0.205, ms300 MS300 COM2
+2026-10-02 21:16:07.483 [info] [DeviceStatus] write #1: {}
+2026-10-02 21:16:07.530 [info] [DeviceStatus] MS300 COM2 (ms300): OFFLINE (serial port not open, first result)
+2026-10-02 21:16:07.530 [info] [DeviceStatus] write #2: {ms300=OFFLINE}
+2026-10-02 21:16:08.104 [info] [DeviceStatus] ADAM-6224 127.0.0.204 (adam6224): online (connected, first result)
+2026-10-02 21:16:08.104 [info] [DeviceStatus] write #3: {adam6224=online, ms300=OFFLINE}
+2026-10-02 21:16:08.105 [info] [DeviceStatus] ADAM-6022 127.0.0.205 (adam6022): online (connected, first result)
+2026-10-02 21:16:08.105 [info] [DeviceStatus] write #4: {adam6022=online, adam6224=online, ms300=OFFLINE}
+2026-10-02 21:16:08.105 [info] [DeviceStatus] ADAM-6217 127.0.0.202 (adam6217a): online (connected, first result)
+2026-10-02 21:16:08.105 [info] [DeviceStatus] write #5: {adam6022=online, adam6217a=online, adam6224=online, ms300=OFFLINE}
+2026-10-02 21:16:08.106 [info] [DeviceStatus] ADAM-6256 127.0.0.201 (adam6256): online (connected, first result)
+2026-10-02 21:16:08.106 [info] [DeviceStatus] write #6: {adam6022=online, adam6217a=online, adam6224=online, adam6256=online, ms300=OFFLINE}
+2026-10-02 21:16:11.599 [info] [DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)
+2026-10-02 21:16:11.599 [info] [DeviceStatus] write #7: {adam6022=online, adam6217a=online, adam6217b=OFFLINE, adam6224=online, adam6256=online, ms300=OFFLINE}
+2026-10-02 21:17:22.454 [info] [DeviceStatus] stopped: deviceStatus = {} (unknown)
+2026-10-02 21:17:22.454 [info] [DeviceStatus] write #8: {}

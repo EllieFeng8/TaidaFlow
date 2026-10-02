@@ -74,7 +74,7 @@ core 分支的桌面後端依本契約產生警報(`Core/LimitAlarms.{h,cpp}` �
 - 判斷值 = 校正後數值 = 原始 PV + 該 key 的 `offset`(PV 本身保持原始值);`filter` = 校正後 PT-02 − 校正後 PT-03,
   用 `filter` 的上下限。壓力與上下限一律以 kPa 比較,與顯示單位 `pressureUnitSv` 無關;溫度 °C、流量 L/min。
 - 超上限:`upperEnabled && 值 > upper`;低於下限:`lowerEnabled && 值 < lower`。**等於上下限屬正常**;
-  停用的上下限不判斷。與主畫面 Filter 變色(`Main.qml` `filterBody.limitState`)同一個運算式
+  停用的上下限不判斷。與主畫面數值與 Filter 變色(`components/SensorUnits.js` `SensorUnits.limitState`,w1-088 起主畫面所有數值共用)同一個運算式
   (`Core/tests/tst_limit_alarms` 直接執行 UI 的 JavaScript 逐一比對)。
 - 上限與下限是同一感測器的兩種狀態,各自新增、各自解除。超限時**立即**新增一筆警報(alarm_history,
   `status` = 「警告」→ 警報頁嚴重程度「警告」、狀態「未處理」);未解除前同一感測器同一方向不重複新增。

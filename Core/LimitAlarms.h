@@ -15,7 +15,8 @@
 //    degC, flow in L/min.
 //  * upper alarm: upperEnabled && value > upper;  lower alarm: lowerEnabled && value < lower.
 //    Equal to a limit is normal; a disabled limit is never violated.  This is the expression the
-//    UI uses for the Filter colour (TaidaFlowContent/Main.qml filterBody.limitState); the test
+//    UI uses for the limit colours (TaidaFlowContent/components/SensorUnits.js SensorUnits.limitState,
+//    called by the Filter graphic and, since w1-088, by every main-page value); the test
 //    tst_limit_alarms evaluates the UI's own JavaScript against limitState() below.
 //  * Upper and lower are two independent alarms of the same sensor (each inserted / resolved on its
 //    own).  While a sensor's upper (lower) alarm is unresolved, no second row of that kind is added.
@@ -109,7 +110,7 @@ public:
     static bool correctedValue(const TaidaFlowProxy &proxy, const QString &key, double *value);
     static bool isAboveUpper(double value, const QVariantMap &entry);
     static bool isBelowLower(double value, const QVariantMap &entry);
-    // 1 above the upper limit, -1 below the lower limit, 0 normal (the UI's filterBody.limitState).
+    // 1 above the upper limit, -1 below the lower limit, 0 normal (the UI's SensorUnits.limitState).
     static int limitState(double value, const QVariantMap &entry);
     static QString alarmMessage(Limit limit, double value, double limitValue, const QString &unit);
 

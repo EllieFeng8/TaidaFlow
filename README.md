@@ -739,11 +739,59 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
 測試:`Core/tests` 的 `tst_offset_storage`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:`docs\evidence\w2-086\tools\`
 (`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔 / port / 資料資料夾啟動桌面版並逐項檢查)。
 
+## 設備離線提示(w1-087 / w2-087)
+
+連不上的設備會在桌面與網頁畫面上方顯示**橙色橫幅**「設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）」(依下表順序,
+以頓號分隔)。只是提示:不停用任何按鈕,其他設備照常操作。網頁與桌面的連線中斷時(紅色「離線」/「連線中斷」橫幅)那條優先,
+設備橫幅暫時不顯示(資料可能已過時),連線恢復後自動回來。
+
+- 介面(main,w1-087):`Core/TaidaFlowProxy.h` 的 `deviceStatus`(鏡像到所有網頁)、`TaidaFlowContent/TopNav.qml` 的橫幅。
+- 寫入端(core,w2-087):`Core/DeviceStatusPublisher.{h,cpp}`(新檔,只編進桌面版),由 `Manager` 建立與啟停
+  (`Manager::start()` 先啟動它再連設備;`Manager::stop()`(`Core::shutdown` 呼叫)先停它、寫回空 map,再關設備)。
+  `Ms300FaultReader` 只多了兩個訊號(`portOpenChanged`、`faultStatusReadFailed`)。
+
+| key | 設備 | 名稱(name) | 位址(address) | 離線的判斷 |
+|---|---|---|---|---|
+| `adam6256` | ADAM-6256 | ADAM-6256 | config.json 的 host(模擬器模式為 127.0.0.201) | Modbus TCP 沒有連線(w2-072 的斷線期間) |
+| `adam6217a` | ADAM-6217 A | ADAM-6217 | 同上(127.0.0.202) | 同上 |
+| `adam6217b` | ADAM-6217 B | ADAM-6217 | 同上(127.0.0.203) | 同上 |
+| `adam6224` | ADAM-6224 | ADAM-6224 | 同上(127.0.0.204) | 同上 |
+| `adam6022` | ADAM-6022 | ADAM-6022 | 同上(127.0.0.205) | 同上 |
+| `ms300` | MS300 變頻器 | MS300 | `devices.ms300.serialPort`(例如 COM2) | 序列埠打不開 / 被關閉,或埠開著但連續 3 次讀故障狀態沒有回應(變頻器沒電、線沒接) |
+
+- 名稱只放型號(兩台 ADAM-6217 以位址區分);位址是程式實際使用的位址(config.json,或測試用 `TAIDAFLOW_DEVICE_PROFILE=simulator`
+  置換後的 127.0.0.20x)。
+- 啟動時是空 map(不顯示);每台設備**第一次連線嘗試有結果**後才出現該設備(第一次還在連的設備不會被標離線)。之後連線狀態
+  改變才重寫整份 map(`sinceMs` = 改變的時刻);斷線期間每 3 秒的重連失敗不會重寫;連上立即恢復 online。MS300 埠打開後要等
+  變頻器第一次回應才算 online。
+- ADAM 拔線但 TCP 還沒斷(Windows 要等送出的請求重送逾時,約十幾秒到數十秒)時不會立刻顯示;程式關閉時寫回空 map。
+- log(full log):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
+  與 `[DeviceStatus] write #<n>: {adam6022=online, ..., ms300=OFFLINE}`,關閉時 `[DeviceStatus] stopped: deviceStatus = {} (unknown)`。
+
+**給 Mango 的測試方法**(不需改程式):
+
+1. 正常接模擬器啟動(`scripts\run-simulator.ps1` → `scripts\run-desktop.ps1 -DeviceProfile simulator`):開發機沒有 COM2,
+   幾秒後橫幅顯示「設備離線：MS300（COM2）」;ADAM 都連上,不在橫幅內。
+2. 關掉模擬器 → 約 1~5 秒內橫幅變成「設備離線：ADAM-6256（127.0.0.201）、ADAM-6217（127.0.0.202）、ADAM-6217（127.0.0.203）、
+   ADAM-6224（127.0.0.204）、ADAM-6022（127.0.0.205）、MS300（COM2）」;按鈕仍可按(寫入會被拒絕並記 log)。
+3. 再開模擬器 → 下一次重連(3 秒內)ADAM 從橫幅消失,只剩 MS300。
+4. 或只讓一台離線:複製 `deploy\dev\config.simulator.json`,把 `devices.adam6217b.host` 改成不存在的位址 `192.0.2.203`
+   (保留給文件用、不會有設備的網段;安全探測對它判定 unreachable,可以啟動),以
+   `run-desktop.ps1 -Config <該檔>`(不加 `-DeviceProfile`)啟動 → 該台第一次連線逾時後(Windows TCP 連線逾時約 20 秒,之前不顯示)
+   橫幅為「設備離線：ADAM-6217（192.0.2.203）、MS300（COM2）」。(w2-087 的 live 測試用的是本機沒人聽的 `127.0.0.210`,
+   連線被拒,約 4 秒內出現;但 `run-desktop.ps1` 的安全探測會因本機位址沒有模擬器在聽而拒絕啟動,所以手動測試用 192.0.2.203。)
+5. 網頁(`http://<IP>/`)同時顯示相同的橫幅;拔掉網頁電腦的網路時改顯示紅色「連線中斷」,插回後橙色橫幅回來。
+
+測試:`Core/tests` 的 `tst_device_status` 與 `tst_device_status_simulator_profile`(見「測試 / 驗證」5j)。不經瀏覽器的 live
+測試工具:`docs\evidence\w2-087\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔
+(ADAM-6217 B 指到 127.0.0.210、MS300 COM2)啟動桌面版並讀 deviceStatus)。
+
 ## 測試 / 驗證(全部以 exit code 判定)
 
 QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset);
+SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset、
+設備離線提示);
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -818,12 +866,17 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     tst_limit_alarms(w2-085 設定頁上下限超限警報:超限立即新增、等於上下限與停用不判斷、回到範圍 1.9 秒內再超限不解除不新增、
 ::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
 ::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
-::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
+::     以 UI 自己的 JavaScript(SensorUnits.js 的 SensorUnits.limitState,Main.qml 的 Filter 與 w1-088 起所有數值共用)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
 ::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)、
 ::     tst_offset_storage(w2-086 存檔時套用 offset:key ↔ 欄位 ↔ 縮放對照、正負 / 0 / 未設定 / 非有限值、四捨五入、夾限 0 與 65535
 ::     與 warning 限流、壓力 / 溫度 / 流量、設定改變後下一筆立即用新 offset、歷史換算值與 UI 自己的 SensorUnits.adjusted() 逐一比對、
 ::     真的 Manager 對測試自己的 Modbus TCP server:資料庫列、歷史頁、CSV 匯出、REST /api/sensor/last、Modbus server input
-::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)
+::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)、
+::     tst_device_status 與 tst_device_status_simulator_profile(w2-087 設備離線提示 deviceStatus:同一個測試程式跑兩次,第二次設
+::     TAIDAFLOW_DEVICE_PROFILE=simulator;四台 ADAM 對測試自己的 Modbus TCP server、ADAM-6217 B 指到沒人聽的本機位址、MS300 用
+::     不存在的 COM 名稱:啟動時空 map、每台第一次連線有結果前沒有該 key、之後完整 6 個 key、name / address(含 simulator 置換後位址)、
+::     重連失敗不重寫、斷線只寫一次、恢復寫 true、stop 後空 map;MS300 讀取規則;真的 Manager start / stop;core.cpp / manager.cpp /
+::     CMake 接線)
 Core\tests\run-core-tests.bat fresh
 :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
 ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、

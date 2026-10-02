@@ -191,7 +191,8 @@ bool LimitAlarmMonitor::isBelowLower(double value, const QVariantMap &entry)
 
 int LimitAlarmMonitor::limitState(double value, const QVariantMap &entry)
 {
-    // Same order as Main.qml filterBody.limitState: upper first, then lower.
+    // Same order as the UI rule SensorUnits.limitState() (TaidaFlowContent/components/SensorUnits.js,
+    // used by the Filter graphic and, since w1-088, every main-page value): upper first, then lower.
     return isAboveUpper(value, entry) ? 1 : isBelowLower(value, entry) ? -1 : 0;
 }
 

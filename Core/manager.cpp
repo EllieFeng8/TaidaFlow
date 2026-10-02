@@ -1,5 +1,7 @@
 #include "manager.h"
 
+#include "DeviceStatusPublisher.h"   // w2-087
+
 #include "LimitAlarms.h"
 #include "ModbusServerBridgeMapping.h"
 #include "SensorOffsetStorage.h"
@@ -144,6 +146,10 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
     connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
     // w2-086: settings-page offsets applied to sensor_data and the Modbus server input registers.
     m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);
+    // w2-087: device connection states -> TaidaFlowProxy::deviceStatus (the offline banner).
+    m_deviceStatus = new DeviceStatusPublisher(proxy, this);
+    m_deviceStatus->attachModbus(&m_modbus);
+    m_deviceStatus->attachMs300(&m_ms300FaultReader);
     m_pollTimer.setInterval(kPollIntervalMs);
     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
 
@@ -232,6 +238,7 @@ Manager::~Manager()
 
 void Manager::start()
 {
+    m_deviceStatus->start();     // w2-087: empty map until each device's first result
     m_modbus.connectAll();
     m_ms300FaultReader.start();
     m_pollTimer.start();
@@ -239,6 +246,7 @@ void Manager::start()
 
 void Manager::stop()
 {
+    m_deviceStatus->stop();      // w2-087: empty map first - the disconnects below are not reported
     m_pollTimer.stop();
     m_ms300FaultReader.stop();
     m_modbus.disconnectAll();

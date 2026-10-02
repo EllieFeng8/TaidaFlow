@@ -1,0 +1,14 @@
+﻿=== w2-087 mutants 2026-10-02T21:30:00.4426560+08:00
+21:31:38 baseline: ctest exit=0
+21:32:01 M1-rewrite-same-state (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared values are not the same / FAIL!  : TestDeviceStatus::ms300ReadRule() Compared values are not the same
+21:32:08 M2-report-before-first-result (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared lists have different sizes. / FAIL!  : TestDeviceStatus::managerWiring() '!proxy.deviceStatus().contains(key)' returned FALSE. (adam6256 before its first result)
+21:33:42 M3-name-is-displayName (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared values are not the same / FAIL!  : TestDeviceStatus::lifecycle() 'proxy.deviceStatus().value("adam6224").toMap().value("online").toBool()' returned FALSE. ()
+21:35:18 M4-stop-writes-nothing (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() 'proxy.deviceStatus().isEmpty()' returned FALSE. () / FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. ()
+21:36:58 M5-ms300-online-on-port-open (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. () / FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. ()
+21:38:38 M6-manager-stops-devices-first (Core\manager.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::managerWiring() Compared values are not the same / FAIL!  : TestDeviceStatus::sourceWiring() 'stop.indexOf(QStringLiteral("m_deviceStatus->stop()")) < stop.indexOf(QStringLiteral("m_ms300FaultReader.stop()"))' returned FALSE. ()
+21:40:20 M7-offline-on-connecting (Core\Ms300FaultReader.cpp): ctest exit=0 -> SURVIVED (expected survivor: needs a serial port that opens - none on this PC) 
+21:42:00 final: ctest exit=0
+21:42:00 Core\DeviceStatusPublisher.cpp restored byte-identical: True
+21:42:00 Core\manager.cpp restored byte-identical: True
+21:42:00 Core\Ms300FaultReader.cpp restored byte-identical: True
+21:42:00 === all mutants killed

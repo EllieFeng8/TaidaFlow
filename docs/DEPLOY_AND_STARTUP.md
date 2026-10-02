@@ -1023,6 +1023,18 @@ nginx 服務與開機啟動資料夾的問題(錯誤 1053、服務停不下來�
   (心跳是新的同步屬性,舊網頁快取連新桌面會被擋下:按 Ctrl+F5 或清除快取)。桌面 log 啟動時有
   `[Heartbeat] server heartbeat started`,正常關閉時有 `[Heartbeat] server heartbeat stopped`。
 
+**畫面上方出現橙色橫幅「設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）」(設備離線提示,w1-087 / w2-087)**:
+桌面程式連不上橫幅列出的設備(名稱是型號,括號內是 config.json 設定的位址;MS300 是序列埠)。只是提示,所有按鈕照常可按,
+其他設備照常運作;設備恢復後橫幅自動消失(ADAM 每 3 秒重連一次,MS300 每 3~4 秒重開一次序列埠)。
+- ADAM-xxxx:確認該模組有電、網路線與交換器、`ping <位址>`;位址不對時改 config.json 的 `devices.<key>.host` 後重新啟動(§3)。
+  兩台 ADAM-6217 名稱相同,以位址區分(`adam6217a` = .202、`adam6217b` = .203)。
+- MS300:序列埠打不開(USB 轉 RS-485 沒插、COM 編號變了:看「裝置管理員 → 連接埠 (COM 和 LPT)」,改 `devices.ms300.serialPort`),
+  或埠開著但變頻器連續 3 次沒有回應(變頻器沒電、RS-485 線沒接、站號 / 鮑率不對)。
+- 程式剛啟動時不會立刻顯示:每台設備第一次連線有結果後才判斷(連不到的 ADAM 最久約 20 秒,Windows TCP 連線逾時)。
+- 網頁斷線時(紅色「離線」/「連線中斷」橫幅)不顯示設備橫幅,恢復連線後自動回來。
+- 桌面 log(`taidaflow-<日期>-full.log`)有 `[DeviceStatus]` 開頭的行:每次設備狀態改變一行(`OFFLINE` / `online`)與送出的整份狀態。
+  quiet log 另有原本的連線警告(`TCP socket error`、`[MS300] COM2: ...`,每台每 60 秒最多一行)。
+
 **下載 CSV 失敗**:
 - 網址的 port 應是 80(`nginx.enabled`);`http://<IP>/exports/<檔名>` 回 404:檔案已被清理(超過 20 個或 2 GB 會刪最舊的),
   或 nginx 設定的匯出資料夾與 config.json 的 `dataDir` 不一致(執行 §3.4)。

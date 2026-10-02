@@ -873,7 +873,8 @@ void TestLimitAlarms::restartLookupFailure()
 
 void TestLimitAlarms::uiRuleEquivalence()
 {
-    // The UI's own code, read from the sources: SensorUnits.adjusted() and filterBody.limitState.
+    // The UI's own code, read from the sources: SensorUnits.adjusted() and SensorUnits.limitState(),
+    // the one rule that filterBody.limitState (and, since w1-088, every value tag) calls.
     QFile unitsFile(QStringLiteral(CORE_SOURCE_DIR "/../TaidaFlowContent/components/SensorUnits.js"));
     QVERIFY(unitsFile.open(QIODevice::ReadOnly));
     QString units = QString::fromUtf8(unitsFile.readAll());
@@ -881,7 +882,7 @@ void TestLimitAlarms::uiRuleEquivalence()
     QFile mainFile(QStringLiteral(CORE_SOURCE_DIR "/../TaidaFlowContent/Main.qml"));
     QVERIFY(mainFile.open(QIODevice::ReadOnly));
     const QString main = QString::fromUtf8(mainFile.readAll());
-    const QRegularExpression re(QStringLiteral("readonly property int limitState:\\s*(.*?\\?\\s*-1\\s*:\\s*0)"),
+    const QRegularExpression re(QStringLiteral("readonly property int limitState:\\s*SensorUnits\\.(limitState\\(deltaKpa, limits\\))"),
                                 QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpressionMatch m = re.match(main);
     QVERIFY2(m.hasMatch(), "limitState expression not found in Main.qml");

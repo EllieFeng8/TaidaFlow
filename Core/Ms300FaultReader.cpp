@@ -256,6 +256,8 @@ Ms300FaultReader::Ms300FaultReader(const Settings &settings, QObject *parent)
             m_connectionWarnings.reset();
         }
         emit connectionChanged(connected, detail);
+        if (connected || state == QModbusDevice::UnconnectedState)
+            emit portOpenChanged(connected);   // w2-087
 
         if (connected && m_running)
             pollFaultStatus();
@@ -368,6 +370,7 @@ void Ms300FaultReader::pollFaultStatus()
     if (!reply) {
         const QString message = m_client->errorString();
         warnRead(QStringLiteral("Fault-status read request failed: %1").arg(message));   // w2-072
+        emit faultStatusReadFailed();   // w2-087
         emit readError(message);
         return;
     }
@@ -378,12 +381,16 @@ void Ms300FaultReader::pollFaultStatus()
         if (reply->error() != QModbusDevice::NoError) {
             const QString message = reply->errorString();
             warnRead(QStringLiteral("Fault-status read failed: %1").arg(message));   // w2-072
+            // w2-087: an exception answer (ProtocolError) means the inverter answers; not counted.
+            if (reply->error() != QModbusDevice::ProtocolError)
+                emit faultStatusReadFailed();
             emit readError(message);
         } else {
             const QList<quint16> values = reply->result().values();
             if (values.isEmpty()) {
                 const QString message = QStringLiteral("MS300 returned an empty fault-status response.");
                 warnRead(message);   // w2-072
+                emit faultStatusReadFailed();   // w2-087
                 emit readError(message);
             } else {
                 if (m_readFailures > 0) {

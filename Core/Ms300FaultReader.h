@@ -48,6 +48,11 @@ signals:
     void faultStatusRead(quint8 faultCode, quint8 warningCode, const QString &message);
     void faultStatusChanged(quint8 faultCode, quint8 warningCode, const QString &message);
     void readError(const QString &message);
+    // w2-087 (device status): the port opened (Connected) / is not open (Unconnected: open failed or
+    // closed) - not emitted for the Connecting / Closing steps; one fault-status poll of an open port
+    // failed (no / bad answer).
+    void portOpenChanged(bool open);
+    void faultStatusReadFailed();
 
 private:
     void pollFaultStatus();

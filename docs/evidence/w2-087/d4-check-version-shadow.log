@@ -1,0 +1,4 @@
+build\w2-087-desktop: objects_with_deps=507 version_shadow_hits=0 std_version_deps=0
+build\w2-087-wasm: objects_with_deps=488 version_shadow_hits=0 std_version_deps=174
+  <version> -> C:/tools/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/version (174 objects)
+exit=0

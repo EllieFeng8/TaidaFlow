@@ -1,0 +1,78 @@
+cmd.exe : 'vswhere.exe' is not recognized as an internal or external command,
+At D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-087\tools\d4-sequence.ps1:80 char:26
++ ... ests-fresh' { & cmd /c "$tools\run-tests-w2087.bat app fresh" } -Buil ...
++                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (2.8s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-087-run/app-tests
+[1/32] Running qmlimportscanner for tst_uifont
+[2/32] Running qmlimportscanner for tst_uifont_wasmpath
+[3/32] Automatic MOC and UIC for target tst_runtimeinfo
+[4/32] Automatic MOC and UIC for target tst_applog
+[5/32] Automatic MOC and UIC for target tst_appconfig
+[6/32] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo_autogen\mocs_compilation.cpp.obj
+[7/32] Building CXX object CMakeFiles\tst_applog.dir\tst_applog_autogen\mocs_compilation.cpp.obj
+[8/32] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig_autogen\mocs_compilation.cpp.obj
+[9/32] Automatic MOC and UIC for target tst_uifont
+[10/32] Automatic MOC and UIC for target tst_uifont_wasmpath
+[11/32] Running rcc for resource tst_uifont_embedded_fonts
+[12/32] Running rcc for resource tst_uifont_wasmpath_embedded_fonts
+[13/32] Building CXX object CMakeFiles\tst_uifont.dir\tst_uifont_autogen\mocs_compilation.cpp.obj
+[14/32] Building CXX object CMakeFiles\tst_uifont_wasmpath.dir\tst_uifont_wasmpath_autogen\mocs_compilation.cpp.obj
+[15/32] Building CXX object CMakeFiles\tst_uifont.dir\.qt\rcc\qrc_tst_uifont_embedded_fonts.cpp.obj
+[16/32] Building CXX object CMakeFiles\tst_uifont_wasmpath.dir\.qt\rcc\qrc_tst_uifont_wasmpath_embedded_fonts.cpp.obj
+[17/32] Building CXX object CMakeFiles\tst_uifont.dir\D_\repo\codex\qmlTester\taidaflow\App\embeddedfonts.cpp.obj
+[18/32] Building CXX object CMakeFiles\tst_runtimeinfo.dir\D_\repo\codex\qmlTester\taidaflow\App\runtimeinfo.cpp.obj
+[19/32] Building CXX object CMakeFiles\tst_uifont_wasmpath.dir\D_\repo\codex\qmlTester\taidaflow\App\embeddedfonts.cpp.obj
+[20/32] Building CXX object CMakeFiles\tst_applog.dir\D_\repo\codex\qmlTester\taidaflow\App\applog.cpp.obj
+[21/32] Building CXX object CMakeFiles\tst_appconfig.dir\D_\repo\codex\qmlTester\taidaflow\App\appconfig.cpp.obj
+[22/32] Building CXX object CMakeFiles\tst_applog.dir\D_\repo\codex\qmlTester\taidaflow\App\appconfig.cpp.obj
+[23/32] Building CXX object CMakeFiles\tst_runtimeinfo.dir\tst_runtimeinfo.cpp.obj
+[24/32] Linking CXX executable tst_runtimeinfo.exe
+[25/32] Building CXX object CMakeFiles\tst_appconfig.dir\tst_appconfig.cpp.obj
+[26/32] Building CXX object CMakeFiles\tst_applog.dir\tst_applog.cpp.obj
+[27/32] Linking CXX executable tst_appconfig.exe
+[28/32] Linking CXX executable tst_applog.exe
+[29/32] Building CXX object CMakeFiles\tst_uifont.dir\tst_uifont.cpp.obj
+[30/32] Building CXX object CMakeFiles\tst_uifont_wasmpath.dir\tst_uifont.cpp.obj
+[31/32] Linking CXX executable tst_uifont.exe
+[32/32] Linking CXX executable tst_uifont_wasmpath.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-087-run/app-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-087-run/app-tests
+    Start 1: tst_appconfig
+1/5 Test #1: tst_appconfig ....................   Passed    0.47 sec
+    Start 2: tst_runtimeinfo
+2/5 Test #2: tst_runtimeinfo ..................   Passed    6.37 sec
+    Start 3: tst_applog
+3/5 Test #3: tst_applog .......................   Passed    1.02 sec
+    Start 4: tst_uifont
+4/5 Test #4: tst_uifont .......................   Passed    0.73 sec
+    Start 5: tst_uifont_wasmpath
+5/5 Test #5: tst_uifont_wasmpath ..............   Passed    0.72 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   9.31 sec
+exit=0

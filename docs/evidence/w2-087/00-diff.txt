@@ -1,0 +1,389 @@
+diff --git a/Core/CMakeLists.txt b/Core/CMakeLists.txt
+index 3a7fa87..9f36c83 100644
+--- a/Core/CMakeLists.txt
++++ b/Core/CMakeLists.txt
+@@ -49,6 +49,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         # w2-086: settings-page offsets applied to sensor_data and the Modbus server PVs (owned by Manager)
+         SensorOffsetStorage.h
+         SensorOffsetStorage.cpp
++        # w2-087: device connection states -> TaidaFlowProxy::deviceStatus (owned by Manager)
++        DeviceStatusPublisher.h
++        DeviceStatusPublisher.cpp
+         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
+         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
+         AppHttpServer/AppHttpServer.h
+diff --git a/Core/LimitAlarms.cpp b/Core/LimitAlarms.cpp
+index c618e3d..0746fd0 100644
+--- a/Core/LimitAlarms.cpp
++++ b/Core/LimitAlarms.cpp
+@@ -191,7 +191,8 @@ bool LimitAlarmMonitor::isBelowLower(double value, const QVariantMap &entry)
+ 
+ int LimitAlarmMonitor::limitState(double value, const QVariantMap &entry)
+ {
+-    // Same order as Main.qml filterBody.limitState: upper first, then lower.
++    // Same order as the UI rule SensorUnits.limitState() (TaidaFlowContent/components/SensorUnits.js,
++    // used by the Filter graphic and, since w1-088, every main-page value): upper first, then lower.
+     return isAboveUpper(value, entry) ? 1 : isBelowLower(value, entry) ? -1 : 0;
+ }
+ 
+diff --git a/Core/LimitAlarms.h b/Core/LimitAlarms.h
+index 9df93f0..08dcb5c 100644
+--- a/Core/LimitAlarms.h
++++ b/Core/LimitAlarms.h
+@@ -15,7 +15,8 @@
+ //    degC, flow in L/min.
+ //  * upper alarm: upperEnabled && value > upper;  lower alarm: lowerEnabled && value < lower.
+ //    Equal to a limit is normal; a disabled limit is never violated.  This is the expression the
+-//    UI uses for the Filter colour (TaidaFlowContent/Main.qml filterBody.limitState); the test
++//    UI uses for the limit colours (TaidaFlowContent/components/SensorUnits.js SensorUnits.limitState,
++//    called by the Filter graphic and, since w1-088, by every main-page value); the test
+ //    tst_limit_alarms evaluates the UI's own JavaScript against limitState() below.
+ //  * Upper and lower are two independent alarms of the same sensor (each inserted / resolved on its
+ //    own).  While a sensor's upper (lower) alarm is unresolved, no second row of that kind is added.
+@@ -109,7 +110,7 @@ public:
+     static bool correctedValue(const TaidaFlowProxy &proxy, const QString &key, double *value);
+     static bool isAboveUpper(double value, const QVariantMap &entry);
+     static bool isBelowLower(double value, const QVariantMap &entry);
+-    // 1 above the upper limit, -1 below the lower limit, 0 normal (the UI's filterBody.limitState).
++    // 1 above the upper limit, -1 below the lower limit, 0 normal (the UI's SensorUnits.limitState).
+     static int limitState(double value, const QVariantMap &entry);
+     static QString alarmMessage(Limit limit, double value, double limitValue, const QString &unit);
+ 
+diff --git a/Core/Ms300FaultReader.cpp b/Core/Ms300FaultReader.cpp
+index 614f0bd..4d9d778 100644
+--- a/Core/Ms300FaultReader.cpp
++++ b/Core/Ms300FaultReader.cpp
+@@ -256,6 +256,8 @@ Ms300FaultReader::Ms300FaultReader(const Settings &settings, QObject *parent)
+             m_connectionWarnings.reset();
+         }
+         emit connectionChanged(connected, detail);
++        if (connected || state == QModbusDevice::UnconnectedState)
++            emit portOpenChanged(connected);   // w2-087
+ 
+         if (connected && m_running)
+             pollFaultStatus();
+@@ -368,6 +370,7 @@ void Ms300FaultReader::pollFaultStatus()
+     if (!reply) {
+         const QString message = m_client->errorString();
+         warnRead(QStringLiteral("Fault-status read request failed: %1").arg(message));   // w2-072
++        emit faultStatusReadFailed();   // w2-087
+         emit readError(message);
+         return;
+     }
+@@ -378,12 +381,16 @@ void Ms300FaultReader::pollFaultStatus()
+         if (reply->error() != QModbusDevice::NoError) {
+             const QString message = reply->errorString();
+             warnRead(QStringLiteral("Fault-status read failed: %1").arg(message));   // w2-072
++            // w2-087: an exception answer (ProtocolError) means the inverter answers; not counted.
++            if (reply->error() != QModbusDevice::ProtocolError)
++                emit faultStatusReadFailed();
+             emit readError(message);
+         } else {
+             const QList<quint16> values = reply->result().values();
+             if (values.isEmpty()) {
+                 const QString message = QStringLiteral("MS300 returned an empty fault-status response.");
+                 warnRead(message);   // w2-072
++                emit faultStatusReadFailed();   // w2-087
+                 emit readError(message);
+             } else {
+                 if (m_readFailures > 0) {
+diff --git a/Core/Ms300FaultReader.h b/Core/Ms300FaultReader.h
+index c2b5c40..f29912e 100644
+--- a/Core/Ms300FaultReader.h
++++ b/Core/Ms300FaultReader.h
+@@ -48,6 +48,11 @@ signals:
+     void faultStatusRead(quint8 faultCode, quint8 warningCode, const QString &message);
+     void faultStatusChanged(quint8 faultCode, quint8 warningCode, const QString &message);
+     void readError(const QString &message);
++    // w2-087 (device status): the port opened (Connected) / is not open (Unconnected: open failed or
++    // closed) - not emitted for the Connecting / Closing steps; one fault-status poll of an open port
++    // failed (no / bad answer).
++    void portOpenChanged(bool open);
++    void faultStatusReadFailed();
+ 
+ private:
+     void pollFaultStatus();
+diff --git a/Core/SensorSettings.md b/Core/SensorSettings.md
+index e15a7de..94f47b5 100644
+--- a/Core/SensorSettings.md
++++ b/Core/SensorSettings.md
+@@ -74,7 +74,7 @@ core 分支的桌面後端依本契約產生警報(`Core/LimitAlarms.{h,cpp}` 
+ - 判斷值 = 校正後數值 = 原始 PV + 該 key 的 `offset`(PV 本身保持原始值);`filter` = 校正後 PT-02 − 校正後 PT-03,
+   用 `filter` 的上下限。壓力與上下限一律以 kPa 比較,與顯示單位 `pressureUnitSv` 無關;溫度 °C、流量 L/min。
+ - 超上限:`upperEnabled && 值 > upper`;低於下限:`lowerEnabled && 值 < lower`。**等於上下限屬正常**;
+-  停用的上下限不判斷。與主畫面 Filter 變色(`Main.qml` `filterBody.limitState`)同一個運算式
++  停用的上下限不判斷。與主畫面數值與 Filter 變色(`components/SensorUnits.js` `SensorUnits.limitState`,w1-088 起主畫面所有數值共用)同一個運算式
+   (`Core/tests/tst_limit_alarms` 直接執行 UI 的 JavaScript 逐一比對)。
+ - 上限與下限是同一感測器的兩種狀態,各自新增、各自解除。超限時**立即**新增一筆警報(alarm_history,
+   `status` = 「警告」→ 警報頁嚴重程度「警告」、狀態「未處理」);未解除前同一感測器同一方向不重複新增。
+diff --git a/Core/manager.cpp b/Core/manager.cpp
+index ad24426..0de38a1 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -1,5 +1,7 @@
+ #include "manager.h"
+ 
++#include "DeviceStatusPublisher.h"   // w2-087
++
+ #include "LimitAlarms.h"
+ #include "ModbusServerBridgeMapping.h"
+ #include "SensorOffsetStorage.h"
+@@ -144,6 +146,10 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
+     connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
+     // w2-086: settings-page offsets applied to sensor_data and the Modbus server input registers.
+     m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);
++    // w2-087: device connection states -> TaidaFlowProxy::deviceStatus (the offline banner).
++    m_deviceStatus = new DeviceStatusPublisher(proxy, this);
++    m_deviceStatus->attachModbus(&m_modbus);
++    m_deviceStatus->attachMs300(&m_ms300FaultReader);
+     m_pollTimer.setInterval(kPollIntervalMs);
+     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
+ 
+@@ -232,6 +238,7 @@ Manager::~Manager()
+ 
+ void Manager::start()
+ {
++    m_deviceStatus->start();     // w2-087: empty map until each device's first result
+     m_modbus.connectAll();
+     m_ms300FaultReader.start();
+     m_pollTimer.start();
+@@ -239,6 +246,7 @@ void Manager::start()
+ 
+ void Manager::stop()
+ {
++    m_deviceStatus->stop();      // w2-087: empty map first - the disconnects below are not reported
+     m_pollTimer.stop();
+     m_ms300FaultReader.stop();
+     m_modbus.disconnectAll();
+diff --git a/Core/manager.h b/Core/manager.h
+index 9dcd134..dc19613 100644
+--- a/Core/manager.h
++++ b/Core/manager.h
+@@ -16,6 +16,7 @@ class TaidaFlowProxy;
+ class SqlManager;
+ class LimitAlarmMonitor;    // w2-085: settings-page limit alarms (Core/LimitAlarms.h)
+ class SensorOffsetStorage;  // w2-086: offsets applied when storing (Core/SensorOffsetStorage.h)
++class DeviceStatusPublisher; // w2-087: TaidaFlowProxy::deviceStatus (Core/DeviceStatusPublisher.h)
+ 
+ class Manager final : public QObject
+ {
+@@ -187,4 +188,6 @@ private:
+     LimitAlarmMonitor *m_limitAlarms = nullptr;
+     // w2-086: sensor_data samples and the Modbus server input registers get the offsets.
+     SensorOffsetStorage *m_offsetStorage = nullptr;
++    // w2-087: device connection states -> deviceStatus (started before, stopped before the devices).
++    DeviceStatusPublisher *m_deviceStatus = nullptr;
+ };
+diff --git a/Core/tests/CMakeLists.txt b/Core/tests/CMakeLists.txt
+index cce7be3..96227ea 100644
+--- a/Core/tests/CMakeLists.txt
++++ b/Core/tests/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ #   w2-084: tst_server_heartbeat
+ #   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
+ #   w2-086: tst_offset_storage (and SensorOffsetStorage.cpp in tst_manager_sv_guard / tst_limit_alarms)
++#   w2-087: tst_device_status (and DeviceStatusPublisher.cpp wherever manager.cpp is compiled)
+ cmake_minimum_required(VERSION 3.21)
+ project(TaidaFlowCoreTests LANGUAGES CXX)
+ 
+@@ -108,6 +109,8 @@ taidaflow_core_test(tst_manager_sv_guard
+         "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
+         "${CORE_DIR}/SensorOffsetStorage.h"
+         "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
++        "${CORE_DIR}/DeviceStatusPublisher.h"
++        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
+         "${CORE_DIR}/manager.cpp"
+         "${CORE_DIR}/Modbus_Client.h"
+         "${CORE_DIR}/Modbus_Client.cpp"
+@@ -191,6 +194,8 @@ taidaflow_core_test(tst_limit_alarms
+         "${CORE_DIR}/LimitAlarms.cpp"
+         "${CORE_DIR}/SensorOffsetStorage.h"
+         "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
++        "${CORE_DIR}/DeviceStatusPublisher.h"
++        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
+         "${CORE_DIR}/manager.h"
+         "${CORE_DIR}/manager.cpp"
+         "${CORE_DIR}/Modbus_Client.h"
+@@ -228,6 +233,8 @@ taidaflow_core_test(tst_offset_storage
+         tst_offset_storage.cpp
+         "${CORE_DIR}/SensorOffsetStorage.h"
+         "${CORE_DIR}/SensorOffsetStorage.cpp"
++        "${CORE_DIR}/DeviceStatusPublisher.h"
++        "${CORE_DIR}/DeviceStatusPublisher.cpp"   # w2-087: owned by Manager
+         "${CORE_DIR}/LimitAlarms.h"
+         "${CORE_DIR}/LimitAlarms.cpp"
+         "${CORE_DIR}/manager.h"
+@@ -254,3 +261,42 @@ taidaflow_core_test(tst_offset_storage
+         "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
+ target_compile_definitions(tst_offset_storage PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
++
++# ---------------------------------------------------------------------------------------------
++# w2-087: TaidaFlowProxy::deviceStatus (DeviceStatusPublisher, Core/DeviceStatusPublisher.h): empty map
++# at start, a key per device only after its first connection attempt, one write per state change (the
++# repeated reconnect attempts of an outage write nothing), lost / restored connection, name / address,
++# empty map after stop, the MS300 port / read rule, the real Manager (start -> keys, stop -> {}) and
++# the wiring in the sources. Real ModbusClient against Modbus TCP servers of the test (QModbusTcpServer,
++# loopback, ports picked by the OS) and a refused loopback address; real Ms300FaultReader with a serial
++# port name that does not exist. Run twice: with the configured hosts and with
++# TAIDAFLOW_DEVICE_PROFILE=simulator (hosts replaced by 127.0.0.201..205, the test's own ports - the
++# shared simulator's port 502 is never used).
++# ---------------------------------------------------------------------------------------------
++taidaflow_core_test(tst_device_status
++    SOURCES
++        tst_device_status.cpp
++        "${CORE_DIR}/DeviceStatusPublisher.h"
++        "${CORE_DIR}/DeviceStatusPublisher.cpp"
++        "${CORE_DIR}/LimitAlarms.h"
++        "${CORE_DIR}/LimitAlarms.cpp"
++        "${CORE_DIR}/SensorOffsetStorage.h"
++        "${CORE_DIR}/SensorOffsetStorage.cpp"
++        "${CORE_DIR}/manager.h"
++        "${CORE_DIR}/manager.cpp"
++        "${CORE_DIR}/Modbus_Client.h"
++        "${CORE_DIR}/Modbus_Client.cpp"
++        "${CORE_DIR}/Ms300FaultReader.h"
++        "${CORE_DIR}/Ms300FaultReader.cpp"
++        "${CORE_DIR}/ModbusMapping.h"
++        "${CORE_DIR}/ModbusServerBridgeMapping.h"
++        "${CORE_DIR}/SqlManager.h"
++        "${CORE_DIR}/SqlManager.cpp"
++        "${CORE_DIR}/TaidaFlowProxy.h"
++    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::SerialBus Qt6::SerialPort)
++target_compile_definitions(tst_device_status PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
++add_test(NAME tst_device_status_simulator_profile
++         COMMAND tst_device_status -o "${CMAKE_CURRENT_BINARY_DIR}/tst_device_status_simulator_profile.result.txt,txt" -o "-,txt")
++set_tests_properties(tst_device_status_simulator_profile PROPERTIES
++    ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_FORCE_STDERR_LOGGING=set:1;TAIDAFLOW_DEVICE_PROFILE=set:simulator"
++    TIMEOUT 300)
+diff --git a/Core/tests/tst_limit_alarms.cpp b/Core/tests/tst_limit_alarms.cpp
+index ae650c8..06871a7 100644
+--- a/Core/tests/tst_limit_alarms.cpp
++++ b/Core/tests/tst_limit_alarms.cpp
+@@ -873,7 +873,8 @@ void TestLimitAlarms::restartLookupFailure()
+ 
+ void TestLimitAlarms::uiRuleEquivalence()
+ {
+-    // The UI's own code, read from the sources: SensorUnits.adjusted() and filterBody.limitState.
++    // The UI's own code, read from the sources: SensorUnits.adjusted() and SensorUnits.limitState(),
++    // the one rule that filterBody.limitState (and, since w1-088, every value tag) calls.
+     QFile unitsFile(QStringLiteral(CORE_SOURCE_DIR "/../TaidaFlowContent/components/SensorUnits.js"));
+     QVERIFY(unitsFile.open(QIODevice::ReadOnly));
+     QString units = QString::fromUtf8(unitsFile.readAll());
+@@ -881,7 +882,7 @@ void TestLimitAlarms::uiRuleEquivalence()
+     QFile mainFile(QStringLiteral(CORE_SOURCE_DIR "/../TaidaFlowContent/Main.qml"));
+     QVERIFY(mainFile.open(QIODevice::ReadOnly));
+     const QString main = QString::fromUtf8(mainFile.readAll());
+-    const QRegularExpression re(QStringLiteral("readonly property int limitState:\\s*(.*?\\?\\s*-1\\s*:\\s*0)"),
++    const QRegularExpression re(QStringLiteral("readonly property int limitState:\\s*SensorUnits\\.(limitState\\(deltaKpa, limits\\))"),
+                                 QRegularExpression::DotMatchesEverythingOption);
+     const QRegularExpressionMatch m = re.match(main);
+     QVERIFY2(m.hasMatch(), "limitState expression not found in Main.qml");
+diff --git a/README.md b/README.md
+index 7c00c54..f23c04e 100644
+--- a/README.md
++++ b/README.md
+@@ -739,11 +739,59 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
+ 測試:`Core/tests` 的 `tst_offset_storage`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:`docs\evidence\w2-086\tools\`
+ (`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔 / port / 資料資料夾啟動桌面版並逐項檢查)。
+ 
++## 設備離線提示(w1-087 / w2-087)
++
++連不上的設備會在桌面與網頁畫面上方顯示**橙色橫幅**「設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）」(依下表順序,
++以頓號分隔)。只是提示:不停用任何按鈕,其他設備照常操作。網頁與桌面的連線中斷時(紅色「離線」/「連線中斷」橫幅)那條優先,
++設備橫幅暫時不顯示(資料可能已過時),連線恢復後自動回來。
++
++- 介面(main,w1-087):`Core/TaidaFlowProxy.h` 的 `deviceStatus`(鏡像到所有網頁)、`TaidaFlowContent/TopNav.qml` 的橫幅。
++- 寫入端(core,w2-087):`Core/DeviceStatusPublisher.{h,cpp}`(新檔,只編進桌面版),由 `Manager` 建立與啟停
++  (`Manager::start()` 先啟動它再連設備;`Manager::stop()`(`Core::shutdown` 呼叫)先停它、寫回空 map,再關設備)。
++  `Ms300FaultReader` 只多了兩個訊號(`portOpenChanged`、`faultStatusReadFailed`)。
++
++| key | 設備 | 名稱(name) | 位址(address) | 離線的判斷 |
++|---|---|---|---|---|
++| `adam6256` | ADAM-6256 | ADAM-6256 | config.json 的 host(模擬器模式為 127.0.0.201) | Modbus TCP 沒有連線(w2-072 的斷線期間) |
++| `adam6217a` | ADAM-6217 A | ADAM-6217 | 同上(127.0.0.202) | 同上 |
++| `adam6217b` | ADAM-6217 B | ADAM-6217 | 同上(127.0.0.203) | 同上 |
++| `adam6224` | ADAM-6224 | ADAM-6224 | 同上(127.0.0.204) | 同上 |
++| `adam6022` | ADAM-6022 | ADAM-6022 | 同上(127.0.0.205) | 同上 |
++| `ms300` | MS300 變頻器 | MS300 | `devices.ms300.serialPort`(例如 COM2) | 序列埠打不開 / 被關閉,或埠開著但連續 3 次讀故障狀態沒有回應(變頻器沒電、線沒接) |
++
++- 名稱只放型號(兩台 ADAM-6217 以位址區分);位址是程式實際使用的位址(config.json,或測試用 `TAIDAFLOW_DEVICE_PROFILE=simulator`
++  置換後的 127.0.0.20x)。
++- 啟動時是空 map(不顯示);每台設備**第一次連線嘗試有結果**後才出現該設備(第一次還在連的設備不會被標離線)。之後連線狀態
++  改變才重寫整份 map(`sinceMs` = 改變的時刻);斷線期間每 3 秒的重連失敗不會重寫;連上立即恢復 online。MS300 埠打開後要等
++  變頻器第一次回應才算 online。
++- ADAM 拔線但 TCP 還沒斷(Windows 要等送出的請求重送逾時,約十幾秒到數十秒)時不會立刻顯示;程式關閉時寫回空 map。
++- log(full log):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
++  與 `[DeviceStatus] write #<n>: {adam6022=online, ..., ms300=OFFLINE}`,關閉時 `[DeviceStatus] stopped: deviceStatus = {} (unknown)`。
++
++**給 Mango 的測試方法**(不需改程式):
++
++1. 正常接模擬器啟動(`scripts\run-simulator.ps1` → `scripts\run-desktop.ps1 -DeviceProfile simulator`):開發機沒有 COM2,
++   幾秒後橫幅顯示「設備離線：MS300（COM2）」;ADAM 都連上,不在橫幅內。
++2. 關掉模擬器 → 約 1~5 秒內橫幅變成「設備離線：ADAM-6256（127.0.0.201）、ADAM-6217（127.0.0.202）、ADAM-6217（127.0.0.203）、
++   ADAM-6224（127.0.0.204）、ADAM-6022（127.0.0.205）、MS300（COM2）」;按鈕仍可按(寫入會被拒絕並記 log)。
++3. 再開模擬器 → 下一次重連(3 秒內)ADAM 從橫幅消失,只剩 MS300。
++4. 或只讓一台離線:複製 `deploy\dev\config.simulator.json`,把 `devices.adam6217b.host` 改成不存在的位址 `192.0.2.203`
++   (保留給文件用、不會有設備的網段;安全探測對它判定 unreachable,可以啟動),以
++   `run-desktop.ps1 -Config <該檔>`(不加 `-DeviceProfile`)啟動 → 該台第一次連線逾時後(Windows TCP 連線逾時約 20 秒,之前不顯示)
++   橫幅為「設備離線：ADAM-6217（192.0.2.203）、MS300（COM2）」。(w2-087 的 live 測試用的是本機沒人聽的 `127.0.0.210`,
++   連線被拒,約 4 秒內出現;但 `run-desktop.ps1` 的安全探測會因本機位址沒有模擬器在聽而拒絕啟動,所以手動測試用 192.0.2.203。)
++5. 網頁(`http://<IP>/`)同時顯示相同的橫幅;拔掉網頁電腦的網路時改顯示紅色「連線中斷」,插回後橙色橫幅回來。
++
++測試:`Core/tests` 的 `tst_device_status` 與 `tst_device_status_simulator_profile`(見「測試 / 驗證」5j)。不經瀏覽器的 live
++測試工具:`docs\evidence\w2-087\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔
++(ADAM-6217 B 指到 127.0.0.210、MS300 COM2)啟動桌面版並讀 deviceStatus)。
++
+ ## 測試 / 驗證(全部以 exit code 判定)
+ 
+ QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
+ 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
+-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset);
++SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset、
++設備離線提示);
+ 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
+ 
+ ```bat
+@@ -818,12 +866,17 @@ docs\evidence\w2-067\tools\run-qtest.bat
+ ::     tst_limit_alarms(w2-085 設定頁上下限超限警報:超限立即新增、等於上下限與停用不判斷、回到範圍 1.9 秒內再超限不解除不新增、
+ ::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
+ ::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
+-::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
++::     以 UI 自己的 JavaScript(SensorUnits.js 的 SensorUnits.limitState,Main.qml 的 Filter 與 w1-088 起所有數值共用)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
+ ::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)、
+ ::     tst_offset_storage(w2-086 存檔時套用 offset:key ↔ 欄位 ↔ 縮放對照、正負 / 0 / 未設定 / 非有限值、四捨五入、夾限 0 與 65535
+ ::     與 warning 限流、壓力 / 溫度 / 流量、設定改變後下一筆立即用新 offset、歷史換算值與 UI 自己的 SensorUnits.adjusted() 逐一比對、
+ ::     真的 Manager 對測試自己的 Modbus TCP server:資料庫列、歷史頁、CSV 匯出、REST /api/sensor/last、Modbus server input
+-::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)
++::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)、
++::     tst_device_status 與 tst_device_status_simulator_profile(w2-087 設備離線提示 deviceStatus:同一個測試程式跑兩次,第二次設
++::     TAIDAFLOW_DEVICE_PROFILE=simulator;四台 ADAM 對測試自己的 Modbus TCP server、ADAM-6217 B 指到沒人聽的本機位址、MS300 用
++::     不存在的 COM 名稱:啟動時空 map、每台第一次連線有結果前沒有該 key、之後完整 6 個 key、name / address(含 simulator 置換後位址)、
++::     重連失敗不重寫、斷線只寫一次、恢復寫 true、stop 後空 map;MS300 讀取規則;真的 Manager start / stop;core.cpp / manager.cpp /
++::     CMake 接線)
+ Core\tests\run-core-tests.bat fresh
+ :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
+ ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、
+diff --git a/docs/DEPLOY_AND_STARTUP.md b/docs/DEPLOY_AND_STARTUP.md
+index 6153ab4..82109c0 100644
+--- a/docs/DEPLOY_AND_STARTUP.md
++++ b/docs/DEPLOY_AND_STARTUP.md
+@@ -1023,6 +1023,18 @@ nginx 服務與開機啟動資料夾的問題(錯誤 1053、服務停不下來
+   (心跳是新的同步屬性,舊網頁快取連新桌面會被擋下:按 Ctrl+F5 或清除快取)。桌面 log 啟動時有
+   `[Heartbeat] server heartbeat started`,正常關閉時有 `[Heartbeat] server heartbeat stopped`。
+ 
++**畫面上方出現橙色橫幅「設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）」(設備離線提示,w1-087 / w2-087)**:
++桌面程式連不上橫幅列出的設備(名稱是型號,括號內是 config.json 設定的位址;MS300 是序列埠)。只是提示,所有按鈕照常可按,
++其他設備照常運作;設備恢復後橫幅自動消失(ADAM 每 3 秒重連一次,MS300 每 3~4 秒重開一次序列埠)。
++- ADAM-xxxx:確認該模組有電、網路線與交換器、`ping <位址>`;位址不對時改 config.json 的 `devices.<key>.host` 後重新啟動(§3)。
++  兩台 ADAM-6217 名稱相同,以位址區分(`adam6217a` = .202、`adam6217b` = .203)。
++- MS300:序列埠打不開(USB 轉 RS-485 沒插、COM 編號變了:看「裝置管理員 → 連接埠 (COM 和 LPT)」,改 `devices.ms300.serialPort`),
++  或埠開著但變頻器連續 3 次沒有回應(變頻器沒電、RS-485 線沒接、站號 / 鮑率不對)。
++- 程式剛啟動時不會立刻顯示:每台設備第一次連線有結果後才判斷(連不到的 ADAM 最久約 20 秒,Windows TCP 連線逾時)。
++- 網頁斷線時(紅色「離線」/「連線中斷」橫幅)不顯示設備橫幅,恢復連線後自動回來。
++- 桌面 log(`taidaflow-<日期>-full.log`)有 `[DeviceStatus]` 開頭的行:每次設備狀態改變一行(`OFFLINE` / `online`)與送出的整份狀態。
++  quiet log 另有原本的連線警告(`TCP socket error`、`[MS300] COM2: ...`,每台每 60 秒最多一行)。
++
+ **下載 CSV 失敗**:
+ - 網址的 port 應是 80(`nginx.enabled`);`http://<IP>/exports/<檔名>` 回 404:檔案已被清理(超過 20 個或 2 GB 會刪最舊的),
+   或 nginx 設定的匯出資料夾與 config.json 的 `dataDir` 不一致(執行 §3.4)。

@@ -38,7 +38,7 @@ function offlineDevices(status) {
     return list
 }
 
-// Banner text, e.g. "設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）"; "" when no device
+// Banner text, e.g. "設備離線：ADAM-6217（192.168.x.y）、MS300（COMx）"; "" when no device
 // is offline (the banner is hidden then).
 function bannerText(status) {
     var devices = offlineDevices(status)

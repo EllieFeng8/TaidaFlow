@@ -1,0 +1,28 @@
+﻿=== w2-086 d5 sequence 2026-10-02T20:20:54.1224966+08:00
+20:20:54 font-check: exit=0 (1 s)
+20:20:54 [build-desktop-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+20:21:45 build-desktop-fresh: exit=0 (51 s)
+20:21:45 [build-wasm-release-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+20:25:09 build-wasm-release-fresh: exit=0 (204 s)
+20:25:11 check-wasm-backend: exit=0 (1 s)
+20:25:13 check-version-shadow: exit=0 (2 s)
+20:25:13 verify-pack: exit=0 (0 s)
+20:25:14 check-rest-routes: exit=0 (0 s)
+20:25:14 sensoroffset-desktop-only: exit=0 (0 s)
+20:25:14 [core-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+20:27:28 core-tests-fresh: exit=0 (134 s)
+20:27:28 [app-tests-fresh] busy: clang++ 31420, clang++ 93964, clang++ 99696, clang++ 100668, clang++ 103204, clang++ 105048, clang++ 105892, clang++ 106536, clang++ 106588, clang++ 108072, clang++ 108356, clang++ 108532, ninja 97416 - waiting
+20:27:48 [app-tests-fresh] busy: clang++ 1180, clang++ 17952, clang++ 29872, clang++ 40592, clang++ 55320, clang++ 59780, clang++ 61168, clang++ 73524, clang++ 74232, clang++ 80108, clang++ 81684, clang++ 86684, clang++ 90672, clang++ 99048, clang++ 101512, clang++ 108528, ninja 97416 - waiting
+20:28:08 [app-tests-fresh] busy: ninja 97416 - waiting
+20:28:28 [app-tests-fresh] busy: ninja 97416 - waiting
+20:28:48 [app-tests-fresh] busy: ninja 97416 - waiting
+20:29:08 [app-tests-fresh] busy: ninja 97416 - waiting
+20:29:29 [app-tests-fresh] busy: ninja 97416 - waiting
+20:29:49 [app-tests-fresh] busy: ninja 97416 - waiting
+20:30:09 [app-tests-fresh] busy: ninja 97416 - waiting
+20:30:29 [app-tests-fresh] busy: ninja 97416 - waiting
+20:30:49 [app-tests-fresh] busy: ninja 105620 - waiting
+20:31:09 [app-tests-fresh] busy: cl 17604, cl 46608, cl 57832, cl 70564, cl 70732, cl 72976, cl 81760, cl 90904, cl 91904, cl 95000, cl 95524, cl 97940, cl 98672, cl 100428, cl 101608, cl 104988, cl 105660, cl 107916, cl 108464, cl 108508, cl 110192, cl 113176, ninja 105620 - waiting
+20:31:29 [app-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+20:31:49 app-tests-fresh: exit=0 (20 s)
+20:31:49 === all steps exit 0

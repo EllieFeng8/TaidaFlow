@@ -1,0 +1,114 @@
+20:32:15.254 contractHash=f88e7ee6f6141be746ae4a77816ee6b6a59e0b27f5d0ae582f83e5e3783aa014
+20:32:15.296 connected to ws://127.0.0.1:8396/mirror (origin http://127.0.0.1:8395)
+20:32:15.297 welcome, connectionSessionId=78ba665d-527f-4200-8ef8-7d774b247e00
+20:32:15.297 snapshot applied
+20:32:17.356 STEP 1 at 62 ms
+20:32:17.356 PASS all offsets 0 at start (fresh settings) 
+20:32:17.357 PVs at start (raw): tt01=28.600 tt02=29.050 tt03=34.000 tt04=33.100 pt01=18.006 pt02=17.273 pt03=16.556 pt04=15.839 pt05=15.122 pt06=14.405 pt07=13.687 flowMeter=0.000
+20:32:17.357 WRITE P0 sensorSettingsSv offsets: all 0 (epoch ms 1790944337357)
+20:32:17.790 REST row ts=1790944336 spans a settings change - not compared
+20:32:18.140 REST row ts=1790944337 spans a settings change - not compared
+20:32:18.954 REST P0 ts=1790944338 (first row after the change) compared: (no offset columns or not stable)
+20:32:20.184 REST P0 ts=1790944339  compared: (no offset columns or not stable)
+20:32:20.989 REST P0 ts=1790944340  compared: (no offset columns or not stable)
+20:32:22.210 REST P0 ts=1790944341  compared: (no offset columns or not stable)
+20:32:23.023 REST P0 ts=1790944342  compared: (no offset columns or not stable)
+20:32:24.248 REST P0 ts=1790944343  compared: (no offset columns or not stable)
+20:32:25.056 REST P0 ts=1790944344  compared: (no offset columns or not stable)
+20:32:25.299 STEP 2 at 8005 ms
+20:32:25.300 SUMMARY P0: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 84 mismatch 0; clamped values seen 0
+20:32:25.300 PASS P0: Modbus server input registers = raw + offset (counts)
+20:32:25.300 PASS P0: REST /api/sensor/last rows = raw + offset (counts)
+20:32:25.300 PASS P0: stored x scale = raw PV + offset within half a count
+20:32:25.300 WRITE P1 sensorSettingsSv offsets: flowMeter=3.4 pt01=12.5 pt06=2000 tt02=-1.25 tt04=-200 (epoch ms 1790944345300)
+20:32:25.862 REST row ts=1790944345 spans a settings change - not compared
+20:32:27.091 REST P1 ts=1790944346 (first row after the change) compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:27.483 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:27.895 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:27.895 REST P1 ts=1790944347  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:28.299 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:28.702 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:29.120 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:29.120 REST P1 ts=1790944348  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:29.524 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:29.923 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:29.924 REST P1 ts=1790944349  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:30.326 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:30.744 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:31.151 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:31.151 REST P1 ts=1790944350  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:31.554 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:31.963 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:31.964 REST P1 ts=1790944351  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:32.373 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:32.777 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:33.181 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:33.181 REST P1 ts=1790944352  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:33.583 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:33.988 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:33.988 REST P1 ts=1790944353  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:34.389 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:34.808 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:35.204 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:35.204 REST P1 ts=1790944354  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:35.615 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:36.019 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:36.019 REST P1 ts=1790944355  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:36.437 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:36.832 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:37.245 IR P1 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=1999(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:37.245 REST P1 ts=1790944356  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:37.302 STEP 3 at 20008 ms
+20:32:37.302 SUMMARY P1: IR compared 300 mismatch 0; REST values compared 132 mismatch 0; history vs screen compared 110 mismatch 0; clamped values seen 72
+20:32:37.302 PASS P1: Modbus server input registers = raw + offset (counts)
+20:32:37.302 PASS P1: REST /api/sensor/last rows = raw + offset (counts)
+20:32:37.303 PASS P1: stored x scale = raw PV + offset within half a count
+20:32:37.303 PASS P1: clamped columns (pt06 -> 65535, tt04 -> 0) seen
+20:32:37.304 WRITE P2 sensorSettingsSv offsets: flowMeter=3.4 pt01=-12.5 pt06=2000 tt02=-1.25 tt04=-200 (epoch ms 1790944357304)
+20:32:38.052 REST row ts=1790944357 spans a settings change - not compared
+20:32:38.865 REST P2 ts=1790944358 (first row after the change) compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:39.264 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:39.672 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:40.076 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:40.077 REST P2 ts=1790944359  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:40.484 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:40.890 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:40.890 REST P2 ts=1790944360  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:41.297 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:41.703 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:42.113 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:42.113 REST P2 ts=1790944361  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:42.517 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:42.922 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:42.922 REST P2 ts=1790944362  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:43.327 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:43.734 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:44.143 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:44.144 REST P2 ts=1790944363  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:44.559 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:44.962 IR P2 ok: tt02 IR1=18219(raw 19038); tt04 IR3=0(raw 21692, clamped); pt01 IR4=361(raw 1180); pt06 IR9=65535(raw 944, clamped); flowMeter IR11=3(raw 0)
+20:32:44.962 REST P2 ts=1790944364  compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:32:45.301 STEP 4 at 28007 ms
+20:32:45.301 SUMMARY P2: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 70 mismatch 0; clamped values seen 44
+20:32:45.303 PASS P2: Modbus server input registers = raw + offset (counts)
+20:32:45.303 PASS P2: REST /api/sensor/last rows = raw + offset (counts)
+20:32:45.303 PASS P2: stored x scale = raw PV + offset within half a count
+20:32:45.303 PASS P2: clamped columns (pt06 -> 65535, tt04 -> 0) seen
+20:32:45.303 PASS P2: the first row stored after the change (ts=1790944358) already uses pt01 -12.5 kPa
+20:32:45.303 WRITE P3 sensorSettingsSv offsets: all 0 (epoch ms 1790944365303)
+20:32:46.183 REST row ts=1790944365 spans a settings change - not compared
+20:32:46.984 REST P3 ts=1790944366 (first row after the change) compared: (no offset columns or not stable)
+20:32:48.203 REST P3 ts=1790944367  compared: (no offset columns or not stable)
+20:32:49.025 REST P3 ts=1790944368  compared: (no offset columns or not stable)
+20:32:50.243 REST P3 ts=1790944369  compared: (no offset columns or not stable)
+20:32:51.046 REST P3 ts=1790944370  compared: (no offset columns or not stable)
+20:32:51.862 REST P3 ts=1790944371  compared: (no offset columns or not stable)
+20:32:53.091 REST P3 ts=1790944372  compared: (no offset columns or not stable)
+20:32:53.294 STEP 5 at 36000 ms
+20:32:53.294 SUMMARY P3: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 84 mismatch 0; clamped values seen 0
+20:32:53.294 PASS P3: Modbus server input registers = raw + offset (counts)
+20:32:53.294 PASS P3: REST /api/sensor/last rows = raw + offset (counts)
+20:32:53.294 PASS P3: stored x scale = raw PV + offset within half a count
+20:32:53.294 PASS P3: the first row stored after resetting the offsets (ts=1790944366) is raw again
+20:32:53.296 RESULT OK (0 failure(s)) - scenario done
+20:32:53.296 DISCONNECTED: close code 1000 

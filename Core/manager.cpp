@@ -2,6 +2,7 @@
 
 #include "LimitAlarms.h"
 #include "ModbusServerBridgeMapping.h"
+#include "SensorOffsetStorage.h"
 #include "SqlManager.h"
 #include "TaidaFlowProxy.h"
 
@@ -141,6 +142,8 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
     // w2-085: settings-page upper/lower limit alarms (the 90 % high alarm below is unchanged).
     m_limitAlarms = new LimitAlarmMonitor(proxy, sql, this);
     connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
+    // w2-086: settings-page offsets applied to sensor_data and the Modbus server input registers.
+    m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);
     m_pollTimer.setInterval(kPollIntervalMs);
     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
 
@@ -784,15 +787,19 @@ void Manager::mirrorClientData(ModbusClient::Device device,
                 continue;
 
             const quint16 serverOffset = static_cast<quint16>(serverStart + aiOffset);
+            // Raw counts: the 90 % alarm below and the sample saved by saveServerInputData().
             m_serverInputRegisters[serverOffset] = values.at(index);
-            emit serverInputRegisterUpdated(serverOffset, values.at(index));
+            // w2-086 D1b: the external HMI's PV carries the offset (same conversion as sensor_data).
+            const quint16 serverValue = m_offsetStorage->correctedServerRegister(serverOffset, values.at(index));
+            emit serverInputRegisterUpdated(serverOffset, serverValue);
             checkHighInputAlarm(serverOffset, values.at(index));
             qInfo().noquote()
-                    << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4")
+                    << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4 server=%5")
                                .arg(serverOffset)
                                .arg(ModbusClient::displayName(device))
                                .arg(aiOffset)
-                               .arg(values.at(index));
+                               .arg(values.at(index))
+                               .arg(serverValue);
         }
 
         const quint8 groupBit = device == ModbusClient::Device::Adam6217_202
@@ -1193,10 +1200,8 @@ void Manager::saveServerInputData()
         return;
     }
 
-    QVector<double> readings;
-    readings.reserve(m_serverInputRegisters.size());
-    for (quint16 value : m_serverInputRegisters)
-        readings.append(static_cast<double>(value));
+    // w2-086 D1: raw counts + the offsets of this moment (converted to counts, rounded, 0..65535).
+    const QVector<double> readings = m_offsetStorage->correctedSample(m_serverInputRegisters);
 
     const bool saved = m_sql->saveSensorData(QDateTime::currentDateTime(), readings);
     if (saved) {

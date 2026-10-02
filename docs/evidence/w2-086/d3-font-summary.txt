@@ -1,0 +1,10 @@
+=== w2-086 font subset (PM correction) 2026-10-02T20:33:32+08:00
+before: --check exit=1 (d3-font-check-before.log): charset changed since last build (2 new chars: 庫給)
+  source: Core/SensorOffsetStorage.h comments (資料庫, 給外部 HMI)
+regenerate: scripts/make-font-subset.ps1 exit=0 (d3-font-regenerate.log)
+after: --check exit=0 (d3-font-check-after.log)
+sizes (HEAD c4eb5fe -> now):
+  TaidaFlowNotoSansTC-Regular.ttf 244708 -> 245368 bytes
+  TaidaFlowNotoSansTC-Bold.ttf 245364 -> 246028 bytes
+  charset.txt 2043 -> 2050 bytes
+wasm-release fresh exit / check-wasm-backend / verify-pack: see d5-summary.txt (20:20 run)

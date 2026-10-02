@@ -1,0 +1,154 @@
+cmd.exe : 'vswhere.exe' is not recognized as an internal or external command,
+At D:\repo\codex\qmlTester\taidaflow\docs\evidence\w2-086\tools\d5-sequence.ps1:74 char:27
++ ... sts-fresh' { & cmd /c "$tools\run-tests-w2086.bat core fresh" } -Buil ...
++                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36257.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (3.2s)
+-- Generating done (0.3s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-086-run/core-tests
+[1/96] Running qmlimportscanner for tst_historyexport_status
+[2/96] Running qmlimportscanner for tst_manager_sv_guard
+[3/96] Running qmlimportscanner for tst_sensor_settings
+[4/96] Running qmlimportscanner for tst_alarm_views
+[5/96] Running qmlimportscanner for tst_server_heartbeat
+[6/96] Running qmlimportscanner for tst_limit_alarms
+[7/96] Running qmlimportscanner for tst_offset_storage
+[8/96] Automatic MOC and UIC for target tst_sensor_settings
+[9/96] Automatic MOC and UIC for target tst_manager_sv_guard
+[10/96] Automatic MOC and UIC for target tst_alarm_views
+[11/96] Automatic MOC and UIC for target tst_server_heartbeat
+[12/96] Automatic MOC and UIC for target tst_historyexport_status
+[13/96] Automatic MOC and UIC for target tst_modbusclient_offline
+[14/96] Automatic MOC and UIC for target tst_sqlmanager_schema_once
+[15/96] Automatic MOC and UIC for target tst_ms300_offline
+[16/96] Automatic MOC and UIC for target tst_rest_range_paging
+[17/96] Automatic MOC and UIC for target tst_limit_alarms
+[18/96] Automatic MOC and UIC for target tst_offset_storage
+[19/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmRecordFormat.cpp.obj
+[20/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[21/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[22/96] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\tst_sqlmanager_schema_once_autogen\mocs_compilation.cpp.obj
+[23/96] Building CXX object CMakeFiles\tst_rest_range_paging.dir\tst_rest_range_paging_autogen\mocs_compilation.cpp.obj
+[24/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManagerAlarms.cpp.obj
+[25/96] Building CXX object CMakeFiles\tst_server_heartbeat.dir\D_\repo\codex\qmlTester\taidaflow\Core\ServerHeartbeat.cpp.obj
+[26/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\SensorOffsetStorage.cpp.obj
+[27/96] Building CXX object CMakeFiles\tst_server_heartbeat.dir\tst_server_heartbeat_autogen\mocs_compilation.cpp.obj
+[28/96] Building CXX object CMakeFiles\tst_sensor_settings.dir\tst_sensor_settings_autogen\mocs_compilation.cpp.obj
+[29/96] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\tst_sqlmanager_schema_once.cpp.obj
+[30/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmViews.cpp.obj
+[31/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\LimitAlarms.cpp.obj
+[32/96] Building CXX object CMakeFiles\tst_rest_range_paging.dir\tst_rest_range_paging.cpp.obj
+[33/96] Building CXX object CMakeFiles\tst_alarm_views.dir\tst_alarm_views_autogen\mocs_compilation.cpp.obj
+[34/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\tst_manager_sv_guard.cpp.obj
+[35/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[36/96] Building CXX object CMakeFiles\tst_sqlmanager_schema_once.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[37/96] Building CXX object CMakeFiles\tst_server_heartbeat.dir\tst_server_heartbeat.cpp.obj
+[38/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[39/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[40/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\D_\repo\codex\qmlTester\taidaflow\Core\manager.cpp.obj
+[41/96] Building CXX object CMakeFiles\tst_manager_sv_guard.dir\tst_manager_sv_guard_autogen\mocs_compilation.cpp.obj
+[42/96] Building CXX object CMakeFiles\tst_alarm_views.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[43/96] Building CXX object CMakeFiles\tst_alarm_views.dir\tst_alarm_views.cpp.obj
+[44/96] Building CXX object CMakeFiles\tst_sensor_settings.dir\tst_sensor_settings.cpp.obj
+[45/96] Building CXX object CMakeFiles\tst_ms300_offline.dir\tst_ms300_offline_autogen\mocs_compilation.cpp.obj
+[46/96] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\tst_modbusclient_offline_autogen\mocs_compilation.cpp.obj
+[47/96] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[48/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmRecordFormat.cpp.obj
+[49/96] Building CXX object CMakeFiles\tst_ms300_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[50/96] Building CXX object CMakeFiles\tst_ms300_offline.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[51/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[52/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[53/96] Building CXX object CMakeFiles\tst_rest_range_paging.dir\D_\repo\codex\qmlTester\taidaflow\Core\RESTManager.cpp.obj
+[54/96] Building CXX object CMakeFiles\tst_rest_range_paging.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[55/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\SensorOffsetStorage.cpp.obj
+[56/96] Building CXX object CMakeFiles\tst_historyexport_status.dir\tst_historyexport_status_autogen\mocs_compilation.cpp.obj
+[57/96] Building CXX object CMakeFiles\tst_ms300_offline.dir\tst_ms300_offline.cpp.obj
+[58/96] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[59/96] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[60/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\AlarmViews.cpp.obj
+[61/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\LimitAlarms.cpp.obj
+[62/96] Building CXX object CMakeFiles\tst_modbusclient_offline.dir\tst_modbusclient_offline.cpp.obj
+[63/96] Building CXX object CMakeFiles\tst_historyexport_status.dir\tst_historyexport_status.cpp.obj
+[64/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManagerAlarms.cpp.obj
+[65/96] Building CXX object CMakeFiles\tst_historyexport_status.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[66/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\tst_limit_alarms_autogen\mocs_compilation.cpp.obj
+[67/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\manager.cpp.obj
+[68/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Client.cpp.obj
+[69/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[70/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\Modbus_Server.cpp.obj
+[71/96] Linking CXX executable tst_rest_range_paging.exe
+[72/96] Linking CXX executable tst_sqlmanager_schema_once.exe
+[73/96] Linking CXX executable tst_modbusclient_offline.exe
+[74/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\Ms300FaultReader.cpp.obj
+[75/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[76/96] Linking CXX executable tst_ms300_offline.exe
+[77/96] Linking CXX executable tst_historyexport_status.exe
+[78/96] Linking CXX executable tst_manager_sv_guard.exe
+[79/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\SensorOffsetStorage.cpp.obj
+[80/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\tst_limit_alarms.cpp.obj
+[81/96] Linking CXX executable tst_server_heartbeat.exe
+[82/96] Linking CXX executable tst_sensor_settings.exe
+[83/96] Linking CXX executable tst_alarm_views.exe
+[84/96] Building CXX object CMakeFiles\tst_limit_alarms.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[85/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\LimitAlarms.cpp.obj
+[86/96] Linking CXX executable tst_limit_alarms.exe
+[87/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManagerAlarms.cpp.obj
+[88/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryViews.cpp.obj
+[89/96] Building CXX object CMakeFiles\tst_offset_storage.dir\tst_offset_storage_autogen\mocs_compilation.cpp.obj
+[90/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\manager.cpp.obj
+[91/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\RESTManager.cpp.obj
+[92/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\AppHttpServer\AppHttpServer.cpp.obj
+[93/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\SqlManager.cpp.obj
+[94/96] Building CXX object CMakeFiles\tst_offset_storage.dir\D_\repo\codex\qmlTester\taidaflow\Core\HistoryExport.cpp.obj
+[95/96] Building CXX object CMakeFiles\tst_offset_storage.dir\tst_offset_storage.cpp.obj
+[96/96] Linking CXX executable tst_offset_storage.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-086-run/core-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-086-run/core-tests
+      Start  1: tst_rest_range_paging
+ 1/11 Test  #1: tst_rest_range_paging ............   Passed    4.86 sec
+      Start  2: tst_sqlmanager_schema_once
+ 2/11 Test  #2: tst_sqlmanager_schema_once .......   Passed    1.13 sec
+      Start  3: tst_historyexport_status
+ 3/11 Test  #3: tst_historyexport_status .........   Passed    0.81 sec
+      Start  4: tst_modbusclient_offline
+ 4/11 Test  #4: tst_modbusclient_offline .........   Passed   16.46 sec
+      Start  5: tst_ms300_offline
+ 5/11 Test  #5: tst_ms300_offline ................   Passed   21.62 sec
+      Start  6: tst_manager_sv_guard
+ 6/11 Test  #6: tst_manager_sv_guard .............   Passed    3.05 sec
+      Start  7: sensor_settings
+ 7/11 Test  #7: sensor_settings ..................   Passed    1.53 sec
+      Start  8: tst_alarm_views
+ 8/11 Test  #8: tst_alarm_views ..................   Passed    5.50 sec
+      Start  9: tst_server_heartbeat
+ 9/11 Test  #9: tst_server_heartbeat .............   Passed   15.12 sec
+      Start 10: tst_limit_alarms
+10/11 Test #10: tst_limit_alarms .................   Passed   24.65 sec
+      Start 11: tst_offset_storage
+11/11 Test #11: tst_offset_storage ...............   Passed    6.87 sec
+
+100% tests passed, 0 tests failed out of 11
+
+Total Test time (real) = 101.64 sec
+exit=0

@@ -9,6 +9,7 @@
 #   w2-080: tst_alarm_views
 #   w2-084: tst_server_heartbeat
 #   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
+#   w2-086: tst_offset_storage (and SensorOffsetStorage.cpp in tst_manager_sv_guard / tst_limit_alarms)
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -105,6 +106,8 @@ taidaflow_core_test(tst_manager_sv_guard
         "${CORE_DIR}/manager.h"
         "${CORE_DIR}/LimitAlarms.h"
         "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
+        "${CORE_DIR}/SensorOffsetStorage.h"
+        "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
         "${CORE_DIR}/manager.cpp"
         "${CORE_DIR}/Modbus_Client.h"
         "${CORE_DIR}/Modbus_Client.cpp"
@@ -186,6 +189,8 @@ taidaflow_core_test(tst_limit_alarms
         tst_limit_alarms.cpp
         "${CORE_DIR}/LimitAlarms.h"
         "${CORE_DIR}/LimitAlarms.cpp"
+        "${CORE_DIR}/SensorOffsetStorage.h"
+        "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
         "${CORE_DIR}/manager.h"
         "${CORE_DIR}/manager.cpp"
         "${CORE_DIR}/Modbus_Client.h"
@@ -208,3 +213,44 @@ taidaflow_core_test(tst_limit_alarms
         "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
 target_compile_definitions(tst_limit_alarms PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+
+# ---------------------------------------------------------------------------------------------
+# w2-086: settings-page offsets applied when storing (SensorOffsetStorage, Core/SensorOffsetStorage.h):
+# key <-> column <-> scale table, rounding / clamping (rate-limited warning), pressure / temperature /
+# flow, settings changes used by the next sample, History value == the UI's SensorUnits.adjusted()
+# (its own JavaScript, read from TaidaFlowContent), and the real Manager against two Modbus TCP
+# servers of the test on 127.0.0.1 (ports picked by the OS) with the real ModbusServer, History page,
+# CSV export and REST /api/sensor/last. Real SqlManager on a temporary data folder; no device, no
+# fixed port.
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_offset_storage
+    SOURCES
+        tst_offset_storage.cpp
+        "${CORE_DIR}/SensorOffsetStorage.h"
+        "${CORE_DIR}/SensorOffsetStorage.cpp"
+        "${CORE_DIR}/LimitAlarms.h"
+        "${CORE_DIR}/LimitAlarms.cpp"
+        "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/manager.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+        "${CORE_DIR}/Modbus_Server.h"
+        "${CORE_DIR}/Modbus_Server.cpp"
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/ModbusMapping.h"
+        "${CORE_DIR}/ModbusServerBridgeMapping.h"
+        "${CORE_DIR}/HistoryViews.h"
+        "${CORE_DIR}/HistoryViews.cpp"
+        "${CORE_DIR}/RESTManager.h"
+        "${CORE_DIR}/RESTManager.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/SqlManagerAlarms.cpp"
+        "${CORE_DIR}/HistoryExport.h"
+        "${CORE_DIR}/HistoryExport.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
+target_compile_definitions(tst_offset_storage PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")

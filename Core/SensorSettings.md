@@ -41,8 +41,19 @@ The UI displays raw PV + offset; the backend must keep PVs raw to avoid applying
 the offset twice. Filter pressure difference is corrected PT-02 minus corrected
 PT-03; filter has no independent offset in the UI. The leakage sensor has no
 settings; its binary indicator continues to display the raw digital state.
-Historical display converts pressure using the stored column unit and does not
-retroactively apply today's offsets. CSV export retains the backend's source units.
+Offsets are applied when a sample is stored (Mango 2026-10-02, core branch desktop
+backend, w2-086, `Core/SensorOffsetStorage.{h,cpp}`; scope table `Core/SensorOffset.md`):
+before each `sensor_data` row is written, the offset in effect at that moment is
+converted to counts with the column's scale (`Core/ModbusMapping.h`), added to the raw
+count, rounded and clamped to 0..65535. The History page, CSV export and REST therefore
+show corrected values (History/CSV in the backend's source units: pressure kPa,
+temperature °C, flow L/min), equal to the screen value raw PV + offset within half a
+count. A changed offset applies only to samples stored afterwards; rows already stored
+are never rewritten, and the original raw value of a corrected row cannot be recovered.
+The Proxy PVs stay raw (the UI adds the offset itself). The original 90 % high-range
+alarm judges raw values. The Modbus server PVs for external HMIs (input registers
+0..15, ADAM-6217 mirror) carry the same correction as the database (Mango 2026-10-02);
+the offset/limit settings themselves stay in HR11..40 unchanged.
 
 The Filter graphic turns red above its enabled upper limit and orange below its
 enabled lower limit, otherwise gray. It compares the unrounded corrected kPa

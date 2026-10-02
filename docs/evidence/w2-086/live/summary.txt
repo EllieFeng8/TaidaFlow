@@ -1,0 +1,60 @@
+﻿=== w2-086 live run 2026-10-02T20:32:00.4958387+08:00
+20:32:00.530 other TaidaFlowApp / nginx processes (not touched): TaidaFlowApp 105468 D:\repo\codex\qmlTester\taidaflow-main\build\pm-main-ui\TaidaFlowApp.exe
+20:32:00.551 Adam60xxSimulator running (pid 91076) - shared, not stopped
+20:32:01.433 ports free: 5396, 8395, 8396, 18395, 18396
+20:32:01.444 data folder (fresh): D:\repo\codex\qmlTester\taidaflow\build\w2-086-run\live
+20:32:04.433 safety_probe exit=0 (SAFE)
+20:32:04.467 app started pid=99940
+20:32:15.061 app listeners: 127.0.0.1:5396 | 127.0.0.1:8395 | 127.0.0.1:8396 | 127.0.0.1:18395 | 127.0.0.1:18396
+20:32:15.067 PASS app listens on its 5 ports (5396, 8395, 8396, 18395, 18396), loopback only
+20:32:15.108 PASS REST GET / -> {"status":"ok"}|200
+20:32:53.612 client exit=0
+20:32:53.614 PASS mirror client scenario: every check passed
+20:32:53.640 REST /api/sensor/last after the scenario: {"s1":18743,"s10":944,"s11":897,"s12":0,"s13":13107,"s14":19669,"s15":26214,"s16":32776,"s17":0,"s18":0,"s19":0,"s2":19038,"s20":0,"s21":"","s22":"","s23":"","s24":"","s25":"","s26":"","s27":"","s28":"","s29":"","s3":22282,"s30":"","s31":"","s32":"","s33":"","s34":"","s35":"","s36":"","s37":"","s38":"","s39":"","s4":21692,"s40":"","s5":1180,"s6":1132,"s7":1085,"s8":1038,"s9":991,"ts":1790944372}
+20:33:19.992 uptime 75 s; WM_CLOSE sent=True exited=True exit_code=0
+20:33:19.995 PASS app ran 75 s (>= 75 s)
+20:33:19.996 PASS app closed with exit code 0
+20:33:21.732 PASS no listener of the app left
+20:33:21.737   client: 20:32:17.356 PASS all offsets 0 at start (fresh settings) 
+20:33:21.738   client: 20:32:17.357 WRITE P0 sensorSettingsSv offsets: all 0 (epoch ms 1790944337357)
+20:33:21.739   client: 20:32:18.954 REST P0 ts=1790944338 (first row after the change) compared: (no offset columns or not stable)
+20:33:21.741   client: 20:32:25.300 SUMMARY P0: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 84 mismatch 0; clamped values seen 0
+20:33:21.742   client: 20:32:25.300 PASS P0: Modbus server input registers = raw + offset (counts)
+20:33:21.742   client: 20:32:25.300 PASS P0: REST /api/sensor/last rows = raw + offset (counts)
+20:33:21.744   client: 20:32:25.300 PASS P0: stored x scale = raw PV + offset within half a count
+20:33:21.745   client: 20:32:25.300 WRITE P1 sensorSettingsSv offsets: flowMeter=3.4 pt01=12.5 pt06=2000 tt02=-1.25 tt04=-200 (epoch ms 1790944345300)
+20:33:21.745   client: 20:32:27.091 REST P1 ts=1790944346 (first row after the change) compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=1999 (raw 1180, x scale 30.503 kPa vs screen 30.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:33:21.813   client: 20:32:37.302 SUMMARY P1: IR compared 300 mismatch 0; REST values compared 132 mismatch 0; history vs screen compared 110 mismatch 0; clamped values seen 72
+20:33:21.815   client: 20:32:37.302 PASS P1: Modbus server input registers = raw + offset (counts)
+20:33:21.816   client: 20:32:37.302 PASS P1: REST /api/sensor/last rows = raw + offset (counts)
+20:33:21.816   client: 20:32:37.303 PASS P1: stored x scale = raw PV + offset within half a count
+20:33:21.818   client: 20:32:37.303 PASS P1: clamped columns (pt06 -> 65535, tt04 -> 0) seen
+20:33:21.819   client: 20:32:37.304 WRITE P2 sensorSettingsSv offsets: flowMeter=3.4 pt01=-12.5 pt06=2000 tt02=-1.25 tt04=-200 (epoch ms 1790944357304)
+20:33:21.820   client: 20:32:38.865 REST P2 ts=1790944358 (first row after the change) compared: tt02 s2=18219 (raw 19038, x scale 27.800 °C vs screen 27.800); tt04 s4=0 (raw 21692, x scale 0.000 °C vs screen -166.900, clamped); pt01 s5=361 (raw 1180, x scale 5.509 kPa vs screen 5.506); pt06 s10=65535 (raw 944, x scale 1000.000 kPa vs screen 2014.405, clamped); flowMeter s12=3 (raw 0, x scale 3.000 L/min vs screen 3.400)
+20:33:21.821   client: 20:32:45.301 SUMMARY P2: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 70 mismatch 0; clamped values seen 44
+20:33:21.822   client: 20:32:45.303 PASS P2: Modbus server input registers = raw + offset (counts)
+20:33:21.823   client: 20:32:45.303 PASS P2: REST /api/sensor/last rows = raw + offset (counts)
+20:33:21.824   client: 20:32:45.303 PASS P2: stored x scale = raw PV + offset within half a count
+20:33:21.825   client: 20:32:45.303 PASS P2: clamped columns (pt06 -> 65535, tt04 -> 0) seen
+20:33:21.826   client: 20:32:45.303 PASS P2: the first row stored after the change (ts=1790944358) already uses pt01 -12.5 kPa
+20:33:21.827   client: 20:32:45.303 WRITE P3 sensorSettingsSv offsets: all 0 (epoch ms 1790944365303)
+20:33:21.828   client: 20:32:46.984 REST P3 ts=1790944366 (first row after the change) compared: (no offset columns or not stable)
+20:33:21.829   client: 20:32:53.294 SUMMARY P3: IR compared 180 mismatch 0; REST values compared 84 mismatch 0; history vs screen compared 84 mismatch 0; clamped values seen 0
+20:33:21.829   client: 20:32:53.294 PASS P3: Modbus server input registers = raw + offset (counts)
+20:33:21.831   client: 20:32:53.294 PASS P3: REST /api/sensor/last rows = raw + offset (counts)
+20:33:21.832   client: 20:32:53.294 PASS P3: stored x scale = raw PV + offset within half a count
+20:33:21.833   client: 20:32:53.294 PASS P3: the first row stored after resetting the offsets (ts=1790944366) is raw again
+20:33:21.833   client: 20:32:53.296 RESULT OK (0 failure(s)) - scenario done
+20:33:22.870 sensor_dump exit=0
+20:33:22.883 sensor_data rows: 75
+20:33:23.047 log: 4 offsets-in-use line(s); 1200 mirrored registers checked (100 with an offset); 100 offset sample values checked; 75 saves
+20:33:23.049 PASS log: offsets-in-use lines for start / P1 / P2 / P3 (4)
+20:33:23.052 PASS log: every Modbus server PV = round(raw + offset / scale) clamped (0 mismatches)
+20:33:23.054 PASS log: every stored offset value = round(raw + offset / scale) clamped, raw = the mirrored raw (0 mismatches)
+20:33:23.063 PASS db: all 75 sensor_data rows = the logged samples (offset columns stored with the offset of that moment, others raw; 0 mismatches, 75 saves logged)
+20:33:23.113 PASS log: clamp warnings rate limited (pt06 1, tt04 1; one per column per 60 s)
+20:33:23.147 PASS log: PT-01 PV still written from the raw count ([Modbus][Read] ... value = raw x scale, 75 lines)
+20:33:23.180 PASS log: no QML error/warning lines (0)
+20:33:23.201 PASS other TaidaFlowApp / nginx processes still running: 1 of 1
+20:33:23.221 PASS Adam60xxSimulator pid 91076 still running
+20:33:23.221 === all checks passed

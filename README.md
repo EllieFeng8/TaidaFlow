@@ -604,6 +604,8 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
   PT-01..07、FM-01、M1..M4,與 `Td.historyTitle` 同一份定義);順序同歷史頁(新到舊),序號 1..N;
   數值 = 歷史頁的換算(TT/M ×100/65535、PT ×1000/65535、FM-01 ×1),格式與頁面 `toFixed(2)` 相同
   (含剛好 .xx5 的進位規則);空值 `—`。檔名 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(要求時間)。
+- **Offset**(w2-086):資料庫存的是**存檔當時已加上設定頁 offset** 的值,所以歷史頁、CSV、REST 都是校正後的值
+  (與主畫面一致,差不超過半個計數);改 offset 只影響之後存的資料,舊資料不改寫。見「存檔時套用 offset」。
 - **桌面**(`desktop`):先跳「下載歷史資料」另存新檔對話框(預設「文件」資料夾 + 上述檔名),選定後
   同樣排隊/進度/可取消,直接寫到選定位置(不經暫存、不占名額),完成填 `savedPath`;對話框按取消 →
   `state = cancelled`(「已取消儲存」)。
@@ -708,11 +710,40 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
 `docs\evidence\w2-085\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端與資料庫列印工具,`live-run.ps1`
 用自己的設定檔 / port / 資料資料夾啟動桌面版兩次並逐項檢查)。
 
+## 存檔時套用 offset(w2-086)
+
+Mango 2026-10-02 決定:設定頁的 Offset **存檔時就加上**,資料庫、歷史頁、CSV、REST 全部一致;Modbus server 給外部 HMI 的
+PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `Core/SensorSettings.md`。
+
+- 程式:`Core/SensorOffsetStorage.{h,cpp}`(新檔,只編進桌面版),`Manager` 只做接線(建構時建立、`saveServerInputData`
+  存檔前換算整筆、`mirrorClientData` 鏡像到 Modbus server input register 時換算)。資料庫結構、SqlManager、Proxy 的 PV
+  (仍是原始值,畫面自己加 offset)、原本的 90% 高限警報(原始值)、設定頁的 HR11~40、DI/DO/線圈都不變。
+- 換算:`存入值 = round(原始計數 + offset ÷ 縮放比例)`,夾在 0~65535(夾到邊界時 warning,每欄每 60 秒最多一行);
+  縮放比例取自 `Core/ModbusMapping.h`(TT ×100/65535 °C、PT ×1000/65535 kPa、流量 ×1 L/min)。流量 1 個計數 = 1 L/min,
+  所以流量 offset 存檔時四捨五入到整數 L/min。
+- 每一筆都用當下的設定:套用後下一筆(≤ 1 秒)就用新 offset;舊資料不改寫(改 offset 的時間點歷史曲線會跳一下)。
+- log:`[SensorOffset] offsets in use from the next sample: …`(設定改變時一行)、
+  `[SensorOffset] sensor_data sample with offsets: s5 pt01 raw=… stored=…`(有 offset 時每筆一行)、
+  `[ModbusServer][Mirror] inputRegister=… raw=… server=…`(server = 給外部 HMI 的值)。
+
+**給 Mango 的測試方法**(模擬器或實機皆可,不需改程式):
+
+1. 主畫面記下 PT-01 目前的值,例如 500.00 kPa。
+2. 設定頁把 PT-01 的 Offset 設成 12.5 後套用 → 主畫面 PT-01 變成 512.50。
+3. 等 2 秒後到歷史頁按「篩選」(或下載 CSV):最新一筆的 PT-01 ≈ 512.50(與主畫面差不超過 0.01);
+   套用之前的資料仍是約 500.00(舊資料不改寫)。
+4. REST:瀏覽器開 `http://<IP>/api/sensor/last`,`s5` × 1000 ÷ 65535 ≈ 512.50。
+5. 外部 HMI(或 Modbus 測試工具)讀 Modbus server input register 4:值 × 1000 ÷ 65535 ≈ 512.50。
+6. Offset 改回 0 後套用 → 之後存的資料回到原始值。
+
+測試:`Core/tests` 的 `tst_offset_storage`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:`docs\evidence\w2-086\tools\`
+(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔 / port / 資料資料夾啟動桌面版並逐項檢查)。
+
 ## 測試 / 驗證(全部以 exit code 判定)
 
 QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報);
+SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset);
 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
 
 ```bat
@@ -788,7 +819,11 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
 ::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
 ::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
-::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)
+::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)、
+::     tst_offset_storage(w2-086 存檔時套用 offset:key ↔ 欄位 ↔ 縮放對照、正負 / 0 / 未設定 / 非有限值、四捨五入、夾限 0 與 65535
+::     與 warning 限流、壓力 / 溫度 / 流量、設定改變後下一筆立即用新 offset、歷史換算值與 UI 自己的 SensorUnits.adjusted() 逐一比對、
+::     真的 Manager 對測試自己的 Modbus TCP server:資料庫列、歷史頁、CSV 匯出、REST /api/sensor/last、Modbus server input
+::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)
 Core\tests\run-core-tests.bat fresh
 :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
 ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、

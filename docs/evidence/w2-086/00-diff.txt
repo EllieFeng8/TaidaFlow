@@ -1,0 +1,1412 @@
+=== w2-086 diff vs HEAD c4eb5fe (2026-10-02T20:33:41+08:00)
+ App/fonts/TaidaFlowNotoSansTC-Bold.ttf    | Bin 245364 -> 246028 bytes
+ App/fonts/TaidaFlowNotoSansTC-Regular.ttf | Bin 244708 -> 245368 bytes
+ App/fonts/charset.txt                     |   2 +-
+ Core/CMakeLists.txt                       |   3 ++
+ Core/SensorOffset.md                      |  32 ++++++++++++++++++---
+ Core/SensorSettings.md                    |  15 ++++++++--
+ Core/manager.cpp                          |  19 +++++++-----
+ Core/manager.h                            |   3 ++
+ Core/tests/CMakeLists.txt                 |  46 ++++++++++++++++++++++++++++++
+ README.md                                 |  39 +++++++++++++++++++++++--
+ 10 files changed, 143 insertions(+), 16 deletions(-)
+
+new files:
+  106 Core/SensorOffsetStorage.h
+  251 Core/SensorOffsetStorage.cpp
+  717 Core/tests/tst_offset_storage.cpp
+ 1074 total
+
+diff --git a/App/fonts/charset.txt b/App/fonts/charset.txt
+index 534e603..23f448c 100644
+--- a/App/fonts/charset.txt
++++ b/App/fonts/charset.txt
+@@ -1 +1 @@
+- !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿΔΩμ–—‘’“”•…‧‰′″‹›℃℉←↑→↓−∞≈≠≤≥✓　、。〈〉《》「」『』【】〔〕一三上下不且並中主久之也了二五今仍他代令以件任份伸但位低佔何作使來例供依保修個值偏停側偵備傳儲光入內全六共其再出分切列初刪到制則前副力功加動包化匯區半卡即原參反取受口只叫可史右各同名向否含吸告周呼命員唯啟單器嚴四回固圈圍圖在地址均型執基報填增壓外多大天央失套如始子字存它守安完定容密實寫寬寸將對導小少尚就尺層左差己已常平年序底度廠建式引張往後徑得從復循心必忙忽急恆恢息感態憶應成或所手才技拉持指按捲掃授排接控描提換援擇操支收改放故效敗整數文料新斷方於旗日明是時晚暫曆更最會月有期未本束果查校格桃框案桌條棄槽標模樣機橫檔檢欄欠次止正此步歷歸段每比水求決沒沿法泵流浦消液減測源準溢溫滑滯滿漏濾瀏灰為無焦熱燈片版狀獨率現理環生用由界留略畫異發的皆盤目直相看知矩硬碌確碼示科秒程稱空立站端第筆等算管箭範篩籤系紀約紅索紫組結統綠維網緊線緣編縮繼續缺置者而能自至致與舊色英落藍藏處虛號行表補裡製複要覽解計訊記設試該認誤說調請諧證警護讀變讓負責資起超距跨路跳身軸較載輯輸轉近迴送逆透這通速連進逾運過達選遺還邊部郵重量針鈕錄錯鍵鎖鐘閉開間閥關防限除隊階隔際障隱離電需青靜非面頁頂項順須預頭頻題顏類顯餘首馬驗體高點齊！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠［＼］＾＿｀｛｜｝～
++ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿΔΩμ–—‘’“”•…‧‰′″‹›℃℉←↑→↓−∞≈≠≤≥✓　、。〈〉《》「」『』【】〔〕一三上下不且並中主久之也了二五今仍他代令以件任份伸但位低佔何作使來例供依保修個值偏停側偵備傳儲光入內全六共其再出分切列初刪到制則前副力功加動包化匯區半卡即原參反取受口只叫可史右各同名向否含吸告周呼命員唯啟單器嚴四回固圈圍圖在地址均型執基報填增壓外多大天央失套如始子字存它守安完定容密實寫寬寸將對導小少尚就尺層左差己已常平年序底度庫廠建式引張往後徑得從復循心必忙忽急恆恢息感態憶應成或所手才技拉持指按捲掃授排接控描提換援擇操支收改放故效敗整數文料新斷方於旗日明是時晚暫曆更最會月有期未本束果查校格桃框案桌條棄槽標模樣機橫檔檢欄欠次止正此步歷歸段每比水求決沒沿法泵流浦消液減測源準溢溫滑滯滿漏濾瀏灰為無焦熱燈片版狀獨率現理環生用由界留略畫異發的皆盤目直相看知矩硬碌確碼示科秒程稱空立站端第筆等算管箭範篩籤系紀約紅索紫組結給統綠維網緊線緣編縮繼續缺置者而能自至致與舊色英落藍藏處虛號行表補裡製複要覽解計訊記設試該認誤說調請諧證警護讀變讓負責資起超距跨路跳身軸較載輯輸轉近迴送逆透這通速連進逾運過達選遺還邊部郵重量針鈕錄錯鍵鎖鐘閉開間閥關防限除隊階隔際障隱離電需青靜非面頁頂項順須預頭頻題顏類顯餘首馬驗體高點齊！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠［＼］＾＿｀｛｜｝～
+diff --git a/Core/CMakeLists.txt b/Core/CMakeLists.txt
+index f9c85a6..3a7fa87 100644
+--- a/Core/CMakeLists.txt
++++ b/Core/CMakeLists.txt
+@@ -46,6 +46,9 @@ if(TAIDAFLOW_IS_WINDOWS_DESKTOP)
+         # w2-085: settings-page upper/lower limit alarms (owned by Manager)
+         LimitAlarms.h
+         LimitAlarms.cpp
++        # w2-086: settings-page offsets applied to sensor_data and the Modbus server PVs (owned by Manager)
++        SensorOffsetStorage.h
++        SensorOffsetStorage.cpp
+         # w2-049: reusable HTTP server singleton (Qt Core/Network/HttpServer only; see
+         # AppHttpServer/README.md). Serves the web page and /exports on 0.0.0.0:8124.
+         AppHttpServer/AppHttpServer.h
+diff --git a/Core/SensorOffset.md b/Core/SensorOffset.md
+index ff0b95e..004ae1d 100644
+--- a/Core/SensorOffset.md
++++ b/Core/SensorOffset.md
+@@ -28,14 +28,38 @@
+ | REST API(`/api/sensor/...`) | ✅ | 讀資料庫,自動一致 |
+ | 超限警報(設定頁上下限) | ✅ | 用加上 offset 後的值判斷 |
+ | Proxy 上的 PV(程式內部、網頁同步) | ❌ 原始值 | 畫面自己加 offset;PV 維持原始值才不會重複加兩次 |
+-| Modbus server 給外部 HMI 的 PV | ❌ 原始值 | 設定頁的 offset 與上下限設定值另外寫在 Modbus server 的 HR(holding register) |
++| Modbus server 給外部 HMI 的 PV | ✅ | Mango 2026-10-02 改為套用:input register 0~15(ADAM-6217 AI 鏡像)與資料庫同一個換算(offset 換成計數值加上去,四捨五入,夾在 0~65535);MV1~4 位置、DI/DO/線圈不變;設定頁的 offset 與上下限設定值本身仍另外寫在 HR11~40(holding register,原樣) |
+ | 原本的「量程 90% 高限」警報 | ❌ 原始值 | 保護硬體量程用 |
+ | 已經存在資料庫的舊資料 | ❌ 不改寫 | |
+ 
+ ## 實作狀態(2026-10-02)
+ 
+ - 已生效:主畫面數值、Filter 壓差、流量計、主畫面超限變色。
+-- 實作中(core 分支):
++- 已生效(core 分支):
+   - 超限警報(超過上限或低於下限立即記錄、嚴重程度「警告」,回到範圍內持續 2 秒才改為已解除):**已生效**(w2-085,2026-10-02)。
+-  - 資料庫存檔時套用 offset;完成後歷史頁、CSV、REST 隨之一致。
+-- 上列完成後更新本節。
++  - 資料庫存檔時套用 offset,歷史頁、CSV、REST 隨之一致;Modbus server 給外部 HMI 的 PV 同樣套用:**已生效**(w2-086,2026-10-02)。
++
++### 存檔時套用的做法(w2-086)
++
++- 程式:`Core/SensorOffsetStorage.{h,cpp}`(新檔,只編進桌面版),`Manager` 只做接線:每秒存檔
++  (`saveServerInputData`)前換算整筆資料,鏡像到 Modbus server 的 input register 時換算該暫存器。
++- 換算:`存入值 = round(原始計數 + offset ÷ 縮放比例)`,夾在 0~65535(夾到邊界時記 warning,每欄每 60 秒最多一行,
++  下一行會附上期間被略過的次數)。四捨五入 = 0.5 進位(遠離 0)。
++- 每一筆都用**當下**的設定:設定頁套用後,下一筆存檔(≤ 1 秒)與下一次 Modbus server 更新就用新的 offset。
++  offset 為 0 或沒有設定 → 存原始計數。
++- 縮放比例只有一個來源:`Core/ModbusMapping.h` 的 `defaultReadBindings()`(即時顯示用的那一份);歷史頁
++  (`HistoryViews.cpp`)與 CSV(`HistoryExport.cpp`)的換算比例與它相同(`Core/tests/tst_offset_storage` 檢查)。
++
++| 設定 key | 資料庫欄位 / Modbus server input register | 縮放比例(每個計數) | 單位 |
++|---|---|---|---|
++| tt01~tt04 | s1~s4 / IR0~IR3 | 100 ÷ 65535 ≈ 0.001526 | °C |
++| pt01~pt04 | s5~s8 / IR4~IR7 | 1000 ÷ 65535 ≈ 0.015259 | kPa |
++| pt05~pt07 | s9~s11 / IR8~IR10 | 1000 ÷ 65535 ≈ 0.015259 | kPa |
++| flowMeter | s12 / IR11 | 1 | L/min |
++| (無,MV1~4 開度回授) | s13~s16 / IR12~IR15 | 100 ÷ 65535 | % — 不套用 |
++| filter | 沒有自己的欄位 | — | 由 PT-02、PT-03 各自校正後相減,自動一致 |
++
++- 一致性:歷史頁 / CSV / REST(× 縮放比例)= 主畫面的「原始值 + offset」,誤差不超過半個計數
++  (壓力 ≤ 0.0076 kPa、溫度 ≤ 0.00076 °C、流量 ≤ 0.5 L/min)。**流量計目前 1 個計數 = 1 L/min**(傳送器量程尚未提供,
++  ModbusMapping.h 暫用原始值),所以流量的 offset 存檔時會四捨五入到整數 L/min(例如 offset 3.4 → 存 +3)。
++- 夾到邊界時(例如原始值已接近滿刻度又加正 offset)存入值就是 0 或 65535,與主畫面顯示值不同;log 有 warning。
+diff --git a/Core/SensorSettings.md b/Core/SensorSettings.md
+index 3c7f8dc..e15a7de 100644
+--- a/Core/SensorSettings.md
++++ b/Core/SensorSettings.md
+@@ -41,8 +41,19 @@ The UI displays raw PV + offset; the backend must keep PVs raw to avoid applying
+ the offset twice. Filter pressure difference is corrected PT-02 minus corrected
+ PT-03; filter has no independent offset in the UI. The leakage sensor has no
+ settings; its binary indicator continues to display the raw digital state.
+-Historical display converts pressure using the stored column unit and does not
+-retroactively apply today's offsets. CSV export retains the backend's source units.
++Offsets are applied when a sample is stored (Mango 2026-10-02, core branch desktop
++backend, w2-086, `Core/SensorOffsetStorage.{h,cpp}`; scope table `Core/SensorOffset.md`):
++before each `sensor_data` row is written, the offset in effect at that moment is
++converted to counts with the column's scale (`Core/ModbusMapping.h`), added to the raw
++count, rounded and clamped to 0..65535. The History page, CSV export and REST therefore
++show corrected values (History/CSV in the backend's source units: pressure kPa,
++temperature °C, flow L/min), equal to the screen value raw PV + offset within half a
++count. A changed offset applies only to samples stored afterwards; rows already stored
++are never rewritten, and the original raw value of a corrected row cannot be recovered.
++The Proxy PVs stay raw (the UI adds the offset itself). The original 90 % high-range
++alarm judges raw values. The Modbus server PVs for external HMIs (input registers
++0..15, ADAM-6217 mirror) carry the same correction as the database (Mango 2026-10-02);
++the offset/limit settings themselves stay in HR11..40 unchanged.
+ 
+ The Filter graphic turns red above its enabled upper limit and orange below its
+ enabled lower limit, otherwise gray. It compares the unrounded corrected kPa
+diff --git a/Core/manager.cpp b/Core/manager.cpp
+index 7e35d37..ad24426 100644
+--- a/Core/manager.cpp
++++ b/Core/manager.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include "LimitAlarms.h"
+ #include "ModbusServerBridgeMapping.h"
++#include "SensorOffsetStorage.h"
+ #include "SqlManager.h"
+ #include "TaidaFlowProxy.h"
+ 
+@@ -141,6 +142,8 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
+     // w2-085: settings-page upper/lower limit alarms (the 90 % high alarm below is unchanged).
+     m_limitAlarms = new LimitAlarmMonitor(proxy, sql, this);
+     connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
++    // w2-086: settings-page offsets applied to sensor_data and the Modbus server input registers.
++    m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);
+     m_pollTimer.setInterval(kPollIntervalMs);
+     connect(&m_pollTimer, &QTimer::timeout, this, &Manager::pollConfiguredPoints);
+ 
+@@ -784,15 +787,19 @@ void Manager::mirrorClientData(ModbusClient::Device device,
+                 continue;
+ 
+             const quint16 serverOffset = static_cast<quint16>(serverStart + aiOffset);
++            // Raw counts: the 90 % alarm below and the sample saved by saveServerInputData().
+             m_serverInputRegisters[serverOffset] = values.at(index);
+-            emit serverInputRegisterUpdated(serverOffset, values.at(index));
++            // w2-086 D1b: the external HMI's PV carries the offset (same conversion as sensor_data).
++            const quint16 serverValue = m_offsetStorage->correctedServerRegister(serverOffset, values.at(index));
++            emit serverInputRegisterUpdated(serverOffset, serverValue);
+             checkHighInputAlarm(serverOffset, values.at(index));
+             qInfo().noquote()
+-                    << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4")
++                    << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4 server=%5")
+                                .arg(serverOffset)
+                                .arg(ModbusClient::displayName(device))
+                                .arg(aiOffset)
+-                               .arg(values.at(index));
++                               .arg(values.at(index))
++                               .arg(serverValue);
+         }
+ 
+         const quint8 groupBit = device == ModbusClient::Device::Adam6217_202
+@@ -1193,10 +1200,8 @@ void Manager::saveServerInputData()
+         return;
+     }
+ 
+-    QVector<double> readings;
+-    readings.reserve(m_serverInputRegisters.size());
+-    for (quint16 value : m_serverInputRegisters)
+-        readings.append(static_cast<double>(value));
++    // w2-086 D1: raw counts + the offsets of this moment (converted to counts, rounded, 0..65535).
++    const QVector<double> readings = m_offsetStorage->correctedSample(m_serverInputRegisters);
+ 
+     const bool saved = m_sql->saveSensorData(QDateTime::currentDateTime(), readings);
+     if (saved) {
+diff --git a/Core/manager.h b/Core/manager.h
+index 69d07d8..9dcd134 100644
+--- a/Core/manager.h
++++ b/Core/manager.h
+@@ -15,6 +15,7 @@
+ class TaidaFlowProxy;
+ class SqlManager;
+ class LimitAlarmMonitor;    // w2-085: settings-page limit alarms (Core/LimitAlarms.h)
++class SensorOffsetStorage;  // w2-086: offsets applied when storing (Core/SensorOffsetStorage.h)
+ 
+ class Manager final : public QObject
+ {
+@@ -184,4 +185,6 @@ private:
+     bool m_restoringSv = false;
+     // w2-085: judged after every PV update (updateProcessPoint); its alarmSaved -> alarmSaved.
+     LimitAlarmMonitor *m_limitAlarms = nullptr;
++    // w2-086: sensor_data samples and the Modbus server input registers get the offsets.
++    SensorOffsetStorage *m_offsetStorage = nullptr;
+ };
+diff --git a/Core/tests/CMakeLists.txt b/Core/tests/CMakeLists.txt
+index 94b6e8a..cce7be3 100644
+--- a/Core/tests/CMakeLists.txt
++++ b/Core/tests/CMakeLists.txt
+@@ -9,6 +9,7 @@
+ #   w2-080: tst_alarm_views
+ #   w2-084: tst_server_heartbeat
+ #   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
++#   w2-086: tst_offset_storage (and SensorOffsetStorage.cpp in tst_manager_sv_guard / tst_limit_alarms)
+ cmake_minimum_required(VERSION 3.21)
+ project(TaidaFlowCoreTests LANGUAGES CXX)
+ 
+@@ -105,6 +106,8 @@ taidaflow_core_test(tst_manager_sv_guard
+         "${CORE_DIR}/manager.h"
+         "${CORE_DIR}/LimitAlarms.h"
+         "${CORE_DIR}/LimitAlarms.cpp"   # w2-085: owned by Manager
++        "${CORE_DIR}/SensorOffsetStorage.h"
++        "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
+         "${CORE_DIR}/manager.cpp"
+         "${CORE_DIR}/Modbus_Client.h"
+         "${CORE_DIR}/Modbus_Client.cpp"
+@@ -186,6 +189,8 @@ taidaflow_core_test(tst_limit_alarms
+         tst_limit_alarms.cpp
+         "${CORE_DIR}/LimitAlarms.h"
+         "${CORE_DIR}/LimitAlarms.cpp"
++        "${CORE_DIR}/SensorOffsetStorage.h"
++        "${CORE_DIR}/SensorOffsetStorage.cpp"   # w2-086: owned by Manager
+         "${CORE_DIR}/manager.h"
+         "${CORE_DIR}/manager.cpp"
+         "${CORE_DIR}/Modbus_Client.h"
+@@ -208,3 +213,44 @@ taidaflow_core_test(tst_limit_alarms
+         "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+     LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
+ target_compile_definitions(tst_limit_alarms PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
++
++# ---------------------------------------------------------------------------------------------
++# w2-086: settings-page offsets applied when storing (SensorOffsetStorage, Core/SensorOffsetStorage.h):
++# key <-> column <-> scale table, rounding / clamping (rate-limited warning), pressure / temperature /
++# flow, settings changes used by the next sample, History value == the UI's SensorUnits.adjusted()
++# (its own JavaScript, read from TaidaFlowContent), and the real Manager against two Modbus TCP
++# servers of the test on 127.0.0.1 (ports picked by the OS) with the real ModbusServer, History page,
++# CSV export and REST /api/sensor/last. Real SqlManager on a temporary data folder; no device, no
++# fixed port.
++# ---------------------------------------------------------------------------------------------
++taidaflow_core_test(tst_offset_storage
++    SOURCES
++        tst_offset_storage.cpp
++        "${CORE_DIR}/SensorOffsetStorage.h"
++        "${CORE_DIR}/SensorOffsetStorage.cpp"
++        "${CORE_DIR}/LimitAlarms.h"
++        "${CORE_DIR}/LimitAlarms.cpp"
++        "${CORE_DIR}/manager.h"
++        "${CORE_DIR}/manager.cpp"
++        "${CORE_DIR}/Modbus_Client.h"
++        "${CORE_DIR}/Modbus_Client.cpp"
++        "${CORE_DIR}/Modbus_Server.h"
++        "${CORE_DIR}/Modbus_Server.cpp"
++        "${CORE_DIR}/Ms300FaultReader.h"
++        "${CORE_DIR}/Ms300FaultReader.cpp"
++        "${CORE_DIR}/ModbusMapping.h"
++        "${CORE_DIR}/ModbusServerBridgeMapping.h"
++        "${CORE_DIR}/HistoryViews.h"
++        "${CORE_DIR}/HistoryViews.cpp"
++        "${CORE_DIR}/RESTManager.h"
++        "${CORE_DIR}/RESTManager.cpp"
++        "${CORE_DIR}/SqlManager.h"
++        "${CORE_DIR}/SqlManager.cpp"
++        "${CORE_DIR}/SqlManagerAlarms.cpp"
++        "${CORE_DIR}/HistoryExport.h"
++        "${CORE_DIR}/HistoryExport.cpp"
++        "${CORE_DIR}/TaidaFlowProxy.h"
++        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
++        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
++    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
++target_compile_definitions(tst_offset_storage PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")
+diff --git a/README.md b/README.md
+index 6319e36..7c00c54 100644
+--- a/README.md
++++ b/README.md
+@@ -604,6 +604,8 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
+   PT-01..07、FM-01、M1..M4,與 `Td.historyTitle` 同一份定義);順序同歷史頁(新到舊),序號 1..N;
+   數值 = 歷史頁的換算(TT/M ×100/65535、PT ×1000/65535、FM-01 ×1),格式與頁面 `toFixed(2)` 相同
+   (含剛好 .xx5 的進位規則);空值 `—`。檔名 `<sessionId>_<yyyyMMdd_HHmmss>.csv`(要求時間)。
++- **Offset**(w2-086):資料庫存的是**存檔當時已加上設定頁 offset** 的值,所以歷史頁、CSV、REST 都是校正後的值
++  (與主畫面一致,差不超過半個計數);改 offset 只影響之後存的資料,舊資料不改寫。見「存檔時套用 offset」。
+ - **桌面**(`desktop`):先跳「下載歷史資料」另存新檔對話框(預設「文件」資料夾 + 上述檔名),選定後
+   同樣排隊/進度/可取消,直接寫到選定位置(不經暫存、不占名額),完成填 `savedPath`;對話框按取消 →
+   `state = cancelled`(「已取消儲存」)。
+@@ -708,11 +710,40 @@ Qt for WebAssembly 沒有系統字型,桌面版則原本會混用微軟正黑體
+ `docs\evidence\w2-085\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端與資料庫列印工具,`live-run.ps1`
+ 用自己的設定檔 / port / 資料資料夾啟動桌面版兩次並逐項檢查)。
+ 
++## 存檔時套用 offset(w2-086)
++
++Mango 2026-10-02 決定:設定頁的 Offset **存檔時就加上**,資料庫、歷史頁、CSV、REST 全部一致;Modbus server 給外部 HMI 的
++PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `Core/SensorSettings.md`。
++
++- 程式:`Core/SensorOffsetStorage.{h,cpp}`(新檔,只編進桌面版),`Manager` 只做接線(建構時建立、`saveServerInputData`
++  存檔前換算整筆、`mirrorClientData` 鏡像到 Modbus server input register 時換算)。資料庫結構、SqlManager、Proxy 的 PV
++  (仍是原始值,畫面自己加 offset)、原本的 90% 高限警報(原始值)、設定頁的 HR11~40、DI/DO/線圈都不變。
++- 換算:`存入值 = round(原始計數 + offset ÷ 縮放比例)`,夾在 0~65535(夾到邊界時 warning,每欄每 60 秒最多一行);
++  縮放比例取自 `Core/ModbusMapping.h`(TT ×100/65535 °C、PT ×1000/65535 kPa、流量 ×1 L/min)。流量 1 個計數 = 1 L/min,
++  所以流量 offset 存檔時四捨五入到整數 L/min。
++- 每一筆都用當下的設定:套用後下一筆(≤ 1 秒)就用新 offset;舊資料不改寫(改 offset 的時間點歷史曲線會跳一下)。
++- log:`[SensorOffset] offsets in use from the next sample: …`(設定改變時一行)、
++  `[SensorOffset] sensor_data sample with offsets: s5 pt01 raw=… stored=…`(有 offset 時每筆一行)、
++  `[ModbusServer][Mirror] inputRegister=… raw=… server=…`(server = 給外部 HMI 的值)。
++
++**給 Mango 的測試方法**(模擬器或實機皆可,不需改程式):
++
++1. 主畫面記下 PT-01 目前的值,例如 500.00 kPa。
++2. 設定頁把 PT-01 的 Offset 設成 12.5 後套用 → 主畫面 PT-01 變成 512.50。
++3. 等 2 秒後到歷史頁按「篩選」(或下載 CSV):最新一筆的 PT-01 ≈ 512.50(與主畫面差不超過 0.01);
++   套用之前的資料仍是約 500.00(舊資料不改寫)。
++4. REST:瀏覽器開 `http://<IP>/api/sensor/last`,`s5` × 1000 ÷ 65535 ≈ 512.50。
++5. 外部 HMI(或 Modbus 測試工具)讀 Modbus server input register 4:值 × 1000 ÷ 65535 ≈ 512.50。
++6. Offset 改回 0 後套用 → 之後存的資料回到原始值。
++
++測試:`Core/tests` 的 `tst_offset_storage`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:`docs\evidence\w2-086\tools\`
++(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔 / port / 資料資料夾啟動桌面版並逐項檢查)。
++
+ ## 測試 / 驗證(全部以 exit code 判定)
+ 
+ QTest:`Core/AppHttpServer/tests`(可重用 HTTP 單例,只編該類別,見 5c)、`App/tests`(config.json 讀取器、`/runtime.json`
+ 與程式自寫 log,見 `App/tests/README.md`)、5b 的歷史/匯出 harness、5e 的各連線端歷史檢視 harness、5f 的 DI 警報與 5i 的
+-SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報);
++SqlManager 關閉、5j 的 `Core/tests`(Core 單元測試:REST 分頁、schema、匯出狀態表、警報頁檢視、超限警報、存檔時套用 offset);
+ 其餘整合以下列可重跑檢查驗證。`PS` = `powershell -NoProfile -ExecutionPolicy Bypass -File`。
+ 
+ ```bat
+@@ -788,7 +819,11 @@ docs\evidence\w2-067\tools\run-qtest.bat
+ ::     持續 2 秒才解除(注入時鐘與真實計時器)、同組感測器各自記錄、Filter = 校正後 PT-02 − PT-03、offset 生效且 PV 保持原始、
+ ::     設定改變 / 停用立即重新判斷、重啟接手不重複新增與查詢失敗重試(共用次數)、嚴重程度「警告」、alarmRecords / alarmViews 狀態、
+ ::     以 UI 自己的 JavaScript(SensorUnits.js + Main.qml limitState)逐一比對判斷結果、真的 Manager 對測試自己的 Modbus TCP
+-::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)
++::     server 走一遍(含原本 90% 高限警報不變)、manager.cpp / core.cpp / CMake 接線)、
++::     tst_offset_storage(w2-086 存檔時套用 offset:key ↔ 欄位 ↔ 縮放對照、正負 / 0 / 未設定 / 非有限值、四捨五入、夾限 0 與 65535
++::     與 warning 限流、壓力 / 溫度 / 流量、設定改變後下一筆立即用新 offset、歷史換算值與 UI 自己的 SensorUnits.adjusted() 逐一比對、
++::     真的 Manager 對測試自己的 Modbus TCP server:資料庫列、歷史頁、CSV 匯出、REST /api/sensor/last、Modbus server input
++::     register 都是校正後的值,Proxy PV 與 90% 高限警報仍用原始值,DI 線圈不變、manager.cpp / CMake 接線)
+ Core\tests\run-core-tests.bat fresh
+ :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
+ ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、
+
+=== new file Core/SensorOffsetStorage.h
+#pragma once
+// w2-086 (desktop only, never compiled into WebAssembly): the settings-page Offset
+// (TaidaFlowProxy::sensorSettingsSv[key].offset, contract Core/SensorSettings.md, scope table
+// Core/SensorOffset.md) is applied when a sample is STORED - Mango 2026-10-02: 「存檔時就加上
+// offset：資料庫、歷史頁、CSV、REST 全部一致」 - and to the PVs the Modbus server gives external HMIs
+// (Mango 2026-10-02: 「Modbus server 給外部 HMI 的 PV 要套用 offset」).
+//
+// Rules (PM decisions of w2-086):
+//  * sensor_data s1..s16 / Modbus server input registers 0..15 hold ADAM-6217 raw counts (0..65535).
+//    For a column with an offset, the offset (engineering units: pressure kPa, temperature degC,
+//    flow L/min) is converted into counts with that column's scale and added to the raw count:
+//        stored = clamp(round(raw + offset / scale), 0, 65535)      (round = half away from zero)
+//    The history page / CSV / REST convert stored * scale, so they show raw * scale + offset within
+//    half a count (<= 1 count) - the value the main screen shows (SensorUnits.adjusted()).
+//  * Scale: ModbusMapping::defaultReadBindings() (ReadBinding::scale, the live-display table) is the
+//    single source; the column / register of a binding is computed exactly like
+//    Manager::mirrorClientData() does (ADAM-6217 .202 -> 0 + AI, .203 -> 8 + AI).
+//  * Columns with an offset key: tt01..tt04 (s1..s4), pt01..pt04 (s5..s8), pt05..pt07 (s9..s11),
+//    flowMeter (s12).  MV1..MV4 positions (s13..s16) and the unused registers 16..19 never change.
+//    filter has no column (its value is corrected PT-02 - corrected PT-03, consistent by itself).
+//  * The offset of the moment is used: sensorSettingsSv is read for every sample / register, so the
+//    first sample after a settings change already uses the new offset.  Offset 0, no entry or a
+//    non-finite offset -> the raw count unchanged.  Old rows are never rewritten.
+//  * Clamped at 0 or 65535: a warning per column, rate limited (RepeatedWarningLimiter, 60 s).
+//  * Not changed: the Proxy PVs (raw; the UI adds the offset itself), the 90 % high alarm (raw), the
+//    settings HR11..40 of the Modbus server (Ukai0107), DI / DO / coils, the database schema.
+#include "ModbusMapping.h"
+#include "Modbus_Client.h"   // RepeatedWarningLimiter
+
+#include <QHash>
+#include <QList>
+#include <QObject>
+#include <QString>
+#include <QVariantMap>
+#include <QVector>
+
+class TaidaFlowProxy;
+
+class SensorOffsetStorage final : public QObject
+{
+    Q_OBJECT
+public:
+    // One sensor with an offset key, its database column / Modbus server input register and scale.
+    struct Column
+    {
+        QString key;                       // sensorSettingsSv key: tt01..tt04, pt01..pt07, flowMeter
+        ModbusMapping::ProcessPoint point = ModbusMapping::ProcessPoint::Tt01;
+        int serverRegister = -1;           // Modbus server input register (0-based)
+        int column = 0;                    // sensor_data column number: s<column> = register + 1
+        double scale = 1.0;                // engineering units per count (ReadBinding::scale)
+        QString unit;                      // kPa, °C, L/min
+    };
+
+    enum class Clamp { None, Low, High };
+    struct Result
+    {
+        quint16 value = 0;
+        Clamp clamp = Clamp::None;
+        double offsetCounts = 0.0;         // offset / scale
+    };
+
+    struct Options
+    {
+        qint64 clampWarningIntervalMs = RepeatedWarningLimiter::kDefaultIntervalMs;
+    };
+
+    SensorOffsetStorage(TaidaFlowProxy *proxy,
+                        const QList<ModbusMapping::ReadBinding> &bindings,
+                        const Options &options,
+                        QObject *parent = nullptr);
+    SensorOffsetStorage(TaidaFlowProxy *proxy,
+                        const QList<ModbusMapping::ReadBinding> &bindings,
+                        QObject *parent = nullptr);
+
+    // Manager::mirrorClientData: the value for Modbus server input register 'serverRegister'.
+    quint16 correctedServerRegister(int serverRegister, quint16 raw);
+    // Manager::saveServerInputData: the readings handed to SqlManager::saveSensorData (one per
+    // register, in register order = s1, s2, ...).
+    QVector<double> correctedSample(const QVector<quint16> &rawRegisters);
+
+    const QList<Column> &columns() const { return m_columns; }
+    // Clamp warnings written / held back so far (tests).
+    qint64 clampWarningsWritten() const { return m_clampWarningsWritten; }
+
+    // ---- rules, shared with the tests ----
+    static QString sensorKey(ModbusMapping::ProcessPoint point);          // empty: no offset key
+    static QString unitOf(const QString &key);                            // kPa, °C, L/min
+    // Modbus server input register of a read binding (as Manager::mirrorClientData); -1: none.
+    static int serverRegisterOf(const ModbusMapping::ReadBinding &binding);
+    static QList<Column> columnsOf(const QList<ModbusMapping::ReadBinding> &bindings);
+    // sensorSettingsSv[key].offset; missing entry / field or non-finite -> 0.
+    static double offsetOf(const QVariantMap &settings, const QString &key);
+    static Result apply(quint16 raw, double offset, double scale);
+
+private:
+    quint16 correct(const Column &column, const QVariantMap &settings, quint16 raw, const char *where);
+    void logSettings();
+
+    TaidaFlowProxy *m_proxy = nullptr;
+    Options m_options;
+    QList<Column> m_columns;
+    QHash<int, int> m_columnOfRegister;              // server register -> index in m_columns
+    QHash<int, RepeatedWarningLimiter> m_clampWarnings;   // per server register
+    qint64 m_clampWarningsWritten = 0;
+    QString m_lastLoggedOffsets;
+};
+
+=== new file Core/SensorOffsetStorage.cpp
+#include "SensorOffsetStorage.h"
+
+#include "ModbusServerBridgeMapping.h"
+#include "TaidaFlowProxy.h"
+
+#include <QDebug>
+#include <QStringList>
+
+#include <cmath>
+#include <limits>
+
+// w2-086: see SensorOffsetStorage.h for the rules.
+
+SensorOffsetStorage::SensorOffsetStorage(TaidaFlowProxy *proxy,
+                                         const QList<ModbusMapping::ReadBinding> &bindings,
+                                         const Options &options,
+                                         QObject *parent)
+    : QObject(parent)
+    , m_proxy(proxy)
+    , m_options(options)
+    , m_columns(columnsOf(bindings))
+{
+    QStringList table;
+    for (qsizetype index = 0; index < m_columns.size(); ++index) {
+        const Column &column = m_columns.at(index);
+        m_columnOfRegister.insert(column.serverRegister, int(index));
+        table << QStringLiteral("%1=s%2/IR%3 x%4 %5")
+                         .arg(column.key)
+                         .arg(column.column)
+                         .arg(column.serverRegister)
+                         .arg(column.scale, 0, 'g', 10)
+                         .arg(column.unit);
+    }
+    qInfo().noquote()
+            << QStringLiteral("[SensorOffset] offsets are applied to sensor_data and the Modbus server input "
+                              "registers (stored = round(raw + offset / scale), clamped 0..65535); %1 columns: %2")
+                       .arg(m_columns.size())
+                       .arg(table.join(QStringLiteral(", ")));
+    if (m_proxy) {
+        connect(m_proxy, &TaidaFlowProxy::sensorSettingsSvChanged, this, &SensorOffsetStorage::logSettings);
+        logSettings();
+    }
+}
+
+SensorOffsetStorage::SensorOffsetStorage(TaidaFlowProxy *proxy,
+                                         const QList<ModbusMapping::ReadBinding> &bindings,
+                                         QObject *parent)
+    : SensorOffsetStorage(proxy, bindings, Options{}, parent)
+{
+}
+
+QString SensorOffsetStorage::sensorKey(ModbusMapping::ProcessPoint point)
+{
+    using P = ModbusMapping::ProcessPoint;
+    switch (point) {
+    case P::Tt01: return QStringLiteral("tt01");
+    case P::Tt02: return QStringLiteral("tt02");
+    case P::Tt03: return QStringLiteral("tt03");
+    case P::Tt04: return QStringLiteral("tt04");
+    case P::Pt01: return QStringLiteral("pt01");
+    case P::Pt02: return QStringLiteral("pt02");
+    case P::Pt03: return QStringLiteral("pt03");
+    case P::Pt04: return QStringLiteral("pt04");
+    case P::Pt05: return QStringLiteral("pt05");
+    case P::Pt06: return QStringLiteral("pt06");
+    case P::Pt07: return QStringLiteral("pt07");
+    case P::FlowMeter: return QStringLiteral("flowMeter");
+    case P::Mv1Position:
+    case P::Mv2Position:
+    case P::Mv3Position:
+    case P::Mv4Position:
+        return {};
+    }
+    return {};
+}
+
+QString SensorOffsetStorage::unitOf(const QString &key)
+{
+    if (key.startsWith(QLatin1String("pt")))
+        return QStringLiteral("kPa");
+    if (key.startsWith(QLatin1String("tt")))
+        return QStringLiteral("°C");
+    return QStringLiteral("L/min");
+}
+
+int SensorOffsetStorage::serverRegisterOf(const ModbusMapping::ReadBinding &binding)
+{
+    // Same mapping as Manager::mirrorClientData(): only the ADAM-6217 holding registers are mirrored,
+    // register = group start + AI number, AI number = startAddress + value index.
+    if (!binding.isConfigured() || binding.registerType != QModbusDataUnit::HoldingRegisters)
+        return -1;
+    int start = -1;
+    if (binding.device == ModbusClient::Device::Adam6217_202)
+        start = ModbusServerBridgeMapping::ServerAdam6217AInputStart;
+    else if (binding.device == ModbusClient::Device::Adam6217_203)
+        start = ModbusServerBridgeMapping::ServerAdam6217BInputStart;
+    if (start < 0)
+        return -1;
+    const qint64 ai = qint64(binding.startAddress) + binding.valueOffset;
+    if (ai < 0 || ai >= ModbusServerBridgeMapping::Adam6217AiCount)
+        return -1;
+    return start + int(ai);
+}
+
+QList<SensorOffsetStorage::Column> SensorOffsetStorage::columnsOf(const QList<ModbusMapping::ReadBinding> &bindings)
+{
+    QList<Column> columns;
+    for (const ModbusMapping::ReadBinding &binding : bindings) {
+        const QString key = sensorKey(binding.point);
+        const int reg = serverRegisterOf(binding);
+        // Counts are 0..65535 (unsigned); a scale of 0 / non-finite cannot convert an offset.
+        if (key.isEmpty() || reg < 0 || binding.valueFormat != ModbusMapping::ValueFormat::Unsigned16
+                || !std::isfinite(binding.scale) || binding.scale == 0.0) {
+            continue;
+        }
+        Column column;
+        column.key = key;
+        column.point = binding.point;
+        column.serverRegister = reg;
+        column.column = reg + 1;
+        column.scale = binding.scale;
+        column.unit = unitOf(key);
+        columns.append(column);
+    }
+    return columns;
+}
+
+double SensorOffsetStorage::offsetOf(const QVariantMap &settings, const QString &key)
+{
+    // The UI's SensorUnits.adjusted(): raw + (settings[id] ? settings[id].offset : 0).
+    const auto entry = settings.constFind(key);
+    if (entry == settings.cend())
+        return 0.0;
+    const double offset = entry->toMap().value(QStringLiteral("offset")).toDouble();
+    return std::isfinite(offset) ? offset : 0.0;
+}
+
+SensorOffsetStorage::Result SensorOffsetStorage::apply(quint16 raw, double offset, double scale)
+{
+    Result result;
+    result.value = raw;
+    if (offset == 0.0 || !std::isfinite(offset) || !std::isfinite(scale) || scale == 0.0)
+        return result;
+    result.offsetCounts = offset / scale;
+    const double corrected = std::round(double(raw) + result.offsetCounts);   // half away from zero
+    constexpr double maximum = std::numeric_limits<quint16>::max();
+    if (!(corrected >= 0.0)) {            // also catches NaN (cannot happen: both terms finite)
+        result.value = 0;
+        result.clamp = Clamp::Low;
+    } else if (corrected > maximum) {
+        result.value = std::numeric_limits<quint16>::max();
+        result.clamp = Clamp::High;
+    } else {
+        result.value = quint16(corrected);
+    }
+    return result;
+}
+
+quint16 SensorOffsetStorage::correct(const Column &column, const QVariantMap &settings, quint16 raw,
+                                     const char *where)
+{
+    const double offset = offsetOf(settings, column.key);
+    const Result result = apply(raw, offset, column.scale);
+    if (result.clamp != Clamp::None) {
+        auto it = m_clampWarnings.find(column.serverRegister);
+        if (it == m_clampWarnings.end())
+            it = m_clampWarnings.insert(column.serverRegister, RepeatedWarningLimiter(m_options.clampWarningIntervalMs));
+        qint64 heldBack = 0;
+        if (it->allow(&heldBack)) {
+            ++m_clampWarningsWritten;
+            qWarning().noquote()
+                    << QStringLiteral("[SensorOffset] %1 (s%2) raw=%3 + offset %4 %5 (%6 counts) is outside 0..65535; "
+                                      "%7 clamped to %8%9")
+                               .arg(column.key)
+                               .arg(column.column)
+                               .arg(raw)
+                               .arg(offset, 0, 'f', 3)
+                               .arg(column.unit)
+                               .arg(result.offsetCounts, 0, 'f', 2)
+                               .arg(QLatin1String(where))
+                               .arg(result.value)
+                               .arg(it->suffix(heldBack));
+        }
+    }
+    return result.value;
+}
+
+quint16 SensorOffsetStorage::correctedServerRegister(int serverRegister, quint16 raw)
+{
+    const auto index = m_columnOfRegister.constFind(serverRegister);
+    if (index == m_columnOfRegister.cend() || !m_proxy)
+        return raw;
+    return correct(m_columns.at(index.value()), m_proxy->sensorSettingsSv(), raw, "Modbus server PV");
+}
+
+QVector<double> SensorOffsetStorage::correctedSample(const QVector<quint16> &rawRegisters)
+{
+    QVector<double> readings;
+    readings.reserve(rawRegisters.size());
+    for (quint16 raw : rawRegisters)
+        readings.append(double(raw));
+    if (!m_proxy)
+        return readings;
+
+    const QVariantMap settings = m_proxy->sensorSettingsSv();   // the offsets of this moment
+    QStringList changed;
+    for (const Column &column : std::as_const(m_columns)) {
+        if (column.serverRegister >= rawRegisters.size())
+            continue;
+        const quint16 raw = rawRegisters.at(column.serverRegister);
+        const quint16 stored = correct(column, settings, raw, "sensor_data value");
+        readings[column.serverRegister] = double(stored);
+        if (offsetOf(settings, column.key) != 0.0) {
+            changed << QStringLiteral("s%1 %2 raw=%3 stored=%4")
+                               .arg(column.column)
+                               .arg(column.key)
+                               .arg(raw)
+                               .arg(stored);
+        }
+    }
+    if (!changed.isEmpty()) {
+        qInfo().noquote() << QStringLiteral("[SensorOffset] sensor_data sample with offsets: %1")
+                                     .arg(changed.join(QStringLiteral("; ")));
+    }
+    return readings;
+}
+
+void SensorOffsetStorage::logSettings()
+{
+    if (!m_proxy)
+        return;
+    const QVariantMap settings = m_proxy->sensorSettingsSv();
+    QStringList parts;
+    for (const Column &column : std::as_const(m_columns)) {
+        const double offset = offsetOf(settings, column.key);
+        if (offset != 0.0) {
+            parts << QStringLiteral("%1 %2 %3 = %4 counts (s%5)")
+                             .arg(column.key)
+                             .arg(offset, 0, 'f', 3)
+                             .arg(column.unit)
+                             .arg(offset / column.scale, 0, 'f', 2)
+                             .arg(column.column);
+        }
+    }
+    const QString text = parts.isEmpty() ? QStringLiteral("none (raw counts are stored)")
+                                         : parts.join(QStringLiteral(", "));
+    if (text == m_lastLoggedOffsets)
+        return;
+    m_lastLoggedOffsets = text;
+    qInfo().noquote() << QStringLiteral("[SensorOffset] offsets in use from the next sample: %1").arg(text);
+}
+
+=== new file Core/tests/tst_offset_storage.cpp
+// w2-086 D1/D1b/D2/D4: settings-page offsets applied when a sample is stored (sensor_data) and to the
+// Modbus server input registers (SensorOffsetStorage, Core/SensorOffsetStorage.h).
+// Real TaidaFlowProxy, real SqlManager on a temporary data folder; managerIntegration runs the real
+// Manager against two Modbus TCP servers of this test on 127.0.0.1 (ports picked by the OS), the
+// real ModbusServer (connected like Core::init), the real HistoryViewService, HistoryExportManager
+// and RESTManager. No device, no fixed port.
+//
+//  * columnTable: key <-> sensor_data column / Modbus server register <-> scale, derived from
+//    ModbusMapping::defaultReadBindings() (single source), = the History page / CSV conversion;
+//  * applyRules (data driven): positive / negative / zero / sub-count offsets, rounding, clamp at 0
+//    and 65535, pressure / temperature / flow scales; offsetOf(): missing entry / field, non-finite;
+//  * clampWarningRateLimited: one warning per column per interval, the next one reports how many
+//    were held back; other columns have their own limiter;
+//  * settingsChangeNextSample: the sample after a settings change already uses the new offset;
+//    offset back to 0 -> raw; PVs stay raw; MV columns and registers 16..19 never change;
+//  * uiEquivalence: stored * scale (the History conversion) == SensorUnits.adjusted() of the UI (its
+//    own JavaScript, read from TaidaFlowContent) within half a count, for every column and a grid
+//    of raw values and offsets (clamped cases excluded and counted);
+//  * managerIntegration: Modbus reply -> Manager -> sensor_data row with the offsets; the same
+//    values through the History page (historyViews), the CSV export and REST /api/sensor/last; the
+//    Modbus server input registers (read with a Modbus TCP client) carry the same corrected counts;
+//    DI coils unchanged; Proxy PVs raw; the 90 % alarm still judged on the raw count; a settings
+//    change is used by the next saved row and the next server update;
+//  * sourceWiring: manager.cpp / manager.h / Core/CMakeLists.txt (desktop only).
+#include <QtTest>
+#include <QDir>
+#include <QFile>
+#include <QJSEngine>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QModbusTcpClient>
+#include <QModbusTcpServer>
+#include <QMutex>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QSignalSpy>
+#include <QTcpServer>
+#include <QTemporaryDir>
+
+#include <cmath>
+#include <limits>
+#include <memory>
+
+#include "HistoryExport.h"
+#include "HistoryViews.h"
+#include "ModbusMapping.h"
+#include "ModbusServerBridgeMapping.h"
+#include "Modbus_Server.h"
+#include "RESTManager.h"
+#include "SensorOffsetStorage.h"
+#include "SqlManager.h"
+#include "TaidaFlowProxy.h"
+#include "manager.h"
+
+#ifndef CORE_SOURCE_DIR
+#error CORE_SOURCE_DIR must point to taidaflow/Core
+#endif
+
+namespace {
+QMutex g_logMutex;
+QStringList g_log;
+QtMessageHandler g_previousHandler = nullptr;
+
+void captureMessages(QtMsgType type, const QMessageLogContext &context, const QString &message)
+{
+    {
+        QMutexLocker locker(&g_logMutex);
+        g_log << message;
+    }
+    if (g_previousHandler)
+        g_previousHandler(type, context, message);
+}
+
+int logCount(const QString &needle)
+{
+    QMutexLocker locker(&g_logMutex);
+    int n = 0;
+    for (const QString &line : std::as_const(g_log))
+        n += line.contains(needle) ? 1 : 0;
+    return n;
+}
+
+QStringList logLines(const QString &needle)
+{
+    QMutexLocker locker(&g_logMutex);
+    QStringList out;
+    for (const QString &line : std::as_const(g_log)) {
+        if (line.contains(needle))
+            out << line;
+    }
+    return out;
+}
+
+QString readSource(const QString &relative)
+{
+    QFile f(QStringLiteral(CORE_SOURCE_DIR "/") + relative);
+    if (!f.open(QIODevice::ReadOnly))
+        return QString();
+    return QString::fromUtf8(f.readAll()).replace(QStringLiteral("\r\n"), QStringLiteral("\n"));   // autocrlf checkouts
+}
+
+quint16 freePort()
+{
+    QTcpServer probe;
+    probe.listen(QHostAddress::LocalHost, 0);
+    return probe.serverPort();
+}
+
+// Three ports the OS picks (all probes listen at the same time, so they differ).
+void freePorts(quint16 *a, quint16 *b, quint16 *c)
+{
+    QTcpServer pa, pb, pc;
+    pa.listen(QHostAddress::LocalHost, 0);
+    pb.listen(QHostAddress::LocalHost, 0);
+    pc.listen(QHostAddress::LocalHost, 0);
+    *a = pa.serverPort();
+    *b = pb.serverPort();
+    *c = pc.serverPort();
+}
+
+constexpr double kT = 100.0 / 65535.0;    // degC per count
+constexpr double kP = 1000.0 / 65535.0;   // kPa per count
+constexpr double kF = 1.0;                // L/min per count
+
+QVariantMap withOffsets(QVariantMap settings, const QHash<QString, double> &offsets)
+{
+    for (auto it = offsets.cbegin(); it != offsets.cend(); ++it) {
+        QVariantMap entry = settings.value(it.key()).toMap();
+        entry.insert(QStringLiteral("offset"), it.value());
+        settings.insert(it.key(), entry);
+    }
+    return settings;
+}
+
+// The UI's own SensorUnits.js (TaidaFlowContent/components), evaluated in a QJSEngine.
+struct UiUnits
+{
+    QJSEngine engine;
+    QJSValue adjusted;
+    bool load(QString *error)
+    {
+        QFile f(QStringLiteral(CORE_SOURCE_DIR "/../TaidaFlowContent/components/SensorUnits.js"));
+        if (!f.open(QIODevice::ReadOnly)) {
+            *error = QStringLiteral("SensorUnits.js not found");
+            return false;
+        }
+        QString units = QString::fromUtf8(f.readAll());
+        units.remove(QStringLiteral(".pragma library"));
+        const QJSValue result = engine.evaluate(units);
+        if (result.isError()) {
+            *error = result.toString();
+            return false;
+        }
+        adjusted = engine.globalObject().property(QStringLiteral("adjusted"));
+        return adjusted.isCallable();
+    }
+    double call(double raw, const QString &key, const QVariantMap &settings)
+    {
+        return adjusted.call({raw, key, engine.toScriptValue(settings)}).toNumber();
+    }
+};
+} // namespace
+
+class TestOffsetStorage : public QObject
+{
+    Q_OBJECT
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+    void columnTable();
+    void applyRules_data();
+    void applyRules();
+    void offsetOfRules();
+    void clampWarningRateLimited();
+    void settingsChangeNextSample();
+    void uiEquivalence();
+    void managerIntegration();
+    void sourceWiring();
+
+private:
+    QTemporaryDir m_dir;
+    QString m_oldCwd;
+    SqlManager *m_sql = nullptr;
+};
+
+void TestOffsetStorage::initTestCase()
+{
+    QVERIFY(m_dir.isValid());
+    m_oldCwd = QDir::currentPath();
+    QVERIFY(QDir::setCurrent(m_dir.path()));   // TaidaFlowSettings.ini of Manager / SqlManager schema lookups
+    g_previousHandler = qInstallMessageHandler(captureMessages);
+    m_sql = SqlManager::instance();
+    m_sql->setDataDirectory(m_dir.filePath(QStringLiteral("data")));
+    m_sql->setSettingsFile(m_dir.filePath(QStringLiteral("settings.sqlite")));
+    QVERIFY(m_sql->initialize());
+}
+
+void TestOffsetStorage::cleanupTestCase()
+{
+    SqlManager::instance()->shutdown();
+    qInstallMessageHandler(g_previousHandler);
+    QDir::setCurrent(m_oldCwd);
+}
+
+void TestOffsetStorage::columnTable()
+{
+    const QList<SensorOffsetStorage::Column> columns =
+            SensorOffsetStorage::columnsOf(ModbusMapping::defaultReadBindings());
+    struct Expected { const char *key; int column; double scale; const char *unit; };
+    const Expected expected[] = {
+        {"tt01", 1, kT, "°C"}, {"tt02", 2, kT, "°C"}, {"tt03", 3, kT, "°C"}, {"tt04", 4, kT, "°C"},
+        {"pt01", 5, kP, "kPa"}, {"pt02", 6, kP, "kPa"}, {"pt03", 7, kP, "kPa"}, {"pt04", 8, kP, "kPa"},
+        {"pt05", 9, kP, "kPa"}, {"pt06", 10, kP, "kPa"}, {"pt07", 11, kP, "kPa"},
+        {"flowMeter", 12, kF, "L/min"},
+    };
+    QCOMPARE(columns.size(), qsizetype(std::size(expected)));
+    QStringList table;
+    for (qsizetype i = 0; i < columns.size(); ++i) {
+        const SensorOffsetStorage::Column &c = columns.at(i);
+        QCOMPARE(c.key, QString::fromLatin1(expected[i].key));
+        QCOMPARE(c.column, expected[i].column);
+        QCOMPARE(c.serverRegister, expected[i].column - 1);
+        QCOMPARE(c.scale, expected[i].scale);
+        QCOMPARE(c.unit, QString::fromUtf8(expected[i].unit));
+        table << QStringLiteral("%1=s%2 x%3").arg(c.key).arg(c.column).arg(c.scale, 0, 'g', 12);
+    }
+    qInfo().noquote() << "[w2-086 test] column table:" << table.join(QStringLiteral(", "));
+
+    // The History page / CSV conversion of the same columns (HistoryExport::appendCsvRow converts
+    // with the same per-column scale as HistoryViews): raw 65535 -> scale x 65535.
+    double raw[16];
+    bool valid[16];
+    for (int i = 0; i < 16; ++i) {
+        raw[i] = 65535.0;
+        valid[i] = true;
+    }
+    QByteArray row;
+    HistoryExport::TimeFormatCache cache;
+    HistoryExport::appendCsvRow(row, 1, 1700000000, raw, valid, cache);
+    const QList<QByteArray> cells = row.trimmed().split(',');
+    QCOMPARE(cells.size(), 2 + 16);
+    for (const SensorOffsetStorage::Column &c : columns) {
+        QByteArray cell = cells.at(1 + c.column);
+        cell.replace('"', "");
+        QByteArray expectedCell;
+        HistoryExport::appendFixed2(expectedCell, 65535.0 * c.scale);
+        QCOMPARE(cell, expectedCell);
+    }
+    // MV positions and FM are the only other columns: no offset key.
+    QCOMPARE(SensorOffsetStorage::sensorKey(ModbusMapping::ProcessPoint::Mv1Position), QString());
+    QCOMPARE(SensorOffsetStorage::sensorKey(ModbusMapping::ProcessPoint::Mv4Position), QString());
+}
+
+void TestOffsetStorage::applyRules_data()
+{
+    QTest::addColumn<int>("raw");
+    QTest::addColumn<double>("offset");
+    QTest::addColumn<double>("scale");
+    QTest::addColumn<int>("expected");
+    QTest::addColumn<int>("clamp");     // 0 none, -1 low, 1 high
+
+    QTest::newRow("pressure +12.5 kPa") << 32768 << 12.5 << kP << 33587 << 0;      // +819.1875
+    QTest::newRow("pressure -7.3 kPa") << 40000 << -7.3 << kP << 39522 << 0;       // -478.4055
+    QTest::newRow("pressure 0") << 40000 << 0.0 << kP << 40000 << 0;
+    QTest::newRow("pressure < half count") << 1000 << 0.0076 << kP << 1000 << 0;  // +0.498
+    QTest::newRow("pressure > half count") << 1000 << 0.0077 << kP << 1001 << 0;  // +0.505
+    QTest::newRow("pressure clamp high") << 65000 << 20.0 << kP << 65535 << 1;     // 66310.7
+    QTest::newRow("pressure exactly 65535") << 65535 - 819 << 12.5 << kP << 65535 << 0;   // 65535.19
+    QTest::newRow("pressure clamp low") << 100 << -10.0 << kP << 0 << -1;          // -555.35
+    QTest::newRow("temperature +2.5 degC") << 30000 << 2.5 << kT << 31638 << 0;    // +1638.375
+    QTest::newRow("temperature -1.25 degC") << 30000 << -1.25 << kT << 29181 << 0; // -819.1875
+    QTest::newRow("temperature to exactly 0") << 3277 << -5.0 << kT << 0 << 0;     // 0.25 -> 0
+    QTest::newRow("temperature clamp low") << 100 << -5.0 << kT << 0 << -1;
+    QTest::newRow("temperature clamp high") << 60000 << 50.0 << kT << 65535 << 1;
+    QTest::newRow("flow +3.4 L/min") << 150 << 3.4 << kF << 153 << 0;
+    QTest::newRow("flow +3.6 L/min") << 150 << 3.6 << kF << 154 << 0;
+    QTest::newRow("flow -0.5 L/min (half away from zero)") << 150 << -0.5 << kF << 150 << 0;   // 149.5 -> 150
+    QTest::newRow("flow +0.5 L/min (half away from zero)") << 150 << 0.5 << kF << 151 << 0;    // 150.5 -> 151
+    QTest::newRow("flow clamp low") << 3 << -10.0 << kF << 0 << -1;
+}
+
+void TestOffsetStorage::applyRules()
+{
+    QFETCH(int, raw);
+    QFETCH(double, offset);
+    QFETCH(double, scale);
+    QFETCH(int, expected);
+    QFETCH(int, clamp);
+    const SensorOffsetStorage::Result r = SensorOffsetStorage::apply(quint16(raw), offset, scale);
+    QCOMPARE(int(r.value), expected);
+    const SensorOffsetStorage::Clamp expectedClamp = clamp < 0 ? SensorOffsetStorage::Clamp::Low
+            : clamp > 0 ? SensorOffsetStorage::Clamp::High : SensorOffsetStorage::Clamp::None;
+    QCOMPARE(r.clamp, expectedClamp);
+    if (clamp == 0) {
+        // Not clamped: stored x scale is the corrected engineering value within half a count.
+        QVERIFY2(std::abs(r.value * scale - (raw * scale + offset)) <= 0.5 * scale + 1e-9,
+                 qPrintable(QStringLiteral("%1 vs %2").arg(r.value * scale).arg(raw * scale + offset)));
+    }
+}
+
+void TestOffsetStorage::offsetOfRules()
+{
+    QVariantMap settings;
+    QCOMPARE(SensorOffsetStorage::offsetOf(settings, QStringLiteral("pt01")), 0.0);          // no entry
+    settings.insert(QStringLiteral("pt01"), QVariantMap{{"lower", 1.0}});
+    QCOMPARE(SensorOffsetStorage::offsetOf(settings, QStringLiteral("pt01")), 0.0);          // no offset field
+    settings.insert(QStringLiteral("pt01"), QVariantMap{{"offset", std::numeric_limits<double>::quiet_NaN()}});
+    QCOMPARE(SensorOffsetStorage::offsetOf(settings, QStringLiteral("pt01")), 0.0);          // non-finite
+    settings.insert(QStringLiteral("pt01"), QVariantMap{{"offset", std::numeric_limits<double>::infinity()}});
+    QCOMPARE(SensorOffsetStorage::offsetOf(settings, QStringLiteral("pt01")), 0.0);
+    settings.insert(QStringLiteral("pt01"), QVariantMap{{"offset", -3.5}});
+    QCOMPARE(SensorOffsetStorage::offsetOf(settings, QStringLiteral("pt01")), -3.5);
+    // apply() with a non-finite offset / scale: raw unchanged.
+    QCOMPARE(int(SensorOffsetStorage::apply(1234, std::numeric_limits<double>::quiet_NaN(), kP).value), 1234);
+    QCOMPARE(int(SensorOffsetStorage::apply(1234, 5.0, 0.0).value), 1234);
+
+    // The Proxy's default map (every offset 0 = nothing configured) changes nothing.
+    TaidaFlowProxy proxy;
+    SensorOffsetStorage storage(&proxy, ModbusMapping::defaultReadBindings());
+    QVector<quint16> regs(ModbusServerBridgeMapping::ServerInputRegisterCount);
+    for (int i = 0; i < regs.size(); ++i)
+        regs[i] = quint16(1000 * (i + 1) + 7);
+    const QVector<double> sample = storage.correctedSample(regs);
+    QCOMPARE(sample.size(), regs.size());
+    for (int i = 0; i < regs.size(); ++i) {
+        QCOMPARE(sample.at(i), double(regs.at(i)));
+        QCOMPARE(storage.correctedServerRegister(i, regs.at(i)), regs.at(i));
+    }
+    // Without a Proxy: raw.
+    SensorOffsetStorage noProxy(nullptr, ModbusMapping::defaultReadBindings());
+    QCOMPARE(noProxy.correctedSample(regs).at(4), double(regs.at(4)));
+    QCOMPARE(noProxy.correctedServerRegister(4, 500), quint16(500));
+}
+
+void TestOffsetStorage::clampWarningRateLimited()
+{
+    TaidaFlowProxy proxy;
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), {{"pt01", 900.0}, {"tt03", -50.0}}));
+    SensorOffsetStorage::Options options;
+    options.clampWarningIntervalMs = 400;
+    SensorOffsetStorage storage(&proxy, ModbusMapping::defaultReadBindings(), options);
+    QVector<quint16> regs(ModbusServerBridgeMapping::ServerInputRegisterCount, 10000);
+    const int before = logCount(QStringLiteral("[SensorOffset] pt01 (s5)"));
+    const int beforeTt = logCount(QStringLiteral("[SensorOffset] tt03 (s3)"));
+    for (int i = 0; i < 10; ++i) {
+        const QVector<double> sample = storage.correctedSample(regs);
+        QCOMPARE(sample.at(4), 65535.0);   // pt01 clamped high
+        QCOMPARE(sample.at(2), 0.0);       // tt03 clamped low
+        QCOMPARE(storage.correctedServerRegister(4, 10000), quint16(65535));
+    }
+    // 20 clamps of pt01 (10 samples + 10 server values) -> one warning; tt03 its own limiter.
+    QCOMPARE(logCount(QStringLiteral("[SensorOffset] pt01 (s5)")) - before, 1);
+    QCOMPARE(logCount(QStringLiteral("[SensorOffset] tt03 (s3)")) - beforeTt, 1);
+    QCOMPARE(storage.clampWarningsWritten(), 2);
+    const QStringList first = logLines(QStringLiteral("[SensorOffset] pt01 (s5)"));
+    QVERIFY(first.last().contains(QStringLiteral("raw=10000 + offset 900.000 kPa")));
+    QVERIFY(first.last().contains(QStringLiteral("clamped to 65535")));
+    QTest::qWait(450);
+    storage.correctedSample(regs);
+    QCOMPARE(logCount(QStringLiteral("[SensorOffset] pt01 (s5)")) - before, 2);
+    const QStringList second = logLines(QStringLiteral("[SensorOffset] pt01 (s5)"));
+    QVERIFY2(second.last().contains(QStringLiteral("(19 similar warning(s) held back since the previous one")),
+             qPrintable(second.last()));
+    qInfo().noquote() << "[w2-086 test] clamp warning after the interval:" << second.last();
+}
+
+void TestOffsetStorage::settingsChangeNextSample()
+{
+    TaidaFlowProxy proxy;
+    SensorOffsetStorage storage(&proxy, ModbusMapping::defaultReadBindings());
+    QVector<quint16> regs(ModbusServerBridgeMapping::ServerInputRegisterCount, 0);
+    for (int i = 0; i < regs.size(); ++i)
+        regs[i] = quint16(20000 + i);
+    proxy.setPt04ValuePv(regs.at(7) * kP);
+    const double pvBefore = proxy.pt04ValuePv();
+
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), {{"pt04", 10.0}}));
+    QCOMPARE(storage.correctedSample(regs).at(7), std::round(regs.at(7) + 10.0 / kP));
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), {{"pt04", -4.0}}));
+    QCOMPARE(storage.correctedSample(regs).at(7), std::round(regs.at(7) - 4.0 / kP));       // next sample
+    QCOMPARE(storage.correctedServerRegister(7, regs.at(7)), quint16(std::round(regs.at(7) - 4.0 / kP)));
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), {{"pt04", 0.0}}));
+    QCOMPARE(storage.correctedSample(regs).at(7), double(regs.at(7)));                       // back to raw
+    QCOMPARE(proxy.pt04ValuePv(), pvBefore);                                                   // PV untouched
+
+    // MV positions (s13..s16) and registers 16..19 have no offset key: never changed.
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(),
+            {{"pt01", 5.0}, {"pt02", 5.0}, {"pt03", 5.0}, {"pt04", 5.0}, {"pt05", 5.0}, {"pt06", 5.0},
+             {"pt07", 5.0}, {"tt01", 5.0}, {"tt02", 5.0}, {"tt03", 5.0}, {"tt04", 5.0}, {"flowMeter", 5.0}}));
+    const QVector<double> all = storage.correctedSample(regs);
+    for (int i = 0; i < 12; ++i)
+        QVERIFY2(all.at(i) != double(regs.at(i)), qPrintable(QStringLiteral("s%1").arg(i + 1)));
+    for (int i = 12; i < regs.size(); ++i) {
+        QCOMPARE(all.at(i), double(regs.at(i)));
+        QCOMPARE(storage.correctedServerRegister(i, regs.at(i)), regs.at(i));
+    }
+    QVERIFY(logCount(QStringLiteral("pt01 5.000 kPa = 327.6")) >= 1);
+}
+
+void TestOffsetStorage::uiEquivalence()
+{
+    UiUnits ui;
+    QString error;
+    QVERIFY2(ui.load(&error), qPrintable(error));
+    TaidaFlowProxy proxy;
+    const QList<SensorOffsetStorage::Column> columns =
+            SensorOffsetStorage::columnsOf(ModbusMapping::defaultReadBindings());
+    const QList<int> raws{0, 1, 100, 3277, 12345, 32768, 40000, 58982, 65000, 65534, 65535};
+    const QList<double> offsets{-50.0, -12.5, -1.25, -0.3, -0.0076, 0.0, 0.0076, 0.3, 2.5, 12.5, 50.0};
+    int compared = 0;
+    int clamped = 0;
+    double worstCounts = 0.0;
+    for (const SensorOffsetStorage::Column &c : columns) {
+        for (double offset : offsets) {
+            const QVariantMap settings = withOffsets(proxy.sensorSettingsSv(), {{c.key, offset}});
+            for (int raw : raws) {
+                const SensorOffsetStorage::Result r = SensorOffsetStorage::apply(quint16(raw), offset, c.scale);
+                if (r.clamp != SensorOffsetStorage::Clamp::None) {
+                    ++clamped;
+                    QVERIFY(r.value == 0 || r.value == 65535);
+                    continue;
+                }
+                const double history = r.value * c.scale;            // HistoryViews / CSV / REST x scale
+                const double screen = ui.call(raw * c.scale, c.key, settings);   // PV raw*scale + offset
+                const double diffCounts = std::abs(history - screen) / c.scale;
+                worstCounts = std::max(worstCounts, diffCounts);
+                if (diffCounts > 0.5 + 1e-6)
+                    QFAIL(qPrintable(QStringLiteral("%1 raw=%2 offset=%3: history %4 vs screen %5 (%6 counts)")
+                                             .arg(c.key).arg(raw).arg(offset).arg(history, 0, 'f', 6)
+                                             .arg(screen, 0, 'f', 6).arg(diffCounts, 0, 'f', 4)));
+                ++compared;
+            }
+        }
+    }
+    qInfo().noquote() << QStringLiteral("[w2-086 test] History value vs SensorUnits.adjusted(): %1 cases within "
+                                        "half a count (worst %2 counts), %3 clamped cases excluded")
+                                 .arg(compared).arg(worstCounts, 0, 'f', 4).arg(clamped);
+    QVERIFY(compared > 1000);
+    QVERIFY(clamped > 0);
+}
+
+void TestOffsetStorage::managerIntegration()
+{
+    UiUnits ui;
+    QString error;
+    QVERIFY2(ui.load(&error), qPrintable(error));
+
+    // Modbus TCP servers of this test: A = ADAM-6217 .202 (TT-01..04, PT-01..04 in HR0..7),
+    // B = everything else (.203 PT-05..07 / flow / MV; .201 coils; .204 DIs / AOs; .205 HR10).
+    QModbusTcpServer serverA;
+    QModbusTcpServer serverB;
+    QModbusDataUnitMap map;
+    map.insert(QModbusDataUnit::Coils, {QModbusDataUnit::Coils, 0, 64});
+    map.insert(QModbusDataUnit::DiscreteInputs, {QModbusDataUnit::DiscreteInputs, 0, 16});
+    map.insert(QModbusDataUnit::HoldingRegisters, {QModbusDataUnit::HoldingRegisters, 0, 32});
+    map.insert(QModbusDataUnit::InputRegisters, {QModbusDataUnit::InputRegisters, 0, 16});
+    quint16 portA = 0, portB = 0, portServer = 0;
+    freePorts(&portA, &portB, &portServer);
+    QVERIFY(portA && portB && portServer && portA != portB && portB != portServer && portA != portServer);
+    for (auto [server, port] : {std::pair<QModbusTcpServer *, quint16>{&serverA, portA}, {&serverB, portB}}) {
+        server->setMap(map);
+        server->setServerAddress(1);
+        server->setConnectionParameter(QModbusDevice::NetworkAddressParameter, QStringLiteral("127.0.0.1"));
+        server->setConnectionParameter(QModbusDevice::NetworkPortParameter, port);
+        QVERIFY2(server->connectDevice(), qPrintable(server->errorString()));
+    }
+    serverB.setData(QModbusDataUnit::DiscreteInputs, 0, 1);    // DI0 = 1 (healthy), DI1 = DI2 = 0
+    // Raw counts: A HR0..7 = TT-01..04, PT-01..04; B HR0..7 = PT-05..07, FM, MV1..4.
+    const quint16 rawA[8] = {30000, 30000, 100, 20000, 32768, 40000, 65000, 58000};
+    const quint16 rawB[8] = {1000, 50000, 12345, 150, 1000, 2000, 3000, 4000};
+    for (int i = 0; i < 8; ++i) {
+        serverA.setData(QModbusDataUnit::HoldingRegisters, quint16(i), rawA[i]);
+        serverB.setData(QModbusDataUnit::HoldingRegisters, quint16(i), rawB[i]);
+    }
+    quint16 raw[16];
+    for (int i = 0; i < 8; ++i) {
+        raw[i] = rawA[i];
+        raw[8 + i] = rawB[i];
+    }
+
+    TaidaFlowProxy proxy;
+    // tt01 +2.5, tt02 -1.25, tt03 -5 (clamped low), tt04 0; pt01 +12.5, pt02 -7.3, pt03 +20 (clamped
+    // high, raw 65000 is also over the 90 % alarm), pt04 +30 (raw 58000 < 90 % = 58982, corrected 59966
+    // > 58982: the 90 % alarm stays raw -> no alarm), pt05 0, pt06 0, pt07 -0.5, flowMeter +3.4.
+    const QHash<QString, double> offsets{{"tt01", 2.5}, {"tt02", -1.25}, {"tt03", -5.0}, {"pt01", 12.5},
+                                         {"pt02", -7.3}, {"pt03", 20.0}, {"pt04", 30.0}, {"pt07", -0.5},
+                                         {"flowMeter", 3.4}};
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), offsets));
+    const QVariantMap settings = proxy.sensorSettingsSv();
+    const QList<SensorOffsetStorage::Column> columns =
+            SensorOffsetStorage::columnsOf(ModbusMapping::defaultReadBindings());
+    quint16 expected[16];
+    for (int i = 0; i < 16; ++i)
+        expected[i] = raw[i];
+    for (const SensorOffsetStorage::Column &c : columns)
+        expected[c.serverRegister] = SensorOffsetStorage::apply(raw[c.serverRegister], offsets.value(c.key), c.scale).value;
+    QCOMPARE(int(expected[0]), 31638);
+    QCOMPARE(int(expected[2]), 0);
+    QCOMPARE(int(expected[4]), 33587);
+    QCOMPARE(int(expected[6]), 65535);
+    QCOMPARE(int(expected[7]), 59966);
+    QCOMPARE(int(expected[11]), 153);
+
+    Manager::DeviceSettings devices;
+    for (ModbusClient::DeviceConfig &config : devices.modbusDevices) {
+        config.host = QStringLiteral("127.0.0.1");               // never the plant addresses
+        config.port = config.device == ModbusClient::Device::Adam6217_202 ? portA : portB;
+    }
+    devices.ms300.serialPort = QStringLiteral("TAIDAFLOW_TEST_NO_SUCH_PORT");
+
+    // The real external Modbus server, connected like Core::init (core.cpp).
+    ModbusServer modbusServer;
+    QVERIFY(modbusServer.start(QHostAddress(QHostAddress::LocalHost), portServer, 1));
+    Manager manager(&proxy, m_sql, devices);
+    connect(&manager, &Manager::serverCoilUpdated, &modbusServer, &ModbusServer::setCoil);
+    connect(&manager, &Manager::serverInputRegisterUpdated, &modbusServer, &ModbusServer::setInputRegister);
+    connect(&manager, &Manager::serverHoldingRegisterUpdated, &modbusServer, &ModbusServer::setHoldingRegister);
+    QSignalSpy savedSpy(&manager, &Manager::serverInputDataSaved);
+    const qint64 startSec = QDateTime::currentSecsSinceEpoch();
+    manager.start();
+    QTRY_VERIFY_WITH_TIMEOUT(savedSpy.count() >= 2, 10000);
+
+    // ---- Modbus server input registers (external HMI view), read with a Modbus TCP client ----
+    auto readServer = [&](QModbusDataUnit::RegisterType type, int start, int count, QVector<quint16> *out) {
+        QModbusTcpClient client;
+        client.setConnectionParameter(QModbusDevice::NetworkAddressParameter, QStringLiteral("127.0.0.1"));
+        client.setConnectionParameter(QModbusDevice::NetworkPortParameter, portServer);
+        client.setTimeout(3000);
+        client.setNumberOfRetries(0);
+        if (!client.connectDevice())
+            return false;
+        QElapsedTimer t;
+        t.start();
+        while (client.state() != QModbusDevice::ConnectedState && t.elapsed() < 5000)
+            QTest::qWait(20);
+        if (client.state() != QModbusDevice::ConnectedState)
+            return false;
+        QModbusReply *reply = client.sendReadRequest(QModbusDataUnit(type, start, quint16(count)), 1);
+        if (!reply)
+            return false;
+        while (!reply->isFinished() && t.elapsed() < 10000)
+            QTest::qWait(20);
+        const bool ok = reply->isFinished() && reply->error() == QModbusDevice::NoError;
+        if (ok)
+            *out = reply->result().values();
+        reply->deleteLater();
+        client.disconnectDevice();
+        return ok;
+    };
+    QVector<quint16> ir;
+    QVERIFY(readServer(QModbusDataUnit::InputRegisters, 0, 16, &ir));
+    QCOMPARE(ir.size(), 16);
+    QStringList irText;
+    for (int i = 0; i < 16; ++i) {
+        irText << QStringLiteral("IR%1=%2(raw %3)").arg(i).arg(ir.at(i)).arg(raw[i]);
+        QVERIFY2(ir.at(i) == expected[i], qPrintable(QStringLiteral("IR%1: %2 != %3").arg(i).arg(ir.at(i)).arg(expected[i])));
+    }
+    qInfo().noquote() << "[w2-086 test] Modbus server input registers:" << irText.join(' ');
+    QVector<quint16> coils;
+    QVERIFY(readServer(QModbusDataUnit::Coils, ModbusServerBridgeMapping::ServerDiStart, 3, &coils));
+    QVERIFY(coils.size() >= 3);
+    QCOMPARE(coils.mid(0, 3), (QVector<quint16>{1, 0, 0}));   // DI0..DI2 mirrored unchanged
+
+    // ---- Proxy PVs stay raw; the 90 % alarm is judged on the raw count ----
+    QVERIFY(std::abs(proxy.pt01ValuePv() - raw[4] * kP) < 1e-9);
+    QVERIFY(std::abs(proxy.tt01ValuePv() - raw[0] * kT) < 1e-9);
+    QVERIFY(std::abs(proxy.flowMeterValuePv() - raw[11] * kF) < 1e-9);
+    QTRY_VERIFY_WITH_TIMEOUT(logCount(QStringLiteral("[SQL] Alarm inserted: sensor=PT-03 message=輸入值達到設定高限")) >= 1, 5000);
+    QCOMPARE(logCount(QStringLiteral("[SQL] Alarm inserted: sensor=PT-04 message=輸入值達到設定高限")), 0);
+
+    // ---- settings change: the next saved row and the next server update use the new offset ----
+    proxy.setSensorSettingsSv(withOffsets(proxy.sensorSettingsSv(), {{"pt01", -12.5}}));
+    const int savedAtChange = savedSpy.count();
+    QTRY_VERIFY_WITH_TIMEOUT(savedSpy.count() >= savedAtChange + 1, 5000);
+    const quint16 pt01New = SensorOffsetStorage::apply(raw[4], -12.5, kP).value;
+    QCOMPARE(int(pt01New), 31949);    // 32768 - 819.1875
+    {
+        const QVector<QVariantList> rows = m_sql->fetchSensorData(QDate::currentDate(), 1);
+        QVERIFY(!rows.isEmpty());
+        QCOMPARE(rows.first().at(5).toDouble(), double(pt01New));   // index 0 = timestamp, 5 = s5
+    }
+    QVector<quint16> irAfter;
+    QVERIFY(readServer(QModbusDataUnit::InputRegisters, 4, 1, &irAfter));
+    QCOMPARE(irAfter.value(0), pt01New);
+    // back to the first offsets for the rest of the checks
+    proxy.setSensorSettingsSv(settings);
+    const int savedAtRestore = savedSpy.count();
+    QTRY_VERIFY_WITH_TIMEOUT(savedSpy.count() >= savedAtRestore + 2, 6000);
+    manager.stop();
+    QTest::qWait(300);
+
+    // ---- sensor_data row (newest) ----
+    const QVector<QVariantList> rows = m_sql->fetchSensorData(QDate::currentDate(), 1);
+    QVERIFY(!rows.isEmpty());
+    const QVariantList dbRow = rows.first();
+    const qint64 ts = dbRow.at(0).toLongLong();
+    QVERIFY(ts >= startSec);
+    for (int i = 0; i < 16; ++i)
+        QCOMPARE(dbRow.at(1 + i).toDouble(), double(expected[i]));
+    qInfo().noquote() << "[w2-086 test] newest sensor_data row ts" << ts << "s1..s16 ="
+                      << [&]() { QStringList l; for (int i = 0; i < 16; ++i) l << dbRow.at(1 + i).toString(); return l.join(','); }();
+
+    // ---- History page (HistoryViewService -> historyViews["desktop"]) for exactly that second ----
+    HistoryViewService views(&proxy, m_sql, HistoryViewService::Options{});
+    views.handleRequest(QStringLiteral("desktop"), double(ts) * 1000.0, double(ts) * 1000.0 + 999.0, 1);
+    QTRY_VERIFY_WITH_TIMEOUT(!proxy.historyViews().value(QStringLiteral("desktop")).toMap()
+                                     .value(QStringLiteral("records")).toList().isEmpty(), 10000);
+    const QVariantList records = proxy.historyViews().value(QStringLiteral("desktop")).toMap()
+            .value(QStringLiteral("records")).toList();
+    const QVariantList history = records.first().toMap().value(QStringLiteral("values")).toList();
+    QCOMPARE(history.size(), 1 + 16);
+    for (const SensorOffsetStorage::Column &c : columns) {
+        const int i = c.serverRegister;
+        const double h = history.at(1 + i).toDouble();
+        QVERIFY2(std::abs(h - expected[i] * c.scale) < 1e-9, qPrintable(c.key));
+        const bool clamped = SensorOffsetStorage::apply(raw[i], offsets.value(c.key), c.scale).clamp
+                != SensorOffsetStorage::Clamp::None;
+        // The main screen shows SensorUnits.adjusted(PV): PV = raw x scale (what Manager wrote).
+        const double pv = proxy.property((c.key + QStringLiteral("ValuePv")).toLatin1().constData()).toDouble();
+        const double screen = ui.call(pv, c.key, settings);
+        if (!clamped) {
+            QVERIFY2(std::abs(h - screen) <= 0.5 * c.scale + 1e-9,
+                     qPrintable(QStringLiteral("%1: history %2 vs screen %3").arg(c.key).arg(h, 0, 'f', 6).arg(screen, 0, 'f', 6)));
+        }
+        qInfo().noquote() << QStringLiteral("[w2-086 test] %1 s%2 raw=%3 stored=%4 history=%5 screen=%6 %7%8")
+                                     .arg(c.key).arg(c.column).arg(raw[i]).arg(expected[i])
+                                     .arg(h, 0, 'f', 4).arg(screen, 0, 'f', 4).arg(c.unit)
+                                     .arg(clamped ? QStringLiteral(" (clamped)") : QString());
+    }
+    for (int i = 12; i < 16; ++i)     // MV1..MV4 positions: raw
+        QVERIFY(std::abs(history.at(1 + i).toDouble() - raw[i] * (100.0 / 65535.0)) < 1e-9);
+
+    // ---- CSV export of the same second (desktop flow, the real export worker) ----
+    HistoryExportManager::Options exportOptions;
+    exportOptions.exportDir = m_dir.filePath(QStringLiteral("exports"));
+    exportOptions.mountDownloads = false;
+    HistoryExportManager exporter(&proxy, m_sql, exportOptions);
+    QSignalSpy exportDone(&exporter, &HistoryExportManager::jobFinished);
+    const QString csvPath = m_dir.filePath(QStringLiteral("w2-086.csv"));
+    exporter.enqueueDesktopExport(csvPath, double(ts) * 1000.0, double(ts) * 1000.0 + 999.0);
+    QTRY_VERIFY_WITH_TIMEOUT(exportDone.count() >= 1, 20000);
+    QCOMPARE(exportDone.first().at(1).toString(), QStringLiteral("done"));
+    QFile csv(csvPath);
+    QVERIFY(csv.open(QIODevice::ReadOnly));
+    const QList<QByteArray> lines = csv.readAll().trimmed().split('\n');
+    QCOMPARE(lines.size(), 2);                                // header + one row
+    QList<QByteArray> cells = lines.at(1).trimmed().split(',');
+    QCOMPARE(cells.size(), 2 + 16);
+    for (int i = 0; i < 16; ++i) {
+        QByteArray cell = cells.at(2 + i);
+        cell.replace('"', "");
+        QByteArray fromHistory;
+        HistoryExport::appendFixed2(fromHistory, history.at(1 + i).toDouble());
+        QVERIFY2(cell == fromHistory, qPrintable(QStringLiteral("CSV s%1 %2 vs history %3").arg(i + 1)
+                                                         .arg(QString::fromLatin1(cell), QString::fromLatin1(fromHistory))));
+    }
+    exporter.shutdown();
+
+    // ---- REST /api/sensor/last (the database row as stored: counts) ----
+    RESTManager rest(m_sql);
+    QVERIFY(rest.start(0, QHostAddress(QHostAddress::LocalHost)));
+    QNetworkAccessManager nam;
+    QNetworkReply *reply = nam.get(QNetworkRequest(QUrl(QStringLiteral("http://127.0.0.1:%1/api/sensor/last")
+                                                                .arg(rest.serverPort()))));
+    QSignalSpy finished(reply, &QNetworkReply::finished);
+    QVERIFY(reply->isFinished() || finished.wait(10000));
+    QCOMPARE(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt(), 200);
+    const QJsonObject last = QJsonDocument::fromJson(reply->readAll()).object();
+    reply->deleteLater();
+    QCOMPARE(last.value(QStringLiteral("ts")).toInteger(), ts);
+    for (int i = 0; i < 16; ++i) {
+        const double counts = last.value(QStringLiteral("s%1").arg(i + 1)).toDouble();
+        QCOMPARE(counts, double(expected[i]));
+        const double scale = i < 4 ? kT : i < 11 ? kP : i == 11 ? kF : 100.0 / 65535.0;
+        QVERIFY(std::abs(counts * scale - history.at(1 + i).toDouble()) < 1e-9);   // REST x scale == History
+    }
+    qInfo().noquote() << "[w2-086 test] REST /api/sensor/last =" << QJsonDocument(last).toJson(QJsonDocument::Compact);
+    modbusServer.stop();
+}
+
+void TestOffsetStorage::sourceWiring()
+{
+    const QString manager = readSource(QStringLiteral("manager.cpp"));
+    const QString managerH = readSource(QStringLiteral("manager.h"));
+    const QString cmake = readSource(QStringLiteral("CMakeLists.txt"));
+    QVERIFY(!manager.isEmpty() && !managerH.isEmpty() && !cmake.isEmpty());
+    QVERIFY(manager.contains(QStringLiteral("m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);")));
+    QVERIFY(managerH.contains(QStringLiteral("SensorOffsetStorage *m_offsetStorage = nullptr;")));
+    // Mirror path: raw kept for the 90 % alarm and the sample, the server gets the corrected value.
+    const int mirror = manager.indexOf(QStringLiteral("void Manager::mirrorClientData("));
+    const int keep = manager.indexOf(QStringLiteral("m_serverInputRegisters[serverOffset] = values.at(index);"), mirror);
+    const int corr = manager.indexOf(QStringLiteral("m_offsetStorage->correctedServerRegister(serverOffset, values.at(index));"), mirror);
+    const int emitIr = manager.indexOf(QStringLiteral("emit serverInputRegisterUpdated(serverOffset, serverValue);"), mirror);
+    const int alarm = manager.indexOf(QStringLiteral("checkHighInputAlarm(serverOffset, values.at(index));"), mirror);
+    QVERIFY(mirror > 0 && keep > mirror && corr > keep && emitIr > corr && alarm > emitIr);
+    QCOMPARE(manager.count(QStringLiteral("emit serverInputRegisterUpdated(")), 1);
+    // Save path: the readings come from the offset storage.
+    const int save = manager.indexOf(QStringLiteral("void Manager::saveServerInputData()"));
+    const int sample = manager.indexOf(QStringLiteral("m_offsetStorage->correctedSample(m_serverInputRegisters);"), save);
+    const int write = manager.indexOf(QStringLiteral("m_sql->saveSensorData(QDateTime::currentDateTime(), readings);"), save);
+    QVERIFY(save > 0 && sample > save && write > sample);
+    QCOMPARE(manager.count(QStringLiteral("saveSensorData(")), 1);
+    // updateProcessPoint (Proxy PVs) unchanged: no offset there.
+    const int upd = manager.indexOf(QStringLiteral("void Manager::updateProcessPoint("));
+    const int updEnd = manager.indexOf(QStringLiteral("void Manager::writeServerData("), upd);
+    QVERIFY(upd > 0 && updEnd > upd);
+    QVERIFY(!manager.mid(upd, updEnd - upd).contains(QStringLiteral("offset")));
+    // Desktop-only source.
+    const int desktop = cmake.indexOf(QStringLiteral("if(TAIDAFLOW_IS_WINDOWS_DESKTOP)"));
+    const int endif = cmake.indexOf(QStringLiteral("endif()"), desktop);
+    const int src = cmake.indexOf(QStringLiteral("SensorOffsetStorage.cpp"));
+    QVERIFY(desktop > 0 && src > desktop && src < endif);
+    QCOMPARE(cmake.count(QStringLiteral("SensorOffsetStorage.cpp")), 1);
+}
+
+QTEST_MAIN(TestOffsetStorage)
+#include "tst_offset_storage.moc"

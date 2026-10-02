@@ -15,6 +15,7 @@
 class TaidaFlowProxy;
 class SqlManager;
 class LimitAlarmMonitor;    // w2-085: settings-page limit alarms (Core/LimitAlarms.h)
+class SensorOffsetStorage;  // w2-086: offsets applied when storing (Core/SensorOffsetStorage.h)
 
 class Manager final : public QObject
 {
@@ -184,4 +185,6 @@ private:
     bool m_restoringSv = false;
     // w2-085: judged after every PV update (updateProcessPoint); its alarmSaved -> alarmSaved.
     LimitAlarmMonitor *m_limitAlarms = nullptr;
+    // w2-086: sensor_data samples and the Modbus server input registers get the offsets.
+    SensorOffsetStorage *m_offsetStorage = nullptr;
 };

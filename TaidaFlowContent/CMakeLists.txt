@@ -27,6 +27,7 @@ qt6_add_qml_module(TaidaFlowContent
         "components/ValueTag.qml"
         "components/LinkWatchdog.qml"
         "components/LinkWatchdog.js"
+        "components/DeviceStatusUtil.js"
     RESOURCES
         "assets/logo_8TFs7.png"
         "assets/center.png"

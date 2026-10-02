@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import TaidaFlowBackend 1.0
 import "components" as Components
+import "components/DeviceStatusUtil.js" as DeviceStatusUtil
 
 Rectangle {
     id: root
@@ -14,6 +15,9 @@ Rectangle {
     // webPage: WebPageControl from App/main.cpp, passed in by App.qml (null when TopNav is
     // loaded alone, e.g. Core/tests/Preview.qml: no heartbeat detection then).
     property var webPage: null
+    // w1-087: the one reference to the Td singleton used by the link watchdog and the
+    // device-offline banner below (both read only).
+    readonly property var backend: Td
     // THE flag for every control that writes to the Core: transportReady (the pack's
     // offline state) AND, on the web page, no heartbeat silence (LinkWatchdog). Desktop:
     // equals Td.transportReady (always true). Each page gets it as its own `linkAlive`
@@ -24,7 +28,7 @@ Rectangle {
     Components.LinkWatchdog {
         id: linkWatchdog
         objectName: "linkWatchdog"
-        backend: Td
+        backend: root.backend
         pageControl: root.webPage
     }
     // ===== end of link state ==================================================
@@ -462,12 +466,15 @@ Rectangle {
     // visible); Main's first content row starts below the banner anyway (see the
     // note in Main.qml). Hidden -> height 0 -> the pages sit exactly at
     // topNavBar.bottom, i.e. the desktop layout is unchanged.
+    // w1-087: anchored below deviceOfflineBanner (height 0 whenever this banner is shown,
+    // see there), so it still starts at topNavBar.bottom; the pages anchored to
+    // offlineBanner.bottom are thus below both banners.
     // =========================================================
     Rectangle {
         id: offlineBanner
         objectName: "offlineBanner"
 
-        anchors.top: topNavBar.bottom
+        anchors.top: deviceOfflineBanner.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         height: visible ? 64 : 0
@@ -527,6 +534,79 @@ Rectangle {
                     font.pixelSize: 15
                 }
             }
+        }
+    }
+
+    // =========================================================
+    // 設備離線提示 (w1-087)
+    // Td.deviceStatus (Core/TaidaFlowProxy.h "Device status", mirrored, written only by the
+    // Core): any device with online === false -> orange banner
+    // "設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）" (fixed key order, see
+    // components/DeviceStatusUtil.js). Empty map / missing fields -> nothing shown.
+    // Same on the desktop and the web page; it never disables any control (the other
+    // devices stay operable) and disappears as soon as the Core reports the device online.
+    // Precedence: while the link to the Core is broken (offlineBanner shown, !linkAlive) this
+    // banner is hidden - the mirrored map may be outdated then; it comes back with the link.
+    // So the two banners never show together and never overlap.
+    // Layout: same mechanism as offlineBanner, in the same 64 px band: this banner sits at
+    // topNavBar.bottom and offlineBanner is anchored below it (height 0 while hidden), so
+    // AlarmPage / HistoryPage / SettingsPage, anchored to offlineBanner.bottom, are pushed
+    // down by whichever banner is shown (the pages themselves are unchanged); Main's first
+    // content row starts below window y 136 anyway (see the note in Main.qml).
+    // =========================================================
+    Rectangle {
+        id: deviceOfflineBanner
+        objectName: "deviceOfflineBanner"
+
+        readonly property string bannerText:
+            DeviceStatusUtil.bannerText(root.backend ? root.backend.deviceStatus : null)
+
+        anchors.top: topNavBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: visible ? 64 : 0
+        z: 200
+        visible: root.linkAlive && bannerText !== ""
+
+        color: "#C2410C"
+        border.color: "#FDBA74"
+        border.width: 2
+
+        Rectangle {
+            id: deviceOfflineBadge
+            anchors.left: parent.left
+            anchors.leftMargin: 24
+            anchors.verticalCenter: parent.verticalCenter
+            width: 84
+            height: 36
+            radius: 6
+            color: "#FFFFFF"
+
+            Text {
+                anchors.centerIn: parent
+                text: "設備"
+                color: "#C2410C"
+                font.pixelSize: 22
+                font.bold: true
+            }
+        }
+
+        Text {
+            objectName: "deviceOfflineBannerText"
+            anchors.left: deviceOfflineBadge.right
+            anchors.leftMargin: 18
+            anchors.right: parent.right
+            anchors.rightMargin: 24
+            anchors.verticalCenter: parent.verticalCenter
+            text: deviceOfflineBanner.bannerText
+            color: "white"
+            font.pixelSize: 22
+            font.bold: true
+            // One line: a text wider than the banner (many devices, long names / addresses)
+            // is drawn smaller (down to 14 px), only beyond that it is elided.
+            fontSizeMode: Text.HorizontalFit
+            minimumPixelSize: 14
+            elide: Text.ElideRight
         }
     }
 

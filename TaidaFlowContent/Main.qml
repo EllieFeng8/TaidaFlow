@@ -16,6 +16,10 @@ Item {
     // for Main loaded without TopNav.
     property bool linkAlive: true
     readonly property bool controlsEnabled: mainPage.linkAlive
+    // w1-088: the sensor settings and the pressure unit, read once for every value display
+    // (value, unit and limit state of each tag, see components/ValueTag.qml).
+    readonly property var sensorSettings: Td.sensorSettingsSv
+    readonly property string pressureUnit: Td.pressureUnitSv
     onControlsEnabledChanged: {
         if (!controlsEnabled) {
             motor2ValueDialog.close()
@@ -30,6 +34,8 @@ Item {
     // stays anchored at topNavBar.bottom (pushing it down would cut its bottom row,
     // "Leakage Sensor", off the 1080 px window); AlarmPage/HistoryPage, which start
     // right under the nav bar, anchor to offlineBanner.bottom and are pushed down.
+    // w1-087: the device-offline banner (TopNav.qml, also 64 px) uses the same band and is
+    // never shown together with the offline banner, so this holds for it too.
     anchors.top: topNavBar.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -668,8 +674,11 @@ Item {
         x: 578
         y: 436
         title: "PT-01"
-        value: SensorUnits.display(Td.pt01ValuePv, "pt01", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-        unit: Td.pressureUnitSv
+        sensorId: "pt01"
+        raw: Td.pt01ValuePv
+        settings: mainPage.sensorSettings
+        value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+        unit: mainPage.pressureUnit
     }
 
     // 小型管件
@@ -692,14 +701,20 @@ Item {
         Components.ValueTag {
             id: tt01
             title: "TT-01"
-            value: SensorUnits.display(Td.tt01ValuePv, "tt01", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            sensorId: "tt01"
+            raw: Td.tt01ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt02
             title: "TT-02"
-            value: SensorUnits.display(Td.tt02ValuePv, "tt02", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            sensorId: "tt02"
+            raw: Td.tt02ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
             unit: "°C"
         }
     }
@@ -711,14 +726,20 @@ Item {
 
         Components.ValueTag {
             title: "PT-04"
-            value: SensorUnits.display(Td.pt04ValuePv, "pt04", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-            unit: Td.pressureUnitSv
+            sensorId: "pt04"
+            raw: Td.pt04ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+            unit: mainPage.pressureUnit
         }
 
         Components.ValueTag {
             title: "PT-05"
-            value: SensorUnits.display(Td.pt05ValuePv, "pt05", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-            unit: Td.pressureUnitSv
+            sensorId: "pt05"
+            raw: Td.pt05ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+            unit: mainPage.pressureUnit
         }
     }
 
@@ -736,14 +757,20 @@ Item {
         Components.ValueTag {
             id: tt03
             title: "TT-03"
-            value: SensorUnits.display(Td.tt03ValuePv, "tt03", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            sensorId: "tt03"
+            raw: Td.tt03ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
             unit: "°C"
         }
 
         Components.ValueTag {
             id: tt04
             title: "TT-04"
-            value: SensorUnits.display(Td.tt04ValuePv, "tt04", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
+            sensorId: "tt04"
+            raw: Td.tt04ValuePv
+            settings: mainPage.sensorSettings
+            value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
             unit: "°C"
         }
     }
@@ -754,15 +781,21 @@ Item {
     Components.ValueTag {
 
         title: "PT-07"
-        value: SensorUnits.display(Td.pt07ValuePv, "pt07", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-        unit: Td.pressureUnitSv
+        sensorId: "pt07"
+        raw: Td.pt07ValuePv
+        settings: mainPage.sensorSettings
+        value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+        unit: mainPage.pressureUnit
     }
 
     Components.ValueTag {
 
         title: "PT-06"
-        value: SensorUnits.display(Td.pt06ValuePv, "pt06", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-        unit: Td.pressureUnitSv
+        sensorId: "pt06"
+        raw: Td.pt06ValuePv
+        settings: mainPage.sensorSettings
+        value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+        unit: mainPage.pressureUnit
     }
     }
 
@@ -1215,16 +1248,22 @@ Item {
         x: 732
         y: 523
         title: "PT-02"
-        value: SensorUnits.display(Td.pt02ValuePv, "pt02", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-        unit: Td.pressureUnitSv
+        sensorId: "pt02"
+        raw: Td.pt02ValuePv
+        settings: mainPage.sensorSettings
+        value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+        unit: mainPage.pressureUnit
     }
 
     Components.ValueTag {
         x: 897
         y: 523
         title: "PT-03"
-        value: SensorUnits.display(Td.pt03ValuePv, "pt03", Td.sensorSettingsSv, Td.pressureUnitSv).toFixed(2)
-        unit: Td.pressureUnitSv
+        sensorId: "pt03"
+        raw: Td.pt03ValuePv
+        settings: mainPage.sensorSettings
+        value: SensorUnits.display(raw, sensorId, settings, mainPage.pressureUnit).toFixed(2)
+        unit: mainPage.pressureUnit
     }
 
     // =========================================================
@@ -1237,16 +1276,16 @@ Item {
                                       - SensorUnits.adjusted(Td.pt03ValuePv, "pt03", Td.sensorSettingsSv)
         readonly property var limits: Td.sensorSettingsSv.filter
         // Compare unrounded kPa; equality with either limit remains normal.
-        readonly property int limitState: limits && limits.upperEnabled && deltaKpa > limits.upper ? 1
-                                        : limits && limits.lowerEnabled && deltaKpa < limits.lower ? -1 : 0
+        // w1-088: the same rule and colors as every value tag (SensorUnits.js).
+        readonly property int limitState: SensorUnits.limitState(deltaKpa, limits)
         x: 818
         y: 475
         width: 40
         height: 168
         radius: 20
 
-        color: limitState > 0 ? "#D64550" : limitState < 0 ? "#D98A32" : "#858B94"
-        border.color: limitState > 0 ? "#FF8A80" : limitState < 0 ? "#FFD166" : "#8FE8E6"
+        color: SensorUnits.limitFillColor(limitState, "#858B94")
+        border.color: SensorUnits.limitBorderColor(limitState, "#8FE8E6")
         border.width: 3
 
         Text {
@@ -1264,6 +1303,7 @@ Item {
         anchors.topMargin: 8
         title: "ΔP"
         tagColor: "#B8A4FF"
+        limitState: filterBody.limitState
         value: (filterBody.deltaKpa * SensorUnits.pressureFactor(Td.pressureUnitSv)).toFixed(2)
         unit: Td.pressureUnitSv
     }
@@ -1277,7 +1317,10 @@ Item {
         width: 60
         height: 97
         id: flowMeter
-        readonly property real value: SensorUnits.adjusted(Td.flowMeterValuePv, "flowMeter", Td.sensorSettingsSv)
+        objectName: "flowMeter"
+        readonly property real value: SensorUnits.adjusted(Td.flowMeterValuePv, "flowMeter", mainPage.sensorSettings)
+        // w1-088: same rule and colors as the value tags (SensorUnits.js), on the value box.
+        readonly property int limitState: SensorUnits.limitState(value, mainPage.sensorSettings.flowMeter)
 
 
         Rectangle {
@@ -1298,11 +1341,14 @@ Item {
         }
 
         Rectangle {
+            objectName: "flowMeterValueBox"
             width: 55
             height: 32
             anchors.horizontalCenter: parent.horizontalCenter
             y: 64
-            color: "#21BCE8"
+            color: SensorUnits.limitFillColor(flowMeter.limitState, "#21BCE8")
+            border.color: SensorUnits.limitBorderColor(flowMeter.limitState, "#21BCE8")
+            border.width: flowMeter.limitState === 0 ? 0 : 2
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter

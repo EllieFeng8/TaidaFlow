@@ -1,6 +1,7 @@
 #pragma once
 #include <QElapsedTimer>
 #include <QObject>
+#include <QVariantMap>
 #include "manager.h"
 #include "TaidaFlowProxy.h"
 
@@ -35,6 +36,9 @@ private:
     void shutdown(const char* reason);
     bool m_shutDown = false;
     void reportIgnoredHmiInputSettings();
+    void loadSettingsPageSettings();
+    void saveChangedSensorSettingsCards();
+    void savePressureUnitSetting();
     void setHistoryTitleOnce();
     void loadAlarmRecords();
     // w2-049/w2-062: web page + /exports on the AppHttpServer singleton (config.json http, default 0.0.0.0:8124); writes <web folder>/runtime.json.
@@ -56,5 +60,9 @@ private:
     // w2-084: serverHeartbeatMs every 1 s on the main thread (ServerHeartbeat.h); started at the
     // end of init(), stopped first in shutdown().
     ServerHeartbeat* m_heartbeat = nullptr;
+    // Snapshot from the last proxy update.  SettingsPage.qml changes only one
+    // card at a time when its existing 「套用」button is pressed, so this lets
+    // Core persist that card without adding a QML or Proxy API.
+    QVariantMap m_lastSensorSettings;
 
 };

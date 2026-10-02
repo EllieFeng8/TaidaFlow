@@ -39,7 +39,7 @@
 [Config]   log.dir = "logs" (file)
 [Config]   log.quiet.enabled = true (file)
 [Config]   log.quiet.keepDays = 60 (file)
-[Config]   log.full.enabled = true (file)
+[Config]   log.full.enabled = false (file)
 [Config]   log.full.keepDays = 7 (file)
 [Config]   dataDir (resolved) = D:\repo\codex\qmlTester\taidaflow\build\w2-072-run
 [Config]   nginx.exe (resolved) = C:\tools\nginx\nginx-1.30.5\nginx.exe

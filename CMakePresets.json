@@ -70,6 +70,18 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
+    },
+    {
+      "hidden": true,
+      "name": "Qt",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "$env{QTDIR}"
+      },
+      "vendor": {
+        "qt-project.org/Qt": {
+          "checksum": "wVa86FgEkvdCTVp1/nxvrkaemJc="
+        }
+      }
     }
   ],
   "buildPresets": [
@@ -77,21 +89,32 @@
       "name": "desktop-release",
       "displayName": "Build Desktop App",
       "configurePreset": "desktop-release",
-      "targets": ["TaidaFlowApp"]
+      "targets": [
+        "TaidaFlowApp"
+      ]
     },
     {
       "name": "wasm-debug",
       "displayName": "Build WASM Debug",
       "configurePreset": "wasm-debug",
       "inheritConfigureEnvironment": true,
-      "targets": ["TaidaFlowApp"]
+      "targets": [
+        "TaidaFlowApp"
+      ]
     },
     {
       "name": "wasm-release",
       "displayName": "Build WASM Release",
       "configurePreset": "wasm-release",
       "inheritConfigureEnvironment": true,
-      "targets": ["TaidaFlowApp"]
+      "targets": [
+        "TaidaFlowApp"
+      ]
     }
-  ]
+  ],
+  "vendor": {
+    "qt-project.org/Presets": {
+      "checksum": "2rj00Tfakcg5xEYaL8haXWphNE0="
+    }
+  }
 }

@@ -61,6 +61,10 @@ param(
     [switch]$IfChanged
 )
 $ErrorActionPreference = 'Stop'
+# vcvars64.bat may launch Windows PowerShell in ConstrainedLanguage mode,
+# where built-in modules are not auto-loaded. Get-FileHash below belongs to
+# Microsoft.PowerShell.Utility, so load it explicitly before using it.
+Import-Module Microsoft.PowerShell.Utility -ErrorAction Stop
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'taidaflow-config.ps1')
 function Say([string]$m) { [Console]::Out.WriteLine($m) }

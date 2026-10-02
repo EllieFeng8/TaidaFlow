@@ -36,6 +36,38 @@
 namespace {
 constexpr auto kHmiInputSettingsFile = "TaidaFlowSettings.ini";
 constexpr auto kHmiInputSettingsGroup = "HmiInput";
+constexpr auto kSettingsPageGroup = "SettingsPage";
+constexpr auto kSettingsPageDisplayGroup = "Display";
+constexpr auto kSettingsPagePressureUnitKey = "pressureUnit";
+constexpr auto kSettingsPageSensorsJsonKey = "sensorSettingsJson";
+
+// The settings-page card id is its first sensor id.  This remains stable even
+// if the displayed card title changes, and matches SettingsPage.qml grouping.
+struct SettingsPageCard {
+    const char *id;
+    const char *firstSensor;
+    const char *secondSensor;
+};
+
+constexpr SettingsPageCard kSettingsPageCards[] = {
+    {"pt04", "pt04", "pt05"},
+    {"tt01", "tt01", "tt02"},
+    {"pt06", "pt06", "pt07"},
+    {"tt03", "tt03", "tt04"},
+    {"pt01", "pt01", nullptr},
+    {"pt02", "pt02", nullptr},
+    {"pt03", "pt03", nullptr},
+    {"flowMeter", "flowMeter", nullptr},
+    {"filter", "filter", nullptr},
+};
+
+QStringList settingsPageCardSensors(const SettingsPageCard &card)
+{
+    QStringList sensors{QLatin1String(card.firstSensor)};
+    if (card.secondSensor)
+        sensors.append(QLatin1String(card.secondSensor));
+    return sensors;
+}
 
 // Alarm vocabulary (Core status -> alarmStatus / severity) and the row conversion: moved
 // unchanged to AlarmRecordFormat.h/.cpp (w2-080), shared with the per-client alarm views.
@@ -223,6 +255,16 @@ void Core::init()
         return;
 
     m_proxy = new TaidaFlowProxy(this);
+    // These settings affect display/threshold configuration only and never
+    // restore a Modbus command.  Load before the Manager and QML clients start.
+    loadSettingsPageSettings();
+    m_lastSensorSettings = m_proxy->sensorSettingsSv();
+    connect(m_proxy, &TaidaFlowProxy::sensorSettingsSvChanged,
+            this, &Core::saveChangedSensorSettingsCards);
+    // Existing QML changes the pressure unit immediately and has no separate
+    // apply event; keep that established behavior without modifying QML.
+    connect(m_proxy, &TaidaFlowProxy::pressureUnitSvChanged,
+            this, &Core::savePressureUnitSetting);
     // w2-067: release the backend while the application object still exists (see Core::shutdown).
     // aboutToQuit = normal close (connected first, so it runs before the per-service handlers
     // below, which then find nothing left to stop).  The post routine covers a main() that returns
@@ -551,6 +593,157 @@ void Core::reportIgnoredHmiInputSettings()
                                 settings.fileName(),
                                 pairs.join(QStringLiteral(", ")));
     }
+}
+
+void Core::loadSettingsPageSettings()
+{
+    if (!m_proxy)
+        return;
+
+    QSettings settings(QString::fromLatin1(kHmiInputSettingsFile), QSettings::IniFormat);
+    settings.beginGroup(QString::fromLatin1(kSettingsPageGroup));
+    settings.beginGroup(QString::fromLatin1(kSettingsPageDisplayGroup));
+    const QString pressureUnit = settings.value(QString::fromLatin1(kSettingsPagePressureUnitKey)).toString();
+    settings.endGroup();
+
+    if (!pressureUnit.isEmpty()) {
+        m_proxy->setPressureUnitSv(pressureUnit);
+        if (m_proxy->pressureUnitSv() != pressureUnit) {
+            qWarning().noquote()
+                    << QStringLiteral("[SettingsPage] Ignoring invalid pressureUnit '%1' in %2.")
+                               .arg(pressureUnit, settings.fileName());
+        }
+    }
+
+    for (const SettingsPageCard &card : kSettingsPageCards) {
+        settings.beginGroup(QLatin1String(card.id));
+        const QString json = settings.value(QString::fromLatin1(kSettingsPageSensorsJsonKey)).toString();
+        settings.endGroup();
+        if (json.isEmpty())
+            continue;
+
+        QJsonParseError error;
+        const QJsonDocument document = QJsonDocument::fromJson(json.toUtf8(), &error);
+        const QStringList sensors = settingsPageCardSensors(card);
+        const QVariantMap saved = document.isObject() ? document.object().toVariantMap() : QVariantMap{};
+        if (!document.isObject() || saved.keys().size() != sensors.size()) {
+            qWarning().noquote()
+                    << QStringLiteral("[SettingsPage] Ignoring invalid card '%1' in %2: %3.")
+                               .arg(QLatin1String(card.id), settings.fileName(), error.errorString());
+            continue;
+        }
+
+        QVariantMap merged = m_proxy->sensorSettingsSv();
+        bool complete = true;
+        for (const QString &sensor : sensors) {
+            if (!saved.contains(sensor)) {
+                complete = false;
+                break;
+            }
+            merged.insert(sensor, saved.value(sensor));
+        }
+        if (!complete) {
+            qWarning().noquote()
+                    << QStringLiteral("[SettingsPage] Ignoring incomplete card '%1' in %2.")
+                               .arg(QLatin1String(card.id), settings.fileName());
+            continue;
+        }
+
+        m_proxy->setSensorSettingsSv(merged);
+        if (m_proxy->sensorSettingsSv() != merged) {
+            qWarning().noquote()
+                    << QStringLiteral("[SettingsPage] Ignoring invalid sensor values for card '%1' in %2.")
+                               .arg(QLatin1String(card.id), settings.fileName());
+            continue;
+        }
+        qInfo().noquote()
+                << QStringLiteral("[SettingsPage] Loaded card '%1' (%2) from %3.")
+                           .arg(QLatin1String(card.id), sensors.join(QStringLiteral(", ")), settings.fileName());
+    }
+    settings.endGroup();
+
+    if (settings.status() != QSettings::NoError) {
+        qWarning().noquote()
+                << QStringLiteral("[SettingsPage] Failed to read %1: QSettings status %2.")
+                           .arg(settings.fileName())
+                           .arg(static_cast<int>(settings.status()));
+    }
+}
+
+void Core::saveChangedSensorSettingsCards()
+{
+    if (!m_proxy)
+        return;
+
+    const QVariantMap current = m_proxy->sensorSettingsSv();
+    QVariantMap savedSnapshot = m_lastSensorSettings;
+    for (const SettingsPageCard &card : kSettingsPageCards) {
+        const QStringList sensors = settingsPageCardSensors(card);
+        bool changed = false;
+        for (const QString &sensor : sensors) {
+            if (m_lastSensorSettings.value(sensor) != current.value(sensor)) {
+                changed = true;
+                break;
+            }
+        }
+        if (!changed)
+            continue;
+
+        QVariantMap cardSettings;
+        for (const QString &sensor : sensors)
+            cardSettings.insert(sensor, current.value(sensor));
+
+        QSettings settings(QString::fromLatin1(kHmiInputSettingsFile), QSettings::IniFormat);
+        settings.beginGroup(QString::fromLatin1(kSettingsPageGroup));
+        settings.beginGroup(QLatin1String(card.id));
+        settings.setValue(QString::fromLatin1(kSettingsPageSensorsJsonKey),
+                          QString::fromUtf8(QJsonDocument(QJsonObject::fromVariantMap(cardSettings))
+                                                     .toJson(QJsonDocument::Compact)));
+        settings.endGroup();
+        settings.endGroup();
+        settings.sync();
+
+        if (settings.status() != QSettings::NoError) {
+            qWarning().noquote()
+                    << QStringLiteral("[SettingsPage] Failed to save card '%1' to %2: QSettings status %3.")
+                               .arg(QLatin1String(card.id), settings.fileName())
+                               .arg(static_cast<int>(settings.status()));
+            continue;
+        }
+        for (const QString &sensor : sensors)
+            savedSnapshot.insert(sensor, current.value(sensor));
+        qInfo().noquote()
+                << QStringLiteral("[SettingsPage] Saved card '%1' (%2) to %3.")
+                           .arg(QLatin1String(card.id), sensors.join(QStringLiteral(", ")), settings.fileName());
+    }
+    // Keep a failed card different from its latest Proxy value.  The next
+    // Apply of that card retries its INI write instead of silently losing it.
+    m_lastSensorSettings = savedSnapshot;
+}
+
+void Core::savePressureUnitSetting()
+{
+    if (!m_proxy)
+        return;
+
+    QSettings settings(QString::fromLatin1(kHmiInputSettingsFile), QSettings::IniFormat);
+    settings.beginGroup(QString::fromLatin1(kSettingsPageGroup));
+    settings.beginGroup(QString::fromLatin1(kSettingsPageDisplayGroup));
+    settings.setValue(QString::fromLatin1(kSettingsPagePressureUnitKey), m_proxy->pressureUnitSv());
+    settings.endGroup();
+    settings.endGroup();
+    settings.sync();
+
+    if (settings.status() != QSettings::NoError) {
+        qWarning().noquote()
+                << QStringLiteral("[SettingsPage] Failed to save pressure unit to %1: QSettings status %2.")
+                           .arg(settings.fileName())
+                           .arg(static_cast<int>(settings.status()));
+        return;
+    }
+    qInfo().noquote()
+            << QStringLiteral("[SettingsPage] Saved pressureUnit=%1 to %2.")
+                       .arg(m_proxy->pressureUnitSv(), settings.fileName());
 }
 
 void Core::setHistoryTitleOnce()

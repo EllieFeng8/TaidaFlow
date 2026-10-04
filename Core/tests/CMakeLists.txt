@@ -11,6 +11,7 @@
 #   w2-085: tst_limit_alarms (and LimitAlarms.cpp in tst_manager_sv_guard: Manager owns the monitor)
 #   w2-086: tst_offset_storage (and SensorOffsetStorage.cpp in tst_manager_sv_guard / tst_limit_alarms)
 #   w2-087: tst_device_status (and DeviceStatusPublisher.cpp wherever manager.cpp is compiled)
+#   w2-089: tst_ms300_alarm_name (MS300 alarm records named 循環泵變頻器)
 cmake_minimum_required(VERSION 3.21)
 project(TaidaFlowCoreTests LANGUAGES CXX)
 
@@ -300,3 +301,43 @@ add_test(NAME tst_device_status_simulator_profile
 set_tests_properties(tst_device_status_simulator_profile PROPERTIES
     ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${QT_BIN_DIR};QT_QPA_PLATFORM=set:offscreen;QT_FORCE_STDERR_LOGGING=set:1;TAIDAFLOW_DEVICE_PROFILE=set:simulator"
     TIMEOUT 300)
+
+# ---------------------------------------------------------------------------------------------
+# w2-089: the MS300 fault / warning alarm records are named 循環泵變頻器 (new rows only; rows stored
+# earlier keep MS300, never rewritten). Real Manager (not started: no device, no port), real
+# SqlManager on a temporary data folder, real AlarmRecordFormat (alarmRecords) and AlarmViewService
+# (alarmViews); the fault status enters through the Manager's own Ms300FaultReader child
+# (faultStatusChanged - no serial port on this PC). Plus a source check that no code looks MS300
+# rows up by name.
+# ---------------------------------------------------------------------------------------------
+taidaflow_core_test(tst_ms300_alarm_name
+    SOURCES
+        tst_ms300_alarm_name.cpp
+        "${CORE_DIR}/LimitAlarms.h"
+        "${CORE_DIR}/LimitAlarms.cpp"
+        "${CORE_DIR}/SensorOffsetStorage.h"
+        "${CORE_DIR}/SensorOffsetStorage.cpp"
+        "${CORE_DIR}/DeviceStatusPublisher.h"
+        "${CORE_DIR}/DeviceStatusPublisher.cpp"
+        "${CORE_DIR}/manager.h"
+        "${CORE_DIR}/manager.cpp"
+        "${CORE_DIR}/Modbus_Client.h"
+        "${CORE_DIR}/Modbus_Client.cpp"
+        "${CORE_DIR}/Ms300FaultReader.h"
+        "${CORE_DIR}/Ms300FaultReader.cpp"
+        "${CORE_DIR}/ModbusMapping.h"
+        "${CORE_DIR}/ModbusServerBridgeMapping.h"
+        "${CORE_DIR}/AlarmViews.h"
+        "${CORE_DIR}/AlarmViews.cpp"
+        "${CORE_DIR}/AlarmRecordFormat.h"
+        "${CORE_DIR}/AlarmRecordFormat.cpp"
+        "${CORE_DIR}/SqlManager.h"
+        "${CORE_DIR}/SqlManager.cpp"
+        "${CORE_DIR}/SqlManagerAlarms.cpp"
+        "${CORE_DIR}/HistoryExport.h"
+        "${CORE_DIR}/HistoryExport.cpp"
+        "${CORE_DIR}/TaidaFlowProxy.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.h"
+        "${CORE_DIR}/AppHttpServer/AppHttpServer.cpp"
+    LIBS Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Network Qt6::Sql Qt6::HttpServer Qt6::SerialBus Qt6::SerialPort)
+target_compile_definitions(tst_ms300_alarm_name PRIVATE CORE_SOURCE_DIR="${CORE_DIR}")

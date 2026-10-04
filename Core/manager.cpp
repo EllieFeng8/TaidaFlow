@@ -227,7 +227,11 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
         const QString status = faultCode != 0
                 ? QStringLiteral("異常")
                 : QStringLiteral("警告");
-        saveAlarm(QStringLiteral("MS300"), message, status);
+        // w2-089 (Mango 2026-10-04): the alarm record names the MS300 by what it drives (the
+        // sensorName of alarmRecords / alarmViews), as the device offline banner does
+        // (DeviceStatusPublisher). Only new rows: rows stored earlier keep the name MS300 (never
+        // rewritten); no code looks MS300 rows up by name (they are never resolved / taken over).
+        saveAlarm(QStringLiteral("循環泵變頻器"), message, status);
     });
 }
 

@@ -11,6 +11,9 @@
 
 namespace {
 const QString kMs300Key = QStringLiteral("ms300");
+// w2-089 (Mango 2026-10-04): the banner names the MS300 by what it drives, "循環泵變頻器（COM2）".
+// The same name as the MS300 alarm records of Manager (manager.cpp, faultStatusChanged -> saveAlarm).
+const QString kMs300Name = QStringLiteral("循環泵變頻器");
 }
 
 DeviceStatusPublisher::DeviceStatusPublisher(TaidaFlowProxy *proxy, QObject *parent)
@@ -82,7 +85,7 @@ void DeviceStatusPublisher::attachMs300(Ms300FaultReader *reader)
     if (!reader)
         return;
     Entry entry;
-    entry.name = QStringLiteral("MS300");
+    entry.name = kMs300Name;                          // w2-089: shown to the user, not the model MS300
     entry.address = reader->settings().serialPort;
     m_entries.insert(kMs300Key, entry);
     connect(reader, &Ms300FaultReader::portOpenChanged, this, &DeviceStatusPublisher::setMs300PortOpen);

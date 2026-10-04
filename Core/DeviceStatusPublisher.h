@@ -8,9 +8,11 @@
 //   adam6217b = ModbusClient::Device::Adam6217_203   name "ADAM-6217"
 //   adam6224  = ModbusClient::Device::Adam6224_204   name "ADAM-6224"
 //   adam6022  = ModbusClient::Device::Adam6022_205   name "ADAM-6022"
-//   ms300     = Ms300FaultReader (serial port)        name "MS300"
-// name is the model only (not ModbusClient::displayName(), which already holds the address and
-// A/B). address is the address really used: the ADAM host of ModbusClient::deviceConfigs() (the
+//   ms300     = Ms300FaultReader (serial port)        name "循環泵變頻器"
+// ADAM name is the model only (not ModbusClient::displayName(), which already holds the address and
+// A/B). w2-089 (Mango 2026-10-04): the MS300 is named by what it drives, "循環泵變頻器" (not the
+// model MS300; the banner reads "循環泵變頻器（COM2）"), the same name as its alarm records
+// (Manager, faultStatusChanged -> saveAlarm). address is the address really used: the ADAM host of ModbusClient::deviceConfigs() (the
 // config.json host, or the simulator address when TAIDAFLOW_DEVICE_PROFILE=simulator replaced it),
 // the MS300 serial port name (config.json devices.ms300.serialPort, e.g. COM2).
 //

@@ -1,0 +1,17 @@
+﻿=== w2-089 mutants 2026-10-04T17:57:06.7192481+08:00 HEAD 8f4ad42
+17:58:45 baseline: ctest exit=0
+17:59:11 M1-rewrite-same-state (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared values are not the same / FAIL!  : TestDeviceStatus::ms300ReadRule() Compared values are not the same
+17:59:21 M2-report-before-first-result (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared lists have different sizes. / FAIL!  : TestDeviceStatus::managerWiring() '!proxy.deviceStatus().contains(key)' returned FALSE. (adam6256 before its first result)
+18:00:58 M3-name-is-displayName (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared values are not the same / FAIL!  : TestDeviceStatus::lifecycle() 'proxy.deviceStatus().value("adam6224").toMap().value("online").toBool()' returned FALSE. ()
+18:02:36 M4-stop-writes-nothing (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() 'proxy.deviceStatus().isEmpty()' returned FALSE. () / FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. ()
+18:04:20 M5-ms300-online-on-port-open (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. () / FAIL!  : TestDeviceStatus::ms300ReadRule() 'proxy.deviceStatus().isEmpty()' returned FALSE. ()
+18:06:02 M6-manager-stops-devices-first (Core\manager.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::managerWiring() Compared values are not the same / FAIL!  : TestDeviceStatus::sourceWiring() 'stop.indexOf(QStringLiteral("m_deviceStatus->stop()")) < stop.indexOf(QStringLiteral("m_ms300FaultReader.stop()"))' returned FALSE. ()
+18:07:48 M7-offline-on-connecting (Core\Ms300FaultReader.cpp): ctest exit=0 -> SURVIVED (expected survivor: needs a serial port that opens - none on this PC) 
+18:08:17 M8-banner-name-MS300 (Core\DeviceStatusPublisher.cpp): ctest exit=8 -> KILLED FAIL!  : TestDeviceStatus::lifecycle() Compared values are not the same / FAIL!  : TestDeviceStatus::ms300ReadRule() Compared values are not the same
+18:10:03 M9-alarm-name-MS300 (Core\manager.cpp): ctest exit=8 -> KILLED FAIL!  : TestMs300AlarmName::newAlarmsNamed() Compared values are not the same / FAIL!  : TestMs300AlarmName::oldRowsKept() Compared values are not the same
+18:11:48 M10-old-rows-renamed (Core\manager.cpp): ctest exit=8 -> KILLED FAIL!  : TestMs300AlarmName::newAlarmsNamed() Compared values are not the same / FAIL!  : TestMs300AlarmName::oldRowsKept() Compared values are not the same
+18:13:33 final: ctest exit=0
+18:13:33 Core\DeviceStatusPublisher.cpp restored byte-identical: True
+18:13:33 Core\manager.cpp restored byte-identical: True
+18:13:33 Core\Ms300FaultReader.cpp restored byte-identical: True
+18:13:33 === all mutants killed (M7 expected survivor)

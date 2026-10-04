@@ -1,0 +1,42 @@
+﻿cmd : 'vswhere.exe' is not recognized as an internal or external command,
+At line:1 char:350
++ ... \taidaflow; cmd /c "docs\evidence\w2-089\tools\run-tests-w2089.bat co ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('vswhere.exe' i...ternal command,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Configuring done (1.3s)
+-- Generating done (0.4s)
+-- Build files have been written to: D:/repo/codex/qmlTester/taidaflow/build/w2-089-run/core-tests
+[1/39] Automatic MOC and UIC for target tst_sqlmanager_schema_once
+[2/37] Automatic MOC and UIC for target tst_rest_range_paging
+[3/35] Automatic MOC and UIC for target tst_modbusclient_offline
+[4/33] Automatic MOC and UIC for target tst_historyexport_status
+[5/31] Automatic MOC and UIC for target tst_ms300_offline
+[6/29] Automatic MOC and UIC for target tst_sensor_settings
+[7/27] Automatic MOC and UIC for target tst_manager_sv_guard
+[8/25] Automatic MOC and UIC for target tst_alarm_views
+[9/23] Automatic MOC and UIC for target tst_server_heartbeat
+[10/21] Automatic MOC and UIC for target tst_limit_alarms
+[11/19] Automatic MOC and UIC for target tst_offset_storage
+[12/18] Automatic MOC and UIC for target tst_device_status
+[13/16] Automatic MOC and UIC for target tst_ms300_alarm_name
+[14/14] Linking CXX executable tst_offset_storage.exe
+Internal ctest changing into directory: D:/repo/codex/qmlTester/taidaflow/build/w2-089-run/core-tests
+Test project D:/repo/codex/qmlTester/taidaflow/build/w2-089-run/core-tests
+    Start 11: tst_offset_storage
+Process not started
+ D:/repo/codex/qmlTester/taidaflow/build/w2-089-run/core-tests/tst_offset_storage.exe
+[operation not permitted]
+1/1 Test #11: tst_offset_storage ...............***Not Run   0.00 sec
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   2.60 sec
+
+The following tests FAILED:
+	 11 - tst_offset_storage (BAD_COMMAND)
+Errors while running CTest

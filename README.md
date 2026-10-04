@@ -739,9 +739,9 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
 測試:`Core/tests` 的 `tst_offset_storage`(見「測試 / 驗證」5j)。不經瀏覽器的 live 測試工具:`docs\evidence\w2-086\tools\`
 (`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔 / port / 資料資料夾啟動桌面版並逐項檢查)。
 
-## 設備離線提示(w1-087 / w2-087)
+## 設備離線提示(w1-087 / w2-087 / w2-089)
 
-連不上的設備會在桌面與網頁畫面上方顯示**橙色橫幅**「設備離線：ADAM-6217（192.168.1.203）、MS300（COM2）」(依下表順序,
+連不上的設備會在桌面與網頁畫面上方顯示**橙色橫幅**「設備離線：ADAM-6217（192.168.1.203）、循環泵變頻器（COM2）」(依下表順序,
 以頓號分隔)。只是提示:不停用任何按鈕,其他設備照常操作。網頁與桌面的連線中斷時(紅色「離線」/「連線中斷」橫幅)那條優先,
 設備橫幅暫時不顯示(資料可能已過時),連線恢復後自動回來。
 
@@ -757,9 +757,10 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
 | `adam6217b` | ADAM-6217 B | ADAM-6217 | 同上(127.0.0.203) | 同上 |
 | `adam6224` | ADAM-6224 | ADAM-6224 | 同上(127.0.0.204) | 同上 |
 | `adam6022` | ADAM-6022 | ADAM-6022 | 同上(127.0.0.205) | 同上 |
-| `ms300` | MS300 變頻器 | MS300 | `devices.ms300.serialPort`(例如 COM2) | 序列埠打不開 / 被關閉,或埠開著但連續 3 次讀故障狀態沒有回應(變頻器沒電、線沒接) |
+| `ms300` | MS300 變頻器(循環泵) | 循環泵變頻器 | `devices.ms300.serialPort`(例如 COM2) | 序列埠打不開 / 被關閉,或埠開著但連續 3 次讀故障狀態沒有回應(變頻器沒電、線沒接) |
 
-- 名稱只放型號(兩台 ADAM-6217 以位址區分);位址是程式實際使用的位址(config.json,或測試用 `TAIDAFLOW_DEVICE_PROFILE=simulator`
+- ADAM 的名稱只放型號(兩台 ADAM-6217 以位址區分);MS300 以用途命名為「循環泵變頻器」(w2-089,Mango 2026-10-04:
+  畫面不寫 MS300),橫幅顯示「循環泵變頻器（COM2）」。位址是程式實際使用的位址(config.json,或測試用 `TAIDAFLOW_DEVICE_PROFILE=simulator`
   置換後的 127.0.0.20x)。
 - 啟動時是空 map(不顯示);每台設備**第一次連線嘗試有結果**後才出現該設備(第一次還在連的設備不會被標離線)。之後連線狀態
   改變才重寫整份 map(`sinceMs` = 改變的時刻);斷線期間每 3 秒的重連失敗不會重寫;連上立即恢復 online。MS300 埠打開後要等
@@ -767,24 +768,32 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
 - ADAM 拔線但 TCP 還沒斷(Windows 要等送出的請求重送逾時,約十幾秒到數十秒)時不會立刻顯示;程式關閉時寫回空 map。
 - log(full log):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
   與 `[DeviceStatus] write #<n>: {adam6022=online, ..., ms300=OFFLINE}`,關閉時 `[DeviceStatus] stopped: deviceStatus = {} (unknown)`。
+  MS300 那一行是 `[DeviceStatus] 循環泵變頻器 COM2 (ms300): OFFLINE (serial port not open, first result)`;
+  `[MS300] ...` 開頭的連線 / 故障讀取 log 標籤不變(給工程人員看)。
+- **警報紀錄名稱(w2-089)**:MS300 故障(故障碼 ≠ 0,`異常` / 嚴重)與警告(只有警告碼,`警告`)警報,新寫入的紀錄
+  設備 / 感測器名稱為「循環泵變頻器」(警報頁 `alarmRecords` / `alarmViews` 的 `sensorName`;`Manager` 的 `faultStatusChanged`
+  → `saveAlarm`,其餘規則不變)。只影響新紀錄:資料庫裡既有的 `MS300` 舊紀錄不改寫,警報頁照原樣顯示 `MS300`;
+  MS300 警報從來不會被自動解除或重啟接手,也沒有任何程式以名稱 `MS300` 查詢舊紀錄(以名稱查詢的只有 DI 重啟接手與上下限警報),
+  所以改名不影響新舊紀錄的處理(`Core/tests` 的 `tst_ms300_alarm_name`)。
 
 **給 Mango 的測試方法**(不需改程式):
 
 1. 正常接模擬器啟動(`scripts\run-simulator.ps1` → `scripts\run-desktop.ps1 -DeviceProfile simulator`):開發機沒有 COM2,
-   幾秒後橫幅顯示「設備離線：MS300（COM2）」;ADAM 都連上,不在橫幅內。
+   幾秒後橫幅顯示「設備離線：循環泵變頻器（COM2）」;ADAM 都連上,不在橫幅內。
 2. 關掉模擬器 → 約 1~5 秒內橫幅變成「設備離線：ADAM-6256（127.0.0.201）、ADAM-6217（127.0.0.202）、ADAM-6217（127.0.0.203）、
-   ADAM-6224（127.0.0.204）、ADAM-6022（127.0.0.205）、MS300（COM2）」;按鈕仍可按(寫入會被拒絕並記 log)。
-3. 再開模擬器 → 下一次重連(3 秒內)ADAM 從橫幅消失,只剩 MS300。
+   ADAM-6224（127.0.0.204）、ADAM-6022（127.0.0.205）、循環泵變頻器（COM2）」;按鈕仍可按(寫入會被拒絕並記 log)。
+3. 再開模擬器 → 下一次重連(3 秒內)ADAM 從橫幅消失,只剩循環泵變頻器。
 4. 或只讓一台離線:複製 `deploy\dev\config.simulator.json`,把 `devices.adam6217b.host` 改成不存在的位址 `192.0.2.203`
    (保留給文件用、不會有設備的網段;安全探測對它判定 unreachable,可以啟動),以
    `run-desktop.ps1 -Config <該檔>`(不加 `-DeviceProfile`)啟動 → 該台第一次連線逾時後(Windows TCP 連線逾時約 20 秒,之前不顯示)
-   橫幅為「設備離線：ADAM-6217（192.0.2.203）、MS300（COM2）」。(w2-087 的 live 測試用的是本機沒人聽的 `127.0.0.210`,
+   橫幅為「設備離線：ADAM-6217（192.0.2.203）、循環泵變頻器（COM2）」。(w2-087 的 live 測試用的是本機沒人聽的 `127.0.0.210`,
    連線被拒,約 4 秒內出現;但 `run-desktop.ps1` 的安全探測會因本機位址沒有模擬器在聽而拒絕啟動,所以手動測試用 192.0.2.203。)
 5. 網頁(`http://<IP>/`)同時顯示相同的橫幅;拔掉網頁電腦的網路時改顯示紅色「連線中斷」,插回後橙色橫幅回來。
 
-測試:`Core/tests` 的 `tst_device_status` 與 `tst_device_status_simulator_profile`(見「測試 / 驗證」5j)。不經瀏覽器的 live
-測試工具:`docs\evidence\w2-087\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1` 用自己的設定檔
-(ADAM-6217 B 指到 127.0.0.210、MS300 COM2)啟動桌面版並讀 deviceStatus)。
+測試:`Core/tests` 的 `tst_device_status` 與 `tst_device_status_simulator_profile`、`tst_ms300_alarm_name`(見「測試 / 驗證」5j)。
+不經瀏覽器的 live 測試工具:`docs\evidence\w2-087\tools\`(`build-live-tools.bat` 建 Proxy Mirror 測試用戶端,`live-run.ps1`
+用自己的設定檔(ADAM-6217 B 指到 127.0.0.210、MS300 COM2)啟動桌面版並讀 deviceStatus);w2-089 的版本在
+`docs\evidence\w2-089\tools\`(五台 ADAM 都接模擬器,檢查 ms300 的名稱為循環泵變頻器)。
 
 ## 測試 / 驗證(全部以 exit code 判定)
 
@@ -876,7 +885,9 @@ docs\evidence\w2-067\tools\run-qtest.bat
 ::     TAIDAFLOW_DEVICE_PROFILE=simulator;四台 ADAM 對測試自己的 Modbus TCP server、ADAM-6217 B 指到沒人聽的本機位址、MS300 用
 ::     不存在的 COM 名稱:啟動時空 map、每台第一次連線有結果前沒有該 key、之後完整 6 個 key、name / address(含 simulator 置換後位址)、
 ::     重連失敗不重寫、斷線只寫一次、恢復寫 true、stop 後空 map;MS300 讀取規則;真的 Manager start / stop;core.cpp / manager.cpp /
-::     CMake 接線)
+::     CMake 接線;w2-089 起 ms300 的 name 為「循環泵變頻器」)、
+::     tst_ms300_alarm_name(w2-089 MS300 故障 / 警告警報紀錄名稱為「循環泵變頻器」:真的 Manager(不啟動)與 SqlManager,
+::     alarmRecords / alarmViews 的 sensorName、舊的 MS300 紀錄不改寫且照原樣顯示、沒有任何程式以名稱查 MS300 紀錄)
 Core\tests\run-core-tests.bat fresh
 :: 5k. (w2-084) 網頁載入頁的當機自動重新整理(node,不開瀏覽器;node 用 emsdk 附的 node.exe):inline script 語法、
 ::     退避函式與 TaidaFlowContent\components\LinkWatchdog.js 逐一比對、假時鐘 / 假 sessionStorage 下的倒數與退避、

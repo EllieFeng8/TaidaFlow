@@ -1,0 +1,17 @@
+﻿=== w2-089 d4 sequence 2026-10-04T17:34:53.4096791+08:00 HEAD 8f4ad42
+17:34:55 font-check: exit=0 (2 s)
+17:34:55 [build-desktop-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+17:36:12 build-desktop-fresh: exit=0 (77 s)
+17:36:12 [build-wasm-release-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+17:40:21 build-wasm-release-fresh: exit=0 (250 s)
+17:40:23 check-wasm-backend: exit=0 (2 s)
+17:40:26 check-version-shadow: exit=0 (3 s)
+17:40:26 verify-pack: exit=0 (1 s)
+17:40:27 check-rest-routes: exit=0 (0 s)
+17:40:27 devicestatus-desktop-only: exit=0 (0 s)
+17:40:27 font-has-new-name: exit=0 (0 s)
+17:40:27 [core-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+17:44:29 core-tests-fresh: exit=8 (242 s)
+17:44:29 [app-tests-fresh] idle check: no cl/clang/clang++/wasm-ld/ninja
+17:44:53 app-tests-fresh: exit=0 (24 s)
+17:44:53 === 1 step(s) FAILED

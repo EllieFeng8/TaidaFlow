@@ -13,7 +13,8 @@
 //
 //  * lifecycle: empty map at start; a device gets its key only after its first connection attempt
 //    (checked at every write); after all first attempts the complete map (4 ADAM online, ADAM-6217 B
-//    and MS300 offline, names = model, addresses = the effective ones, sinceMs = time of the change);
+//    and MS300 offline, names = model (MS300: 循環泵變頻器, w2-089), addresses = the effective ones,
+//    sinceMs = time of the change);
 //    the repeated failed reconnects / port opens write nothing; a lost connection (server closed)
 //    -> online false, written once although the reconnect attempts keep failing; restored -> true;
 //    stop() -> {} and nothing after it (the devices' disconnects of the shutdown are not reported).
@@ -48,6 +49,9 @@
 
 namespace {
 const QString kNoSuchPort = QStringLiteral("COM239");
+// w2-089 (Mango 2026-10-04): the MS300 entry is named "循環泵變頻器" (banner "循環泵變頻器（COM2）"),
+// never the model "MS300"; the ADAM entries keep their model names.
+const QString kMs300Name = QStringLiteral("循環泵變頻器");
 
 bool simulatorProfile()
 {
@@ -242,7 +246,7 @@ void TestDeviceStatus::checkCompleteMap(const QVariantMap &map, qint64 notBefore
         QVERIFY2(since >= double(notBefore) && since <= double(notAfter),
                  qPrintable(QStringLiteral("%1 sinceMs %2 not in %3..%4").arg(key).arg(qint64(since)).arg(notBefore).arg(notAfter)));
         if (key == QLatin1String("ms300")) {
-            QCOMPARE(entry.value(QStringLiteral("name")).toString(), QStringLiteral("MS300"));
+            QCOMPARE(entry.value(QStringLiteral("name")).toString(), kMs300Name);   // w2-089
             QCOMPARE(entry.value(QStringLiteral("address")).toString(), kNoSuchPort);
             QCOMPARE(entry.value(QStringLiteral("online")).toBool(), false);
             continue;
@@ -289,6 +293,8 @@ void TestDeviceStatus::lifecycle()
     reader.start();
     QCOMPARE(proxy.deviceStatus().keys(), QStringList{QStringLiteral("ms300")});
     QCOMPARE(proxy.deviceStatus().value("ms300").toMap().value("online").toBool(), false);
+    QCOMPARE(proxy.deviceStatus().value("ms300").toMap().value("name").toString(), kMs300Name);   // w2-089
+    QCOMPARE(proxy.deviceStatus().value("ms300").toMap().value("address").toString(), kNoSuchPort);
 
     QTRY_COMPARE_WITH_TIMEOUT(proxy.deviceStatus().size(), 6, 20000);
     const qint64 t1 = QDateTime::currentMSecsSinceEpoch();
@@ -384,6 +390,7 @@ void TestDeviceStatus::ms300ReadRule()
     QCOMPARE(ms300().value("online").toBool(), true);
     QCOMPARE(ms300().value("sinceMs").toDouble(), 2000.0);
     QCOMPARE(ms300().value("address").toString(), kNoSuchPort);
+    QCOMPARE(ms300().value("name").toString(), kMs300Name);   // w2-089
     QCOMPARE(log.maps.size(), 1);
     publisher.ms300ReadSucceeded();               // same state
     now = 3000;
@@ -495,6 +502,9 @@ void TestDeviceStatus::sourceWiring()
     QVERIFY(!publisher.isEmpty());
     QVERIFY(!publisher.contains(QStringLiteral("displayName(")));
     QVERIFY(publisher.contains(QStringLiteral("proxy->setDeviceStatus(")));
+    // w2-089: the MS300 entry is named 循環泵變頻器 - no "MS300" string literal is left in the writer.
+    QVERIFY(publisher.contains(QStringLiteral("QStringLiteral(\"循環泵變頻器\")")));
+    QVERIFY(!publisher.contains(QStringLiteral("\"MS300\"")));
 
     // Desktop only: in the TAIDAFLOW_IS_WINDOWS_DESKTOP block of Core/CMakeLists.txt.
     const QString cmake = read(QStringLiteral("CMakeLists.txt"));

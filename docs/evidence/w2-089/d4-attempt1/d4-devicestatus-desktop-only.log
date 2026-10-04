@@ -1,0 +1,4 @@
+desktop: DeviceStatusPublisher.cpp compile commands=2, log string in TaidaFlowApp.exe=True, deviceStatusChanged=True
+wasm   : DeviceStatusPublisher.cpp compile commands=0, log string in TaidaFlowApp.wasm=False, deviceStatusChanged=True
+desktop: MS300 name (circulation pump inverter, 6 CJK chars) in TaidaFlowApp.exe=True
+exit=0

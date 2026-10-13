@@ -817,28 +817,33 @@ void tst_AppLog::configFailureWritesFallbackLog()
     const QString failureLine = QStringLiteral("[critical] [Config] config file %1 cannot be used: %2%3 - the program "
                                                "exits with code 2; log files (fallback folder beside config.json): %4, %5")
                                     .arg(nativePath, r.error, where, fullFile, quietFile);
-    const QString full = QString::fromUtf8(readAll(fullPath(logs, day)));
+    // w2-090: log.full.enabled defaults to false (8954ad3) and the fallback settings are the defaults,
+    // so the fallback folder gets no full log; the quiet log carries the buffered warning and the
+    // critical line (the buffered [info] lines are in no file, only on stderr / the debugger).
+    QVERIFY2(!QFileInfo::exists(fullPath(logs, day)), qPrintable(fullFile));
     const QString quiet = QString::fromUtf8(readAll(quietPath(logs, day)));
-    QVERIFY2(full.contains(QStringLiteral("[info] [Config] config file %1").arg(nativePath)) || pathIsFolder,
-             qPrintable(full));                                    // buffered info
-    QVERIFY2(full.contains(QStringLiteral("[warning] [Config] config file %1 cannot be used: ").arg(nativePath)),
-             qPrintable(full));                                    // buffered warning
-    QVERIFY2(full.contains(failureLine), qPrintable(full));
-    QVERIFY2(quiet.contains(failureLine), qPrintable(quiet));
-    QVERIFY(quiet.contains(QStringLiteral("[warning] [Config] config file %1 cannot be used: ").arg(nativePath)));
-    QVERIFY(!quiet.contains(QStringLiteral("[info]")));
+    const QString warningLine = QStringLiteral("[warning] [Config] config file %1 cannot be used: %2%3 - the file is "
+                                               "left unchanged and the program exits")
+                                    .arg(nativePath, r.error, where);
+    QVERIFY2(quiet.contains(warningLine), qPrintable(quiet));       // buffered warning
+    QVERIFY2(quiet.contains(failureLine), qPrintable(quiet));       // critical line
+    QVERIFY2(quiet.indexOf(warningLine) < quiet.indexOf(failureLine), qPrintable(quiet));   // chronological
+    QVERIFY2(!quiet.contains(QStringLiteral("[info]")), qPrintable(quiet));
     if (!pathIsFolder) {
         QCOMPARE(r.errorLine, 3);
         QVERIFY(r.error.startsWith(QStringLiteral("JSON syntax error")));
-        QVERIFY(full.contains(QStringLiteral("(line 3, column ")));
+        QVERIFY(quiet.contains(QStringLiteral("(line 3, column ")));
     }
-    // Dialog: the usual text + the log file.
+    // Dialog: the usual text + the log file. Current applog.cpp names the full log file here (and in the
+    // critical line) even when full logging is off - reported to PM in w2-090, the program is not changed.
     QVERIFY2(dialog.startsWith(r.errorDialogText()), qPrintable(dialog));
     QVERIFY(dialog.contains(QStringLiteral("請修正 config.json 或刪除它讓程式重建預設值")));
     QVERIFY2(dialog.endsWith(QStringLiteral("\n\n記錄檔:%1").arg(fullFile)), qPrintable(dialog));
-    // Clean-up of the fallback folder; nothing else created next to config.json.
+    // Clean-up of the fallback folder; nothing else created next to config.json or in the log folder.
     QVERIFY(!QFileInfo::exists(quietPath(logs, QDate(2026, 7, 1))));
     QVERIFY(QFileInfo::exists(QDir(logs).filePath(QStringLiteral("launcher.log"))));
+    QCOMPARE(QDir(logs).entryList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Name),
+             QStringList({QStringLiteral("launcher.log"), QFileInfo(quietPath(logs, day)).fileName()}));
     QCOMPARE(QDir(cfgDir).entryList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Name),
              QStringList({QStringLiteral("config.json"), QStringLiteral("logs")}));
 }

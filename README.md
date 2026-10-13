@@ -104,8 +104,10 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
   `/mirror` 同步,正式機防火牆只開 80),否則 = `mirror.publicPort`(8125 的區網轉發)。網頁讀不到時退回 8125。
 - **log**(w2-064 / w2-065,規格 §2 `log`;詳見 `docs/DEPLOY_AND_STARTUP.md` §13):程式自己寫檔到 config.json 的 `log.dir`
   (相對於 `dataDir`,預設 `C:\TaidaFlowData\logs`;開發設定 = `build\runtime-cwd\logs`):`taidaflow-YYYY-MM-DD.log`
-  (warning 以上,保留 60 天)與 `taidaflow-YYYY-MM-DD-full.log`(全部,保留 7 天),換日換檔並清理,只刪符合這兩種檔名的檔;
-  config.json 讀不到時寫到 config.json 旁的 `logs\`。正式機啟動 / 停止腳本在同一資料夾寫 `launcher-YYYY-MM-DD.log`,
+  (warning 以上,保留 60 天)與 `taidaflow-YYYY-MM-DD-full.log`(全部,保留 7 天;**預設關閉**,`log.full.enabled` = `false`,
+  origin/core 8954ad3 起;排錯時在 config.json 改為 `true` 並重新啟動才寫,步驟見 DEPLOY_AND_STARTUP.md §13.1),
+  換日換檔並清理,只刪符合這兩種檔名的檔;config.json 讀不到時寫到 config.json 旁的 `logs\`(用預設值:只有 quiet log,
+  含 `[warning]` / `[critical] [Config]` 行)。正式機啟動 / 停止腳本在同一資料夾寫 `launcher-YYYY-MM-DD.log`,
   nginx 寫 `nginx-access-YYYY-MM-DD.log` 與 `nginx-error.log`;`start-taidaflow` 啟動時依 `log.quiet.keepDays` 清理
   launcher / nginx access log。舊版的 `taidaflow-yyyyMMdd-HHmmss.log` 不刪。測試:`App/tests` 的 `tst_applog`、
   `docs\evidence\w2-065\tools\test-config-reader.ps1`(腳本端的 log 資料夾與清理)。
@@ -462,8 +464,9 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
   B 改 config.json 的 dataDir、`install-nginx-config.ps1`、啟動(nginx `start nginx` + app)、curl 檢查網頁 / `runtime.json` no-store /
   `/mirror` 101 / REST / 匯出下載與 Range、DLL 來源、log、停止(nginx 保持執行,再 `nginx -s quit`)→ C 整個資料夾搬到另一處,啟動時
   自動重產 nginx.conf → D 壞掉的 config.json:腳本與程式都 exit 2 且不覆寫 → E 還原成出貨狀態。不操作畫面。
-  w2-065 另檢查:`<資料資料夾>\logs` 有當天的 quiet / full / launcher 檔(full 有 info、quiet 只有 warning 以上)、
-  nginx access log 以日期命名、壞 JSON 時備援 log 在打包資料夾的 `logs\`。
+  w2-065 另檢查:`<資料資料夾>\logs` 有當天的 quiet / launcher 檔(quiet 只有 warning 以上;full 依 `log.full.enabled`:
+  預設關閉時確認沒有 `-full.log`,開啟時 full 有 info)、nginx access log 以日期命名、壞 JSON 時備援 log(quiet,
+  含 JSON 錯誤與結果碼 2 的 critical 行;不寫 full)在打包資料夾的 `logs\`。
 - **開發機腳本與正式機腳本不可混用**:開發機一律用 `scripts\run-desktop.ps1`(安全探測);正式機腳本沒有保護。
 
 ## 接 Adam60xxSimulator(測試用設備位址切換)
@@ -766,7 +769,7 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
   改變才重寫整份 map(`sinceMs` = 改變的時刻);斷線期間每 3 秒的重連失敗不會重寫;連上立即恢復 online。MS300 埠打開後要等
   變頻器第一次回應才算 online。
 - ADAM 拔線但 TCP 還沒斷(Windows 要等送出的請求重送逾時,約十幾秒到數十秒)時不會立刻顯示;程式關閉時寫回空 map。
-- log(full log):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
+- log(full log,預設關閉,需開啟 `log.full.enabled`):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
   與 `[DeviceStatus] write #<n>: {adam6022=online, ..., ms300=OFFLINE}`,關閉時 `[DeviceStatus] stopped: deviceStatus = {} (unknown)`。
   MS300 那一行是 `[DeviceStatus] 循環泵變頻器 COM2 (ms300): OFFLINE (serial port not open, first result)`;
   `[MS300] ...` 開頭的連線 / 故障讀取 log 標籤不變(給工程人員看)。

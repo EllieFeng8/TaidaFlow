@@ -30,7 +30,7 @@ const char *const kSpecDefaultJson = R"({
   "rest":         { "bind": "127.0.0.1", "port": 18080 },
   "mirror":       { "internalPort": 18125, "publicBind": "0.0.0.0", "publicPort": 8125 },
   "nginx":        { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" },
-  "log":          { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": true, "keepDays": 7 } }
+  "log":          { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": false, "keepDays": 7 } }
 })";
 
 QByteArray readAll(const QString &path)
@@ -190,7 +190,7 @@ void tst_AppConfig::defaultFileFormat()
     QVERIFY(bytes.contains("\n  \"nginx\": {\n    \"enabled\": true,\n    \"port\": 80,\n"
                            "    \"exe\": \"nginx\\\\nginx.exe\"\n  },\n"));
     QVERIFY(bytes.contains("\n  \"log\": {\n    \"dir\": \"logs\",\n    \"quiet\": {\n      \"enabled\": true,\n"
-                           "      \"keepDays\": 60\n    },\n    \"full\": {\n      \"enabled\": true,\n"
+                           "      \"keepDays\": 60\n    },\n    \"full\": {\n      \"enabled\": false,\n"
                            "      \"keepDays\": 7\n    }\n  }\n}\n"));
     QVERIFY(bytes.indexOf("\"nginx\"") < bytes.indexOf("\"log\""));
     QVERIFY(!bytes.contains('\r'));

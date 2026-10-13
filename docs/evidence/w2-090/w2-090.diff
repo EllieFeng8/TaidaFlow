@@ -1,0 +1,246 @@
+diff --git a/App/tests/tst_appconfig.cpp b/App/tests/tst_appconfig.cpp
+index 88f5a45..ff3d609 100644
+--- a/App/tests/tst_appconfig.cpp
++++ b/App/tests/tst_appconfig.cpp
+@@ -30,7 +30,7 @@ const char *const kSpecDefaultJson = R"({
+   "rest":         { "bind": "127.0.0.1", "port": 18080 },
+   "mirror":       { "internalPort": 18125, "publicBind": "0.0.0.0", "publicPort": 8125 },
+   "nginx":        { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" },
+-  "log":          { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": true, "keepDays": 7 } }
++  "log":          { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": false, "keepDays": 7 } }
+ })";
+ 
+ QByteArray readAll(const QString &path)
+@@ -190,7 +190,7 @@ void tst_AppConfig::defaultFileFormat()
+     QVERIFY(bytes.contains("\n  \"nginx\": {\n    \"enabled\": true,\n    \"port\": 80,\n"
+                            "    \"exe\": \"nginx\\\\nginx.exe\"\n  },\n"));
+     QVERIFY(bytes.contains("\n  \"log\": {\n    \"dir\": \"logs\",\n    \"quiet\": {\n      \"enabled\": true,\n"
+-                           "      \"keepDays\": 60\n    },\n    \"full\": {\n      \"enabled\": true,\n"
++                           "      \"keepDays\": 60\n    },\n    \"full\": {\n      \"enabled\": false,\n"
+                            "      \"keepDays\": 7\n    }\n  }\n}\n"));
+     QVERIFY(bytes.indexOf("\"nginx\"") < bytes.indexOf("\"log\""));
+     QVERIFY(!bytes.contains('\r'));
+diff --git a/App/tests/tst_applog.cpp b/App/tests/tst_applog.cpp
+index 8a34cb5..e04353b 100644
+--- a/App/tests/tst_applog.cpp
++++ b/App/tests/tst_applog.cpp
+@@ -817,28 +817,33 @@ void tst_AppLog::configFailureWritesFallbackLog()
+     const QString failureLine = QStringLiteral("[critical] [Config] config file %1 cannot be used: %2%3 - the program "
+                                                "exits with code 2; log files (fallback folder beside config.json): %4, %5")
+                                     .arg(nativePath, r.error, where, fullFile, quietFile);
+-    const QString full = QString::fromUtf8(readAll(fullPath(logs, day)));
++    // w2-090: log.full.enabled defaults to false (8954ad3) and the fallback settings are the defaults,
++    // so the fallback folder gets no full log; the quiet log carries the buffered warning and the
++    // critical line (the buffered [info] lines are in no file, only on stderr / the debugger).
++    QVERIFY2(!QFileInfo::exists(fullPath(logs, day)), qPrintable(fullFile));
+     const QString quiet = QString::fromUtf8(readAll(quietPath(logs, day)));
+-    QVERIFY2(full.contains(QStringLiteral("[info] [Config] config file %1").arg(nativePath)) || pathIsFolder,
+-             qPrintable(full));                                    // buffered info
+-    QVERIFY2(full.contains(QStringLiteral("[warning] [Config] config file %1 cannot be used: ").arg(nativePath)),
+-             qPrintable(full));                                    // buffered warning
+-    QVERIFY2(full.contains(failureLine), qPrintable(full));
+-    QVERIFY2(quiet.contains(failureLine), qPrintable(quiet));
+-    QVERIFY(quiet.contains(QStringLiteral("[warning] [Config] config file %1 cannot be used: ").arg(nativePath)));
+-    QVERIFY(!quiet.contains(QStringLiteral("[info]")));
++    const QString warningLine = QStringLiteral("[warning] [Config] config file %1 cannot be used: %2%3 - the file is "
++                                               "left unchanged and the program exits")
++                                    .arg(nativePath, r.error, where);
++    QVERIFY2(quiet.contains(warningLine), qPrintable(quiet));       // buffered warning
++    QVERIFY2(quiet.contains(failureLine), qPrintable(quiet));       // critical line
++    QVERIFY2(quiet.indexOf(warningLine) < quiet.indexOf(failureLine), qPrintable(quiet));   // chronological
++    QVERIFY2(!quiet.contains(QStringLiteral("[info]")), qPrintable(quiet));
+     if (!pathIsFolder) {
+         QCOMPARE(r.errorLine, 3);
+         QVERIFY(r.error.startsWith(QStringLiteral("JSON syntax error")));
+-        QVERIFY(full.contains(QStringLiteral("(line 3, column ")));
++        QVERIFY(quiet.contains(QStringLiteral("(line 3, column ")));
+     }
+-    // Dialog: the usual text + the log file.
++    // Dialog: the usual text + the log file. Current applog.cpp names the full log file here (and in the
++    // critical line) even when full logging is off - reported to PM in w2-090, the program is not changed.
+     QVERIFY2(dialog.startsWith(r.errorDialogText()), qPrintable(dialog));
+     QVERIFY(dialog.contains(QStringLiteral("請修正 config.json 或刪除它讓程式重建預設值")));
+     QVERIFY2(dialog.endsWith(QStringLiteral("\n\n記錄檔:%1").arg(fullFile)), qPrintable(dialog));
+-    // Clean-up of the fallback folder; nothing else created next to config.json.
++    // Clean-up of the fallback folder; nothing else created next to config.json or in the log folder.
+     QVERIFY(!QFileInfo::exists(quietPath(logs, QDate(2026, 7, 1))));
+     QVERIFY(QFileInfo::exists(QDir(logs).filePath(QStringLiteral("launcher.log"))));
++    QCOMPARE(QDir(logs).entryList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Name),
++             QStringList({QStringLiteral("launcher.log"), QFileInfo(quietPath(logs, day)).fileName()}));
+     QCOMPARE(QDir(cfgDir).entryList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Name),
+              QStringList({QStringLiteral("config.json"), QStringLiteral("logs")}));
+ }
+diff --git a/README.md b/README.md
+index 7a8e64e..993896e 100644
+--- a/README.md
++++ b/README.md
+@@ -104,8 +104,10 @@ powershell -ExecutionPolicy Bypass -File scripts\run-desktop.ps1 -Label "manual"
+   `/mirror` 同步,正式機防火牆只開 80),否則 = `mirror.publicPort`(8125 的區網轉發)。網頁讀不到時退回 8125。
+ - **log**(w2-064 / w2-065,規格 §2 `log`;詳見 `docs/DEPLOY_AND_STARTUP.md` §13):程式自己寫檔到 config.json 的 `log.dir`
+   (相對於 `dataDir`,預設 `C:\TaidaFlowData\logs`;開發設定 = `build\runtime-cwd\logs`):`taidaflow-YYYY-MM-DD.log`
+-  (warning 以上,保留 60 天)與 `taidaflow-YYYY-MM-DD-full.log`(全部,保留 7 天),換日換檔並清理,只刪符合這兩種檔名的檔;
+-  config.json 讀不到時寫到 config.json 旁的 `logs\`。正式機啟動 / 停止腳本在同一資料夾寫 `launcher-YYYY-MM-DD.log`,
++  (warning 以上,保留 60 天)與 `taidaflow-YYYY-MM-DD-full.log`(全部,保留 7 天;**預設關閉**,`log.full.enabled` = `false`,
++  origin/core 8954ad3 起;排錯時在 config.json 改為 `true` 並重新啟動才寫,步驟見 DEPLOY_AND_STARTUP.md §13.1),
++  換日換檔並清理,只刪符合這兩種檔名的檔;config.json 讀不到時寫到 config.json 旁的 `logs\`(用預設值:只有 quiet log,
++  含 `[warning]` / `[critical] [Config]` 行)。正式機啟動 / 停止腳本在同一資料夾寫 `launcher-YYYY-MM-DD.log`,
+   nginx 寫 `nginx-access-YYYY-MM-DD.log` 與 `nginx-error.log`;`start-taidaflow` 啟動時依 `log.quiet.keepDays` 清理
+   launcher / nginx access log。舊版的 `taidaflow-yyyyMMdd-HHmmss.log` 不刪。測試:`App/tests` 的 `tst_applog`、
+   `docs\evidence\w2-065\tools\test-config-reader.ps1`(腳本端的 log 資料夾與清理)。
+@@ -462,8 +464,9 @@ desktop 上 `transportReady` 永遠是 `true`,外觀與行為不變(見驗證 4)
+   B 改 config.json 的 dataDir、`install-nginx-config.ps1`、啟動(nginx `start nginx` + app)、curl 檢查網頁 / `runtime.json` no-store /
+   `/mirror` 101 / REST / 匯出下載與 Range、DLL 來源、log、停止(nginx 保持執行,再 `nginx -s quit`)→ C 整個資料夾搬到另一處,啟動時
+   自動重產 nginx.conf → D 壞掉的 config.json:腳本與程式都 exit 2 且不覆寫 → E 還原成出貨狀態。不操作畫面。
+-  w2-065 另檢查:`<資料資料夾>\logs` 有當天的 quiet / full / launcher 檔(full 有 info、quiet 只有 warning 以上)、
+-  nginx access log 以日期命名、壞 JSON 時備援 log 在打包資料夾的 `logs\`。
++  w2-065 另檢查:`<資料資料夾>\logs` 有當天的 quiet / launcher 檔(quiet 只有 warning 以上;full 依 `log.full.enabled`:
++  預設關閉時確認沒有 `-full.log`,開啟時 full 有 info)、nginx access log 以日期命名、壞 JSON 時備援 log(quiet,
++  含 JSON 錯誤與結果碼 2 的 critical 行;不寫 full)在打包資料夾的 `logs\`。
+ - **開發機腳本與正式機腳本不可混用**:開發機一律用 `scripts\run-desktop.ps1`(安全探測);正式機腳本沒有保護。
+ 
+ ## 接 Adam60xxSimulator(測試用設備位址切換)
+@@ -766,7 +769,7 @@ PV 也套用。範圍表與欄位對照表見 `Core/SensorOffset.md`,契約見 `
+   改變才重寫整份 map(`sinceMs` = 改變的時刻);斷線期間每 3 秒的重連失敗不會重寫;連上立即恢復 online。MS300 埠打開後要等
+   變頻器第一次回應才算 online。
+ - ADAM 拔線但 TCP 還沒斷(Windows 要等送出的請求重送逾時,約十幾秒到數十秒)時不會立刻顯示;程式關閉時寫回空 map。
+-- log(full log):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
++- log(full log,預設關閉,需開啟 `log.full.enabled`):`[DeviceStatus] started ...`、每次改變一行 `[DeviceStatus] ADAM-6217 127.0.0.210 (adam6217b): OFFLINE (not connected, first result)`
+   與 `[DeviceStatus] write #<n>: {adam6022=online, ..., ms300=OFFLINE}`,關閉時 `[DeviceStatus] stopped: deviceStatus = {} (unknown)`。
+   MS300 那一行是 `[DeviceStatus] 循環泵變頻器 COM2 (ms300): OFFLINE (serial port not open, first result)`;
+   `[MS300] ...` 開頭的連線 / 故障讀取 log 標籤不變(給工程人員看)。
+diff --git a/docs/DEPLOY_AND_STARTUP.md b/docs/DEPLOY_AND_STARTUP.md
+index f80a62d..cd928c9 100644
+--- a/docs/DEPLOY_AND_STARTUP.md
++++ b/docs/DEPLOY_AND_STARTUP.md
+@@ -30,7 +30,8 @@
+    (`run-desktop.ps1` 等,會先做安全探測)。兩套不可混用(§11)。部署與執行都**不需要 Python**,也不需要安裝 Qt 或 VC++ 執行環境。
+ 
+ 出問題時先看 **log 資料夾**(預設 `C:\TaidaFlowData\logs`,config.json 的 `log.dir`):程式自己寫的
+-`taidaflow-<日期>.log`(警告與錯誤)與 `taidaflow-<日期>-full.log`(全部訊息),以及啟動 / 停止腳本的 `launcher-<日期>.log`(§13)。
++`taidaflow-<日期>.log`(警告與錯誤)與 `taidaflow-<日期>-full.log`(全部訊息;**預設關閉**,排錯時在 config.json 把
++`log.full.enabled` 改為 `true` 並重新啟動才會寫,§13.1),以及啟動 / 停止腳本的 `launcher-<日期>.log`(§13)。
+ 
+ ---
+ 
+@@ -111,7 +112,7 @@
+ | `device_info.ini` | 設備序號(`[device] sn`;沒有時建立,內容 `sn000000`) |
+ | `data\sensor_YYYYMM.sqlite` | 歷史資料與警報,每月一個檔 |
+ | `exports\` | 網頁匯出的 CSV(超過 20 個或 2 GB 時自動刪最舊的) |
+-| `logs\` | log 資料夾(config.json `log.dir`,預設 `logs` = 資料資料夾裡的 `logs\`):程式自己寫的 `taidaflow-<日期>.log`、`taidaflow-<日期>-full.log`,啟動 / 停止腳本的 `launcher-<日期>.log`,nginx 的 `nginx-access-<日期>.log`、`nginx-error.log`(§13) |
++| `logs\` | log 資料夾(config.json `log.dir`,預設 `logs` = 資料資料夾裡的 `logs\`):程式自己寫的 `taidaflow-<日期>.log`、`taidaflow-<日期>-full.log`(預設關閉,`log.full.enabled`),啟動 / 停止腳本的 `launcher-<日期>.log`,nginx 的 `nginx-access-<日期>.log`、`nginx-error.log`(§13) |
+ | `taidaflow-app.json` | 執行中的 TaidaFlow 身分(停止時用;停止後刪除) |
+ | `config.effective.json` | 只有啟動時用了單次覆寫參數(§3.1)才有:當次實際使用的完整設定 |
+ 
+@@ -324,7 +325,7 @@ netstat -ano | findstr ":80 "
+    顯示網址與結果碼,按任意鍵關閉這個黑色視窗(TaidaFlow 會繼續執行;關掉這個視窗也不會關掉 TaidaFlow)。
+ 
+ 結果碼:`0` 成功;`4` 已經在執行或 port 被占用(**什麼都沒啟動**,也不會關掉別的程式);`6` app 沒起來(`launcher-<日期>.log`
+-會抄錄程式 log 的最後幾行;完整內容看 `taidaflow-<日期>-full.log`,§13);`8` app 已啟動但 nginx 沒起來;
++會抄錄程式 log 的最後幾行;完整內容看 `taidaflow-<日期>.log`(預設),有開啟 `log.full.enabled` 時看 `taidaflow-<日期>-full.log`,§13);`8` app 已啟動但 nginx 沒起來;
+ `3` app 與 nginx 都已啟動,但 `nginx.conf` 重新產生了、nginx **服務**還在用舊的(不是系統管理員,不能套用;以系統管理員執行
+ `scripts\install-nginx-service.ps1` 或 `nginx\nginx-service.exe restart`,§2A.3);
+ `2` 打包資料夾不完整、資料夾不能寫或 config.json 有誤。
+@@ -333,7 +334,7 @@ netstat -ano | findstr ":80 "
+ `C:\TaidaFlow\start-taidaflow.bat -DataDir D:\Test`,可用的有 `-DataDir`、`-LogDir <log 資料夾>`(程式、nginx、腳本的 log
+ 都改寫到那裡)、`-UseNginx` / `-NoNginx`、`-Port <nginx port>`、`-RestPort <port>`、`-Nginx <nginx.exe>`、`-Config <另一個 config.json>`;
+ `-StartTimeoutSec <秒>` 是第 5 步等 port 開始聽的時間(預設 60)。
+-(舊版的 `-AppLog quiet|full` 與 `-KeepLogDays` 已移除:quiet 與 full 兩種 log 由程式同時寫,保留天數在 config.json 的 `log`,§13。)
++(舊版的 `-AppLog quiet|full` 與 `-KeepLogDays` 已移除:quiet 與 full 兩種 log 由程式自己寫(full 預設關閉),開關與保留天數在 config.json 的 `log`,§13。)
+ 
+ 不要直接雙擊 `TaidaFlowApp.exe`:程式可以跑(會讀旁邊的 config.json),但不會做重複執行 / port 檢查,也不會帶起 nginx;
+ 手動做法見 §5。
+@@ -766,8 +767,9 @@ UTF-8 文字檔,JSON 格式。
+ - **JSON 格式錯誤**(少逗號、多逗號、引號不成對……)→ 程式顯示錯誤視窗(檔案、第幾行第幾欄、錯誤內容、
+   「請修正 config.json 或刪除它讓程式重建預設值」)並結束(exit 2),**不覆寫**;`start-taidaflow` 也會拒絕啟動(結果碼 2)。
+ - Windows 路徑的反斜線在 JSON 要寫兩個(`"C:\\TaidaFlowData"`),或改用正斜線(`"C:/TaidaFlowData"`)。
+-- 程式的完整 log(`taidaflow-<日期>-full.log`,§13)在每次啟動時列出每一項的實際值與來源(file / default / environment),
+-  以及解析後的 `dataDir`、`nginx.exe`、`log.dir`。缺少或錯誤的值另有 info / warning 行(warning 也會進精簡 log)。
++- 程式的完整 log(`taidaflow-<日期>-full.log`,§13;**預設關閉**,`log.full.enabled` 改為 `true` 才寫)在每次啟動時列出每一項的
++  實際值與來源(file / default / environment),以及解析後的 `dataDir`、`nginx.exe`、`log.dir`。缺少或錯誤的值另有 info / warning 行
++  (warning 也會進精簡 log;完整 log 關閉時 info 行只送到除錯輸出,不寫檔)。
+ - config.json **讀不到**(JSON 格式錯誤、路徑是資料夾……)時,程式還不知道 `dataDir` 與 `log.dir`,這時的 log 寫到
+   **`<config.json 所在資料夾>\logs`**(正式機 = `<安裝資料夾>\logs`),錯誤視窗與 `start-taidaflow` 的訊息會指出檔名(§13)。
+ - 不放在 config.json、固定在程式裡的值(決定事項):Modbus TCP 逾時 1000 ms / 重試 2 / 重連間隔 3000 ms;MS300 逾時 1000 ms /
+@@ -792,7 +794,7 @@ UTF-8 文字檔,JSON 格式。
+   "rest": { "bind": "127.0.0.1", "port": 18080 },
+   "mirror": { "internalPort": 18125, "publicBind": "0.0.0.0", "publicPort": 8125 },
+   "nginx": { "enabled": true, "port": 80, "exe": "nginx\\nginx.exe" },
+-  "log": { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": true, "keepDays": 7 } }
++  "log": { "dir": "logs", "quiet": { "enabled": true, "keepDays": 60 }, "full": { "enabled": false, "keepDays": 7 } }
+ }
+ ```
+ 
+@@ -1032,7 +1034,7 @@ nginx 服務與開機啟動資料夾的問題(錯誤 1053、服務停不下來
+   或埠開著但變頻器連續 3 次沒有回應(變頻器沒電、RS-485 線沒接、站號 / 鮑率不對)。
+ - 程式剛啟動時不會立刻顯示:每台設備第一次連線有結果後才判斷(連不到的 ADAM 最久約 20 秒,Windows TCP 連線逾時)。
+ - 網頁斷線時(紅色「離線」/「連線中斷」橫幅)不顯示設備橫幅,恢復連線後自動回來。
+-- 桌面 log(`taidaflow-<日期>-full.log`)有 `[DeviceStatus]` 開頭的行:每次設備狀態改變一行(`OFFLINE` / `online`)與送出的整份狀態。
++- 桌面 log(`taidaflow-<日期>-full.log`,預設關閉,需開啟 `log.full.enabled`,§13.1)有 `[DeviceStatus]` 開頭的行:每次設備狀態改變一行(`OFFLINE` / `online`)與送出的整份狀態。
+   quiet log 另有原本的連線警告(`TCP socket error`、`[MS300] COM2: ...`,每台每 60 秒最多一行)。
+ - 變頻器的故障 / 警告另由警報頁記錄:w2-089 起新紀錄的名稱為「循環泵變頻器」;升級前已存的紀錄仍顯示 `MS300`(不改寫)。
+ 
+@@ -1045,7 +1047,8 @@ nginx 服務與開機啟動資料夾的問題(錯誤 1053、服務停不下來
+ 反斜線只寫一個),或刪掉 config.json 讓程式重建預設值(會失去現場的修改)。
+ 
+ **`start-taidaflow` 結果碼 6**:app 沒起來或 8124/8125 沒在聽。`launcher-<日期>.log` 抄了程式 log 的最後幾行;完整內容看
+-log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀不到時,看 `<安裝資料夾>\logs`,§13)。
++log 資料夾的 `taidaflow-<日期>.log`(預設),有開啟 `log.full.enabled` 時看 `taidaflow-<日期>-full.log`
++(結果碼是 2 = config.json 讀不到時,看 `<安裝資料夾>\logs`,§13.3)。
+ 
+ **log 資料夾裡沒有今天的 `taidaflow-<日期>.log`**:程式寫不進 log 資料夾(沒有權限、磁碟滿、`log.dir` 寫錯)。程式照常執行,
+ 會每 60 秒與換日時重試;full 與 quiet 其中一個打得開時,另一個的錯誤會寫在打得開的那個檔。檢查 config.json 的 `log.dir`
+@@ -1084,7 +1087,7 @@ log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀
+ | 工作目錄 | config.dev.json 的 `dataDir` = `build\runtime-cwd` | config.json 的 `dataDir`(預設 `C:\TaidaFlowData`) |
+ | 設備 | 可用 `-DeviceProfile simulator` 或 `config.simulator.json` 改連模擬器 | **一律清除** `TAIDAFLOW_DEVICE_PROFILE`(不能進測試模式) |
+ | nginx | `build\desktop\nginx` 的 `start nginx`,或 `nginx-start.ps1`(`build\nginx` 前綴) | `<安裝資料夾>\nginx` 的 `start nginx`(`start-taidaflow` 會帶起) |
+-| log | 程式自己寫到 config.dev.json 的 log 資料夾(`build\runtime-cwd\logs`);`run-desktop.ps1` 另外把輸出存到 `build\runtime-logs\`(開發用) | 程式自己寫到 config.json 的 `log.dir`(預設 `<資料資料夾>\logs\`):quiet 保留 60 天、full 保留 7 天;`launcher-<日期>.log`、nginx log 在同一個資料夾(§13) |
++| log | 程式自己寫到 config.dev.json 的 log 資料夾(`build\runtime-cwd\logs`);`run-desktop.ps1` 另外把輸出存到 `build\runtime-logs\`(開發用) | 程式自己寫到 config.json 的 `log.dir`(預設 `<資料資料夾>\logs\`):quiet 保留 60 天、full 預設關閉(開啟時保留 7 天);`launcher-<日期>.log`、nginx log 在同一個資料夾(§13) |
+ | nginx 服務 | **不註冊服務**(開發機不裝任何 Windows 服務) | `scripts\install-nginx-service.ps1` / `uninstall-nginx-service.ps1`(系統管理員;服務 `TaidaFlowNginx`,WinSW `nginx\nginx-service.exe`,§2A) |
+ | 登入時自動啟動 | 不設定 | `scripts\add-startup-shortcut.ps1` / `remove-startup-shortcut.ps1`(開機啟動資料夾,§2A)**或** `register-autostart.ps1` / `unregister-autostart.ps1`(工作排程器,§3.5),擇一 |
+ 
+@@ -1119,7 +1122,8 @@ log 資料夾的 `taidaflow-<日期>-full.log`(結果碼是 2 = config.json 讀
+    (2026-09-29 起現場標準改為第 11 項:開機啟動資料夾 + nginx 服務;工作排程器仍可用,兩者擇一。)
+ 7. **防火牆**:只開 80(nginx:網頁、同步、下載、REST)與 502(Modbus,不限來源)。**已決定。**
+ 8. **存取控管**:80(含 REST API 的 PUT)與 502 不做登入或來源限制(內網)。任何連得到的人都能操作(含急停)。**已決定。**
+-9. **log**:程式自己寫檔(不再由啟動腳本轉存輸出);quiet(警告與錯誤)保留 60 天 + full(全部訊息)保留 7 天,兩者預設都開、
++9. **log**:程式自己寫檔(不再由啟動腳本轉存輸出);quiet(警告與錯誤)保留 60 天 + full(全部訊息)保留 7 天;quiet 預設開,
++   **full 預設關閉**(2026-10-13 起,origin/core 8954ad3,Mango 要的設定;排錯時在 config.json 開啟,§13.1)、
+    檔名帶日期、換日時清理;log 資料夾預設也在 config.json(`log.dir`,預設 `C:\TaidaFlowData\logs`);config.json 讀不到時也要有
+    log(寫到 config.json 旁的 `logs\`);不刪減原本的 log 訊息、舊版的 log 檔不刪。**已決定,已實作(w2-064、w2-065,§13)。**
+ 10. **現場電腦設定**(睡眠、Windows Update 自動重開機時段、螢幕保護)與**備份**的頻率與位置(§3.6):由 IT / 現場決定。
+@@ -1138,13 +1142,19 @@ TaidaFlow 的 log **由程式自己寫檔**(w2-064),啟動腳本不再把程式
+ | 檔名 | 誰寫 | 內容 | 保留(預設) | 誰清理 |
+ |---|---|---|---|---|
+ | `taidaflow-YYYY-MM-DD.log` | 程式 | 精簡(quiet):只有 warning / critical / fatal | `log.quiet.keepDays` = 60 天 | 程式 |
+-| `taidaflow-YYYY-MM-DD-full.log` | 程式 | 完整(full):全部訊息(debug / info 以上),約每小時 15 MB、一天約 360 MB | `log.full.keepDays` = 7 天(約 2.5 GB) | 程式 |
++| `taidaflow-YYYY-MM-DD-full.log` | 程式 | 完整(full):全部訊息(debug / info 以上),約每小時 15 MB、一天約 360 MB。**預設關閉**(`log.full.enabled` = `false`) | `log.full.keepDays` = 7 天(約 2.5 GB) | 程式 |
+ | `launcher-YYYY-MM-DD.log` | `start-taidaflow` / `stop-taidaflow` | 每次啟動 / 停止的步驟、使用的設定、port 檢查、nginx、結果碼;程式在啟動過程中結束時,抄錄它最後的 log 行 | `log.quiet.keepDays` = 60 天 | `start-taidaflow` |
+ | `nginx-access-YYYY-MM-DD.log` | nginx | 每個 HTTP 請求一行(網頁、`/runtime.json`、`/api/`、`/exports/` 下載、`/mirror` 連線) | `log.quiet.keepDays` = 60 天 | `start-taidaflow` |
+ | `nginx-error.log` | nginx | nginx 的警告與錯誤(`warn` 以上,量很少) | 不清理(一個固定檔名) | —(需要時手動刪) |
+ 
+-- 日期 `YYYY-MM-DD` 是本機時間的日期。quiet 與 full **預設同時寫**,各自可在 config.json 用 `enabled: false` 關掉;
+-  關掉的那種仍會依它自己的 `keepDays` 清掉過期的舊檔。今天的 quiet 檔在啟動時就會建立(即使還沒有警告,是空檔)。
++- 日期 `YYYY-MM-DD` 是本機時間的日期。**quiet 預設開、full 預設關閉**(2026-10-13 起,origin/core 8954ad3);各自可在
++  config.json 用 `enabled` 開關;關掉的那種仍會依它自己的 `keepDays` 清掉過期的舊檔。今天的 quiet 檔在啟動時就會建立
++  (即使還沒有警告,是空檔)。
++- **開啟完整 log(排錯用)**:用記事本編輯 config.json(正式機 = `<安裝資料夾>\config.json`),把 `log` 裡 `full` 的
++  `"enabled": false` 改成 `"enabled": true`(`keepDays` 預設 7),存檔(UTF-8)後**停止再啟動** TaidaFlow(`stop-taidaflow` →
++  `start-taidaflow`;程式只在啟動時讀 config.json)。之後 log 資料夾會多出 `taidaflow-<日期>-full.log`(約每小時 15 MB,
++  保留 7 天約 2.5 GB)。排錯完改回 `false` 並重新啟動;已寫的 full log 會在超過 `keepDays` 後由程式清掉。
++  沒有 `log.full` 的舊 config.json 用預設值(關閉)。
+ - 每一行的格式:`2026-09-28 14:03:05.007 [info] [Config] ...`(時間到毫秒、層級、訊息;UTF-8、CRLF 換行)。
+   原本程式印出的訊息內容**一字不刪**,只是在前面加上時間與層級。
+ - 程式仍同時把訊息送到除錯輸出(開發時在 Qt Creator 看得到)。
+@@ -1167,7 +1177,11 @@ TaidaFlow 的 log **由程式自己寫檔**(w2-064),啟動腳本不再把程式
+   quiet / full 其中一個還能寫時,另一個的錯誤會寫在能寫的那個檔。
+ - **config.json 讀不到**(JSON 格式錯誤、路徑是資料夾……):程式還不知道 `dataDir` / `log.dir`,就寫到
+   **`<config.json 所在資料夾>\logs`**(正式機 = `<安裝資料夾>\logs`,同樣的檔名與保留天數),錯誤視窗最後一行寫出 log 檔的位置,
+-  程式以結果碼 2 結束,config.json 不會被改。`start-taidaflow` 自己先檢查 config.json,格式錯誤時根本不啟動程式(結果碼 2,
++  程式以結果碼 2 結束,config.json 不會被改。這時用的是**預設值**(讀不到 config.json 就不知道現場有沒有開 full):只寫精簡 log
++  `taidaflow-<日期>.log`,裡面有 `[warning] [Config] config file ... cannot be used: ...`(錯誤內容與行列)與
++  `[critical] [Config] ... the program exits with code 2` 兩行;不寫 `-full.log`。(目前錯誤視窗最後一行與 critical 那一行列的是
++  `-full.log` 的檔名,該檔不會產生,請看同一資料夾的 `taidaflow-<日期>.log`;已回報 PM,w2-090。)
++  `start-taidaflow` 自己先檢查 config.json,格式錯誤時根本不啟動程式(結果碼 2,
+   訊息在畫面上);只有直接執行 `TaidaFlowApp.exe` 時才會產生這個備援 log。
+ - 程式在啟動過程中就結束(結果碼 6):`start-taidaflow` 把程式寫到 stderr / stdout 的內容(通常沒有)與 log 檔最後幾行抄進 `launcher-<日期>.log`。
+ 

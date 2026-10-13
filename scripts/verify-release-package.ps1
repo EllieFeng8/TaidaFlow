@@ -16,8 +16,9 @@
 #      build\verify-release-data). App ports up, page + runtime.json (no-store, mirrorPublicPort =
 #      mirror.publicPort because nginx is off) on http.port, WebSocket 101 on mirror.publicPort.
 #      w2-065 logs: <data>\logs (log.dir default "logs" relative to dataDir) holds the app's own
-#      taidaflow-<today>.log (only warning/critical/fatal lines) and taidaflow-<today>-full.log (with info
-#      lines) and launcher-<today>.log of the start script; no taidaflow-yyyyMMdd-HHmmss.log is written. Stop.
+#      taidaflow-<today>.log (only warning/critical/fatal lines), optionally
+#      taidaflow-<today>-full.log (with info lines when enabled), and launcher-<today>.log of the
+#      start script; no taidaflow-yyyyMMdd-HHmmss.log is written. Stop.
 #   B. CONFIGURED SITE (nginx on, Mango A6/A7): the check edits config.json like the plant engineer
 #      does (only "dataDir" = <data>), runs scripts\install-nginx-config.ps1 (writes nginx\conf\nginx.conf
 #      with the web root relative to the nginx folder, nginx -t passes), then the start script without
@@ -30,7 +31,7 @@
 #      link (HistoryPage.qml exportDownloadUrl via node) 200 + same SHA-256, Range 206. Stop: the app
 #      is closed, nginx keeps running (checked), then "nginx -s quit" from nginx\ (as documented).
 #      w2-065: nginx writes <data>\logs\nginx-access-<today>.log (the requests of this check) and
-#      nginx-error.log, not nginx\logs\access.log; the app's full log has no load error; stop writes to
+#      nginx-error.log, not nginx\logs\access.log; the app's primary log has no load error; stop writes to
 #      launcher-<today>.log.
 #   C. MOVED INSTALLATION (Mango A9, only -Mode ps1): the whole package folder (with config.json and
 #      nginx.conf of B) is copied to build\verify-release-moved\<name>; its start script must detect
@@ -41,7 +42,8 @@
 #      (QT_QPA_PLATFORM=offscreen with the plugin of the Qt installation - the package ships only
 #      qwindows - and TAIDAFLOW_CONFIG_ERROR_DIALOG_TIMEOUT_MS), file unchanged, nothing
 #      listening. w2-065: the app logs the failure in the fallback folder <package>\logs (folder of
-#      config.json): taidaflow-<today>-full.log / .log with the JSON error and the exit-code-2 line.
+#      config.json): taidaflow-<today>.log (and -full.log only when enabled) with the JSON error and
+#      the exit-code-2 line.
 #   E. the package is left as shipped (no config.json, no nginx.conf / nginx logs / temp, no logs\) and nothing of ours
 #      runs.
 #
@@ -163,16 +165,20 @@ trap {
     exit 1
 }
 # w2-065: the log files of one start in the log folder (config.json log.dir resolved against dataDir).
-function Test-LogFolder([string]$logDir, [string]$phase, [switch]$Launcher) {
+function Test-LogFolder([string]$logDir, [string]$phase, [bool]$FullEnabled, [switch]$Launcher) {
     $today = (Get-Date).ToString('yyyy-MM-dd')
     $quiet = Join-Path $logDir "taidaflow-$today.log"; $full = Join-Path $logDir "taidaflow-$today-full.log"
     $listing = @(Get-ChildItem -LiteralPath $logDir -File -ErrorAction SilentlyContinue | ForEach-Object { "$($_.Name) ($($_.Length) bytes)" })
     Note "  $phase log folder $logDir : $($listing -join ', ')"
-    $fullText = if (Test-Path -LiteralPath $full) { @(Get-Content -LiteralPath $full -Encoding UTF8) } else { @() }
     $quietText = if (Test-Path -LiteralPath $quiet) { @(Get-Content -LiteralPath $quiet -Encoding UTF8) } else { $null }
-    $infoLines = @($fullText | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[info\] ' }).Count
-    Check "$phase app log (full) taidaflow-$today-full.log written by the app, with [info] lines" ($infoLines -gt 0) "$($fullText.Count) line(s), $infoLines info"
-    Check "$phase full log has this start's config.json lines ([Config] ... log.dir (resolved) = $logDir)" (@($fullText | Where-Object { $_.Contains('log.dir (resolved) = ' + $logDir) }).Count -gt 0) ''
+    if ($FullEnabled) {
+        $fullText = if (Test-Path -LiteralPath $full) { @(Get-Content -LiteralPath $full -Encoding UTF8) } else { @() }
+        $infoLines = @($fullText | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[info\] ' }).Count
+        Check "$phase app log (full) taidaflow-$today-full.log written by the app, with [info] lines" ($infoLines -gt 0) "$($fullText.Count) line(s), $infoLines info"
+        Check "$phase full log has this start's config.json lines ([Config] ... log.dir (resolved) = $logDir)" (@($fullText | Where-Object { $_.Contains('log.dir (resolved) = ' + $logDir) }).Count -gt 0) ''
+    } else {
+        Check "$phase app log (full) is disabled: taidaflow-$today-full.log is absent" (-not (Test-Path -LiteralPath $full)) $full
+    }
     $quietBad = @()
     if ($null -ne $quietText) { $quietBad = @($quietText | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2} ' -and $_ -notmatch '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(warning|critical|fatal)\] ' }) }
     $quietDetail = if ($null -ne $quietText) { "$($quietText.Count) line(s)" } else { 'missing' }
@@ -276,7 +282,7 @@ Test-NoMachinePaths $Package '0.'
 $defaults = Get-TaidaFlowConfig -Path $pkgConfig -Exe $pkgExe
 $dv = $defaults.Values
 Check 'default config.json: nginx.exe nginx\nginx.exe = the bundled nginx of the package (w2-065 D3)' ((Resolve-TaidaFlowNginxExe $defaults) -eq (Join-Path $Package 'nginx\nginx.exe') -and $defaults.Sources['nginx.exe'] -eq 'default') "$($dv['nginx.exe']) -> $(Resolve-TaidaFlowNginxExe $defaults)"
-Check 'default config.json: log.dir logs, quiet on 60 days, full on 7 days (TaidaFlowApp.exe --write-default-config)' ($dv['log.dir'] -eq 'logs' -and $dv['log.quiet.enabled'] -eq $true -and [int]$dv['log.quiet.keepDays'] -eq 60 -and $dv['log.full.enabled'] -eq $true -and [int]$dv['log.full.keepDays'] -eq 7) ''
+Check 'default config.json: log.dir logs, quiet on 60 days, full off (7-day retention if enabled) (TaidaFlowApp.exe --write-default-config)' ($dv['log.dir'] -eq 'logs' -and $dv['log.quiet.enabled'] -eq $true -and [int]$dv['log.quiet.keepDays'] -eq 60 -and $dv['log.full.enabled'] -eq $false -and [int]$dv['log.full.keepDays'] -eq 7) ''
 $allPorts = @('modbusServer.port', 'http.port', 'mirror.publicPort', 'mirror.internalPort', 'rest.port', 'nginx.port') | ForEach-Object { [int]$dv[$_] }
 $probeOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\safety_probe.ps1') -Reason "verify-release-package ($Mode) before launch" -LogFile (Join-Path $Evidence 'safety-probe.log') -Config $pkgConfig -Exe $pkgExe
 $probeRc = $LASTEXITCODE
@@ -321,7 +327,7 @@ if ($app) {
     Test-Ws "http://127.0.0.1:$($dv['mirror.publicPort'])/mirror" "http://127.0.0.1:$($dv['http.port'])" 'A.'
 }
 Check 'A. state file names the log folder <data>\logs (config.json log.dir relative to dataDir)' ($state -and [string]$state.logDir -eq (Join-Path $DataDir 'logs')) $(if ($state) { [string]$state.logDir } else { '' })
-Test-LogFolder (Join-Path $DataDir 'logs') 'A.' -Launcher
+Test-LogFolder (Join-Path $DataDir 'logs') 'A.' ([bool]$dv['log.full.enabled']) -Launcher
 $rc = Invoke-Cmd (Stop-Cmd $Package ('-DataDir "' + $DataDir + '"')) (Join-Path $Evidence 'A-stop.console.txt')
 Check 'A. stop exit code 0' ("$rc" -eq '0') "exit $rc"
 $llA = Join-Path $DataDir ("logs\launcher-" + (Get-Date).ToString('yyyy-MM-dd') + '.log')
@@ -468,8 +474,9 @@ if ($app) {
     Check 'B. nginx-error.log in the log folder (fixed name)' (Test-Path -LiteralPath (Join-Path $bLogDir 'nginx-error.log') -PathType Leaf) ''
     $ngxAccess = @(Get-ChildItem -LiteralPath (Join-Path $Package 'nginx\logs') -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^access' })
     Check 'B. no access log in nginx\logs (only nginx.pid / its start-up messages stay there)' ($ngxAccess.Count -eq 0) (($ngxAccess | ForEach-Object { $_.Name }) -join ', ')
-    Check 'B. state file: app log = <data>\logs\taidaflow-<today>-full.log' ([string]$state.appLog -eq (Join-Path $bLogDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '-full.log'))) ([string]$state.appLog)
-    Test-LogFolder $bLogDir 'B.' -Launcher
+    $bAppLogName = "taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + $(if ([bool]$sv['log.full.enabled']) { '-full.log' } else { '.log' })
+    Check 'B. state file: app log = the configured primary app log' ([string]$state.appLog -eq (Join-Path $bLogDir $bAppLogName)) ([string]$state.appLog)
+    Test-LogFolder $bLogDir 'B.' ([bool]$sv['log.full.enabled']) -Launcher
     $appLog = [string]$state.appLog
     $logText = if (Test-Path $appLog) { Get-Content -LiteralPath $appLog } else { @() }
     Copy-Item -LiteralPath $appLog -Destination (Join-Path $Evidence 'B-app.log') -ErrorAction SilentlyContinue
@@ -560,10 +567,9 @@ Check 'D. app log names the JSON error with line/column' ($appText -match 'JSON 
 $fbDir = Join-Path $Package 'logs'
 $fbFull = Join-Path $fbDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '-full.log')
 $fbQuiet = Join-Path $fbDir ("taidaflow-" + (Get-Date).ToString('yyyy-MM-dd') + '.log')
-$fbText = if (Test-Path -LiteralPath $fbFull) { (Get-Content -LiteralPath $fbFull -Encoding UTF8) -join "`n" } else { '' }
 $fbQText = if (Test-Path -LiteralPath $fbQuiet) { (Get-Content -LiteralPath $fbQuiet -Encoding UTF8) -join "`n" } else { '' }
-Check 'D. fallback log <package>\logs\taidaflow-<today>-full.log: JSON error with line/column and the exit-code-2 line' ($fbText -match 'JSON syntax error' -and $fbText -match '\[critical\] \[Config\] config file .* cannot be used: .*\(line \d+, column \d+\) - the program exits with code 2') $fbFull
-Check 'D. fallback quiet log taidaflow-<today>.log has the critical line, no [info]' ($fbQText -match '\[critical\] \[Config\]' -and $fbQText -notmatch '\[info\]') $fbQuiet
+Check 'D. fallback full log is absent when full logging is disabled' (-not (Test-Path -LiteralPath $fbFull)) $fbFull
+Check 'D. fallback quiet log taidaflow-<today>.log has the JSON error / critical exit-code-2 line, no [info]' ($fbQText -match 'JSON syntax error' -and $fbQText -match '\[critical\] \[Config\] config file .* cannot be used: .*\(line \d+, column \d+\) - the program exits with code 2' -and $fbQText -notmatch '\[info\]') $fbQuiet
 foreach ($x in $fbFull, $fbQuiet) { if (Test-Path -LiteralPath $x) { Copy-Item -LiteralPath $x -Destination (Join-Path $Evidence ('D-fallback-' + (Split-Path -Leaf $x))) -Force } }
 
 # --- E. leave the package as shipped ---------------------------------------------------------------------------

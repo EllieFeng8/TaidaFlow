@@ -117,6 +117,17 @@ void freePorts(quint16 *a, quint16 *b)
     *b = probeB.serverPort();
 }
 
+// QModbusServer fills a QModbusDataUnit supplied by the caller; it does not
+// expose a two-argument single-register accessor.  Returning 0xffff on a
+// failed read makes an unavailable test value fail every expected assertion.
+quint16 serverValue(QModbusServer &server, QModbusDataUnit::RegisterType type, int address)
+{
+    QModbusDataUnit unit(type, address, 1);
+    if (!server.data(&unit) || unit.valueCount() != 1)
+        return 0xffff;
+    return unit.value(0);
+}
+
 using Limit = LimitAlarmMonitor::Limit;
 } // namespace
 
@@ -980,6 +991,10 @@ void TestLimitAlarms::managerIntegration()
         QVERIFY2(server->connectDevice(), qPrintable(server->errorString()));
     }
     serverB.setData(QModbusDataUnit::DiscreteInputs, 0, 1);    // DI0 = 1 (healthy), DI1 = DI2 = 0
+    serverB.setData(QModbusDataUnit::DiscreteInputs, 3, 1);    // DI3 NC button released
+    serverB.setData(QModbusDataUnit::Coils, 16, 1);             // DO0: VFD enabled
+    serverB.setData(QModbusDataUnit::Coils, 18, 1);             // DO2: emergency stop released
+    serverB.setData(QModbusDataUnit::Coils, 19, 1);             // DO3: makeup pump running
     const quint16 raw500 = 32768;                              // x 1000 / 65535 = 500.0076 kPa
     serverA.setData(QModbusDataUnit::HoldingRegisters, 7, raw500);   // PT-04
     serverA.setData(QModbusDataUnit::HoldingRegisters, 6, 65535);    // PT-03 at full scale: 90 % alarm
@@ -994,6 +1009,10 @@ void TestLimitAlarms::managerIntegration()
     const int before = rows().size();
 
     Manager manager(m_proxy.get(), m_sql, devices);
+    connect(m_proxy.get(), &TaidaFlowProxy::motorRunningSvChanged,
+            &manager, &Manager::setMotorRunningSv);
+    connect(m_proxy.get(), &TaidaFlowProxy::emergencyStopSvChanged,
+            &manager, &Manager::setEmergencyStopSv);
     int saved = 0;
     connect(&manager, &Manager::alarmSaved, this, [&saved]() { ++saved; });
     manager.start();
@@ -1007,6 +1026,40 @@ void TestLimitAlarms::managerIntegration()
     QTRY_VERIFY_WITH_TIMEOUT(!rowsOf("PT-03").isEmpty(), 5000);
     QCOMPARE(rowsOf("PT-03").first().status(), QStringLiteral("數值異常"));
     QVERIFY(rowsOf("PT-03").first().message().startsWith(QStringLiteral("輸入值達到設定高限 90.0%")));
+
+    // The HMI emergency-stop switch lights the complete red/yellow indication.
+    QVERIFY(!m_proxy->emergencyStopSv());
+    m_proxy->setEmergencyStopSv(true);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 18), quint16(0), 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 16), quint16(0), 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 19), quint16(0), 5000);
+    QTRY_VERIFY_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 21) != 0, 5000);
+    QTRY_VERIFY_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 22) != 0, 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 23), quint16(0), 5000);
+    m_proxy->setEmergencyStopSv(false);
+    QTRY_VERIFY_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 18) != 0, 5000);
+
+    // DI3 is normally closed: pressing it must activate the same stop and
+    // must keep the HMI from releasing DO2 until the physical button releases.
+    serverB.setData(QModbusDataUnit::Coils, 16, 1);             // simulate a running field device
+    serverB.setData(QModbusDataUnit::Coils, 19, 1);
+    serverB.setData(QModbusDataUnit::DiscreteInputs, 3, 0);
+    QTRY_VERIFY_WITH_TIMEOUT(m_proxy->emergencyStopSv(), 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 18), quint16(0), 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 16), quint16(0), 5000);
+    QTRY_COMPARE_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 19), quint16(0), 5000);
+    QVERIFY(serverValue(serverB, QModbusDataUnit::Coils, 21) != 0);
+    QVERIFY(serverValue(serverB, QModbusDataUnit::Coils, 22) != 0);
+    QCOMPARE(serverValue(serverB, QModbusDataUnit::Coils, 23), quint16(0));
+    m_proxy->setEmergencyStopSv(false);
+    QTRY_VERIFY_WITH_TIMEOUT(m_proxy->emergencyStopSv(), 1000);
+    QCOMPARE(serverValue(serverB, QModbusDataUnit::Coils, 18), quint16(0));
+
+    // Returning DI3 to its normally-closed state is the physical release
+    // event.  It must also release the synchronised UI emergency stop and DO2.
+    serverB.setData(QModbusDataUnit::DiscreteInputs, 3, 1);
+    QTRY_VERIFY_WITH_TIMEOUT(!m_proxy->emergencyStopSv(), 5000);
+    QTRY_VERIFY_WITH_TIMEOUT(serverValue(serverB, QModbusDataUnit::Coils, 18) != 0, 5000);
 
     // Back in range (250 kPa): resolved about 2 s later; further polls write nothing new.
     const int savedBefore = saved;

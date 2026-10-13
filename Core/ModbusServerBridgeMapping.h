@@ -11,7 +11,9 @@ constexpr int ServerDoCount = 5;
 constexpr int Adam6256DoStart = 16; // ADAM-6256 manual coil 00017 = DO0.
 
 constexpr int ServerDiStart = 10;
-constexpr int ServerDiCount = 3;
+// ADAM-6224 DI0..DI3 are polled and mirrored to external server coils 10..13.
+// DI0..DI2 have alarm/interlock logic; DI3 is the NC red-tower-light button.
+constexpr int ServerDiCount = 4;
 constexpr int Adam6224DiStart = 0;
 
 constexpr int ServerAdam6217AInputStart = 0;

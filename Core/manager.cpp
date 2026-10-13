@@ -14,6 +14,8 @@
 #include <QElapsedTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
+#include <QMetaObject>
 #include <QScopedValueRollback>
 #include <QSettings>
 #include <QStringList>
@@ -21,6 +23,10 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+
+// Per-poll process values are available for targeted diagnostics, but are disabled
+// by default so normal operation does not emit dozens of lines per second.
+Q_LOGGING_CATEGORY(lcModbusPolling, "taidaflow.modbus.polling", QtWarningMsg)
 
 namespace {
 constexpr int kPollIntervalMs = 1000;
@@ -119,6 +125,9 @@ QString commandPointName(ModbusMapping::CommandPoint point)
     case ModbusMapping::CommandPoint::VfdRun: return QStringLiteral("VfdRun");
     case ModbusMapping::CommandPoint::InverterReset: return QStringLiteral("InverterReset");
     case ModbusMapping::CommandPoint::EmergencyStop: return QStringLiteral("EmergencyStop");
+    case ModbusMapping::CommandPoint::TowerLightRed: return QStringLiteral("TowerLightRed");
+    case ModbusMapping::CommandPoint::TowerLightYellow: return QStringLiteral("TowerLightYellow");
+    case ModbusMapping::CommandPoint::TowerLightGreen: return QStringLiteral("TowerLightGreen");
     }
 
     return QStringLiteral("Unknown");
@@ -144,6 +153,11 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
     // w2-085: settings-page upper/lower limit alarms (the 90 % high alarm below is unchanged).
     m_limitAlarms = new LimitAlarmMonitor(proxy, sql, this);
     connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, &Manager::alarmSaved);
+    connect(m_limitAlarms, &LimitAlarmMonitor::alarmSaved, this, [this]() {
+        // LimitAlarmMonitor emits before it updates its own active state.  Queue this
+        // calculation so the yellow/green tower lights see the final state.
+        QMetaObject::invokeMethod(this, [this]() { updateAlarmTowerLights(); }, Qt::QueuedConnection);
+    });
     // w2-086: settings-page offsets applied to sensor_data and the Modbus server input registers.
     m_offsetStorage = new SensorOffsetStorage(proxy, m_readBindings, this);
     // w2-087: device connection states -> TaidaFlowProxy::deviceStatus (the offline banner).
@@ -174,7 +188,7 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
                     ? static_cast<double>(static_cast<qint16>(raw))
                     : static_cast<double>(raw);
             const double value = decoded * binding.scale + binding.offset;
-            qInfo().noquote()
+            qCDebug(lcModbusPolling).noquote()
                     << QStringLiteral("[Modbus][Read] device=%1 point=%2 offset=%3 raw=%4 value=%5")
                                .arg(ModbusClient::displayName(device),
                                     processPointName(binding.point))
@@ -208,11 +222,20 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
     });
 
     connect(&m_modbus, &ModbusClient::deviceConnectionChanged, this,
-            [](ModbusClient::Device device, bool connected, const QString &detail) {
+            [this](ModbusClient::Device device, bool connected, const QString &detail) {
         qInfo().noquote() << ModbusClient::displayName(device)
                           << (connected ? QStringLiteral("connected")
                                         : QStringLiteral("disconnected"))
                           << detail;
+        if (device == ModbusClient::Device::Adam6256_201) {
+            m_adam6256Connected = connected;
+            if (connected) {
+                // This is the first lamp-state evaluation at startup, and also
+                // replays the state after the output module reconnects.
+                m_alarmTowerLightStateKnown = false;
+                updateAlarmTowerLights();
+            }
+        }
     });
     connect(&m_modbus, &ModbusClient::deviceError, this,
             [](ModbusClient::Device device, const QString &message) {
@@ -221,7 +244,12 @@ Manager::Manager(TaidaFlowProxy *proxy, SqlManager *sql, const DeviceSettings &d
 
     connect(&m_ms300FaultReader, &Ms300FaultReader::faultStatusChanged, this,
             [this](quint8 faultCode, quint8 warningCode, const QString &message) {
-        if (faultCode == 0 && warningCode == 0)
+        const bool alarmActive = faultCode != 0 || warningCode != 0;
+        if (m_ms300AlarmActive != alarmActive) {
+            m_ms300AlarmActive = alarmActive;
+            updateAlarmTowerLights();
+        }
+        if (!alarmActive)
             return;
 
         const QString status = faultCode != 0
@@ -238,6 +266,10 @@ Manager::~Manager()
 
 void Manager::start()
 {
+    // The first successful ADAM-6256 connection below evaluates and writes the
+    // current yellow/green indication.  Reset this cache for a Manager restart.
+    m_adam6256Connected = false;
+    m_alarmTowerLightStateKnown = false;
     m_deviceStatus->start();     // w2-087: empty map until each device's first result
     m_modbus.connectAll();
     m_ms300FaultReader.start();
@@ -669,7 +701,6 @@ void Manager::syncCoilSvsFromAdam6256(int startAddress, const QList<quint16> &va
     // DO2 (00019) = emergency stop, active-low (Manager::setEmergencyStopSv
     // writes DO2 = 0 for UI ON).  So emergencyStopSv = (DO2 == 0).
     const bool emergencyStop = !do2;
-
     const bool motorBefore = m_proxy->motorRunningSv();
     const bool valveBefore = m_proxy->wayValveOpenSv();
     const bool estopBefore = m_proxy->emergencyStopSv();
@@ -764,6 +795,136 @@ void Manager::tripMakeupPumpOverload()
         writeCommand(ModbusMapping::CommandPoint::MotorRunning, 0.0);
 }
 
+void Manager::updateNcButtonTowerLight(bool di3State)
+{
+    // The button is normally closed: DI3 is 1 when released and 0 when pressed
+    // (or when its cable is open).  The red light follows the button state.
+    const bool released = m_di3StateKnown && m_redTowerLightOn && di3State;
+    const bool redOn = !di3State;
+    const bool changed = !m_di3StateKnown || m_redTowerLightOn != redOn;
+
+    m_di3StateKnown = true;
+    m_redTowerLightOn = redOn;
+    if (changed) {
+        qInfo().noquote()
+                << QStringLiteral("[NC Button] ADAM-6224 DI3=%1 -> tower red request=%2")
+                           .arg(di3State ? 1 : 0)
+                           .arg(redOn ? 1 : 0);
+    }
+
+    // DI3 is an NC physical button.  A pressed/open-circuit state (0) asserts
+    // the same stop as the HMI and therefore writes active-low DO2, stops the
+    // VFD, and stops the makeup pump.  DI3 itself creates no SQL alarm row.
+    if (!di3State) {
+        if (m_proxy && !m_proxy->emergencyStopSv())
+            m_proxy->setEmergencyStopSv(true);
+        else
+            setEmergencyStopSv(true);
+    } else if (released) {
+        // DI3 returned to its normally-closed state.  This is the matching
+        // physical release event: clear the UI stop and restore active-high
+        // DO2.  Do this only on the edge, so an independent UI emergency stop
+        // is not cleared again by every normal DI3 polling cycle.
+        qInfo() << "[NC Button] ADAM-6224 DI3 released -> emergency stop released";
+        if (m_proxy && m_proxy->emergencyStopSv())
+            m_proxy->setEmergencyStopSv(false);
+        else
+            setEmergencyStopSv(false);
+    }
+
+    // updateAlarmTowerLights() writes DO5/DO6/DO7 as one Modbus request.
+    updateAlarmTowerLights();
+}
+
+bool Manager::hasActiveAlarm() const
+{
+    return !m_activeHighInputAlarms.isEmpty()
+            || !m_activeDigitalInputAlarms.isEmpty()
+            || m_ms300AlarmActive
+            || m_emergencyStopActive
+            || (m_di3StateKnown && m_redTowerLightOn)
+            || (m_limitAlarms && !m_limitAlarms->activeAlarms().isEmpty());
+}
+
+bool Manager::writeTowerLightState(bool redOn, bool alarmActive)
+{
+    const ModbusMapping::WriteBinding *red = nullptr;
+    const ModbusMapping::WriteBinding *yellow = nullptr;
+    const ModbusMapping::WriteBinding *green = nullptr;
+    for (const ModbusMapping::WriteBinding &binding : m_writeBindings) {
+        if (binding.point == ModbusMapping::CommandPoint::TowerLightRed)
+            red = &binding;
+        else if (binding.point == ModbusMapping::CommandPoint::TowerLightYellow)
+            yellow = &binding;
+        else if (binding.point == ModbusMapping::CommandPoint::TowerLightGreen)
+            green = &binding;
+    }
+
+    // All three lamps must be consecutive coils of one module.  Do not fall
+    // back to separate FC05 commands: DI3 would make red change before the
+    // queued yellow/green request was processed.
+    if (!red || !yellow || !green || !red->isConfigured() || !yellow->isConfigured()
+            || !green->isConfigured() || red->device != yellow->device
+            || red->device != green->device || red->registerType != QModbusDataUnit::Coils
+            || yellow->registerType != QModbusDataUnit::Coils
+            || green->registerType != QModbusDataUnit::Coils
+            || yellow->startAddress != red->startAddress + 1
+            || green->startAddress != red->startAddress + 2) {
+        qWarning() << "[TowerLight] Red/yellow/green mapping is not a contiguous coil triplet; indication was not written.";
+        return false;
+    }
+
+    const QList<quint16> values{
+        static_cast<quint16>(redOn ? 1 : 0),       // DO5 red
+        static_cast<quint16>(alarmActive ? 1 : 0), // DO6 yellow
+        static_cast<quint16>(alarmActive ? 0 : 1), // DO7 green
+    };
+    qCDebug(lcModbusPolling).noquote()
+            << QStringLiteral("[Modbus][Write request] device=%1 command=TowerLightRedYellowGreen "
+                              "offset=%2 input=(red=%3,yellow=%4,green=%5) raw=%6")
+                       .arg(ModbusClient::displayName(red->device))
+                       .arg(red->startAddress)
+                       .arg(values.at(0))
+                       .arg(values.at(1))
+                       .arg(values.at(2))
+                       .arg(modbusValuesText(values));
+    countModbusWriteRequest();
+    return m_modbus.write(red->device, red->registerType, red->startAddress, values);
+}
+
+void Manager::updateAlarmTowerLights()
+{
+    const bool alarmActive = hasActiveAlarm();
+    // Both physical DI3 and the UI emergency stop require the full red/yellow
+    // alarm indication.  Other alarms retain their existing yellow/green rule.
+    const bool redOn = (m_di3StateKnown && m_redTowerLightOn) || m_emergencyStopActive;
+    if (!m_adam6256Connected)
+        return;     // the connection callback performs the first/retry write
+    if (m_alarmTowerLightStateKnown && m_alarmTowerLightActive == alarmActive
+            && m_appliedTowerLightRedOn == redOn)
+        return;
+
+    // One FC15 (Write Multiple Coils) updates ADAM-6256 DO5/DO6/DO7 together.
+    // This makes DI3's red indication and the yellow/green alarm indication
+    // arrive in the same physical output update.
+    if (!writeTowerLightState(redOn, alarmActive)) {
+        m_alarmTowerLightStateKnown = false;
+        qWarning().noquote()
+                << QStringLiteral("[TowerLight] Could not apply alarm indication; it will retry when ADAM-6256 reconnects.");
+        return;
+    }
+
+    m_alarmTowerLightStateKnown = true;
+    m_alarmTowerLightActive = alarmActive;
+    m_appliedTowerLightRedOn = redOn;
+    qInfo().noquote()
+            << QStringLiteral("[TowerLight] activeAlarm=%1 -> DO5 red=%2, DO6 yellow=%3, DO7 green=%4")
+                       .arg(alarmActive ? 1 : 0)
+                       .arg(redOn ? 1 : 0)
+                       .arg(alarmActive ? 1 : 0)
+                       .arg(alarmActive ? 0 : 1);
+}
+
 void Manager::mirrorClientData(ModbusClient::Device device,
                                QModbusDataUnit::RegisterType registerType,
                                int startAddress,
@@ -801,7 +962,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             const quint16 serverValue = m_offsetStorage->correctedServerRegister(serverOffset, values.at(index));
             emit serverInputRegisterUpdated(serverOffset, serverValue);
             checkHighInputAlarm(serverOffset, values.at(index));
-            qInfo().noquote()
+            qCDebug(lcModbusPolling).noquote()
                     << QStringLiteral("[ModbusServer][Mirror] inputRegister=%1 device=%2 AI=%3 raw=%4 server=%5")
                                .arg(serverOffset)
                                .arg(ModbusClient::displayName(device))
@@ -836,7 +997,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             const bool state = values.at(index) != 0;
             emit serverCoilUpdated(serverOffset, state);
             checkDigitalInputAlarm(static_cast<quint16>(diOffset), state);
-            qInfo().noquote()
+            qCDebug(lcModbusPolling).noquote()
                     << QStringLiteral("[ModbusServer][Mirror] coil=%1 device=%2 DI=%3 value=%4")
                                .arg(serverOffset)
                                .arg(ModbusClient::displayName(device))
@@ -855,6 +1016,8 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             } else if (diOffset == 2) {
                 // DI2 = makeup pump overload (1 = OL tripped).
                 updateMakeupPumpOverload(state);
+            } else if (diOffset == 3) {
+                updateNcButtonTowerLight(state);
             }
         }
         return;
@@ -880,7 +1043,7 @@ void Manager::mirrorClientData(ModbusClient::Device device,
             else if (m_proxy && doOffset == 4)
                 m_proxy->setWayValveOpenPv(state);
 
-            qInfo().noquote()
+            qCDebug(lcModbusPolling).noquote()
                     << QStringLiteral("[Modbus][Read] device=%1 point=DO%2 offset=%3 raw=%4 value=%5")
                                .arg(ModbusClient::displayName(device))
                                .arg(doOffset)
@@ -901,7 +1064,10 @@ void Manager::checkHighInputAlarm(quint16 serverOffset, quint16 rawValue)
     const quint16 threshold = static_cast<quint16>(std::ceil(
             std::numeric_limits<quint16>::max() * m_aiHighAlarmPercent / 100.0));
     if (rawValue < threshold) {
+        const bool wasActive = m_activeHighInputAlarms.contains(serverOffset);
         m_activeHighInputAlarms.remove(serverOffset);
+        if (wasActive)
+            updateAlarmTowerLights();
         return;
     }
 
@@ -913,7 +1079,10 @@ void Manager::checkHighInputAlarm(quint16 serverOffset, quint16 rawValue)
             .arg(rawValue)
             .arg(threshold);
     if (saveAlarm(sensor, message, QStringLiteral("數值異常")))
+    {
         m_activeHighInputAlarms.insert(serverOffset);
+        updateAlarmTowerLights();
+    }
 }
 
 void Manager::loadAiHighAlarmPercentSetting()
@@ -958,10 +1127,13 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
 
     // w2-053: on this DI's first read after start, rows left 未處理 by an
     // earlier run are taken over (DI still in alarm) or resolved (DI normal).
-    if (!m_diRestartChecked.contains(diOffset)
+    const bool firstReadAfterStart = !m_diRestartChecked.contains(diOffset);
+    if (firstReadAfterStart
             && !takeOverPreviousRunDigitalInputAlarms(diOffset, state, alarmActive)) {
         return;     // lookup failed; retried on the next poll
     }
+    if (firstReadAfterStart)
+        updateAlarmTowerLights();
     resolvePendingRestartRows(diOffset);
 
     if (!alarmActive) {
@@ -978,6 +1150,7 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
                     << QStringLiteral("[SQL] %1 alarm cleared but its row id is unknown; the row stays 未處理.")
                                .arg(sensor);
             m_activeDigitalInputAlarms.erase(active);
+            updateAlarmTowerLights();
             return;
         }
 
@@ -987,8 +1160,10 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
         const QString detail = QStringLiteral("%1 解除（%2=%3）")
                 .arg(alarmMessage, sensor)
                 .arg(state ? 1 : 0);
-        if (markAlarmRowResolved(active.value(), detail))
+        if (markAlarmRowResolved(active.value(), detail)) {
             m_activeDigitalInputAlarms.remove(diOffset);
+            updateAlarmTowerLights();
+        }
         return;
     }
 
@@ -1000,7 +1175,10 @@ void Manager::checkDigitalInputAlarm(quint16 diOffset, bool state)
             .arg(state ? 1 : 0);
     AlarmRow row;
     if (insertAlarmRow(sensor, message, QStringLiteral("異常"), &row))
+    {
         m_activeDigitalInputAlarms.insert(diOffset, row);
+        updateAlarmTowerLights();
+    }
 }
 
 bool Manager::takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state, bool alarmActive)
@@ -1017,7 +1195,7 @@ bool Manager::takeOverPreviousRunDigitalInputAlarms(quint16 diOffset, bool state
 
     if (m_restartLookupFailure.isValid()
             && m_restartLookupFailure.elapsed() < kRestartLookupDeferMs) {
-        qInfo().noquote()
+        qCDebug(lcModbusPolling).noquote()
                 << QStringLiteral("[Alarm][Restart] %1 lookup deferred to the next poll (a lookup failed %2 ms ago); no new %1 row until then.")
                            .arg(sensor)
                            .arg(m_restartLookupFailure.elapsed());
@@ -1173,6 +1351,20 @@ void Manager::setEmergencyStopSv(bool active)
     if (isSvWriteSuppressed("emergencyStopSv"))
         return;
 
+    // A still-pressed NC DI3 is a physical stop source and cannot be released
+    // by the UI.  The HMI switch is restored to show the actual safe state.
+    if (!active && m_di3StateKnown && m_redTowerLightOn) {
+        qWarning() << "[Emergency Stop] UI release ignored while ADAM-6224 DI3 is pressed.";
+        if (m_proxy && !m_proxy->emergencyStopSv()) {
+            const QScopedValueRollback<bool> guard(m_syncingSvFromDevice, true);
+            m_proxy->setEmergencyStopSv(true);
+        }
+        active = true;
+    }
+
+    m_emergencyStopActive = active;
+    updateAlarmTowerLights();
+
     // The emergency-stop circuit is active-low: UI ON asserts the stop by
     // writing DO2 = 0; UI OFF releases it by writing DO2 = 1.
     writeCommand(ModbusMapping::CommandPoint::EmergencyStop, active ? 0.0 : 1.0);
@@ -1213,7 +1405,7 @@ void Manager::saveServerInputData()
 
     const bool saved = m_sql->saveSensorData(QDateTime::currentDateTime(), readings);
     if (saved) {
-        qInfo().noquote()
+        qCDebug(lcModbusPolling).noquote()
                 << QStringLiteral("[SQL] Saved Server Input Registers 0..%1 to sensor_data.")
                            .arg(m_serverInputRegisters.size() - 1);
         emit serverInputDataSaved();

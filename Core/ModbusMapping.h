@@ -22,7 +22,8 @@ enum class ProcessPoint {
 };
 
 enum class CommandPoint {
-    M1, M2, M3, M4, Pump2Hz, MotorRunning, WayValveOpen, VfdRun, InverterReset, EmergencyStop
+    M1, M2, M3, M4, Pump2Hz, MotorRunning, WayValveOpen, VfdRun, InverterReset, EmergencyStop,
+    TowerLightRed, TowerLightYellow, TowerLightGreen
 };
 
 enum class ValueFormat {
@@ -78,6 +79,8 @@ inline QList<ReadBinding> defaultReadBindings()
     constexpr double kAdcFullScale = 65535.0;
     constexpr double kTemperatureScale = 100.0 / kAdcFullScale;
     constexpr double kPressureScale = 1000.0 / kAdcFullScale;
+    // Flow transmitter: raw 0..65535 corresponds linearly to 0..1000 L/min.
+    constexpr double kFlowMeterScale = 1000.0 / kAdcFullScale;
     // ADAM-6217 .203 AI4..AI7 are 0..10 V valve-position feedbacks.
     // Their 16-bit raw range maps directly to 0..100 % for HMI display.
     constexpr double kValvePositionScale = 100.0 / kAdcFullScale;
@@ -116,12 +119,9 @@ inline QList<ReadBinding> defaultReadBindings()
         {ProcessPoint::Pt07, ModbusClient::Device::Adam6217_203,
          QModbusDataUnit::HoldingRegisters, 0, 8, 2,
          ValueFormat::Unsigned16, kPressureScale, 0.0},
-        // The transmitter's engineering range has not been provided, so keep
-        // this value as its original 16-bit register value rather than
-        // inventing a flow-rate conversion.
         {ProcessPoint::FlowMeter, ModbusClient::Device::Adam6217_203,
          QModbusDataUnit::HoldingRegisters, 0, 8, 3,
-         ValueFormat::Unsigned16, 1.0, 0.0},
+         ValueFormat::Unsigned16, kFlowMeterScale, 0.0},
         {ProcessPoint::Mv1Position, ModbusClient::Device::Adam6217_203,
          QModbusDataUnit::HoldingRegisters, 0, 8, 4,
          ValueFormat::Unsigned16, kValvePositionScale, 0.0},
@@ -166,6 +166,15 @@ inline QList<WriteBinding> defaultWriteBindings()
          QModbusDataUnit::Coils, 17}, // DO1 / manual coil 00018: VFD reset.
         {CommandPoint::EmergencyStop, ModbusClient::Device::Adam6256_201,
          QModbusDataUnit::Coils, 18}, // DO2 / manual coil 00019: emergency stop.
+        // DI3 on ADAM-6224 is the normally-closed physical button.  It controls
+        // this output internally and is deliberately not exposed as a writable
+        // external-server coil.
+        {CommandPoint::TowerLightRed, ModbusClient::Device::Adam6256_201,
+         QModbusDataUnit::Coils, 21}, // DO5 / manual coil 00022: tower light red.
+        {CommandPoint::TowerLightYellow, ModbusClient::Device::Adam6256_201,
+         QModbusDataUnit::Coils, 22}, // DO6 / manual coil 00023: tower light yellow.
+        {CommandPoint::TowerLightGreen, ModbusClient::Device::Adam6256_201,
+         QModbusDataUnit::Coils, 23}, // DO7 / manual coil 00024: tower light green.
     };
 }
 

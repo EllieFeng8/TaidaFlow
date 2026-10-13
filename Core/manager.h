@@ -117,6 +117,13 @@ private:
     void updateLeakDetected(bool leak);
     void updateMakeupPumpOverload(bool overload);
     void tripMakeupPumpOverload();
+    void updateNcButtonTowerLight(bool di3State);
+    bool hasActiveAlarm() const;
+    // DO5 (red), DO6 (yellow), and DO7 (green) are written in one contiguous
+    // FC15 request.  DI3 must therefore not wait for a red-only command before
+    // the yellow/green indication is updated.
+    bool writeTowerLightState(bool redOn, bool alarmActive);
+    void updateAlarmTowerLights();
     void countModbusWriteRequest();
 
     TaidaFlowProxy *m_proxy = nullptr;
@@ -131,6 +138,7 @@ private:
     quint8 m_completedAiGroups = 0;
     bool m_startVfdAfterFrequencyWrite = false;
     QSet<quint16> m_activeHighInputAlarms;
+    bool m_ms300AlarmActive = false;
     // w2-037: DI offset -> the row written when that DI alarm was raised in
     // this run.  When the DI returns to normal that same row is marked
     // resolved; the entry is removed only after the update succeeded.
@@ -161,6 +169,15 @@ private:
     bool m_makeupPumpOverload = false;
     bool m_di2StateKnown = false;
     bool m_di1StateKnown = false;
+    // DI3 is a normally-closed physical button: 0 means pressed and turns
+    // the red tower light (ADAM-6256 DO5) on and asserts the emergency stop.
+    bool m_di3StateKnown = false;
+    bool m_redTowerLightOn = false;
+    bool m_emergencyStopActive = false;
+    bool m_adam6256Connected = false;
+    bool m_alarmTowerLightStateKnown = false;
+    bool m_alarmTowerLightActive = false;
+    bool m_appliedTowerLightRedOn = false;
 
     // Pump frequency feedback (ADAM-6022 AO0 read-back, HR10 / 40011).
     bool m_pump2HzReadOutstanding = false;

@@ -3,8 +3,11 @@
 #include "ModbusServerBridgeMapping.h"
 
 #include <QDebug>
+#include <QLoggingCategory>
 #include <QModbusDevice>
 #include <QModbusTcpServer>
+
+Q_LOGGING_CATEGORY(lcModbusServerMirror, "taidaflow.modbus.server.mirror", QtWarningMsg)
 
 class BridgeModbusTcpServer final : public QModbusTcpServer
 {
@@ -97,7 +100,7 @@ ModbusServer::ModbusServer(QObject *parent)
     connect(m_server.get(), &QModbusServer::dataWritten, this,
             [this](QModbusDataUnit::RegisterType table, int offset, int count) {
         if (m_applyingLocalValue) {
-            qInfo().noquote()
+            qCDebug(lcModbusServerMirror).noquote()
                     << QStringLiteral("[ModbusServer][Local update] type=%1 offset=%2 count=%3")
                                .arg(static_cast<int>(table))
                                .arg(offset)

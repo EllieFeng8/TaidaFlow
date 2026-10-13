@@ -119,7 +119,7 @@ const QList<Field> &fields()
         f.append(field("log.dir", Kind::Text, QStringLiteral("logs")));
         f.append(field("log.quiet.enabled", Kind::Bool, true));
         f.append(integerField(QStringLiteral("log.quiet.keepDays"), 60, 1, INT_MAX));
-        f.append(field("log.full.enabled", Kind::Bool, true));
+        f.append(field("log.full.enabled", Kind::Bool, false));
         f.append(integerField(QStringLiteral("log.full.keepDays"), 7, 1, INT_MAX));
         return f;
     }();

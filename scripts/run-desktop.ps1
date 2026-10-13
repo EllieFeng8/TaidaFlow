@@ -10,7 +10,8 @@
 #              (that file would hold the plant defaults: data in C:\TaidaFlowData, plant IP
 #              addresses). The file must exist (this script refuses a missing one).
 #   -Exe     : default build\desktop\TaidaFlowApp.exe
-#   -LogFile : stderr log (default build\runtime-logs\desktop-<time>.log; stdout -> .stdout)
+#   -LogFile : optional stderr log (stdout -> .stdout).  Omit it to suppress the app's
+#              diagnostic output; provide it explicitly only when diagnosing a problem.
 #   -ProbeLog: safety-probe log file (default build\runtime-logs\safety-probe[-sim].log)
 #   -Wait    : block until the app exits and return its exit code
 #   -DeviceProfile simulator : TEST ONLY. Runs the probe in simulator mode and starts the app with
@@ -76,16 +77,20 @@ if ($LASTEXITCODE -ne 0) {
 
 $cwd = $cfg.DataDir
 New-Item -ItemType Directory -Force $cwd | Out-Null
-if ($LogFile -eq "") {
-    $LogFile = Join-Path $root ('build\runtime-logs\desktop-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log')
-} elseif (-not [System.IO.Path]::IsPathRooted($LogFile)) {
-    $LogFile = Join-Path $root $LogFile      # relative paths are relative to the taidaflow root
+$captureOutput = $LogFile -ne ""
+if ($captureOutput) {
+    if (-not [System.IO.Path]::IsPathRooted($LogFile)) {
+        $LogFile = Join-Path $root $LogFile      # relative paths are relative to the taidaflow root
+    }
+    New-Item -ItemType Directory -Force (Split-Path -Parent $LogFile) | Out-Null
 }
-New-Item -ItemType Directory -Force (Split-Path -Parent $LogFile) | Out-Null
 
 $qtRoot = if ($env:TAIDAFLOW_QT_ROOT) { $env:TAIDAFLOW_QT_ROOT } else { 'C:\Qt\6.8.3' }
 $env:PATH = (Join-Path $qtRoot 'msvc2022_64\bin') + ';' + $env:PATH
-$env:QT_FORCE_STDERR_LOGGING = '1'
+# Keep Qt diagnostics out of the console by default.  An explicit -LogFile is the
+# opt-in diagnostic mode and deliberately restores the old capture behaviour.
+Remove-Item Env:\QT_FORCE_STDERR_LOGGING -ErrorAction SilentlyContinue
+if ($captureOutput) { $env:QT_FORCE_STDERR_LOGGING = '1' }
 $env:TAIDAFLOW_CONFIG = $Config
 if ($DeviceProfile -eq 'simulator') {
     $env:TAIDAFLOW_DEVICE_PROFILE = 'simulator'
@@ -93,9 +98,13 @@ if ($DeviceProfile -eq 'simulator') {
     Remove-Item Env:\TAIDAFLOW_DEVICE_PROFILE -ErrorAction SilentlyContinue
 }
 
-$p = Start-Process -FilePath $Exe -WorkingDirectory $cwd -PassThru `
-        -RedirectStandardError $LogFile -RedirectStandardOutput "$LogFile.stdout"
+$startArgs = @{ FilePath = $Exe; WorkingDirectory = $cwd; PassThru = $true }
+if ($captureOutput) {
+    $startArgs.RedirectStandardError = $LogFile
+    $startArgs.RedirectStandardOutput = "$LogFile.stdout"
+}
+$p = Start-Process @startArgs
 $null = $p.Handle
-Write-Output "PID=$($p.Id) CONFIG=$Config DATADIR=$cwd LOG=$LogFile$(if ($DeviceProfile -eq 'simulator') { ' PROFILE=simulator' })"
+Write-Output "PID=$($p.Id) CONFIG=$Config DATADIR=$cwd$(if ($captureOutput) { " LOG=$LogFile" })$(if ($DeviceProfile -eq 'simulator') { ' PROFILE=simulator' })"
 if ($Wait) { $p.WaitForExit(); exit $p.ExitCode }
 exit 0

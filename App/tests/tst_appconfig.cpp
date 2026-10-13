@@ -171,7 +171,7 @@ void tst_AppConfig::defaultGetters()
     QCOMPARE(log.dir, QStringLiteral("C:/TaidaFlowData/logs"));
     QCOMPARE(log.quiet.enabled, true);
     QCOMPARE(log.quiet.keepDays, 60);
-    QCOMPARE(log.full.enabled, true);
+    QCOMPARE(log.full.enabled, false);
     QCOMPARE(log.full.keepDays, 7);
     for (const QString &key : AppConfig::keys())
         QCOMPARE(c.source(key), AppConfig::ValueSource::Default);
@@ -395,7 +395,7 @@ void tst_AppConfig::invalidValuesUseDefaults_data()
     QTest::newRow("quiet.enabled string") << QByteArray(R"({"log": {"quiet": {"enabled": "yes"}}})")
                                           << "log.quiet.enabled" << "true";
     QTest::newRow("full.enabled number") << QByteArray(R"({"log": {"full": {"enabled": 0}}})")
-                                         << "log.full.enabled" << "true";
+                                         << "log.full.enabled" << "false";
     QTest::newRow("quiet.keepDays 0") << QByteArray(R"({"log": {"quiet": {"keepDays": 0}}})")
                                       << "log.quiet.keepDays" << "60";
     QTest::newRow("quiet.keepDays -5") << QByteArray(R"({"log": {"quiet": {"keepDays": -5}}})")

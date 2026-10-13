@@ -757,7 +757,7 @@ UTF-8 文字檔,JSON 格式。
 | `nginx.exe` | `nginx\\nginx.exe` | nginx 程式位置(程式啟動 log 印出解析後的路徑;腳本用它找 nginx,`-Nginx` 可單次覆寫)。相對路徑以 **config.json 所在資料夾**為準(= 隨包的 `<安裝資料夾>\nginx\nginx.exe`);也可寫絕對路徑(例如另外安裝的 nginx) |
 | `log.dir` | `logs` | log 資料夾。相對路徑以 **`dataDir`** 為準(預設 = `C:\TaidaFlowData\logs`);不存在時自動建立。程式的 log、腳本的 `launcher-<日期>.log`、nginx 的 log 都寫在這裡(§13) |
 | `log.quiet.enabled` / `log.quiet.keepDays` | `true` / `60` | 精簡 log `taidaflow-<日期>.log`(只有 warning / critical / fatal)是否寫、保留幾天(1 以上;含今天)。腳本也用這個天數清理 `launcher-<日期>.log` 與 `nginx-access-<日期>.log` |
-| `log.full.enabled` / `log.full.keepDays` | `true` / `7` | 完整 log `taidaflow-<日期>-full.log`(全部訊息,約每小時 15 MB、一天約 360 MB)是否寫、保留幾天(1 以上;含今天) |
+| `log.full.enabled` / `log.full.keepDays` | `false` / `7` | 完整 log `taidaflow-<日期>-full.log`(全部訊息,約每小時 15 MB、一天約 360 MB)是否寫、保留幾天(1 以上;含今天) |
 
 規則:
 

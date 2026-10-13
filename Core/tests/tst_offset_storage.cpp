@@ -120,7 +120,7 @@ void freePorts(quint16 *a, quint16 *b, quint16 *c)
 
 constexpr double kT = 100.0 / 65535.0;    // degC per count
 constexpr double kP = 1000.0 / 65535.0;   // kPa per count
-constexpr double kF = 1.0;                // L/min per count
+constexpr double kF = 1000.0 / 65535.0;  // L/min per count
 
 QVariantMap withOffsets(QVariantMap settings, const QHash<QString, double> &offsets)
 {
@@ -175,6 +175,7 @@ private slots:
     void settingsChangeNextSample();
     void uiEquivalence();
     void managerIntegration();
+    void towerLightMappings();
     void sourceWiring();
 
 private:
@@ -222,6 +223,10 @@ void TestOffsetStorage::columnTable()
         QCOMPARE(c.serverRegister, expected[i].column - 1);
         QCOMPARE(c.scale, expected[i].scale);
         QCOMPARE(c.unit, QString::fromUtf8(expected[i].unit));
+        if (c.key == QStringLiteral("flowMeter")) {
+            QCOMPARE(0.0 * c.scale, 0.0);
+            QCOMPARE(65535.0 * c.scale, 1000.0);
+        }
         table << QStringLiteral("%1=s%2 x%3").arg(c.key).arg(c.column).arg(c.scale, 0, 'g', 12);
     }
     qInfo().noquote() << "[w2-086 test] column table:" << table.join(QStringLiteral(", "));
@@ -272,10 +277,10 @@ void TestOffsetStorage::applyRules_data()
     QTest::newRow("temperature to exactly 0") << 3277 << -5.0 << kT << 0 << 0;     // 0.25 -> 0
     QTest::newRow("temperature clamp low") << 100 << -5.0 << kT << 0 << -1;
     QTest::newRow("temperature clamp high") << 60000 << 50.0 << kT << 65535 << 1;
-    QTest::newRow("flow +3.4 L/min") << 150 << 3.4 << kF << 153 << 0;
-    QTest::newRow("flow +3.6 L/min") << 150 << 3.6 << kF << 154 << 0;
-    QTest::newRow("flow -0.5 L/min (half away from zero)") << 150 << -0.5 << kF << 150 << 0;   // 149.5 -> 150
-    QTest::newRow("flow +0.5 L/min (half away from zero)") << 150 << 0.5 << kF << 151 << 0;    // 150.5 -> 151
+    QTest::newRow("flow +3.4 L/min") << 150 << 3.4 << kF << 373 << 0;
+    QTest::newRow("flow +3.6 L/min") << 150 << 3.6 << kF << 386 << 0;
+    QTest::newRow("flow -0.5 L/min") << 150 << -0.5 << kF << 117 << 0;
+    QTest::newRow("flow +0.5 L/min") << 150 << 0.5 << kF << 183 << 0;
     QTest::newRow("flow clamp low") << 3 << -10.0 << kF << 0 << -1;
 }
 
@@ -465,6 +470,7 @@ void TestOffsetStorage::managerIntegration()
         QVERIFY2(server->connectDevice(), qPrintable(server->errorString()));
     }
     serverB.setData(QModbusDataUnit::DiscreteInputs, 0, 1);    // DI0 = 1 (healthy), DI1 = DI2 = 0
+    serverB.setData(QModbusDataUnit::DiscreteInputs, 3, 1);    // DI3 NC button released
     // Raw counts: A HR0..7 = TT-01..04, PT-01..04; B HR0..7 = PT-05..07, FM, MV1..4.
     const quint16 rawA[8] = {30000, 30000, 100, 20000, 32768, 40000, 65000, 58000};
     const quint16 rawB[8] = {1000, 50000, 12345, 150, 1000, 2000, 3000, 4000};
@@ -499,7 +505,7 @@ void TestOffsetStorage::managerIntegration()
     QCOMPARE(int(expected[4]), 33587);
     QCOMPARE(int(expected[6]), 65535);
     QCOMPARE(int(expected[7]), 59966);
-    QCOMPARE(int(expected[11]), 153);
+    QCOMPARE(int(expected[11]), 373);
 
     Manager::DeviceSettings devices;
     for (ModbusClient::DeviceConfig &config : devices.modbusDevices) {
@@ -557,9 +563,11 @@ void TestOffsetStorage::managerIntegration()
     }
     qInfo().noquote() << "[w2-086 test] Modbus server input registers:" << irText.join(' ');
     QVector<quint16> coils;
-    QVERIFY(readServer(QModbusDataUnit::Coils, ModbusServerBridgeMapping::ServerDiStart, 3, &coils));
-    QVERIFY(coils.size() >= 3);
-    QCOMPARE(coils.mid(0, 3), (QVector<quint16>{1, 0, 0}));   // DI0..DI2 mirrored unchanged
+    QVERIFY(readServer(QModbusDataUnit::Coils, ModbusServerBridgeMapping::ServerDiStart,
+                       ModbusServerBridgeMapping::ServerDiCount, &coils));
+    QVERIFY(coils.size() >= ModbusServerBridgeMapping::ServerDiCount);
+    QCOMPARE(coils.mid(0, ModbusServerBridgeMapping::ServerDiCount),
+             (QVector<quint16>{1, 0, 0, 1}));   // DI0..DI3 mirrored unchanged
 
     // ---- Proxy PVs stay raw; the 90 % alarm is judged on the raw count ----
     QVERIFY(std::abs(proxy.pt01ValuePv() - raw[4] * kP) < 1e-9);
@@ -676,6 +684,28 @@ void TestOffsetStorage::managerIntegration()
     }
     qInfo().noquote() << "[w2-086 test] REST /api/sensor/last =" << QJsonDocument(last).toJson(QJsonDocument::Compact);
     modbusServer.stop();
+}
+
+void TestOffsetStorage::towerLightMappings()
+{
+    const QList<ModbusMapping::WriteBinding> bindings = ModbusMapping::defaultWriteBindings();
+    const ModbusMapping::WriteBinding *yellow = nullptr;
+    const ModbusMapping::WriteBinding *green = nullptr;
+    for (const ModbusMapping::WriteBinding &binding : bindings) {
+        if (binding.point == ModbusMapping::CommandPoint::TowerLightYellow)
+            yellow = &binding;
+        else if (binding.point == ModbusMapping::CommandPoint::TowerLightGreen)
+            green = &binding;
+    }
+
+    QVERIFY(yellow);
+    QVERIFY(green);
+    QCOMPARE(static_cast<int>(yellow->device), static_cast<int>(ModbusClient::Device::Adam6256_201));
+    QCOMPARE(static_cast<int>(yellow->registerType), static_cast<int>(QModbusDataUnit::Coils));
+    QCOMPARE(yellow->startAddress, 22);  // ADAM-6256 DO6 / manual coil 00023
+    QCOMPARE(static_cast<int>(green->device), static_cast<int>(ModbusClient::Device::Adam6256_201));
+    QCOMPARE(static_cast<int>(green->registerType), static_cast<int>(QModbusDataUnit::Coils));
+    QCOMPARE(green->startAddress, 23);   // ADAM-6256 DO7 / manual coil 00024
 }
 
 void TestOffsetStorage::sourceWiring()

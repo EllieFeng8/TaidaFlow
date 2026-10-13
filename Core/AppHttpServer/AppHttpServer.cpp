@@ -323,6 +323,11 @@ class AppHttpServerImpl;
 struct AppHttpServer::Private
 {
     QMutex lifecycle;                          // serializes start()/stop()
+    // AppHttpServerImpl is created by the caller (normally the GUI/main thread),
+    // then moved to `thread` to own QTcpServer/QHttpServer there.  Its children
+    // must be closed and destroyed on that server thread; the empty wrapper is
+    // moved back here before the caller deletes it after thread.wait().
+    QThread *ownerThread = QThread::currentThread();
     QThread thread;
     AppHttpServerImpl *impl = nullptr;         // lives on thread while it runs
 
@@ -730,6 +735,28 @@ void runOn(QThread *thread, QObject *context, F &&f)
     else
         QMetaObject::invokeMethod(context, std::forward<F>(f), Qt::BlockingQueuedConnection);
 }
+
+void closeMoveAndDelete(AppHttpServer::Private *d, AppHttpServerImpl *impl)
+{
+    Q_ASSERT(d);
+    Q_ASSERT(impl);
+    Q_ASSERT(QThread::currentThread() != &d->thread);
+
+    // `impl` owns QTcpServer/QHttpServer and their internal timers.  Closing
+    // them is not enough: deleting `impl` on the caller thread afterwards
+    // destroys QObject children from the wrong thread (QTBUG-style warning:
+    // "Timers cannot be stopped from another thread"), which can corrupt the
+    // heap during a later start.  Delete the children on the server thread and
+    // move the now-empty wrapper back to its owner before joining the thread.
+    runOn(&d->thread, impl, [impl, ownerThread = d->ownerThread]() {
+        impl->close();
+        impl->moveToThread(ownerThread);
+    });
+    d->thread.quit();
+    d->thread.wait();
+    delete impl;
+    d->impl = nullptr;
+}
 } // namespace
 
 bool AppHttpServer::start(quint16 port, const QHostAddress &address)
@@ -775,11 +802,7 @@ bool AppHttpServer::start(quint16 port, const QHostAddress &address)
         qCWarning(lcAppHttpServer).noquote()
             << QStringLiteral("[AppHttpServer] NOT listening on %1: %2 (the application keeps running)")
                    .arg(where, error);
-        runOn(&d->thread, impl, [impl]() { impl->close(); });
-        d->thread.quit();
-        d->thread.wait();
-        delete impl;
-        d->impl = nullptr;
+        closeMoveAndDelete(d.get(), impl);
     }
     return ok;
 }
@@ -805,11 +828,7 @@ void AppHttpServer::stop()
         qCWarning(lcAppHttpServer).noquote() << "[AppHttpServer] stop() called on the server thread";
         return;
     }
-    runOn(&d->thread, impl, [impl]() { impl->close(); });
-    d->thread.quit();
-    d->thread.wait();                     // pending deleteLater()s run before the thread ends
-    delete impl;
-    d->impl = nullptr;
+    closeMoveAndDelete(d.get(), impl);
     qCInfo(lcAppHttpServer).noquote() << QStringLiteral("[AppHttpServer] stopped (was port %1)").arg(port);
 }
 

@@ -783,7 +783,7 @@ void tst_AppLog::configFailureWritesFallbackLog()
 
     const AppConfig::LogSettings fallback = AppConfig::fallbackLogSettings(path);
     QCOMPARE(fallback.dir, logs);
-    QVERIFY(fallback.quiet.enabled && fallback.full.enabled);
+    QVERIFY(fallback.quiet.enabled && !fallback.full.enabled);
     QCOMPARE(fallback.quiet.keepDays, 60);
     QCOMPARE(fallback.full.keepDays, 7);
 

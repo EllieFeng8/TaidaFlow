@@ -9,7 +9,7 @@
 //   * written to up to two daily files in config.json log.dir (default <dataDir>\logs):
 //       quiet: taidaflow-YYYY-MM-DD.log       warning / critical / fatal only, kept log.quiet.keepDays (60)
 //       full:  taidaflow-YYYY-MM-DD-full.log  every message,                   kept log.full.keepDays (7)
-//     each switchable with log.quiet.enabled / log.full.enabled (both on by default);
+//     each switchable with log.quiet.enabled / log.full.enabled (quiet on, full off by default);
 //   * and still passed on to the previous handler (stderr / debugger / Qt Creator), unchanged.
 //
 // Line format (UTF-8 without BOM, CRLF):

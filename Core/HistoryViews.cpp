@@ -45,7 +45,8 @@ QVariantList recordsFromSamples(const QJsonArray &samples)
             values.append(valueAt(sensorIndex, 100.0 / adcFullScale));
         for (int sensorIndex = 5; sensorIndex <= 11; ++sensorIndex)
             values.append(valueAt(sensorIndex, 1000.0 / adcFullScale));
-        values.append(valueAt(12));
+        // FM-01: raw 0..65535 maps to 0..1000 L/min.
+        values.append(valueAt(12, 1000.0 / adcFullScale));
         for (int sensorIndex = 13; sensorIndex <= 16; ++sensorIndex)
             values.append(valueAt(sensorIndex, 100.0 / adcFullScale));
 

@@ -35,7 +35,7 @@ double scaleForSensor(int sensorIndex)                  // 1-based
     if (sensorIndex <= 11)
         return 1000.0 / kAdcFullScale;                  // PT-01..07 (bar)
     if (sensorIndex == 12)
-        return 1.0;                                     // FM-01 (L/min)
+        return 1000.0 / kAdcFullScale;                  // FM-01 (L/min)
     return 100.0 / kAdcFullScale;                       // M1..M4 (%)
 }
 

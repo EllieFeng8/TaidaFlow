@@ -449,6 +449,10 @@ if ($useNginxNow) {
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $fullLog = Join-Path $LogDir "taidaflow-$today-full.log"
 $quietLog = Join-Path $LogDir "taidaflow-$today.log"
+# `appLog` is the primary log reported by the launcher.  Full logging is
+# intentionally optional, so do not direct deployment diagnostics to a file
+# that will not be created when log.full.enabled is false.
+$appLog = if ($fullOn) { $fullLog } else { $quietLog }
 # Collects what arrives on a redirected stream in the background (a .NET thread, no PowerShell
 # runspace needed), so the text so far can be read while the app is still starting.
 if (-not ('TaidaFlowStreamCollector' -as [type])) {
@@ -487,7 +491,7 @@ try {
 }
 $state = [ordered]@{
     pid = $p.Id; exe = $exe; startTicksUtc = $p.StartTime.ToUniversalTime().Ticks; startTime = $p.StartTime.ToString('o')
-    config = $env:TAIDAFLOW_CONFIG; dataDir = $DataDir; logDir = $LogDir; appLog = $fullLog; appQuietLog = $quietLog
+    config = $env:TAIDAFLOW_CONFIG; dataDir = $DataDir; logDir = $LogDir; appLog = $appLog; appQuietLog = $quietLog
     useNginx = $useNginxNow; nginxAvailable = $nginxOk; nginxStartedByThisScript = $nginxStartedNow
     nginxService = $(if ($svcMode -eq 'ours') { $svc.Name } else { '' }); nginxConfNotApplied = $nginxConfNotApplied
     nginxPort = $(if ($useNginxNow) { [int]$v['nginx.port'] } else { 0 }); downloadPort = (Get-TaidaFlowDownloadPort $cfg)
@@ -495,7 +499,7 @@ $state = [ordered]@{
     restPort = [int]$v['rest.port']; modbusServerPort = [int]$v['modbusServer.port']
 }
 [System.IO.File]::WriteAllText($stateFile, ($state | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
-Log "TaidaFlowApp started: pid $($p.Id) (no console window); its log files: $fullLog, $quietLog"
+Log "TaidaFlowApp started: pid $($p.Id) (no console window); primary app log: $appLog$(if ($fullOn) { "; quiet log: $quietLog" } else { '; full log is disabled' })"
 
 $appPorts = @([int]$v['modbusServer.port'], [int]$v['http.port'], [int]$v['mirror.publicPort'], [int]$v['mirror.internalPort'], [int]$v['rest.port'])
 $t0 = Get-Date
@@ -526,11 +530,14 @@ if ($p.HasExited) {
     if ($code -eq 2) {
         # w2-064 A2: an unusable config.json is logged in <folder of that config.json>\logs.
         $fallback = Join-Path (Split-Path -Parent $env:TAIDAFLOW_CONFIG) 'logs'
-        $fb = Join-Path $fallback "taidaflow-$today-full.log"
+        $fb = Join-Path $fallback $(if ($fullOn) { "taidaflow-$today-full.log" } else { "taidaflow-$today.log" })
         Log "the app wrote the reason to its fallback log folder $fallback"
         if (Test-Path -LiteralPath $fb) { Get-Content -LiteralPath $fb -Tail 10 -Encoding UTF8 | ForEach-Object { Log "  app log | $_" } }
     } else {
-        $last = if (Test-Path -LiteralPath $fullLog) { $fullLog } elseif (Test-Path -LiteralPath $quietLog) { $quietLog } else { $null }
+        # `$appLog` is the enabled primary log for this run.  In particular,
+        # when full logging is disabled, do not show a stale -full.log left by
+        # an older configuration instead of today's quiet log.
+        $last = if (Test-Path -LiteralPath $appLog) { $appLog } elseif (Test-Path -LiteralPath $quietLog) { $quietLog } elseif (Test-Path -LiteralPath $fullLog) { $fullLog } else { $null }
         if ($last) { Log "last lines of $last :"; Get-Content -LiteralPath $last -Tail 15 -Encoding UTF8 | ForEach-Object { Log "  app log | $_" } }
         else { Log "no app log file in $LogDir (the app ended before it opened its log files)" }
     }
@@ -545,10 +552,10 @@ foreach ($pp in $appPorts) {
     Log ("  port {0,-5} {1,-50} {2}" -f $pp, $portNames["$pp"], $(if ($have -contains $pp) { 'listening' } else { 'NOT listening' }))
 }
 if ($missing.Count -gt 0) {
-    Log "ERROR: after $StartTimeoutSec s the app does not listen on $($missing -join ', ') - the app is left running (desktop HMI); see $fullLog"
+    Log "ERROR: after $StartTimeoutSec s the app does not listen on $($missing -join ', ') - the app is left running (desktop HMI); see $appLog"
     exit 6
 }
-if ($have -notcontains [int]$v['rest.port']) { Log "WARNING: the REST API does not listen on 127.0.0.1:$($v['rest.port']) (see [REST] in $fullLog); the app runs without it" }
+if ($have -notcontains [int]$v['rest.port']) { Log "WARNING: the REST API does not listen on 127.0.0.1:$($v['rest.port']) (see [REST] in $appLog); the app runs without it" }
 $ips = @(try { Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop | Where-Object { $_.IPAddress -notlike '169.254.*' -and $_.IPAddress -ne '127.0.0.1' } | ForEach-Object { $_.IPAddress } } catch { })
 foreach ($ip in @($ips) + @('127.0.0.1')) {
     if ($nginxOk) {
